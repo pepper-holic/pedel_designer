@@ -248,6 +248,27 @@ export function SchematicEditor() {
                   .map(([key, value]) => {
                     const meta = PARAM_META[key];
                     const isInvalid = typeof value === "number" && meta?.min !== undefined && value < meta.min;
+
+                    if (meta?.slider && typeof value === "number") {
+                      return (
+                        <div className="field" key={key}>
+                          <div className="field-row">
+                            <label>{key}</label>
+                            <span className="field-value">{value.toFixed(2)}</span>
+                          </div>
+                          <input
+                            type="range"
+                            min={meta.min ?? 0}
+                            max={meta.slider.max}
+                            step={meta.slider.step}
+                            value={value}
+                            onChange={(e) => handleParamChange(key, e.target.value)}
+                            style={{ width: "100%" }}
+                          />
+                        </div>
+                      );
+                    }
+
                     return (
                       <div className="field" key={key}>
                         <div className="field-row">
