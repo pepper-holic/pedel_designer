@@ -51,7 +51,7 @@ UI 재설계(1~4단계, [plan-professional-ui.md](./plan-professional-ui.md) 참
 
 - `core/library/deviceModels.ts`에 `DIODE_MODELS` 레지스트리 추가: `1N4148`(실리콘), `1N34A`(저마늄, `Is=2e-7, N=1.2`로 갱신), `RED_LED`(`Is=1e-18, N=2.5`로 갱신 — 실제 LED 순방향 전압(~1.8V)에 더 가깝게 조정).
 - `editor/SchematicEditor.tsx`: 다이오드 소자 선택 시 속성 패널에 "소자 모델" 드롭다운이 나타나고, 선택하면 `saturationCurrent`/`thermalVoltage`/`emissionCoefficient` 세 값이 한번에 적용됨.
-- **모델링 한계**: 스펙에서 제시한 `RS`(직렬저항) 파라미터는 현재 다이오드 방정식(`diode.ts`)에 반영되어 있지 않음 — 순방향 무릎(knee) 이후 고전류 영역의 저항성 성분을 재현하려면 다이오드 내부에 직렬 노드를 추가해야 하는데, 우리 프리셋들이 다루는 신호 레벨(수 mA 이하)에서는 영향이 작아 우선순위를 낮게 판단함. 필요 시 후속 작업으로 추가 가능.
+- **RS(직렬저항) 모델링 완료** (7번 항목, 스트레치 목표): `DiodeElement`에 옵셔널 `seriesResistance` 필드 추가. Op-amp의 내부 pole 노드와 동일한 패턴으로 다이오드 내부에 `${id}::rs` 노드를 추가해, 외부 애노드 핀 → (선형 저항 Rs) → 내부 접합 노드 → (기존 지수 방정식) → 캐소드로 분리. 미설정(0/undefined) 시 기존 동작과 완전히 동일(회귀 없음). AC 해석(`ac.ts`)도 동일한 2단 구조로 스탬프(Rs 저항 + 접합의 DC 선형화 컨덕턴스)해 반영. **검증**: `tests/solver/diode-series-resistance.test.ts` 4개 — 고전류에서 Rs가 전압 강하를 늘리는지, 저전류 소신호 영역은 거의 그대로인지, AC 해석이 finite한지, `seriesResistance=0`/미설정이 회귀 없음(9자리 정밀도 일치)인지 확인. 인스펙터에는 `paramMeta.ts`에 단위(Ω) 등록만으로 자동 노출.
 
 ---
 

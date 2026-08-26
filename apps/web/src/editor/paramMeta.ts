@@ -8,6 +8,7 @@ export interface ParamMeta {
 
 export const PARAM_META: Record<string, ParamMeta> = {
   resistance: { unit: "Ω", min: 0.001 },
+  seriesResistance: { unit: "Ω", min: 0 },
   capacitance: { unit: "F", min: 1e-15 },
   inductance: { unit: "H", min: 1e-9 },
   voltage: { unit: "V" },

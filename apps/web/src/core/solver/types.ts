@@ -38,6 +38,8 @@ export interface DiodeElement extends ElementBase {
   saturationCurrent: number;
   thermalVoltage: number;
   emissionCoefficient: number;
+  /** Optional bulk/lead series resistance in ohms, for accuracy in the high-current knee region. Undefined/0 disables it (unchanged ideal-junction behavior). */
+  seriesResistance?: number;
 }
 
 export interface BjtElement extends ElementBase {

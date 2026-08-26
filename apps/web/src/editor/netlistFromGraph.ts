@@ -84,7 +84,8 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
       case "inductor":
         elements.push({ id: part.id, type: "inductor", nodes: [nodes[0], nodes[1]], inductance: Number(part.params.inductance) });
         break;
-      case "diode":
+      case "diode": {
+        const seriesResistance = Number(part.params.seriesResistance) || 0;
         elements.push({
           id: part.id,
           type: "diode",
@@ -92,8 +93,10 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
           saturationCurrent: Number(part.params.saturationCurrent),
           thermalVoltage: Number(part.params.thermalVoltage),
           emissionCoefficient: Number(part.params.emissionCoefficient),
+          ...(seriesResistance > 0 ? { seriesResistance } : {}),
         });
         break;
+      }
       case "bjt":
         elements.push({
           id: part.id,

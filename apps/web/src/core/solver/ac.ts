@@ -4,6 +4,7 @@ import { voltageAt } from "./solution";
 import { solveComplexLinear } from "./complexLinear";
 import { linearizeBjt } from "../components/bjt";
 import { bufferBranchId, clipSlope, hasGbwp, hasRailClipping, integratorGm, POLE_CAPACITANCE, poleNodeId } from "../components/opamp";
+import { hasSeriesResistance, seriesNodeId } from "../components/diode";
 import type { Netlist, NodeId } from "./types";
 
 export interface AcOptions {
@@ -103,9 +104,14 @@ export function runAcAnalysis(netlist: Netlist, options: AcOptions): AcPoint[] {
           const p = nodeOf(topology, el.nodes[0]);
           const ni = nodeOf(topology, el.nodes[1]);
           const veff = el.emissionCoefficient * el.thermalVoltage;
-          const vd = voltageAt(topology, dcSolution, el.nodes[0]) - voltageAt(topology, dcSolution, el.nodes[1]);
+          const useRs = hasSeriesResistance(el);
+          const junctionNodeId = useRs ? seriesNodeId(el.id) : el.nodes[0];
+          const junctionP = useRs ? nodeOf(topology, junctionNodeId) : p;
+          const vd = voltageAt(topology, dcSolution, junctionNodeId) - voltageAt(topology, dcSolution, el.nodes[1]);
           const id = el.saturationCurrent * (Math.exp(vd / veff) - 1);
-          stampG(p, ni, (id + el.saturationCurrent) / veff);
+          const gd = (id + el.saturationCurrent) / veff;
+          if (useRs) stampG(p, junctionP, 1 / el.seriesResistance!);
+          stampG(junctionP, ni, gd);
           break;
         }
         case "bjt": {

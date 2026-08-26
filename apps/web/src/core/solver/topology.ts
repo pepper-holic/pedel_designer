@@ -1,5 +1,6 @@
-import { GROUND, type Netlist, type NodeId, type OpAmpElement } from "./types";
+import { GROUND, type Netlist, type NodeId, type OpAmpElement, type DiodeElement } from "./types";
 import { bufferBranchId, needsInternalNode, hasGbwp, poleNodeId } from "../components/opamp";
+import { hasSeriesResistance, seriesNodeId } from "../components/diode";
 
 /**
  * Static structure of a circuit: which node each terminal maps to, and how
@@ -28,9 +29,13 @@ export function buildTopology(netlist: Netlist): CircuitTopology {
     }
   }
   for (const element of netlist.elements) {
-    if (element.type !== "opamp") continue;
-    const el = element as OpAmpElement;
-    if (needsInternalNode(el)) nodeIndex.set(poleNodeId(el.id), nodeIndex.size);
+    if (element.type === "opamp") {
+      const el = element as OpAmpElement;
+      if (needsInternalNode(el)) nodeIndex.set(poleNodeId(el.id), nodeIndex.size);
+    } else if (element.type === "diode") {
+      const el = element as DiodeElement;
+      if (hasSeriesResistance(el)) nodeIndex.set(seriesNodeId(el.id), nodeIndex.size);
+    }
   }
 
   const branchIndex = new Map<string, number>();

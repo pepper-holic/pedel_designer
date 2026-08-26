@@ -51,7 +51,7 @@ export const PART_DEFS: Record<PartType, PartDef> = {
       { id: "anode", dx: -30, dy: 0, label: "A" },
       { id: "cathode", dx: 30, dy: 0, label: "K" },
     ],
-    defaultParams: { ...SILICON_DIODE_1N4148 },
+    defaultParams: { ...SILICON_DIODE_1N4148, seriesResistance: 0 },
   },
   bjt: {
     type: "bjt",
