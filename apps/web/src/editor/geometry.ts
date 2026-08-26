@@ -26,6 +26,24 @@ export function terminalPosition(part: PartInstance, terminalId: string): { x: n
   return { x: part.x + rotated.x, y: part.y + rotated.y };
 }
 
+export interface CanvasView {
+  zoom: number;
+  panX: number;
+  panY: number;
+}
+
+/**
+ * Computes the pan/zoom needed to zoom by `factor` while keeping the world point under
+ * `cursor` (screen coordinates) fixed on screen - the standard "zoom toward the mouse" trick.
+ * Clamps the resulting zoom to [minZoom, maxZoom].
+ */
+export function zoomAroundPoint(view: CanvasView, cursor: { x: number; y: number }, factor: number, minZoom: number, maxZoom: number): CanvasView {
+  const nextZoom = Math.min(maxZoom, Math.max(minZoom, view.zoom * factor));
+  const worldX = (cursor.x - view.panX) / view.zoom;
+  const worldY = (cursor.y - view.panY) / view.zoom;
+  return { zoom: nextZoom, panX: cursor.x - worldX * nextZoom, panY: cursor.y - worldY * nextZoom };
+}
+
 /**
  * A 2-bend orthogonal (Manhattan) path between two points, picking
  * horizontal-first or vertical-first based on which axis has more distance

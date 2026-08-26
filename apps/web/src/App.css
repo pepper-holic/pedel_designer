@@ -258,3 +258,32 @@
   overflow: auto;
   max-height: 70vh;
 }
+
+.canvas-zoom-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.canvas-zoom-controls button {
+  width: 22px;
+  height: 22px;
+  line-height: 1;
+  padding: 0;
+}
+
+.canvas-zoom-controls span {
+  min-width: 3.2em;
+  text-align: center;
+  color: var(--text-dim);
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { snapToGrid, rotateClockwise, rotateOffset, terminalPosition, orthogonalPath, GRID_SIZE } from "../../src/editor/geometry";
+import { snapToGrid, rotateClockwise, rotateOffset, terminalPosition, orthogonalPath, zoomAroundPoint, GRID_SIZE } from "../../src/editor/geometry";
 import type { PartInstance } from "../../src/editor/types";
 
 describe("snapToGrid", () => {
@@ -39,6 +39,39 @@ describe("terminalPosition", () => {
     const pos = terminalPosition(part, "b"); // local offset (30, 0)
     expect(pos.x).toBeCloseTo(100, 9);
     expect(pos.y).toBeCloseTo(130, 9);
+  });
+});
+
+describe("zoomAroundPoint", () => {
+  it("keeps the world point under the cursor fixed on screen when zooming in", () => {
+    const view = { zoom: 1, panX: 0, panY: 0 };
+    const cursor = { x: 200, y: 150 };
+    const worldBefore = { x: (cursor.x - view.panX) / view.zoom, y: (cursor.y - view.panY) / view.zoom };
+
+    const next = zoomAroundPoint(view, cursor, 1.1, 0.3, 3);
+
+    expect(next.zoom).toBeCloseTo(1.1, 9);
+    const worldAfter = { x: (cursor.x - next.panX) / next.zoom, y: (cursor.y - next.panY) / next.zoom };
+    expect(worldAfter.x).toBeCloseTo(worldBefore.x, 9);
+    expect(worldAfter.y).toBeCloseTo(worldBefore.y, 9);
+  });
+
+  it("clamps zoom to the given min/max range", () => {
+    const view = { zoom: 1, panX: 0, panY: 0 };
+    expect(zoomAroundPoint(view, { x: 0, y: 0 }, 0.01, 0.3, 3).zoom).toBe(0.3);
+    expect(zoomAroundPoint(view, { x: 0, y: 0 }, 100, 0.3, 3).zoom).toBe(3);
+  });
+
+  it("preserves the cursor's fixed world point across an existing pan/zoom", () => {
+    const view = { zoom: 1.5, panX: 40, panY: -20 };
+    const cursor = { x: 300, y: 80 };
+    const worldBefore = { x: (cursor.x - view.panX) / view.zoom, y: (cursor.y - view.panY) / view.zoom };
+
+    const next = zoomAroundPoint(view, cursor, 0.9, 0.3, 3);
+    const worldAfter = { x: (cursor.x - next.panX) / next.zoom, y: (cursor.y - next.panY) / next.zoom };
+
+    expect(worldAfter.x).toBeCloseTo(worldBefore.x, 9);
+    expect(worldAfter.y).toBeCloseTo(worldBefore.y, 9);
   });
 });
 
