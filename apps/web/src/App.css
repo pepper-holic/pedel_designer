@@ -1,0 +1,260 @@
+.workbench {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
+/* ---------- menu bar (black chrome, like a stompbox's hardware) ---------- */
+.menubar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--chrome-bg);
+  border-bottom: 1px solid var(--chrome-border);
+  color: var(--chrome-text-dim);
+  flex-shrink: 0;
+}
+
+.menubar .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--chrome-text);
+  font-weight: 600;
+  margin-right: 16px;
+  letter-spacing: 0.01em;
+  font-size: 0.85rem;
+}
+
+.menubar .brand .mark {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--accent);
+  border-radius: 3px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.menubar .brand .mark::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+.menubar .spacer {
+  flex: 1;
+}
+
+.menubar .proj {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--chrome-text-dim);
+}
+
+/* ---------- status bar ---------- */
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 4px 16px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+.statusbar .stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.statusbar .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-ink);
+}
+
+.statusbar .spacer {
+  flex: 1;
+}
+
+/* ---------- workspace content ---------- */
+.workspace-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.panel + .panel {
+  margin-top: 16px;
+}
+
+.panel-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+.field {
+  margin-bottom: 14px;
+}
+
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.field-value {
+  font-family: var(--font-mono);
+  color: var(--accent-dim);
+  font-size: 0.85rem;
+}
+
+.preset-description {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  margin: 6px 0 16px;
+  line-height: 1.5;
+}
+
+.run-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.status-text {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+
+.tap-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.tap-buttons button {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.dock-tab-row {
+  display: flex;
+  gap: 4px;
+  margin: -18px -18px 14px;
+  padding: 6px 14px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel-header);
+  border-radius: 10px 10px 0 0;
+}
+
+.dock-tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 8px 4px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+
+.dock-tab:hover:not(:disabled) {
+  color: var(--text-dim);
+}
+
+.dock-tab.active {
+  color: var(--accent-dim);
+  border-bottom-color: var(--accent);
+}
+
+.template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.template-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.template-card:hover:not(:disabled) {
+  border-color: var(--accent-dim);
+}
+
+.template-card.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.template-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.template-card.active .template-name {
+  color: var(--accent-dim);
+}
+
+.template-desc {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  line-height: 1.4;
+}
+
+.canvas-frame {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-inset);
+}
+
+.canvas-frame-scroll {
+  overflow: auto;
+  max-height: 70vh;
+}

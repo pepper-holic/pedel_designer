@@ -1,0 +1,72 @@
+export type NodeId = string;
+
+export const GROUND: NodeId = "0";
+
+export interface ElementBase {
+  id: string;
+  nodes: NodeId[];
+}
+
+export interface ResistorElement extends ElementBase {
+  type: "resistor";
+  nodes: [NodeId, NodeId];
+  resistance: number;
+}
+
+export interface CapacitorElement extends ElementBase {
+  type: "capacitor";
+  nodes: [NodeId, NodeId];
+  capacitance: number;
+}
+
+export interface InductorElement extends ElementBase {
+  type: "inductor";
+  nodes: [NodeId, NodeId];
+  inductance: number;
+}
+
+export interface VoltageSourceElement extends ElementBase {
+  type: "vsource";
+  nodes: [NodeId, NodeId];
+  /** DC/instantaneous voltage in volts. For time-varying sources this is set per timestep before stamping. */
+  voltage: number;
+}
+
+export interface DiodeElement extends ElementBase {
+  type: "diode";
+  nodes: [NodeId, NodeId];
+  saturationCurrent: number;
+  thermalVoltage: number;
+  emissionCoefficient: number;
+}
+
+export interface BjtElement extends ElementBase {
+  type: "bjt";
+  /** [base, collector, emitter] */
+  nodes: [NodeId, NodeId, NodeId];
+  polarity: "npn" | "pnp";
+  saturationCurrent: number;
+  thermalVoltage: number;
+  forwardBeta: number;
+  reverseBeta: number;
+}
+
+export interface OpAmpElement extends ElementBase {
+  type: "opamp";
+  /** [nonInverting, inverting, output] */
+  nodes: [NodeId, NodeId, NodeId];
+  openLoopGain: number;
+}
+
+export type Element =
+  | ResistorElement
+  | CapacitorElement
+  | InductorElement
+  | VoltageSourceElement
+  | DiodeElement
+  | BjtElement
+  | OpAmpElement;
+
+export interface Netlist {
+  elements: Element[];
+}
