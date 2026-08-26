@@ -9,8 +9,8 @@ const ORIGIN_X = 100;
 const ORIGIN_Y = 100;
 const GROUND_PART_ID = "GND";
 
-/** BFS distance from the input source, hopping over any node the two elements share except ground - a rough stand-in for "how far downstream is this part". */
-function computeSignalDepth(netlist: Netlist, rootId: string | undefined): Map<string, number> {
+/** Elements that share a (non-ground) net with each other, keyed by element id - the adjacency used by both column and row placement. */
+function buildNeighborMap(netlist: Netlist): Map<string, Set<string>> {
   const neighbors = new Map<string, Set<string>>();
   for (const el of netlist.elements) neighbors.set(el.id, new Set());
 
@@ -25,7 +25,11 @@ function computeSignalDepth(netlist: Netlist, rootId: string | undefined): Map<s
   for (const ids of elementsByNode.values()) {
     for (const a of ids) for (const b of ids) if (a !== b) neighbors.get(a)!.add(b);
   }
+  return neighbors;
+}
 
+/** BFS distance from the input source, hopping over any node the two elements share except ground - a rough stand-in for "how far downstream is this part". */
+function computeSignalDepth(netlist: Netlist, rootId: string | undefined, neighbors: Map<string, Set<string>>): Map<string, number> {
   const depth = new Map<string, number>();
   const root = rootId && neighbors.has(rootId) ? rootId : netlist.elements[0]?.id;
   if (!root) return depth;
@@ -48,27 +52,67 @@ function computeSignalDepth(netlist: Netlist, rootId: string | undefined): Map<s
 }
 
 /**
+ * Assigns a row (vertical slot) to every element within its column, using the standard
+ * "barycenter heuristic" from layered graph drawing (Sugiyama-style): repeatedly re-sort each
+ * column's elements by the average row of their already-placed neighbors in adjacent columns,
+ * alternating left-to-right and right-to-left passes. This tends to pull electrically-connected
+ * parts onto the same row and pushes unrelated branches apart, which cuts down on wires crossing
+ * through unrelated components - a first-declaration-order row assignment has no such preference.
+ */
+function assignRows(netlist: Netlist, depth: Map<string, number>, neighbors: Map<string, Set<string>>): Map<string, number> {
+  const byColumn = new Map<number, string[]>();
+  for (const el of netlist.elements) {
+    const column = depth.get(el.id) ?? 0;
+    if (!byColumn.has(column)) byColumn.set(column, []);
+    byColumn.get(column)!.push(el.id);
+  }
+  const columns = [...byColumn.keys()].sort((a, b) => a - b);
+
+  const rowOf = new Map<string, number>();
+  for (const column of columns) byColumn.get(column)!.forEach((id, i) => rowOf.set(id, i));
+
+  const ITERATIONS = 4;
+  for (let iter = 0; iter < ITERATIONS; iter++) {
+    const passOrder = iter % 2 === 0 ? columns : [...columns].reverse();
+    for (const column of passOrder) {
+      const ids = byColumn.get(column)!;
+      const barycenterOf = new Map<string, number>();
+      for (const id of ids) {
+        const neighborRows = [...(neighbors.get(id) ?? [])].map((n) => rowOf.get(n)).filter((r): r is number => r !== undefined);
+        barycenterOf.set(id, neighborRows.length > 0 ? neighborRows.reduce((a, b) => a + b, 0) / neighborRows.length : rowOf.get(id)!);
+      }
+      ids.sort((a, b) => barycenterOf.get(a)! - barycenterOf.get(b)!);
+      ids.forEach((id, i) => rowOf.set(id, i));
+    }
+  }
+  return rowOf;
+}
+
+/**
  * Reconstructs a placeable part/wire graph from a netlist (e.g. a preset), so
  * a template can be "loaded" straight into the schematic canvas instead of
  * living in a separate read-only view. Parts are arranged left-to-right by
- * BFS distance from the input source (a rough stand-in for signal flow) so
- * wiring mostly runs forward instead of zig-zagging across the whole canvas;
- * it's still not a hand-tuned schematic, but it reads far better than a
- * plain declaration-order grid. Ground gets its own row below everything.
+ * BFS distance from the input source (a rough stand-in for signal flow), and
+ * top-to-bottom within each column by a barycenter heuristic that pulls
+ * connected parts onto shared rows to reduce wire crossings; it's still not
+ * a hand-tuned schematic, but it reads far better than a plain
+ * declaration-order grid. Ground gets its own row below everything.
  */
 export function graphFromNetlist(
   netlist: Netlist,
   inputSourceId?: string,
   layout?: Record<string, { x: number; y: number }>,
 ): { parts: PartInstance[]; wires: Wire[] } {
-  const depth = computeSignalDepth(netlist, inputSourceId);
+  const neighbors = buildNeighborMap(netlist);
+  const depth = computeSignalDepth(netlist, inputSourceId, neighbors);
+  const rowOf = assignRows(netlist, depth, neighbors);
   const rowCountByColumn = new Map<number, number>();
   const parts: PartInstance[] = [];
 
   for (const element of netlist.elements) {
     const column = depth.get(element.id) ?? 0;
-    const row = rowCountByColumn.get(column) ?? 0;
-    rowCountByColumn.set(column, row + 1);
+    const row = rowOf.get(element.id) ?? 0;
+    rowCountByColumn.set(column, Math.max(rowCountByColumn.get(column) ?? 0, row + 1));
 
     const { id, type, nodes: _nodes, ...rest } = element;
     void _nodes;

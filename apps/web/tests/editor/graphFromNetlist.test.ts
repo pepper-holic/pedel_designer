@@ -36,6 +36,31 @@ describe("graphFromNetlist layout override", () => {
   });
 });
 
+describe("graphFromNetlist barycenter row assignment", () => {
+  it("re-sorts a column's rows to match connected neighbors instead of keeping raw declaration order", () => {
+    // Two independent branches (A, B) fan out from V1 and rejoin at separate output nodes. B2 is
+    // declared before A2, so a naive declaration-order row assignment would put A1/B2 on the same
+    // row and B1/A2 on the same row - crossing the two branches' wires for no reason. The
+    // barycenter pass should instead pull each branch onto a single consistent row.
+    const netlist: Netlist = {
+      elements: [
+        { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },
+        { id: "A1", type: "resistor", nodes: ["in", "na"], resistance: 1000 },
+        { id: "B1", type: "resistor", nodes: ["in", "nb"], resistance: 1000 },
+        { id: "B2", type: "resistor", nodes: ["nb", "outB"], resistance: 1000 },
+        { id: "A2", type: "resistor", nodes: ["na", "outA"], resistance: 1000 },
+      ],
+    };
+
+    const { parts } = graphFromNetlist(netlist, "V1");
+    const byId = new Map(parts.map((p) => [p.id, p]));
+
+    expect(byId.get("A1")!.y).toBe(byId.get("A2")!.y);
+    expect(byId.get("B1")!.y).toBe(byId.get("B2")!.y);
+    expect(byId.get("A1")!.y).not.toBe(byId.get("B1")!.y);
+  });
+});
+
 describe("graphFromNetlist round-trip", () => {
   for (const preset of presets) {
     it(`${preset.id}: loading as a graph and converting back preserves the AC response`, () => {

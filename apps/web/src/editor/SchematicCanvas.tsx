@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { PART_DEFS } from "./partDefs";
 import { PartSymbol } from "./symbols";
-import { terminalPosition, orthogonalPath, zoomAroundPoint } from "./geometry";
+import { terminalPosition, computeWirePaths, zoomAroundPoint } from "./geometry";
 import type { PartInstance, TerminalRef, Wire } from "./types";
 
 interface SchematicCanvasProps {
@@ -119,6 +119,23 @@ export function SchematicCanvas({ parts, wires, selectedPartId, onMovePart, onSe
     return points;
   }, [wires, parts]);
 
+  // Resolved (wire, endpoints) pairs for wires whose parts still exist, plus the crossing-aware
+  // path string for each - computed together in one pass so a hop on one wire accounts for every
+  // other wire currently on the canvas.
+  const resolvedWires = useMemo(() => {
+    const withEndpoints = wires
+      .map((wire) => {
+        const partA = parts.find((p) => p.id === wire.a.partId);
+        const partB = parts.find((p) => p.id === wire.b.partId);
+        if (!partA || !partB) return null;
+        return { wire, a: terminalPosition(partA, wire.a.terminalId), b: terminalPosition(partB, wire.b.terminalId) };
+      })
+      .filter((w): w is { wire: Wire; a: { x: number; y: number }; b: { x: number; y: number } } => w !== null);
+
+    const paths = computeWirePaths(withEndpoints.map((w) => [w.a, w.b]));
+    return withEndpoints.map((w, i) => ({ wire: w.wire, path: paths[i] }));
+  }, [wires, parts]);
+
   return (
     <div style={{ position: "relative" }}>
       <div className="canvas-zoom-controls">
@@ -151,14 +168,9 @@ export function SchematicCanvas({ parts, wires, selectedPartId, onMovePart, onSe
         <rect width={width} height={height} fill="var(--bg-inset)" onMouseDown={handleBackgroundMouseDown} onClick={handleBackgroundClick} />
 
         <g transform={`translate(${view.panX},${view.panY}) scale(${view.zoom})`}>
-          {wires.map((wire) => {
-            const partA = parts.find((p) => p.id === wire.a.partId);
-            const partB = parts.find((p) => p.id === wire.b.partId);
-            if (!partA || !partB) return null;
-            const pa = terminalPosition(partA, wire.a.terminalId);
-            const pb = terminalPosition(partB, wire.b.terminalId);
-            return <path key={wire.id} d={orthogonalPath(pa, pb)} stroke="var(--wire)" strokeWidth={2} fill="none" />;
-          })}
+          {resolvedWires.map(({ wire, path }) => (
+            <path key={wire.id} d={path} stroke="var(--wire)" strokeWidth={2} fill="none" />
+          ))}
 
           {junctionPoints.map((p, i) => (
             <circle key={i} cx={p.x} cy={p.y} r={3.5} fill="var(--wire)" />

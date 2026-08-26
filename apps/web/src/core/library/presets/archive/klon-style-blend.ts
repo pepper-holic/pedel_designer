@@ -29,6 +29,21 @@ export const klonStyleBlendPreset: PedalPreset = {
     ],
     disclaimer: "대표값 근사치이며 특정 상용 제품의 실측 회로도가 아닙니다.",
   },
+  // Hand-tuned layout: clean path along the top row, drive path (gain stage + its feedback/clip
+  // components) along the bottom row, both feeding into the blend resistors and the output buffer
+  // on the right - clearer than the automatic layout for a genuinely two-path (parallel) topology.
+  layout: {
+    V1: { x: 60, y: 300 },
+    Uclean: { x: 250, y: 150 },
+    Rin: { x: 250, y: 450 },
+    Rf: { x: 420, y: 300 },
+    Udrive: { x: 420, y: 450 },
+    D1: { x: 500, y: 380 },
+    D2: { x: 500, y: 520 },
+    Rblend1: { x: 600, y: 150 },
+    Rblend2: { x: 600, y: 450 },
+    Uout: { x: 770, y: 300 },
+  },
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { snapToGrid, rotateClockwise, rotateOffset, terminalPosition, orthogonalPath, zoomAroundPoint, GRID_SIZE } from "../../src/editor/geometry";
+import { snapToGrid, rotateClockwise, rotateOffset, terminalPosition, orthogonalPath, computeWirePaths, zoomAroundPoint, GRID_SIZE } from "../../src/editor/geometry";
 import type { PartInstance } from "../../src/editor/types";
 
 describe("snapToGrid", () => {
@@ -75,11 +75,48 @@ describe("zoomAroundPoint", () => {
   });
 });
 
+describe("computeWirePaths", () => {
+  it("adds a hop (Q curve) to the vertical wire where two unrelated wires truly cross", () => {
+    // Horizontal wire from (0,50) to (100,50); vertical wire from (50,0) to (50,100) - they cross at (50,50).
+    const [horizontalPath, verticalPath] = computeWirePaths([
+      [{ x: 0, y: 50 }, { x: 100, y: 50 }],
+      [{ x: 50, y: 0 }, { x: 50, y: 100 }],
+    ]);
+
+    expect(horizontalPath).not.toContain("Q"); // horizontal wire stays straight
+    expect(verticalPath).toContain("Q"); // vertical wire gets the hop
+  });
+
+  it("does not add a hop where two wires only meet at a shared terminal (a real junction)", () => {
+    // Wires meeting exactly at (50,50), an endpoint of both - not a mid-path crossing.
+    const paths = computeWirePaths([
+      [{ x: 0, y: 50 }, { x: 50, y: 50 }],
+      [{ x: 50, y: 50 }, { x: 50, y: 100 }],
+    ]);
+
+    for (const p of paths) expect(p).not.toContain("Q");
+  });
+
+  it("adds no hops for wires that never cross", () => {
+    const paths = computeWirePaths([
+      [{ x: 0, y: 0 }, { x: 100, y: 0 }],
+      [{ x: 0, y: 200 }, { x: 100, y: 200 }],
+    ]);
+    for (const p of paths) expect(p).not.toContain("Q");
+  });
+
+  it("matches orthogonalPath's straight-line output when there is only one wire (nothing to cross)", () => {
+    const a = { x: 0, y: 0 };
+    const b = { x: 100, y: 40 };
+    const [path] = computeWirePaths([[a, b]]);
+    expect(path).toBe(orthogonalPath(a, b));
+  });
+});
+
 describe("orthogonalPath", () => {
-  it("degenerates to a straight line when points already share an axis", () => {
+  it("degenerates to a single straight segment (no redundant midpoint) when points already share an axis", () => {
     const path = orthogonalPath({ x: 0, y: 50 }, { x: 100, y: 50 });
-    expect(path).toContain("M0,50");
-    expect(path).toContain("50,50");
+    expect(path).toBe("M0,50 L100,50");
   });
 
   it("bends through a midpoint when the two points share neither axis", () => {
