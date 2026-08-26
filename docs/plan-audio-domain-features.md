@@ -43,7 +43,7 @@ UI 재설계(1~4단계, [plan-professional-ui.md](./plan-professional-ui.md) 참
 - `editor/partDefs.ts`: 포텐셔미터 기본 파라미터에 `taper: "B"` 추가.
 - `editor/netlistFromGraph.ts`: 포텐셔미터를 저항 2개로 분해할 때 `position`을 그대로 쓰지 않고 `applyTaper`를 통과시킨 비율(`ratio`)로 분해하도록 수정.
 - 검증: `tests/editor/taper.test.ts` — A 테이퍼가 회전 중간(0.5)에서 전기적으로 10%만 이동했는지, C가 A의 반전인지, 범위를 벗어난 입력이 클램핑되는지 확인.
-- **남은 폴리시**: 현재 `taper` 값은 속성 인스펙터의 범용 텍스트 입력으로 편집됨(A/B/C를 직접 타이핑). 다이오드 모델 드롭다운과 동일한 패턴으로 전용 드롭다운 UI를 추가하면 더 매끄러움 — 사소한 후속 작업으로 남김.
+- **드롭다운 UI 완료**: `editor/taper.ts`에 `TAPER_OPTIONS` 레이블 맵 추가, `SchematicEditor.tsx`에서 포텐셔미터 선택 시 다이오드 모델 드롭다운과 동일한 패턴으로 전용 `<select>` 렌더링 (범용 텍스트 인풋 목록에서는 `taper` 키를 필터링해 중복 표시 방지). 브라우저에서 포텐셔미터 배치 → 선택 → 드롭다운에 B/A/C 3개 옵션 노출 확인, 콘솔 에러 없음.
 
 ---
 

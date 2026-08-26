@@ -1,5 +1,12 @@
 export type TaperType = "A" | "B" | "C";
 
+/** Selectable taper curves for the schematic editor's property inspector. */
+export const TAPER_OPTIONS: Record<TaperType, string> = {
+  B: "B (선형)",
+  A: "A (오디오/로그)",
+  C: "C (역오디오)",
+};
+
 /**
  * Approximate audio/log taper: most of the resistance change happens in the
  * back half of the rotation, matching how "audio" pots feel on a volume/gain

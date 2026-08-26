@@ -8,6 +8,7 @@ import { SchematicCanvas } from "./SchematicCanvas";
 import { PartPalette } from "./PartPalette";
 import { presets, type PedalPreset } from "../core/library/presets";
 import { DIODE_MODELS } from "../core/library/deviceModels";
+import { TAPER_OPTIONS } from "./taper";
 import { loadSampleFromFile, type LoadedSample } from "../audio/loadSample";
 import { playSamples } from "../audio/playback";
 import { runTransient } from "../core/solver/transient";
@@ -220,19 +221,39 @@ export function SchematicEditor() {
                     </select>
                   </div>
                 )}
-                {Object.entries(selectedPart.params).map(([key, value]) => (
-                  <div className="field" key={key}>
+                {selectedPart.type === "potentiometer" && (
+                  <div className="field">
                     <div className="field-row">
-                      <label>{key}</label>
+                      <label>테이퍼</label>
                     </div>
-                    <input
-                      type="text"
-                      value={String(value)}
-                      onChange={(e) => handleParamChange(key, e.target.value)}
-                      style={{ width: "100%", background: "var(--bg-inset)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: 6, padding: 6 }}
-                    />
+                    <select
+                      value={String(selectedPart.params.taper)}
+                      onChange={(e) => handleParamChange("taper", e.target.value)}
+                      style={{ width: "100%" }}
+                    >
+                      {Object.entries(TAPER_OPTIONS).map(([key, label]) => (
+                        <option key={key} value={key}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                ))}
+                )}
+                {Object.entries(selectedPart.params)
+                  .filter(([key]) => !(selectedPart.type === "potentiometer" && key === "taper"))
+                  .map(([key, value]) => (
+                    <div className="field" key={key}>
+                      <div className="field-row">
+                        <label>{key}</label>
+                      </div>
+                      <input
+                        type="text"
+                        value={String(value)}
+                        onChange={(e) => handleParamChange(key, e.target.value)}
+                        style={{ width: "100%", background: "var(--bg-inset)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: 6, padding: 6 }}
+                      />
+                    </div>
+                  ))}
                 <div className="run-row">
                   <button type="button" onClick={handleRotateSelected}>
                     회전 (R)
