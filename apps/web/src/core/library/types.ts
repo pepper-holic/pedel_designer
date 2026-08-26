@@ -19,4 +19,16 @@ export interface PedalPreset {
    * (or every element, if the field is omitted) fall back to the automatic layout.
    */
   layout?: Record<string, { x: number; y: number }>;
+  /**
+   * Present only for presets re-derived from publicly documented, community DIY circuit topologies
+   * (see docs/plan-circuit-archive.md) rather than designed from scratch for this app. Component
+   * values here are representative approximations reconstructed from public descriptions, not a
+   * trace of any specific commercial product's exact schematic - `name`/`description` intentionally
+   * describe the circuit's *style* rather than naming a trademarked product.
+   */
+  archive?: {
+    /** Public reference material consulted for the general topology/values - not copied text or images. */
+    sourceRefs: { label: string; url: string }[];
+    disclaimer: string;
+  };
 }
