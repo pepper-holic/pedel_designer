@@ -29,3 +29,4 @@ export function stampElement(element: Element, ctx: StampContext): void {
 
 export { updateCapacitorHistory } from "./capacitor";
 export { updateInductorHistory } from "./inductor";
+export { updateOpAmpHistory } from "./opamp";

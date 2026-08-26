@@ -71,7 +71,7 @@ export const PART_DEFS: Record<PartType, PartDef> = {
       { id: "inMinus", dx: -35, dy: 15, label: "-" },
       { id: "out", dx: 35, dy: 0, label: "out" },
     ],
-    defaultParams: { openLoopGain: 1e5 },
+    defaultParams: { openLoopGain: 1e5, gbwpHz: 0, slewRateVPerUs: 0, railPositive: 0, railNegative: 0 },
   },
   vsource: {
     type: "vsource",

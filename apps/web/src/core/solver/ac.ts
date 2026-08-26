@@ -3,6 +3,7 @@ import { solveNewton } from "./newton";
 import { voltageAt } from "./solution";
 import { solveComplexLinear } from "./complexLinear";
 import { linearizeBjt } from "../components/bjt";
+import { bufferBranchId, clipSlope, hasGbwp, hasRailClipping, integratorGm, POLE_CAPACITANCE, poleNodeId } from "../components/opamp";
 import type { Netlist, NodeId } from "./types";
 
 export interface AcOptions {
@@ -130,10 +131,41 @@ export function runAcAnalysis(netlist: Netlist, options: AcOptions): AcPoint[] {
           const inPlus = nodeOf(topology, el.nodes[0]);
           const inMinus = nodeOf(topology, el.nodes[1]);
           const out = nodeOf(topology, el.nodes[2]);
-          const branch = branchOf(topology, el.id);
-          addRe(branch, inPlus, 1);
-          addRe(branch, inMinus, -1);
-          addRe(out, branch, 1);
+
+          if (!hasGbwp(el)) {
+            const branch = branchOf(topology, el.id);
+            if (!hasRailClipping(el)) {
+              addRe(branch, inPlus, 1);
+              addRe(branch, inMinus, -1);
+              addRe(out, branch, 1);
+            } else {
+              // Small-signal slope of the clipped amplifier, frozen at the DC operating point.
+              const vp = voltageAt(topology, dcSolution, el.nodes[0]);
+              const vm = voltageAt(topology, dcSolution, el.nodes[1]);
+              const slope = clipSlope(el.openLoopGain * (vp - vm), el.railPositive!, el.railNegative!);
+              const gp = slope * el.openLoopGain;
+              addRe(branch, out, 1);
+              addRe(branch, inPlus, -gp);
+              addRe(branch, inMinus, gp);
+              addRe(out, branch, 1);
+            }
+            break;
+          }
+
+          const pole = nodeOf(topology, poleNodeId(el.id));
+          const gm = integratorGm(el.gbwpHz!);
+          addRe(pole, inPlus, -gm);
+          addRe(pole, inMinus, gm);
+          if (omega > 0) stampB(pole, -1, omega * POLE_CAPACITANCE);
+
+          const bufferBranch = branchOf(topology, bufferBranchId(el.id));
+          const slope = hasRailClipping(el)
+            ? clipSlope(voltageAt(topology, dcSolution, poleNodeId(el.id)), el.railPositive!, el.railNegative!)
+            : 1;
+          addRe(bufferBranch, out, 1);
+          addRe(bufferBranch, pole, -slope);
+          addRe(out, bufferBranch, 1);
+          addRe(pole, bufferBranch, -1);
           break;
         }
       }

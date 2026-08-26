@@ -106,9 +106,22 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
           reverseBeta: Number(part.params.reverseBeta),
         });
         break;
-      case "opamp":
-        elements.push({ id: part.id, type: "opamp", nodes: [nodes[0], nodes[1], nodes[2]], openLoopGain: Number(part.params.openLoopGain) });
+      case "opamp": {
+        const gbwpHz = Number(part.params.gbwpHz) || 0;
+        const slewRateVPerUs = Number(part.params.slewRateVPerUs) || 0;
+        const railPositive = Number(part.params.railPositive) || 0;
+        const railNegative = Number(part.params.railNegative) || 0;
+        elements.push({
+          id: part.id,
+          type: "opamp",
+          nodes: [nodes[0], nodes[1], nodes[2]],
+          openLoopGain: Number(part.params.openLoopGain),
+          ...(gbwpHz > 0 ? { gbwpHz } : {}),
+          ...(slewRateVPerUs > 0 ? { slewRateVPerUs } : {}),
+          ...(railPositive > 0 && railNegative < 0 ? { railPositive, railNegative } : {}),
+        });
         break;
+      }
       case "vsource":
         elements.push({ id: part.id, type: "vsource", nodes: [nodes[0], nodes[1]], voltage: Number(part.params.voltage) });
         break;

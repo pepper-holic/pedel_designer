@@ -8,7 +8,18 @@ UI 재설계(1~4단계, [plan-professional-ui.md](./plan-professional-ui.md) 참
 
 ---
 
-## 1. 비이상적 Op-Amp 매크로 모델링 — **다음 작업 (미착수)**
+## 1. 비이상적 Op-Amp 매크로 모델링 — **완료**
+
+- `solver/types.ts`: `OpAmpElement`에 옵셔널 필드 4개 추가 (`gbwpHz`, `slewRateVPerUs`, `railPositive`, `railNegative`). 전부 미설정이면 기존 이상적 nullor 동작 그대로 (회귀 없음, 42개 기존 테스트 전부 그대로 통과).
+- **GBWP 저역통과 극**: `components/opamp.ts`의 `stampGbwpIntegrator` — 내부 노드(`${id}::pole`)에 VCCS(트랜스컨덕턴스 `2*pi*gbwpHz*Cpole`) + 커패시터(`Cpole=1nF`, Backward-Euler 컴패니언 모델) 조합으로 `dV(pole)/dt = 2*pi*gbwpHz*(V+ - V-)` 적분기를 구현. 순수 선형(신규 비선형 로직 불필요, 계획대로). `pole → out`은 항등 브랜치(레일 없을 때) 또는 클리핑 브랜치(아래).
+- **Rail-to-rail 클리핑**: 계획대로 Newton 루프 내부 비선형 스탬프로 구현(`stampClippedBuffer`/`stampClippedAmplifier`) — tanh 기반 부드러운 클램프 + 도함수로 컨덕턴스 선형화(다이오드와 동일한 원리). **설계 시행착오**: 처음에는 GBWP 없이 레일만 설정된 경우도 "내부 pole 노드 + 별도 nullor 브랜치"로 라우팅하려 했으나, 외부 피드백 네트워크가 반전 입력단을 실제 출력 노드에 직접 연결하는 경우(대부분의 실제 회로) nullor의 등식 제약(`V+=V-`)이 pole/클리핑 로직을 완전히 우회해 특이(singular) 행렬을 유발함을 테스트로 발견. 레일만 설정된 경우는 대신 `openLoopGain`(기존에 있었지만 미사용이던 필드)을 유한 이득으로 사용해 입력 오차 신호를 직접 클리핑하는 브랜치로 재설계 — 별도 내부 노드 불필요, 특이성 문제 해결.
+- **슬루레이트 제한**: 계획대로 `transient.ts`에서 이전 타임스텝 대비 dV/dt 상한을 소프트웨어적으로 클램핑(`applySlewRateLimiting`). 초기 구현에서 "히스토리 없으면 현재 미클램프 해로 초기화" 버그로 클램핑이 전혀 발생하지 않는 문제 발견 → 초기값을 0V로 고정해 수정.
+- AC 소신호 해석(`ac.ts`)에도 동일한 GBWP 적분기 + 레일 클리핑(DC 동작점에서 기울기 고정) 스탬프를 반영해 주파수 응답에서 GBWP 컷오프가 실제로 보이도록 함.
+- 속성 인스펙터: 기존 `Object.entries(selectedPart.params)` 범용 렌더링이 새 필드를 자동으로 텍스트 인풋으로 노출 — 별도 UI 코드 불필요.
+- **신규 프리셋**: `ts9-overdrive` — JRC4558 근사치(`GBWP=3MHz`, `slewRate=1.5V/us`, `rails=±4V`)를 opamp-drive와 동일한 회로 토폴로지에 적용, 이상적 버전과 톤 비교 가능.
+- **검증**: `tests/solver/opamp-nonideal.test.ts` 신규 — GBWP 컷오프 주파수(-3dB @ gbwpHz, unity buffer), 슬루레이트로 인한 계단 응답 램프(및 이상적 op-amp 회귀 없음 확인), rail 클리핑 레벨(및 레일 내 선형 구간 회귀 없음 확인) 총 6개 테스트. 기존 8개 프리셋 + 신규 ts9-overdrive 프리셋 전부 `presets-sanity`/`graphFromNetlist` 회귀 테스트 통과. `npx tsc --noEmit`, `npm run build`, 브라우저에서 TS9 프리셋 로드 후 인스펙터에 5개 파라미터 정상 노출 및 콘솔 에러 없음 확인.
+
+## 1-구. 비이상적 Op-Amp 매크로 모델링 (원본 계획, 참고용)
 
 제안된 4단계 구성(입력저항 → GBWP 저역통과 극 → 슬루레이트 제한 → rail-to-rail 클리핑) 자체는 타당하고, 현재 아키텍처(MNA + Newton-Raphson, `mna.ts`/`newton.ts`)로 충분히 구현 가능하다. 다만 난이도가 서로 다르므로 아래 순서로 단계적 구현을 권장한다.
 
@@ -79,7 +90,7 @@ UI 재설계(1~4단계, [plan-professional-ui.md](./plan-professional-ui.md) 참
 
 | 항목 | 상태 |
 |---|---|
-| 1. 비이상적 Op-Amp | 미착수 — 다음 세션 최우선 작업 |
+| 1. 비이상적 Op-Amp | ✅ 완료 (GBWP/슬루레이트/rail 클리핑, TS9 프리셋, 6개 테스트) |
 | 2. 포텐셔미터 테이퍼 | ✅ 완료 (A/B/C, 테스트 포함) |
 | 3. 다이오드 프리셋화 | ✅ 완료 (드롭다운 UI 포함, RS 미모델링) |
 | 4. 캐비닛 IR | 미착수 — IR 자산 라이선스 확인 필요 |

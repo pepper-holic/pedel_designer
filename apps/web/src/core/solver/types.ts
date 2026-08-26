@@ -56,6 +56,14 @@ export interface OpAmpElement extends ElementBase {
   /** [nonInverting, inverting, output] */
   nodes: [NodeId, NodeId, NodeId];
   openLoopGain: number;
+  /** Gain-bandwidth product in Hz. Undefined/0 keeps the ideal infinite-bandwidth behavior. */
+  gbwpHz?: number;
+  /** Output slew rate limit in V/us, applied in the transient solver only. Undefined/0 disables it. */
+  slewRateVPerUs?: number;
+  /** Positive supply rail in volts. Both rails must be set (and railPositive > railNegative) to enable clipping. */
+  railPositive?: number;
+  /** Negative supply rail in volts. */
+  railNegative?: number;
 }
 
 export type Element =

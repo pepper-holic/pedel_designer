@@ -3,6 +3,7 @@ import { bufferPreset } from "./buffer";
 import { diodeClipperPreset } from "./diode-clipper";
 import { asymmetricClipperPreset } from "./asymmetric-clipper";
 import { opampDrivePreset } from "./opamp-drive";
+import { ts9OverdrivePreset } from "./ts9-overdrive";
 import { multiStageDrivePreset } from "./multi-stage-drive";
 import { fuzzGermaniumPreset } from "./fuzz-germanium";
 import { passiveToneTiltPreset } from "./passive-tone-tilt";
@@ -13,6 +14,7 @@ export const presets: PedalPreset[] = [
   diodeClipperPreset,
   asymmetricClipperPreset,
   opampDrivePreset,
+  ts9OverdrivePreset,
   multiStageDrivePreset,
   fuzzGermaniumPreset,
   passiveToneTiltPreset,
@@ -24,6 +26,7 @@ export {
   diodeClipperPreset,
   asymmetricClipperPreset,
   opampDrivePreset,
+  ts9OverdrivePreset,
   multiStageDrivePreset,
   fuzzGermaniumPreset,
   passiveToneTiltPreset,

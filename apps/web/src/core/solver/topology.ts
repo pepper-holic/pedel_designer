@@ -1,4 +1,5 @@
-import { GROUND, type Netlist, type NodeId } from "./types";
+import { GROUND, type Netlist, type NodeId, type OpAmpElement } from "./types";
+import { bufferBranchId, needsInternalNode, hasGbwp, poleNodeId } from "../components/opamp";
 
 /**
  * Static structure of a circuit: which node each terminal maps to, and how
@@ -16,7 +17,6 @@ export interface CircuitTopology {
 
 const BRANCHES_PER_ELEMENT: Record<string, number> = {
   vsource: 1,
-  opamp: 1,
 };
 
 export function buildTopology(netlist: Netlist): CircuitTopology {
@@ -27,14 +27,31 @@ export function buildTopology(netlist: Netlist): CircuitTopology {
       nodeIndex.set(node, nodeIndex.size);
     }
   }
+  for (const element of netlist.elements) {
+    if (element.type !== "opamp") continue;
+    const el = element as OpAmpElement;
+    if (needsInternalNode(el)) nodeIndex.set(poleNodeId(el.id), nodeIndex.size);
+  }
 
   const branchIndex = new Map<string, number>();
   let numBranches = 0;
+  const addBranch = (key: string) => {
+    branchIndex.set(key, nodeIndex.size + numBranches);
+    numBranches += 1;
+  };
   for (const element of netlist.elements) {
+    if (element.type === "opamp") {
+      const el = element as OpAmpElement;
+      if (!hasGbwp(el)) {
+        addBranch(el.id);
+      } else {
+        addBranch(bufferBranchId(el.id));
+      }
+      continue;
+    }
     const count = BRANCHES_PER_ELEMENT[element.type] ?? 0;
     if (count === 0) continue;
-    branchIndex.set(element.id, nodeIndex.size + numBranches);
-    numBranches += count;
+    addBranch(element.id);
   }
 
   const numNodes = nodeIndex.size;

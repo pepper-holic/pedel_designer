@@ -34,6 +34,15 @@ export const GENERIC_SILICON_NPN = {
   reverseBeta: 1,
 };
 
+/** JRC4558-style dual op-amp approximation: GBWP ~3MHz, modest slew rate, and rails clamped to the
+ * usable swing around a 9V-pedal virtual-ground bias (~+-4V here rather than the raw supply rails). */
+export const JRC4558_APPROX = {
+  gbwpHz: 3_000_000,
+  slewRateVPerUs: 1.5,
+  railPositive: 4,
+  railNegative: -4,
+};
+
 export const GENERIC_GERMANIUM_PNP = {
   // Higher Is and lower beta are typical of vintage germanium fuzz transistors (e.g. AC128/NKT275).
   saturationCurrent: 5e-6,
