@@ -7,7 +7,9 @@
 > - 3단계 마무리 + 4단계 완료: `editor/geometry.ts`에 회전(`R` 키 또는 버튼, 90도씩), 그리드 스냅(10px, 부품 배치·이동 시 자동 적용), 직교(Manhattan) 배선 라우팅, 3개 이상 배선이 만나는 지점의 접점 dot 구현. `Delete`/`Backspace` 키로 선택 소자 삭제도 추가. 회전/스냅 수학은 유닛 테스트로 검증 완료.
 > - **버그 수정**: 자동 배치가 선언 순서 그대로 격자에 나열해 배선이 부품을 관통하고, 부품이 많은 회로(예: 퍼즈)는 고정 캔버스 크기(900×460)를 넘어가 하단이 잘리는 문제가 실사용 중 발견됨. `graphFromNetlist.ts`를 입력 소스로부터의 BFS 신호흐름 거리 기반 좌우 배치로 재작성(같은 넷 안에서는 배치 좌표 기준으로 가까운 부품끼리 먼저 배선)하고, `SchematicEditor`에서 부품 배치 범위에 맞춰 캔버스 크기를 자동 확장 + 넘치면 스크롤(`canvas-frame-scroll`)하도록 수정. 상세 리뷰는 [plan-audio-domain-features.md](./plan-audio-domain-features.md)의 6번 항목 참고.
 > - 소자 인스펙터에 다이오드 모델 드롭다운(1N4148/1N34A/Red LED)과 포텐셔미터 A/B/C 테이퍼 커브 반영 — 상세는 [plan-audio-domain-features.md](./plan-audio-domain-features.md) 참고.
-> - 남은 5단계(속성 인스펙터를 표 형태로 다듬기, 단위 라벨/값 검증, 캔버스 줌·팬)는 아직 미착수. 다음 우선 작업은 비이상적 Op-Amp 매크로 모델(별도 문서 1번 항목).
+> - 5단계 일부 완료: `editor/paramMeta.ts`에 파라미터 키별 단위 라벨(Ω/F/H/V/Hz/V/us)과 최솟값(min) 테이블 추가. `SchematicEditor.tsx` 속성 인스펙터가 각 필드 라벨 옆에 단위를 표시하고, `handleParamChange`가 숫자 입력값을 파라미터별 최솟값으로 자동 클램핑(예: 저항에 음수/0 입력 시 0.001Ω로 보정) — 값이 최솟값 미만이면 입력 테두리도 빨간색으로 표시. 브라우저에서 저항 소자에 "-500" 입력 시 "0.001"로 클램핑되는 것 확인. 남은 5단계 항목: 캔버스 줌·팬 (아래 참고).
+> - 포텐셔미터 taper 값도 다이오드 모델 드롭다운과 동일한 패턴의 전용 `<select>` UI로 교체 완료 (`editor/taper.ts`의 `TAPER_OPTIONS`).
+> - 비이상적 Op-Amp 매크로 모델(GBWP/슬루레이트/rail 클리핑) 완료 — 상세는 [plan-audio-domain-features.md](./plan-audio-domain-features.md) 1번 항목 참고.
 
 ## 배경
 

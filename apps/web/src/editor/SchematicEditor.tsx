@@ -9,6 +9,7 @@ import { PartPalette } from "./PartPalette";
 import { presets, type PedalPreset } from "../core/library/presets";
 import { DIODE_MODELS } from "../core/library/deviceModels";
 import { TAPER_OPTIONS } from "./taper";
+import { PARAM_META } from "./paramMeta";
 import { loadSampleFromFile, type LoadedSample } from "../audio/loadSample";
 import { playSamples } from "../audio/playback";
 import { runTransient } from "../core/solver/transient";
@@ -117,7 +118,10 @@ export function SchematicEditor() {
 
   const handleParamChange = (key: string, value: string) => {
     if (!selectedPart) return;
-    setParts((prev) => prev.map((p) => (p.id === selectedPart.id ? { ...p, params: { ...p.params, [key]: Number(value) || value } } : p)));
+    const parsed = Number(value);
+    const meta = PARAM_META[key];
+    const nextValue = Number.isFinite(parsed) && value.trim() !== "" ? (meta?.min !== undefined ? Math.max(parsed, meta.min) : parsed) : value;
+    setParts((prev) => prev.map((p) => (p.id === selectedPart.id ? { ...p, params: { ...p.params, [key]: nextValue } } : p)));
   };
 
   const handleApplyDiodeModel = (modelKey: string) => {
@@ -241,19 +245,31 @@ export function SchematicEditor() {
                 )}
                 {Object.entries(selectedPart.params)
                   .filter(([key]) => !(selectedPart.type === "potentiometer" && key === "taper"))
-                  .map(([key, value]) => (
-                    <div className="field" key={key}>
-                      <div className="field-row">
-                        <label>{key}</label>
+                  .map(([key, value]) => {
+                    const meta = PARAM_META[key];
+                    const isInvalid = typeof value === "number" && meta?.min !== undefined && value < meta.min;
+                    return (
+                      <div className="field" key={key}>
+                        <div className="field-row">
+                          <label>{key}</label>
+                          {meta?.unit && <span className="field-value">{meta.unit}</span>}
+                        </div>
+                        <input
+                          type="text"
+                          value={String(value)}
+                          onChange={(e) => handleParamChange(key, e.target.value)}
+                          style={{
+                            width: "100%",
+                            background: "var(--bg-inset)",
+                            color: "var(--text)",
+                            border: `1px solid ${isInvalid ? "#c0392b" : "var(--border)"}`,
+                            borderRadius: 6,
+                            padding: 6,
+                          }}
+                        />
                       </div>
-                      <input
-                        type="text"
-                        value={String(value)}
-                        onChange={(e) => handleParamChange(key, e.target.value)}
-                        style={{ width: "100%", background: "var(--bg-inset)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: 6, padding: 6 }}
-                      />
-                    </div>
-                  ))}
+                    );
+                  })}
                 <div className="run-row">
                   <button type="button" onClick={handleRotateSelected}>
                     회전 (R)
