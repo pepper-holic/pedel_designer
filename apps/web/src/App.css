@@ -161,6 +161,13 @@
   margin-top: 8px;
 }
 
+.canvas-hint {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  margin: 6px 0 10px;
+}
+
 .tap-buttons {
   display: flex;
   gap: 8px;

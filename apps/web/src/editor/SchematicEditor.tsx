@@ -14,7 +14,7 @@ import { loadSampleFromFile, type LoadedSample } from "../audio/loadSample";
 import { playSamples } from "../audio/playback";
 import { CABINET_VARIANTS, type CabinetVariant } from "../audio/cabinetIr";
 import { runTransient } from "../core/solver/transient";
-import { runAcAnalysis, logFrequencySweep } from "../core/solver/ac";
+import { runAcAnalysis, logFrequencySweep, type AcPoint } from "../core/solver/ac";
 import { Waveform, type WaveformTrace } from "../viz/Waveform";
 import { FrequencyResponse } from "../viz/FrequencyResponse";
 
@@ -52,14 +52,31 @@ export function SchematicEditor() {
     return { width: Math.max(900, maxX + margin), height: Math.max(460, maxY + margin) };
   }, [parts]);
 
-  const acPoints = useMemo(() => {
-    if (!graph.inputSourceId || !outputNode || graph.netlist.elements.length === 0) return [];
+  type AcStatus = "no-output" | "no-source" | "error" | "ok";
+  const acResult = useMemo((): { points: AcPoint[]; status: AcStatus; error: string | null } => {
+    if (!outputNode) return { points: [], status: "no-output", error: null };
+    if (!graph.inputSourceId || graph.netlist.elements.length === 0) return { points: [], status: "no-source", error: null };
     try {
-      return runAcAnalysis(graph.netlist, { inputSourceId: graph.inputSourceId, outputNode, frequenciesHz: logFrequencySweep(20, 20000, 40) });
-    } catch {
-      return [];
+      return {
+        points: runAcAnalysis(graph.netlist, { inputSourceId: graph.inputSourceId, outputNode, frequenciesHz: logFrequencySweep(20, 20000, 40) }),
+        status: "ok",
+        error: null,
+      };
+    } catch (err) {
+      return { points: [], status: "error", error: err instanceof Error ? err.message : "알 수 없는 오류" };
     }
   }, [graph, outputNode]);
+  const acPoints = acResult.points;
+
+  const handleNewCircuit = () => {
+    setParts([]);
+    setWires([]);
+    setSelectedPartId(null);
+    setLoadedPresetId(null);
+    setOutputNode("");
+    setWaveTraces(null);
+    setStatus("새 회로");
+  };
 
   const handleLoadTemplate = (preset: PedalPreset) => {
     const originalNetlist = preset.build(preset.defaultParams);
@@ -180,6 +197,16 @@ export function SchematicEditor() {
           </button>
           <button type="button" className={leftTab === "templates" ? "dock-tab active" : "dock-tab"} onClick={() => setLeftTab("templates")}>
             템플릿
+          </button>
+          <button
+            type="button"
+            className="dock-tab"
+            style={{ marginLeft: "auto" }}
+            onClick={handleNewCircuit}
+            disabled={parts.length === 0}
+            title="캔버스를 비우고 처음부터 다시 시작합니다"
+          >
+            새 회로
           </button>
         </div>
 
@@ -343,6 +370,13 @@ export function SchematicEditor() {
         <div>
           <div className="panel">
             <div className="panel-title">회로도</div>
+            {parts.length === 0 ? (
+              <p className="preset-description">
+                회로가 비어 있습니다. 왼쪽 "소자 팔레트"에서 부품을 추가하거나, "템플릿" 탭에서 예제 회로를 불러와 시작하세요.
+              </p>
+            ) : (
+              <p className="canvas-hint">R: 회전 · Delete: 삭제 · 휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · 부품 드래그: 이동 · 단자 클릭 2회: 배선</p>
+            )}
             <div className="canvas-frame canvas-frame-scroll">
               <SchematicCanvas
                 parts={parts}
@@ -357,14 +391,26 @@ export function SchematicEditor() {
             </div>
           </div>
 
-          {outputNode && (
-            <div className="panel">
-              <div className="panel-title">주파수 응답 (input → {outputNode})</div>
-              <div className="canvas-frame">
+          <div className="panel">
+            <div className="panel-title">주파수 응답{outputNode && ` (input → ${outputNode})`}</div>
+            <div className="canvas-frame">
+              {acResult.status === "no-output" ? (
+                <p className="preset-description" style={{ padding: 16 }}>
+                  출력 노드를 선택하면 여기에 실시간으로 표시됩니다.
+                </p>
+              ) : acResult.status === "no-source" ? (
+                <p className="preset-description" style={{ padding: 16 }}>
+                  회로에 입력 전압원이 없습니다. 전압원(입력) 소자를 추가하고 배선하세요.
+                </p>
+              ) : acResult.status === "error" ? (
+                <p className="preset-description" style={{ padding: 16, color: "#c0392b" }}>
+                  ⚠ 계산 실패: 회로 구성을 확인하세요 (플로팅 노드, 닫히지 않은 루프 등). {acResult.error}
+                </p>
+              ) : (
                 <FrequencyResponse points={acPoints} />
-              </div>
+              )}
             </div>
-          )}
+          </div>
 
           {waveTraces && (
             <div className="panel">
