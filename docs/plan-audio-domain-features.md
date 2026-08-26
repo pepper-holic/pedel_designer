@@ -55,13 +55,13 @@ UI 재설계(1~4단계, [plan-professional-ui.md](./plan-professional-ui.md) 참
 
 ---
 
-## 4. 캐비닛 IR 컨볼루션 — **미착수**
+## 4. 캐비닛 IR 컨볼루션 — **완료**
 
-`audio/playback.ts`에 `ConvolverNode`를 추가하는 구현 자체는 단순하다 (`AudioBufferSourceNode → ConvolverNode → destination`). 착수하지 못한 이유는 기술적 난이도가 아니라 **IR 자산 확보 문제**:
-
-- 스펙에서 언급한 "4x12 V30" 같은 특정 캐비닛/스피커의 IR은 대부분 상용 제품(캡처 IR 라이브러리)이며, 라이선스 없이 앱에 내장해 배포하면 안 됨.
-- 대안: (a) CC0/공개 라이선스 IR을 리서치해서 소싱, (b) 특정 캐비닛을 흉내낸 합성 근사 IR(간단한 다중 밴드 EQ의 임펄스 응답을 직접 만들어서)을 생성해 "제네릭 캐비닛 시뮬레이션"으로 명확히 라벨링. (b)가 라이선스 리스크 없이 바로 착수 가능.
-- **다음 작업 제안**: 합성 근사 IR 1~2종(예: "브라이트 4x12", "다크 2x12")을 직접 생성하는 스크립트를 작성하고, 하단 결과 패널에 "IR 적용" 토글을 추가.
+- **설계 변경**: 스펙은 "생성 스크립트로 IR을 만들어 `public/ir/`에 WAV로 저장"을 제안했으나, 정적 WAV 자산 대신 **런타임에 직접 합성**하는 방식으로 구현 (`audio/cabinetIr.ts`의 `generateCabinetIr(sampleRate, variant)`). 이유: (1) 바이너리 자산을 커밋/유지보수할 필요가 없음, (2) 순수 함수라 vitest로 바로 단위 테스트 가능(정적 WAV는 별도 디코딩 없이는 테스트 불가), (3) 샘플레이트가 바뀌어도(44.1k/48k) 항상 그 자리에서 정확히 재생성됨.
+- **구현**: RBJ Audio EQ Cookbook 공식으로 peaking/high-shelf biquad 2~3개를 유닛 임펄스에 직렬로 통과시키고(순수 시간영역 IIR, FFT 불필요), 짧은 지수 감쇠 엔벨로프(τ=6ms)를 곱해 실제 캐비닛 IR과 비슷한 길이(~20ms)로 정리. 2종: `brightCab4x12`(3kHz 프레즌스 부스트 +6dB, 저역 컷), `darkCab2x12`(3kHz 딥 -6dB, 150Hz 로우미드 부스트 +4dB). **"제네릭 캐비닛 시뮬레이션"으로 명확히 라벨링** — 특정 상용 캐비닛 이름 미사용.
+- `audio/playback.ts`의 `playSamples`에 옵셔널 `cabinetVariant` 인자 추가 — 설정 시 `AudioBufferSourceNode → ConvolverNode(normalize=true) → destination`으로 라우팅, 미설정 시 기존 경로 그대로(회귀 없음).
+- `SchematicEditor.tsx` 파형 패널 하단에 "IR 적용 (제네릭 캐비닛 시뮬레이션)" 체크박스 + variant 드롭다운 추가.
+- **검증**: `tests/audio/cabinetIr.test.ts` — IR 길이/유한성/비무음 확인, bright가 dark보다 3kHz 에너지 높음, dark가 bright보다 150Hz 에너지 높음(단순 단일주파수 DFT로 계산), 샘플레이트에 비례해 길이 스케일 확인. 브라우저에서 WAV 샘플 로드→시뮬레이션 실행→"IR 적용" 체크→파형 재생까지 콘솔 에러 없이 동작 확인.
 
 ---
 
@@ -93,6 +93,6 @@ UI 재설계(1~4단계, [plan-professional-ui.md](./plan-professional-ui.md) 참
 | 1. 비이상적 Op-Amp | ✅ 완료 (GBWP/슬루레이트/rail 클리핑, TS9 프리셋, 6개 테스트) |
 | 2. 포텐셔미터 테이퍼 | ✅ 완료 (A/B/C, 테스트 포함) |
 | 3. 다이오드 프리셋화 | ✅ 완료 (드롭다운 UI 포함, RS 미모델링) |
-| 4. 캐비닛 IR | 미착수 — IR 자산 라이선스 확인 필요 |
+| 4. 캐비닛 IR | ✅ 완료 (런타임 합성 IR, ConvolverNode, 4개 테스트) |
 | 5. 실시간 AC 뷰어 | ✅ 완료 (연산은 이미 실시간 + 슬라이더 UI 반영, 브라우저 검증 완료) |
 | 6. 프리셋 데이터 구조 | 대안 방식으로 해결 (BFS 자동 레이아웃) — 완료 |

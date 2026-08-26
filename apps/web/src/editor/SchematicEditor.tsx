@@ -12,6 +12,7 @@ import { TAPER_OPTIONS } from "./taper";
 import { PARAM_META } from "./paramMeta";
 import { loadSampleFromFile, type LoadedSample } from "../audio/loadSample";
 import { playSamples } from "../audio/playback";
+import { CABINET_VARIANTS, type CabinetVariant } from "../audio/cabinetIr";
 import { runTransient } from "../core/solver/transient";
 import { runAcAnalysis, logFrequencySweep } from "../core/solver/ac";
 import { Waveform, type WaveformTrace } from "../viz/Waveform";
@@ -32,6 +33,8 @@ export function SchematicEditor() {
   const [sample, setSample] = useState<LoadedSample | null>(null);
   const [status, setStatus] = useState("");
   const [waveTraces, setWaveTraces] = useState<WaveformTrace[] | null>(null);
+  const [cabinetEnabled, setCabinetEnabled] = useState(false);
+  const [cabinetVariant, setCabinetVariant] = useState<CabinetVariant>("brightCab4x12");
   const audioContextRef = useRef<AudioContext | null>(null);
 
   const getAudioContext = () => {
@@ -165,7 +168,7 @@ export function SchematicEditor() {
     if (!waveTraces || !sample) return;
     const trace = waveTraces.find((t) => t.label === label);
     if (!trace) return;
-    playSamples(trace.data, sample.sampleRate, getAudioContext());
+    playSamples(trace.data, sample.sampleRate, getAudioContext(), cabinetEnabled ? cabinetVariant : null);
   };
 
   return (
@@ -375,6 +378,23 @@ export function SchematicEditor() {
                     ▶ {t.label}
                   </button>
                 ))}
+              </div>
+              <div className="field-row" style={{ marginTop: 10 }}>
+                <label>
+                  <input type="checkbox" checked={cabinetEnabled} onChange={(e) => setCabinetEnabled(e.target.checked)} /> IR 적용 (제네릭 캐비닛 시뮬레이션)
+                </label>
+                <select
+                  value={cabinetVariant}
+                  onChange={(e) => setCabinetVariant(e.target.value as CabinetVariant)}
+                  disabled={!cabinetEnabled}
+                  style={{ maxWidth: 220 }}
+                >
+                  {Object.entries(CABINET_VARIANTS).map(([key, label]) => (
+                    <option key={key} value={key}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           )}
