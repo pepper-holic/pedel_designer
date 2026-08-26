@@ -11,4 +11,12 @@ export interface PedalPreset {
   tapNodes: NodeId[];
   outputNode: NodeId;
   defaultParams: Record<string, number>;
+  /**
+   * Optional hand-picked canvas coordinates, keyed by element id, that override the automatic
+   * BFS signal-flow layout when loading this preset as a template. Wiring is still derived
+   * entirely from the netlist (`graphFromNetlist`) - this only fixes part positions for presets
+   * where the automatic grid layout produces excessive wire crossing. Elements not listed here
+   * (or every element, if the field is omitted) fall back to the automatic layout.
+   */
+  layout?: Record<string, { x: number; y: number }>;
 }

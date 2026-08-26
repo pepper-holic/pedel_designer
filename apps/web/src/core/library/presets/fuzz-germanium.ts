@@ -26,6 +26,24 @@ export const fuzzGermaniumPreset: PedalPreset = {
     collector2Resistance: 8_200,
     emitter2Resistance: 100,
   },
+  // Hand-tuned layout: Q1/Q2 in a left-to-right signal chain with their bias resistors stacked
+  // above/below, and the global feedback resistor (Rfb) routed along the top rather than crossing
+  // back through the middle of the stage as the BFS auto-layout tends to do.
+  layout: {
+    Rfb: { x: 400, y: 0 },
+    Rc1: { x: 400, y: 150 },
+    Rc2: { x: 570, y: 150 },
+    V1: { x: 60, y: 300 },
+    Cin: { x: 230, y: 300 },
+    Q1: { x: 400, y: 300 },
+    Q2: { x: 570, y: 300 },
+    Cout: { x: 740, y: 300 },
+    Rload: { x: 910, y: 300 },
+    Vcc: { x: 60, y: 450 },
+    Re1: { x: 400, y: 450 },
+    Re2: { x: 570, y: 450 },
+    Ce2: { x: 740, y: 450 },
+  },
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

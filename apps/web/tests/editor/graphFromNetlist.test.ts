@@ -3,12 +3,44 @@ import { graphFromNetlist, findEquivalentNode } from "../../src/editor/graphFrom
 import { netlistFromGraph } from "../../src/editor/netlistFromGraph";
 import { runAcAnalysis } from "../../src/core/solver/ac";
 import { presets } from "../../src/core/library/presets";
+import type { Netlist } from "../../src/core/solver/types";
+
+describe("graphFromNetlist layout override", () => {
+  const netlist: Netlist = {
+    elements: [
+      { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },
+      { id: "R1", type: "resistor", nodes: ["in", "out"], resistance: 1000 },
+    ],
+  };
+
+  it("places an element at its explicit layout coordinates instead of the auto-computed grid position", () => {
+    const { parts } = graphFromNetlist(netlist, "V1", { R1: { x: 777, y: 333 } });
+    const r1 = parts.find((p) => p.id === "R1")!;
+    expect(r1.x).toBe(777);
+    expect(r1.y).toBe(333);
+  });
+
+  it("falls back to the automatic BFS layout for elements missing from a partial layout map", () => {
+    const auto = graphFromNetlist(netlist, "V1");
+    const partial = graphFromNetlist(netlist, "V1", { R1: { x: 777, y: 333 } });
+    const v1Auto = auto.parts.find((p) => p.id === "V1")!;
+    const v1Partial = partial.parts.find((p) => p.id === "V1")!;
+    expect(v1Partial.x).toBe(v1Auto.x);
+    expect(v1Partial.y).toBe(v1Auto.y);
+  });
+
+  it("is a no-op (identical to the automatic layout) when no layout argument is passed - regression guard", () => {
+    const withoutArg = graphFromNetlist(netlist, "V1");
+    const withUndefined = graphFromNetlist(netlist, "V1", undefined);
+    expect(withUndefined.parts).toEqual(withoutArg.parts);
+  });
+});
 
 describe("graphFromNetlist round-trip", () => {
   for (const preset of presets) {
     it(`${preset.id}: loading as a graph and converting back preserves the AC response`, () => {
       const original = preset.build(preset.defaultParams);
-      const { parts, wires } = graphFromNetlist(original, preset.inputSourceId);
+      const { parts, wires } = graphFromNetlist(original, preset.inputSourceId, preset.layout);
       const graph = netlistFromGraph(parts, wires);
 
       expect(graph.inputSourceId).toBe(preset.inputSourceId);

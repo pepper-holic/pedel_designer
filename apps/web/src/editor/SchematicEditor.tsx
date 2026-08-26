@@ -63,7 +63,7 @@ export function SchematicEditor() {
 
   const handleLoadTemplate = (preset: PedalPreset) => {
     const originalNetlist = preset.build(preset.defaultParams);
-    const { parts: newParts, wires: newWires } = graphFromNetlist(originalNetlist, preset.inputSourceId);
+    const { parts: newParts, wires: newWires } = graphFromNetlist(originalNetlist, preset.inputSourceId, preset.layout);
     const roundTripped = netlistFromGraph(newParts, newWires);
     const equivalentOutput = findEquivalentNode(originalNetlist, preset.outputNode, roundTripped.netlist);
 

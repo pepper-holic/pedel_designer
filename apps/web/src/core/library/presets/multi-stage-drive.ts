@@ -13,6 +13,22 @@ export const multiStageDrivePreset: PedalPreset = {
     inputResistance: 10_000,
     feedbackResistance: 100_000,
   },
+  // Hand-tuned layout: two clipping stages side by side, each with its feedback diode pair
+  // stacked directly above/below the feedback resistor instead of wherever the BFS auto-layout
+  // (which only orders by signal-flow depth) happens to drop them.
+  layout: {
+    V1: { x: 60, y: 120 },
+    Rin1: { x: 180, y: 120 },
+    U1: { x: 300, y: 120 },
+    Rf1: { x: 240, y: 40 },
+    D1a: { x: 240, y: 200 },
+    D1b: { x: 300, y: 200 },
+    Rin2: { x: 420, y: 120 },
+    U2: { x: 540, y: 120 },
+    Rf2: { x: 480, y: 40 },
+    D2a: { x: 480, y: 200 },
+    D2b: { x: 540, y: 200 },
+  },
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

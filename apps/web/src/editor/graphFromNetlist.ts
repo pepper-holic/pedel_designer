@@ -56,7 +56,11 @@ function computeSignalDepth(netlist: Netlist, rootId: string | undefined): Map<s
  * it's still not a hand-tuned schematic, but it reads far better than a
  * plain declaration-order grid. Ground gets its own row below everything.
  */
-export function graphFromNetlist(netlist: Netlist, inputSourceId?: string): { parts: PartInstance[]; wires: Wire[] } {
+export function graphFromNetlist(
+  netlist: Netlist,
+  inputSourceId?: string,
+  layout?: Record<string, { x: number; y: number }>,
+): { parts: PartInstance[]; wires: Wire[] } {
   const depth = computeSignalDepth(netlist, inputSourceId);
   const rowCountByColumn = new Map<number, number>();
   const parts: PartInstance[] = [];
@@ -68,11 +72,12 @@ export function graphFromNetlist(netlist: Netlist, inputSourceId?: string): { pa
 
     const { id, type, nodes: _nodes, ...rest } = element;
     void _nodes;
+    const override = layout?.[id];
     parts.push({
       id,
       type,
-      x: ORIGIN_X + column * COLUMN_SPACING,
-      y: ORIGIN_Y + row * ROW_SPACING,
+      x: override?.x ?? ORIGIN_X + column * COLUMN_SPACING,
+      y: override?.y ?? ORIGIN_Y + row * ROW_SPACING,
       rotation: 0,
       params: rest as PartInstance["params"],
     });
