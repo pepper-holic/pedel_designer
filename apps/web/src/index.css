@@ -31,7 +31,7 @@
   --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
 
   color-scheme: light;
-  font: 15px/1.5 var(--font-display);
+  font: 13px/1.45 var(--font-display);
   color: var(--text);
   background: var(--bg);
 }
@@ -100,11 +100,12 @@ select {
 button {
   font-family: var(--font-display);
   font-weight: 500;
+  font-size: 0.8rem;
   background: var(--bg-inset);
   color: var(--text);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 8px 14px;
+  border-radius: 5px;
+  padding: 5px 10px;
   cursor: pointer;
   transition: border-color 0.15s ease, transform 0.1s ease;
 }
