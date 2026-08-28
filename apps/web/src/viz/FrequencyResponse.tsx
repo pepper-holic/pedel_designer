@@ -7,12 +7,14 @@ interface FrequencyResponseProps {
   height?: number;
   minDb?: number;
   maxDb?: number;
+  /** Optional Monte Carlo tolerance band - same length/frequency alignment as `points`. */
+  band?: { minDb: number[]; maxDb: number[] };
 }
 
 const LABEL_FREQS = [20, 100, 1000, 10000, 20000];
 
 /** Bode magnitude plot: log-scaled frequency axis, linear dB axis. */
-export function FrequencyResponse({ points, width = 800, height = 260, minDb = -60, maxDb = 20 }: FrequencyResponseProps) {
+export function FrequencyResponse({ points, width = 800, height = 260, minDb = -60, maxDb = 20, band }: FrequencyResponseProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -59,6 +61,15 @@ export function FrequencyResponse({ points, width = 800, height = 260, minDb = -
     ctx.lineTo(width, yOf(0));
     ctx.stroke();
 
+    if (band && band.minDb.length === points.length) {
+      ctx.fillStyle = "rgba(60, 107, 46, 0.18)";
+      ctx.beginPath();
+      points.forEach((p, i) => ctx.lineTo(xOf(p.frequencyHz), yOf(band.maxDb[i])));
+      for (let i = points.length - 1; i >= 0; i--) ctx.lineTo(xOf(points[i].frequencyHz), yOf(band.minDb[i]));
+      ctx.closePath();
+      ctx.fill();
+    }
+
     ctx.strokeStyle = "#3c6b2e";
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -69,7 +80,7 @@ export function FrequencyResponse({ points, width = 800, height = 260, minDb = -
       else ctx.lineTo(x, y);
     });
     ctx.stroke();
-  }, [points, width, height, minDb, maxDb]);
+  }, [points, width, height, minDb, maxDb, band]);
 
   return <canvas ref={canvasRef} width={width} height={height} style={{ width: "100%", display: "block" }} />;
 }
