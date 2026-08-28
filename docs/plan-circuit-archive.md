@@ -57,10 +57,12 @@ export interface PedalPreset {
 
 기존 8개 프리셋과 겹치지 않으면서 대표성이 높은 토폴로지 후보 (실제 값은 구현 세션에서 공개 자료 참고해 확정):
 
-1. **RAT 스타일 디스토션** — op-amp 게인 스테이지 + 클리핑 다이오드를 op-amp 출력 쪽(피드백 루프 밖)에 배치하는 것이 특징 (기존 opamp-drive/ts9는 피드백 내부 클리핑이라 토폴로지가 다름).
-2. **Big Muff 스타일 퍼즈/서스테이너** — 2~3단 트랜지스터 증폭 + 다이오드 클리퍼 + 톤 컨트롤(톤 스택) 조합, 기존 fuzz-germanium(2트랜지스터 직결)과 구분되는 4단 구성.
-3. **Klon 스타일 클린 부스트/오버드라이브** — 클린 버퍼 경로와 클리핑 경로를 병렬로 섞는(blend) 독특한 구조, MNA 솔버가 병렬 경로를 잘 처리하는지 확인하는 좋은 테스트케이스.
-4. **Silicon/Germanium 스타일 오버드라이브 (Boss-style)** — 다단 오피앰프 + 톤 컨트롤 통합형, 기존 프리셋들과 톤스택 결합 패턴 비교용.
+1. **RAT 스타일 디스토션** — op-amp 게인 스테이지 + 클리핑 다이오드를 op-amp 출력 쪽(피드백 루프 밖)에 배치하는 것이 특징 (기존 opamp-drive/ts9는 피드백 내부 클리핑이라 토폴로지가 다름). ✅ 완료 (`rat-style-distortion.ts`)
+2. **Big Muff 스타일 퍼즈/서스테이너** — 2~3단 트랜지스터 증폭 + 다이오드 클리퍼 + 톤 컨트롤(톤 스택) 조합, 기존 fuzz-germanium(2트랜지스터 직결)과 구분되는 4단 구성. ✅ 완료 (`big-muff-style-fuzz.ts`, 상세는 [plan-workbench-extensions.md](./plan-workbench-extensions.md) 참고)
+3. **Klon 스타일 클린 부스트/오버드라이브** — 클린 버퍼 경로와 클리핑 경로를 병렬로 섞는(blend) 독특한 구조, MNA 솔버가 병렬 경로를 잘 처리하는지 확인하는 좋은 테스트케이스. ✅ 완료 (`klon-style-blend.ts`)
+4. **Silicon/Germanium 스타일 오버드라이브 (Boss-style)** — 다단 오피앰프 + 톤 컨트롤 통합형, 기존 프리셋들과 톤스택 결합 패턴 비교용. ✅ 완료 (`boss-style-overdrive.ts`, 상세는 [plan-workbench-extensions.md](./plan-workbench-extensions.md) 참고)
+
+**우선순위 후보 4개 전부 구현 완료.**
 
 ## 5. 구현 로드맵 (실제 작업 시)
 
@@ -77,6 +79,7 @@ export interface PedalPreset {
 - [x] 우선순위 후보 회로 선정
 - [x] 구현 로드맵 작성
 - [x] **일반화 메커니즘 실제 구현 + 데모 회로 2개로 검증 완료** (아래 참고)
+- [x] **우선순위 후보 회로 4개 전부 구현 완료** (RAT/Big Muff/Klon/Boss 스타일) — 나머지 2개(Big Muff, Boss 스타일)는 [plan-workbench-extensions.md](./plan-workbench-extensions.md) 참고
 
 ## 6. 일반화 메커니즘 구현 완료
 

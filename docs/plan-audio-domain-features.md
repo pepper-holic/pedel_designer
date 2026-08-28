@@ -6,6 +6,8 @@ UI 재설계(1~4단계, [plan-professional-ui.md](./plan-professional-ui.md) 참
 
 **우선순위 지시**: 6번(프리셋 데이터 구조)과 2번(포텐셔미터 테이퍼)을 최우선 반영, 완료 후 1번(Op-amp 매크로 모델)으로 진행.
 
+> 이 6개 항목이 모두 완료된 이후 이어서 진행된 확장 기능(Undo/Redo, 회로 저장, THD 측정, 페달 체인, 공차 분석, JFET, 아카이브 프리셋 추가)은 [plan-workbench-extensions.md](./plan-workbench-extensions.md)에 정리되어 있음.
+
 ---
 
 ## 1. 비이상적 Op-Amp 매크로 모델링 — **완료**
@@ -97,7 +99,7 @@ UI 재설계(1~4단계, [plan-professional-ui.md](./plan-professional-ui.md) 참
 |---|---|
 | 1. 비이상적 Op-Amp | ✅ 완료 (GBWP/슬루레이트/rail 클리핑, TS9 프리셋, 6개 테스트) |
 | 2. 포텐셔미터 테이퍼 | ✅ 완료 (A/B/C, 테스트 포함) |
-| 3. 다이오드 프리셋화 | ✅ 완료 (드롭다운 UI 포함, RS 미모델링) |
+| 3. 다이오드 프리셋화 | ✅ 완료 (드롭다운 UI + RS 직렬저항 모델링까지 포함) |
 | 4. 캐비닛 IR | ✅ 완료 (런타임 합성 IR, ConvolverNode, 4개 테스트) |
 | 5. 실시간 AC 뷰어 | ✅ 완료 (연산은 이미 실시간 + 슬라이더 UI 반영, 브라우저 검증 완료) |
 | 6. 프리셋 데이터 구조 | 대안 방식으로 해결 (BFS 자동 레이아웃) — 완료 |
