@@ -53,6 +53,16 @@ export interface BjtElement extends ElementBase {
   reverseBeta: number;
 }
 
+export interface JfetElement extends ElementBase {
+  type: "jfet";
+  /** [gate, drain, source] - n-channel only. */
+  nodes: [NodeId, NodeId, NodeId];
+  /** Drain saturation current at Vgs=0, in amps. */
+  idss: number;
+  /** Pinch-off (gate-source cutoff) voltage, in volts. Negative for n-channel. */
+  pinchOffVoltage: number;
+}
+
 export interface OpAmpElement extends ElementBase {
   type: "opamp";
   /** [nonInverting, inverting, output] */
@@ -75,6 +85,7 @@ export type Element =
   | VoltageSourceElement
   | DiodeElement
   | BjtElement
+  | JfetElement
   | OpAmpElement;
 
 export interface Netlist {

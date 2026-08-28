@@ -6,6 +6,7 @@ import { stampInductor } from "./inductor";
 import { stampVoltageSource } from "./vsource";
 import { stampDiode } from "./diode";
 import { stampBjt } from "./bjt";
+import { stampJfet } from "./jfet";
 import { stampOpAmp } from "./opamp";
 
 export function stampElement(element: Element, ctx: StampContext): void {
@@ -22,6 +23,8 @@ export function stampElement(element: Element, ctx: StampContext): void {
       return stampDiode(element, ctx);
     case "bjt":
       return stampBjt(element, ctx);
+    case "jfet":
+      return stampJfet(element, ctx);
     case "opamp":
       return stampOpAmp(element, ctx);
   }

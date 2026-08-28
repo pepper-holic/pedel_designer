@@ -3,6 +3,7 @@ import { solveNewton } from "./newton";
 import { voltageAt } from "./solution";
 import { solveComplexLinear } from "./complexLinear";
 import { linearizeBjt } from "../components/bjt";
+import { linearizeJfet, JFET_GMIN } from "../components/jfet";
 import { bufferBranchId, clipSlope, hasGbwp, hasRailClipping, integratorGm, POLE_CAPACITANCE, poleNodeId } from "../components/opamp";
 import { hasSeriesResistance, seriesNodeId } from "../components/diode";
 import type { Netlist, NodeId } from "./types";
@@ -131,6 +132,20 @@ export function runAcAnalysis(netlist: Netlist, options: AcOptions): AcPoint[] {
           addRe(e, b, -(gpi + gm + gmu + go));
           addRe(e, e, gpi + gm);
           addRe(e, c, gmu + go);
+          break;
+        }
+        case "jfet": {
+          const g = nodeOf(topology, el.nodes[0]);
+          const d = nodeOf(topology, el.nodes[1]);
+          const s = nodeOf(topology, el.nodes[2]);
+          const vgs = voltageAt(topology, dcSolution, el.nodes[0]) - voltageAt(topology, dcSolution, el.nodes[2]);
+          const { gm } = linearizeJfet(el, vgs);
+          addRe(d, g, gm);
+          addRe(d, s, -gm);
+          addRe(s, g, -gm);
+          addRe(s, s, gm);
+          stampG(d, s, JFET_GMIN);
+          stampG(g, s, JFET_GMIN);
           break;
         }
         case "opamp": {

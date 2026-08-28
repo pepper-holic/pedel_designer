@@ -8,7 +8,8 @@ import { multiStageDrivePreset } from "./multi-stage-drive";
 import { fuzzGermaniumPreset } from "./fuzz-germanium";
 import { passiveToneTiltPreset } from "./passive-tone-tilt";
 import { activeShelfEqPreset } from "./active-shelf-eq";
-import { archivePresets, ratStyleDistortionPreset, klonStyleBlendPreset } from "./archive";
+import { jfetBoostPreset } from "./jfet-boost";
+import { archivePresets, ratStyleDistortionPreset, klonStyleBlendPreset, bigMuffStyleFuzzPreset, bossStyleOverdrivePreset } from "./archive";
 
 export const presets: PedalPreset[] = [
   bufferPreset,
@@ -20,6 +21,7 @@ export const presets: PedalPreset[] = [
   fuzzGermaniumPreset,
   passiveToneTiltPreset,
   activeShelfEqPreset,
+  jfetBoostPreset,
   ...archivePresets,
 ];
 
@@ -33,8 +35,11 @@ export {
   fuzzGermaniumPreset,
   passiveToneTiltPreset,
   activeShelfEqPreset,
+  jfetBoostPreset,
   archivePresets,
   ratStyleDistortionPreset,
   klonStyleBlendPreset,
+  bigMuffStyleFuzzPreset,
+  bossStyleOverdrivePreset,
 };
 export type { PedalPreset };

@@ -43,6 +43,12 @@ export const JRC4558_APPROX = {
   railNegative: -4,
 };
 
+/** Generic n-channel JFET (e.g. 2N5457/J201-class) representative of common audio buffer/boost parts. */
+export const GENERIC_NCHANNEL_JFET = {
+  idss: 2e-3,
+  pinchOffVoltage: -2.5,
+};
+
 export const GENERIC_GERMANIUM_PNP = {
   // Higher Is and lower beta are typical of vintage germanium fuzz transistors (e.g. AC128/NKT275).
   saturationCurrent: 5e-6,

@@ -23,4 +23,6 @@ export const PARAM_META: Record<string, ParamMeta> = {
   emissionCoefficient: { unit: "", min: 0.1 },
   forwardBeta: { unit: "", min: 0 },
   reverseBeta: { unit: "", min: 0 },
+  idss: { unit: "A", min: 0 },
+  pinchOffVoltage: { unit: "V" },
 };

@@ -1,6 +1,6 @@
-import { SILICON_DIODE_1N4148, GENERIC_SILICON_NPN } from "../core/library/deviceModels";
+import { SILICON_DIODE_1N4148, GENERIC_SILICON_NPN, GENERIC_NCHANNEL_JFET } from "../core/library/deviceModels";
 
-export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "opamp" | "vsource" | "ground" | "potentiometer";
+export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "jfet" | "opamp" | "vsource" | "ground" | "potentiometer";
 
 export interface TerminalDef {
   id: string;
@@ -62,6 +62,16 @@ export const PART_DEFS: Record<PartType, PartDef> = {
       { id: "emitter", dx: 20, dy: 30, label: "E" },
     ],
     defaultParams: { polarity: "npn", ...GENERIC_SILICON_NPN },
+  },
+  jfet: {
+    type: "jfet",
+    label: "JFET (N채널)",
+    terminals: [
+      { id: "gate", dx: -30, dy: 0, label: "G" },
+      { id: "drain", dx: 20, dy: -30, label: "D" },
+      { id: "source", dx: 20, dy: 30, label: "S" },
+    ],
+    defaultParams: { ...GENERIC_NCHANNEL_JFET },
   },
   opamp: {
     type: "opamp",

@@ -109,6 +109,15 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
           reverseBeta: Number(part.params.reverseBeta),
         });
         break;
+      case "jfet":
+        elements.push({
+          id: part.id,
+          type: "jfet",
+          nodes: [nodes[0], nodes[1], nodes[2]],
+          idss: Number(part.params.idss),
+          pinchOffVoltage: Number(part.params.pinchOffVoltage),
+        });
+        break;
       case "opamp": {
         const gbwpHz = Number(part.params.gbwpHz) || 0;
         const slewRateVPerUs = Number(part.params.slewRateVPerUs) || 0;

@@ -58,6 +58,17 @@ function BjtSymbol({ polarity }: { polarity: string }) {
   );
 }
 
+function JfetSymbol() {
+  return (
+    <>
+      <circle cx={0} cy={0} r={24} stroke={stroke} strokeWidth={1.4} fill="none" />
+      <path d="M-8,-16 v32" stroke={stroke} strokeWidth={1.6} fill="none" />
+      <path d="M-8,-14 h22 v-6 M-8,14 h22 v6" stroke={stroke} strokeWidth={1.6} fill="none" />
+      <path d="M-16,0 h8 M-20,-4 l-4,4 l4,4" stroke={stroke} strokeWidth={1.4} fill="none" strokeLinejoin="round" />
+    </>
+  );
+}
+
 function OpAmpSymbol() {
   return (
     <>
@@ -108,6 +119,8 @@ export function PartSymbol({ part }: { part: PartInstance }) {
       return <DiodeSymbol />;
     case "bjt":
       return <BjtSymbol polarity={String(part.params.polarity ?? "npn")} />;
+    case "jfet":
+      return <JfetSymbol />;
     case "opamp":
       return <OpAmpSymbol />;
     case "vsource":
