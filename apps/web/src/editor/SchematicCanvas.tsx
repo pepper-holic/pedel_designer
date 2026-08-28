@@ -11,6 +11,7 @@ interface SchematicCanvasProps {
   onMovePart: (id: string, x: number, y: number) => void;
   onSelectPart: (id: string | null) => void;
   onAddWire: (a: TerminalRef, b: TerminalRef) => void;
+  onDragEnd?: () => void;
   width?: number;
   height?: number;
 }
@@ -27,7 +28,17 @@ const PAN_DRAG_THRESHOLD = 4;
  * SVG schematic canvas: drag parts by their body, click two terminals in sequence to wire them
  * together, drag the empty background to pan, and scroll the wheel to zoom (centered on the cursor).
  */
-export function SchematicCanvas({ parts, wires, selectedPartId, onMovePart, onSelectPart, onAddWire, width = 900, height = 460 }: SchematicCanvasProps) {
+export function SchematicCanvas({
+  parts,
+  wires,
+  selectedPartId,
+  onMovePart,
+  onSelectPart,
+  onAddWire,
+  onDragEnd,
+  width = 900,
+  height = 460,
+}: SchematicCanvasProps) {
   const [dragId, setDragId] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [pendingTerminal, setPendingTerminal] = useState<TerminalRef | null>(null);
@@ -156,10 +167,12 @@ export function SchematicCanvas({ parts, wires, selectedPartId, onMovePart, onSe
         style={{ display: "block", cursor: dragId ? "grabbing" : panStart ? "grabbing" : "default" }}
         onMouseMove={handleMouseMove}
         onMouseUp={() => {
+          if (dragId) onDragEnd?.();
           setDragId(null);
           setPanStart(null);
         }}
         onMouseLeave={() => {
+          if (dragId) onDragEnd?.();
           setDragId(null);
           setPanStart(null);
         }}
