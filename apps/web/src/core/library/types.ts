@@ -1,9 +1,15 @@
 import type { Netlist, NodeId } from "../solver/types";
 
+/** Coarse circuit-family grouping used to organize the template explorer tree. Assigned from the
+ * genre word already in each preset's `name` (e.g. "오버드라이브 (...)" -> "오버드라이브") so the
+ * grouping stays consistent with what the preset calls itself. */
+export type PresetCategory = "버퍼" | "부스트" | "오버드라이브" | "디스토션" | "퍼즈" | "톤/EQ";
+
 export interface PedalPreset {
   id: string;
   name: string;
   description: string;
+  category: PresetCategory;
   /** Builds a fresh netlist from the current parameter values (fresh element objects, safe to mutate during simulation). */
   build: (params: Record<string, number>) => Netlist;
   inputSourceId: string;

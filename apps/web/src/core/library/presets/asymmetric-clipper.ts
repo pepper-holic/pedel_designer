@@ -6,6 +6,7 @@ export const asymmetricClipperPreset: PedalPreset = {
   id: "asymmetric-clipper",
   name: "다이오드 클리퍼 (비대칭: 실리콘 + LED)",
   description: "저항 + 비대칭 다이오드 페어(실리콘/LED) - 짝수 배음이 강한 비대칭 클리핑",
+  category: "디스토션",
   inputSourceId: "V1",
   tapNodes: ["in", "out"],
   outputNode: "out",

@@ -18,6 +18,7 @@ export const ratStyleDistortionPreset: PedalPreset = {
   id: "rat-style-distortion",
   name: "RAT 스타일 디스토션 (출력단 션트 클리핑)",
   description: "인버팅 op-amp 게인 스테이지 + 저항으로 전류 제한된 출력단 다이오드 클리퍼 - 피드백 루프 밖에서 클리핑",
+  category: "디스토션",
   inputSourceId: "V1",
   tapNodes: ["in", "opout", "out"],
   outputNode: "out",

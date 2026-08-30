@@ -13,6 +13,7 @@ export const klonStyleBlendPreset: PedalPreset = {
   id: "klon-style-blend",
   name: "Klon 스타일 클린/드라이브 블렌드",
   description: "클린 버퍼 경로 + 클리핑 드라이브 경로를 저항 분배로 합치는 병렬 블렌드 구조",
+  category: "오버드라이브",
   inputSourceId: "V1",
   tapNodes: ["in", "cleanOut", "driveOut", "mix", "out"],
   outputNode: "out",

@@ -1,4 +1,4 @@
-import type { PedalPreset } from "../types";
+import type { PedalPreset, PresetCategory } from "../types";
 import { bufferPreset } from "./buffer";
 import { diodeClipperPreset } from "./diode-clipper";
 import { asymmetricClipperPreset } from "./asymmetric-clipper";
@@ -9,7 +9,18 @@ import { fuzzGermaniumPreset } from "./fuzz-germanium";
 import { passiveToneTiltPreset } from "./passive-tone-tilt";
 import { activeShelfEqPreset } from "./active-shelf-eq";
 import { jfetBoostPreset } from "./jfet-boost";
-import { archivePresets, ratStyleDistortionPreset, klonStyleBlendPreset, bigMuffStyleFuzzPreset, bossStyleOverdrivePreset } from "./archive";
+import {
+  archivePresets,
+  ratStyleDistortionPreset,
+  klonStyleBlendPreset,
+  bigMuffStyleFuzzPreset,
+  bossStyleOverdrivePreset,
+  timmyStyleOverdrivePreset,
+  bluesbreakerStyleOverdrivePreset,
+  kingOfToneStyleOverdrivePreset,
+  ocdStyleOverdrivePreset,
+  lpb1StyleBoostPreset,
+} from "./archive";
 
 export const presets: PedalPreset[] = [
   bufferPreset,
@@ -41,5 +52,10 @@ export {
   klonStyleBlendPreset,
   bigMuffStyleFuzzPreset,
   bossStyleOverdrivePreset,
+  timmyStyleOverdrivePreset,
+  bluesbreakerStyleOverdrivePreset,
+  kingOfToneStyleOverdrivePreset,
+  ocdStyleOverdrivePreset,
+  lpb1StyleBoostPreset,
 };
-export type { PedalPreset };
+export type { PedalPreset, PresetCategory };

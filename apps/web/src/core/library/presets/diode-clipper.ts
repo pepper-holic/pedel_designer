@@ -6,6 +6,7 @@ export const diodeClipperPreset: PedalPreset = {
   id: "diode-clipper",
   name: "다이오드 클리퍼 (대칭)",
   description: "저항 + 대칭 실리콘 다이오드 페어 - 하드 클리핑 디스토션",
+  category: "디스토션",
   inputSourceId: "V1",
   tapNodes: ["in", "out"],
   outputNode: "out",

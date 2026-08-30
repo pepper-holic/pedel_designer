@@ -11,6 +11,7 @@ export const activeShelfEqPreset: PedalPreset = {
   id: "active-shelf-eq",
   name: "능동 EQ (고역 부스트 쉘빙)",
   description: "인버팅 연산증폭기 + 주파수 의존 입력 임피던스 - 고역 부스트량을 노브로 조절",
+  category: "톤/EQ",
   inputSourceId: "V1",
   tapNodes: ["in", "out"],
   outputNode: "out",

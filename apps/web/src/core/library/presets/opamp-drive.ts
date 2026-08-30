@@ -10,6 +10,7 @@ export const opampDrivePreset: PedalPreset = {
   id: "opamp-drive",
   name: "오버드라이브 (Op-Amp 피드백 클리핑)",
   description: "인버팅 연산증폭기 게인 스테이지 + 피드백 다이오드 - 소프트 클리핑",
+  category: "오버드라이브",
   inputSourceId: "V1",
   tapNodes: ["in", "vminus", "out"],
   outputNode: "out",

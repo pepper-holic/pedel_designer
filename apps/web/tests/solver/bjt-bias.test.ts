@@ -26,7 +26,7 @@ describe("NPN fixed-bias common-emitter stage", () => {
     };
 
     const topology = buildTopology(netlist);
-    const solution = solveNewton(netlist, topology, new Map(), 0);
+    const { solution } = solveNewton(netlist, topology, new Map(), 0);
 
     const vb = voltageAt(topology, solution, "b");
     const vc = voltageAt(topology, solution, "c");

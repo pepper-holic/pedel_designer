@@ -15,7 +15,7 @@ describe("DC voltage divider", () => {
     };
 
     const topology = buildTopology(netlist);
-    const solution = solveNewton(netlist, topology, new Map(), 0);
+    const { solution } = solveNewton(netlist, topology, new Map(), 0);
     const vout = voltageAt(topology, solution, "out");
 
     expect(vout).toBeCloseTo(5 * (3000 / (1000 + 3000)), 9);

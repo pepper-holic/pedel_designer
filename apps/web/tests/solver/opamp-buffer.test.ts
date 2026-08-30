@@ -14,7 +14,7 @@ describe("Ideal op-amp unity-gain buffer", () => {
     };
 
     const topology = buildTopology(netlist);
-    const solution = solveNewton(netlist, topology, new Map(), 0);
+    const { solution } = solveNewton(netlist, topology, new Map(), 0);
     expect(voltageAt(topology, solution, "out")).toBeCloseTo(2.5, 9);
   });
 });

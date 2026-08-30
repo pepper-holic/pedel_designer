@@ -6,6 +6,7 @@ export const multiStageDrivePreset: PedalPreset = {
   id: "multi-stage-drive",
   name: "다단 증폭 드라이브 (2단 Op-Amp 클리핑)",
   description: "동일한 op-amp 클리핑 스테이지 2개를 직렬로 연결 - 게인과 압축감 증가",
+  category: "오버드라이브",
   inputSourceId: "V1",
   tapNodes: ["in", "stage1", "out"],
   outputNode: "out",

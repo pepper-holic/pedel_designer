@@ -1,7 +1,7 @@
 /**
  * Synthetic "generic cabinet simulation" impulse responses - NOT a captured IR of any real,
  * commercially-named cabinet (licensing that kind of IR library is out of scope; see
- * docs/plan-audio-domain-features.md #4). Each variant is built by running a short cascade of
+ * docs/plan-editor-implementation-history.md 2부-4). Each variant is built by running a short cascade of
  * parametric EQ biquads (RBJ Audio EQ Cookbook formulas) on a unit impulse, then applying a fast
  * decay envelope so the result stays in the same few-millisecond ballpark as a real speaker/cab IR.
  */

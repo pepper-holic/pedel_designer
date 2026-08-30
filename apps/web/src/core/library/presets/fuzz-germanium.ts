@@ -16,6 +16,7 @@ export const fuzzGermaniumPreset: PedalPreset = {
   id: "fuzz-germanium",
   name: "퍼즈 (2-트랜지스터 저마늄, Fuzz-Face 스타일)",
   description: "PNP 저마늄 트랜지스터 2단 직결 피드백 바이어스 퍼즈 회로",
+  category: "퍼즈",
   inputSourceId: "V1",
   tapNodes: ["in", "c1", "outc", "outAC"],
   outputNode: "outAC",

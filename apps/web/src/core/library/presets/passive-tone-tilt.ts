@@ -14,6 +14,7 @@ export const passiveToneTiltPreset: PedalPreset = {
   id: "passive-tone-tilt",
   name: "톤스택 (패시브 톤 컨트롤)",
   description: "가변 직렬 저항(포트) + 고정 션트 커패시터 - 저역통과 코너 주파수를 노브로 조절",
+  category: "톤/EQ",
   inputSourceId: "V1",
   tapNodes: ["in", "out"],
   outputNode: "out",

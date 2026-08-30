@@ -12,6 +12,7 @@ export const jfetBoostPreset: PedalPreset = {
   id: "jfet-boost",
   name: "JFET 클린 부스트 (공통-소스 증폭단)",
   description: "N채널 JFET 셀프 바이어스 공통-소스 증폭 - 게인 부스트, 소자 자체의 부드러운 오버로드 특성",
+  category: "부스트",
   inputSourceId: "V1",
   tapNodes: ["in", "gate", "source", "drain", "outAC"],
   outputNode: "outAC",

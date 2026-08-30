@@ -10,6 +10,7 @@ export const ts9OverdrivePreset: PedalPreset = {
   id: "ts9-overdrive",
   name: "TS9 스타일 오버드라이브 (비이상적 Op-Amp)",
   description: "JRC4558 근사(GBWP~3MHz, 슬루레이트, rail 클리핑) 적용 - 이상적 opamp-drive 프리셋과 톤 비교용",
+  category: "오버드라이브",
   inputSourceId: "V1",
   tapNodes: ["in", "vminus", "out"],
   outputNode: "out",

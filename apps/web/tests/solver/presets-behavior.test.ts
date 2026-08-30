@@ -9,7 +9,7 @@ describe("Fuzz Face style germanium fuzz", () => {
   it("biases Q2's collector between the negative rail and ground, not slammed into either", () => {
     const netlist = fuzzGermaniumPreset.build(fuzzGermaniumPreset.defaultParams);
     const topology = buildTopology(netlist);
-    const solution = solveNewton(netlist, topology, new Map(), 0);
+    const { solution } = solveNewton(netlist, topology, new Map(), 0);
     const outc = voltageAt(topology, solution, "outc");
 
     expect(outc).toBeLessThan(-0.3);

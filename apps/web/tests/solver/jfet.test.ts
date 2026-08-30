@@ -39,7 +39,7 @@ describe("JFET boost preset", () => {
   it("self-biases to a sane operating point (not cut off, not saturated to the rail)", () => {
     const netlist = jfetBoostPreset.build(jfetBoostPreset.defaultParams);
     const topology = buildTopology(netlist);
-    const dcSolution = solveNewton(netlist, topology, new Map(), 0); // dt=0: true DC operating point (caps open)
+    const { solution: dcSolution } = solveNewton(netlist, topology, new Map(), 0); // dt=0: true DC operating point (caps open)
 
     const vgate = voltageAt(topology, dcSolution, "gate");
     const vsource = voltageAt(topology, dcSolution, "source");

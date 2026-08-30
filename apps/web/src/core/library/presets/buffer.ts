@@ -5,6 +5,7 @@ export const bufferPreset: PedalPreset = {
   id: "buffer",
   name: "버퍼 (Op-Amp Follower)",
   description: "이상적 연산증폭기 유닛 버퍼 - 입력을 그대로 출력",
+  category: "버퍼",
   inputSourceId: "V1",
   tapNodes: ["in", "out"],
   outputNode: "out",

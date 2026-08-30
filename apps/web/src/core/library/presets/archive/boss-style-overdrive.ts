@@ -17,6 +17,7 @@ export const bossStyleOverdrivePreset: PedalPreset = {
   id: "boss-style-overdrive",
   name: "오버드라이브 (클리핑 + 톤 통합형, Boss 스타일)",
   description: "인버팅 op-amp 클리핑 게인 스테이지 + 패시브 톤 컨트롤 + 출력 버퍼 - 클리핑 이후 톤을 다듬는 다단 구성",
+  category: "오버드라이브",
   inputSourceId: "V1",
   tapNodes: ["in", "stage1out", "tone", "out"],
   outputNode: "out",

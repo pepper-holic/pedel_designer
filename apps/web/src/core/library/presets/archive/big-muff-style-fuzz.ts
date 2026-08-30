@@ -18,6 +18,7 @@ export const bigMuffStyleFuzzPreset: PedalPreset = {
   id: "big-muff-style-fuzz",
   name: "퍼즈 (2단 실리콘 클리핑 + 톤스택, Big Muff 스타일)",
   description: "실리콘 트랜지스터 2단 컬렉터 클리핑 + 패시브 톤스택 - 압축감 강한 버즈 퍼즈",
+  category: "퍼즈",
   inputSourceId: "V1",
   tapNodes: ["in", "c1", "c2", "outAC"],
   outputNode: "outAC",
