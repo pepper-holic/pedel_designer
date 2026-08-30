@@ -1,8 +1,9 @@
-import type { PartInstance, Wire } from "./types";
+import type { BlockInstance, PartInstance, Wire } from "./types";
 
 export interface CircuitSnapshot {
   parts: PartInstance[];
   wires: Wire[];
+  blocks: BlockInstance[];
 }
 
 export interface HistoryState {
