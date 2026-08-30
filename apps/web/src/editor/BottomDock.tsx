@@ -4,6 +4,9 @@ export interface DockTab {
   key: string;
   label: string;
   content: ReactNode;
+  /** Plain-language explanation shown as a tooltip - helps first-time users who don't know what
+   * "THD" or "부품 공차" mean yet. */
+  helpText?: string;
 }
 
 interface BottomDockProps {
@@ -25,6 +28,7 @@ export function BottomDock({ tabs }: BottomDockProps) {
             type="button"
             className={tab.key === activeTab?.key ? "dock-tab active" : "dock-tab"}
             onClick={() => setActiveKey(tab.key)}
+            title={tab.helpText}
           >
             {tab.label}
           </button>

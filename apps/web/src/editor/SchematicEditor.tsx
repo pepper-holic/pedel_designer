@@ -312,11 +312,13 @@ export function SchematicEditor() {
     {
       key: "response",
       label: `주파수 응답${outputNode ? ` (→ ${outputNode})` : ""}`,
+      helpText: "이 회로가 저음/고음을 얼마나 통과시키거나 깎는지 주파수별로 보여줍니다.",
       content: <FrequencyResponseTab status={acResult.status} error={acResult.error} points={acPoints} band={monteCarloResult} />,
     },
     {
       key: "waveform",
       label: "파형",
+      helpText: "오디오 파일을 넣고 시뮬레이션을 실행하면 입력/출력 파형을 비교하고 소리로 들어볼 수 있습니다.",
       content: (
         <WaveformTab
           traces={waveTraces}
@@ -328,11 +330,36 @@ export function SchematicEditor() {
         />
       ),
     },
-    { key: "thd", label: "THD", content: <ThdPanel {...analysis.thd} /> },
-    { key: "montecarlo", label: "부품 공차", content: <MonteCarloPanel {...analysis.monteCarlo} /> },
-    { key: "chain", label: "페달 체인", content: <ChainPanel {...analysis.chain} /> },
-    { key: "bom", label: "BOM", content: <BomPanel parts={parts} /> },
-    { key: "pcb", label: "PCB", content: <PcbExportPanel parts={parts} graph={graph} /> },
+    {
+      key: "thd",
+      label: "THD",
+      helpText: "총고조파왜곡(THD): 원래 신호에 없던 배음이 얼마나 섞여 나오는지 - 숫자가 클수록 더 찌그러진(드라이브가 강한) 소리입니다.",
+      content: <ThdPanel {...analysis.thd} />,
+    },
+    {
+      key: "montecarlo",
+      label: "부품 공차",
+      helpText: "실제 부품은 표시값과 오차가 있습니다(예: 저항 5%). 이 오차 범위 안에서 소리가 얼마나 달라질 수 있는지 시뮬레이션합니다.",
+      content: <MonteCarloPanel {...analysis.monteCarlo} />,
+    },
+    {
+      key: "chain",
+      label: "페달 체인",
+      helpText: "지금 만든 회로를 다른 프리셋과 직렬로 연결했을 때(예: 부스트 → 오버드라이브) 결과를 시뮬레이션합니다.",
+      content: <ChainPanel {...analysis.chain} />,
+    },
+    {
+      key: "bom",
+      label: "BOM",
+      helpText: "부품 목록(Bill of Materials): 이 회로를 실제로 만들 때 구매해야 할 부품과 값을 정리해줍니다.",
+      content: <BomPanel parts={parts} />,
+    },
+    {
+      key: "pcb",
+      label: "PCB",
+      helpText: "이 회로의 연결 정보를 KiCad에서 바로 불러올 수 있는 넷리스트 파일로 내보냅니다(기판 배치/배선은 KiCad에서 직접).",
+      content: <PcbExportPanel parts={parts} graph={graph} />,
+    },
   ];
 
   return (
@@ -365,9 +392,16 @@ export function SchematicEditor() {
           <div className="panel canvas-stage">
             <div className="panel-title">회로도</div>
             {parts.length === 0 ? (
-              <p className="preset-description">
-                회로가 비어 있습니다. 왼쪽 "소자 팔레트"에서 부품을 추가하거나, "템플릿" 탭에서 예제 회로를 불러와 시작하세요.
-              </p>
+              <div className="onboarding-card">
+                <p className="preset-description">
+                  회로가 비어 있습니다. 왼쪽 "소자 팔레트"에서 부품을 추가하거나, "템플릿" 탭에서 예제 회로를 불러와 시작하세요.
+                </p>
+                <p className="onboarding-hint">
+                  처음이신가요? <strong>템플릿/블록</strong> 탭에서 완성된 회로를 하나 불러온 뒤, 아래 <strong>파형</strong> 탭에서
+                  오디오 파일을 넣고 "시뮬레이션 실행"을 눌러보세요. <strong>THD</strong>는 소리가 얼마나 찌그러지는지, <strong>부품 공차</strong>는
+                  실제 부품값 오차가 소리에 얼마나 영향을 주는지 보여주는 분석 도구입니다.
+                </p>
+              </div>
             ) : (
               <p className="canvas-hint">R: 회전 · Delete: 삭제 · 휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · 부품 드래그: 이동 · 단자 클릭 2회: 배선</p>
             )}

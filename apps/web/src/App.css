@@ -256,6 +256,24 @@
   margin: 6px 0 10px;
 }
 
+.onboarding-card {
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin: 6px 0 16px;
+}
+
+.onboarding-hint {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.onboarding-hint strong {
+  color: var(--text);
+}
+
 .tap-buttons {
   display: flex;
   gap: 8px;
