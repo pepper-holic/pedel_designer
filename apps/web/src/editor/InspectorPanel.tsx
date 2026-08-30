@@ -1,18 +1,32 @@
-import { PART_DEFS } from "./partDefs";
-import type { PartInstance } from "./types";
-import { DIODE_MODELS } from "../core/library/deviceModels";
+import { PART_DEFS, type PartType } from "./partDefs";
+import type { BlockInstance, PartInstance } from "./types";
+import { DIODE_MODELS, OPAMP_MODELS, TRANSISTOR_MODELS, JFET_MODELS } from "../core/library/deviceModels";
 import { TAPER_OPTIONS } from "./taper";
 import { PARAM_META } from "./paramMeta";
 
+/** Part types with more than one selectable named model - see PartPalette.tsx's MODEL_MENUS, which
+ * this mirrors so the same variety is reachable after placement, not just at insert time. */
+const MODEL_MENUS: Partial<Record<PartType, Record<string, { label: string; params: Record<string, number | string> }>>> = {
+  diode: DIODE_MODELS,
+  opamp: OPAMP_MODELS,
+  bjt: TRANSISTOR_MODELS,
+  jfet: JFET_MODELS,
+};
+
 interface InspectorPanelProps {
   selectedPart: PartInstance | null;
+  blocks: BlockInstance[];
   onParamChange: (key: string, value: string) => void;
-  onApplyDiodeModel: (modelKey: string) => void;
+  onApplyModel: (paramsOverride: Record<string, number | string>) => void;
   onRotate: () => void;
   onDelete: () => void;
+  onDeleteBlock: (blockId: string) => void;
 }
 
-export function InspectorPanel({ selectedPart, onParamChange, onApplyDiodeModel, onRotate, onDelete }: InspectorPanelProps) {
+export function InspectorPanel({ selectedPart, blocks, onParamChange, onApplyModel, onRotate, onDelete, onDeleteBlock }: InspectorPanelProps) {
+  const ownerBlock = selectedPart?.blockId ? (blocks.find((b) => b.id === selectedPart.blockId) ?? null) : null;
+  const modelMenu = selectedPart ? MODEL_MENUS[selectedPart.type] : undefined;
+
   return (
     <div className="panel">
       <div className="panel-title">선택된 소자</div>
@@ -21,16 +35,23 @@ export function InspectorPanel({ selectedPart, onParamChange, onApplyDiodeModel,
           <p className="preset-description">
             {PART_DEFS[selectedPart.type].label} ({selectedPart.id})
           </p>
-          {selectedPart.type === "diode" && (
+          {ownerBlock && <p className="canvas-hint">소속 블록: {ownerBlock.label}</p>}
+          {modelMenu && (
             <div className="field">
               <div className="field-row">
                 <label>소자 모델</label>
               </div>
-              <select defaultValue="" onChange={(e) => onApplyDiodeModel(e.target.value)} style={{ width: "100%" }}>
+              <select
+                defaultValue=""
+                onChange={(e) => {
+                  const model = modelMenu[e.target.value];
+                  if (model) onApplyModel(model.params);
+                }}
+              >
                 <option value="" disabled>
                   모델 선택...
                 </option>
-                {Object.entries(DIODE_MODELS).map(([key, model]) => (
+                {Object.entries(modelMenu).map(([key, model]) => (
                   <option key={key} value={key}>
                     {model.label}
                   </option>
@@ -43,7 +64,7 @@ export function InspectorPanel({ selectedPart, onParamChange, onApplyDiodeModel,
               <div className="field-row">
                 <label>테이퍼</label>
               </div>
-              <select value={String(selectedPart.params.taper)} onChange={(e) => onParamChange("taper", e.target.value)} style={{ width: "100%" }}>
+              <select value={String(selectedPart.params.taper)} onChange={(e) => onParamChange("taper", e.target.value)}>
                 {Object.entries(TAPER_OPTIONS).map(([key, label]) => (
                   <option key={key} value={key}>
                     {label}
@@ -72,7 +93,6 @@ export function InspectorPanel({ selectedPart, onParamChange, onApplyDiodeModel,
                       step={meta.slider.step}
                       value={value}
                       onChange={(e) => onParamChange(key, e.target.value)}
-                      style={{ width: "100%" }}
                     />
                   </div>
                 );
@@ -107,6 +127,11 @@ export function InspectorPanel({ selectedPart, onParamChange, onApplyDiodeModel,
             <button type="button" onClick={onDelete}>
               삭제 (Del)
             </button>
+            {ownerBlock && (
+              <button type="button" onClick={() => onDeleteBlock(ownerBlock.id)}>
+                블록 전체 삭제
+              </button>
+            )}
           </div>
         </>
       ) : (
