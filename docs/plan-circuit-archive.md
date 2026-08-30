@@ -58,9 +58,9 @@ export interface PedalPreset {
 기존 8개 프리셋과 겹치지 않으면서 대표성이 높은 토폴로지 후보 (실제 값은 구현 세션에서 공개 자료 참고해 확정):
 
 1. **RAT 스타일 디스토션** — op-amp 게인 스테이지 + 클리핑 다이오드를 op-amp 출력 쪽(피드백 루프 밖)에 배치하는 것이 특징 (기존 opamp-drive/ts9는 피드백 내부 클리핑이라 토폴로지가 다름). ✅ 완료 (`rat-style-distortion.ts`)
-2. **Big Muff 스타일 퍼즈/서스테이너** — 2~3단 트랜지스터 증폭 + 다이오드 클리퍼 + 톤 컨트롤(톤 스택) 조합, 기존 fuzz-germanium(2트랜지스터 직결)과 구분되는 4단 구성. ✅ 완료 (`big-muff-style-fuzz.ts`, 상세는 [plan-workbench-extensions.md](./plan-workbench-extensions.md) 참고)
+2. **Big Muff 스타일 퍼즈/서스테이너** — 2~3단 트랜지스터 증폭 + 다이오드 클리퍼 + 톤 컨트롤(톤 스택) 조합, 기존 fuzz-germanium(2트랜지스터 직결)과 구분되는 4단 구성. ✅ 완료 (`big-muff-style-fuzz.ts`, 상세는 [plan-editor-implementation-history.md](./plan-editor-implementation-history.md) 참고)
 3. **Klon 스타일 클린 부스트/오버드라이브** — 클린 버퍼 경로와 클리핑 경로를 병렬로 섞는(blend) 독특한 구조, MNA 솔버가 병렬 경로를 잘 처리하는지 확인하는 좋은 테스트케이스. ✅ 완료 (`klon-style-blend.ts`)
-4. **Silicon/Germanium 스타일 오버드라이브 (Boss-style)** — 다단 오피앰프 + 톤 컨트롤 통합형, 기존 프리셋들과 톤스택 결합 패턴 비교용. ✅ 완료 (`boss-style-overdrive.ts`, 상세는 [plan-workbench-extensions.md](./plan-workbench-extensions.md) 참고)
+4. **Silicon/Germanium 스타일 오버드라이브 (Boss-style)** — 다단 오피앰프 + 톤 컨트롤 통합형, 기존 프리셋들과 톤스택 결합 패턴 비교용. ✅ 완료 (`boss-style-overdrive.ts`, 상세는 [plan-editor-implementation-history.md](./plan-editor-implementation-history.md) 참고)
 
 **우선순위 후보 4개 전부 구현 완료.**
 
@@ -79,7 +79,7 @@ export interface PedalPreset {
 - [x] 우선순위 후보 회로 선정
 - [x] 구현 로드맵 작성
 - [x] **일반화 메커니즘 실제 구현 + 데모 회로 2개로 검증 완료** (아래 참고)
-- [x] **우선순위 후보 회로 4개 전부 구현 완료** (RAT/Big Muff/Klon/Boss 스타일) — 나머지 2개(Big Muff, Boss 스타일)는 [plan-workbench-extensions.md](./plan-workbench-extensions.md) 참고
+- [x] **우선순위 후보 회로 4개 전부 구현 완료** (RAT/Big Muff/Klon/Boss 스타일) — 나머지 2개(Big Muff, Boss 스타일)는 [plan-editor-implementation-history.md](./plan-editor-implementation-history.md) 참고
 
 ## 6. 일반화 메커니즘 구현 완료
 
@@ -93,3 +93,18 @@ export interface PedalPreset {
 - `presets/index.ts`에서 `archivePresets`를 기존 `presets` 배열에 병합 — 기존 8개 프리셋과 완전히 동일하게 취급되어 `presets-sanity.test.ts`/`graphFromNetlist.test.ts`의 전수 회귀 테스트에 **자동으로 편입**됨(추가 테스트 코드 불필요).
 - 전용 동작 검증: `tests/solver/archive-presets-behavior.test.ts` 4개 — RAT 스타일이 큰 입력에서 선형 이득 예측치보다 훨씬 낮게 클리핑되는지/작은 입력에서는 선형에 가까운지, Klon 블렌드가 한쪽 저항을 극단으로 키우면 순수 클린/순수 드라이브 경로에 각각 수렴하는지 확인 — **4개 전부 첫 실행에 통과**, 두 토폴로지가 설계 의도대로 정확히 동작함을 뒷받침.
 - 검증: `npx tsc --noEmit`, `npx vitest run`(70개 전부 통과), `npm run build` 클린. 브라우저에서 두 템플릿 모두 로드 → 회로도 렌더링 → 출력 노드 자동 선택 → 주파수 응답 정상 계산까지 확인, 콘솔 에러 없음.
+
+## 7. 2차 확장: 오버드라이브 계보 4종 추가 완료
+
+사용자 요청으로 유명 오버드라이브/트랜스페어런트 계열 4개를 추가 조사·구현. `coda-effects.com`(Jan Ray/Timmy 회로 분석) 및 웹 검색(ElectroSmash, PedalPCB 포럼, Dirtbox Layouts, Analog Is Not Dead, Stanford CCRMA 논문 등)으로 각 회로의 **기능적 토폴로지**(게인 스테이지 형태, 클리핑 다이오드 위치/개수/종류, 톤스택 방식)를 확인 후 직접 넷리스트로 재구성 - 기존 원칙(회로도 이미지·텍스트 비복제, 상표명 대신 스타일 표기, `archive.sourceRefs`/`disclaimer` 메타데이터 부착) 동일 적용.
+
+- **`timmy-style-overdrive.ts`**: JFET 공통-소스 부스트 단 + 인버팅 op-amp 게인 스테이지, 피드백 루프에 다이오드 **단 1쌍만** 배치(기존 TS9/opamp-drive의 4-다이오드 피드백 대비 압축감이 훨씬 적은 것이 이 계열의 핵심 특징) + 패시브 RC 톤스택.
+- **`bluesbreaker-style-overdrive.ts`**: 라이브러리 최초로 **논인버팅** op-amp 게인 스테이지(입력 임피던스가 높고 인버팅 스테이지들과 캐릭터가 다름) + 별도 인버팅 스테이지의 피드백 루프에 4-다이오드(직렬 2개 x 양방향) 클리핑 + 패시브 톤스택.
+- **`king-of-tone-style-overdrive.ts`**: Bluesbreaker와 동일한 논인버팅 1단 이후, `clipMode` 파라미터로 **클리핑 배치 자체가 바뀌는** 2단을 `build()` 내에서 분기 구현 - `0`은 피드백 루프 클리핑(TS 계열), `1`은 이미 검증된 RAT 스타일의 "출력단 션트 클리핑" 패턴 재사용. 파라미터 분기가 넷리스트 구조 자체를 바꾸는 첫 사례라 `presets-sanity.test.ts`(defaultParams만 커버)와 별도로 `tests/solver/king-of-tone-clip-modes.test.ts`를 추가해 `clipMode: 1` 분기도 회귀 검증.
+- **`ocd-style-overdrive.ts`**: 인버팅 게인 스테이지 + RAT 패턴 재사용의 출력단 션트 클리핑이되, 양쪽 다이오드를 **실리콘/게르마늄으로 다르게** 배치(비대칭 하드 클리핑) + `brightSwitch` 파라미터로 트레블 브리드 커패시터 유무를 분기. 이 분기도 넷리스트 구조를 바꾸므로 `tests/solver/ocd-bright-switch.test.ts`로 `brightSwitch: 1` 분기 별도 검증.
+- `presets/archive/index.ts`, `presets/index.ts`에 4종 전부 등록 - 기존 8+4개 프리셋과 동일하게 `presets-sanity.test.ts`(NaN/Infinity 전수 검사)에 자동 편입.
+- 검증: `npx tsc -b` 클린, `npx vitest run` 149개 전부 통과(기존 137 + 신규 12: 프리셋 4종의 기본 sanity 테스트 4개 + 분기 전용 테스트 8개), 브라우저에서 4개 템플릿 전부 로드 → 회로도 렌더링 → 출력 노드 자동 선택 → 주파수 응답 정상 계산까지 확인, 콘솔에 새로 발생한 에러 없음.
+
+### 남은 후보 (추가 세션에서)
+
+`coda-effects.com` Theory 섹션에서 추가로 확인한, 아직 미구현인 대표 토폴로지 후보: Fuzz Face류(트랜지스터 2개 피드백 바이어스 퍼즈 - 기존 `fuzz-germanium`과는 바이어스 방식이 다름), LPB1류(단일 트랜지스터 부스트), Tonebender MkIII류(3-트랜지스터 퍼즈). 필요 시 동일 원칙으로 후속 구현 가능.
