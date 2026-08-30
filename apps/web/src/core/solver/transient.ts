@@ -15,6 +15,11 @@ export interface TransientOptions {
 
 export interface TransientResult {
   traces: Map<NodeId, Float64Array>;
+  /** Count of samples where the per-sample Newton solve hit the iteration cap without converging -
+   * those samples are still present in `traces` (the solver falls back to its last guess rather than
+   * throwing or producing NaN) but are not a solved operating point, so their accuracy is suspect.
+   * Non-zero here means the circuit is numerically stiff for this waveform - worth a UI warning. */
+  nonConvergentSampleCount: number;
 }
 
 /**
@@ -58,10 +63,12 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
   const traces = new Map<NodeId, Float64Array>();
   for (const node of options.tapNodes) traces.set(node, new Float64Array(n));
   const slewHistory = new Map<string, number>();
+  let nonConvergentSampleCount = 0;
 
   for (let i = 0; i < n; i++) {
     inputElement.voltage = options.inputSamples[i];
-    const solution = solveNewton(netlist, topology, history, dt);
+    const { solution, converged } = solveNewton(netlist, topology, history, dt);
+    if (!converged) nonConvergentSampleCount++;
     applySlewRateLimiting(netlist, topology, solution, slewHistory, dt);
 
     for (const node of options.tapNodes) {
@@ -75,5 +82,5 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
     }
   }
 
-  return { traces };
+  return { traces, nonConvergentSampleCount };
 }

@@ -9,6 +9,16 @@ export interface NewtonOptions {
   tolerance?: number;
 }
 
+export interface NewtonResult {
+  solution: Float64Array<ArrayBuffer>;
+  /** False when the iteration hit `maxIterations` without the node voltages settling within
+   * `tolerance` - the returned solution is then just the last guess, not a solved operating point.
+   * Callers that run this per-sample (transient) should track and surface this rather than trust
+   * every sample silently, since a stiff or badly-conditioned user-built circuit (e.g. a tight
+   * feedback loop through two diodes) can fail to converge without producing NaN or throwing. */
+  converged: boolean;
+}
+
 /**
  * Solves one timestep (or the DC operating point, when dt = 0) by repeatedly
  * stamping the network at the current voltage guess and re-solving until the
@@ -20,7 +30,7 @@ export function solveNewton(
   history: Map<string, number>,
   dt: number,
   options: NewtonOptions = {},
-): Float64Array<ArrayBuffer> {
+): NewtonResult {
   const maxIterations = options.maxIterations ?? 50;
   const tolerance = options.tolerance ?? 1e-9;
 
@@ -39,7 +49,7 @@ export function solveNewton(
       maxDelta = Math.max(maxDelta, Math.abs(solution[i] - guess[i]));
     }
     guess = solution;
-    if (maxDelta < tolerance) return solution;
+    if (maxDelta < tolerance) return { solution, converged: true };
   }
-  return guess;
+  return { solution: guess, converged: false };
 }

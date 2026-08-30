@@ -41,7 +41,7 @@ export interface AcPoint {
  */
 export function runAcAnalysis(netlist: Netlist, options: AcOptions): AcPoint[] {
   const topology = buildTopology(netlist);
-  const dcSolution = solveNewton(netlist, topology, new Map(), 0);
+  const { solution: dcSolution } = solveNewton(netlist, topology, new Map(), 0);
   const outIndex = nodeOf(topology, options.outputNode);
 
   return options.frequenciesHz.map((frequencyHz) => {
