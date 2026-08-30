@@ -29,7 +29,6 @@ export function ChainPanel({ options, chain, onAddStage, onRemoveStage, onMoveSt
           onChange={(e) => {
             if (e.target.value) onAddStage(e.target.value);
           }}
-          style={{ width: "100%" }}
         >
           <option value="" disabled>
             추가할 회로 선택...

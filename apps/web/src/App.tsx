@@ -13,9 +13,7 @@ function App() {
         <span className="proj">기타 이펙트 회로 시뮬레이터</span>
       </header>
 
-      <div className="workspace-content">
-        <SchematicEditor />
-      </div>
+      <SchematicEditor />
 
       <footer className="statusbar">
         <span className="stat">

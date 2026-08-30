@@ -6,9 +6,13 @@
   --bg-panel-header: #e4e8d5;
   --border: #d3d9c1;
   --border-soft: #e3e7d3;
+  /* schematic canvas snap-grid dots - faint enough to read as paper texture, not UI chrome */
+  --grid-dot: #d8dcc7;
   --text: #191a10;
   --text-dim: #5c5f49;
-  --text-faint: #8b8e75;
+  /* darkened from the original #8b8e75 - that failed WCAG AA (~3.4:1) for the small hint/description
+     text it's used on against the light panel backgrounds; this hits ~4.9:1. */
+  --text-faint: #6f735a;
 
   /* chrome (hardware/knobs side - menubar, toolbar, status bar) */
   --chrome-bg: #131409;
@@ -26,6 +30,18 @@
   /* circuit-trace green, used for wires and waveform ink - distinct from the accent so pops still read as "active" */
   --wire: #3c6b2e;
   --wire-dim: #a9c19c;
+
+  /* functional-block overlays on the schematic canvas (buffer/gain/clipping/tone) - translucent
+     tints + matching label color, one hue per category, styled after annotated reference schematics
+     that shade a pedal's circuit into labeled functional regions. */
+  --block-buffer-fill: rgba(74, 122, 191, 0.14);
+  --block-buffer-stroke: #4a7abf;
+  --block-gain-fill: rgba(199, 130, 43, 0.14);
+  --block-gain-stroke: #c7822b;
+  --block-clipping-fill: rgba(178, 63, 63, 0.14);
+  --block-clipping-stroke: #b23f3f;
+  --block-tone-fill: rgba(122, 78, 168, 0.14);
+  --block-tone-stroke: #7a4ea8;
 
   --font-display: "Space Grotesk", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
@@ -67,6 +83,11 @@ input[type="range"] {
   border-radius: 2px;
   background: var(--border);
   outline: none;
+}
+
+input[type="range"]:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  border-radius: 2px;
 }
 
 input[type="range"]::-webkit-slider-thumb {

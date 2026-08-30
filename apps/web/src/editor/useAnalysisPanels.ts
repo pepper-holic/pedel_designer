@@ -5,17 +5,14 @@ import type { CabinetVariant } from "../audio/cabinetIr";
 import { playSamples } from "../audio/playback";
 import { presets } from "../core/library/presets";
 import { logFrequencySweep } from "../core/solver/ac";
-import { ThdPanel } from "./ThdPanel";
 import { measureThd } from "./thdMeasurement";
 import type { ThdResult } from "../core/analysis/thd";
-import { MonteCarloPanel } from "./MonteCarloPanel";
 import { runMonteCarloAc, type MonteCarloResult } from "../core/analysis/montecarlo";
-import { ChainPanel } from "./ChainPanel";
 import { runChainedTransient, type ChainStage } from "../core/analysis/chain";
 
 const CURRENT_CIRCUIT_CHAIN_ID = "__current__";
 
-interface AnalysisPanelsProps {
+interface UseAnalysisPanelsArgs {
   graph: GraphNetlist;
   outputNode: string;
   sample: LoadedSample | null;
@@ -23,13 +20,13 @@ interface AnalysisPanelsProps {
   getAudioContext: () => AudioContext;
   cabinetEnabled: boolean;
   cabinetVariant: CabinetVariant;
-  /** Lifted up so the frequency-response chart (rendered by the parent) can overlay the tolerance band. */
+  /** Lifted up so the frequency-response chart can overlay the tolerance band. */
   onMonteCarloResultChange: (result: MonteCarloResult | null) => void;
 }
 
-/** THD measurement, component-tolerance Monte Carlo, and multi-stage pedal chaining - grouped here
- * since they all just consume the current circuit + uploaded sample and don't affect schematic editing. */
-export function AnalysisPanels({
+/** THD measurement, component-tolerance Monte Carlo, and multi-stage pedal chaining - state and
+ * handlers only, extracted so the bottom-dock tabs can render each result independently. */
+export function useAnalysisPanels({
   graph,
   outputNode,
   sample,
@@ -38,7 +35,7 @@ export function AnalysisPanels({
   cabinetEnabled,
   cabinetVariant,
   onMonteCarloResultChange,
-}: AnalysisPanelsProps) {
+}: UseAnalysisPanelsArgs) {
   const [thdResult, setThdResult] = useState<ThdResult | null>(null);
   const [tolerancePercent, setTolerancePercent] = useState(5);
   const [monteCarloResult, setMonteCarloResultState] = useState<MonteCarloResult | null>(null);
@@ -111,30 +108,26 @@ export function AnalysisPanels({
     playSamples(chainOutput, sample.sampleRate, getAudioContext(), cabinetEnabled ? cabinetVariant : null);
   };
 
-  return (
-    <>
-      <ThdPanel canMeasure={!!outputNode && !!graph.inputSourceId} result={thdResult} onMeasure={handleMeasureThd} />
-
-      <ChainPanel
-        options={chainOptions}
-        chain={chain}
-        onAddStage={handleAddChainStage}
-        onRemoveStage={handleRemoveChainStage}
-        onMoveStage={handleMoveChainStage}
-        canRun={!!sample && chain.length > 0}
-        onRun={handleRunChain}
-        status={chainStatus}
-        hasResult={chainOutput !== null}
-        onPlayResult={handlePlayChain}
-      />
-
-      <MonteCarloPanel
-        canRun={!!outputNode && !!graph.inputSourceId}
-        tolerancePercent={tolerancePercent}
-        onTolerancePercentChange={setTolerancePercent}
-        worstCaseSpreadDb={monteCarloResult ? Math.max(...monteCarloResult.maxDb.map((v, i) => v - monteCarloResult.minDb[i])) : null}
-        onRun={handleRunMonteCarlo}
-      />
-    </>
-  );
+  return {
+    thd: { canMeasure: !!outputNode && !!graph.inputSourceId, result: thdResult, onMeasure: handleMeasureThd },
+    monteCarlo: {
+      canRun: !!outputNode && !!graph.inputSourceId,
+      tolerancePercent,
+      onTolerancePercentChange: setTolerancePercent,
+      worstCaseSpreadDb: monteCarloResult ? Math.max(...monteCarloResult.maxDb.map((v, i) => v - monteCarloResult.minDb[i])) : null,
+      onRun: handleRunMonteCarlo,
+    },
+    chain: {
+      options: chainOptions,
+      chain,
+      onAddStage: handleAddChainStage,
+      onRemoveStage: handleRemoveChainStage,
+      onMoveStage: handleMoveChainStage,
+      canRun: !!sample && chain.length > 0,
+      onRun: handleRunChain,
+      status: chainStatus,
+      hasResult: chainOutput !== null,
+      onPlayResult: handlePlayChain,
+    },
+  };
 }

@@ -4,34 +4,43 @@ import type { TerminalRef } from "./types";
 import { netlistFromGraph } from "./netlistFromGraph";
 import { graphFromNetlist, findEquivalentNode } from "./graphFromNetlist";
 import { snapToGrid, rotateClockwise } from "./geometry";
+import type { BlockDef } from "./blockDefs";
+import { instantiateBlock } from "./blockInstance";
 import { SchematicCanvas } from "./SchematicCanvas";
-import { PartPalette } from "./PartPalette";
+import { PartsSidebar } from "./PartsSidebar";
 import { InspectorPanel } from "./InspectorPanel";
 import { OutputAudioPanel } from "./OutputAudioPanel";
-import { AnalysisPanels } from "./AnalysisPanels";
+import { BottomDock } from "./BottomDock";
+import { FrequencyResponseTab, type AcStatus } from "./FrequencyResponseTab";
+import { WaveformTab } from "./WaveformTab";
+import { ThdPanel } from "./ThdPanel";
+import { MonteCarloPanel } from "./MonteCarloPanel";
+import { ChainPanel } from "./ChainPanel";
+import { BomPanel } from "./BomPanel";
+import { PcbExportPanel } from "./PcbExportPanel";
+import { useAnalysisPanels } from "./useAnalysisPanels";
 import type { MonteCarloResult } from "../core/analysis/montecarlo";
 import { presets, type PedalPreset } from "../core/library/presets";
-import { DIODE_MODELS } from "../core/library/deviceModels";
 import { PARAM_META } from "./paramMeta";
 import { loadSampleFromFile, type LoadedSample } from "../audio/loadSample";
 import { playSamples } from "../audio/playback";
-import { CABINET_VARIANTS, type CabinetVariant } from "../audio/cabinetIr";
-import { runTransient } from "../core/solver/transient";
+import { type CabinetVariant } from "../audio/cabinetIr";
+import { runTransientAsync } from "../core/solver/runTransientAsync";
 import { runAcAnalysis, logFrequencySweep, type AcPoint } from "../core/solver/ac";
-import { Waveform, type WaveformTrace } from "../viz/Waveform";
-import { FrequencyResponse } from "../viz/FrequencyResponse";
+import { type WaveformTrace } from "../viz/Waveform";
 import { canRedo, canUndo, commitPrevious, createHistory, pushSnapshot, redo, replacePresent, undo, type CircuitSnapshot } from "./historyStack";
-import { loadCircuitFromStorage, saveCircuitToStorage } from "./circuitStorage";
+import { loadCircuitFromStorage, saveCircuitToStorage, CURRENT_SCHEMA_VERSION } from "./circuitStorage";
 
 let partCounter = 0;
+let blockCounter = 0;
 const AUTOSAVE_DEBOUNCE_MS = 400;
 
-type LeftTab = "parts" | "templates";
+type LeftTab = "parts" | "library";
 
 function loadInitialState(): { snapshot: CircuitSnapshot; outputNode: string; inputGain: number } {
   const stored = loadCircuitFromStorage(localStorage);
-  if (!stored) return { snapshot: { parts: [], wires: [] }, outputNode: "", inputGain: 0.5 };
-  return { snapshot: { parts: stored.parts, wires: stored.wires }, outputNode: stored.outputNode, inputGain: stored.inputGain };
+  if (!stored) return { snapshot: { parts: [], wires: [], blocks: [] }, outputNode: "", inputGain: 0.5 };
+  return { snapshot: { parts: stored.parts, wires: stored.wires, blocks: stored.blocks }, outputNode: stored.outputNode, inputGain: stored.inputGain };
 }
 
 export function SchematicEditor() {
@@ -45,6 +54,7 @@ export function SchematicEditor() {
   const [sample, setSample] = useState<LoadedSample | null>(null);
   const [status, setStatus] = useState("");
   const [waveTraces, setWaveTraces] = useState<WaveformTrace[] | null>(null);
+  const [isSimulating, setIsSimulating] = useState(false);
   const [monteCarloResult, setMonteCarloResult] = useState<MonteCarloResult | null>(null);
   const [circuitVersion, setCircuitVersion] = useState(0);
   const [cabinetEnabled, setCabinetEnabled] = useState(false);
@@ -54,6 +64,7 @@ export function SchematicEditor() {
 
   const parts = history.present.parts;
   const wires = history.present.wires;
+  const blocks = history.present.blocks;
 
   const getAudioContext = () => {
     if (!audioContextRef.current) audioContextRef.current = new AudioContext();
@@ -70,7 +81,6 @@ export function SchematicEditor() {
     return { width: Math.max(900, maxX + margin), height: Math.max(460, maxY + margin) };
   }, [parts]);
 
-  type AcStatus = "no-output" | "no-source" | "error" | "ok";
   const acResult = useMemo((): { points: AcPoint[]; status: AcStatus; error: string | null } => {
     if (!outputNode) return { points: [], status: "no-output", error: null };
     if (!graph.inputSourceId || graph.netlist.elements.length === 0) return { points: [], status: "no-source", error: null };
@@ -88,10 +98,10 @@ export function SchematicEditor() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      saveCircuitToStorage(localStorage, { parts, wires, outputNode, inputGain });
+      saveCircuitToStorage(localStorage, { schemaVersion: CURRENT_SCHEMA_VERSION, parts, wires, blocks, outputNode, inputGain });
     }, AUTOSAVE_DEBOUNCE_MS);
     return () => clearTimeout(timer);
-  }, [parts, wires, outputNode, inputGain]);
+  }, [parts, wires, blocks, outputNode, inputGain]);
 
   const commit = (next: CircuitSnapshot) => setHistory((h) => pushSnapshot(h, next));
 
@@ -100,7 +110,7 @@ export function SchematicEditor() {
 
   const handleNewCircuit = () => {
     if (parts.length > 0 && !window.confirm("현재 회로를 지우고 새로 시작할까요? 저장되지 않은 작업은 undo(Ctrl+Z)로만 복구할 수 있습니다.")) return;
-    commit({ parts: [], wires: [] });
+    commit({ parts: [], wires: [], blocks: [] });
     setSelectedPartId(null);
     setLoadedPresetId(null);
     setOutputNode("");
@@ -116,7 +126,7 @@ export function SchematicEditor() {
     const roundTripped = netlistFromGraph(newParts, newWires);
     const equivalentOutput = findEquivalentNode(originalNetlist, preset.outputNode, roundTripped.netlist);
 
-    commit({ parts: newParts, wires: newWires });
+    commit({ parts: newParts, wires: newWires, blocks: [] });
     setSelectedPartId(null);
     setLoadedPresetId(preset.id);
     setOutputNode(equivalentOutput ?? "");
@@ -126,7 +136,7 @@ export function SchematicEditor() {
     setStatus(`템플릿 로드됨: ${preset.name}`);
   };
 
-  const handleAddPart = (type: PartType) => {
+  const handleAddPart = (type: PartType, paramsOverride?: Record<string, number | string>) => {
     partCounter += 1;
     const id = `${type}${partCounter}`;
     const col = partCounter % 6;
@@ -134,15 +144,32 @@ export function SchematicEditor() {
     commit({
       parts: [
         ...parts,
-        { id, type, x: snapToGrid(80 + col * 130), y: snapToGrid(80 + row * 100), rotation: 0, params: { ...PART_DEFS[type].defaultParams } },
+        {
+          id,
+          type,
+          x: snapToGrid(80 + col * 130),
+          y: snapToGrid(80 + row * 100),
+          rotation: 0,
+          params: { ...PART_DEFS[type].defaultParams, ...paramsOverride },
+        },
       ],
       wires,
+      blocks,
     });
+  };
+
+  const handleAddBlock = (def: BlockDef) => {
+    blockCounter += 1;
+    const instanceId = `blk${blockCounter}`;
+    const col = (blockCounter - 1) % 3;
+    const row = Math.floor((blockCounter - 1) / 3);
+    const { parts: blockParts, wires: blockWires, block } = instantiateBlock(def, instanceId, { x: 100 + col * 420, y: 100 + row * 260 });
+    commit({ parts: [...parts, ...blockParts], wires: [...wires, ...blockWires], blocks: [...blocks, block] });
   };
 
   const handleMovePart = (id: string, x: number, y: number) => {
     if (dragStartSnapshotRef.current === null) dragStartSnapshotRef.current = history.present;
-    setHistory((h) => replacePresent(h, { parts: parts.map((p) => (p.id === id ? { ...p, x: snapToGrid(x), y: snapToGrid(y) } : p)), wires }));
+    setHistory((h) => replacePresent(h, { parts: parts.map((p) => (p.id === id ? { ...p, x: snapToGrid(x), y: snapToGrid(y) } : p)), wires, blocks }));
   };
 
   const handleDragEnd = () => {
@@ -152,21 +179,33 @@ export function SchematicEditor() {
   };
 
   const handleAddWire = (a: TerminalRef, b: TerminalRef) => {
-    commit({ parts, wires: [...wires, { id: `w${wires.length + 1}_${Date.now()}`, a, b }] });
+    commit({ parts, wires: [...wires, { id: `w${wires.length + 1}_${Date.now()}`, a, b }], blocks });
   };
 
   const handleDeleteSelected = () => {
     if (!selectedPartId) return;
+    const nextParts = parts.filter((p) => p.id !== selectedPartId);
+    const remainingBlockIds = new Set(nextParts.map((p) => p.blockId).filter((id): id is string => id !== undefined));
     commit({
-      parts: parts.filter((p) => p.id !== selectedPartId),
+      parts: nextParts,
       wires: wires.filter((w) => w.a.partId !== selectedPartId && w.b.partId !== selectedPartId),
+      blocks: blocks.filter((b) => remainingBlockIds.has(b.id)),
+    });
+    setSelectedPartId(null);
+  };
+
+  const handleDeleteBlock = (blockId: string) => {
+    commit({
+      parts: parts.filter((p) => p.blockId !== blockId),
+      wires: wires.filter((w) => w.a.partId.split("_")[0] !== blockId || w.b.partId.split("_")[0] !== blockId),
+      blocks: blocks.filter((b) => b.id !== blockId),
     });
     setSelectedPartId(null);
   };
 
   const handleRotateSelected = () => {
     if (!selectedPartId) return;
-    commit({ parts: parts.map((p) => (p.id === selectedPartId ? { ...p, rotation: rotateClockwise(p.rotation) } : p)), wires });
+    commit({ parts: parts.map((p) => (p.id === selectedPartId ? { ...p, rotation: rotateClockwise(p.rotation) } : p)), wires, blocks });
   };
 
   useEffect(() => {
@@ -197,14 +236,12 @@ export function SchematicEditor() {
     const parsed = Number(value);
     const meta = PARAM_META[key];
     const nextValue = Number.isFinite(parsed) && value.trim() !== "" ? (meta?.min !== undefined ? Math.max(parsed, meta.min) : parsed) : value;
-    commit({ parts: parts.map((p) => (p.id === selectedPart.id ? { ...p, params: { ...p.params, [key]: nextValue } } : p)), wires });
+    commit({ parts: parts.map((p) => (p.id === selectedPart.id ? { ...p, params: { ...p.params, [key]: nextValue } } : p)), wires, blocks });
   };
 
-  const handleApplyDiodeModel = (modelKey: string) => {
+  const handleApplyModel = (paramsOverride: Record<string, number | string>) => {
     if (!selectedPart) return;
-    const model = DIODE_MODELS[modelKey];
-    if (!model) return;
-    commit({ parts: parts.map((p) => (p.id === selectedPart.id ? { ...p, params: { ...p.params, ...model.params } } : p)), wires });
+    commit({ parts: parts.map((p) => (p.id === selectedPart.id ? { ...p, params: { ...p.params, ...paramsOverride } } : p)), wires, blocks });
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -216,25 +253,41 @@ export function SchematicEditor() {
     setStatus(`샘플 로드 완료 (${loaded.samples.length}개 샘플, ${loaded.sampleRate}Hz)`);
   };
 
-  const handleRun = () => {
+  const handleRun = async () => {
     if (!sample || !graph.inputSourceId) return;
+    setIsSimulating(true);
     setStatus("시뮬레이션 실행 중...");
     const scaled = new Float64Array(sample.samples.length);
     for (let i = 0; i < scaled.length; i++) scaled[i] = sample.samples[i] * inputGain;
-    const { traces } = runTransient(graph.netlist, {
-      inputSourceId: graph.inputSourceId,
-      inputSamples: scaled,
-      sampleRate: sample.sampleRate,
-      tapNodes: graph.netNames.filter((n) => n !== "0"),
-    });
-    setWaveTraces(
-      Array.from(traces.entries()).map(([label, data], i) => ({
-        label,
-        data,
-        color: ["#3c6b2e", "#7c9300", "#8a4a2a", "#191a10"][i % 4],
-      })),
-    );
-    setStatus("시뮬레이션 완료");
+    try {
+      // Run off the main thread - a long user-uploaded file is enough per-sample Newton solving to
+      // freeze the page if run inline (docs/ROADMAP.md §6).
+      const { traces, nonConvergentSampleCount } = await runTransientAsync(graph.netlist, {
+        inputSourceId: graph.inputSourceId,
+        inputSamples: scaled,
+        sampleRate: sample.sampleRate,
+        tapNodes: graph.netNames.filter((n) => n !== "0"),
+      });
+      setWaveTraces(
+        Array.from(traces.entries()).map(([label, data], i) => ({
+          label,
+          data,
+          color: ["#3c6b2e", "#7c9300", "#8a4a2a", "#191a10"][i % 4],
+        })),
+      );
+      // A stiff/badly-conditioned circuit (e.g. a tight feedback loop through two diodes) can fail to
+      // converge on some samples - the solver falls back to its last guess rather than throwing or
+      // producing NaN, so without this the user would have no way to know those samples are suspect.
+      setStatus(
+        nonConvergentSampleCount > 0
+          ? `시뮬레이션 완료 (경고: ${nonConvergentSampleCount}개 샘플에서 수렴 실패 - 해당 구간 파형 정확도가 낮을 수 있습니다)`
+          : "시뮬레이션 완료",
+      );
+    } catch (err) {
+      setStatus(`시뮬레이션 실패: ${err instanceof Error ? err.message : "알 수 없는 오류"}`);
+    } finally {
+      setIsSimulating(false);
+    }
   };
 
   const handlePlay = (label: string) => {
@@ -244,79 +297,72 @@ export function SchematicEditor() {
     playSamples(trace.data, sample.sampleRate, getAudioContext(), cabinetEnabled ? cabinetVariant : null);
   };
 
+  const analysis = useAnalysisPanels({
+    graph,
+    outputNode,
+    sample,
+    inputGain,
+    getAudioContext,
+    cabinetEnabled,
+    cabinetVariant,
+    onMonteCarloResultChange: setMonteCarloResult,
+  });
+
+  const dockTabs = [
+    {
+      key: "response",
+      label: `주파수 응답${outputNode ? ` (→ ${outputNode})` : ""}`,
+      content: <FrequencyResponseTab status={acResult.status} error={acResult.error} points={acPoints} band={monteCarloResult} />,
+    },
+    {
+      key: "waveform",
+      label: "파형",
+      content: (
+        <WaveformTab
+          traces={waveTraces}
+          onPlay={handlePlay}
+          cabinetEnabled={cabinetEnabled}
+          onCabinetEnabledChange={setCabinetEnabled}
+          cabinetVariant={cabinetVariant}
+          onCabinetVariantChange={setCabinetVariant}
+        />
+      ),
+    },
+    { key: "thd", label: "THD", content: <ThdPanel {...analysis.thd} /> },
+    { key: "montecarlo", label: "부품 공차", content: <MonteCarloPanel {...analysis.monteCarlo} /> },
+    { key: "chain", label: "페달 체인", content: <ChainPanel {...analysis.chain} /> },
+    { key: "bom", label: "BOM", content: <BomPanel parts={parts} /> },
+    { key: "pcb", label: "PCB", content: <PcbExportPanel parts={parts} graph={graph} /> },
+  ];
+
   return (
-    <div>
-      <div className="panel">
-        <div className="dock-tab-row">
-          <button type="button" className={leftTab === "parts" ? "dock-tab active" : "dock-tab"} onClick={() => setLeftTab("parts")}>
-            소자 팔레트
-          </button>
-          <button type="button" className={leftTab === "templates" ? "dock-tab active" : "dock-tab"} onClick={() => setLeftTab("templates")}>
-            템플릿
-          </button>
-          <button type="button" className="dock-tab" onClick={handleUndo} disabled={!canUndo(history)} title="실행 취소 (Ctrl+Z)">
-            ↶ 실행 취소
-          </button>
-          <button type="button" className="dock-tab" onClick={handleRedo} disabled={!canRedo(history)} title="다시 실행 (Ctrl+Shift+Z)">
-            ↷ 다시 실행
-          </button>
-          <button
-            type="button"
-            className="dock-tab"
-            style={{ marginLeft: "auto" }}
-            onClick={handleNewCircuit}
-            disabled={parts.length === 0}
-            title="캔버스를 비우고 처음부터 다시 시작합니다"
-          >
-            새 회로
-          </button>
-        </div>
-
-        {leftTab === "parts" && <PartPalette onAdd={handleAddPart} />}
-
-        {leftTab === "templates" && (
-          <div className="template-list">
-            {presets.map((preset) => (
-              <button
-                key={preset.id}
-                type="button"
-                className={preset.id === loadedPresetId ? "template-card active" : "template-card"}
-                onClick={() => handleLoadTemplate(preset)}
-              >
-                <span className="template-name">{preset.name}</span>
-                <span className="template-desc">{preset.description}</span>
-              </button>
-            ))}
-          </div>
-        )}
+    <div className="workspace-content">
+      <div className="toolbar">
+        <button type="button" onClick={handleUndo} disabled={!canUndo(history)} title="실행 취소 (Ctrl+Z)">
+          ↶ 실행 취소
+        </button>
+        <button type="button" onClick={handleRedo} disabled={!canRedo(history)} title="다시 실행 (Ctrl+Shift+Z)">
+          ↷ 다시 실행
+        </button>
+        <div className="spacer" />
+        <button type="button" onClick={handleNewCircuit} disabled={parts.length === 0} title="캔버스를 비우고 처음부터 다시 시작합니다">
+          새 회로
+        </button>
       </div>
 
-      <div className="layout-grid" style={{ marginTop: 16 }}>
-        <div>
-          <InspectorPanel
-            selectedPart={selectedPart}
-            onParamChange={handleParamChange}
-            onApplyDiodeModel={handleApplyDiodeModel}
-            onRotate={handleRotateSelected}
-            onDelete={handleDeleteSelected}
-          />
+      <div className="workbench-body">
+        <PartsSidebar
+          activeTab={leftTab}
+          onTabChange={setLeftTab}
+          onAddPart={handleAddPart}
+          onAddBlock={handleAddBlock}
+          presets={presets}
+          loadedPresetId={loadedPresetId}
+          onLoadTemplate={handleLoadTemplate}
+        />
 
-          <OutputAudioPanel
-            outputNode={outputNode}
-            onOutputNodeChange={setOutputNode}
-            netNames={graph.netNames}
-            inputGain={inputGain}
-            onInputGainChange={setInputGain}
-            hasSample={sample !== null}
-            onFileChange={handleFileChange}
-            canRun={sample !== null && !!graph.inputSourceId}
-            onRun={handleRun}
-            status={status}
-          />
-        </div>
-
-        <div>
-          <div className="panel">
+        <div className="canvas-area">
+          <div className="panel canvas-stage">
             <div className="panel-title">회로도</div>
             {parts.length === 0 ? (
               <p className="preset-description">
@@ -329,6 +375,7 @@ export function SchematicEditor() {
               <SchematicCanvas
                 parts={parts}
                 wires={wires}
+                blocks={blocks}
                 width={canvasSize.width}
                 height={canvasSize.height}
                 selectedPartId={selectedPartId}
@@ -340,71 +387,32 @@ export function SchematicEditor() {
             </div>
           </div>
 
-          <div className="panel">
-            <div className="panel-title">주파수 응답{outputNode && ` (input → ${outputNode})`}</div>
-            <div className="canvas-frame">
-              {acResult.status === "no-output" ? (
-                <p className="preset-description" style={{ padding: 16 }}>
-                  출력 노드를 선택하면 여기에 실시간으로 표시됩니다.
-                </p>
-              ) : acResult.status === "no-source" ? (
-                <p className="preset-description" style={{ padding: 16 }}>
-                  회로에 입력 전압원이 없습니다. 전압원(입력) 소자를 추가하고 배선하세요.
-                </p>
-              ) : acResult.status === "error" ? (
-                <p className="preset-description" style={{ padding: 16, color: "#c0392b" }}>
-                  ⚠ 계산 실패: 회로 구성을 확인하세요 (플로팅 노드, 닫히지 않은 루프 등). {acResult.error}
-                </p>
-              ) : (
-                <FrequencyResponse points={acPoints} band={monteCarloResult ?? undefined} />
-              )}
-            </div>
-          </div>
+          <BottomDock key={circuitVersion} tabs={dockTabs} />
+        </div>
 
-          <AnalysisPanels
-            key={circuitVersion}
-            graph={graph}
-            outputNode={outputNode}
-            sample={sample}
-            inputGain={inputGain}
-            getAudioContext={getAudioContext}
-            cabinetEnabled={cabinetEnabled}
-            cabinetVariant={cabinetVariant}
-            onMonteCarloResultChange={setMonteCarloResult}
+        <div className="sidebar-right">
+          <InspectorPanel
+            selectedPart={selectedPart}
+            blocks={blocks}
+            onParamChange={handleParamChange}
+            onApplyModel={handleApplyModel}
+            onRotate={handleRotateSelected}
+            onDelete={handleDeleteSelected}
+            onDeleteBlock={handleDeleteBlock}
           />
 
-          {waveTraces && (
-            <div className="panel">
-              <div className="panel-title">파형</div>
-              <div className="canvas-frame">
-                <Waveform traces={waveTraces} />
-              </div>
-              <div className="tap-buttons">
-                {waveTraces.map((t) => (
-                  <button key={t.label} type="button" onClick={() => handlePlay(t.label)}>
-                    ▶ {t.label}
-                  </button>
-                ))}
-              </div>
-              <div className="field-row" style={{ marginTop: 10 }}>
-                <label>
-                  <input type="checkbox" checked={cabinetEnabled} onChange={(e) => setCabinetEnabled(e.target.checked)} /> IR 적용 (제네릭 캐비닛 시뮬레이션)
-                </label>
-                <select
-                  value={cabinetVariant}
-                  onChange={(e) => setCabinetVariant(e.target.value as CabinetVariant)}
-                  disabled={!cabinetEnabled}
-                  style={{ maxWidth: 220 }}
-                >
-                  {Object.entries(CABINET_VARIANTS).map(([key, label]) => (
-                    <option key={key} value={key}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          )}
+          <OutputAudioPanel
+            outputNode={outputNode}
+            onOutputNodeChange={setOutputNode}
+            netNames={graph.netNames}
+            inputGain={inputGain}
+            onInputGainChange={setInputGain}
+            hasSample={sample !== null}
+            onFileChange={handleFileChange}
+            canRun={sample !== null && !!graph.inputSourceId && !isSimulating}
+            onRun={handleRun}
+            status={status}
+          />
         </div>
       </div>
     </div>

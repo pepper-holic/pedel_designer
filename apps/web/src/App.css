@@ -84,23 +84,107 @@
   flex: 1;
 }
 
-/* ---------- workspace content ---------- */
+/* ---------- workspace content: toolbar + 3-pane workbench body ---------- */
 .workspace-content {
   flex: 1;
-  overflow-y: auto;
-  padding: 12px 16px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 16px 16px;
+  overflow: hidden;
 }
 
-.layout-grid {
-  display: grid;
-  grid-template-columns: 300px 1fr;
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.toolbar .spacer {
+  flex: 1;
+}
+
+.workbench-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
   gap: 12px;
-  align-items: start;
+  overflow: hidden;
 }
 
-@media (max-width: 860px) {
-  .layout-grid {
-    grid-template-columns: 1fr;
+.sidebar-left {
+  width: 230px;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.sidebar-right {
+  width: 300px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-right .panel + .panel {
+  margin-top: 0;
+}
+
+.canvas-area {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.canvas-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom-dock {
+  flex-shrink: 0;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom-dock-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-top: 4px;
+}
+
+@media (max-width: 1100px) {
+  .workbench-body {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .sidebar-left,
+  .sidebar-right,
+  .canvas-area {
+    width: auto;
+    flex: none;
+  }
+
+  .canvas-stage {
+    min-height: 380px;
+    flex: none;
+  }
+
+  .bottom-dock {
+    height: auto;
+    min-height: 260px;
+    flex: none;
   }
 }
 
@@ -125,6 +209,10 @@
 
 .field {
   margin-bottom: 10px;
+}
+
+.field select {
+  width: 100%;
 }
 
 .field-row {
@@ -211,10 +299,271 @@
   border-bottom-color: var(--accent);
 }
 
+.part-palette {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* Flat explorer-style rows, not the boxed/bordered look every <button> gets by default (see
+ * index.css's global button rule) - a real border+background per row reads as a grid of buttons,
+ * not a list to scan. Hover/active are communicated with a background tint and a left accent bar
+ * instead. */
+.part-palette-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  padding: 5px 8px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.part-palette-item:hover:not(:disabled) {
+  background: var(--bg-inset);
+  border-color: transparent;
+  color: var(--text);
+}
+
+.part-palette-item[aria-expanded="true"] {
+  background: var(--bg-inset);
+  border-left-color: var(--accent-dim);
+  color: var(--text);
+}
+
+.part-palette-icon {
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.part-palette-menu-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.part-palette-menu-wrap .part-palette-item {
+  width: 100%;
+}
+
+.part-palette-menu-wrap .part-palette-item .template-category-chevron {
+  margin-left: auto;
+}
+
+.part-palette-submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px 0 4px 34px;
+}
+
+.part-palette-submenu-item {
+  text-align: left;
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.part-palette-submenu-item:hover {
+  background: var(--accent-soft);
+  color: var(--accent-dim);
+}
+
 .template-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.template-search {
+  padding: 6px 9px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.8rem;
+  font-family: inherit;
+}
+
+.template-search:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.library-toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.library-collapse-all {
+  background: transparent;
+  border: none;
+  padding: 2px 4px;
+  color: var(--text-faint);
+  font-size: 0.7rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.library-collapse-all:hover {
+  color: var(--accent-dim);
+}
+
+/* One card per top-level group ("페달 프리셋" / "기능 블록") so the two are visually separated at a
+ * glance, not just distinguishable by reading their header text - a flat, borderless list of many
+ * rows made it hard to tell where one grouping ended and the next began. */
+.library-section {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 6px;
+}
+
+.library-section + .library-section {
+  margin-top: 8px;
+}
+
+.template-category-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.template-category-group + .template-category-group {
+  margin-top: 2px;
+}
+
+.template-category-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 6px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.template-category-header:hover {
+  background: var(--bg-raised);
+  color: var(--text);
+}
+
+.template-category-chevron {
+  display: inline-block;
+  font-size: 0.65rem;
+  color: var(--text-faint);
+  transition: transform 0.12s ease;
+}
+
+.template-category-chevron.expanded {
+  transform: rotate(90deg);
+}
+
+.template-category-count {
+  margin-left: auto;
+  color: var(--text-faint);
+  font-weight: 400;
+  font-size: 0.72rem;
+}
+
+.template-category-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-left: 10px;
+  margin: 2px 0 6px 8px;
+  border-left: 2px solid var(--border-soft);
+}
+
+.template-archive-badge {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent-dim);
+  font-size: 0.62rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.template-empty {
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  padding: 8px 2px;
+}
+
+.library-top-header {
+  font-size: 0.85rem;
+  padding: 8px 4px;
+}
+
+/* Pinned to the bottom of the scrollable sidebar (position: sticky in LibraryExplorer's markup) so
+ * it reads as a persistent detail pane under the list, like a file explorer's info footer, rather
+ * than an odd banner that appears above the thing you just clicked. Solid background (not a tinted
+ * translucent card) so list rows scrolling underneath don't show through it. */
+.library-preview-box {
+  position: sticky;
+  bottom: -12px;
+  padding: 9px 10px;
+  background: var(--bg-raised);
+  border-top: 1px solid var(--border);
+  margin: 4px -12px -12px;
+}
+
+.library-preview-title {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.library-preview-desc {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+.library-item-row {
+  text-align: left;
+  width: 100%;
+  padding: 5px 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.library-item-row:hover {
+  background: var(--bg-raised);
+  color: var(--text);
+}
+
+.library-item-row.active {
+  background: var(--bg-raised);
+  border-left-color: var(--accent);
+  color: var(--accent-dim);
+  font-weight: 600;
 }
 
 .template-card {
@@ -254,6 +603,79 @@
   line-height: 1.4;
 }
 
+.bom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.bom-table th {
+  text-align: left;
+  color: var(--text-faint);
+  font-weight: 600;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bom-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text);
+}
+
+.bom-ids {
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.quick-add-toggle {
+  margin-top: 8px;
+  border-top: 1px solid var(--border-soft);
+  padding-top: 10px;
+}
+
+.quick-add-palette {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.quick-add-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.quick-add-heading {
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  font-weight: 600;
+}
+
+.quick-add-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.quick-add-chip {
+  padding: 4px 8px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  cursor: pointer;
+}
+
+.quick-add-chip:hover {
+  border-color: var(--accent-dim);
+  color: var(--text);
+}
+
 .canvas-frame {
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -261,9 +683,10 @@
   background: var(--bg-inset);
 }
 
-.canvas-frame-scroll {
+.canvas-stage .canvas-frame-scroll {
   overflow: auto;
-  max-height: 70vh;
+  flex: 1;
+  min-height: 0;
 }
 
 .canvas-zoom-controls {

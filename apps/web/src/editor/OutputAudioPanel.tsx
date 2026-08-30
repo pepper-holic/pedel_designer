@@ -28,7 +28,7 @@ export function OutputAudioPanel({
       <div className="panel-title">출력 노드 / 오디오</div>
       <div className="field">
         <label htmlFor="output-node-select">출력 노드</label>
-        <select id="output-node-select" value={outputNode} onChange={(e) => onOutputNodeChange(e.target.value)} style={{ width: "100%" }}>
+        <select id="output-node-select" value={outputNode} onChange={(e) => onOutputNodeChange(e.target.value)}>
           <option value="">선택 안 함</option>
           {netNames
             .filter((n) => n !== "0")
