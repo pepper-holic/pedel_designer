@@ -11,6 +11,14 @@ export interface TransientOptions {
   sampleRate: number;
   /** Nodes to record a voltage trace for at every sample. */
   tapNodes: NodeId[];
+  /**
+   * Internal Newton solves per output sample (default 1 = no oversampling). A sharp clipping knee
+   * (e.g. germanium diodes, veff ~0.031V) can finish its transition within a single 44.1kHz sample
+   * period, aliasing the knee and skewing THD measurements (docs/ROADMAP.md §6 risk 2). Values >1
+   * shrink dt to resolve that transition, linearly interpolating the input between samples and
+   * box-car averaging the sub-samples back down to the output rate.
+   */
+  oversample?: number;
 }
 
 export interface TransientResult {
@@ -50,8 +58,9 @@ function applySlewRateLimiting(
 
 /** Runs a time-domain simulation, sample-by-sample, feeding `inputSamples` through a voltage source. */
 export function runTransient(netlist: Netlist, options: TransientOptions): TransientResult {
+  const oversample = options.oversample ?? 1;
   const topology = buildTopology(netlist);
-  const dt = 1 / options.sampleRate;
+  const dt = 1 / (options.sampleRate * oversample);
   const history = new Map<string, number>();
 
   const inputElement = netlist.elements.find((e) => e.id === options.inputSourceId);
@@ -61,24 +70,41 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
 
   const n = options.inputSamples.length;
   const traces = new Map<NodeId, Float64Array>();
-  for (const node of options.tapNodes) traces.set(node, new Float64Array(n));
+  const accum = new Map<NodeId, number>();
+  for (const node of options.tapNodes) {
+    traces.set(node, new Float64Array(n));
+    accum.set(node, 0);
+  }
   const slewHistory = new Map<string, number>();
   let nonConvergentSampleCount = 0;
 
-  for (let i = 0; i < n; i++) {
-    inputElement.voltage = options.inputSamples[i];
+  const totalSteps = n * oversample;
+  for (let step = 0; step < totalSteps; step++) {
+    const i = Math.floor(step / oversample);
+    const frac = (step % oversample) / oversample;
+    const curr = options.inputSamples[i];
+    const next = i + 1 < n ? options.inputSamples[i + 1] : curr;
+    inputElement.voltage = curr + (next - curr) * frac;
+
     const { solution, converged } = solveNewton(netlist, topology, history, dt);
     if (!converged) nonConvergentSampleCount++;
     applySlewRateLimiting(netlist, topology, solution, slewHistory, dt);
 
     for (const node of options.tapNodes) {
-      traces.get(node)![i] = voltageAt(topology, solution, node);
+      accum.set(node, accum.get(node)! + voltageAt(topology, solution, node));
     }
 
     for (const element of netlist.elements) {
       if (element.type === "capacitor") updateCapacitorHistory(element, topology, history, solution);
       if (element.type === "inductor") updateInductorHistory(element, topology, history, dt, solution);
       if (element.type === "opamp") updateOpAmpHistory(element, topology, history, solution);
+    }
+
+    if ((step + 1) % oversample === 0) {
+      for (const node of options.tapNodes) {
+        traces.get(node)![i] = accum.get(node)! / oversample;
+        accum.set(node, 0);
+      }
     }
   }
 

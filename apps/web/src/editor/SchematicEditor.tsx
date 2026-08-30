@@ -267,6 +267,10 @@ export function SchematicEditor() {
         inputSamples: scaled,
         sampleRate: sample.sampleRate,
         tapNodes: graph.netNames.filter((n) => n !== "0"),
+        // Resolves fast clipping knees (germanium diodes etc.) that a single 44.1/48kHz sample
+        // period would otherwise alias away (docs/ROADMAP.md §6 risk 2). THD/Monte Carlo/chain use
+        // short synthesized tones and stay at the default (no oversampling) - not worth the 4x cost.
+        oversample: 4,
       });
       setWaveTraces(
         Array.from(traces.entries()).map(([label, data], i) => ({
