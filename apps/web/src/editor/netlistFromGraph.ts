@@ -37,6 +37,12 @@ export interface GraphNetlist {
   netNames: string[];
   /** id of the first vsource part found, if any - the conventional input source. */
   inputSourceId: string | null;
+  /** Net name for every placed part's every terminal, keyed by "partId:terminalId" - the same
+   * resolution used to build `netlist.elements[].nodes`, but keyed by the original canvas terminal
+   * rather than the solver's per-element node index. This is what a KiCad-style export needs: it
+   * wants each potentiometer's three real pins, not the two synthetic resistors the solver splits
+   * it into for MNA stamping. */
+  terminalNet: Map<string, string>;
 }
 
 /** Converts placed parts + wires into the solver's Netlist format via union-find over wired terminals. */
@@ -154,5 +160,12 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
 
   const inputSourceId = parts.find((p) => p.type === "vsource")?.id ?? null;
 
-  return { netlist: { elements }, netNames, inputSourceId };
+  const terminalNet = new Map<string, string>();
+  for (const part of parts) {
+    for (const terminal of PART_DEFS[part.type].terminals) {
+      terminalNet.set(terminalKey(part.id, terminal.id), nodeOfTerminal(part.id, terminal.id));
+    }
+  }
+
+  return { netlist: { elements }, netNames, inputSourceId, terminalNet };
 }

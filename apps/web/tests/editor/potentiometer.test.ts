@@ -22,7 +22,7 @@ describe("Potentiometer part", () => {
     expect(netlist.elements).toHaveLength(3); // V1 + two split resistors
 
     const topology = buildTopology(netlist);
-    const solution = solveNewton(netlist, topology, new Map(), 0);
+    const { solution } = solveNewton(netlist, topology, new Map(), 0);
     const wiperNode = netlist.elements.find((e) => e.id === "P1:a")!.nodes[1];
     const vWiper = voltageAt(topology, solution, wiperNode);
 

@@ -1,12 +1,15 @@
 import { useMemo, useState } from "react";
 import { PART_DEFS } from "./partDefs";
 import { PartSymbol } from "./symbols";
-import { terminalPosition, computeWirePaths, zoomAroundPoint } from "./geometry";
-import type { PartInstance, TerminalRef, Wire } from "./types";
+import { terminalPosition, computeWirePaths, zoomAroundPoint, GRID_SIZE } from "./geometry";
+import { BLOCK_CATEGORY_LABELS } from "./blockDefs";
+import { partValueLabel } from "./valueLabel";
+import type { BlockInstance, PartInstance, TerminalRef, Wire } from "./types";
 
 interface SchematicCanvasProps {
   parts: PartInstance[];
   wires: Wire[];
+  blocks?: BlockInstance[];
   selectedPartId: string | null;
   onMovePart: (id: string, x: number, y: number) => void;
   onSelectPart: (id: string | null) => void;
@@ -14,6 +17,41 @@ interface SchematicCanvasProps {
   onDragEnd?: () => void;
   width?: number;
   height?: number;
+}
+
+// Half-width/height of the invisible hit-box drawn around every part body (see the `<rect>` in the
+// parts loop below) - reused here so a block's tinted region hugs its parts with the same margin
+// used for the single-part selection outline.
+const PART_HALF_WIDTH = 40;
+const PART_HALF_HEIGHT = 38;
+const BLOCK_PADDING = 22;
+
+interface BlockRegion {
+  block: BlockInstance;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+function computeBlockRegions(parts: PartInstance[], blocks: BlockInstance[]): BlockRegion[] {
+  const regions: BlockRegion[] = [];
+  for (const block of blocks) {
+    const blockParts = parts.filter((p) => p.blockId === block.id);
+    if (blockParts.length === 0) continue;
+    const minX = Math.min(...blockParts.map((p) => p.x - PART_HALF_WIDTH));
+    const maxX = Math.max(...blockParts.map((p) => p.x + PART_HALF_WIDTH));
+    const minY = Math.min(...blockParts.map((p) => p.y - PART_HALF_HEIGHT));
+    const maxY = Math.max(...blockParts.map((p) => p.y + PART_HALF_HEIGHT));
+    regions.push({
+      block,
+      x: minX - BLOCK_PADDING,
+      y: minY - BLOCK_PADDING - 18, // extra headroom above so the label doesn't overlap the topmost part
+      width: maxX - minX + BLOCK_PADDING * 2,
+      height: maxY - minY + BLOCK_PADDING * 2 + 18,
+    });
+  }
+  return regions;
 }
 
 function terminalKey(ref: TerminalRef): string {
@@ -31,6 +69,7 @@ const PAN_DRAG_THRESHOLD = 4;
 export function SchematicCanvas({
   parts,
   wires,
+  blocks = [],
   selectedPartId,
   onMovePart,
   onSelectPart,
@@ -147,6 +186,8 @@ export function SchematicCanvas({
     return withEndpoints.map((w, i) => ({ wire: w.wire, path: paths[i] }));
   }, [wires, parts]);
 
+  const blockRegions = useMemo(() => computeBlockRegions(parts, blocks), [parts, blocks]);
+
   return (
     <div style={{ position: "relative" }}>
       <div className="canvas-zoom-controls">
@@ -178,9 +219,40 @@ export function SchematicCanvas({
         }}
         onWheel={handleWheel}
       >
+        <defs>
+          <pattern
+            id="schematic-grid"
+            width={GRID_SIZE}
+            height={GRID_SIZE}
+            patternUnits="userSpaceOnUse"
+            patternTransform={`translate(${view.panX},${view.panY}) scale(${view.zoom})`}
+          >
+            <circle cx={GRID_SIZE / 2} cy={GRID_SIZE / 2} r={1} fill="var(--grid-dot)" />
+          </pattern>
+        </defs>
         <rect width={width} height={height} fill="var(--bg-inset)" onMouseDown={handleBackgroundMouseDown} onClick={handleBackgroundClick} />
+        <rect width={width} height={height} fill="url(#schematic-grid)" pointerEvents="none" />
 
         <g transform={`translate(${view.panX},${view.panY}) scale(${view.zoom})`}>
+          {blockRegions.map(({ block, x, y, width: w, height: h }) => (
+            <g key={block.id} pointerEvents="none">
+              <rect
+                x={x}
+                y={y}
+                width={w}
+                height={h}
+                rx={10}
+                fill={`var(--block-${block.category}-fill)`}
+                stroke={`var(--block-${block.category}-stroke)`}
+                strokeWidth={1.2}
+                strokeDasharray="5 4"
+              />
+              <text x={x + 8} y={y + 13} fontSize={10} fontFamily="var(--font-mono)" fill={`var(--block-${block.category}-stroke)`}>
+                {BLOCK_CATEGORY_LABELS[block.category].toUpperCase()} · {block.label}
+              </text>
+            </g>
+          ))}
+
           {resolvedWires.map(({ wire, path }) => (
             <path key={wire.id} d={path} stroke="var(--wire)" strokeWidth={2} fill="none" />
           ))}
@@ -192,8 +264,13 @@ export function SchematicCanvas({
           {parts.map((part) => {
             const def = PART_DEFS[part.type];
             const isSelected = part.id === selectedPartId;
+            const valueLabel = partValueLabel(part);
             return (
-              <g key={part.id} transform={`translate(${part.x},${part.y}) rotate(${part.rotation})`}>
+              // Rotation is scoped to an inner group (symbol + terminals only) rather than this
+              // outer one, so the id/value text stays upright and stays put on screen instead of
+              // flipping upside-down (and sliding to the opposite side) whenever a part is rotated
+              // 180 - which auto-layout now does routinely for antiparallel diode pairs.
+              <g key={part.id} transform={`translate(${part.x},${part.y})`}>
                 {isSelected && (
                   <rect x={-40} y={-38} width={80} height={76} rx={6} fill="none" stroke="var(--accent)" strokeWidth={1.2} strokeDasharray="3 2" />
                 )}
@@ -206,21 +283,32 @@ export function SchematicCanvas({
                   onMouseDown={(e) => handleBodyMouseDown(part, e)}
                   style={{ cursor: "grab", pointerEvents: "all" }}
                 />
-                <PartSymbol part={part} />
+                <g transform={`rotate(${part.rotation})`}>
+                  <PartSymbol part={part} />
+                  {def.terminals.map((t) => (
+                    <circle
+                      key={t.id}
+                      cx={t.dx}
+                      cy={t.dy}
+                      r={4}
+                      fill={pendingTerminal?.partId === part.id && pendingTerminal.terminalId === t.id ? "var(--accent)" : "var(--wire)"}
+                      onClick={(e) => handleTerminalClick({ partId: part.id, terminalId: t.id }, e)}
+                      style={{ cursor: "crosshair" }}
+                    />
+                  ))}
+                </g>
+                <rect x={-19} y={-39} width={38} height={11} fill="var(--bg-inset)" opacity={0.85} pointerEvents="none" />
                 <text textAnchor="middle" y={-30} fill="var(--text-dim)" fontSize={10} fontFamily="var(--font-mono)" pointerEvents="none">
                   {part.id}
                 </text>
-                {def.terminals.map((t) => (
-                  <circle
-                    key={t.id}
-                    cx={t.dx}
-                    cy={t.dy}
-                    r={4}
-                    fill={pendingTerminal?.partId === part.id && pendingTerminal.terminalId === t.id ? "var(--accent)" : "var(--wire)"}
-                    onClick={(e) => handleTerminalClick({ partId: part.id, terminalId: t.id }, e)}
-                    style={{ cursor: "crosshair" }}
-                  />
-                ))}
+                {valueLabel && (
+                  <>
+                    <rect x={-24} y={39} width={48} height={11} fill="var(--bg-inset)" opacity={0.85} pointerEvents="none" />
+                    <text textAnchor="middle" y={46} fill="var(--text-dim)" fontSize={10} fontFamily="var(--font-mono)" pointerEvents="none">
+                      {valueLabel}
+                    </text>
+                  </>
+                )}
               </g>
             );
           })}

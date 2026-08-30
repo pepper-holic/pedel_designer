@@ -141,7 +141,10 @@ export function computeWirePaths(endpoints: [Point, Point][]): string[] {
       if (!cp) continue;
       const key = `${v.wireIndex}:${v.segmentIndex}`;
       if (!hopsByKey.has(key)) hopsByKey.set(key, []);
-      hopsByKey.get(key)!.push(cp.y);
+      // Two different wires can cross this vertical segment at the same y (mirrored branches of a
+      // symmetric stage, e.g. clipping diode pairs) - draw one hop there, not two stacked on top of each other.
+      const positions = hopsByKey.get(key)!;
+      if (!positions.includes(cp.y)) positions.push(cp.y);
     }
   }
 

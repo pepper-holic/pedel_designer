@@ -24,8 +24,10 @@ function fakeStorage() {
 }
 
 const sample: StoredCircuit = {
+  schemaVersion: 1,
   parts: [{ id: "r1", type: "resistor", x: 10, y: 20, rotation: 0, params: { resistance: 1000 } }],
   wires: [],
+  blocks: [],
   outputNode: "n2",
   inputGain: 0.75,
 };
@@ -57,9 +59,9 @@ describe("circuitStorage", () => {
     expect(deserializeCircuit(JSON.stringify({ foo: "bar" }))).toBeNull();
   });
 
-  it("defaults outputNode/inputGain when absent", () => {
+  it("defaults schemaVersion/outputNode/inputGain/blocks when absent", () => {
     const partial = deserializeCircuit(JSON.stringify({ parts: [], wires: [] }));
-    expect(partial).toEqual({ parts: [], wires: [], outputNode: "", inputGain: 0.5 });
+    expect(partial).toEqual({ schemaVersion: 1, parts: [], wires: [], blocks: [], outputNode: "", inputGain: 0.5 });
   });
 
   it("clearCircuitStorage removes the stored entry", () => {

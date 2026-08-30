@@ -7,7 +7,30 @@ const COLUMN_SPACING = 170;
 const ROW_SPACING = 150;
 const ORIGIN_X = 100;
 const ORIGIN_Y = 100;
-const GROUND_PART_ID = "GND";
+const GROUND_ID_PREFIX = "GND";
+/** Vertical offset from an owning part's center to its local ground symbol - far enough to clear
+ * the owner's own body (drawn ~38px tall) and its terminal leads before the ground triangle starts. */
+const GROUND_LOCAL_OFFSET_Y = 70;
+
+/** 2-terminal element types whose two nodes are drawn on opposite sides (terminal "a" at dx=-30,
+ * "b" at dx=+30 - see partDefs.ts) - the only types `orientTwoTerminal` below knows how to flip. */
+const TWO_TERMINAL_TYPES = new Set(["resistor", "capacitor", "inductor", "diode"]);
+
+/**
+ * A 2-terminal part whose first-listed node is ground gets rotated 180 degrees, moving its OTHER
+ * (non-ground) terminal from the right side to the left. Ground connections are always short local
+ * hops (see GROUND_LOCAL_OFFSET_Y) regardless of which side they're drawn on, so this costs nothing
+ * there - but it matters a lot for the non-ground terminal, which otherwise ends up facing away from
+ * whatever hub node it needs to reach. Concretely: a symmetric diode clipper's two antiparallel
+ * diodes (D1: anode->signal, cathode->gnd; D2: anode->gnd, cathode->signal) both default to the same
+ * left-anode/right-cathode orientation, so D2's signal-side terminal (its cathode) ends up on the
+ * right, forcing its wire to loop all the way around both diode bodies to reach the signal node on
+ * the left. Rotating D2 puts its cathode on the left instead, next to the node it actually connects to.
+ */
+function orientTwoTerminal(type: string, nodes: NodeId[]): 0 | 180 {
+  if (!TWO_TERMINAL_TYPES.has(type)) return 0;
+  return nodes[0] === GROUND ? 180 : 0;
+}
 
 /** Elements that share a (non-ground) net with each other, keyed by element id - the adjacency used by both column and row placement. */
 function buildNeighborMap(netlist: Netlist): Map<string, Set<string>> {
@@ -96,7 +119,12 @@ function assignRows(netlist: Netlist, depth: Map<string, number>, neighbors: Map
  * top-to-bottom within each column by a barycenter heuristic that pulls
  * connected parts onto shared rows to reduce wire crossings; it's still not
  * a hand-tuned schematic, but it reads far better than a plain
- * declaration-order grid. Ground gets its own row below everything.
+ * declaration-order grid. Every grounded terminal gets its own local ground
+ * symbol placed right beside its owner (the paper-schematic convention) -
+ * `netlistFromGraph` unions every "ground"-type part together regardless of
+ * id, so any number of instances is electrically equivalent to one shared
+ * node. This replaced routing every grounded terminal to a single shared
+ * ground part far away on the sheet, which produced long round-trip wires.
  */
 export function graphFromNetlist(
   netlist: Netlist,
@@ -106,42 +134,25 @@ export function graphFromNetlist(
   const neighbors = buildNeighborMap(netlist);
   const depth = computeSignalDepth(netlist, inputSourceId, neighbors);
   const rowOf = assignRows(netlist, depth, neighbors);
-  const rowCountByColumn = new Map<number, number>();
   const parts: PartInstance[] = [];
 
   for (const element of netlist.elements) {
     const column = depth.get(element.id) ?? 0;
     const row = rowOf.get(element.id) ?? 0;
-    rowCountByColumn.set(column, Math.max(rowCountByColumn.get(column) ?? 0, row + 1));
 
-    const { id, type, nodes: _nodes, ...rest } = element;
-    void _nodes;
+    const { id, type, nodes, ...rest } = element;
     const override = layout?.[id];
     parts.push({
       id,
       type,
       x: override?.x ?? ORIGIN_X + column * COLUMN_SPACING,
       y: override?.y ?? ORIGIN_Y + row * ROW_SPACING,
-      rotation: 0,
+      rotation: orientTwoTerminal(type, nodes),
       params: rest as PartInstance["params"],
     });
   }
 
-  const usesGround = netlist.elements.some((el) => el.nodes.includes(GROUND));
-  if (usesGround) {
-    const columns = Math.max(0, ...rowCountByColumn.keys());
-    const maxRows = Math.max(1, ...rowCountByColumn.values());
-    parts.push({
-      id: GROUND_PART_ID,
-      type: "ground",
-      x: ORIGIN_X + (columns / 2) * COLUMN_SPACING,
-      y: ORIGIN_Y + maxRows * ROW_SPACING,
-      rotation: 0,
-      params: {},
-    });
-  }
-
-  const partById = new Map(parts.map((p) => [p.id, p]));
+  const ownerById = new Map(parts.map((p) => [p.id, p]));
   const terminalsByNode = new Map<NodeId, TerminalRef[]>();
   const addTerminal = (node: NodeId, ref: TerminalRef) => {
     if (!terminalsByNode.has(node)) terminalsByNode.set(node, []);
@@ -152,8 +163,23 @@ export function graphFromNetlist(
     const terminals = PART_DEFS[element.type].terminals;
     element.nodes.forEach((node, i) => addTerminal(node, { partId: element.id, terminalId: terminals[i].id }));
   }
-  if (usesGround) addTerminal(GROUND, { partId: GROUND_PART_ID, terminalId: "gnd" });
 
+  let groundIndex = 0;
+  for (const element of netlist.elements) {
+    if (!element.nodes.includes(GROUND)) continue;
+    const owner = ownerById.get(element.id)!;
+    const override = layout?.[element.id];
+    // A layout override already fixes the owner's position (e.g. a saved custom arrangement) -
+    // the local ground symbol should follow it there too, not the auto-computed grid slot.
+    const ownerX = override?.x ?? owner.x;
+    const ownerY = override?.y ?? owner.y;
+    groundIndex += 1;
+    const groundPartId = `${GROUND_ID_PREFIX}${groundIndex}`;
+    parts.push({ id: groundPartId, type: "ground", x: ownerX, y: ownerY + GROUND_LOCAL_OFFSET_Y, rotation: 0, params: {} });
+    addTerminal(GROUND, { partId: groundPartId, terminalId: "gnd" });
+  }
+
+  const partById = new Map(parts.map((p) => [p.id, p]));
   const wires: Wire[] = [];
   let wireCount = 0;
   for (const refs of terminalsByNode.values()) {
