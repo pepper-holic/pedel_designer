@@ -1,32 +1,11 @@
-# React + TypeScript + Vite
+# apps/web
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Pedal Designer의 프론트엔드(React + TypeScript + Vite). 전체 프로젝트 개요는
+[루트 README](../../README.md)를 참고하세요.
 
-Currently, two official plugins are available:
+## 스크립트
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+- `npm run dev` — 개발 서버
+- `npm run build` — 타입체크 + 프로덕션 빌드
+- `npm test` — Vitest (Testing Library + jsdom)
+- `npm run lint` — Oxlint
