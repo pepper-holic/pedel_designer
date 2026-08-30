@@ -23,6 +23,7 @@ function matchesQuery(haystack: string, query: string): boolean {
   return haystack.toLowerCase().includes(query.toLowerCase());
 }
 
+
 /**
  * Merged explorer for the two ways to start a circuit: a complete pedal preset ("특정 페달 프리셋
  * 버전") or an empty, unwired functional block you assemble by hand ("아예 비어있는 기본버전"). Both
@@ -137,8 +138,9 @@ export function LibraryExplorer({ presets, loadedPresetId, onLoadTemplate, onAdd
                         type="button"
                         className={preset.id === loadedPresetId ? "library-item-row active" : "library-item-row"}
                         onClick={() => selectPreset(preset)}
+                        title={preset.name}
                       >
-                        {preset.name}
+                        <span className="library-item-label">{preset.name}</span>
                         {preset.archive && <span className="template-archive-badge">아카이브</span>}
                       </button>
                     ))}
@@ -176,8 +178,8 @@ export function LibraryExplorer({ presets, loadedPresetId, onLoadTemplate, onAdd
                 {expanded && (
                   <div className="template-category-items">
                     {items.map((def) => (
-                      <button key={def.id} type="button" className="library-item-row" onClick={() => selectBlock(def)}>
-                        {def.label}
+                      <button key={def.id} type="button" className="library-item-row" onClick={() => selectBlock(def)} title={def.label}>
+                        <span className="library-item-label">{def.label}</span>
                       </button>
                     ))}
                   </div>

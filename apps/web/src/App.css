@@ -237,7 +237,8 @@
 
 .run-row {
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
   margin-top: 12px;
 }
@@ -256,22 +257,25 @@
   margin: 6px 0 10px;
 }
 
-.onboarding-card {
-  border: 1px dashed var(--border);
-  border-radius: 6px;
-  padding: 12px 14px;
-  margin: 6px 0 16px;
+.info-tip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  color: var(--text-faint);
+  font-size: 0.7rem;
+  line-height: 1;
+  cursor: help;
+  vertical-align: middle;
 }
 
-.onboarding-hint {
-  color: var(--text-dim);
-  font-size: 0.8rem;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.onboarding-hint strong {
-  color: var(--text);
+.info-tip:hover {
+  color: var(--accent-dim);
+  border-color: var(--accent-dim);
 }
 
 .tap-buttons {
@@ -288,6 +292,7 @@
 
 .dock-tab-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
   margin: -12px -12px 10px;
   padding: 4px 10px 0;
@@ -510,6 +515,7 @@
 }
 
 .template-archive-badge {
+  flex-shrink: 0;
   margin-left: 6px;
   padding: 1px 5px;
   border-radius: 4px;
@@ -518,6 +524,10 @@
   font-size: 0.62rem;
   font-weight: 600;
   vertical-align: middle;
+}
+
+.library-item-row .template-archive-badge {
+  margin-left: auto;
 }
 
 .template-empty {
@@ -560,6 +570,8 @@
 }
 
 .library-item-row {
+  display: flex;
+  align-items: center;
   text-align: left;
   width: 100%;
   padding: 5px 8px;
@@ -570,6 +582,14 @@
   color: var(--text-dim);
   font-size: 0.8rem;
   cursor: pointer;
+}
+
+.library-item-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .library-item-row:hover {

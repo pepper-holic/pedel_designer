@@ -396,16 +396,19 @@ export function SchematicEditor() {
           <div className="panel canvas-stage">
             <div className="panel-title">회로도</div>
             {parts.length === 0 ? (
-              <div className="onboarding-card">
-                <p className="preset-description">
-                  회로가 비어 있습니다. 왼쪽 "소자 팔레트"에서 부품을 추가하거나, "템플릿" 탭에서 예제 회로를 불러와 시작하세요.
-                </p>
-                <p className="onboarding-hint">
-                  처음이신가요? <strong>템플릿/블록</strong> 탭에서 완성된 회로를 하나 불러온 뒤, 아래 <strong>파형</strong> 탭에서
-                  오디오 파일을 넣고 "시뮬레이션 실행"을 눌러보세요. <strong>THD</strong>는 소리가 얼마나 찌그러지는지, <strong>부품 공차</strong>는
-                  실제 부품값 오차가 소리에 얼마나 영향을 주는지 보여주는 분석 도구입니다.
-                </p>
-              </div>
+              <p className="preset-description">
+                회로가 비어 있습니다. 왼쪽 "소자 팔레트"에서 부품을 추가하거나, "템플릿" 탭에서 예제 회로를 불러와 시작하세요.
+                <span
+                  className="info-tip"
+                  title={
+                    '처음이신가요? "템플릿/블록" 탭에서 완성된 회로를 하나 불러온 뒤, 아래 "파형" 탭에서 오디오 파일을 넣고 ' +
+                    '"시뮬레이션 실행"을 눌러보세요. THD는 소리가 얼마나 찌그러지는지, 부품 공차는 실제 부품값 오차가 소리에 얼마나 ' +
+                    "영향을 주는지 보여주는 분석 도구입니다."
+                  }
+                >
+                  ⓘ
+                </span>
+              </p>
             ) : (
               <p className="canvas-hint">R: 회전 · Delete: 삭제 · 휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · 부품 드래그: 이동 · 단자 클릭 2회: 배선</p>
             )}

@@ -39,15 +39,22 @@ export function PcbExportPanel({ parts, graph }: PcbExportPanelProps) {
 
   return (
     <div className="panel">
-      <div className="panel-title">PCB 익스포트 (KiCad 넷리스트)</div>
+      <div className="panel-title">
+        PCB 익스포트 (KiCad 넷리스트)
+        <span
+          className="info-tip"
+          title={
+            'KiCad PCB 에디터의 "File → Import → Netlist"로 불러올 수 있는 형식입니다. 풋프린트는 비어 있으니 KiCad에서 ' +
+            "직접 할당해야 하고, 배치/라우팅도 자동화되어 있지 않습니다 - 연결 정보만 가져옵니다."
+          }
+        >
+          ⓘ
+        </span>
+      </div>
       {!hasParts ? (
         <p className="canvas-hint">캔버스에 부품을 배치하면 넷리스트를 만들 수 있습니다.</p>
       ) : (
         <>
-          <p className="canvas-hint">
-            KiCad PCB 에디터의 "File → Import → Netlist"로 불러올 수 있는 형식입니다. 풋프린트는 비어 있으니 KiCad에서 직접
-            할당해야 하고, 배치/라우팅도 자동화되어 있지 않습니다 - 연결 정보만 가져옵니다.
-          </p>
           <div className="run-row">
             <button type="button" onClick={handleDownload}>
               .net 파일 다운로드
