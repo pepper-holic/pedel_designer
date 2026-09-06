@@ -195,6 +195,28 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
         });
         break;
       }
+      case "blade3":
+      case "blade5": {
+        // A guitar blade selector is not a 1-of-N switch. With N input contacts it has 2N-1
+        // detents: the even ones sit on a single contact, the odd ones bridge two adjacent
+        // contacts - which is where the "both pickups" combinations come from.
+        const inputCount = nodes.length - 1;
+        const positionCount = inputCount * 2 - 1;
+        const raw = Math.trunc(Number(part.params.switchPosition));
+        const position = Number.isFinite(raw) && raw >= 0 && raw < positionCount ? raw : 0;
+        const primary = Math.floor(position / 2);
+        const bridgesNext = position % 2 === 1;
+        for (let i = 0; i < inputCount; i++) {
+          const closed = i === primary || (bridgesNext && i === primary + 1);
+          elements.push({
+            id: `${part.id}:in${i + 1}`,
+            type: "resistor",
+            nodes: [nodes[0], nodes[i + 1]],
+            resistance: closed ? SWITCH_ON_OHMS : SWITCH_OFF_OHMS,
+          });
+        }
+        break;
+      }
       case "potentiometer": {
         // Modeled as two resistors split at the wiper's net - no synthetic node needed since the wiper terminal already has its own net.
         const total = Number(part.params.resistance);

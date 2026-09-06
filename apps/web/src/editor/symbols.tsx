@@ -8,6 +8,13 @@ import type { PartInstance } from "./types";
 
 const stroke = "var(--text)";
 
+/** Keeps a stored position inside the switch's real range so a stale or hand-edited value can't
+ * make the symbol read an undefined contact. Mirrors the same clamp in netlistFromGraph. */
+function clampPosition(raw: number | string, positionCount: number): number {
+  const value = Math.trunc(Number(raw));
+  return Number.isFinite(value) && value >= 0 && value < positionCount ? value : 0;
+}
+
 function ResistorSymbol() {
   return <path d="M-30,0 h8 l5,-10 l10,20 l10,-20 l10,20 l10,-20 l5,10 h8" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinejoin="round" />;
 }
@@ -91,6 +98,28 @@ function DpdtSymbol({ position }: { position: number }) {
       ))}
       {/* Dashed tie bar: the two poles are ganged to one lever. */}
       <path d="M0,-14 v28" stroke={stroke} strokeWidth={1} strokeDasharray="3 3" fill="none" opacity={0.7} />
+    </>
+  );
+}
+
+/** Blade selector: contacts down the right-hand side with the wiper resting on the selected one,
+ * or halfway between two when the detent bridges both. Drawn from the live position so the
+ * schematic shows which pickups are actually selected. */
+function BladeSymbol({ position, contactYs }: { position: number; contactYs: number[] }) {
+  const primary = Math.floor(position / 2);
+  const bridges = position % 2 === 1;
+  const targetY = bridges ? (contactYs[primary] + contactYs[primary + 1]) / 2 : contactYs[primary];
+  return (
+    <>
+      <path d="M-30,0 h16" stroke={stroke} strokeWidth={1.6} fill="none" />
+      <circle cx={-14} cy={0} r={2.4} fill={stroke} />
+      {contactYs.map((y) => (
+        <g key={y}>
+          <path d={`M14,${y} h16`} stroke={stroke} strokeWidth={1.6} fill="none" />
+          <circle cx={14} cy={y} r={2.2} fill={stroke} />
+        </g>
+      ))}
+      <path d={`M-14,0 L12,${targetY}`} stroke={stroke} strokeWidth={1.8} fill="none" strokeLinecap="round" />
     </>
   );
 }
@@ -197,6 +226,10 @@ export function PartSymbol({ part }: { part: PartInstance }) {
       return <SpdtSymbol position={Number(part.params.switchPosition) === 1 ? 1 : 0} />;
     case "dpdt":
       return <DpdtSymbol position={Number(part.params.switchPosition) === 1 ? 1 : 0} />;
+    case "blade3":
+      return <BladeSymbol position={clampPosition(part.params.switchPosition, 3)} contactYs={[-18, 18]} />;
+    case "blade5":
+      return <BladeSymbol position={clampPosition(part.params.switchPosition, 5)} contactYs={[-24, 0, 24]} />;
     case "diode":
       return <DiodeSymbol />;
     case "bjt":

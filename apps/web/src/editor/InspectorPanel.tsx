@@ -20,6 +20,8 @@ const SWITCH_POSITION_LABELS: Partial<Record<PartType, string[]>> = {
   spst: ["열림 (OFF)", "닫힘 (ON)"],
   spdt: ["위치 1 (단자 1)", "위치 2 (단자 2)"],
   dpdt: ["위치 1 (단자 a)", "위치 2 (단자 b)"],
+  blade3: ["1 (입력 1)", "2 (입력 1+2)", "3 (입력 2)"],
+  blade5: ["1 (입력 1)", "2 (입력 1+2)", "3 (입력 2)", "4 (입력 2+3)", "5 (입력 3)"],
 };
 
 interface InspectorPanelProps {
@@ -90,7 +92,9 @@ export function InspectorPanel({ selectedPart, selectedWire = null, blocks, onPa
               </div>
               <select
                 id="switch-position-select"
-                value={String(Number(selectedPart.params.switchPosition) === 1 ? 1 : 0)}
+                value={String(
+                  Math.min(Math.max(Math.trunc(Number(selectedPart.params.switchPosition)) || 0, 0), switchPositions.length - 1),
+                )}
                 onChange={(e) => onParamChange("switchPosition", e.target.value)}
               >
                 {switchPositions.map((label, i) => (

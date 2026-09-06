@@ -36,6 +36,11 @@ function kicadSymbol(part: PartInstance): KicadSymbol {
       return { lib: "Switch", part: "SW_SPDT" };
     case "dpdt":
       return { lib: "Switch", part: "SW_DPDT_x2" };
+    case "blade3":
+    case "blade5":
+      // KiCad has no standard guitar blade-selector symbol, so the lugs go out as a connector of
+      // the right pin count - same reasoning as the pickup below, and the user picks a real symbol.
+      return { lib: "Connector", part: part.type === "blade3" ? "Conn_01x03" : "Conn_01x04" };
     case "pickup":
       // KiCad has no guitar-pickup symbol; a 2-pin connector is the honest stand-in for "the coil
       // leads enter the circuit here", same reasoning as the vsource case below.

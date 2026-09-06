@@ -1,6 +1,6 @@
 import { SILICON_DIODE_1N4148, GENERIC_SILICON_NPN, GENERIC_NCHANNEL_JFET, VINTAGE_SINGLE_COIL } from "../core/library/deviceModels";
 
-export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "jfet" | "opamp" | "vsource" | "ground" | "potentiometer" | "pickup" | "spst" | "spdt" | "dpdt";
+export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "jfet" | "opamp" | "vsource" | "ground" | "potentiometer" | "pickup" | "spst" | "spdt" | "dpdt" | "blade3" | "blade5";
 
 export interface TerminalDef {
   id: string;
@@ -143,6 +143,27 @@ export const PART_DEFS: Record<PartType, PartDef> = {
       { id: "common2", dx: -30, dy: 20, label: "C2" },
       { id: "pole2ThrowA", dx: 30, dy: 8, label: "2a" },
       { id: "pole2ThrowB", dx: 30, dy: 32, label: "2b" },
+    ],
+    defaultParams: { switchPosition: 0 },
+  },
+  blade3: {
+    type: "blade3",
+    label: "셀렉터 (3-way 블레이드)",
+    terminals: [
+      { id: "common", dx: -30, dy: 0, label: "C" },
+      { id: "in1", dx: 30, dy: -18, label: "1" },
+      { id: "in2", dx: 30, dy: 18, label: "2" },
+    ],
+    defaultParams: { switchPosition: 0 },
+  },
+  blade5: {
+    type: "blade5",
+    label: "셀렉터 (5-way 블레이드)",
+    terminals: [
+      { id: "common", dx: -30, dy: 0, label: "C" },
+      { id: "in1", dx: 30, dy: -24, label: "1" },
+      { id: "in2", dx: 30, dy: 0, label: "2" },
+      { id: "in3", dx: 30, dy: 24, label: "3" },
     ],
     defaultParams: { switchPosition: 0 },
   },
