@@ -21,6 +21,7 @@ export const BLOCK_CATEGORY_LABELS: Record<BlockCategory, string> = {
   gain: "증폭 단",
   clipping: "클리핑 단",
   tone: "톤 스택",
+  load: "부하",
 };
 
 /** Ideal op-amp voltage follower: high input impedance in, unity gain out - the classic
@@ -109,10 +110,38 @@ const toneStackPassiveBlock: BlockDef = {
   },
 };
 
+
+/** Typical instrument-cable capacitance per metre. Real cables vary roughly 100-150 pF/m depending
+ * on construction; this is a representative mid value, exposed through a length knob rather than a
+ * raw picofarad figure because length is what a player actually changes. */
+const CABLE_PF_PER_METER = 125;
+
+/**
+ * What a passive pickup actually drives: the cable's shunt capacitance plus the amp/pedal input
+ * impedance. This pair is what moves a pickup's resonant peak around, so it is the other half of
+ * any pickup experiment - see docs/plan-guitar-wiring.md §5. Wire "in" to the signal you want to
+ * load (usually the pickup's hot lead).
+ */
+const cableAndAmpLoadBlock: BlockDef = {
+  id: "cable-amp-load",
+  label: "케이블 + 앰프 입력 부하",
+  category: "load",
+  description: "기타 케이블의 정전용량과 앰프 입력 임피던스 - 패시브 픽업의 공진 주파수와 고음을 좌우하는 부하",
+  defaultParams: { cableLengthMeters: 3, ampInputResistance: 1_000_000 },
+  netlist: (params) => ({
+    elements: [
+      { id: "Ccable", type: "capacitor", nodes: ["in", GROUND], capacitance: params.cableLengthMeters * CABLE_PF_PER_METER * 1e-12 },
+      { id: "Rin", type: "resistor", nodes: ["in", GROUND], resistance: params.ampInputResistance },
+    ],
+  }),
+  layout: { Ccable: { x: 100, y: 100 }, Rin: { x: 240, y: 100 } },
+};
+
 export const BLOCK_DEFS: BlockDef[] = [
   bufferFollowerBlock,
   gainStageInvertingBlock,
   clipperSymmetricBlock,
   clipperAsymmetricBlock,
   toneStackPassiveBlock,
+  cableAndAmpLoadBlock,
 ];

@@ -42,6 +42,8 @@
   --block-clipping-stroke: #b23f3f;
   --block-tone-fill: rgba(122, 78, 168, 0.14);
   --block-tone-stroke: #7a4ea8;
+  --block-load-fill: rgba(90, 122, 90, 0.14);
+  --block-load-stroke: #5a7a5a;
 
   --font-display: "Space Grotesk", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;

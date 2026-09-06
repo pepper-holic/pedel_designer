@@ -28,7 +28,7 @@ export interface PartInstance {
   blockId?: string;
 }
 
-export type BlockCategory = "buffer" | "gain" | "clipping" | "tone";
+export type BlockCategory = "buffer" | "gain" | "clipping" | "tone" | "load";
 
 /** A functional block (e.g. one "게인 스테이지" instance) stamped onto the canvas: a group of parts
  * + internal wires added together from a BlockDef, tracked here only for the schematic canvas's

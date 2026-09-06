@@ -16,7 +16,7 @@ type PreviewItem = { label: string; description: string; archive?: boolean };
 /** Signal-chain-ish display order, not alphabetical, so the tree reads the way a pedal builder
  * thinks about gain staging. */
 const PRESET_CATEGORY_ORDER: PresetCategory[] = ["버퍼", "부스트", "오버드라이브", "디스토션", "퍼즈", "톤/EQ"];
-const BLOCK_CATEGORY_ORDER: BlockCategory[] = ["buffer", "gain", "clipping", "tone"];
+const BLOCK_CATEGORY_ORDER: BlockCategory[] = ["buffer", "gain", "clipping", "tone", "load"];
 
 function matchesQuery(haystack: string, query: string): boolean {
   if (!query) return true;
