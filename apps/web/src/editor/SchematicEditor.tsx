@@ -356,7 +356,7 @@ export function SchematicEditor() {
       key: "bom",
       label: "BOM",
       helpText: "부품 목록(Bill of Materials): 이 회로를 실제로 만들 때 구매해야 할 부품과 값을 정리해줍니다.",
-      content: <BomPanel parts={parts} />,
+      content: <BomPanel parts={parts} graph={graph} />,
     },
     {
       key: "pcb",

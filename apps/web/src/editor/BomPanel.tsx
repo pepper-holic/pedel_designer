@@ -1,16 +1,22 @@
 import { useState } from "react";
 import type { PartInstance } from "./types";
 import { buildBom, bomToText } from "./bom";
+import { estimatePowerSupplyDraw } from "./powerDraw";
+import type { GraphNetlist } from "./netlistFromGraph";
 
 interface BomPanelProps {
   parts: PartInstance[];
+  graph: GraphNetlist;
 }
 
-/** Bill of materials: aggregates the placed parts by type + value/model into a shopping list. */
-export function BomPanel({ parts }: BomPanelProps) {
+/** Bill of materials: aggregates the placed parts by type + value/model into a shopping list, plus
+ * an estimated current draw from any bias/supply source (transistor/JFET circuits only - see
+ * powerDraw.ts for why ideal op-amp circuits have nothing to report here). */
+export function BomPanel({ parts, graph }: BomPanelProps) {
   const [copyStatus, setCopyStatus] = useState<string | null>(null);
   const rows = buildBom(parts);
   const totalCount = rows.reduce((sum, r) => sum + r.quantity, 0);
+  const powerDraw = estimatePowerSupplyDraw(graph.netlist, graph.inputSourceId);
 
   const handleCopy = async () => {
     try {
@@ -53,6 +59,13 @@ export function BomPanel({ parts }: BomPanelProps) {
               ))}
             </tbody>
           </table>
+          {powerDraw.length > 0 && (
+            <p className="canvas-hint">
+              예상 소비 전류:{" "}
+              {powerDraw.map((d) => `${d.sourceId} (${d.voltageV}V) ${d.currentMa.toFixed(1)}mA`).join(" · ")}
+              {" "}— 이상적 op-amp 회로는 실제 전원 소자를 모델링하지 않아 표시되지 않습니다.
+            </p>
+          )}
         </>
       )}
     </div>
