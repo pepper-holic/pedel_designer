@@ -140,11 +140,11 @@ export const OP07_APPROX = {
  * (this app's op-amp is a macromodel - see docs/plan-editor-implementation-history.md pt.2). */
 export const OPAMP_MODELS: Record<string, { label: string; params: typeof JRC4558_APPROX }> = {
   IDEAL: { label: "이상적 (비이상성 없음)", params: { gbwpHz: 0, slewRateVPerUs: 0, railPositive: 0, railNegative: 0 } },
-  JRC4558: { label: "JRC4558 (TS9/OD-1 계열)", params: JRC4558_APPROX },
+  JRC4558: { label: "JRC4558 (오버드라이브 스타일)", params: JRC4558_APPROX },
   TL072: { label: "TL072/TL071 (JFET 입력)", params: TL072_APPROX },
   LM741: { label: "LM741 (범용)", params: LM741_APPROX },
-  LM308: { label: "LM308 (RAT 계열)", params: LM308_APPROX },
-  CA3130: { label: "CA3130 (Big Muff 계열, BiMOS)", params: CA3130_APPROX },
+  LM308: { label: "LM308 (디스토션 스타일, 슬루 느림)", params: LM308_APPROX },
+  CA3130: { label: "CA3130 (퍼즈 스타일, BiMOS)", params: CA3130_APPROX },
   NE5532: { label: "NE5532 (저노이즈 오디오)", params: NE5532_APPROX },
   OP07: { label: "OP07 (정밀, 저속)", params: OP07_APPROX },
 };
