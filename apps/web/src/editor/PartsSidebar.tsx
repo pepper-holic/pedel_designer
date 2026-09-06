@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { PartType } from "./partDefs";
 import type { PedalPreset, PresetVariant } from "../core/library/presets";
+import type { WiringPreset } from "./wiring";
 import type { BlockDef } from "./blockDefs";
 import { PartPalette } from "./PartPalette";
 import { LibraryExplorer } from "./LibraryExplorer";
@@ -14,14 +15,16 @@ interface PartsSidebarProps {
   onAddPart: (type: PartType, paramsOverride?: Record<string, number | string>) => void;
   onAddBlock: (def: BlockDef) => void;
   presets: PedalPreset[];
+  wiringPresets: WiringPreset[];
   loadedPresetId: string | null;
   onLoadTemplate: (preset: PedalPreset, variant?: PresetVariant) => void;
+  onLoadWiring: (preset: WiringPreset) => void;
 }
 
 /** Left dock: switches between the part palette (drag-to-add components) and the combined
  * template/block library - complete pedal presets and empty functional blocks are both ways to
  * start a circuit, so they share one explorer instead of separate tabs. */
-export function PartsSidebar({ activeTab, onTabChange, onAddPart, onAddBlock, presets, loadedPresetId, onLoadTemplate }: PartsSidebarProps) {
+export function PartsSidebar({ activeTab, onTabChange, onAddPart, onAddBlock, presets, wiringPresets, loadedPresetId, onLoadTemplate, onLoadWiring }: PartsSidebarProps) {
   const [quickAddExpanded, setQuickAddExpanded] = useState(false);
 
   return (
@@ -52,7 +55,14 @@ export function PartsSidebar({ activeTab, onTabChange, onAddPart, onAddBlock, pr
       )}
 
       {activeTab === "library" && (
-        <LibraryExplorer presets={presets} loadedPresetId={loadedPresetId} onLoadTemplate={onLoadTemplate} onAddBlock={onAddBlock} />
+        <LibraryExplorer
+          presets={presets}
+          wiringPresets={wiringPresets}
+          loadedPresetId={loadedPresetId}
+          onLoadTemplate={onLoadTemplate}
+          onLoadWiring={onLoadWiring}
+          onAddBlock={onAddBlock}
+        />
       )}
     </div>
   );

@@ -21,6 +21,7 @@ import { PcbExportPanel } from "./PcbExportPanel";
 import { useAnalysisPanels } from "./useAnalysisPanels";
 import type { MonteCarloResult } from "../core/analysis/montecarlo";
 import { presets, type PedalPreset, type PresetVariant } from "../core/library/presets";
+import { wiringPresets, type WiringPreset } from "./wiring";
 import { PARAM_META } from "./paramMeta";
 import { loadSampleFromFile, type LoadedSample } from "../audio/loadSample";
 import { playSamples } from "../audio/playback";
@@ -152,6 +153,25 @@ export function SchematicEditor() {
     setMonteCarloResult(null);
     setCircuitVersion((v) => v + 1);
     setStatus(`템플릿 로드됨: ${preset.name}${variant ? ` - ${variant.label}` : ""}`);
+  };
+
+  /** Wiring presets are stored as a part-level snapshot (see wiring/types.ts), so loading one is
+   * just a commit - no netlist round-trip, and composite parts (pickup, pots) stay composite.
+   * The arrays are module-level constants, so they are copied before entering the undo stack. */
+  const handleLoadWiring = (preset: WiringPreset) => {
+    const newParts = preset.snapshot.parts.map((p) => ({ ...p, params: { ...p.params } }));
+    const newWires = preset.snapshot.wires.map((w) => ({ ...w, a: { ...w.a }, b: { ...w.b } }));
+    const outputKey = `${preset.outputTerminal.partId}:${preset.outputTerminal.terminalId}`;
+
+    commit({ parts: newParts, wires: newWires, blocks: [...preset.snapshot.blocks] });
+    setSelectedPartId(null);
+    setSelectedWireId(null);
+    setLoadedPresetId(preset.id);
+    setOutputNode(netlistFromGraph(newParts, newWires).terminalNet.get(outputKey) ?? "");
+    setWaveTraces(null);
+    setMonteCarloResult(null);
+    setCircuitVersion((v) => v + 1);
+    setStatus(`배선 로드됨: ${preset.name}`);
   };
 
   const handleAddPart = (type: PartType, paramsOverride?: Record<string, number | string>) => {
@@ -411,8 +431,10 @@ export function SchematicEditor() {
           onAddPart={handleAddPart}
           onAddBlock={handleAddBlock}
           presets={presets}
+          wiringPresets={wiringPresets}
           loadedPresetId={loadedPresetId}
           onLoadTemplate={handleLoadTemplate}
+          onLoadWiring={handleLoadWiring}
         />
 
         <div className="canvas-area">

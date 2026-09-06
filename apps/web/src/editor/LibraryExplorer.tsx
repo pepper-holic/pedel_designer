@@ -1,16 +1,19 @@
 import { useMemo, useState } from "react";
 import type { PedalPreset, PresetCategory, PresetVariant } from "../core/library/presets";
 import { BLOCK_DEFS, BLOCK_CATEGORY_LABELS, type BlockDef } from "./blockDefs";
+import { WIRING_CATEGORY_ORDER, type WiringPreset } from "./wiring";
 import type { BlockCategory } from "./types";
 
 interface LibraryExplorerProps {
   presets: PedalPreset[];
+  wiringPresets: WiringPreset[];
   loadedPresetId: string | null;
   onLoadTemplate: (preset: PedalPreset, variant?: PresetVariant) => void;
+  onLoadWiring: (preset: WiringPreset) => void;
   onAddBlock: (def: BlockDef) => void;
 }
 
-type TopSection = "presets" | "blocks";
+type TopSection = "presets" | "wiring" | "blocks";
 type PreviewItem = { label: string; description: string; archive?: boolean };
 
 /** Signal-chain-ish display order, not alphabetical, so the tree reads the way a pedal builder
@@ -33,9 +36,9 @@ function matchesQuery(haystack: string, query: string): boolean {
  * populated by whichever item was clicked most recently (loading/adding still happens on that same
  * click, this is purely about where the description text lives).
  */
-export function LibraryExplorer({ presets, loadedPresetId, onLoadTemplate, onAddBlock }: LibraryExplorerProps) {
+export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoadTemplate, onLoadWiring, onAddBlock }: LibraryExplorerProps) {
   const [query, setQuery] = useState("");
-  const [collapsedTop, setCollapsedTop] = useState<Set<TopSection>>(new Set(["blocks"]));
+  const [collapsedTop, setCollapsedTop] = useState<Set<TopSection>>(new Set(["wiring", "blocks"]));
   const [collapsedCategory, setCollapsedCategory] = useState<Set<string>>(new Set());
   const [preview, setPreview] = useState<PreviewItem | null>(null);
   // Which variant row to mark active. Cleared whenever a preset is loaded without one, so the
@@ -45,23 +48,28 @@ export function LibraryExplorer({ presets, loadedPresetId, onLoadTemplate, onAdd
 
   const filteredPresets = useMemo(() => presets.filter((p) => matchesQuery(`${p.name} ${p.description}`, query)), [presets, query]);
   const filteredBlocks = useMemo(() => BLOCK_DEFS.filter((b) => matchesQuery(`${b.label} ${b.description}`, query)), [query]);
+  const filteredWiring = useMemo(
+    () => wiringPresets.filter((p) => matchesQuery(`${p.name} ${p.description}`, query)),
+    [wiringPresets, query],
+  );
 
   // Every category key that currently has at least one item - used by "모두 접기/펼치기" so it
   // touches exactly the groups actually rendered, not stale keys from a category that ended up empty.
   const allCategoryKeys = useMemo(() => {
     const keys: string[] = [];
     for (const category of PRESET_CATEGORY_ORDER) if (presets.some((p) => p.category === category)) keys.push(`preset:${category}`);
+    for (const category of WIRING_CATEGORY_ORDER) if (wiringPresets.some((p) => p.category === category)) keys.push(`wiring:${category}`);
     for (const category of BLOCK_CATEGORY_ORDER) if (BLOCK_DEFS.some((b) => b.category === category)) keys.push(`block:${category}`);
     return keys;
-  }, [presets]);
-  const isAllCollapsed = collapsedTop.size >= 2;
+  }, [presets, wiringPresets]);
+  const isAllCollapsed = collapsedTop.size >= 3;
 
   const toggleAll = () => {
     if (isAllCollapsed) {
       setCollapsedTop(new Set());
       setCollapsedCategory(new Set());
     } else {
-      setCollapsedTop(new Set<TopSection>(["presets", "blocks"]));
+      setCollapsedTop(new Set<TopSection>(["presets", "wiring", "blocks"]));
       setCollapsedCategory(new Set(allCategoryKeys));
     }
   };
@@ -91,6 +99,11 @@ export function LibraryExplorer({ presets, loadedPresetId, onLoadTemplate, onAdd
     });
     setLoadedVariantId(variant?.id ?? null);
     onLoadTemplate(preset, variant);
+  };
+  const selectWiring = (preset: WiringPreset) => {
+    setPreview({ label: preset.name, description: preset.description, archive: !!preset.archive });
+    setLoadedVariantId(null);
+    onLoadWiring(preset);
   };
   const selectBlock = (def: BlockDef) => {
     setPreview({ label: def.label, description: def.description });
@@ -186,6 +199,51 @@ export function LibraryExplorer({ presets, loadedPresetId, onLoadTemplate, onAdd
         <button
           type="button"
           className="template-category-header library-top-header"
+          aria-expanded={isSearching || !collapsedTop.has("wiring")}
+          onClick={() => toggleTop("wiring")}
+        >
+          <span className={isSearching || !collapsedTop.has("wiring") ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+          기타 배선 (픽업·볼륨·톤)
+          <span className="template-category-count">{filteredWiring.length}</span>
+        </button>
+        {(isSearching || !collapsedTop.has("wiring")) &&
+          WIRING_CATEGORY_ORDER.map((category) => {
+            const items = filteredWiring.filter((p) => p.category === category);
+            if (items.length === 0) return null;
+            const key = `wiring:${category}`;
+            const expanded = isSearching || !collapsedCategory.has(key);
+            return (
+              <div key={key} className="template-category-group">
+                <button type="button" className="template-category-header" aria-expanded={expanded} onClick={() => toggleCategory(key)}>
+                  <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+                  {category}
+                  <span className="template-category-count">{items.length}</span>
+                </button>
+                {expanded && (
+                  <div className="template-category-items">
+                    {items.map((preset) => (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        className={preset.id === loadedPresetId ? "library-item-row active" : "library-item-row"}
+                        onClick={() => selectWiring(preset)}
+                        title={preset.name}
+                      >
+                        <span className="library-item-label">{preset.name}</span>
+                        {preset.archive && <span className="template-archive-badge">아카이브</span>}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+      </div>
+
+      <div className="library-section">
+        <button
+          type="button"
+          className="template-category-header library-top-header"
           aria-expanded={isSearching || !collapsedTop.has("blocks")}
           onClick={() => toggleTop("blocks")}
         >
@@ -220,7 +278,7 @@ export function LibraryExplorer({ presets, loadedPresetId, onLoadTemplate, onAdd
           })}
       </div>
 
-      {isSearching && filteredPresets.length === 0 && filteredBlocks.length === 0 && (
+      {isSearching && filteredPresets.length === 0 && filteredWiring.length === 0 && filteredBlocks.length === 0 && (
         <p className="template-empty">일치하는 프리셋/블록이 없습니다.</p>
       )}
 

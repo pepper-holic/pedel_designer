@@ -29,14 +29,14 @@ const presets: PedalPreset[] = [preset({ id: "od1", name: "오버드라이브 A"
 
 describe("LibraryExplorer", () => {
   it("shows the preset section expanded and the block section collapsed by default", () => {
-    render(<LibraryExplorer presets={presets} loadedPresetId={null} onLoadTemplate={vi.fn()} onAddBlock={vi.fn()} />);
+    render(<LibraryExplorer presets={presets} wiringPresets={[]} loadedPresetId={null} onLoadTemplate={vi.fn()} onLoadWiring={vi.fn()} onAddBlock={vi.fn()} />);
     expect(screen.getByText("오버드라이브 A")).toBeInTheDocument();
     expect(screen.queryByText("버퍼 (Op-Amp 팔로워)")).not.toBeInTheDocument();
   });
 
   it("expanding the block section reveals its category groups and items", async () => {
     const user = userEvent.setup();
-    render(<LibraryExplorer presets={presets} loadedPresetId={null} onLoadTemplate={vi.fn()} onAddBlock={vi.fn()} />);
+    render(<LibraryExplorer presets={presets} wiringPresets={[]} loadedPresetId={null} onLoadTemplate={vi.fn()} onLoadWiring={vi.fn()} onAddBlock={vi.fn()} />);
 
     await user.click(screen.getByRole("button", { name: /기능 블록/ }));
     expect(screen.getByText("버퍼 (Op-Amp 팔로워)")).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe("LibraryExplorer", () => {
   it("clicking a preset calls onLoadTemplate and shows its description in the preview box", async () => {
     const user = userEvent.setup();
     const onLoadTemplate = vi.fn();
-    render(<LibraryExplorer presets={presets} loadedPresetId={null} onLoadTemplate={onLoadTemplate} onAddBlock={vi.fn()} />);
+    render(<LibraryExplorer presets={presets} wiringPresets={[]} loadedPresetId={null} onLoadTemplate={onLoadTemplate} onLoadWiring={vi.fn()} onAddBlock={vi.fn()} />);
 
     await user.click(screen.getByText("오버드라이브 A"));
     // The second argument is the optional topology variant - undefined here because clicking the
@@ -57,7 +57,7 @@ describe("LibraryExplorer", () => {
   it("clicking a block calls onAddBlock and shows its description in the preview box", async () => {
     const user = userEvent.setup();
     const onAddBlock = vi.fn();
-    render(<LibraryExplorer presets={presets} loadedPresetId={null} onLoadTemplate={vi.fn()} onAddBlock={onAddBlock} />);
+    render(<LibraryExplorer presets={presets} wiringPresets={[]} loadedPresetId={null} onLoadTemplate={vi.fn()} onLoadWiring={vi.fn()} onAddBlock={onAddBlock} />);
 
     await user.click(screen.getByRole("button", { name: /기능 블록/ }));
     await user.click(screen.getByText("버퍼 (Op-Amp 팔로워)"));
@@ -67,7 +67,7 @@ describe("LibraryExplorer", () => {
 
   it("searching matches across both presets and blocks regardless of collapse state", async () => {
     const user = userEvent.setup();
-    render(<LibraryExplorer presets={presets} loadedPresetId={null} onLoadTemplate={vi.fn()} onAddBlock={vi.fn()} />);
+    render(<LibraryExplorer presets={presets} wiringPresets={[]} loadedPresetId={null} onLoadTemplate={vi.fn()} onLoadWiring={vi.fn()} onAddBlock={vi.fn()} />);
 
     await user.type(screen.getByLabelText("템플릿 검색"), "버퍼");
     expect(screen.getByText("버퍼 (Op-Amp 팔로워)")).toBeInTheDocument();
@@ -75,7 +75,7 @@ describe("LibraryExplorer", () => {
 
   it("모두 접기 collapses every top section and category, and toggles to 모두 펼치기", async () => {
     const user = userEvent.setup();
-    render(<LibraryExplorer presets={presets} loadedPresetId={null} onLoadTemplate={vi.fn()} onAddBlock={vi.fn()} />);
+    render(<LibraryExplorer presets={presets} wiringPresets={[]} loadedPresetId={null} onLoadTemplate={vi.fn()} onLoadWiring={vi.fn()} onAddBlock={vi.fn()} />);
 
     expect(screen.getByText("오버드라이브 A")).toBeInTheDocument();
 
