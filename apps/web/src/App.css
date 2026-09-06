@@ -623,6 +623,48 @@
   font-weight: 600;
 }
 
+/* Topology-branch rows nested under a preset that has `variants` - indented and smaller than the
+   preset row so the tree reads as "this preset, in one of these wirings". */
+.library-variant-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-left: 14px;
+}
+
+.library-variant-row {
+  text-align: left;
+  width: 100%;
+  padding: 3px 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-left: 2px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-faint);
+  font-size: 0.74rem;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library-variant-row::before {
+  content: "└ ";
+  color: var(--border);
+}
+
+.library-variant-row:hover {
+  background: var(--bg-raised);
+  color: var(--text);
+}
+
+.library-variant-row.active {
+  background: var(--bg-raised);
+  border-left-color: var(--accent);
+  color: var(--accent-dim);
+  font-weight: 600;
+}
+
 .template-card {
   display: flex;
   flex-direction: column;

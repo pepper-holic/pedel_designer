@@ -48,7 +48,9 @@ describe("LibraryExplorer", () => {
     render(<LibraryExplorer presets={presets} loadedPresetId={null} onLoadTemplate={onLoadTemplate} onAddBlock={vi.fn()} />);
 
     await user.click(screen.getByText("오버드라이브 A"));
-    expect(onLoadTemplate).toHaveBeenCalledWith(presets[0]);
+    // The second argument is the optional topology variant - undefined here because clicking the
+    // preset row itself means "load the default branch".
+    expect(onLoadTemplate).toHaveBeenCalledWith(presets[0], undefined);
     expect(screen.getByText("프리셋 설명")).toBeInTheDocument();
   });
 

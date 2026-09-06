@@ -24,6 +24,10 @@ export const ocdStyleOverdrivePreset: PedalPreset = {
     /** 0 = off, 1 = bypass the series resistor at high frequencies (brighter/harder). */
     brightSwitch: 0,
   },
+  variants: [
+    { id: "normal", label: "노멀 (트레블 브리드 없음)", params: { brightSwitch: 0 } },
+    { id: "bright", label: "브라이트 (트레블 브리드 켬)", params: { brightSwitch: 1 } },
+  ],
   archive: {
     sourceRefs: [
       { label: "Analog Is Not Dead - Fulltone OCD circuit analysis (topology reference, not copied)", url: "https://analogisnotdead.com/article34/circuit-analysis-fulltone-s-ocd" },

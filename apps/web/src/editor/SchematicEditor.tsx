@@ -20,7 +20,7 @@ import { BomPanel } from "./BomPanel";
 import { PcbExportPanel } from "./PcbExportPanel";
 import { useAnalysisPanels } from "./useAnalysisPanels";
 import type { MonteCarloResult } from "../core/analysis/montecarlo";
-import { presets, type PedalPreset } from "../core/library/presets";
+import { presets, type PedalPreset, type PresetVariant } from "../core/library/presets";
 import { PARAM_META } from "./paramMeta";
 import { loadSampleFromFile, type LoadedSample } from "../audio/loadSample";
 import { playSamples } from "../audio/playback";
@@ -135,8 +135,10 @@ export function SchematicEditor() {
     setStatus("새 회로");
   };
 
-  const handleLoadTemplate = (preset: PedalPreset) => {
-    const originalNetlist = preset.build(preset.defaultParams);
+  const handleLoadTemplate = (preset: PedalPreset, variant?: PresetVariant) => {
+    // Variant params override the defaults, which is what makes a preset's non-default topology
+    // branch (King of Tone's clipMode, OCD's brightSwitch) reachable at all.
+    const originalNetlist = preset.build({ ...preset.defaultParams, ...(variant?.params ?? {}) });
     const { parts: newParts, wires: newWires } = graphFromNetlist(originalNetlist, preset.inputSourceId, preset.layout);
     const roundTripped = netlistFromGraph(newParts, newWires);
     const equivalentOutput = findEquivalentNode(originalNetlist, preset.outputNode, roundTripped.netlist);
@@ -149,7 +151,7 @@ export function SchematicEditor() {
     setWaveTraces(null);
     setMonteCarloResult(null);
     setCircuitVersion((v) => v + 1);
-    setStatus(`템플릿 로드됨: ${preset.name}`);
+    setStatus(`템플릿 로드됨: ${preset.name}${variant ? ` - ${variant.label}` : ""}`);
   };
 
   const handleAddPart = (type: PartType, paramsOverride?: Record<string, number | string>) => {

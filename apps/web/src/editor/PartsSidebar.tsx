@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { PartType } from "./partDefs";
-import type { PedalPreset } from "../core/library/presets";
+import type { PedalPreset, PresetVariant } from "../core/library/presets";
 import type { BlockDef } from "./blockDefs";
 import { PartPalette } from "./PartPalette";
 import { LibraryExplorer } from "./LibraryExplorer";
@@ -15,7 +15,7 @@ interface PartsSidebarProps {
   onAddBlock: (def: BlockDef) => void;
   presets: PedalPreset[];
   loadedPresetId: string | null;
-  onLoadTemplate: (preset: PedalPreset) => void;
+  onLoadTemplate: (preset: PedalPreset, variant?: PresetVariant) => void;
 }
 
 /** Left dock: switches between the part palette (drag-to-add components) and the combined

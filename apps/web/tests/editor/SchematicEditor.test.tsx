@@ -198,4 +198,25 @@ describe("SchematicEditor", () => {
 
     expect(wireCount()).toBe(wiresBefore);
   });
+
+  it("loads the chosen topology variant of a preset, not only its default branch", async () => {
+    const user = userEvent.setup();
+    render(<SchematicEditor />);
+
+    await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
+    await user.click(screen.getByRole("button", { name: /듀얼 보이싱 오버드라이브/ }));
+
+    const canvasPanel = screen.getByText("회로도").closest(".panel")!;
+    // Default (clipMode 0) clips inside the feedback loop through four series diodes.
+    expect(within(canvasPanel).getByText("D1a")).toBeInTheDocument();
+    expect(within(canvasPanel).queryByText("Rs")).not.toBeInTheDocument();
+
+    // clipMode 1 swaps in the output-shunt topology: a current-limiting Rs and a plain diode pair.
+    // Matched by exact name on purpose - a loose regex here silently matches the unrelated
+    // "RAT 스타일 디스토션 (출력단 션트 클리핑)" preset, which also has an Rs and no D1a.
+    await user.click(screen.getByRole("button", { name: "출력단 션트 클리핑 (단단함)" }));
+
+    expect(within(canvasPanel).getByText("Rs")).toBeInTheDocument();
+    expect(within(canvasPanel).queryByText("D1a")).not.toBeInTheDocument();
+  });
 });

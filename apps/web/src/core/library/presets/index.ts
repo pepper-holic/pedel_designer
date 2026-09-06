@@ -1,4 +1,4 @@
-import type { PedalPreset, PresetCategory } from "../types";
+import type { PedalPreset, PresetCategory, PresetVariant } from "../types";
 import { bufferPreset } from "./buffer";
 import { diodeClipperPreset } from "./diode-clipper";
 import { asymmetricClipperPreset } from "./asymmetric-clipper";
@@ -58,4 +58,4 @@ export {
   ocdStyleOverdrivePreset,
   lpb1StyleBoostPreset,
 };
-export type { PedalPreset, PresetCategory };
+export type { PedalPreset, PresetCategory, PresetVariant };

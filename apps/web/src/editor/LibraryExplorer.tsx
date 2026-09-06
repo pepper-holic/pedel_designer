@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
-import type { PedalPreset, PresetCategory } from "../core/library/presets";
+import type { PedalPreset, PresetCategory, PresetVariant } from "../core/library/presets";
 import { BLOCK_DEFS, BLOCK_CATEGORY_LABELS, type BlockDef } from "./blockDefs";
 import type { BlockCategory } from "./types";
 
 interface LibraryExplorerProps {
   presets: PedalPreset[];
   loadedPresetId: string | null;
-  onLoadTemplate: (preset: PedalPreset) => void;
+  onLoadTemplate: (preset: PedalPreset, variant?: PresetVariant) => void;
   onAddBlock: (def: BlockDef) => void;
 }
 
@@ -38,6 +38,9 @@ export function LibraryExplorer({ presets, loadedPresetId, onLoadTemplate, onAdd
   const [collapsedTop, setCollapsedTop] = useState<Set<TopSection>>(new Set(["blocks"]));
   const [collapsedCategory, setCollapsedCategory] = useState<Set<string>>(new Set());
   const [preview, setPreview] = useState<PreviewItem | null>(null);
+  // Which variant row to mark active. Cleared whenever a preset is loaded without one, so the
+  // highlight never outlives the circuit it describes.
+  const [loadedVariantId, setLoadedVariantId] = useState<string | null>(null);
   const isSearching = query.trim().length > 0;
 
   const filteredPresets = useMemo(() => presets.filter((p) => matchesQuery(`${p.name} ${p.description}`, query)), [presets, query]);
@@ -80,9 +83,14 @@ export function LibraryExplorer({ presets, loadedPresetId, onLoadTemplate, onAdd
     });
   };
 
-  const selectPreset = (preset: PedalPreset) => {
-    setPreview({ label: preset.name, description: preset.description, archive: !!preset.archive });
-    onLoadTemplate(preset);
+  const selectPreset = (preset: PedalPreset, variant?: PresetVariant) => {
+    setPreview({
+      label: variant ? `${preset.name} - ${variant.label}` : preset.name,
+      description: preset.description,
+      archive: !!preset.archive,
+    });
+    setLoadedVariantId(variant?.id ?? null);
+    onLoadTemplate(preset, variant);
   };
   const selectBlock = (def: BlockDef) => {
     setPreview({ label: def.label, description: def.description });
@@ -133,16 +141,39 @@ export function LibraryExplorer({ presets, loadedPresetId, onLoadTemplate, onAdd
                 {expanded && (
                   <div className="template-category-items">
                     {items.map((preset) => (
-                      <button
-                        key={preset.id}
-                        type="button"
-                        className={preset.id === loadedPresetId ? "library-item-row active" : "library-item-row"}
-                        onClick={() => selectPreset(preset)}
-                        title={preset.name}
-                      >
-                        <span className="library-item-label">{preset.name}</span>
-                        {preset.archive && <span className="template-archive-badge">아카이브</span>}
-                      </button>
+                      <div key={preset.id}>
+                        <button
+                          type="button"
+                          className={preset.id === loadedPresetId ? "library-item-row active" : "library-item-row"}
+                          onClick={() => selectPreset(preset)}
+                          title={preset.name}
+                        >
+                          <span className="library-item-label">{preset.name}</span>
+                          {preset.archive && <span className="template-archive-badge">아카이브</span>}
+                        </button>
+                        {/* Topology branches are always listed rather than revealed on selection -
+                            they are the only way to reach the non-default branch, so hiding them
+                            behind a prior click is how they stayed unreachable in the first place. */}
+                        {preset.variants && (
+                          <div className="library-variant-items">
+                            {preset.variants.map((variant) => (
+                              <button
+                                key={variant.id}
+                                type="button"
+                                className={
+                                  preset.id === loadedPresetId && variant.id === loadedVariantId
+                                    ? "library-variant-row active"
+                                    : "library-variant-row"
+                                }
+                                onClick={() => selectPreset(preset, variant)}
+                                title={`${preset.name} - ${variant.label}`}
+                              >
+                                {variant.label}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     ))}
                   </div>
                 )}

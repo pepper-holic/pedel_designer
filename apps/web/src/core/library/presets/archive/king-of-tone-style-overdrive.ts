@@ -26,6 +26,10 @@ export const kingOfToneStyleOverdrivePreset: PedalPreset = {
     clipMode: 0,
     tone: 0.5,
   },
+  variants: [
+    { id: "feedback", label: "피드백 루프 클리핑 (부드러움)", params: { clipMode: 0 } },
+    { id: "shunt", label: "출력단 션트 클리핑 (단단함)", params: { clipMode: 1 } },
+  ],
   archive: {
     sourceRefs: [
       { label: "Dirtbox Layouts - Analog Man King of Tone (topology reference, not copied)", url: "https://dirtboxlayouts.blogspot.com/2021/06/analog-man-king-of-tone.html" },
