@@ -49,6 +49,9 @@ export function SchematicEditor() {
   const [history, setHistory] = useState(() => createHistory(initial.snapshot));
   const [loadedPresetId, setLoadedPresetId] = useState<string | null>(null);
   const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
+  // Parts and wires share one logical selection - selecting either clears the other, so Delete and
+  // the inspector always act on exactly one thing.
+  const [selectedWireId, setSelectedWireId] = useState<string | null>(null);
   const [outputNode, setOutputNode] = useState<string>(initial.outputNode);
   const [inputGain, setInputGain] = useState(initial.inputGain);
   const [sample, setSample] = useState<LoadedSample | null>(null);
@@ -73,6 +76,17 @@ export function SchematicEditor() {
 
   const graph = useMemo(() => netlistFromGraph(parts, wires), [parts, wires]);
   const selectedPart = parts.find((p) => p.id === selectedPartId) ?? null;
+  const selectedWire = wires.find((w) => w.id === selectedWireId) ?? null;
+
+  const handleSelectPart = (id: string | null) => {
+    setSelectedPartId(id);
+    setSelectedWireId(null);
+  };
+
+  const handleSelectWire = (id: string | null) => {
+    setSelectedWireId(id);
+    setSelectedPartId(null);
+  };
 
   const canvasSize = useMemo(() => {
     const margin = 120;
@@ -112,6 +126,7 @@ export function SchematicEditor() {
     if (parts.length > 0 && !window.confirm("현재 회로를 지우고 새로 시작할까요? 저장되지 않은 작업은 undo(Ctrl+Z)로만 복구할 수 있습니다.")) return;
     commit({ parts: [], wires: [], blocks: [] });
     setSelectedPartId(null);
+    setSelectedWireId(null);
     setLoadedPresetId(null);
     setOutputNode("");
     setWaveTraces(null);
@@ -128,6 +143,7 @@ export function SchematicEditor() {
 
     commit({ parts: newParts, wires: newWires, blocks: [] });
     setSelectedPartId(null);
+    setSelectedWireId(null);
     setLoadedPresetId(preset.id);
     setOutputNode(equivalentOutput ?? "");
     setWaveTraces(null);
@@ -183,6 +199,11 @@ export function SchematicEditor() {
   };
 
   const handleDeleteSelected = () => {
+    if (selectedWireId) {
+      commit({ parts, wires: wires.filter((w) => w.id !== selectedWireId), blocks });
+      setSelectedWireId(null);
+      return;
+    }
     if (!selectedPartId) return;
     const nextParts = parts.filter((p) => p.id !== selectedPartId);
     const remainingBlockIds = new Set(nextParts.map((p) => p.blockId).filter((id): id is string => id !== undefined));
@@ -229,7 +250,7 @@ export function SchematicEditor() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedPartId, parts, wires]);
+  }, [selectedPartId, selectedWireId, parts, wires]);
 
   const handleParamChange = (key: string, value: string) => {
     if (!selectedPart) return;
@@ -410,7 +431,7 @@ export function SchematicEditor() {
                 </span>
               </p>
             ) : (
-              <p className="canvas-hint">R: 회전 · Delete: 삭제 · 휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · 부품 드래그: 이동 · 단자 클릭 2회: 배선</p>
+              <p className="canvas-hint">R: 회전 · Delete: 삭제 · 휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · 부품 드래그: 이동 · 단자 클릭 2회: 배선 · 배선 클릭: 선택</p>
             )}
             <div className="canvas-frame canvas-frame-scroll">
               <SchematicCanvas
@@ -420,8 +441,10 @@ export function SchematicEditor() {
                 width={canvasSize.width}
                 height={canvasSize.height}
                 selectedPartId={selectedPartId}
+                selectedWireId={selectedWireId}
                 onMovePart={handleMovePart}
-                onSelectPart={setSelectedPartId}
+                onSelectPart={handleSelectPart}
+                onSelectWire={handleSelectWire}
                 onAddWire={handleAddWire}
                 onDragEnd={handleDragEnd}
               />
@@ -434,6 +457,7 @@ export function SchematicEditor() {
         <div className="sidebar-right">
           <InspectorPanel
             selectedPart={selectedPart}
+            selectedWire={selectedWire}
             blocks={blocks}
             onParamChange={handleParamChange}
             onApplyModel={handleApplyModel}

@@ -1,5 +1,5 @@
 import { PART_DEFS, type PartType } from "./partDefs";
-import type { BlockInstance, PartInstance } from "./types";
+import type { BlockInstance, PartInstance, Wire } from "./types";
 import { DIODE_MODELS, OPAMP_MODELS, TRANSISTOR_MODELS, JFET_MODELS } from "../core/library/deviceModels";
 import { TAPER_OPTIONS } from "./taper";
 import { PARAM_META } from "./paramMeta";
@@ -15,6 +15,8 @@ const MODEL_MENUS: Partial<Record<PartType, Record<string, { label: string; para
 
 interface InspectorPanelProps {
   selectedPart: PartInstance | null;
+  /** Set instead of `selectedPart` when the canvas selection is a wire - the two are mutually exclusive. */
+  selectedWire?: Wire | null;
   blocks: BlockInstance[];
   onParamChange: (key: string, value: string) => void;
   onApplyModel: (paramsOverride: Record<string, number | string>) => void;
@@ -23,14 +25,26 @@ interface InspectorPanelProps {
   onDeleteBlock: (blockId: string) => void;
 }
 
-export function InspectorPanel({ selectedPart, blocks, onParamChange, onApplyModel, onRotate, onDelete, onDeleteBlock }: InspectorPanelProps) {
+export function InspectorPanel({ selectedPart, selectedWire = null, blocks, onParamChange, onApplyModel, onRotate, onDelete, onDeleteBlock }: InspectorPanelProps) {
   const ownerBlock = selectedPart?.blockId ? (blocks.find((b) => b.id === selectedPart.blockId) ?? null) : null;
   const modelMenu = selectedPart ? MODEL_MENUS[selectedPart.type] : undefined;
 
   return (
     <div className="panel">
-      <div className="panel-title">선택된 소자</div>
-      {selectedPart ? (
+      <div className="panel-title">{selectedWire ? "선택된 배선" : "선택된 소자"}</div>
+      {selectedWire ? (
+        <>
+          <p className="preset-description">
+            {selectedWire.a.partId}:{selectedWire.a.terminalId} ↔ {selectedWire.b.partId}:{selectedWire.b.terminalId}
+          </p>
+          <p className="canvas-hint">잘못 이은 배선은 여기서 지울 수 있습니다. 부품은 그대로 남습니다.</p>
+          <div className="run-row">
+            <button type="button" onClick={onDelete}>
+              삭제 (Del)
+            </button>
+          </div>
+        </>
+      ) : selectedPart ? (
         <>
           <p className="preset-description">
             {PART_DEFS[selectedPart.type].label} ({selectedPart.id})
@@ -135,7 +149,7 @@ export function InspectorPanel({ selectedPart, blocks, onParamChange, onApplyMod
           </div>
         </>
       ) : (
-        <p className="preset-description">캔버스에서 소자를 클릭해 선택하세요.</p>
+        <p className="preset-description">캔버스에서 소자나 배선을 클릭해 선택하세요.</p>
       )}
     </div>
   );

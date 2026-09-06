@@ -139,4 +139,63 @@ describe("SchematicEditor", () => {
     await user.click(within(inspector).getByRole("button", { name: "블록 전체 삭제" }));
     expect(screen.getByText(/회로가 비어 있습니다/)).toBeInTheDocument();
   });
+
+  it("clicking a wire selects it and the inspector offers to delete it", async () => {
+    const user = userEvent.setup();
+    render(<SchematicEditor />);
+
+    await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
+    await user.click(screen.getByRole("button", { name: /다이오드 클리퍼 \(대칭\)/ }));
+
+    const canvasPanel = screen.getByText("회로도").closest(".panel")!;
+    // Wires are SVG paths with no accessible role, so this is the same kind of deliberate,
+    // narrowly-scoped DOM query the part-selection tests above use for the part hit-boxes.
+    const wireHitboxes = canvasPanel.querySelectorAll<SVGPathElement>("path[data-wire-id]");
+    expect(wireHitboxes.length).toBeGreaterThan(0);
+
+    await user.click(wireHitboxes[0]);
+
+    const inspector = screen.getByText("선택된 배선").closest(".panel")!;
+    expect(within(inspector).getByRole("button", { name: "삭제 (Del)" })).toBeInTheDocument();
+  });
+
+  it("deleting a selected wire removes only that wire, leaving the parts in place", async () => {
+    const user = userEvent.setup();
+    render(<SchematicEditor />);
+
+    await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
+    await user.click(screen.getByRole("button", { name: /다이오드 클리퍼 \(대칭\)/ }));
+
+    const canvasPanel = screen.getByText("회로도").closest(".panel")!;
+    const wireCount = () => canvasPanel.querySelectorAll("path[data-wire-id]").length;
+    const partCount = () => canvasPanel.querySelectorAll("g[data-part-id]").length;
+    const wiresBefore = wireCount();
+    const partsBefore = partCount();
+
+    await user.click(canvasPanel.querySelectorAll<SVGPathElement>("path[data-wire-id]")[0]);
+    await user.click(within(screen.getByText("선택된 배선").closest(".panel")!).getByRole("button", { name: "삭제 (Del)" }));
+
+    expect(wireCount()).toBe(wiresBefore - 1);
+    expect(partCount()).toBe(partsBefore);
+  });
+
+  it("undo restores a deleted wire", async () => {
+    const user = userEvent.setup();
+    render(<SchematicEditor />);
+
+    await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
+    await user.click(screen.getByRole("button", { name: /다이오드 클리퍼 \(대칭\)/ }));
+
+    const canvasPanel = screen.getByText("회로도").closest(".panel")!;
+    const wireCount = () => canvasPanel.querySelectorAll("path[data-wire-id]").length;
+    const wiresBefore = wireCount();
+
+    await user.click(canvasPanel.querySelectorAll<SVGPathElement>("path[data-wire-id]")[0]);
+    await user.click(within(screen.getByText("선택된 배선").closest(".panel")!).getByRole("button", { name: "삭제 (Del)" }));
+    expect(wireCount()).toBe(wiresBefore - 1);
+
+    await user.click(screen.getByRole("button", { name: /실행 취소/ }));
+
+    expect(wireCount()).toBe(wiresBefore);
+  });
 });

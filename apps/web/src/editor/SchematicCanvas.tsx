@@ -11,8 +11,10 @@ interface SchematicCanvasProps {
   wires: Wire[];
   blocks?: BlockInstance[];
   selectedPartId: string | null;
+  selectedWireId?: string | null;
   onMovePart: (id: string, x: number, y: number) => void;
   onSelectPart: (id: string | null) => void;
+  onSelectWire?: (id: string | null) => void;
   onAddWire: (a: TerminalRef, b: TerminalRef) => void;
   onDragEnd?: () => void;
   width?: number;
@@ -61,6 +63,9 @@ function terminalKey(ref: TerminalRef): string {
 const MIN_ZOOM = 0.3;
 const MAX_ZOOM = 3;
 const PAN_DRAG_THRESHOLD = 4;
+// Transparent click target width for wires - the visible stroke is only 2px, which is not a
+// realistic mouse target on a dense schematic.
+const WIRE_HITBOX_WIDTH = 12;
 
 /**
  * SVG schematic canvas: drag parts by their body, click two terminals in sequence to wire them
@@ -71,8 +76,10 @@ export function SchematicCanvas({
   wires,
   blocks = [],
   selectedPartId,
+  selectedWireId = null,
   onMovePart,
   onSelectPart,
+  onSelectWire,
   onAddWire,
   onDragEnd,
   width = 900,
@@ -144,6 +151,7 @@ export function SchematicCanvas({
   const handleBackgroundClick = () => {
     if (panStart?.moved) return; // just finished a pan-drag, not a deselect click
     onSelectPart(null);
+    onSelectWire?.(null);
   };
 
   const resetView = () => setView({ zoom: 1, panX: 0, panY: 0 });
@@ -265,7 +273,34 @@ export function SchematicCanvas({
           ))}
 
           {resolvedWires.map(({ wire, path }) => (
-            <path key={wire.id} d={path} stroke="var(--wire)" strokeWidth={2} fill="none" />
+            <path
+              key={wire.id}
+              d={path}
+              stroke={wire.id === selectedWireId ? "var(--accent)" : "var(--wire)"}
+              strokeWidth={wire.id === selectedWireId ? 3 : 2}
+              fill="none"
+              pointerEvents="none"
+            />
+          ))}
+
+          {/* Transparent fat overlay per wire: a 2px stroke is far too thin to click reliably, so
+              selection hit-testing runs against this instead. Drawn after the visible strokes but
+              before the parts, so terminals (wiring) still win over wire selection where they overlap. */}
+          {resolvedWires.map(({ wire, path }) => (
+            <path
+              key={`hit-${wire.id}`}
+              data-wire-id={wire.id}
+              d={path}
+              stroke="transparent"
+              strokeWidth={WIRE_HITBOX_WIDTH}
+              fill="none"
+              pointerEvents="stroke"
+              style={{ cursor: "pointer" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelectWire?.(wire.id);
+              }}
+            />
           ))}
 
           {junctionPoints.map((p, i) => (
@@ -281,7 +316,7 @@ export function SchematicCanvas({
               // outer one, so the id/value text stays upright and stays put on screen instead of
               // flipping upside-down (and sliding to the opposite side) whenever a part is rotated
               // 180 - which auto-layout now does routinely for antiparallel diode pairs.
-              <g key={part.id} transform={`translate(${part.x},${part.y})`}>
+              <g key={part.id} data-part-id={part.id} transform={`translate(${part.x},${part.y})`}>
                 {isSelected && (
                   <rect x={-40} y={-38} width={80} height={76} rx={6} fill="none" stroke="var(--accent)" strokeWidth={1.2} strokeDasharray="3 2" />
                 )}
