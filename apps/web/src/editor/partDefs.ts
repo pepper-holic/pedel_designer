@@ -1,6 +1,6 @@
-import { SILICON_DIODE_1N4148, GENERIC_SILICON_NPN, GENERIC_NCHANNEL_JFET } from "../core/library/deviceModels";
+import { SILICON_DIODE_1N4148, GENERIC_SILICON_NPN, GENERIC_NCHANNEL_JFET, VINTAGE_SINGLE_COIL } from "../core/library/deviceModels";
 
-export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "jfet" | "opamp" | "vsource" | "ground" | "potentiometer";
+export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "jfet" | "opamp" | "vsource" | "ground" | "potentiometer" | "pickup";
 
 export interface TerminalDef {
   id: string;
@@ -97,6 +97,15 @@ export const PART_DEFS: Record<PartType, PartDef> = {
     label: "접지",
     terminals: [{ id: "gnd", dx: 0, dy: -20, label: "" }],
     defaultParams: {},
+  },
+  pickup: {
+    type: "pickup",
+    label: "픽업",
+    terminals: [
+      { id: "gnd", dx: -30, dy: 0, label: "G" },
+      { id: "hot", dx: 30, dy: 0, label: "H" },
+    ],
+    defaultParams: { ...VINTAGE_SINGLE_COIL },
   },
   potentiometer: {
     type: "potentiometer",

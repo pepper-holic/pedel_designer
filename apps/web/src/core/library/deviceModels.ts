@@ -200,3 +200,56 @@ export const JFET_MODELS: Record<string, { label: string; params: typeof JFET_2N
   "2N5457": { label: "2N5457 (표준)", params: JFET_2N5457 },
   MPF102: { label: "MPF102 (고전류)", params: JFET_MPF102 },
 };
+
+/**
+ * Lumped electrical model of a magnetic guitar/bass pickup: coil DC resistance in series with coil
+ * inductance, with the winding's self-capacitance across the output. `inductance` and
+ * `selfCapacitance` together with whatever the pickup is loaded by (cable, volume/tone pots, amp
+ * input) set the resonant peak that gives each pickup its character - see docs/plan-guitar-wiring.md.
+ *
+ * These are representative approximations for each pickup *family*, not measurements of any
+ * specific manufacturer's product. Trademarked model names are deliberately avoided in favour of
+ * construction-style descriptions, per the project's existing archive convention.
+ */
+// Declared as a type alias rather than an interface on purpose: the model-menu maps in the palette
+// and inspector are typed as Record<string, number | string>, and only type aliases (not
+// interfaces) get the implicit index signature that makes them assignable to it.
+export type PickupParams = {
+  /** Coil inductance in henries. */
+  inductance: number;
+  /** Coil DC resistance in ohms - the number a multimeter across the leads reads. */
+  dcResistance: number;
+  /** Winding self-capacitance in farads. */
+  selfCapacitance: number;
+};
+
+export const VINTAGE_SINGLE_COIL: PickupParams = { inductance: 2.2, dcResistance: 5_800, selfCapacitance: 100e-12 };
+export const HOT_SINGLE_COIL: PickupParams = { inductance: 3.5, dcResistance: 8_000, selfCapacitance: 120e-12 };
+export const BRIDGE_SINGLE_COIL: PickupParams = { inductance: 2.8, dcResistance: 6_500, selfCapacitance: 110e-12 };
+export const P90_STYLE: PickupParams = { inductance: 5.5, dcResistance: 8_200, selfCapacitance: 130e-12 };
+export const PAF_STYLE_HUMBUCKER: PickupParams = { inductance: 4.4, dcResistance: 7_500, selfCapacitance: 150e-12 };
+export const HOT_CERAMIC_HUMBUCKER: PickupParams = { inductance: 7.5, dcResistance: 14_000, selfCapacitance: 180e-12 };
+/** One coil of a PAF-style humbucker on its own - what a coil-split leaves connected. */
+export const HUMBUCKER_SINGLE_COIL: PickupParams = { inductance: 2.2, dcResistance: 3_750, selfCapacitance: 75e-12 };
+export const JAZZ_BASS_SINGLE: PickupParams = { inductance: 2.5, dcResistance: 7_500, selfCapacitance: 100e-12 };
+export const P_BASS_SPLIT: PickupParams = { inductance: 5.5, dcResistance: 11_000, selfCapacitance: 130e-12 };
+/**
+ * Active pickup with an on-board preamp: the preamp's low output impedance swamps cable and pot
+ * loading, so there is no useful resonant peak to model. Represented as a near-zero inductance and
+ * capacitance with the preamp's output impedance as the series resistance.
+ */
+export const ACTIVE_PREAMP_PICKUP: PickupParams = { inductance: 1e-6, dcResistance: 10_000, selfCapacitance: 1e-15 };
+
+/** Selectable pickup models for the palette and property inspector. */
+export const PICKUP_MODELS: Record<string, { label: string; params: PickupParams }> = {
+  VINTAGE_SINGLE: { label: "빈티지 싱글코일 (넥)", params: VINTAGE_SINGLE_COIL },
+  HOT_SINGLE: { label: "핫 싱글코일", params: HOT_SINGLE_COIL },
+  BRIDGE_SINGLE: { label: "브릿지 싱글코일 (텔레 스타일)", params: BRIDGE_SINGLE_COIL },
+  P90: { label: "P90 스타일", params: P90_STYLE },
+  PAF: { label: "PAF 스타일 험버커 (직렬 등가)", params: PAF_STYLE_HUMBUCKER },
+  HOT_HUMBUCKER: { label: "핫/세라믹 험버커", params: HOT_CERAMIC_HUMBUCKER },
+  HUMBUCKER_COIL: { label: "험버커 단일 코일 (스플릿용)", params: HUMBUCKER_SINGLE_COIL },
+  JAZZ_BASS: { label: "재즈베이스 스타일 싱글", params: JAZZ_BASS_SINGLE },
+  P_BASS: { label: "P베이스 스타일 스플릿", params: P_BASS_SPLIT },
+  ACTIVE: { label: "액티브 (프리앰프 내장, 공진 없음)", params: ACTIVE_PREAMP_PICKUP },
+};

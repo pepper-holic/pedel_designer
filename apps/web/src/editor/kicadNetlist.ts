@@ -30,6 +30,10 @@ function kicadSymbol(part: PartInstance): KicadSymbol {
       return { lib: "Amplifier_Operational", part: "OPAMP" };
     case "potentiometer":
       return { lib: "Device", part: "R_POT" };
+    case "pickup":
+      // KiCad has no guitar-pickup symbol; a 2-pin connector is the honest stand-in for "the coil
+      // leads enter the circuit here", same reasoning as the vsource case below.
+      return { lib: "Connector", part: "Conn_01x02" };
     case "vsource":
       // Not a real component on the board - this stands in for wherever the input signal actually
       // enters the circuit (an input jack, a send from a previous pedal, ...).

@@ -13,6 +13,8 @@ export const PARAM_META: Record<string, ParamMeta> = {
   seriesResistance: { label: "직렬 저항", unit: "Ω", min: 0 },
   capacitance: { label: "커패시턴스", unit: "F", min: 1e-15 },
   inductance: { label: "인덕턴스", unit: "H", min: 1e-9 },
+  dcResistance: { label: "코일 DC 저항", unit: "Ω", min: 1 },
+  selfCapacitance: { label: "코일 자기용량", unit: "F", min: 1e-15 },
   voltage: { label: "전압", unit: "V" },
   position: { label: "포텐셔미터 위치", unit: "", min: 0, slider: { max: 1, step: 0.01 } },
   openLoopGain: { label: "개루프 이득", unit: "", min: 1 },

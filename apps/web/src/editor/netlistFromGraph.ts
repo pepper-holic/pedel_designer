@@ -74,6 +74,11 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
 
   const nodeOfTerminal = (partId: string, terminalId: string): string => nameFor(uf.leaderOf(terminalKey(partId, terminalId)));
 
+  // Nets created *inside* a composite part (currently only the pickup's series R-L chain). They are
+  // real solver nodes but not user-visible connection points, so they are kept out of `netNames` -
+  // otherwise they would show up as pickable output nodes in the UI.
+  const internalNets = new Set<string>();
+
   const elements: Element[] = [];
   for (const part of parts) {
     if (part.type === "ground") continue;
@@ -143,6 +148,22 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
       case "vsource":
         elements.push({ id: part.id, type: "vsource", nodes: [nodes[0], nodes[1]], voltage: Number(part.params.voltage) });
         break;
+      case "pickup": {
+        // Standard lumped pickup model: an ideal signal source behind the coil's DC resistance and
+        // inductance, with the winding self-capacitance across the output. The L and the total
+        // capacitance hanging off "hot" (this Cp + cable + pots) form the resonant peak.
+        const coilInner = `${part.id}~src`;
+        const coilMid = `${part.id}~coil`;
+        internalNets.add(coilInner);
+        internalNets.add(coilMid);
+        const gndNode = nodes[0];
+        const hotNode = nodes[1];
+        elements.push({ id: `${part.id}:src`, type: "vsource", nodes: [coilInner, gndNode], voltage: 0 });
+        elements.push({ id: `${part.id}:rdc`, type: "resistor", nodes: [coilInner, coilMid], resistance: Number(part.params.dcResistance) });
+        elements.push({ id: `${part.id}:l`, type: "inductor", nodes: [coilMid, hotNode], inductance: Number(part.params.inductance) });
+        elements.push({ id: `${part.id}:cp`, type: "capacitor", nodes: [hotNode, gndNode], capacitance: Number(part.params.selfCapacitance) });
+        break;
+      }
       case "potentiometer": {
         // Modeled as two resistors split at the wiper's net - no synthetic node needed since the wiper terminal already has its own net.
         const total = Number(part.params.resistance);
@@ -155,14 +176,19 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
     }
   }
 
-  const netNames = Array.from(new Set(elements.flatMap((e) => e.nodes)));
+  const netNames = Array.from(new Set(elements.flatMap((e) => e.nodes))).filter((n) => !internalNets.has(n));
   if (groundLeader !== null && !netNames.includes("0")) netNames.unshift("0");
 
   // An explicit `role: "signalSource"` wins; otherwise fall back to the historical "first vsource
   // on the canvas" rule, but never on a source that has declared itself a supply/bias rail. That
   // fallback is what keeps every existing preset and saved circuit working unchanged.
   const sources = parts.filter((p) => p.type === "vsource");
-  const inputSourceId = (sources.find((p) => p.role === "signalSource") ?? sources.find((p) => p.role === undefined))?.id ?? null;
+  const explicitSource = sources.find((p) => p.role === "signalSource");
+  // A pickup carries its own signal source, and it outranks an unmarked bare vsource: placing a
+  // pickup on the canvas is an unambiguous statement about where the signal comes from.
+  const pickup = parts.find((p) => p.type === "pickup");
+  const inputSourceId =
+    explicitSource?.id ?? (pickup ? `${pickup.id}:src` : undefined) ?? sources.find((p) => p.role === undefined)?.id ?? null;
 
   const terminalNet = new Map<string, string>();
   for (const part of parts) {

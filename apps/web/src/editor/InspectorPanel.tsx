@@ -1,6 +1,6 @@
 import { PART_DEFS, type PartType } from "./partDefs";
 import type { BlockInstance, PartInstance, Wire } from "./types";
-import { DIODE_MODELS, OPAMP_MODELS, TRANSISTOR_MODELS, JFET_MODELS } from "../core/library/deviceModels";
+import { DIODE_MODELS, OPAMP_MODELS, TRANSISTOR_MODELS, JFET_MODELS, PICKUP_MODELS } from "../core/library/deviceModels";
 import { TAPER_OPTIONS } from "./taper";
 import { PARAM_META } from "./paramMeta";
 
@@ -11,6 +11,7 @@ const MODEL_MENUS: Partial<Record<PartType, Record<string, { label: string; para
   opamp: OPAMP_MODELS,
   bjt: TRANSISTOR_MODELS,
   jfet: JFET_MODELS,
+  pickup: PICKUP_MODELS,
 };
 
 interface InspectorPanelProps {

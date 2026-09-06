@@ -21,6 +21,21 @@ function CapacitorSymbol() {
   );
 }
 
+/** Pickup: a bobbin outline with pole pieces, plus the coil winding on its hot lead - reads as
+ * "coil with magnets" rather than a plain inductor, which it electrically almost is. */
+function PickupSymbol() {
+  return (
+    <>
+      <path d="M-30,0 h8 M22,0 h8" stroke={stroke} strokeWidth={1.6} fill="none" />
+      <rect x={-22} y={-14} width={30} height={28} rx={3} stroke={stroke} strokeWidth={1.6} fill="none" />
+      <circle cx={-14} cy={0} r={2.2} fill={stroke} />
+      <circle cx={-7} cy={0} r={2.2} fill={stroke} />
+      <circle cx={0} cy={0} r={2.2} fill={stroke} />
+      <path d="M8,0 h2 a3,3 0 0 1 6,0 a3,3 0 0 1 6,0" stroke={stroke} strokeWidth={1.4} fill="none" />
+    </>
+  );
+}
+
 function InductorSymbol() {
   return (
     <path
@@ -115,6 +130,8 @@ export function PartSymbol({ part }: { part: PartInstance }) {
       return <CapacitorSymbol />;
     case "inductor":
       return <InductorSymbol />;
+    case "pickup":
+      return <PickupSymbol />;
     case "diode":
       return <DiodeSymbol />;
     case "bjt":

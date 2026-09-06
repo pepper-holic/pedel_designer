@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PART_DEFS, type PartType } from "./partDefs";
 import { PartSymbol } from "./symbols";
-import { DIODE_MODELS, TRANSISTOR_MODELS, JFET_MODELS } from "../core/library/deviceModels";
+import { DIODE_MODELS, TRANSISTOR_MODELS, JFET_MODELS, PICKUP_MODELS } from "../core/library/deviceModels";
 
 interface PartPaletteProps {
   onAdd: (type: PartType, paramsOverride?: Record<string, number | string>) => void;
@@ -15,6 +15,7 @@ const MODEL_MENUS: Partial<Record<PartType, Record<string, { label: string; para
   diode: DIODE_MODELS,
   bjt: TRANSISTOR_MODELS,
   jfet: JFET_MODELS,
+  pickup: PICKUP_MODELS,
 };
 
 export function PartPalette({ onAdd }: PartPaletteProps) {
