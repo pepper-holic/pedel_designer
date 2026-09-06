@@ -101,7 +101,7 @@ describe("SchematicEditor", () => {
     await user.click(hitbox);
 
     const inspector = screen.getByText("선택된 소자").closest(".panel")!;
-    expect(within(inspector).getByText(/resistance/)).toBeInTheDocument();
+    expect(within(inspector).getByText("저항값")).toBeInTheDocument();
   });
 
   it("adding a block from the block palette stamps its pre-wired parts onto the canvas", async () => {

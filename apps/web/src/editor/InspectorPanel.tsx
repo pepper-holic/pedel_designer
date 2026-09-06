@@ -83,7 +83,7 @@ export function InspectorPanel({ selectedPart, blocks, onParamChange, onApplyMod
                 return (
                   <div className="field" key={key}>
                     <div className="field-row">
-                      <label>{key}</label>
+                      <label>{meta?.label ?? key}</label>
                       <span className="field-value">{value.toFixed(2)}</span>
                     </div>
                     <input
@@ -101,7 +101,7 @@ export function InspectorPanel({ selectedPart, blocks, onParamChange, onApplyMod
               return (
                 <div className="field" key={key}>
                   <div className="field-row">
-                    <label>{key}</label>
+                    <label>{meta?.label ?? key}</label>
                     {meta?.unit && <span className="field-value">{meta.unit}</span>}
                   </div>
                   <input
