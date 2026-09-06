@@ -161,6 +161,16 @@ export function SchematicCanvas({
     onSelectWire?.(null);
   };
 
+  // A wire is drawn by clicking two terminals in sequence, so between those clicks the first one
+  // lives in `pendingTerminal`. If its part disappears in between - deleted, or the whole circuit
+  // replaced by "새 회로"/a template - the half-finished wire has to be abandoned. Otherwise the
+  // next terminal click completes it against a part that no longer exists, producing a wire that
+  // is in the circuit data but never rendered (its endpoints can't be resolved), and so can be
+  // neither seen nor deleted.
+  useEffect(() => {
+    if (pendingTerminal && !parts.some((p) => p.id === pendingTerminal.partId)) setPendingTerminal(null);
+  }, [parts, pendingTerminal]);
+
   const resetView = () => setView({ zoom: 1, panX: 0, panY: 0 });
 
   const partsRef = useRef(parts);

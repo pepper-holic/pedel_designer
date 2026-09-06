@@ -199,6 +199,36 @@ describe("SchematicEditor", () => {
     expect(wireCount()).toBe(wiresBefore);
   });
 
+  it("drops a half-finished wire when the circuit is replaced instead of connecting it to a deleted part", async () => {
+    const user = userEvent.setup();
+    const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
+    render(<SchematicEditor />);
+
+    const canvasPanel = screen.getByText("회로도").closest(".panel")!;
+    const terminalsOf = (partId: string) =>
+      Array.from(canvasPanel.querySelector(`g[data-part-id="${partId}"]`)!.querySelectorAll<SVGCircleElement>("circle")).filter(
+        (c) => c.getAttribute("r") === "4",
+      );
+    const idsOnCanvas = () =>
+      Array.from(canvasPanel.querySelectorAll("g[data-part-id]")).map((g) => g.getAttribute("data-part-id")!);
+
+    // Start one wire, then throw the whole circuit away before finishing it.
+    await user.click(screen.getByRole("button", { name: "저항" }));
+    await user.click(terminalsOf(idsOnCanvas()[0])[0]);
+    await user.click(screen.getByRole("button", { name: "새 회로" }));
+
+    // Two fresh parts, wired to each other. The stale pending terminal must not have eaten the
+    // first of these two clicks to make an invisible wire to the part that no longer exists.
+    await user.click(screen.getByRole("button", { name: "저항" }));
+    await user.click(screen.getByRole("button", { name: "커패시터" }));
+    const [first, second] = idsOnCanvas();
+    await user.click(terminalsOf(first)[1]);
+    await user.click(terminalsOf(second)[0]);
+
+    expect(canvasPanel.querySelectorAll("path[data-wire-id]")).toHaveLength(1);
+    confirmSpy.mockRestore();
+  });
+
   it("loads the chosen topology variant of a preset, not only its default branch", async () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
