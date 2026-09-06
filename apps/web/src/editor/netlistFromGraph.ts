@@ -1,5 +1,5 @@
 import type { Netlist, Element } from "../core/solver/types";
-import { PART_DEFS } from "./partDefs";
+import { PART_DEFS, SWITCH_ON_OHMS, SWITCH_OFF_OHMS } from "./partDefs";
 import { applyTaper, type TaperType } from "./taper";
 import type { PartInstance, Wire } from "./types";
 
@@ -158,10 +158,41 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
         internalNets.add(coilMid);
         const gndNode = nodes[0];
         const hotNode = nodes[1];
-        elements.push({ id: `${part.id}:src`, type: "vsource", nodes: [coilInner, gndNode], voltage: 0 });
+        elements.push({ id: `${part.id}:src`, type: "vsource", nodes: [coilInner, gndNode], voltage: 0, isSignalSource: true });
         elements.push({ id: `${part.id}:rdc`, type: "resistor", nodes: [coilInner, coilMid], resistance: Number(part.params.dcResistance) });
         elements.push({ id: `${part.id}:l`, type: "inductor", nodes: [coilMid, hotNode], inductance: Number(part.params.inductance) });
         elements.push({ id: `${part.id}:cp`, type: "capacitor", nodes: [hotNode, gndNode], capacitance: Number(part.params.selfCapacitance) });
+        break;
+      }
+      case "spst":
+      case "spdt":
+      case "dpdt": {
+        // Every switch is just contacts: a near-short for the selected throw, a near-open for the
+        // rest. Stamping them as resistors keeps switching entirely out of the solver, the same way
+        // the potentiometer below is stamped as two resistors.
+        // Every switch here is two-position. Anything other than 1 falls back to position 0 - a
+        // switch with no closed contact would silently break the circuit with nothing on screen to
+        // explain why.
+        const position = Number(part.params.switchPosition) === 1 ? 1 : 0;
+        const contact = (closed: boolean) => (closed ? SWITCH_ON_OHMS : SWITCH_OFF_OHMS);
+
+        if (part.type === "spst") {
+          elements.push({ id: `${part.id}:sw`, type: "resistor", nodes: [nodes[0], nodes[1]], resistance: contact(position === 1) });
+          break;
+        }
+        // [common, throwA, throwB] for SPDT; DPDT repeats that layout for a second pole, and both
+        // poles follow the same lever.
+        const poles: [string, string, string][] =
+          part.type === "spdt"
+            ? [[nodes[0], nodes[1], nodes[2]]]
+            : [
+                [nodes[0], nodes[1], nodes[2]],
+                [nodes[3], nodes[4], nodes[5]],
+              ];
+        poles.forEach(([common, throwA, throwB], i) => {
+          elements.push({ id: `${part.id}:p${i + 1}a`, type: "resistor", nodes: [common, throwA], resistance: contact(position === 0) });
+          elements.push({ id: `${part.id}:p${i + 1}b`, type: "resistor", nodes: [common, throwB], resistance: contact(position === 1) });
+        });
         break;
       }
       case "potentiometer": {

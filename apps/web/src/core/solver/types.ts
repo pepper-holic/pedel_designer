@@ -30,6 +30,16 @@ export interface VoltageSourceElement extends ElementBase {
   nodes: [NodeId, NodeId];
   /** DC/instantaneous voltage in volts. For time-varying sources this is set per timestep before stamping. */
   voltage: number;
+  /**
+   * Marks this source as carrying the input signal, so every analysis drives it in phase with the
+   * named input source. A humbucker is two coils sensing one string: both generate together, and
+   * driving only one would leave the other as a dead passive impedance - which gets the
+   * series-vs-parallel and coil-split level relationships backwards.
+   *
+   * It lives on the element rather than in each analysis's options so that THD, Monte Carlo and the
+   * pedal chain get it right for free, without every call site having to remember to pass it.
+   */
+  isSignalSource?: boolean;
 }
 
 export interface DiodeElement extends ElementBase {

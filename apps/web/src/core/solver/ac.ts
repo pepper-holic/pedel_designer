@@ -43,6 +43,8 @@ export function runAcAnalysis(netlist: Netlist, options: AcOptions): AcPoint[] {
   const topology = buildTopology(netlist);
   const { solution: dcSolution } = solveNewton(netlist, topology, new Map(), 0);
   const outIndex = nodeOf(topology, options.outputNode);
+  // The named input plus every source flagged as carrying the signal (see VoltageSourceElement).
+  const isDriven = (el: { id: string; isSignalSource?: boolean }) => el.id === options.inputSourceId || el.isSignalSource === true;
 
   return options.frequenciesHz.map((frequencyHz) => {
     const omega = 2 * Math.PI * frequencyHz;
@@ -98,7 +100,7 @@ export function runAcAnalysis(netlist: Netlist, options: AcOptions): AcPoint[] {
           addRe(branch, ni, -1);
           addRe(p, branch, 1);
           addRe(ni, branch, -1);
-          if (el.id === options.inputSourceId) reZ[branch] += 1; // unit AC magnitude, 0 phase
+          if (isDriven(el)) reZ[branch] += 1; // unit AC magnitude, 0 phase
           break;
         }
         case "diode": {

@@ -2,7 +2,7 @@ import { buildTopology, nodeOf } from "./topology";
 import { voltageAt } from "./solution";
 import { solveNewton } from "./newton";
 import { updateCapacitorHistory, updateInductorHistory, updateOpAmpHistory } from "../components";
-import type { Netlist, NodeId } from "./types";
+import type { Netlist, NodeId, VoltageSourceElement } from "./types";
 
 export interface TransientOptions {
   /** Element id of the input voltage source driven sample-by-sample by `inputSamples`. */
@@ -67,6 +67,10 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
   if (!inputElement || inputElement.type !== "vsource") {
     throw new Error(`Input source not found or not a vsource: ${options.inputSourceId}`);
   }
+  // The named input plus every source flagged as carrying the signal (see VoltageSourceElement).
+  const drivenElements = netlist.elements.filter(
+    (e): e is VoltageSourceElement => e.type === "vsource" && (e.id === options.inputSourceId || e.isSignalSource === true),
+  );
 
   const n = options.inputSamples.length;
   const traces = new Map<NodeId, Float64Array>();
@@ -84,7 +88,8 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
     const frac = (step % oversample) / oversample;
     const curr = options.inputSamples[i];
     const next = i + 1 < n ? options.inputSamples[i + 1] : curr;
-    inputElement.voltage = curr + (next - curr) * frac;
+    const drive = curr + (next - curr) * frac;
+    for (const el of drivenElements) el.voltage = drive;
 
     const { solution, converged } = solveNewton(netlist, topology, history, dt);
     if (!converged) nonConvergentSampleCount++;
