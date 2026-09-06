@@ -77,3 +77,47 @@ describe("싱글 픽업 + 볼륨 + 톤", () => {
     expect(trebleDb(0)).toBeLessThan(trebleDb(1));
   });
 });
+
+/** Peak-picking helper shared by the switching tests below. */
+function sweepPreset(presetId: string, overrides: Record<string, Record<string, number>> = {}) {
+  const preset = wiringPresets.find((p) => p.id === presetId)!;
+  const parts = preset.snapshot.parts.map((p) =>
+    overrides[p.id] ? { ...p, params: { ...p.params, ...overrides[p.id] } } : p,
+  );
+  const graph = netlistFromGraph(parts, preset.snapshot.wires);
+  const points = runAcAnalysis(graph.netlist, {
+    inputSourceId: graph.inputSourceId!,
+    outputNode: graph.terminalNet.get(`${preset.outputTerminal.partId}:${preset.outputTerminal.terminalId}`)!,
+    frequenciesHz: logFrequencySweep(20, 20000, 60),
+  });
+  return {
+    peakHz: points.reduce((best, p) => (p.magnitudeDb > best.magnitudeDb ? p : best)).frequencyHz,
+    midDb: points.find((p) => p.frequencyHz > 400)!.magnitudeDb,
+  };
+}
+
+describe("험버커 코일 스플릿", () => {
+  const id = "wiring-humbucker-coil-split";
+
+  it("raises the resonant peak and drops the level when the split switch shorts one coil", () => {
+    const full = sweepPreset(id, { SW_SPLIT: { switchPosition: 0 } });
+    const split = sweepPreset(id, { SW_SPLIT: { switchPosition: 1 } });
+
+    // Half the inductance resonates higher...
+    expect(split.peakHz).toBeGreaterThan(full.peakHz);
+    // ...and half the coil means less output, which is why a split humbucker sounds weaker.
+    expect(split.midDb).toBeLessThan(full.midDb);
+  });
+});
+
+describe("험버커 직렬/병렬 전환", () => {
+  const id = "wiring-humbucker-series-parallel";
+
+  it("moves the resonant peak up and the level down when switched from series to parallel", () => {
+    const series = sweepPreset(id, { SW_SP: { switchPosition: 0 } });
+    const parallel = sweepPreset(id, { SW_SP: { switchPosition: 1 } });
+
+    expect(parallel.peakHz).toBeGreaterThan(series.peakHz);
+    expect(parallel.midDb).toBeLessThan(series.midDb);
+  });
+});
