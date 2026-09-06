@@ -4,6 +4,25 @@
   height: 100dvh;
 }
 
+/* Hidden by default - the editor's core interactions (wheel-zoom, drag-to-move, click-twice-to-wire)
+   assume a mouse, so this only surfaces on touch-primary or narrow (likely handheld) viewports. */
+.mobile-notice {
+  display: none;
+}
+
+@media (pointer: coarse), (max-width: 700px) {
+  .mobile-notice {
+    display: block;
+    margin: 0;
+    padding: 8px 12px;
+    background: var(--accent-soft);
+    color: var(--text);
+    font-size: 0.78rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+}
+
 /* ---------- menu bar (black chrome, like a stompbox's hardware) ---------- */
 .menubar {
   display: flex;
