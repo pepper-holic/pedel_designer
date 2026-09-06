@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { PART_DEFS } from "./partDefs";
 import { PartSymbol } from "./symbols";
 import { terminalPosition, computeWirePaths, zoomAroundPoint, GRID_SIZE } from "./geometry";
@@ -83,6 +83,24 @@ export function SchematicCanvas({
   const [pendingTerminal, setPendingTerminal] = useState<TerminalRef | null>(null);
   const [view, setView] = useState({ zoom: 1, panX: 0, panY: 0 });
   const [panStart, setPanStart] = useState<{ mouseX: number; mouseY: number; panX: number; panY: number; moved: boolean } | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // Attached as a native (non-passive) listener rather than React's onWheel: React registers
+  // wheel handlers as passive, which silently drops preventDefault() and lets the page scroll
+  // underneath the zoom gesture instead of stopping it.
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const onWheelNative = (e: WheelEvent) => {
+      e.preventDefault();
+      const rect = svg.getBoundingClientRect();
+      const p = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+      setView((v) => zoomAroundPoint(v, p, factor, MIN_ZOOM, MAX_ZOOM));
+    };
+    svg.addEventListener("wheel", onWheelNative, { passive: false });
+    return () => svg.removeEventListener("wheel", onWheelNative);
+  }, []);
 
   const screenPoint = (e: React.MouseEvent<SVGSVGElement> | React.WheelEvent<SVGSVGElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -121,13 +139,6 @@ export function SchematicCanvas({
       setPanStart({ ...panStart, moved });
       setView((v) => ({ ...v, panX: panStart.panX + dx, panY: panStart.panY + dy }));
     }
-  };
-
-  const handleWheel = (e: React.WheelEvent<SVGSVGElement>) => {
-    e.preventDefault();
-    const p = screenPoint(e);
-    const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
-    setView((v) => zoomAroundPoint(v, p, factor, MIN_ZOOM, MAX_ZOOM));
   };
 
   const handleBackgroundClick = () => {
@@ -203,6 +214,7 @@ export function SchematicCanvas({
         </button>
       </div>
       <svg
+        ref={svgRef}
         width={width}
         height={height}
         style={{ display: "block", cursor: dragId ? "grabbing" : panStart ? "grabbing" : "default" }}
@@ -217,7 +229,6 @@ export function SchematicCanvas({
           setDragId(null);
           setPanStart(null);
         }}
-        onWheel={handleWheel}
       >
         <defs>
           <pattern
