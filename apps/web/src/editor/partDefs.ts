@@ -1,6 +1,6 @@
 import { SILICON_DIODE_1N4148, GENERIC_SILICON_NPN, GENERIC_NCHANNEL_JFET, VINTAGE_SINGLE_COIL } from "../core/library/deviceModels";
 
-export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "jfet" | "opamp" | "vsource" | "ground" | "potentiometer" | "pickup";
+export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "jfet" | "opamp" | "vsource" | "ground" | "potentiometer" | "pickup" | "spst" | "spdt" | "dpdt";
 
 export interface TerminalDef {
   id: string;
@@ -15,6 +15,13 @@ export interface PartDef {
   terminals: TerminalDef[];
   defaultParams: Record<string, number | string>;
 }
+
+/** A closed switch contact, in ohms. Not zero: an exact short would put a redundant row in the MNA
+ * matrix, and a milliohm is already four orders of magnitude below anything else in a guitar circuit. */
+export const SWITCH_ON_OHMS = 1e-3;
+/** An open switch contact, in ohms. Large enough to be an open circuit next to megohm-scale pots,
+ * small enough to keep the matrix well conditioned. */
+export const SWITCH_OFF_OHMS = 1e9;
 
 export const PART_DEFS: Record<PartType, PartDef> = {
   resistor: {
@@ -106,6 +113,38 @@ export const PART_DEFS: Record<PartType, PartDef> = {
       { id: "hot", dx: 30, dy: 0, label: "H" },
     ],
     defaultParams: { ...VINTAGE_SINGLE_COIL },
+  },
+  spst: {
+    type: "spst",
+    label: "스위치 (SPST, 1접점)",
+    terminals: [
+      { id: "a", dx: -30, dy: 0, label: "1" },
+      { id: "b", dx: 30, dy: 0, label: "2" },
+    ],
+    defaultParams: { switchPosition: 0 },
+  },
+  spdt: {
+    type: "spdt",
+    label: "스위치 (SPDT, 3-way 토글)",
+    terminals: [
+      { id: "common", dx: -30, dy: 0, label: "C" },
+      { id: "throwA", dx: 30, dy: -16, label: "1" },
+      { id: "throwB", dx: 30, dy: 16, label: "2" },
+    ],
+    defaultParams: { switchPosition: 0 },
+  },
+  dpdt: {
+    type: "dpdt",
+    label: "스위치 (DPDT, 푸시풀/2단)",
+    terminals: [
+      { id: "common1", dx: -30, dy: -20, label: "C1" },
+      { id: "pole1ThrowA", dx: 30, dy: -32, label: "1a" },
+      { id: "pole1ThrowB", dx: 30, dy: -8, label: "1b" },
+      { id: "common2", dx: -30, dy: 20, label: "C2" },
+      { id: "pole2ThrowA", dx: 30, dy: 8, label: "2a" },
+      { id: "pole2ThrowB", dx: 30, dy: 32, label: "2b" },
+    ],
+    defaultParams: { switchPosition: 0 },
   },
   potentiometer: {
     type: "potentiometer",

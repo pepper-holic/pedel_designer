@@ -14,6 +14,14 @@ const MODEL_MENUS: Partial<Record<PartType, Record<string, { label: string; para
   pickup: PICKUP_MODELS,
 };
 
+/** Position names per switch type. A switch has a handful of named states, not a continuous value,
+ * so it gets a select rather than the numeric field the generic param loop would give it. */
+const SWITCH_POSITION_LABELS: Partial<Record<PartType, string[]>> = {
+  spst: ["열림 (OFF)", "닫힘 (ON)"],
+  spdt: ["위치 1 (단자 1)", "위치 2 (단자 2)"],
+  dpdt: ["위치 1 (단자 a)", "위치 2 (단자 b)"],
+};
+
 interface InspectorPanelProps {
   selectedPart: PartInstance | null;
   /** Set instead of `selectedPart` when the canvas selection is a wire - the two are mutually exclusive. */
@@ -29,6 +37,7 @@ interface InspectorPanelProps {
 export function InspectorPanel({ selectedPart, selectedWire = null, blocks, onParamChange, onApplyModel, onRotate, onDelete, onDeleteBlock }: InspectorPanelProps) {
   const ownerBlock = selectedPart?.blockId ? (blocks.find((b) => b.id === selectedPart.blockId) ?? null) : null;
   const modelMenu = selectedPart ? MODEL_MENUS[selectedPart.type] : undefined;
+  const switchPositions = selectedPart ? SWITCH_POSITION_LABELS[selectedPart.type] : undefined;
 
   return (
     <div className="panel">
@@ -74,6 +83,24 @@ export function InspectorPanel({ selectedPart, selectedWire = null, blocks, onPa
               </select>
             </div>
           )}
+          {switchPositions && (
+            <div className="field">
+              <div className="field-row">
+                <label htmlFor="switch-position-select">스위치 위치</label>
+              </div>
+              <select
+                id="switch-position-select"
+                value={String(Number(selectedPart.params.switchPosition) === 1 ? 1 : 0)}
+                onChange={(e) => onParamChange("switchPosition", e.target.value)}
+              >
+                {switchPositions.map((label, i) => (
+                  <option key={label} value={i}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           {selectedPart.type === "potentiometer" && (
             <div className="field">
               <div className="field-row">
@@ -90,6 +117,7 @@ export function InspectorPanel({ selectedPart, selectedWire = null, blocks, onPa
           )}
           {Object.entries(selectedPart.params)
             .filter(([key]) => !(selectedPart.type === "potentiometer" && key === "taper"))
+            .filter(([key]) => !(switchPositions && key === "switchPosition"))
             .map(([key, value]) => {
               const meta = PARAM_META[key];
               const isInvalid = typeof value === "number" && meta?.min !== undefined && value < meta.min;

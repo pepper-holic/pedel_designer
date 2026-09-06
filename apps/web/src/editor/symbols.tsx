@@ -36,6 +36,65 @@ function PickupSymbol() {
   );
 }
 
+/** Switch lever: the blade swings between contacts, so the drawn position is the actual state -
+ * the schematic tells you which way the switch is thrown without opening the inspector. */
+function SwitchBlade({ x1, y1, closed }: { x1: number; y1: number; closed: boolean }) {
+  return <path d={`M-14,0 L${closed ? x1 : x1 - 4},${closed ? y1 : y1 - 10}`} stroke={stroke} strokeWidth={1.8} fill="none" strokeLinecap="round" />;
+}
+
+function SpstSymbol({ closed }: { closed: boolean }) {
+  return (
+    <>
+      <path d="M-30,0 h16 M14,0 h16" stroke={stroke} strokeWidth={1.6} fill="none" />
+      <circle cx={-14} cy={0} r={2.4} fill={stroke} />
+      <circle cx={14} cy={0} r={2.4} fill={stroke} />
+      <SwitchBlade x1={14} y1={0} closed={closed} />
+    </>
+  );
+}
+
+function SpdtSymbol({ position }: { position: number }) {
+  return (
+    <>
+      <path d="M-30,0 h16 M14,-16 h16 M14,16 h16" stroke={stroke} strokeWidth={1.6} fill="none" />
+      <circle cx={-14} cy={0} r={2.4} fill={stroke} />
+      <circle cx={14} cy={-16} r={2.4} fill={stroke} />
+      <circle cx={14} cy={16} r={2.4} fill={stroke} />
+      <path
+        d={position === 1 ? "M-14,0 L14,16" : "M-14,0 L14,-16"}
+        stroke={stroke}
+        strokeWidth={1.8}
+        fill="none"
+        strokeLinecap="round"
+      />
+    </>
+  );
+}
+
+function DpdtSymbol({ position }: { position: number }) {
+  return (
+    <>
+      {[-20, 20].map((offset) => (
+        <g key={offset} transform={`translate(0,${offset})`}>
+          <path d="M-30,0 h16 M14,-12 h16 M14,12 h16" stroke={stroke} strokeWidth={1.6} fill="none" />
+          <circle cx={-14} cy={0} r={2.2} fill={stroke} />
+          <circle cx={14} cy={-12} r={2.2} fill={stroke} />
+          <circle cx={14} cy={12} r={2.2} fill={stroke} />
+          <path
+            d={position === 1 ? "M-14,0 L14,12" : "M-14,0 L14,-12"}
+            stroke={stroke}
+            strokeWidth={1.7}
+            fill="none"
+            strokeLinecap="round"
+          />
+        </g>
+      ))}
+      {/* Dashed tie bar: the two poles are ganged to one lever. */}
+      <path d="M0,-14 v28" stroke={stroke} strokeWidth={1} strokeDasharray="3 3" fill="none" opacity={0.7} />
+    </>
+  );
+}
+
 function InductorSymbol() {
   return (
     <path
@@ -132,6 +191,12 @@ export function PartSymbol({ part }: { part: PartInstance }) {
       return <InductorSymbol />;
     case "pickup":
       return <PickupSymbol />;
+    case "spst":
+      return <SpstSymbol closed={Number(part.params.switchPosition) === 1} />;
+    case "spdt":
+      return <SpdtSymbol position={Number(part.params.switchPosition) === 1 ? 1 : 0} />;
+    case "dpdt":
+      return <DpdtSymbol position={Number(part.params.switchPosition) === 1 ? 1 : 0} />;
     case "diode":
       return <DiodeSymbol />;
     case "bjt":

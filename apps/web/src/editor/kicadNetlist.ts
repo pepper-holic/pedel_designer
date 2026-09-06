@@ -30,6 +30,12 @@ function kicadSymbol(part: PartInstance): KicadSymbol {
       return { lib: "Amplifier_Operational", part: "OPAMP" };
     case "potentiometer":
       return { lib: "Device", part: "R_POT" };
+    case "spst":
+      return { lib: "Switch", part: "SW_SPST" };
+    case "spdt":
+      return { lib: "Switch", part: "SW_SPDT" };
+    case "dpdt":
+      return { lib: "Switch", part: "SW_DPDT_x2" };
     case "pickup":
       // KiCad has no guitar-pickup symbol; a 2-pin connector is the honest stand-in for "the coil
       // leads enter the circuit here", same reasoning as the vsource case below.
