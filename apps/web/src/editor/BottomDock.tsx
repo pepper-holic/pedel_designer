@@ -29,10 +29,20 @@ export function BottomDock({ tabs }: BottomDockProps) {
             className={tab.key === activeTab?.key ? "dock-tab active" : "dock-tab"}
             onClick={() => setActiveKey(tab.key)}
             title={tab.helpText}
+            aria-label={tab.label}
+            aria-describedby={tab.helpText ? `dock-tab-help-${tab.key}` : undefined}
           >
             {tab.label}
           </button>
         ))}
+        {tabs.map(
+          (tab) =>
+            tab.helpText && (
+              <span key={tab.key} id={`dock-tab-help-${tab.key}`} className="visually-hidden">
+                {tab.helpText}
+              </span>
+            ),
+        )}
       </div>
       <div className="bottom-dock-content">{activeTab?.content}</div>
     </div>
