@@ -40,3 +40,40 @@ describe("netlistFromGraph", () => {
     expect(out[0]).toBeLessThan(0.1);
   });
 });
+
+describe("netlistFromGraph input source selection", () => {
+  const wires: Wire[] = [];
+
+  it("falls back to the first vsource in the array when no part declares a role", () => {
+    const parts: PartInstance[] = [
+      { id: "Vcc", type: "vsource", x: 0, y: 0, rotation: 0, params: { voltage: 9 } },
+      { id: "V1", type: "vsource", x: 0, y: 100, rotation: 0, params: { voltage: 0 } },
+    ];
+    expect(netlistFromGraph(parts, wires).inputSourceId).toBe("Vcc");
+  });
+
+  it("prefers the part marked as the signal source over an earlier unmarked vsource", () => {
+    // This is what a pickup needs: it stamps its own vsource, but a supply rail may already sit
+    // earlier in the array and would otherwise be picked as "the input" by the array-order rule.
+    const parts: PartInstance[] = [
+      { id: "Vcc", type: "vsource", x: 0, y: 0, rotation: 0, params: { voltage: 9 }, role: "supply" },
+      { id: "V1", type: "vsource", x: 0, y: 100, rotation: 0, params: { voltage: 0 }, role: "signalSource" },
+    ];
+    expect(netlistFromGraph(parts, wires).inputSourceId).toBe("V1");
+  });
+
+  it("never picks a supply-role source as the input, even when it is the only vsource", () => {
+    const parts: PartInstance[] = [
+      { id: "Vcc", type: "vsource", x: 0, y: 0, rotation: 0, params: { voltage: 9 }, role: "supply" },
+    ];
+    expect(netlistFromGraph(parts, wires).inputSourceId).toBeNull();
+  });
+
+  it("keeps the first signal source when several are marked", () => {
+    const parts: PartInstance[] = [
+      { id: "V1", type: "vsource", x: 0, y: 0, rotation: 0, params: { voltage: 0 }, role: "signalSource" },
+      { id: "V2", type: "vsource", x: 0, y: 100, rotation: 0, params: { voltage: 0 }, role: "signalSource" },
+    ];
+    expect(netlistFromGraph(parts, wires).inputSourceId).toBe("V1");
+  });
+});

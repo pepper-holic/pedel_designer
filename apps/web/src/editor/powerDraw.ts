@@ -11,8 +11,8 @@ export interface PowerSupplyDraw {
 /**
  * Estimates DC current drawn from each bias/supply voltage source (e.g. "Vcc"/"Vdd" in
  * transistor/JFET circuits) by solving the DC operating point and reading the MNA branch current
- * for that source. `inputSourceId` (the audio input, per the "first vsource" convention in
- * netlistFromGraph.ts) is excluded - only power-rail sources are reported.
+ * for that source. `inputSourceId` (the audio input, resolved by netlistFromGraph.ts from each
+ * part's `role` with a first-vsource fallback) is excluded - only power-rail sources are reported.
  *
  * Ideal op-amp-based circuits have no physical supply node in the netlist (the macromodel's
  * rail-clipping is a solver-internal parameter, not a stamped element), so they yield no rows here.

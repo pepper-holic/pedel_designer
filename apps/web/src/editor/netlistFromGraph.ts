@@ -158,7 +158,11 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
   const netNames = Array.from(new Set(elements.flatMap((e) => e.nodes)));
   if (groundLeader !== null && !netNames.includes("0")) netNames.unshift("0");
 
-  const inputSourceId = parts.find((p) => p.type === "vsource")?.id ?? null;
+  // An explicit `role: "signalSource"` wins; otherwise fall back to the historical "first vsource
+  // on the canvas" rule, but never on a source that has declared itself a supply/bias rail. That
+  // fallback is what keeps every existing preset and saved circuit working unchanged.
+  const sources = parts.filter((p) => p.type === "vsource");
+  const inputSourceId = (sources.find((p) => p.role === "signalSource") ?? sources.find((p) => p.role === undefined))?.id ?? null;
 
   const terminalNet = new Map<string, string>();
   for (const part of parts) {
