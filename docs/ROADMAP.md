@@ -22,6 +22,16 @@ PCB 레이아웃 생성/익스포트       ← 🟡 KiCad 넷리스트 export까
 
 파이프라인 앞 절반(조합 + 시뮬레이션)에 이어, 뒷 절반(BOM/PCB)도 2026-08-28 야간 루프에서 결정된 범위까지 완료했다.
 
+**2026-09-06 확장 방향 — 신호 경로를 페달 앞뒤로 넓힌다.** 지금까지는 "페달 회로 1개"가 대상이었지만,
+기타리스트가 실제로 듣는 소리는 그 앞뒤가 결정한다:
+
+```
+픽업 → 기타 배선(볼륨/톤/셀렉터/스플릿/직병렬) → 케이블 → 페달 체인 → 앰프 입력 → 캐비닛 IR
+       └────────── 신규 (Phase 9~13) ──────────┘   └── 기존 ──┘
+```
+
+상세 계획은 [plan-guitar-wiring.md](./plan-guitar-wiring.md).
+
 핵심 설계 원칙 (지금까지 세션들에서 자연스럽게 정착된 것):
 
 - **직접 넷리스트 재구성**: 유명 페달 회로는 스캔 이미지·문구를 복제하지 않고, 공개된 자료에서 **토폴로지/부품값(기능적 사실)만** 참고해 직접 넷리스트로 다시 작성한다. 상표명 대신 "~스타일"로 표기 ([plan-circuit-archive.md](./plan-circuit-archive.md) §2 참고).
@@ -42,6 +52,16 @@ PCB 레이아웃 생성/익스포트       ← 🟡 KiCad 넷리스트 export까
 | 6 | BOM(부품 목록) 자동 생성 | ✅ 완료 (2026-08-28) |
 | 7 | PCB 레이아웃 생성/익스포트 | 🟡 KiCad 넷리스트 export 완료(2026-08-28) — 배치/자동 라우팅은 범위 밖으로 확정 |
 | 8 | (선택) 실물 빌드 검증 / 커뮤니티 공유 기능 | ⬜ 미착수 |
+
+**Phase 9 이후 — 기타 배선/픽업 도메인 확장** (2026-09-06 신설, 상세는 [plan-guitar-wiring.md](./plan-guitar-wiring.md)):
+
+| 페이즈 | 내용 | 상태 |
+|---|---|---|
+| 9 | 기타 신호원 — `role` 플래그 → `pickup` 소자 → 픽업 모델 라이브러리 → 케이블/앰프 부하 | ⬜ 미착수 |
+| 10 | 스위칭 & 배선 — `switch` 소자(SPST/SPDT/DPDT/5-way) + 배선 프리셋(스플릿/직병렬/위상) | ⬜ 미착수 |
+| 11 | 노브 & 톤 회로 — 실시간 노브, 파라미터 스윕 겹쳐 그리기, 트레블 블리드, 50s vs 모던 배선 | ⬜ 미착수 |
+| 12 | 온보드 액티브 — Baxandall 2/3밴드, 자이레이터 미드, 액티브 픽업 | ⬜ 미착수 |
+| 13 | 통합 신호 경로 — 픽업→배선→케이블→페달→앰프를 하나의 넷리스트로 병합 해석(로딩 효과 포함) | ⬜ 미착수 |
 
 ## 3. 진행된 것 (상세)
 
@@ -126,9 +146,69 @@ Klon Centaur 다이어그램(기능별 반투명 색상 블록 + 라벨)을 참�
 - 인증/과금/약관·개인정보처리방침/에러 트래킹·애널리틱스 전부 없음.
 - 타겟 시장(국내/해외)·가격 모델(무료/유료/구독)·실제 배포처가 아직 미정 — 이건 코드 문제가 아니라 사업 방향 결정이 먼저 필요.
 
+### 2026-09-05 — 상용화 상세 조사 + 즉시 가능한 기술 항목 처리
+
+전체 코드베이스를 감사해 위 상용화 격차를 구체화(배포/인프라, 에러처리, 보안, 법적 문서, 접근성/i18n, 테스트, 성능, 브라우저 호환성, PWA 9개 항목). 사업 결정이 필요 없는 즉시 처리 가능 항목 3개 바로 적용, 173개 테스트·타입체크·프로덕션 빌드·브라우저 실동작 확인.
+
+1. **React Error Boundary 추가** — [ErrorBoundary.tsx](../apps/web/src/ErrorBoundary.tsx) 신규, [main.tsx](../apps/web/src/main.tsx)에서 `<App />`을 감쌈. 기존엔 런타임 에러 시 화이트스크린이었음.
+2. **CSP 등 보안 헤더 추가** — [vercel.json](../vercel.json)에 `Content-Security-Policy`(외부 API/스크립트 없는 순수 클라이언트 앱 특성 반영해 `default-src 'self'` 기반), `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security` 추가.
+3. **상표 표기 수정** — [deviceModels.ts](../apps/web/src/core/library/deviceModels.ts) op-amp 모델 라벨에서 "RAT"/"Big Muff"/"TS9/OD-1" 상표명 노출을 프로젝트 기존 관례("~스타일")로 통일.
+
+**감사에서 확인된 양호 항목** (조치 불필요): npm audit 취약점 0건, `dangerouslySetInnerHTML` 미사용, 외부 API 호출 전무(순수 클라이언트 앱), localStorage에 민감정보 없음.
+
+**남은 항목**(사업 결정 또는 더 큰 작업 필요, 위 "아직 남은 상용화 격차"와 중복 없이 추가):
+- TypeScript strict 모드 미설정(`strictNullChecks` 등 없음).
+- 커버리지 측정 도구 없음, E2E 테스트 부재(기존에도 알려진 문제).
+- 접근성 속성(`aria-label` 등) 6개 파일 10건뿐 — 컴포넌트 수 대비 부족.
+- CI/CD 파이프라인 없음(`.github/workflows` 없음), `.env` 환경변수 관리 체계 없음.
+- PWA(manifest/service worker) 미구현 — 오프라인 계산형 앱 특성상 전환 난이도는 낮음.
+
+### 2026-09-05 후속 — 기능/라이브러리 완성도 + UX A-Z 점검 및 수정
+
+`core/components`·`core/analysis`·프리셋·블록·BOM/PCB·의존성 전수 확인(배경 에이전트) + 브라우저 실사용 흐름(온보딩 → 프리셋 로드 → 배선 → 인스펙터 → BOM/PCB) 직접 점검. 173개 테스트·타입체크·빌드·브라우저 실동작(휠 줌 `defaultPrevented` 확인 포함) 통과.
+
+**감사 결론(수정 불필요, 기록용)**: 소자/분석/프리셋 라이브러리는 로드맵에 명시된 스코프(오버드라이브/디스토션/부스트) 안에서 충분히 두터움 — MOSFET 부재·모듈레이션 이펙트 부재는 의도된 스코프 제한. react/react-dom 단 2개 의존성은 이 규모 앱에는 장점.
+
+**실사용 중 발견해 바로 수정한 항목**:
+1. **캔버스 휠 줌 버그** — React의 `onWheel`은 wheel 리스너를 passive로 등록해 `e.preventDefault()`가 조용히 무시되고 있었음(콘솔에 "Unable to preventDefault inside passive event listener" 반복). [SchematicCanvas.tsx](../apps/web/src/editor/SchematicCanvas.tsx)에서 `useEffect`로 `{ passive: false }` 네이티브 리스너를 직접 붙이는 방식으로 교체. 수정 후 `dispatchEvent`로 `defaultPrevented: true` 확인.
+2. **인스펙터 파라미터가 전부 영어 원본 키로 표시** — [paramMeta.ts](../apps/web/src/editor/paramMeta.ts)에 단위만 있고 표시명이 없어 "voltage", "gbwpHz", "saturationCurrent" 등이 그대로 노출되던 문제. `ParamMeta`에 `label` 필드 추가해 18개 키 전부 한글 라벨 부여, [InspectorPanel.tsx](../apps/web/src/editor/InspectorPanel.tsx)가 이를 사용하도록 수정.
+3. **전류 소모 추정치 추가** — [powerDraw.ts](../apps/web/src/editor/powerDraw.ts) 신규: DC 동작점을 풀어 오디오 입력이 아닌 전원(Vcc/Vdd) 소스의 MNA 분기 전류를 읽어 mA 단위로 추정. [BomPanel.tsx](../apps/web/src/editor/BomPanel.tsx)에 노출(예: LPB-1 프리셋에서 "Vcc (9V) 0.3mA"). 이상적 op-amp 회로는 전원 소자 자체가 넷리스트에 없어 표시되지 않음 — 정확도보다 "회로에 실제 전원 소스가 있을 때만 보여준다"는 원칙으로 과설계 방지.
+4. **분석 탭 버튼의 접근성 이름이 시각 라벨과 다름** — `title` 속성(긴 툴팁 문장)이 스크린리더 접근성 이름으로 읽히던 문제. [BottomDock.tsx](../apps/web/src/editor/BottomDock.tsx)에 `aria-label`(짧은 이름 고정)과 `aria-describedby`(긴 설명은 시각적으로 숨긴 별도 요소로 분리) 추가, `.visually-hidden` 유틸리티 클래스 신규.
+5. **모바일/터치 사용자 안내 부재** — 핵심 조작(휠 줌·드래그 이동·단자 2회 클릭 배선)이 마우스 전용인데 안내가 없던 문제. [App.tsx](../apps/web/src/App.tsx)/[App.css](../apps/web/src/App.css)에 `@media (pointer: coarse), (max-width: 700px)`에서만 노출되는 안내 배너 추가.
+
+### 2026-09-06 — 도메인 확장 탐색 (ask-matt) · 계획 문서 2종 신설
+
+사용자 요청: 전체 탐색 후 UI/UX·기능 개선점, 공개 회로 추가 후보, 그리고 **페달 밖의 영역**(픽업 배선,
+온보드 배선, 스위치/스플릿/직병렬, 온보드 EQ, 톤노브·픽업별 시뮬레이션)을 계획 문서로 정리.
+코드 전수 확인 + 브라우저 실사용(TS9 프리셋 로드 → 렌더링 → 사이드바 조작) 근거. **이번 루프는 조사·계획까지만, 코드 변경 없음.**
+
+신설 문서 2종:
+
+- **[plan-guitar-wiring.md](./plan-guitar-wiring.md)** — 기타 배선/픽업 도메인 전체 계획(위 Phase 9~13).
+  핵심 결론: 신규 프리미티브는 `switch`·`pickup` **2개뿐**이고 둘 다 포텐셔미터와 같은
+  "캔버스 1부품 → 넷리스트에서 기본 소자로 전개" 패턴이라 **솔버·MNA·Newton은 안 바뀐다.**
+- **[plan-ux-and-features.md](./plan-ux-and-features.md)** — UI/UX·기능 백로그 + 페달 아카이브 추가 후보.
+  이 문서 §6에 이미 있는 항목은 중복 기재하지 않고 신규 발견만 담음.
+
+이번 탐색에서 새로 드러난 것 중 특히 중요한 3가지:
+
+1. **와이어를 지울 수 없다** — `selectedWire`/`onDeleteWire` 류가 코드베이스에 하나도 없음.
+   배선을 잘못 그으면 Ctrl+Z 외에 복구 수단이 없다. 배선이 핵심 조작인 앱에서 실질적 기능 공백.
+2. **프리셋 파라미터가 UI에 노출되지 않는다** — `handleLoadTemplate`이 `defaultParams`로만 빌드하므로
+   King of Tone의 `clipMode`, OCD의 `brightSwitch` 분기를 **사용자가 쓸 방법이 없다**(전용 회귀 테스트까지
+   있는데도). 아카이브를 더 늘리기 전에 이걸 먼저 풀어야 한다.
+3. **`chain.ts`는 로딩 효과를 무시한다** — 스테이지 출력을 다음 스테이지의 이상적 입력원으로 넘기므로
+   패시브 픽업 → 첫 페달 구간(퍼즈페이스가 기타 볼륨에 반응하는 그 상호작용)에는 부정확하다.
+   기타 배선은 체인이 아니라 **같은 캔버스에서 하나의 넷리스트로 병합**해 풀어야 한다
+   (plan-guitar-wiring.md §8). `netlistFromGraph`의 union-find가 이미 그 일을 하므로 추가 작업은 UI 쪽뿐.
+
 ## 4. 해야 할 것 (다음 단계 후보, 우선순위 대략순)
 
-1. **남은 아카이브 프리셋 후보** (2026-08-28 기준 갱신):
+0. **[plan-ux-and-features.md](./plan-ux-and-features.md) §5의 A그룹** — 와이어 삭제, 프리셋 파라미터 UI,
+   캔버스 화면 맞춤(fit). 셋 다 작고, 앞의 둘은 "이미 있는 걸 못 쓰는 상태"를 푸는 것이라 효과가 가장 크다.
+0-1. **`role` 플래그 리팩토링** — Phase 9의 착수점이자, 오래 보류돼 온 트랜지스터 게인 블록·파워서플라이
+   블록(아래 2번)의 선행 조건이기도 하다. 하나 고쳐서 셋이 풀린다.
+1. **남은 아카이브 프리셋 후보** (2026-08-28 기준 갱신, 신규 후보는 plan-ux-and-features.md §4):
    - Tonebender MkIII류 (3-트랜지스터 퍼즈) — 미착수, 부품값 검증 필요
    - JHS Superbolt / ROG Supreaux류 — 미착수, 부품값 검증 필요
    - ~~Fuzz Face류~~ — 기존 `fuzz-germanium` 프리셋이 이미 이 토폴로지였음, 별도 작업 불필요로 정정
