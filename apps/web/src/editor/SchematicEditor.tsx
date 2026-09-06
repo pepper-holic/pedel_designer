@@ -447,6 +447,7 @@ export function SchematicEditor() {
                 onSelectWire={handleSelectWire}
                 onAddWire={handleAddWire}
                 onDragEnd={handleDragEnd}
+                fitSignal={circuitVersion}
               />
             </div>
           </div>

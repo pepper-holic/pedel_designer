@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PART_DEFS } from "./partDefs";
 import { PartSymbol } from "./symbols";
-import { terminalPosition, computeWirePaths, zoomAroundPoint, GRID_SIZE } from "./geometry";
+import { terminalPosition, computeWirePaths, zoomAroundPoint, fitView, GRID_SIZE } from "./geometry";
 import { BLOCK_CATEGORY_LABELS } from "./blockDefs";
 import { partValueLabel } from "./valueLabel";
 import type { BlockInstance, PartInstance, TerminalRef, Wire } from "./types";
@@ -17,6 +17,9 @@ interface SchematicCanvasProps {
   onSelectWire?: (id: string | null) => void;
   onAddWire: (a: TerminalRef, b: TerminalRef) => void;
   onDragEnd?: () => void;
+  /** Bump to auto-fit the view to the current parts - the editor changes this whenever the whole
+   * circuit is replaced (template load, new circuit) so a freshly loaded preset arrives fully visible. */
+  fitSignal?: number;
   width?: number;
   height?: number;
 }
@@ -66,6 +69,9 @@ const PAN_DRAG_THRESHOLD = 4;
 // Transparent click target width for wires - the visible stroke is only 2px, which is not a
 // realistic mouse target on a dense schematic.
 const WIRE_HITBOX_WIDTH = 12;
+// Half-extent used when fitting: a little wider than the part hit-box so the id/value text labels
+// drawn just outside it are inside the fitted view too.
+const FIT_PART_MARGIN = 50;
 
 /**
  * SVG schematic canvas: drag parts by their body, click two terminals in sequence to wire them
@@ -82,6 +88,7 @@ export function SchematicCanvas({
   onSelectWire,
   onAddWire,
   onDragEnd,
+  fitSignal = 0,
   width = 900,
   height = 460,
 }: SchematicCanvasProps) {
@@ -156,6 +163,25 @@ export function SchematicCanvas({
 
   const resetView = () => setView({ zoom: 1, panX: 0, panY: 0 });
 
+  const partsRef = useRef(parts);
+  partsRef.current = parts;
+
+  // Reads parts through a ref so the auto-fit effect below depends only on the fit signal - it must
+  // fire when the circuit is *replaced*, not on every part drag.
+  const fitToContent = useCallback(() => {
+    const bounds = partsRef.current.map((p) => ({
+      minX: p.x - FIT_PART_MARGIN,
+      minY: p.y - FIT_PART_MARGIN,
+      maxX: p.x + FIT_PART_MARGIN,
+      maxY: p.y + FIT_PART_MARGIN,
+    }));
+    setView(fitView(bounds, { width, height }, { minZoom: MIN_ZOOM }));
+  }, [width, height]);
+
+  useEffect(() => {
+    fitToContent();
+  }, [fitSignal, fitToContent]);
+
   const handleTerminalClick = (ref: TerminalRef, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!pendingTerminal) {
@@ -216,6 +242,9 @@ export function SchematicCanvas({
         <span>{Math.round(view.zoom * 100)}%</span>
         <button type="button" onClick={() => setView((v) => ({ ...v, zoom: Math.max(MIN_ZOOM, v.zoom / 1.2) }))}>
           −
+        </button>
+        <button type="button" onClick={fitToContent} title="회로 전체가 보이도록 확대/축소와 위치를 맞춥니다">
+          화면 맞춤
         </button>
         <button type="button" onClick={resetView}>
           리셋

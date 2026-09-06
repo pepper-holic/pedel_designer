@@ -44,6 +44,50 @@ export function zoomAroundPoint(view: CanvasView, cursor: { x: number; y: number
   return { zoom: nextZoom, panX: cursor.x - worldX * nextZoom, panY: cursor.y - worldY * nextZoom };
 }
 
+export interface ContentBounds {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+}
+
+export interface FitOptions {
+  /** Empty margin kept between the content's bounding box and the viewport edge, in screen px. */
+  padding?: number;
+  minZoom?: number;
+  /** Upper bound on the fitted zoom. Defaults to 1 so a two-part circuit is centered at 1:1 rather
+   * than magnified to fill the canvas, which reads as a bug rather than a fit. */
+  maxZoom?: number;
+}
+
+/**
+ * The view (zoom + pan) that centers the union of `bounds` inside `viewport` with padding on every
+ * side. Returns the identity view when there is nothing to fit, so "fit" on an empty canvas behaves
+ * like "reset" rather than producing a NaN view from an empty min/max.
+ */
+export function fitView(bounds: ContentBounds[], viewport: { width: number; height: number }, options: FitOptions = {}): CanvasView {
+  if (bounds.length === 0) return { zoom: 1, panX: 0, panY: 0 };
+  const { padding = 40, minZoom = 0.3, maxZoom = 1 } = options;
+
+  const minX = Math.min(...bounds.map((b) => b.minX));
+  const minY = Math.min(...bounds.map((b) => b.minY));
+  const maxX = Math.max(...bounds.map((b) => b.maxX));
+  const maxY = Math.max(...bounds.map((b) => b.maxY));
+
+  const contentWidth = Math.max(maxX - minX, 1);
+  const contentHeight = Math.max(maxY - minY, 1);
+  const availableWidth = Math.max(viewport.width - padding * 2, 1);
+  const availableHeight = Math.max(viewport.height - padding * 2, 1);
+
+  const zoom = Math.min(maxZoom, Math.max(minZoom, Math.min(availableWidth / contentWidth, availableHeight / contentHeight)));
+
+  return {
+    zoom,
+    panX: viewport.width / 2 - ((minX + maxX) / 2) * zoom,
+    panY: viewport.height / 2 - ((minY + maxY) / 2) * zoom,
+  };
+}
+
 export interface Point {
   x: number;
   y: number;

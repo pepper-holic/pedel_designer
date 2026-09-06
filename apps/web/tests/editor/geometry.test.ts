@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { snapToGrid, rotateClockwise, rotateOffset, terminalPosition, orthogonalPath, computeWirePaths, zoomAroundPoint, GRID_SIZE } from "../../src/editor/geometry";
+import { snapToGrid, rotateClockwise, rotateOffset, terminalPosition, orthogonalPath, computeWirePaths, zoomAroundPoint, fitView, GRID_SIZE } from "../../src/editor/geometry";
 import type { PartInstance } from "../../src/editor/types";
 
 describe("snapToGrid", () => {
@@ -123,5 +123,54 @@ describe("orthogonalPath", () => {
     const path = orthogonalPath({ x: 0, y: 0 }, { x: 100, y: 10 });
     // dx (100) > dy (10), so it should route horizontal-first through midX = 50.
     expect(path).toBe("M0,0 L50,0 L50,10 L100,10");
+  });
+});
+
+describe("fitView", () => {
+  const viewport = { width: 800, height: 400 };
+
+  it("returns the identity view when there is no content to fit", () => {
+    expect(fitView([], viewport)).toEqual({ zoom: 1, panX: 0, panY: 0 });
+  });
+
+  it("centers content that already fits without magnifying it past 1:1", () => {
+    // A 100x100 box at the origin fits in 800x400 many times over - fitting it should center it,
+    // not blow a two-part circuit up to fill the canvas.
+    const view = fitView([{ minX: 0, minY: 0, maxX: 100, maxY: 100 }], viewport);
+    expect(view.zoom).toBe(1);
+    // content center (50,50) must land on the viewport center (400,200)
+    expect(50 * view.zoom + view.panX).toBeCloseTo(400);
+    expect(50 * view.zoom + view.panY).toBeCloseTo(200);
+  });
+
+  it("zooms out until oversized content fits inside the viewport, with padding", () => {
+    // minZoom is lowered here so the assertion is about the fitting math itself; the separate
+    // test below covers what happens when content is too big even for the minimum zoom.
+    const bounds = [{ minX: 0, minY: 0, maxX: 4000, maxY: 400 }];
+    const view = fitView(bounds, viewport, { minZoom: 0.05 });
+    expect(view.zoom).toBeLessThan(1);
+    const left = 0 * view.zoom + view.panX;
+    const right = 4000 * view.zoom + view.panX;
+    expect(left).toBeGreaterThanOrEqual(0);
+    expect(right).toBeLessThanOrEqual(viewport.width);
+  });
+
+  it("never zooms out past the minimum zoom, even for content far larger than the viewport", () => {
+    const view = fitView([{ minX: 0, minY: 0, maxX: 1e6, maxY: 1e6 }], viewport, { minZoom: 0.3 });
+    expect(view.zoom).toBe(0.3);
+  });
+
+  it("fits the union of several separate content boxes", () => {
+    const view = fitView(
+      [
+        { minX: 0, minY: 0, maxX: 50, maxY: 50 },
+        { minX: 1950, minY: 0, maxX: 2000, maxY: 50 },
+      ],
+      viewport,
+    );
+    const left = 0 * view.zoom + view.panX;
+    const right = 2000 * view.zoom + view.panX;
+    expect(left).toBeGreaterThanOrEqual(0);
+    expect(right).toBeLessThanOrEqual(viewport.width);
   });
 });
