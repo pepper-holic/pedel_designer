@@ -1,5 +1,7 @@
 import { jazzBassTwoVolumes, pjBlendWiring } from "./bassWiring";
+import { activeThreeBandEq } from "./activeThreeBand";
 import { fiftiesWiring, modernWiring } from "./fiftiesVsModern";
+import { guitarIntoBufferedInput, guitarIntoFuzzInput } from "./guitarIntoPedal";
 import { humbuckerCoilSplit } from "./humbuckerCoilSplit";
 import { humbuckerSeriesParallel } from "./humbuckerSeriesParallel";
 import {
@@ -38,11 +40,14 @@ export const wiringPresets: WiringPreset[] = [
   midCutRealInductor,
   midCutGyrator,
   activeTwoBandEq,
+  activeThreeBandEq,
   activePickupLongCable,
   passivePickupLongCable,
+  guitarIntoFuzzInput,
+  guitarIntoBufferedInput,
 ];
 
 /** Display order for the wiring explorer tree - roughly "simplest first". */
-export const WIRING_CATEGORY_ORDER: WiringCategory[] = ["픽업 기본", "셀렉터", "코일 스위칭", "톤 회로", "베이스", "온보드 액티브"];
+export const WIRING_CATEGORY_ORDER: WiringCategory[] = ["픽업 기본", "셀렉터", "코일 스위칭", "톤 회로", "베이스", "온보드 액티브", "신호 경로"];
 
 export type { WiringPreset, WiringCategory };

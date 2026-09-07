@@ -293,3 +293,47 @@ describe("온보드 액티브", () => {
     expect(tilt("wiring-passive-pickup-long-cable")).toBeLessThan(-15);
   });
 });
+
+describe("온보드 액티브 3밴드", () => {
+  const band3 = (ov: Record<string, Record<string, number>>, lo: number, hi: number) =>
+    bandDb(sweepPoints("wiring-active-3band-eq", ov), lo, hi);
+
+  it("모든 노브 중앙에서 평탄하다", () => {
+    expect(Math.abs(band3({}, 50, 150))).toBeLessThan(1.5);
+    expect(Math.abs(band3({}, 350, 700))).toBeLessThan(1.5);
+    expect(Math.abs(band3({}, 5000, 15000))).toBeLessThan(1.5);
+  });
+
+  it("미드 노브는 중역만 깎고 베이스/트레블은 건드리지 않는다", () => {
+    const cut = { MID: { position: 0 } };
+    expect(band3(cut, 350, 700)).toBeLessThan(-12);
+    // The mid section is cascaded after the Baxandall stage, so it must not drag the other bands.
+    expect(Math.abs(band3(cut, 50, 150))).toBeLessThan(3);
+    expect(Math.abs(band3(cut, 5000, 15000))).toBeLessThan(3);
+  });
+
+  it("베이스와 트레블은 3밴드에서도 서로 독립적으로 움직인다", () => {
+    expect(band3({ BASS: { position: 1 } }, 50, 150)).toBeGreaterThan(12);
+    expect(Math.abs(band3({ BASS: { position: 1 } }, 5000, 15000))).toBeLessThan(2);
+    expect(band3({ TREBLE: { position: 1 } }, 5000, 15000)).toBeGreaterThan(12);
+    expect(Math.abs(band3({ TREBLE: { position: 1 } }, 50, 150))).toBeLessThan(2);
+  });
+});
+
+describe("기타 → 페달 로딩 상호작용 (Phase 13)", () => {
+  const tilt = (id: string, ov: Record<string, Record<string, number>> = {}) =>
+    bandDb(sweepPoints(id, ov), 3000, 10000) - bandDb(sweepPoints(id, ov), 200, 500);
+
+  it("저임피던스 입력에 직결하면 픽업이 로딩돼 버퍼를 거칠 때보다 훨씬 어두워진다", () => {
+    // Same guitar, same pedal stage - the only difference is whether a buffer sits between them.
+    expect(tilt("wiring-guitar-into-fuzz-input")).toBeLessThan(tilt("wiring-guitar-into-buffered-input") - 10);
+  });
+
+  it("직결일 때 볼륨 노브가 음량뿐 아니라 톤까지 바꾼다", () => {
+    const rolled = { VOL: { position: 0.4 } };
+    const directSwing = Math.abs(tilt("wiring-guitar-into-fuzz-input", rolled) - tilt("wiring-guitar-into-fuzz-input"));
+    const bufferedSwing = Math.abs(tilt("wiring-guitar-into-buffered-input", rolled) - tilt("wiring-guitar-into-buffered-input"));
+    // This is the "fuzz cleans up with the volume knob" effect, and the buffer is what removes it.
+    expect(directSwing).toBeGreaterThan(bufferedSwing * 2);
+  });
+});
