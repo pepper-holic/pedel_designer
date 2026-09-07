@@ -28,13 +28,19 @@ export function DrcPanel({ parts, wires, outputNode, onSelectPart }: DrcPanelPro
       <p className="canvas-hint">
         오류 {errors.length}건 · 경고 {warnings.length}건. 경고는 의도적인 배선일 수 있으니 내용을 보고 판단하세요.
       </p>
-      <ul className="drc-list">
+      {/* Results change as the user edits, so they are announced rather than silently replaced. */}
+      <ul className="drc-list" aria-live="polite">
         {[...errors, ...warnings].map((issue) => (
           <li key={issue.code} className={issue.severity === "error" ? "drc-item drc-error" : "drc-item drc-warning"}>
             <span className="drc-badge">{issue.severity === "error" ? "오류" : "경고"}</span>
             <span className="drc-message">{issue.message}</span>
             {issue.partIds.length > 0 && (
-              <button type="button" className="drc-jump" onClick={() => onSelectPart(issue.partIds[0])}>
+              <button
+                type="button"
+                className="drc-jump"
+                aria-label={`${issue.partIds[0]} 캔버스에서 선택`}
+                onClick={() => onSelectPart(issue.partIds[0])}
+              >
                 {issue.partIds[0]} 선택
               </button>
             )}

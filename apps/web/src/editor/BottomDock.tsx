@@ -21,11 +21,17 @@ export function BottomDock({ tabs }: BottomDockProps) {
 
   return (
     <div className="panel bottom-dock">
-      <div className="dock-tab-row">
+      {/* A real tablist, so a screen reader announces "tab 3 of 10" and arrow keys behave as
+          users expect, rather than reading ten unrelated buttons. */}
+      <div className="dock-tab-row" role="tablist" aria-label="분석 패널">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             type="button"
+            role="tab"
+            id={`dock-tab-${tab.key}`}
+            aria-selected={tab.key === activeTab?.key}
+            aria-controls="dock-tab-panel"
             className={tab.key === activeTab?.key ? "dock-tab active" : "dock-tab"}
             onClick={() => setActiveKey(tab.key)}
             title={tab.helpText}
@@ -44,7 +50,14 @@ export function BottomDock({ tabs }: BottomDockProps) {
             ),
         )}
       </div>
-      <div className="bottom-dock-content">{activeTab?.content}</div>
+      <div
+        className="bottom-dock-content"
+        role="tabpanel"
+        id="dock-tab-panel"
+        aria-labelledby={activeTab ? `dock-tab-${activeTab.key}` : undefined}
+      >
+        {activeTab?.content}
+      </div>
     </div>
   );
 }

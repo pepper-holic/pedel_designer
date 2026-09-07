@@ -24,10 +24,15 @@ export function WaveformTab({ traces, onPlay, onCompare, cabinetEnabled, onCabin
       <div className="tap-buttons">
         {traces.map((t) => (
           <span key={t.label} className="tap-button-pair">
-            <button type="button" onClick={() => onPlay(t.label)}>
+            <button type="button" onClick={() => onPlay(t.label)} aria-label={`${t.label} 지점 소리 재생`}>
               ▶ {t.label}
             </button>
-            <button type="button" onClick={() => onCompare(t.label)} title="원본 소리를 먼저 들려준 뒤 이 지점의 소리를 이어서 재생합니다">
+            <button
+              type="button"
+              onClick={() => onCompare(t.label)}
+              aria-label={`원본과 ${t.label} 지점 소리 비교 재생`}
+              title="원본 소리를 먼저 들려준 뒤 이 지점의 소리를 이어서 재생합니다"
+            >
               A/B
             </button>
           </span>

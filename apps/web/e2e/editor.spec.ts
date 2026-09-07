@@ -18,6 +18,9 @@ async function loadPreset(page: Page, name: string | RegExp, group?: string) {
 
 const partsOnCanvas = (page: Page) => page.locator("g[data-part-id]");
 
+/** The analysis dock is a real tablist, so its tabs are reached by the tab role, not by button. */
+const dockTab = (page: Page, name: string) => page.getByRole("tab", { name });
+
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
   // Each test starts from a clean slate: the editor autosaves to localStorage, so without this a
@@ -47,13 +50,14 @@ test("runs a simulation from a built-in signal and offers playback", async ({ pa
   // No convergence warning: the warm-started solver should settle on every sample here.
   await expect(page.getByText(/수렴 실패/)).toHaveCount(0);
 
-  await page.getByRole("button", { name: "파형" }).click();
-  await expect(page.getByRole("button", { name: "A/B" }).first()).toBeVisible();
+  await page.getByRole("tab", { name: "파형" }).click();
+  // Named after the trace it acts on, so the assertion also checks the label is meaningful.
+  await expect(page.getByRole("button", { name: /지점 소리 비교 재생/ }).first()).toBeVisible();
 });
 
 test("reports why a broken circuit does nothing, and clears once it is fixed", async ({ page }) => {
   await page.getByRole("button", { name: "저항", exact: true }).click();
-  await page.getByRole("button", { name: "검사" }).click();
+  await page.getByRole("tab", { name: "검사" }).click();
 
   await expect(page.getByText(/접지가 없습니다/)).toBeVisible();
   await expect(page.getByText(/입력 신호원이 없습니다/)).toBeVisible();
@@ -79,7 +83,7 @@ test("wheel over the canvas zooms instead of scrolling the page", async ({ page 
 test("sweeps a knob and draws one curve per position", async ({ page }) => {
   await loadPreset(page, /싱글 픽업 \+ 볼륨 \+ 톤/, "기타 배선");
 
-  await page.getByRole("button", { name: "노브 스윕" }).click();
+  await page.getByRole("tab", { name: "노브 스윕" }).click();
   // The option value is the part id.
   await page.locator("#sweep-target-select").selectOption("TONE");
 
@@ -88,7 +92,7 @@ test("sweeps a knob and draws one curve per position", async ({ page }) => {
 
 test("exports a KiCad netlist for the loaded circuit", async ({ page }) => {
   await loadPreset(page, /다이오드 클리퍼 \(대칭\)/);
-  await page.getByRole("button", { name: "PCB" }).click();
+  await page.getByRole("tab", { name: "PCB" }).click();
 
   // The downloaded file is the deliverable, so the test reads it rather than trusting the button.
   const [download] = await Promise.all([

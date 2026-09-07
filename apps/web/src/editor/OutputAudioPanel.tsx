@@ -77,7 +77,10 @@ export function OutputAudioPanel({
           시뮬레이션 실행
         </button>
       </div>
-      {status && <p className="status-text">{status}</p>}
+      {/* Simulation progress and failures arrive asynchronously, so they have to be announced. */}
+      <p className="status-text" role="status" aria-live="polite">
+        {status}
+      </p>
     </div>
   );
 }

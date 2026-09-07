@@ -292,6 +292,10 @@ export function SchematicCanvas({
         ref={svgRef}
         width={width}
         height={height}
+        // The schematic is a graphic, and its content is only otherwise reachable by the inspector.
+        // Naming it with a live count at least tells a screen-reader user what is on the canvas.
+        role="img"
+        aria-label={`회로도: 부품 ${parts.length}개, 배선 ${wires.length}개`}
         style={{ display: "block", cursor: dragId ? "grabbing" : panStart ? "grabbing" : "default" }}
         onMouseMove={handleMouseMove}
         onMouseUp={() => {
