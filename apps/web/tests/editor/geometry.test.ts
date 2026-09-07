@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { snapToGrid, rotateClockwise, rotateOffset, terminalPosition, orthogonalPath, computeWirePaths, zoomAroundPoint, fitView, GRID_SIZE } from "../../src/editor/geometry";
 import type { PartInstance } from "../../src/editor/types";
+import type { Point } from "../../src/editor/geometry";
 
 describe("snapToGrid", () => {
   it("rounds to the nearest grid step", () => {
@@ -172,5 +173,39 @@ describe("fitView", () => {
     const right = 2000 * view.zoom + view.panX;
     expect(left).toBeGreaterThanOrEqual(0);
     expect(right).toBeLessThanOrEqual(viewport.width);
+  });
+});
+
+describe("computeWirePaths lane spreading", () => {
+  it("gives parallel wires different bend positions instead of stacking them", () => {
+    // Four nets running the same way between two columns of parts - the case that produced a
+    // clump of hops all at the same x (docs/ROADMAP.md §6 routing risk 3).
+    const endpoints: [Point, Point][] = [0, 1, 2, 3].map((i) => [
+      { x: 0, y: i * 40 },
+      { x: 300, y: i * 40 + 20 },
+    ]);
+    const paths = computeWirePaths(endpoints);
+
+    // Each 2-bend path turns at some x; those x values must not all be the same.
+    const bendXs = paths.map((d) => Number(d.split("L")[1].split(",")[0]));
+    expect(new Set(bendXs).size).toBeGreaterThan(1);
+  });
+
+  it("keeps every bend between the two endpoints it joins", () => {
+    const endpoints: [Point, Point][] = [0, 1, 2, 3, 4, 5].map((i) => [
+      { x: 100, y: i * 30 },
+      { x: 220, y: i * 30 + 15 },
+    ]);
+    for (const d of computeWirePaths(endpoints)) {
+      const bendX = Number(d.split("L")[1].split(",")[0]);
+      // A bend outside the span would send the wire out and back, which reads as a routing bug.
+      expect(bendX).toBeGreaterThanOrEqual(100);
+      expect(bendX).toBeLessThanOrEqual(220);
+    }
+  });
+
+  it("still routes a single wire straight through the midpoint", () => {
+    const [path] = computeWirePaths([[{ x: 0, y: 0 }, { x: 100, y: 10 }]]);
+    expect(path).toBe(orthogonalPath({ x: 0, y: 0 }, { x: 100, y: 10 }));
   });
 });

@@ -98,15 +98,24 @@ export interface Point {
  * horizontal-first or vertical-first based on which axis has more distance to cover - a simple
  * heuristic, not an obstacle-avoiding auto-router.
  */
-export function orthogonalPoints(a: Point, b: Point): Point[] {
+export function orthogonalPoints(a: Point, b: Point, laneOffset = 0): Point[] {
   const dx = Math.abs(b.x - a.x);
   const dy = Math.abs(b.y - a.y);
   if (dx === 0 || dy === 0) return [a, b]; // already axis-aligned - no bend, and no degenerate zero-length middle segment
+
+  // The bend is nudged off the exact midpoint by `laneOffset` so that neighbouring nets running the
+  // same way do not all turn at the same coordinate. Clamped inside the span, because a bend outside
+  // it would send the wire out and back - which reads as a routing bug, not as a lane.
+  const shift = (mid: number, lo: number, hi: number) => {
+    const margin = Math.min(BEND_MARGIN, (hi - lo) / 2);
+    return Math.min(Math.max(mid + laneOffset, lo + margin), hi - margin);
+  };
+
   if (dx > dy) {
-    const midX = (a.x + b.x) / 2;
+    const midX = shift((a.x + b.x) / 2, Math.min(a.x, b.x), Math.max(a.x, b.x));
     return [a, { x: midX, y: a.y }, { x: midX, y: b.y }, b];
   }
-  const midY = (a.y + b.y) / 2;
+  const midY = shift((a.y + b.y) / 2, Math.min(a.y, b.y), Math.max(a.y, b.y));
   return [a, { x: a.x, y: midY }, { x: b.x, y: midY }, b];
 }
 
@@ -117,6 +126,21 @@ export function orthogonalPath(a: Point, b: Point): string {
 }
 
 const HOP_RADIUS = 6;
+
+/** How far apart neighbouring wires' bends are placed, and how many distinct lanes there are before
+ * the pattern repeats. One grid step keeps the result aligned with everything else on the canvas. */
+const LANE_SPACING = GRID_SIZE;
+const LANE_COUNT = 5;
+/** Minimum distance a bend keeps from either endpoint, so a lane never collapses onto a terminal. */
+const BEND_MARGIN = GRID_SIZE;
+
+/** Lane offset for the nth wire: 0, +1, -1, +2, -2 steps, so the first wire keeps the plain
+ * midpoint and later ones fan out symmetrically around it. */
+export function laneOffsetFor(wireIndex: number): number {
+  const lane = wireIndex % LANE_COUNT;
+  const magnitude = Math.ceil(lane / 2);
+  return (lane % 2 === 1 ? 1 : -1) * magnitude * LANE_SPACING;
+}
 
 interface Segment {
   wireIndex: number;
@@ -172,7 +196,7 @@ function segmentPathWithHops(a: Point, b: Point, horizontal: boolean, hopPositio
  * depend on which wire happens to be declared first.
  */
 export function computeWirePaths(endpoints: [Point, Point][]): string[] {
-  const pointLists = endpoints.map(([a, b]) => orthogonalPoints(a, b));
+  const pointLists = endpoints.map(([a, b], wireIndex) => orthogonalPoints(a, b, laneOffsetFor(wireIndex)));
   const allSegments = pointLists.flatMap((points, wireIndex) => segmentsOf(points, wireIndex));
   const horizontals = allSegments.filter((s) => s.horizontal);
   const verticals = allSegments.filter((s) => !s.horizontal);
