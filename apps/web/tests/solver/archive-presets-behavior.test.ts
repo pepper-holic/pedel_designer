@@ -62,6 +62,9 @@ describe("Archive preset: Klon-style blend", () => {
 
     expect(traces.get("out")![0]).toBeCloseTo(traces.get("driveOut")![0], 1);
     // And the drive path should actually be clipping (not tracking the raw linear gain) for this input.
-    expect(Math.abs(traces.get("out")![0])).toBeLessThan(Math.abs(traces.get("in")![0]) * (params.feedbackResistance / params.inputResistance) * 0.2);
+    // Read the gain-setting values off the preset rather than the spread override object: spreading
+    // a Record<string, number> and adding one literal key narrows away the index signature.
+    const { feedbackResistance, inputResistance } = klonStyleBlendPreset.defaultParams;
+    expect(Math.abs(traces.get("out")![0])).toBeLessThan(Math.abs(traces.get("in")![0]) * (feedbackResistance / inputResistance) * 0.2);
   });
 });

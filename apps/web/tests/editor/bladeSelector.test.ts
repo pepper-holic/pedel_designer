@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { netlistFromGraph } from "../../src/editor/netlistFromGraph";
 import { SWITCH_ON_OHMS } from "../../src/editor/partDefs";
-import type { PartInstance, PartType, Wire } from "../../src/editor/types";
+import type { PartInstance, Wire } from "../../src/editor/types";
+import type { PartType } from "../../src/editor/partDefs";
 import type { ResistorElement } from "../../src/core/solver/types";
 
 const noWires: Wire[] = [];

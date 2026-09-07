@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { canRedo, canUndo, commitPrevious, createHistory, pushSnapshot, redo, replacePresent, undo, type CircuitSnapshot } from "../../src/editor/historyStack";
 
 function snap(id: string): CircuitSnapshot {
-  return { parts: [{ id, type: "resistor", x: 0, y: 0, rotation: 0, params: {} }], wires: [] };
+  return { parts: [{ id, type: "resistor", x: 0, y: 0, rotation: 0, params: {} }], wires: [], blocks: [] };
 }
 
 describe("historyStack", () => {
