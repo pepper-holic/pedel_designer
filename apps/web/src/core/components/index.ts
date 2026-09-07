@@ -3,6 +3,7 @@ import type { StampContext } from "./context";
 import { stampResistor } from "./resistor";
 import { stampCapacitor } from "./capacitor";
 import { stampInductor } from "./inductor";
+import { stampCoupledInductors } from "./coupledInductors";
 import { stampVoltageSource } from "./vsource";
 import { stampDiode } from "./diode";
 import { stampBjt } from "./bjt";
@@ -17,6 +18,8 @@ export function stampElement(element: Element, ctx: StampContext): void {
       return stampCapacitor(element, ctx);
     case "inductor":
       return stampInductor(element, ctx);
+    case "coupledInductors":
+      return stampCoupledInductors(element, ctx);
     case "vsource":
       return stampVoltageSource(element, ctx);
     case "diode":
@@ -32,4 +35,5 @@ export function stampElement(element: Element, ctx: StampContext): void {
 
 export { updateCapacitorHistory } from "./capacitor";
 export { updateInductorHistory } from "./inductor";
+export { updateCoupledInductorsHistory } from "./coupledInductors";
 export { updateOpAmpHistory } from "./opamp";

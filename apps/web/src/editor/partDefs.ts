@@ -1,6 +1,6 @@
 import { SILICON_DIODE_1N4148, GENERIC_SILICON_NPN, GENERIC_NCHANNEL_JFET, VINTAGE_SINGLE_COIL } from "../core/library/deviceModels";
 
-export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "jfet" | "opamp" | "vsource" | "ground" | "potentiometer" | "pickup" | "spst" | "spdt" | "dpdt" | "blade3" | "blade5" | "rotary6";
+export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "jfet" | "opamp" | "vsource" | "ground" | "potentiometer" | "pickup" | "spst" | "spdt" | "dpdt" | "blade3" | "blade5" | "rotary6" | "coupledInductors";
 
 export interface TerminalDef {
   id: string;
@@ -180,6 +180,17 @@ export const PART_DEFS: Record<PartType, PartDef> = {
       { id: "in6", dx: 30, dy: 30, label: "6" },
     ],
     defaultParams: { switchPosition: 0 },
+  },
+  coupledInductors: {
+    type: "coupledInductors",
+    label: "결합 인덕터 / 트랜스포머",
+    terminals: [
+      { id: "a1", dx: -30, dy: -20, label: "1a" },
+      { id: "b1", dx: -30, dy: 20, label: "1b" },
+      { id: "a2", dx: 30, dy: -20, label: "2a" },
+      { id: "b2", dx: 30, dy: 20, label: "2b" },
+    ],
+    defaultParams: { inductanceA: 1, inductanceB: 1, coupling: 0.9 },
   },
   potentiometer: {
     type: "potentiometer",

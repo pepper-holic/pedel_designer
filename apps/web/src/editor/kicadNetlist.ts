@@ -36,6 +36,8 @@ function kicadSymbol(part: PartInstance): KicadSymbol {
       return { lib: "Switch", part: "SW_SPDT" };
     case "dpdt":
       return { lib: "Switch", part: "SW_DPDT_x2" };
+    case "coupledInductors":
+      return { lib: "Device", part: "Transformer_1P_1S" };
     case "rotary6":
       return { lib: "Connector", part: "Conn_01x07" };
     case "blade3":

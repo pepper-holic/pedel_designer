@@ -6,6 +6,7 @@ import { linearizeBjt } from "../components/bjt";
 import { linearizeJfet, JFET_GMIN } from "../components/jfet";
 import { bufferBranchId, clipSlope, hasGbwp, hasRailClipping, integratorGm, POLE_CAPACITANCE, poleNodeId } from "../components/opamp";
 import { hasSeriesResistance, seriesNodeId } from "../components/diode";
+import { coupledInductorsAcTerms } from "../components/coupledInductors";
 import type { Netlist, NodeId } from "./types";
 
 export interface AcOptions {
@@ -96,6 +97,27 @@ export function runAcAnalysis(netlist: Netlist, options: AcOptions): AcPoint[] {
         case "inductor": {
           const [p, ni] = el.nodes.map((node) => nodeOf(topology, node));
           if (omega > 0) stampB(p, ni, -1 / (omega * el.inductance));
+          break;
+        }
+        case "coupledInductors": {
+          // Y = Linv / (j*omega): the same 2x2 inverse-inductance matrix the transient stamp uses,
+          // divided by j*omega, which lands entirely in the susceptance (imaginary) part.
+          const terms = coupledInductorsAcTerms(el);
+          if (!terms || omega <= 0) break;
+          const p1 = nodeOf(topology, el.nodes[0]);
+          const n1 = nodeOf(topology, el.nodes[1]);
+          const p2 = nodeOf(topology, el.nodes[2]);
+          const n2 = nodeOf(topology, el.nodes[3]);
+          const block = (rowP: number, rowN: number, colP: number, colN: number, value: number) => {
+            addIm(rowP, colP, value);
+            addIm(rowP, colN, -value);
+            addIm(rowN, colP, -value);
+            addIm(rowN, colN, value);
+          };
+          block(p1, n1, p1, n1, -terms.g11 / omega);
+          block(p2, n2, p2, n2, -terms.g22 / omega);
+          block(p1, n1, p2, n2, -terms.g12 / omega);
+          block(p2, n2, p1, n1, -terms.g12 / omega);
           break;
         }
         case "vsource": {

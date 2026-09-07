@@ -25,6 +25,17 @@ export interface InductorElement extends ElementBase {
   inductance: number;
 }
 
+export interface CoupledInductorsElement extends ElementBase {
+  type: "coupledInductors";
+  /** [a1, b1, a2, b2] - the two ends of the first winding, then of the second. */
+  nodes: [NodeId, NodeId, NodeId, NodeId];
+  inductanceA: number;
+  inductanceB: number;
+  /** Coupling coefficient k, 0 (independent coils) to 1 (ideal transformer). Sign flips the
+   * secondary's polarity, which is how a phase-inverting winding is expressed. */
+  coupling: number;
+}
+
 export interface VoltageSourceElement extends ElementBase {
   type: "vsource";
   nodes: [NodeId, NodeId];
@@ -92,6 +103,7 @@ export type Element =
   | ResistorElement
   | CapacitorElement
   | InductorElement
+  | CoupledInductorsElement
   | VoltageSourceElement
   | DiodeElement
   | BjtElement

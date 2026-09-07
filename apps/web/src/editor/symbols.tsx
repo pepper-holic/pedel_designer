@@ -124,6 +124,19 @@ function BladeSymbol({ position, contactYs, bridging = true }: { position: numbe
   );
 }
 
+/** Transformer: two coils facing a shared core, drawn as the paired bars between them. */
+function CoupledInductorsSymbol() {
+  return (
+    <>
+      <path d="M-30,-20 h8 M-30,20 h8" stroke={stroke} strokeWidth={1.6} fill="none" />
+      <path d="M30,-20 h-8 M30,20 h-8" stroke={stroke} strokeWidth={1.6} fill="none" />
+      <path d="M-22,-20 a6,6 0 0 0 0,12 a6,6 0 0 0 0,12 a6,6 0 0 0 0,16" stroke={stroke} strokeWidth={1.5} fill="none" />
+      <path d="M22,-20 a6,6 0 0 1 0,12 a6,6 0 0 1 0,12 a6,6 0 0 1 0,16" stroke={stroke} strokeWidth={1.5} fill="none" />
+      <path d="M-5,-22 v44 M5,-22 v44" stroke={stroke} strokeWidth={1.2} fill="none" />
+    </>
+  );
+}
+
 function InductorSymbol() {
   return (
     <path
@@ -230,6 +243,8 @@ export function PartSymbol({ part }: { part: PartInstance }) {
       return <BladeSymbol position={clampPosition(part.params.switchPosition, 3)} contactYs={[-18, 18]} />;
     case "blade5":
       return <BladeSymbol position={clampPosition(part.params.switchPosition, 5)} contactYs={[-24, 0, 24]} />;
+    case "coupledInductors":
+      return <CoupledInductorsSymbol />;
     case "rotary6":
       return (
         <BladeSymbol position={clampPosition(part.params.switchPosition, 6)} contactYs={[-30, -18, -6, 6, 18, 30]} bridging={false} />

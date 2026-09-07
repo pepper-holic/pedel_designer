@@ -195,6 +195,16 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
         });
         break;
       }
+      case "coupledInductors":
+        elements.push({
+          id: part.id,
+          type: "coupledInductors",
+          nodes: [nodes[0], nodes[1], nodes[2], nodes[3]],
+          inductanceA: Number(part.params.inductanceA),
+          inductanceB: Number(part.params.inductanceB),
+          coupling: Number(part.params.coupling),
+        });
+        break;
       case "blade3":
       case "blade5":
       case "rotary6": {

@@ -1,7 +1,7 @@
 import { buildTopology, nodeOf } from "./topology";
 import { voltageAt } from "./solution";
 import { solveNewton } from "./newton";
-import { updateCapacitorHistory, updateInductorHistory, updateOpAmpHistory } from "../components";
+import { updateCapacitorHistory, updateCoupledInductorsHistory, updateInductorHistory, updateOpAmpHistory } from "../components";
 import type { Netlist, NodeId, VoltageSourceElement } from "./types";
 
 export interface TransientOptions {
@@ -111,6 +111,7 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
     for (const element of netlist.elements) {
       if (element.type === "capacitor") updateCapacitorHistory(element, topology, history, solution);
       if (element.type === "inductor") updateInductorHistory(element, topology, history, dt, solution);
+      if (element.type === "coupledInductors") updateCoupledInductorsHistory(element, topology, history, dt, solution);
       if (element.type === "opamp") updateOpAmpHistory(element, topology, history, solution);
     }
 
