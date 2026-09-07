@@ -195,6 +195,15 @@
     flex: none;
   }
 
+  /* Stacked, the library tree is tall enough to push the canvas past the fold - so a preset click
+     produces no visible change and reads as a dead button. Capping the docks keeps the schematic
+     within reach of whatever the user just clicked. */
+  .sidebar-left,
+  .sidebar-right {
+    max-height: 42vh;
+    overflow-y: auto;
+  }
+
   .canvas-stage {
     min-height: 380px;
     flex: none;

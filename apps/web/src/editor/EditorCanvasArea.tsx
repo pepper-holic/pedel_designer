@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { SchematicCanvas } from "./SchematicCanvas";
 import { BottomDock } from "./BottomDock";
 import type { DockTab } from "./dockTabs";
@@ -32,8 +33,18 @@ interface EditorCanvasAreaProps {
 
 /** Centre column: the schematic itself with the analysis dock underneath. */
 export function EditorCanvasArea(props: EditorCanvasAreaProps) {
+  const areaRef = useRef<HTMLDivElement>(null);
+
+  // On a narrow screen the three panes stack, and the canvas can sit below the fold - so loading a
+  // preset changes nothing the user can see. `block: "nearest"` makes this a no-op on a wide screen
+  // where the canvas is already in view.
+  useEffect(() => {
+    // Optional-called: jsdom (and any non-browser host) has no scrollIntoView.
+    areaRef.current?.scrollIntoView?.({ block: "nearest", behavior: "smooth" });
+  }, [props.circuitVersion]);
+
   return (
-    <div className="canvas-area">
+    <div className="canvas-area" ref={areaRef}>
       <div className="panel canvas-stage">
         <div className="panel-title">회로도</div>
         {props.parts.length === 0 ? (
