@@ -6,31 +6,20 @@ import { graphFromNetlist, findEquivalentNode } from "./graphFromNetlist";
 import { snapToGrid, rotateClockwise } from "./geometry";
 import type { BlockDef } from "./blockDefs";
 import { instantiateBlock } from "./blockInstance";
-import { SchematicCanvas } from "./SchematicCanvas";
 import { PartsSidebar } from "./PartsSidebar";
-import { InspectorPanel } from "./InspectorPanel";
-import { OutputAudioPanel } from "./OutputAudioPanel";
-import { BottomDock } from "./BottomDock";
-import { FrequencyResponseTab, type AcStatus } from "./FrequencyResponseTab";
-import { WaveformTab } from "./WaveformTab";
-import { SweepTab } from "./SweepTab";
-import { DrcPanel } from "./DrcPanel";
-import { ThdPanel } from "./ThdPanel";
-import { MonteCarloPanel } from "./MonteCarloPanel";
-import { ChainPanel } from "./ChainPanel";
-import { BomPanel } from "./BomPanel";
-import { PcbExportPanel } from "./PcbExportPanel";
+import { EditorToolbar } from "./EditorToolbar";
+import { EditorCanvasArea } from "./EditorCanvasArea";
+import { EditorSidebarRight } from "./EditorSidebarRight";
+import { useEditorShortcuts } from "./useEditorShortcuts";
+import { buildDockTabs } from "./dockTabs";
 import { useAnalysisPanels } from "./useAnalysisPanels";
 import type { MonteCarloResult } from "../core/analysis/montecarlo";
 import { presets, type PedalPreset, type PresetVariant } from "../core/library/presets";
 import { wiringPresets, type WiringPreset } from "./wiring";
 import { PARAM_META } from "./paramMeta";
-import { loadSampleFromFile, type LoadedSample } from "../audio/loadSample";
-import { playSamples } from "../audio/playback";
-import { type CabinetVariant } from "../audio/cabinetIr";
-import { runTransientAsync } from "../core/solver/runTransientAsync";
+import { useAudioRun } from "./useAudioRun";
 import { runAcAnalysis, logFrequencySweep, type AcPoint } from "../core/solver/ac";
-import { type WaveformTrace } from "../viz/Waveform";
+import type { AcStatus } from "./FrequencyResponseTab";
 import { canRedo, canUndo, commitPrevious, createHistory, pushSnapshot, redo, replacePresent, undo, type CircuitSnapshot } from "./historyStack";
 import { loadCircuitFromStorage, saveCircuitToStorage, CURRENT_SCHEMA_VERSION } from "./circuitStorage";
 import { circuitToFileText, parseCircuitFile } from "./circuitFile";
@@ -58,25 +47,14 @@ export function SchematicEditor() {
   const [selectedWireId, setSelectedWireId] = useState<string | null>(null);
   const [outputNode, setOutputNode] = useState<string>(initial.outputNode);
   const [inputGain, setInputGain] = useState(initial.inputGain);
-  const [sample, setSample] = useState<LoadedSample | null>(null);
   const [status, setStatus] = useState("");
-  const [waveTraces, setWaveTraces] = useState<WaveformTrace[] | null>(null);
-  const [isSimulating, setIsSimulating] = useState(false);
   const [monteCarloResult, setMonteCarloResult] = useState<MonteCarloResult | null>(null);
   const [circuitVersion, setCircuitVersion] = useState(0);
-  const [cabinetEnabled, setCabinetEnabled] = useState(false);
-  const [cabinetVariant, setCabinetVariant] = useState<CabinetVariant>("brightCab4x12");
-  const audioContextRef = useRef<AudioContext | null>(null);
   const dragStartSnapshotRef = useRef<CircuitSnapshot | null>(null);
 
   const parts = history.present.parts;
   const wires = history.present.wires;
   const blocks = history.present.blocks;
-
-  const getAudioContext = () => {
-    if (!audioContextRef.current) audioContextRef.current = new AudioContext();
-    return audioContextRef.current;
-  };
 
   const graph = useMemo(() => netlistFromGraph(parts, wires), [parts, wires]);
   const selectedPart = parts.find((p) => p.id === selectedPartId) ?? null;
@@ -126,17 +104,30 @@ export function SchematicEditor() {
   const handleUndo = () => setHistory((h) => undo(h));
   const handleRedo = () => setHistory((h) => redo(h));
 
-  const handleNewCircuit = () => {
-    if (parts.length > 0 && !window.confirm("현재 회로를 지우고 새로 시작할까요? 저장되지 않은 작업은 undo(Ctrl+Z)로만 복구할 수 있습니다.")) return;
-    commit({ parts: [], wires: [], blocks: [] });
+  /**
+   * Swaps in a whole new circuit. Every entry point that does this - new, template, wiring preset,
+   * opened file - has to clear the same six things, and forgetting one leaves stale traces or a
+   * stale preset highlight pointing at a circuit that is no longer on the canvas.
+   */
+  const replaceCircuit = (
+    snapshot: CircuitSnapshot,
+    options: { outputNode: string; presetId: string | null; status: string; inputGain?: number },
+  ) => {
+    commit(snapshot);
     setSelectedPartId(null);
     setSelectedWireId(null);
-    setLoadedPresetId(null);
-    setOutputNode("");
-    setWaveTraces(null);
+    setLoadedPresetId(options.presetId);
+    setOutputNode(options.outputNode);
+    if (options.inputGain !== undefined) setInputGain(options.inputGain);
+    audio.clearTraces();
     setMonteCarloResult(null);
     setCircuitVersion((v) => v + 1);
-    setStatus("새 회로");
+    setStatus(options.status);
+  };
+
+  const handleNewCircuit = () => {
+    if (parts.length > 0 && !window.confirm("현재 회로를 지우고 새로 시작할까요? 저장되지 않은 작업은 undo(Ctrl+Z)로만 복구할 수 있습니다.")) return;
+    replaceCircuit({ parts: [], wires: [], blocks: [] }, { outputNode: "", presetId: null, status: "새 회로" });
   };
 
   const handleLoadTemplate = (preset: PedalPreset, variant?: PresetVariant) => {
@@ -147,15 +138,14 @@ export function SchematicEditor() {
     const roundTripped = netlistFromGraph(newParts, newWires);
     const equivalentOutput = findEquivalentNode(originalNetlist, preset.outputNode, roundTripped.netlist);
 
-    commit({ parts: newParts, wires: newWires, blocks: [] });
-    setSelectedPartId(null);
-    setSelectedWireId(null);
-    setLoadedPresetId(preset.id);
-    setOutputNode(equivalentOutput ?? "");
-    setWaveTraces(null);
-    setMonteCarloResult(null);
-    setCircuitVersion((v) => v + 1);
-    setStatus(`템플릿 로드됨: ${preset.name}${variant ? ` - ${variant.label}` : ""}`);
+    replaceCircuit(
+      { parts: newParts, wires: newWires, blocks: [] },
+      {
+        outputNode: equivalentOutput ?? "",
+        presetId: preset.id,
+        status: `템플릿 로드됨: ${preset.name}${variant ? ` - ${variant.label}` : ""}`,
+      },
+    );
   };
 
   /** Wiring presets are stored as a part-level snapshot (see wiring/types.ts), so loading one is
@@ -166,15 +156,14 @@ export function SchematicEditor() {
     const newWires = preset.snapshot.wires.map((w) => ({ ...w, a: { ...w.a }, b: { ...w.b } }));
     const outputKey = `${preset.outputTerminal.partId}:${preset.outputTerminal.terminalId}`;
 
-    commit({ parts: newParts, wires: newWires, blocks: [...preset.snapshot.blocks] });
-    setSelectedPartId(null);
-    setSelectedWireId(null);
-    setLoadedPresetId(preset.id);
-    setOutputNode(netlistFromGraph(newParts, newWires).terminalNet.get(outputKey) ?? "");
-    setWaveTraces(null);
-    setMonteCarloResult(null);
-    setCircuitVersion((v) => v + 1);
-    setStatus(`배선 로드됨: ${preset.name}`);
+    replaceCircuit(
+      { parts: newParts, wires: newWires, blocks: [...preset.snapshot.blocks] },
+      {
+        outputNode: netlistFromGraph(newParts, newWires).terminalNet.get(outputKey) ?? "",
+        presetId: preset.id,
+        status: `배선 로드됨: ${preset.name}`,
+      },
+    );
   };
 
   const handleAddPart = (type: PartType, paramsOverride?: Record<string, number | string>) => {
@@ -254,28 +243,12 @@ export function SchematicEditor() {
     commit({ parts: parts.map((p) => (p.id === selectedPartId ? { ...p, rotation: rotateClockwise(p.rotation) } : p)), wires, blocks });
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.tagName === "INPUT" || target.tagName === "SELECT" || target.tagName === "TEXTAREA") return;
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
-        e.preventDefault();
-        if (e.shiftKey) handleRedo();
-        else handleUndo();
-        return;
-      }
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
-        e.preventDefault();
-        handleRedo();
-        return;
-      }
-      if (e.key === "r" || e.key === "R") handleRotateSelected();
-      if (e.key === "Delete" || e.key === "Backspace") handleDeleteSelected();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedPartId, selectedWireId, parts, wires]);
+  useEditorShortcuts({
+    onUndo: handleUndo,
+    onRedo: handleRedo,
+    onRotate: handleRotateSelected,
+    onDelete: handleDeleteSelected,
+  });
 
   const handleParamChange = (key: string, value: string) => {
     if (!selectedPart) return;
@@ -310,173 +283,49 @@ export function SchematicEditor() {
       setStatus(`불러오기 실패: ${error}`);
       return;
     }
-    commit({ parts: circuit.parts, wires: circuit.wires, blocks: circuit.blocks });
-    setSelectedPartId(null);
-    setSelectedWireId(null);
-    setLoadedPresetId(null);
-    setOutputNode(circuit.outputNode);
-    setInputGain(circuit.inputGain);
-    setWaveTraces(null);
-    setMonteCarloResult(null);
-    setCircuitVersion((v) => v + 1);
-    setStatus(`회로를 불러왔습니다: ${file.name}`);
+    replaceCircuit(
+      { parts: circuit.parts, wires: circuit.wires, blocks: circuit.blocks },
+      { outputNode: circuit.outputNode, presetId: null, status: `회로를 불러왔습니다: ${file.name}`, inputGain: circuit.inputGain },
+    );
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setStatus("샘플 디코딩 중...");
-    const loaded = await loadSampleFromFile(file, getAudioContext());
-    setSample(loaded);
-    setStatus(`샘플 로드 완료 (${loaded.samples.length}개 샘플, ${loaded.sampleRate}Hz)`);
-  };
-
-  const handleRun = async () => {
-    if (!sample || !graph.inputSourceId) return;
-    setIsSimulating(true);
-    setStatus("시뮬레이션 실행 중...");
-    const scaled = new Float64Array(sample.samples.length);
-    for (let i = 0; i < scaled.length; i++) scaled[i] = sample.samples[i] * inputGain;
-    try {
-      // Run off the main thread - a long user-uploaded file is enough per-sample Newton solving to
-      // freeze the page if run inline (docs/ROADMAP.md §6).
-      const { traces, nonConvergentSampleCount } = await runTransientAsync(graph.netlist, {
-        inputSourceId: graph.inputSourceId,
-        inputSamples: scaled,
-        sampleRate: sample.sampleRate,
-        tapNodes: graph.netNames.filter((n) => n !== "0"),
-        // Resolves fast clipping knees (germanium diodes etc.) that a single 44.1/48kHz sample
-        // period would otherwise alias away (docs/ROADMAP.md §6 risk 2). THD/Monte Carlo/chain use
-        // short synthesized tones and stay at the default (no oversampling) - not worth the 4x cost.
-        oversample: 4,
-      });
-      setWaveTraces(
-        Array.from(traces.entries()).map(([label, data], i) => ({
-          label,
-          data,
-          color: ["#3c6b2e", "#7c9300", "#8a4a2a", "#191a10"][i % 4],
-        })),
-      );
-      // A stiff/badly-conditioned circuit (e.g. a tight feedback loop through two diodes) can fail to
-      // converge on some samples - the solver falls back to its last guess rather than throwing or
-      // producing NaN, so without this the user would have no way to know those samples are suspect.
-      setStatus(
-        nonConvergentSampleCount > 0
-          ? `시뮬레이션 완료 (경고: ${nonConvergentSampleCount}개 샘플에서 수렴 실패 - 해당 구간 파형 정확도가 낮을 수 있습니다)`
-          : "시뮬레이션 완료",
-      );
-    } catch (err) {
-      setStatus(`시뮬레이션 실패: ${err instanceof Error ? err.message : "알 수 없는 오류"}`);
-    } finally {
-      setIsSimulating(false);
-    }
-  };
-
-  const handlePlay = (label: string) => {
-    if (!waveTraces || !sample) return;
-    const trace = waveTraces.find((t) => t.label === label);
-    if (!trace) return;
-    playSamples(trace.data, sample.sampleRate, getAudioContext(), cabinetEnabled ? cabinetVariant : null);
-  };
+  const audio = useAudioRun({ graph, inputGain, onStatus: setStatus });
 
   const analysis = useAnalysisPanels({
     graph,
     outputNode,
-    sample,
+    sample: audio.sample,
     inputGain,
-    getAudioContext,
-    cabinetEnabled,
-    cabinetVariant,
+    getAudioContext: audio.getAudioContext,
+    cabinetEnabled: audio.cabinetEnabled,
+    cabinetVariant: audio.cabinetVariant,
     onMonteCarloResultChange: setMonteCarloResult,
   });
 
-  const dockTabs = [
-    {
-      key: "drc",
-      label: "검사",
-      helpText: "접지 누락, 떠 있는 단자처럼 회로가 동작하지 않는 원인을 찾아 알려줍니다. 분석 결과가 비어 있으면 먼저 여기를 보세요.",
-      content: <DrcPanel parts={parts} wires={wires} outputNode={outputNode} onSelectPart={handleSelectPart} />,
-    },
-    {
-      key: "response",
-      label: `주파수 응답${outputNode ? ` (→ ${outputNode})` : ""}`,
-      helpText: "이 회로가 저음/고음을 얼마나 통과시키거나 깎는지 주파수별로 보여줍니다.",
-      content: <FrequencyResponseTab status={acResult.status} error={acResult.error} points={acPoints} band={monteCarloResult} />,
-    },
-    {
-      key: "waveform",
-      label: "파형",
-      helpText: "오디오 파일을 넣고 시뮬레이션을 실행하면 입력/출력 파형을 비교하고 소리로 들어볼 수 있습니다.",
-      content: (
-        <WaveformTab
-          traces={waveTraces}
-          onPlay={handlePlay}
-          cabinetEnabled={cabinetEnabled}
-          onCabinetEnabledChange={setCabinetEnabled}
-          cabinetVariant={cabinetVariant}
-          onCabinetVariantChange={setCabinetVariant}
-        />
-      ),
-    },
-    {
-      key: "sweep",
-      label: "노브 스윕",
-      helpText: "톤/볼륨 노브나 셀렉터를 위치별로 돌렸을 때의 주파수 응답을 한 그래프에 겹쳐서 비교합니다.",
-      content: <SweepTab parts={parts} wires={wires} outputNode={outputNode} />,
-    },
-    {
-      key: "thd",
-      label: "THD",
-      helpText: "총고조파왜곡(THD): 원래 신호에 없던 배음이 얼마나 섞여 나오는지 - 숫자가 클수록 더 찌그러진(드라이브가 강한) 소리입니다.",
-      content: <ThdPanel {...analysis.thd} />,
-    },
-    {
-      key: "montecarlo",
-      label: "부품 공차",
-      helpText: "실제 부품은 표시값과 오차가 있습니다(예: 저항 5%). 이 오차 범위 안에서 소리가 얼마나 달라질 수 있는지 시뮬레이션합니다.",
-      content: <MonteCarloPanel {...analysis.monteCarlo} />,
-    },
-    {
-      key: "chain",
-      label: "페달 체인",
-      helpText: "지금 만든 회로를 다른 프리셋과 직렬로 연결했을 때(예: 부스트 → 오버드라이브) 결과를 시뮬레이션합니다.",
-      content: <ChainPanel {...analysis.chain} />,
-    },
-    {
-      key: "bom",
-      label: "BOM",
-      helpText: "부품 목록(Bill of Materials): 이 회로를 실제로 만들 때 구매해야 할 부품과 값을 정리해줍니다.",
-      content: <BomPanel parts={parts} graph={graph} />,
-    },
-    {
-      key: "pcb",
-      label: "PCB",
-      helpText: "이 회로의 연결 정보를 KiCad에서 바로 불러올 수 있는 넷리스트 파일로 내보냅니다(기판 배치/배선은 KiCad에서 직접).",
-      content: <PcbExportPanel parts={parts} graph={graph} />,
-    },
-  ];
+  const dockTabs = buildDockTabs({
+    parts,
+    wires,
+    graph,
+    outputNode,
+    onSelectPart: handleSelectPart,
+    acResult: { points: acPoints, status: acResult.status, error: acResult.error },
+    monteCarloResult,
+    audio,
+    analysis,
+  });
 
   return (
     <div className="workspace-content">
-      <div className="toolbar">
-        <button type="button" onClick={handleUndo} disabled={!canUndo(history)} title="실행 취소 (Ctrl+Z)">
-          ↶ 실행 취소
-        </button>
-        <button type="button" onClick={handleRedo} disabled={!canRedo(history)} title="다시 실행 (Ctrl+Shift+Z)">
-          ↷ 다시 실행
-        </button>
-        <div className="spacer" />
-        <button type="button" onClick={handleSaveCircuitFile} disabled={parts.length === 0} title="지금 회로를 .json 파일로 내려받습니다">
-          회로 저장
-        </button>
-        <label className="toolbar-file-button" title="이 앱에서 저장한 .json 회로 파일을 불러옵니다">
-          회로 열기
-          <input type="file" accept="application/json,.json" onChange={handleOpenCircuitFile} className="visually-hidden" />
-        </label>
-        <button type="button" onClick={handleNewCircuit} disabled={parts.length === 0} title="캔버스를 비우고 처음부터 다시 시작합니다">
-          새 회로
-        </button>
-      </div>
+      <EditorToolbar
+        canUndo={canUndo(history)}
+        canRedo={canRedo(history)}
+        hasParts={parts.length > 0}
+        onUndo={handleUndo}
+        onRedo={handleRedo}
+        onSaveFile={handleSaveCircuitFile}
+        onOpenFile={handleOpenCircuitFile}
+        onNewCircuit={handleNewCircuit}
+      />
 
       <div className="workbench-body">
         <PartsSidebar
@@ -491,73 +340,39 @@ export function SchematicEditor() {
           onLoadWiring={handleLoadWiring}
         />
 
-        <div className="canvas-area">
-          <div className="panel canvas-stage">
-            <div className="panel-title">회로도</div>
-            {parts.length === 0 ? (
-              <p className="preset-description">
-                회로가 비어 있습니다. 왼쪽 "소자 팔레트"에서 부품을 추가하거나, "템플릿" 탭에서 예제 회로를 불러와 시작하세요.
-                <span
-                  className="info-tip"
-                  title={
-                    '처음이신가요? "템플릿/블록" 탭에서 완성된 회로를 하나 불러온 뒤, 아래 "파형" 탭에서 오디오 파일을 넣고 ' +
-                    '"시뮬레이션 실행"을 눌러보세요. THD는 소리가 얼마나 찌그러지는지, 부품 공차는 실제 부품값 오차가 소리에 얼마나 ' +
-                    "영향을 주는지 보여주는 분석 도구입니다."
-                  }
-                >
-                  ⓘ
-                </span>
-              </p>
-            ) : (
-              <p className="canvas-hint">R: 회전 · Delete: 삭제 · 휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · 부품 드래그: 이동 · 단자 클릭 2회: 배선 · 배선 클릭: 선택</p>
-            )}
-            <div className="canvas-frame canvas-frame-scroll">
-              <SchematicCanvas
-                parts={parts}
-                wires={wires}
-                blocks={blocks}
-                width={canvasSize.width}
-                height={canvasSize.height}
-                selectedPartId={selectedPartId}
-                selectedWireId={selectedWireId}
-                onMovePart={handleMovePart}
-                onSelectPart={handleSelectPart}
-                onSelectWire={handleSelectWire}
-                onAddWire={handleAddWire}
-                onDragEnd={handleDragEnd}
-                fitSignal={circuitVersion}
-              />
-            </div>
-          </div>
+        <EditorCanvasArea
+          parts={parts}
+          wires={wires}
+          blocks={blocks}
+          canvasSize={canvasSize}
+          selectedPartId={selectedPartId}
+          selectedWireId={selectedWireId}
+          circuitVersion={circuitVersion}
+          dockTabs={dockTabs}
+          onMovePart={handleMovePart}
+          onSelectPart={handleSelectPart}
+          onSelectWire={handleSelectWire}
+          onAddWire={handleAddWire}
+          onDragEnd={handleDragEnd}
+        />
 
-          <BottomDock key={circuitVersion} tabs={dockTabs} />
-        </div>
-
-        <div className="sidebar-right">
-          <InspectorPanel
-            selectedPart={selectedPart}
-            selectedWire={selectedWire}
-            blocks={blocks}
-            onParamChange={handleParamChange}
-            onApplyModel={handleApplyModel}
-            onRotate={handleRotateSelected}
-            onDelete={handleDeleteSelected}
-            onDeleteBlock={handleDeleteBlock}
-          />
-
-          <OutputAudioPanel
-            outputNode={outputNode}
-            onOutputNodeChange={setOutputNode}
-            netNames={graph.netNames}
-            inputGain={inputGain}
-            onInputGainChange={setInputGain}
-            hasSample={sample !== null}
-            onFileChange={handleFileChange}
-            canRun={sample !== null && !!graph.inputSourceId && !isSimulating}
-            onRun={handleRun}
-            status={status}
-          />
-        </div>
+        <EditorSidebarRight
+          selectedPart={selectedPart}
+          selectedWire={selectedWire}
+          blocks={blocks}
+          graph={graph}
+          outputNode={outputNode}
+          onOutputNodeChange={setOutputNode}
+          inputGain={inputGain}
+          onInputGainChange={setInputGain}
+          status={status}
+          audio={audio}
+          onParamChange={handleParamChange}
+          onApplyModel={handleApplyModel}
+          onRotate={handleRotateSelected}
+          onDelete={handleDeleteSelected}
+          onDeleteBlock={handleDeleteBlock}
+        />
       </div>
     </div>
   );

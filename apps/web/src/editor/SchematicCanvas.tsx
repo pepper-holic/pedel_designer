@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { PART_DEFS } from "./partDefs";
-import { PartSymbol } from "./symbols";
 import { terminalPosition, computeWirePaths, zoomAroundPoint, fitView, GRID_SIZE } from "./geometry";
 import { BLOCK_CATEGORY_LABELS } from "./blockDefs";
-import { partValueLabel } from "./valueLabel";
+import { CanvasPart, PART_HALF_WIDTH, PART_HALF_HEIGHT } from "./CanvasPart";
 import type { BlockInstance, PartInstance, TerminalRef, Wire } from "./types";
 
 interface SchematicCanvasProps {
@@ -24,11 +22,8 @@ interface SchematicCanvasProps {
   height?: number;
 }
 
-// Half-width/height of the invisible hit-box drawn around every part body (see the `<rect>` in the
-// parts loop below) - reused here so a block's tinted region hugs its parts with the same margin
-// used for the single-part selection outline.
-const PART_HALF_WIDTH = 40;
-const PART_HALF_HEIGHT = 38;
+// Block regions hug their parts using the same margin as a part's own hit-box, so the tint lines up
+// with the selection outline rather than floating at some other offset.
 const BLOCK_PADDING = 22;
 
 interface BlockRegion {
@@ -346,57 +341,16 @@ export function SchematicCanvas({
             <circle key={i} cx={p.x} cy={p.y} r={3.5} fill="var(--wire)" />
           ))}
 
-          {parts.map((part) => {
-            const def = PART_DEFS[part.type];
-            const isSelected = part.id === selectedPartId;
-            const valueLabel = partValueLabel(part);
-            return (
-              // Rotation is scoped to an inner group (symbol + terminals only) rather than this
-              // outer one, so the id/value text stays upright and stays put on screen instead of
-              // flipping upside-down (and sliding to the opposite side) whenever a part is rotated
-              // 180 - which auto-layout now does routinely for antiparallel diode pairs.
-              <g key={part.id} data-part-id={part.id} transform={`translate(${part.x},${part.y})`}>
-                {isSelected && (
-                  <rect x={-40} y={-38} width={80} height={76} rx={6} fill="none" stroke="var(--accent)" strokeWidth={1.2} strokeDasharray="3 2" />
-                )}
-                <rect
-                  x={-40}
-                  y={-38}
-                  width={80}
-                  height={76}
-                  fill="transparent"
-                  onMouseDown={(e) => handleBodyMouseDown(part, e)}
-                  style={{ cursor: "grab", pointerEvents: "all" }}
-                />
-                <g transform={`rotate(${part.rotation})`}>
-                  <PartSymbol part={part} />
-                  {def.terminals.map((t) => (
-                    <circle
-                      key={t.id}
-                      cx={t.dx}
-                      cy={t.dy}
-                      r={4}
-                      fill={pendingTerminal?.partId === part.id && pendingTerminal.terminalId === t.id ? "var(--accent)" : "var(--wire)"}
-                      onClick={(e) => handleTerminalClick({ partId: part.id, terminalId: t.id }, e)}
-                      style={{ cursor: "crosshair" }}
-                    />
-                  ))}
-                </g>
-                <rect x={-19} y={-39} width={38} height={11} fill="var(--bg-inset)" opacity={0.85} pointerEvents="none" />
-                <text textAnchor="middle" y={-30} fill="var(--text-dim)" fontSize={10} fontFamily="var(--font-mono)" pointerEvents="none">
-                  {part.id}
-                </text>
-                {valueLabel && (
-                  <>
-                    <rect x={-24} y={39} width={48} height={11} fill="var(--bg-inset)" opacity={0.85} pointerEvents="none" />
-                    <text textAnchor="middle" y={46} fill="var(--text-dim)" fontSize={10} fontFamily="var(--font-mono)" pointerEvents="none">
-                      {valueLabel}
-                    </text>
-                  </>
-                )}
-              </g>
-            );
-          })}
+          {parts.map((part) => (
+            <CanvasPart
+              key={part.id}
+              part={part}
+              isSelected={part.id === selectedPartId}
+              pendingTerminal={pendingTerminal}
+              onBodyMouseDown={handleBodyMouseDown}
+              onTerminalClick={handleTerminalClick}
+            />
+          ))}
         </g>
       </svg>
     </div>
