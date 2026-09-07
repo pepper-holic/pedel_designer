@@ -30,6 +30,12 @@ export interface AcPoint {
   frequencyHz: number;
   magnitudeDb: number;
   phaseDeg: number;
+  /**
+   * Magnitude of the current the input source has to supply, in amps, at its unit drive. Its
+   * reciprocal is the impedance that source is looking into - which is what decides whether the
+   * next stage loads this one (see core/analysis/impedance.ts).
+   */
+  sourceCurrentMagA: number;
 }
 
 /**
@@ -195,6 +201,7 @@ export function runAcAnalysis(netlist: Netlist, options: AcOptions): AcPoint[] {
     }
 
     const x = solveComplexLinear(reA, imA, reZ, imZ, n);
+    const srcBranch = branchOf(topology, options.inputSourceId);
     const outRe = outIndex < 0 ? 0 : x.re[outIndex];
     const outIm = outIndex < 0 ? 0 : x.im[outIndex];
     const magnitude = Math.hypot(outRe, outIm); // input magnitude is 1V, so this is the transfer function magnitude directly
@@ -203,6 +210,7 @@ export function runAcAnalysis(netlist: Netlist, options: AcOptions): AcPoint[] {
       frequencyHz,
       magnitudeDb: 20 * Math.log10(Math.max(magnitude, 1e-12)),
       phaseDeg: (Math.atan2(outIm, outRe) * 180) / Math.PI,
+      sourceCurrentMagA: srcBranch < 0 ? 0 : Math.hypot(x.re[srcBranch], x.im[srcBranch]),
     };
   });
 }

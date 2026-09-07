@@ -2,6 +2,7 @@ import { FrequencyResponseTab, type AcStatus } from "./FrequencyResponseTab";
 import { WaveformTab } from "./WaveformTab";
 import { SweepTab } from "./SweepTab";
 import { DrcPanel } from "./DrcPanel";
+import { ImpedancePanel } from "./ImpedancePanel";
 import { ThdPanel } from "./ThdPanel";
 import { MonteCarloPanel } from "./MonteCarloPanel";
 import { ChainPanel } from "./ChainPanel";
@@ -86,6 +87,12 @@ export function buildDockTabs({
     label: "노브 스윕",
     helpText: "톤/볼륨 노브나 셀렉터를 위치별로 돌렸을 때의 주파수 응답을 한 그래프에 겹쳐서 비교합니다.",
     content: <SweepTab parts={parts} wires={wires} outputNode={outputNode} />,
+  },
+  {
+    key: "impedance",
+    label: "임피던스",
+    helpText: "이 회로가 앞단(픽업이나 이전 페달)에 얼마나 무거운 부하인지 보여줍니다. 값이 낮으면 앞단의 음량과 톤을 함께 끌어내립니다.",
+    content: <ImpedancePanel graph={graph} />,
   },
   {
     key: "thd",

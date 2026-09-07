@@ -710,6 +710,25 @@
   font-size: 0.72rem;
 }
 
+.impedance-table {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  margin-top: 8px;
+}
+
+.impedance-table th,
+.impedance-table td {
+  padding: 4px 18px 4px 0;
+  text-align: left;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.impedance-table th {
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
 .drc-list {
   list-style: none;
   margin: 0;
