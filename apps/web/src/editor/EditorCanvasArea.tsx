@@ -9,7 +9,7 @@ const EMPTY_CIRCUIT_TIP =
   "영향을 주는지 보여주는 분석 도구입니다.";
 
 const CANVAS_HINT =
-  "R: 회전 · Delete: 삭제 · 휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · 부품 드래그: 이동 · 단자 클릭 2회: 배선 · 배선 클릭: 선택";
+  "R: 회전 · Delete: 삭제 · Ctrl+C/V/D: 복사·붙여넣기·복제 · 휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · Shift+드래그: 범위 선택 · 부품 드래그: 이동 · 단자 클릭 2회: 배선 · 배선 클릭: 선택";
 
 interface EditorCanvasAreaProps {
   parts: PartInstance[];
@@ -17,7 +17,9 @@ interface EditorCanvasAreaProps {
   blocks: BlockInstance[];
   canvasSize: { width: number; height: number };
   selectedPartId: string | null;
+  selectedPartIds: string[];
   selectedWireId: string | null;
+  onBoxSelect: (ids: string[]) => void;
   /** Bumped whenever the whole circuit is replaced - re-fits the view and resets the dock. */
   circuitVersion: number;
   dockTabs: DockTab[];
@@ -52,7 +54,9 @@ export function EditorCanvasArea(props: EditorCanvasAreaProps) {
             width={props.canvasSize.width}
             height={props.canvasSize.height}
             selectedPartId={props.selectedPartId}
+            selectedPartIds={props.selectedPartIds}
             selectedWireId={props.selectedWireId}
+            onBoxSelect={props.onBoxSelect}
             onMovePart={props.onMovePart}
             onSelectPart={props.onSelectPart}
             onSelectWire={props.onSelectWire}

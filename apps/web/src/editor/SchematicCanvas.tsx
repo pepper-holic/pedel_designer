@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { terminalPosition, computeWirePaths, zoomAroundPoint, fitView, GRID_SIZE } from "./geometry";
 import { BLOCK_CATEGORY_LABELS } from "./blockDefs";
 import { CanvasPart, PART_HALF_WIDTH, PART_HALF_HEIGHT } from "./CanvasPart";
+import { partsInBox, type SelectionBox } from "./selection";
 import type { BlockInstance, PartInstance, TerminalRef, Wire } from "./types";
 
 interface SchematicCanvasProps {
@@ -9,7 +10,12 @@ interface SchematicCanvasProps {
   wires: Wire[];
   blocks?: BlockInstance[];
   selectedPartId: string | null;
+  /** Every part in the current selection. Always contains `selectedPartId` when that is set - the
+   * single id drives the inspector, the list drives move/copy/delete. */
+  selectedPartIds?: string[];
   selectedWireId?: string | null;
+  /** Rubber-band result: the ids the user just dragged a box around. */
+  onBoxSelect?: (ids: string[]) => void;
   onMovePart: (id: string, x: number, y: number) => void;
   onSelectPart: (id: string | null) => void;
   onSelectWire?: (id: string | null) => void;
@@ -77,7 +83,9 @@ export function SchematicCanvas({
   wires,
   blocks = [],
   selectedPartId,
+  selectedPartIds,
   selectedWireId = null,
+  onBoxSelect,
   onMovePart,
   onSelectPart,
   onSelectWire,
@@ -92,6 +100,9 @@ export function SchematicCanvas({
   const [pendingTerminal, setPendingTerminal] = useState<TerminalRef | null>(null);
   const [view, setView] = useState({ zoom: 1, panX: 0, panY: 0 });
   const [panStart, setPanStart] = useState<{ mouseX: number; mouseY: number; panX: number; panY: number; moved: boolean } | null>(null);
+  // Shift+drag on the background draws a selection box instead of panning. Panning is the more
+  // frequent gesture, so it keeps the unmodified drag.
+  const [selectBox, setSelectBox] = useState<SelectionBox | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
   // Attached as a native (non-passive) listener rather than React's onWheel: React registers
@@ -131,10 +142,20 @@ export function SchematicCanvas({
 
   const handleBackgroundMouseDown = (e: React.MouseEvent<SVGRectElement>) => {
     const p = screenPoint(e as unknown as React.MouseEvent<SVGSVGElement>);
+    if (e.shiftKey && onBoxSelect) {
+      const world = toWorld(p);
+      setSelectBox({ x1: world.x, y1: world.y, x2: world.x, y2: world.y });
+      return;
+    }
     setPanStart({ mouseX: p.x, mouseY: p.y, panX: view.panX, panY: view.panY, moved: false });
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (selectBox) {
+      const world = toWorld(screenPoint(e));
+      setSelectBox({ ...selectBox, x2: world.x, y2: world.y });
+      return;
+    }
     if (dragId) {
       const world = toWorld(screenPoint(e));
       onMovePart(dragId, world.x - dragOffset.x, world.y - dragOffset.y);
@@ -154,6 +175,13 @@ export function SchematicCanvas({
     if (panStart?.moved) return; // just finished a pan-drag, not a deselect click
     onSelectPart(null);
     onSelectWire?.(null);
+  };
+
+  /** Ends a rubber-band drag, reporting whatever it enclosed. */
+  const finishBoxSelect = () => {
+    if (!selectBox) return;
+    onBoxSelect?.(partsInBox(parts, selectBox));
+    setSelectBox(null);
   };
 
   // A wire is drawn by clicking two terminals in sequence, so between those clicks the first one
@@ -262,11 +290,13 @@ export function SchematicCanvas({
         style={{ display: "block", cursor: dragId ? "grabbing" : panStart ? "grabbing" : "default" }}
         onMouseMove={handleMouseMove}
         onMouseUp={() => {
+          finishBoxSelect();
           if (dragId) onDragEnd?.();
           setDragId(null);
           setPanStart(null);
         }}
         onMouseLeave={() => {
+          finishBoxSelect();
           if (dragId) onDragEnd?.();
           setDragId(null);
           setPanStart(null);
@@ -345,12 +375,27 @@ export function SchematicCanvas({
             <CanvasPart
               key={part.id}
               part={part}
-              isSelected={part.id === selectedPartId}
+              isSelected={selectedPartIds ? selectedPartIds.includes(part.id) : part.id === selectedPartId}
               pendingTerminal={pendingTerminal}
               onBodyMouseDown={handleBodyMouseDown}
               onTerminalClick={handleTerminalClick}
             />
           ))}
+
+          {selectBox && (
+            <rect
+              x={Math.min(selectBox.x1, selectBox.x2)}
+              y={Math.min(selectBox.y1, selectBox.y2)}
+              width={Math.abs(selectBox.x2 - selectBox.x1)}
+              height={Math.abs(selectBox.y2 - selectBox.y1)}
+              fill="var(--accent)"
+              fillOpacity={0.1}
+              stroke="var(--accent)"
+              strokeWidth={1}
+              strokeDasharray="4 3"
+              pointerEvents="none"
+            />
+          )}
         </g>
       </svg>
     </div>

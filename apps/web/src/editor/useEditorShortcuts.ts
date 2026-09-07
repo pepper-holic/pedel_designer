@@ -5,6 +5,9 @@ interface EditorShortcuts {
   onRedo: () => void;
   onRotate: () => void;
   onDelete: () => void;
+  onCopy: () => void;
+  onPaste: () => void;
+  onDuplicate: () => void;
 }
 
 /**
@@ -14,7 +17,7 @@ interface EditorShortcuts {
  * its own - a user who has just clicked a part expects Delete to work without hunting for where
  * focus went. Typing in a form control is excluded so "r" in a resistance field stays a letter.
  */
-export function useEditorShortcuts({ onUndo, onRedo, onRotate, onDelete }: EditorShortcuts): void {
+export function useEditorShortcuts({ onUndo, onRedo, onRotate, onDelete, onCopy, onPaste, onDuplicate }: EditorShortcuts): void {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
@@ -30,10 +33,20 @@ export function useEditorShortcuts({ onUndo, onRedo, onRotate, onDelete }: Edito
         onRedo();
         return;
       }
+      if (e.ctrlKey || e.metaKey) {
+        const key = e.key.toLowerCase();
+        if (key === "c" || key === "v" || key === "d") {
+          e.preventDefault();
+          if (key === "c") onCopy();
+          else if (key === "v") onPaste();
+          else onDuplicate();
+          return;
+        }
+      }
       if (e.key === "r" || e.key === "R") onRotate();
       if (e.key === "Delete" || e.key === "Backspace") onDelete();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onUndo, onRedo, onRotate, onDelete]);
+  }, [onUndo, onRedo, onRotate, onDelete, onCopy, onPaste, onDuplicate]);
 }

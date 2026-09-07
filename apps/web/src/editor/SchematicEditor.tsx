@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PART_DEFS, type PartType } from "./partDefs";
-import type { TerminalRef } from "./types";
+import type { PartInstance, TerminalRef, Wire } from "./types";
+import { cloneSelection } from "./selection";
 import { netlistFromGraph } from "./netlistFromGraph";
 import { graphFromNetlist, findEquivalentNode } from "./graphFromNetlist";
 import { snapToGrid, rotateClockwise } from "./geometry";
@@ -26,6 +27,9 @@ import { circuitToFileText, parseCircuitFile } from "./circuitFile";
 
 let partCounter = 0;
 let blockCounter = 0;
+let pasteCounter = 0;
+/** Pasted copies land slightly off the originals so they are visibly a second object. */
+const PASTE_OFFSET = { dx: 30, dy: 30 };
 const AUTOSAVE_DEBOUNCE_MS = 400;
 
 type LeftTab = "parts" | "library";
@@ -45,12 +49,19 @@ export function SchematicEditor() {
   // Parts and wires share one logical selection - selecting either clears the other, so Delete and
   // the inspector always act on exactly one thing.
   const [selectedWireId, setSelectedWireId] = useState<string | null>(null);
+  // The full selection. `selectedPartId` stays the one the inspector shows; this list is what
+  // move/copy/delete act on, so a box selection can cover many parts without the inspector having
+  // to grow a multi-part mode.
+  const [selectedPartIds, setSelectedPartIds] = useState<string[]>([]);
+  const [clipboard, setClipboard] = useState<{ parts: PartInstance[]; wires: Wire[] } | null>(null);
   const [outputNode, setOutputNode] = useState<string>(initial.outputNode);
   const [inputGain, setInputGain] = useState(initial.inputGain);
   const [status, setStatus] = useState("");
   const [monteCarloResult, setMonteCarloResult] = useState<MonteCarloResult | null>(null);
   const [circuitVersion, setCircuitVersion] = useState(0);
   const dragStartSnapshotRef = useRef<CircuitSnapshot | null>(null);
+  /** Which ids were selected when the clipboard was filled. */
+  const clipboardIdsRef = useRef<string[]>([]);
 
   const parts = history.present.parts;
   const wires = history.present.wires;
@@ -62,12 +73,20 @@ export function SchematicEditor() {
 
   const handleSelectPart = (id: string | null) => {
     setSelectedPartId(id);
+    setSelectedPartIds(id ? [id] : []);
+    setSelectedWireId(null);
+  };
+
+  const handleBoxSelect = (ids: string[]) => {
+    setSelectedPartIds(ids);
+    setSelectedPartId(ids[0] ?? null);
     setSelectedWireId(null);
   };
 
   const handleSelectWire = (id: string | null) => {
     setSelectedWireId(id);
     setSelectedPartId(null);
+    setSelectedPartIds([]);
   };
 
   const canvasSize = useMemo(() => {
@@ -115,6 +134,7 @@ export function SchematicEditor() {
   ) => {
     commit(snapshot);
     setSelectedPartId(null);
+    setSelectedPartIds([]);
     setSelectedWireId(null);
     setLoadedPresetId(options.presetId);
     setOutputNode(options.outputNode);
@@ -199,7 +219,20 @@ export function SchematicEditor() {
 
   const handleMovePart = (id: string, x: number, y: number) => {
     if (dragStartSnapshotRef.current === null) dragStartSnapshotRef.current = history.present;
-    setHistory((h) => replacePresent(h, { parts: parts.map((p) => (p.id === id ? { ...p, x: snapToGrid(x), y: snapToGrid(y) } : p)), wires, blocks }));
+    const dragged = parts.find((p) => p.id === id);
+    if (!dragged) return;
+    // Dragging one part of a multi-selection moves the whole selection - leaving the others behind
+    // is the thing that makes box-select feel broken.
+    const moving = selectedPartIds.includes(id) ? new Set(selectedPartIds) : new Set([id]);
+    const dx = snapToGrid(x) - dragged.x;
+    const dy = snapToGrid(y) - dragged.y;
+    setHistory((h) =>
+      replacePresent(h, {
+        parts: parts.map((p) => (moving.has(p.id) ? { ...p, x: p.x + dx, y: p.y + dy } : p)),
+        wires,
+        blocks,
+      }),
+    );
   };
 
   const handleDragEnd = () => {
@@ -218,16 +251,46 @@ export function SchematicEditor() {
       setSelectedWireId(null);
       return;
     }
-    if (!selectedPartId) return;
-    const nextParts = parts.filter((p) => p.id !== selectedPartId);
+    if (selectedPartIds.length === 0) return;
+    const removing = new Set(selectedPartIds);
+    const nextParts = parts.filter((p) => !removing.has(p.id));
     const remainingBlockIds = new Set(nextParts.map((p) => p.blockId).filter((id): id is string => id !== undefined));
     commit({
       parts: nextParts,
-      wires: wires.filter((w) => w.a.partId !== selectedPartId && w.b.partId !== selectedPartId),
+      wires: wires.filter((w) => !removing.has(w.a.partId) && !removing.has(w.b.partId)),
       blocks: blocks.filter((b) => remainingBlockIds.has(b.id)),
     });
     setSelectedPartId(null);
+    setSelectedPartIds([]);
   };
+
+  /** Copy/paste and duplicate share one path: both stamp a clone of a selection onto the canvas. */
+  const pasteClone = (source: { parts: PartInstance[]; wires: Wire[] }, sourceIds: string[]) => {
+    pasteCounter += 1;
+    const { parts: newParts, wires: newWires } = cloneSelection(source.parts, source.wires, sourceIds, PASTE_OFFSET, `cp${pasteCounter}`);
+    if (newParts.length === 0) return;
+    commit({ parts: [...parts, ...newParts], wires: [...wires, ...newWires], blocks });
+    const ids = newParts.map((p) => p.id);
+    setSelectedPartIds(ids);
+    setSelectedPartId(ids[0]);
+    setStatus(`${newParts.length}개 부품을 붙여넣었습니다.`);
+  };
+
+  const handleCopy = () => {
+    if (selectedPartIds.length === 0) return;
+    setClipboard({ parts, wires });
+    clipboardIdsRef.current = selectedPartIds;
+    setStatus(`${selectedPartIds.length}개 부품을 복사했습니다.`);
+  };
+
+  const handlePaste = () => {
+    if (!clipboard) return;
+    // The clipboard holds the whole canvas as it was at copy time plus the ids that were selected,
+    // so a paste still works after the originals have been edited or deleted.
+    pasteClone(clipboard, clipboardIdsRef.current);
+  };
+
+  const handleDuplicate = () => pasteClone({ parts, wires }, selectedPartIds);
 
   const handleDeleteBlock = (blockId: string) => {
     commit({
@@ -248,6 +311,9 @@ export function SchematicEditor() {
     onRedo: handleRedo,
     onRotate: handleRotateSelected,
     onDelete: handleDeleteSelected,
+    onCopy: handleCopy,
+    onPaste: handlePaste,
+    onDuplicate: handleDuplicate,
   });
 
   const handleParamChange = (key: string, value: string) => {
@@ -346,7 +412,9 @@ export function SchematicEditor() {
           blocks={blocks}
           canvasSize={canvasSize}
           selectedPartId={selectedPartId}
+          selectedPartIds={selectedPartIds}
           selectedWireId={selectedWireId}
+          onBoxSelect={handleBoxSelect}
           circuitVersion={circuitVersion}
           dockTabs={dockTabs}
           onMovePart={handleMovePart}
