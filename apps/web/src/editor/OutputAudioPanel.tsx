@@ -1,3 +1,5 @@
+import { TEST_SIGNALS } from "../audio/testSignals";
+
 interface OutputAudioPanelProps {
   outputNode: string;
   onOutputNodeChange: (node: string) => void;
@@ -6,6 +8,7 @@ interface OutputAudioPanelProps {
   onInputGainChange: (gain: number) => void;
   hasSample: boolean;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onUseTestSignal: (id: string) => void;
   canRun: boolean;
   onRun: () => void;
   status: string;
@@ -19,6 +22,7 @@ export function OutputAudioPanel({
   onInputGainChange,
   hasSample,
   onFileChange,
+  onUseTestSignal,
   canRun,
   onRun,
   status,
@@ -54,8 +58,20 @@ export function OutputAudioPanel({
           onChange={(e) => onInputGainChange(Number(e.target.value))}
         />
       </div>
+      <div className="field">
+        <div className="field-row">
+          <label>내장 테스트 신호</label>
+        </div>
+        <div className="test-signal-buttons">
+          {TEST_SIGNALS.map((signal) => (
+            <button key={signal.id} type="button" onClick={() => onUseTestSignal(signal.id)} title={signal.hint}>
+              {signal.label}
+            </button>
+          ))}
+        </div>
+      </div>
       <input type="file" accept="audio/*" onChange={onFileChange} />
-      {!hasSample && <p className="canvas-hint">오디오 파일을 먼저 선택해야 시뮬레이션을 실행할 수 있습니다.</p>}
+      {!hasSample && <p className="canvas-hint">위 버튼으로 내장 신호를 고르거나 오디오 파일을 선택하면 시뮬레이션을 실행할 수 있습니다.</p>}
       <div className="run-row">
         <button type="button" className="primary" onClick={onRun} disabled={!canRun}>
           시뮬레이션 실행

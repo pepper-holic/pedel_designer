@@ -4,6 +4,7 @@ import { Waveform, type WaveformTrace } from "../viz/Waveform";
 interface WaveformTabProps {
   traces: WaveformTrace[] | null;
   onPlay: (label: string) => void;
+  onCompare: (label: string) => void;
   cabinetEnabled: boolean;
   onCabinetEnabledChange: (enabled: boolean) => void;
   cabinetVariant: CabinetVariant;
@@ -12,7 +13,7 @@ interface WaveformTabProps {
 
 /** Bottom-dock "파형" tab: plots the last transient-simulation result and lets the user play back
  * any tap point, optionally through a cabinet IR. */
-export function WaveformTab({ traces, onPlay, cabinetEnabled, onCabinetEnabledChange, cabinetVariant, onCabinetVariantChange }: WaveformTabProps) {
+export function WaveformTab({ traces, onPlay, onCompare, cabinetEnabled, onCabinetEnabledChange, cabinetVariant, onCabinetVariantChange }: WaveformTabProps) {
   if (!traces) return <p className="preset-description">시뮬레이션을 실행하면 결과 파형이 여기에 표시됩니다.</p>;
 
   return (
@@ -22,9 +23,14 @@ export function WaveformTab({ traces, onPlay, cabinetEnabled, onCabinetEnabledCh
       </div>
       <div className="tap-buttons">
         {traces.map((t) => (
-          <button key={t.label} type="button" onClick={() => onPlay(t.label)}>
-            ▶ {t.label}
-          </button>
+          <span key={t.label} className="tap-button-pair">
+            <button type="button" onClick={() => onPlay(t.label)}>
+              ▶ {t.label}
+            </button>
+            <button type="button" onClick={() => onCompare(t.label)} title="원본 소리를 먼저 들려준 뒤 이 지점의 소리를 이어서 재생합니다">
+              A/B
+            </button>
+          </span>
         ))}
       </div>
       <div className="field-row" style={{ marginTop: 10 }}>

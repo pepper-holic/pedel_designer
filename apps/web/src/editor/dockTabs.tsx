@@ -73,6 +73,7 @@ export function buildDockTabs({
       <WaveformTab
         traces={audio.waveTraces}
         onPlay={audio.handlePlay}
+        onCompare={audio.handleCompare}
         cabinetEnabled={audio.cabinetEnabled}
         onCabinetEnabledChange={audio.setCabinetEnabled}
         cabinetVariant={audio.cabinetVariant}

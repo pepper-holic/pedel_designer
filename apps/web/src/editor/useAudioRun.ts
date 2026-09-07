@@ -1,10 +1,14 @@
 import { useRef, useState } from "react";
 import { loadSampleFromFile, type LoadedSample } from "../audio/loadSample";
+import { TEST_SIGNALS, generateTestSignal } from "../audio/testSignals";
 import { playSamples } from "../audio/playback";
 import { type CabinetVariant } from "../audio/cabinetIr";
 import { runTransientAsync } from "../core/solver/runTransientAsync";
 import { type WaveformTrace } from "../viz/Waveform";
 import type { GraphNetlist } from "./netlistFromGraph";
+
+/** Silence between the dry and processed halves of an A/B, so the switch is audible as a switch. */
+const AB_GAP_SEC = 0.25;
 
 /** Trace colours, in the order nodes come out of the netlist. */
 const TRACE_COLORS = ["#3c6b2e", "#7c9300", "#8a4a2a", "#191a10"];
@@ -44,6 +48,16 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
     const loaded = await loadSampleFromFile(file, getAudioContext());
     setSample(loaded);
     onStatus(`샘플 로드 완료 (${loaded.samples.length}개 샘플, ${loaded.sampleRate}Hz)`);
+  };
+
+  /** Loads one of the built-in signals so a first simulation needs no audio file at all. */
+  const handleUseTestSignal = (id: string) => {
+    const context = getAudioContext();
+    const samples = generateTestSignal(id, context.sampleRate);
+    if (samples.length === 0) return;
+    setSample({ samples, sampleRate: context.sampleRate });
+    const label = TEST_SIGNALS.find((t) => t.id === id)?.label ?? id;
+    onStatus(`내장 신호 사용: ${label}`);
   };
 
   const handleRun = async () => {
@@ -94,6 +108,23 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
     playSamples(trace.data, sample.sampleRate, getAudioContext(), cabinetEnabled ? cabinetVariant : null);
   };
 
+  /**
+   * Plays the dry input and then a tap, back to back with a short gap.
+   *
+   * Judging a drive circuit means hearing the difference, and doing that by clicking two buttons in
+   * turn leaves a gap long enough to forget what the first one sounded like.
+   */
+  const handleCompare = async (label: string) => {
+    if (!waveTraces || !sample) return;
+    const trace = waveTraces.find((t) => t.label === label);
+    if (!trace) return;
+    const context = getAudioContext();
+    playSamples(sample.samples, sample.sampleRate, context, null);
+    const drySeconds = sample.samples.length / sample.sampleRate;
+    await new Promise((resolve) => setTimeout(resolve, (drySeconds + AB_GAP_SEC) * 1000));
+    playSamples(trace.data, sample.sampleRate, context, cabinetEnabled ? cabinetVariant : null);
+  };
+
   return {
     sample,
     waveTraces,
@@ -106,7 +137,9 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
     setCabinetVariant,
     getAudioContext,
     handleFileChange,
+    handleUseTestSignal,
     handleRun,
     handlePlay,
+    handleCompare,
   };
 }

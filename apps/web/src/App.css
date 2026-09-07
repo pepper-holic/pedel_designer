@@ -688,6 +688,28 @@
   outline-offset: 1px;
 }
 
+.test-signal-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.test-signal-buttons button {
+  padding: 4px 9px;
+  font-size: 0.74rem;
+}
+
+.tap-button-pair {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.tap-button-pair button:last-child {
+  padding-left: 7px;
+  padding-right: 7px;
+  font-size: 0.72rem;
+}
+
 .drc-list {
   list-style: none;
   margin: 0;
