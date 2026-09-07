@@ -19,6 +19,12 @@ export interface TransientOptions {
    * box-car averaging the sub-samples back down to the output rate.
    */
   oversample?: number;
+  /**
+   * Seed each sample's Newton solve with the previous sample's answer (default true). Only affects
+   * how many iterations the solve takes, never the answer it lands on - the flag exists so tests
+   * can show that.
+   */
+  warmStart?: boolean;
 }
 
 export interface TransientResult {
@@ -81,6 +87,8 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
   }
   const slewHistory = new Map<string, number>();
   let nonConvergentSampleCount = 0;
+  const warmStart = options.warmStart ?? true;
+  let previousSolution: Float64Array | undefined;
 
   const totalSteps = n * oversample;
   for (let step = 0; step < totalSteps; step++) {
@@ -91,7 +99,8 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
     const drive = curr + (next - curr) * frac;
     for (const el of drivenElements) el.voltage = drive;
 
-    const { solution, converged } = solveNewton(netlist, topology, history, dt);
+    const { solution, converged } = solveNewton(netlist, topology, history, dt, warmStart ? { initialGuess: previousSolution } : {});
+    if (warmStart) previousSolution = solution;
     if (!converged) nonConvergentSampleCount++;
     applySlewRateLimiting(netlist, topology, solution, slewHistory, dt);
 

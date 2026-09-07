@@ -7,6 +7,15 @@ import type { StampContext } from "../components/context";
 export interface NewtonOptions {
   maxIterations?: number;
   tolerance?: number;
+  /**
+   * Voltages to start iterating from, instead of all-zero.
+   *
+   * In a transient run the operating point moves only slightly between adjacent samples, so the
+   * previous sample's answer is a far better starting point than zero volts - especially for a
+   * clipping stage, where starting from zero means re-crossing the diode knee from scratch every
+   * sample and burning iterations to get back where you already were (docs/ROADMAP.md §6 risk 4).
+   */
+  initialGuess?: Float64Array;
 }
 
 export interface NewtonResult {
@@ -34,7 +43,12 @@ export function solveNewton(
   const maxIterations = options.maxIterations ?? 50;
   const tolerance = options.tolerance ?? 1e-9;
 
-  let guess = new Float64Array(topology.size);
+  // Length is checked rather than assumed: a caller reusing a guess across a topology change would
+  // otherwise silently seed the wrong nodes.
+  let guess =
+    options.initialGuess && options.initialGuess.length === topology.size
+      ? Float64Array.from(options.initialGuess)
+      : new Float64Array(topology.size);
   const limitState = new Map<string, number>();
   for (let iter = 0; iter < maxIterations; iter++) {
     const system = new MnaSystem(topology.size);
