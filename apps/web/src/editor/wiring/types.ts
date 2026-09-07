@@ -2,7 +2,7 @@ import type { CircuitSnapshot } from "../historyStack";
 import type { TerminalRef } from "../types";
 
 /** Coarse grouping for the wiring explorer tree, in the order a builder meets them. */
-export type WiringCategory = "픽업 기본" | "셀렉터" | "코일 스위칭" | "톤 회로" | "온보드 액티브";
+export type WiringCategory = "픽업 기본" | "셀렉터" | "코일 스위칭" | "톤 회로" | "베이스" | "온보드 액티브";
 
 /**
  * A guitar-wiring preset, stored as a **part-level** canvas snapshot rather than a netlist.

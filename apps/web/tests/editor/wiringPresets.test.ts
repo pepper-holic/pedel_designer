@@ -219,3 +219,77 @@ describe("트레블 블리드", () => {
     expect(trebleTilt("wiring-treble-bleed-cap-series-r")).toBeGreaterThan(trebleTilt("wiring-treble-bleed-cap-parallel-r"));
   });
 });
+
+/** Frequency and depth of the deepest dip in a response - what a notch filter is characterised by. */
+function deepestNotch(points: { frequencyHz: number; magnitudeDb: number }[]) {
+  const worst = points.reduce((w, p) => (p.magnitudeDb < w.magnitudeDb ? p : w));
+  return { hz: worst.frequencyHz, db: worst.magnitudeDb };
+}
+
+describe("50s 배선 vs 모던 배선", () => {
+  it("볼륨을 내렸을 때 50s 배선이 고음을 더 남긴다", () => {
+    const treble = (id: string) => bandDb(sweepPoints(id), 3000, 10000);
+    const mid = (id: string) => bandDb(sweepPoints(id), 200, 500);
+    // Same pickup, pots, cap and load - only which lug the tone circuit hangs off differs.
+    expect(treble("wiring-50s-tone-feed")).toBeGreaterThan(treble("wiring-modern-tone-feed") + 1);
+    // The mids are essentially untouched, so this really is a treble difference and not just level.
+    expect(Math.abs(mid("wiring-50s-tone-feed") - mid("wiring-modern-tone-feed"))).toBeLessThan(1);
+  });
+});
+
+describe("스위치 응용 배선", () => {
+  it("킬 스위치를 닫으면 출력이 사실상 사라진다", () => {
+    const open = bandDb(sweepPoints("wiring-kill-switch-noload-tone"), 200, 2000);
+    const closed = bandDb(sweepPoints("wiring-kill-switch-noload-tone", { SW_KILL: { switchPosition: 1 } }), 200, 2000);
+    expect(closed).toBeLessThan(open - 100);
+  });
+
+  it("노로드 스위치를 열면 톤 회로가 픽업에서 완전히 떨어져 고음이 돌아온다", () => {
+    const engaged = { TONE: { position: 0.3 } };
+    const withTone = bandDb(sweepPoints("wiring-kill-switch-noload-tone", engaged), 3000, 10000);
+    const noLoad = bandDb(sweepPoints("wiring-kill-switch-noload-tone", { ...engaged, SW_NOLOAD: { switchPosition: 0 } }), 3000, 10000);
+    expect(noLoad).toBeGreaterThan(withTone + 10);
+  });
+
+  it("로터리는 캡이 커질수록 더 깎고, 마지막 단은 톤 회로를 끊어 가장 덜 깎는다", () => {
+    const cut = (position: number) => bandDb(sweepPoints("wiring-rotary-tone-caps", { SEL_CAP: { switchPosition: position } }), 1000, 4000);
+    expect(cut(4)).toBeLessThan(cut(0)); // 100nF cuts more than 3.3nF
+    expect(cut(5)).toBeGreaterThan(cut(0)); // the empty detent cuts least of all
+  });
+});
+
+describe("온보드 액티브", () => {
+  it("자이레이터가 같은 값의 실제 인덕터와 같은 노치를 만든다", () => {
+    const real = deepestNotch(sweepPoints("wiring-mid-cut-inductor"));
+    const gyrator = deepestNotch(sweepPoints("wiring-mid-cut-gyrator"));
+    // L = R1 * R2 * Cg is the whole claim behind replacing a bulky audio inductor with an op-amp.
+    expect(gyrator.hz).toBeGreaterThan(real.hz * 0.95);
+    expect(gyrator.hz).toBeLessThan(real.hz * 1.05);
+    expect(Math.abs(gyrator.db - real.db)).toBeLessThan(2);
+  });
+
+  it("2밴드 EQ는 노브 중앙에서 평탄하고 각 밴드가 서로를 건드리지 않는다", () => {
+    const low = (ov: Record<string, Record<string, number>>) => bandDb(sweepPoints("wiring-active-2band-eq", ov), 50, 150);
+    const high = (ov: Record<string, Record<string, number>>) => bandDb(sweepPoints("wiring-active-2band-eq", ov), 5000, 15000);
+
+    expect(Math.abs(low({}))).toBeLessThan(0.5);
+    expect(Math.abs(high({}))).toBeLessThan(0.5);
+
+    // Bass knob moves the lows a lot and leaves the highs where they were.
+    expect(low({ BASS: { position: 1 } })).toBeGreaterThan(12);
+    expect(low({ BASS: { position: 0 } })).toBeLessThan(-12);
+    expect(Math.abs(high({ BASS: { position: 1 } }))).toBeLessThan(2);
+
+    // ...and the treble knob does the mirror image.
+    expect(high({ TREBLE: { position: 1 } })).toBeGreaterThan(12);
+    expect(high({ TREBLE: { position: 0 } })).toBeLessThan(-12);
+    expect(Math.abs(low({ TREBLE: { position: 1 } }))).toBeLessThan(2);
+  });
+
+  it("액티브 픽업은 긴 케이블에도 응답이 평탄하지만 패시브는 크게 무너진다", () => {
+    const tilt = (id: string) => bandDb(sweepPoints(id), 5000, 15000) - bandDb(sweepPoints(id), 200, 500);
+    // Same 900pF cable and 1M load on both - only the pickup's output impedance differs.
+    expect(Math.abs(tilt("wiring-active-pickup-long-cable"))).toBeLessThan(3);
+    expect(tilt("wiring-passive-pickup-long-cable")).toBeLessThan(-15);
+  });
+});
