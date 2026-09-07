@@ -1,10 +1,41 @@
 import react from '@vitejs/plugin-react'
 // vitest/config rather than vite: the `test` block is not part of Vite's own config type.
 import { defineConfig } from 'vitest/config'
+import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    // Everything this app does - solving, plotting, exporting - runs in the browser with no server
+    // call at any point, so it already works offline once the assets are cached. The service worker
+    // is what turns that from "happens to work" into installable and reliable.
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.svg', 'icons.svg'],
+      manifest: {
+        name: 'Pedal Designer',
+        short_name: 'Pedal Designer',
+        description:
+          '기타 이펙트 페달 회로를 조합하고 시뮬레이션하고 BOM/PCB 넷리스트까지 뽑아내는 웹 기반 스키매틱 에디터',
+        lang: 'ko',
+        theme_color: '#191a10',
+        background_color: '#f2f3e8',
+        display: 'standalone',
+        start_url: '/',
+        icons: [
+          // The SVG favicon doubles as the app icon: it is the only mark this project has, and one
+          // maskable SVG scales to every launcher size without shipping a pile of PNGs.
+          { src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' },
+        ],
+      },
+      workbox: {
+        // The transient solver ships as its own worker chunk, so .js has to be precached for the
+        // simulation to work offline - not just the main bundle.
+        globPatterns: ['**/*.{js,css,html,svg}'],
+      },
+    }),
+  ],
   test: {
     coverage: {
       provider: 'v8',
