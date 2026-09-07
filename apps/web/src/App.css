@@ -665,6 +665,61 @@
   font-weight: 600;
 }
 
+.drc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.drc-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  border-left: 3px solid transparent;
+  background: var(--bg-inset);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.drc-error {
+  border-left-color: #c0392b;
+}
+
+.drc-warning {
+  border-left-color: #c7822b;
+}
+
+.drc-badge {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.drc-error .drc-badge {
+  color: #c0392b;
+}
+
+.drc-warning .drc-badge {
+  color: #c7822b;
+}
+
+.drc-message {
+  flex: 1;
+  min-width: 0;
+}
+
+.drc-jump {
+  flex: none;
+  padding: 2px 8px;
+  font-size: 0.72rem;
+}
+
 .sweep-legend {
   display: flex;
   flex-wrap: wrap;

@@ -14,6 +14,7 @@ import { BottomDock } from "./BottomDock";
 import { FrequencyResponseTab, type AcStatus } from "./FrequencyResponseTab";
 import { WaveformTab } from "./WaveformTab";
 import { SweepTab } from "./SweepTab";
+import { DrcPanel } from "./DrcPanel";
 import { ThdPanel } from "./ThdPanel";
 import { MonteCarloPanel } from "./MonteCarloPanel";
 import { ChainPanel } from "./ChainPanel";
@@ -357,6 +358,12 @@ export function SchematicEditor() {
   });
 
   const dockTabs = [
+    {
+      key: "drc",
+      label: "검사",
+      helpText: "접지 누락, 떠 있는 단자처럼 회로가 동작하지 않는 원인을 찾아 알려줍니다. 분석 결과가 비어 있으면 먼저 여기를 보세요.",
+      content: <DrcPanel parts={parts} wires={wires} outputNode={outputNode} onSelectPart={handleSelectPart} />,
+    },
     {
       key: "response",
       label: `주파수 응답${outputNode ? ` (→ ${outputNode})` : ""}`,
