@@ -17,10 +17,14 @@ export function stampInductor(el: InductorElement, ctx: StampContext): void {
     return;
   }
 
-  const geq = ctx.dt / el.inductance;
+  // Trapezoidal halves the conductance and carries the previous voltage as well as the previous
+  // current - the dual of the capacitor case above it.
+  const trapezoidal = ctx.integration === "trapezoidal";
+  const geq = trapezoidal ? ctx.dt / (2 * el.inductance) : ctx.dt / el.inductance;
   const prevCurrent = ctx.history.get(el.id) ?? 0;
+  const prevVoltage = trapezoidal ? (ctx.history.get(`${el.id}#v`) ?? 0) : 0;
   ctx.system.stampConductance(p, n, geq);
-  ctx.system.stampCurrentSource(n, p, prevCurrent);
+  ctx.system.stampCurrentSource(n, p, prevCurrent + geq * prevVoltage);
 }
 
 export function updateInductorHistory(
@@ -29,10 +33,16 @@ export function updateInductorHistory(
   history: Map<string, number>,
   dt: number,
   solution: Float64Array,
+  integration: "backwardEuler" | "trapezoidal" = "backwardEuler",
 ): void {
   if (dt <= 0) return;
   const voltage = voltageAt(topology, solution, el.nodes[0]) - voltageAt(topology, solution, el.nodes[1]);
-  const geq = dt / el.inductance;
+  const trapezoidal = integration === "trapezoidal";
+  const geq = trapezoidal ? dt / (2 * el.inductance) : dt / el.inductance;
   const prevCurrent = history.get(el.id) ?? 0;
-  history.set(el.id, geq * voltage + prevCurrent);
+  const prevVoltage = trapezoidal ? (history.get(`${el.id}#v`) ?? 0) : 0;
+  history.set(el.id, geq * voltage + prevCurrent + (trapezoidal ? geq * prevVoltage : 0));
+  // Tracked on every step regardless of method, for the same reason the capacitor's `#i` is - see
+  // the comment there.
+  history.set(`${el.id}#v`, voltage);
 }

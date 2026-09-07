@@ -3,6 +3,7 @@ import { voltageAt } from "./solution";
 import { solveNewton } from "./newton";
 import { updateCapacitorHistory, updateCoupledInductorsHistory, updateInductorHistory, updateOpAmpHistory } from "../components";
 import type { Netlist, NodeId, VoltageSourceElement } from "./types";
+import type { IntegrationMethod } from "../components/context";
 
 export interface TransientOptions {
   /** Element id of the input voltage source driven sample-by-sample by `inputSamples`. */
@@ -25,6 +26,12 @@ export interface TransientOptions {
    * can show that.
    */
   warmStart?: boolean;
+  /**
+   * Discretisation for capacitors and inductors. Defaults to backward Euler, which never rings on a
+   * stiff user-built circuit; trapezoidal is second-order and much closer to the real response at a
+   * given timestep (docs/ROADMAP.md §6 risk 3).
+   */
+  integration?: IntegrationMethod;
 }
 
 export interface TransientResult {
@@ -88,6 +95,7 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
   const slewHistory = new Map<string, number>();
   let nonConvergentSampleCount = 0;
   const warmStart = options.warmStart ?? true;
+  const integration: IntegrationMethod = options.integration ?? "backwardEuler";
   let previousSolution: Float64Array | undefined;
 
   const totalSteps = n * oversample;
@@ -99,7 +107,18 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
     const drive = curr + (next - curr) * frac;
     for (const el of drivenElements) el.voltage = drive;
 
-    const { solution, converged } = solveNewton(netlist, topology, history, dt, warmStart ? { initialGuess: previousSolution } : {});
+    // Trapezoidal needs a consistent i(t-dt) for every reactive element, and at step 0 that history
+    // is empty - defaulting it to zero silently assumes nothing was happening before the run
+    // started, which is wrong the instant the input is not already zero (e.g. a hard step). That
+    // mismatch shows up as a single badly-off first sample rather than the improved accuracy
+    // trapezoidal is there for. Real simulators sidestep exactly this with a backward-Euler
+    // "startup" step; using it here only for step 0 fixes the first sample without touching the
+    // steady accuracy gain over the rest of the run.
+    const stepIntegration: IntegrationMethod = step === 0 ? "backwardEuler" : integration;
+    const { solution, converged } = solveNewton(netlist, topology, history, dt, {
+      integration: stepIntegration,
+      ...(warmStart ? { initialGuess: previousSolution } : {}),
+    });
     if (warmStart) previousSolution = solution;
     if (!converged) nonConvergentSampleCount++;
     applySlewRateLimiting(netlist, topology, solution, slewHistory, dt);
@@ -109,8 +128,8 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
     }
 
     for (const element of netlist.elements) {
-      if (element.type === "capacitor") updateCapacitorHistory(element, topology, history, solution);
-      if (element.type === "inductor") updateInductorHistory(element, topology, history, dt, solution);
+      if (element.type === "capacitor") updateCapacitorHistory(element, topology, history, solution, dt, stepIntegration);
+      if (element.type === "inductor") updateInductorHistory(element, topology, history, dt, solution, stepIntegration);
       if (element.type === "coupledInductors") updateCoupledInductorsHistory(element, topology, history, dt, solution);
       if (element.type === "opamp") updateOpAmpHistory(element, topology, history, solution);
     }

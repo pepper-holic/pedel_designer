@@ -47,6 +47,8 @@ export function EditorSidebarRight(props: EditorSidebarRightProps) {
         hasSample={audio.sample !== null}
         onFileChange={audio.handleFileChange}
         onUseTestSignal={audio.handleUseTestSignal}
+        useTrapezoidal={audio.useTrapezoidal}
+        onUseTrapezoidalChange={audio.setUseTrapezoidal}
         canRun={audio.sample !== null && !!graph.inputSourceId && !audio.isSimulating}
         onRun={audio.handleRun}
         status={props.status}

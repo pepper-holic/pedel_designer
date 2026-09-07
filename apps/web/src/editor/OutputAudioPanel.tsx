@@ -9,6 +9,8 @@ interface OutputAudioPanelProps {
   hasSample: boolean;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onUseTestSignal: (id: string) => void;
+  useTrapezoidal: boolean;
+  onUseTrapezoidalChange: (value: boolean) => void;
   canRun: boolean;
   onRun: () => void;
   status: string;
@@ -23,6 +25,8 @@ export function OutputAudioPanel({
   hasSample,
   onFileChange,
   onUseTestSignal,
+  useTrapezoidal,
+  onUseTrapezoidalChange,
   canRun,
   onRun,
   status,
@@ -69,6 +73,18 @@ export function OutputAudioPanel({
             </button>
           ))}
         </div>
+      </div>
+      <div className="field-row">
+        <label>
+          <input type="checkbox" checked={useTrapezoidal} onChange={(e) => onUseTrapezoidalChange(e.target.checked)} />{" "}
+          정확한 적분(trapezoidal) 사용
+        </label>
+        <span
+          className="info-tip"
+          title="기본값은 어떤 회로에도 안정적인 backward Euler입니다. 이 옵션을 켜면 특히 고음역대에서 더 정확한 결과를 주지만, 피드백이 강한 일부 회로에서는 진동이 생길 수 있습니다."
+        >
+          ⓘ
+        </span>
       </div>
       <input type="file" accept="audio/*" onChange={onFileChange} />
       {!hasSample && <p className="canvas-hint">위 버튼으로 내장 신호를 고르거나 오디오 파일을 선택하면 시뮬레이션을 실행할 수 있습니다.</p>}

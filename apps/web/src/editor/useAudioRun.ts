@@ -34,6 +34,10 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
   const [isSimulating, setIsSimulating] = useState(false);
   const [cabinetEnabled, setCabinetEnabled] = useState(false);
   const [cabinetVariant, setCabinetVariant] = useState<CabinetVariant>("brightCab4x12");
+  // Off by default: backward Euler is unconditionally stable on any user-built topology, including
+  // a tight feedback loop through two diodes. Trapezoidal is more accurate but can ring on exactly
+  // that kind of stiff circuit, so it is an opt-in rather than a silent default switch.
+  const [useTrapezoidal, setUseTrapezoidal] = useState(false);
   const audioContextRef = useRef<AudioContext | null>(null);
 
   const getAudioContext = () => {
@@ -78,6 +82,7 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
         // period would otherwise alias away (docs/ROADMAP.md §6 risk 2). THD/Monte Carlo/chain use
         // short synthesized tones and stay at the default (no oversampling) - not worth the 4x cost.
         oversample: 4,
+        ...(useTrapezoidal ? { integration: "trapezoidal" as const } : {}),
       });
       setWaveTraces(
         Array.from(traces.entries()).map(([label, data], i) => ({
@@ -135,6 +140,8 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
     setCabinetEnabled,
     cabinetVariant,
     setCabinetVariant,
+    useTrapezoidal,
+    setUseTrapezoidal,
     getAudioContext,
     handleFileChange,
     handleUseTestSignal,

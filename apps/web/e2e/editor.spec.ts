@@ -18,9 +18,6 @@ async function loadPreset(page: Page, name: string | RegExp, group?: string) {
 
 const partsOnCanvas = (page: Page) => page.locator("g[data-part-id]");
 
-/** The analysis dock is a real tablist, so its tabs are reached by the tab role, not by button. */
-const dockTab = (page: Page, name: string) => page.getByRole("tab", { name });
-
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
   // Each test starts from a clean slate: the editor autosaves to localStorage, so without this a

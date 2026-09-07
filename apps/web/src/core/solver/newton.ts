@@ -2,7 +2,7 @@ import { MnaSystem } from "./mna";
 import type { CircuitTopology } from "./topology";
 import type { Netlist } from "./types";
 import { stampElement } from "../components";
-import type { StampContext } from "../components/context";
+import type { IntegrationMethod, StampContext } from "../components/context";
 
 export interface NewtonOptions {
   maxIterations?: number;
@@ -16,6 +16,8 @@ export interface NewtonOptions {
    * sample and burning iterations to get back where you already were (docs/ROADMAP.md §6 risk 4).
    */
   initialGuess?: Float64Array;
+  /** Passed through to the reactive companion models - see StampContext. */
+  integration?: IntegrationMethod;
 }
 
 export interface NewtonResult {
@@ -52,7 +54,7 @@ export function solveNewton(
   const limitState = new Map<string, number>();
   for (let iter = 0; iter < maxIterations; iter++) {
     const system = new MnaSystem(topology.size);
-    const ctx: StampContext = { system, topology, solutionGuess: guess, history, dt, limitState };
+    const ctx: StampContext = { system, topology, solutionGuess: guess, history, dt, limitState, integration: options.integration };
     for (const element of netlist.elements) {
       stampElement(element, ctx);
     }
