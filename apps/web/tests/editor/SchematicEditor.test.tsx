@@ -250,3 +250,78 @@ describe("SchematicEditor", () => {
     expect(within(canvasPanel).queryByText("D1a")).not.toBeInTheDocument();
   });
 });
+
+describe("SchematicEditor keyboard navigation", () => {
+  const transformOf = (canvasPanel: HTMLElement, id: string) =>
+    canvasPanel.querySelector(`g[data-part-id="${id}"]`)!.getAttribute("transform")!;
+
+  const idsOnCanvas = (canvasPanel: HTMLElement) =>
+    Array.from(canvasPanel.querySelectorAll("g[data-part-id]")).map((g) => g.getAttribute("data-part-id")!);
+
+  it("moves the selected part with the arrow keys", async () => {
+    const user = userEvent.setup();
+    render(<SchematicEditor />);
+
+    await user.click(screen.getByRole("button", { name: /^저항$/ }));
+    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const [id] = idsOnCanvas(canvasPanel);
+
+    // Nothing selected yet: the first arrow press should pick a part rather than doing nothing.
+    await user.keyboard("{ArrowRight}");
+    const afterFirst = transformOf(canvasPanel, id);
+
+    await user.keyboard("{ArrowRight}");
+    expect(transformOf(canvasPanel, id)).not.toBe(afterFirst);
+  });
+
+  it("takes a bigger step when shift is held", async () => {
+    const user = userEvent.setup();
+    render(<SchematicEditor />);
+
+    await user.click(screen.getByRole("button", { name: "커패시터" }));
+    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const [id] = idsOnCanvas(canvasPanel);
+    const xOf = () => Number(transformOf(canvasPanel, id).match(/translate\((-?\d+)/)![1]);
+
+    await user.keyboard("{ArrowRight}"); // selects
+    const start = xOf();
+    await user.keyboard("{ArrowRight}");
+    const smallStep = xOf() - start;
+    await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
+    const bigStep = xOf() - start - smallStep;
+
+    expect(bigStep).toBeGreaterThan(smallStep);
+  });
+
+  it("cycles the selection through the parts with the bracket keys", async () => {
+    const user = userEvent.setup();
+    render(<SchematicEditor />);
+
+    await user.click(screen.getByRole("button", { name: /^저항$/ }));
+    await user.click(screen.getByRole("button", { name: "커패시터" }));
+    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const inspector = () => screen.getByText("선택된 소자").closest<HTMLElement>(".panel")!;
+
+    // The inspector's first description line names the selected part, e.g. "저항 (resistor1)".
+    const selectedName = () => inspector().querySelector(".preset-description")!.textContent;
+    await user.keyboard("]");
+    const first = selectedName();
+    await user.keyboard("]");
+    const second = selectedName();
+
+    expect(second).not.toBe(first);
+    expect(idsOnCanvas(canvasPanel).length).toBe(2);
+  });
+
+  it("clears the selection on Escape", async () => {
+    const user = userEvent.setup();
+    render(<SchematicEditor />);
+
+    await user.click(screen.getByRole("button", { name: /^저항$/ }));
+    await user.keyboard("]");
+    expect(screen.queryByText(/캔버스에서 소자나 배선을 클릭해 선택하세요/)).not.toBeInTheDocument();
+
+    await user.keyboard("{Escape}");
+    expect(screen.getByText(/캔버스에서 소자나 배선을 클릭해 선택하세요/)).toBeInTheDocument();
+  });
+});

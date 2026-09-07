@@ -4,7 +4,7 @@ import type { PartInstance, TerminalRef, Wire } from "./types";
 import { cloneSelection } from "./selection";
 import { netlistFromGraph } from "./netlistFromGraph";
 import { graphFromNetlist, findEquivalentNode } from "./graphFromNetlist";
-import { snapToGrid, rotateClockwise } from "./geometry";
+import { snapToGrid, rotateClockwise, GRID_SIZE } from "./geometry";
 import type { BlockDef } from "./blockDefs";
 import { instantiateBlock } from "./blockInstance";
 import { PartsSidebar } from "./PartsSidebar";
@@ -292,6 +292,37 @@ export function SchematicEditor() {
 
   const handleDuplicate = () => pasteClone({ parts, wires }, selectedPartIds);
 
+  /**
+   * Arrow-key move. With nothing selected it selects the first part instead of moving nothing -
+   * otherwise a keyboard-only user has no way to get a selection started at all.
+   */
+  const handleNudge = (dx: number, dy: number) => {
+    if (selectedPartIds.length === 0) {
+      if (parts.length > 0) handleSelectPart(parts[0].id);
+      return;
+    }
+    const moving = new Set(selectedPartIds);
+    commit({
+      parts: parts.map((p) => (moving.has(p.id) ? { ...p, x: p.x + dx * GRID_SIZE, y: p.y + dy * GRID_SIZE } : p)),
+      wires,
+      blocks,
+    });
+  };
+
+  const handleCycleSelection = (direction: 1 | -1) => {
+    if (parts.length === 0) return;
+    const current = parts.findIndex((p) => p.id === selectedPartId);
+    // Wraps, so the list is a loop rather than something you can fall off either end of.
+    const next = (current + direction + parts.length) % parts.length;
+    handleSelectPart(parts[current === -1 ? 0 : next].id);
+  };
+
+  const handleDeselect = () => {
+    setSelectedPartId(null);
+    setSelectedPartIds([]);
+    setSelectedWireId(null);
+  };
+
   const handleDeleteBlock = (blockId: string) => {
     commit({
       parts: parts.filter((p) => p.blockId !== blockId),
@@ -314,6 +345,9 @@ export function SchematicEditor() {
     onCopy: handleCopy,
     onPaste: handlePaste,
     onDuplicate: handleDuplicate,
+    onNudge: handleNudge,
+    onCycleSelection: handleCycleSelection,
+    onDeselect: handleDeselect,
   });
 
   const handleParamChange = (key: string, value: string) => {
