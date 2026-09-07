@@ -33,6 +33,7 @@ import { runAcAnalysis, logFrequencySweep, type AcPoint } from "../core/solver/a
 import { type WaveformTrace } from "../viz/Waveform";
 import { canRedo, canUndo, commitPrevious, createHistory, pushSnapshot, redo, replacePresent, undo, type CircuitSnapshot } from "./historyStack";
 import { loadCircuitFromStorage, saveCircuitToStorage, CURRENT_SCHEMA_VERSION } from "./circuitStorage";
+import { circuitToFileText, parseCircuitFile } from "./circuitFile";
 
 let partCounter = 0;
 let blockCounter = 0;
@@ -289,6 +290,38 @@ export function SchematicEditor() {
     commit({ parts: parts.map((p) => (p.id === selectedPart.id ? { ...p, params: { ...p.params, ...paramsOverride } } : p)), wires, blocks });
   };
 
+  const handleSaveCircuitFile = () => {
+    const text = circuitToFileText({ schemaVersion: CURRENT_SCHEMA_VERSION, parts, wires, blocks, outputNode, inputGain });
+    const url = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `pedal-designer-circuit-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setStatus("회로를 파일로 저장했습니다.");
+  };
+
+  const handleOpenCircuitFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // let the same file be picked again after a failed attempt
+    if (!file) return;
+    const { circuit, error } = parseCircuitFile(await file.text());
+    if (!circuit) {
+      setStatus(`불러오기 실패: ${error}`);
+      return;
+    }
+    commit({ parts: circuit.parts, wires: circuit.wires, blocks: circuit.blocks });
+    setSelectedPartId(null);
+    setSelectedWireId(null);
+    setLoadedPresetId(null);
+    setOutputNode(circuit.outputNode);
+    setInputGain(circuit.inputGain);
+    setWaveTraces(null);
+    setMonteCarloResult(null);
+    setCircuitVersion((v) => v + 1);
+    setStatus(`회로를 불러왔습니다: ${file.name}`);
+  };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -433,6 +466,13 @@ export function SchematicEditor() {
           ↷ 다시 실행
         </button>
         <div className="spacer" />
+        <button type="button" onClick={handleSaveCircuitFile} disabled={parts.length === 0} title="지금 회로를 .json 파일로 내려받습니다">
+          회로 저장
+        </button>
+        <label className="toolbar-file-button" title="이 앱에서 저장한 .json 회로 파일을 불러옵니다">
+          회로 열기
+          <input type="file" accept="application/json,.json" onChange={handleOpenCircuitFile} className="visually-hidden" />
+        </label>
         <button type="button" onClick={handleNewCircuit} disabled={parts.length === 0} title="캔버스를 비우고 처음부터 다시 시작합니다">
           새 회로
         </button>

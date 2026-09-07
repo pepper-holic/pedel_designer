@@ -665,6 +665,29 @@
   font-weight: 600;
 }
 
+/* A file input styled as a toolbar button - the native control cannot be restyled, so the real
+   input is visually hidden inside this label. */
+.toolbar-file-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.toolbar-file-button:hover {
+  border-color: var(--accent-dim);
+}
+
+.toolbar-file-button:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
 .drc-list {
   list-style: none;
   margin: 0;
