@@ -11,6 +11,7 @@ import { lpb1StyleBoostPreset } from "./lpb1-style-boost";
 import { rangemasterStyleTrebleBoostPreset } from "./rangemaster-style-treble-boost";
 import { distortionPlusStylePreset } from "./distortion-plus-style";
 import { octaveFuzzStylePreset } from "./octave-fuzz-style";
+import { tonebenderMk3StyleFuzzPreset } from "./tonebender-mk3-style-fuzz";
 
 /** Presets re-derived from publicly documented DIY circuit topologies - see docs/plan-circuit-archive.md. */
 export const archivePresets: PedalPreset[] = [
@@ -26,6 +27,7 @@ export const archivePresets: PedalPreset[] = [
   rangemasterStyleTrebleBoostPreset,
   distortionPlusStylePreset,
   octaveFuzzStylePreset,
+  tonebenderMk3StyleFuzzPreset,
 ];
 
 export {
@@ -41,4 +43,5 @@ export {
   rangemasterStyleTrebleBoostPreset,
   distortionPlusStylePreset,
   octaveFuzzStylePreset,
+  tonebenderMk3StyleFuzzPreset,
 };
