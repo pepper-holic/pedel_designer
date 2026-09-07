@@ -1,6 +1,6 @@
 import { SILICON_DIODE_1N4148, GENERIC_SILICON_NPN, GENERIC_NCHANNEL_JFET, VINTAGE_SINGLE_COIL } from "../core/library/deviceModels";
 
-export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "jfet" | "opamp" | "vsource" | "ground" | "potentiometer" | "pickup" | "spst" | "spdt" | "dpdt" | "blade3" | "blade5";
+export type PartType = "resistor" | "capacitor" | "inductor" | "diode" | "bjt" | "jfet" | "opamp" | "vsource" | "ground" | "potentiometer" | "pickup" | "spst" | "spdt" | "dpdt" | "blade3" | "blade5" | "rotary6";
 
 export interface TerminalDef {
   id: string;
@@ -164,6 +164,20 @@ export const PART_DEFS: Record<PartType, PartDef> = {
       { id: "in1", dx: 30, dy: -24, label: "1" },
       { id: "in2", dx: 30, dy: 0, label: "2" },
       { id: "in3", dx: 30, dy: 24, label: "3" },
+    ],
+    defaultParams: { switchPosition: 0 },
+  },
+  rotary6: {
+    type: "rotary6",
+    label: "로터리 스위치 (6단)",
+    terminals: [
+      { id: "common", dx: -30, dy: 0, label: "C" },
+      { id: "in1", dx: 30, dy: -30, label: "1" },
+      { id: "in2", dx: 30, dy: -18, label: "2" },
+      { id: "in3", dx: 30, dy: -6, label: "3" },
+      { id: "in4", dx: 30, dy: 6, label: "4" },
+      { id: "in5", dx: 30, dy: 18, label: "5" },
+      { id: "in6", dx: 30, dy: 30, label: "6" },
     ],
     defaultParams: { switchPosition: 0 },
   },

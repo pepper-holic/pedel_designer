@@ -36,6 +36,8 @@ function kicadSymbol(part: PartInstance): KicadSymbol {
       return { lib: "Switch", part: "SW_SPDT" };
     case "dpdt":
       return { lib: "Switch", part: "SW_DPDT_x2" };
+    case "rotary6":
+      return { lib: "Connector", part: "Conn_01x07" };
     case "blade3":
     case "blade5":
       // KiCad has no standard guitar blade-selector symbol, so the lugs go out as a connector of

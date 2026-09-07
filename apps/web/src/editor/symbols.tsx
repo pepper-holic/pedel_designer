@@ -105,9 +105,9 @@ function DpdtSymbol({ position }: { position: number }) {
 /** Blade selector: contacts down the right-hand side with the wiper resting on the selected one,
  * or halfway between two when the detent bridges both. Drawn from the live position so the
  * schematic shows which pickups are actually selected. */
-function BladeSymbol({ position, contactYs }: { position: number; contactYs: number[] }) {
-  const primary = Math.floor(position / 2);
-  const bridges = position % 2 === 1;
+function BladeSymbol({ position, contactYs, bridging = true }: { position: number; contactYs: number[]; bridging?: boolean }) {
+  const primary = bridging ? Math.floor(position / 2) : position;
+  const bridges = bridging && position % 2 === 1;
   const targetY = bridges ? (contactYs[primary] + contactYs[primary + 1]) / 2 : contactYs[primary];
   return (
     <>
@@ -230,6 +230,10 @@ export function PartSymbol({ part }: { part: PartInstance }) {
       return <BladeSymbol position={clampPosition(part.params.switchPosition, 3)} contactYs={[-18, 18]} />;
     case "blade5":
       return <BladeSymbol position={clampPosition(part.params.switchPosition, 5)} contactYs={[-24, 0, 24]} />;
+    case "rotary6":
+      return (
+        <BladeSymbol position={clampPosition(part.params.switchPosition, 6)} contactYs={[-30, -18, -6, 6, 18, 30]} bridging={false} />
+      );
     case "diode":
       return <DiodeSymbol />;
     case "bjt":

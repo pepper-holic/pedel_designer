@@ -196,16 +196,19 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
         break;
       }
       case "blade3":
-      case "blade5": {
+      case "blade5":
+      case "rotary6": {
         // A guitar blade selector is not a 1-of-N switch. With N input contacts it has 2N-1
         // detents: the even ones sit on a single contact, the odd ones bridge two adjacent
-        // contacts - which is where the "both pickups" combinations come from.
+        // contacts - which is where the "both pickups" combinations come from. A rotary is the
+        // plain 1-of-N case, so it shares this code with bridging turned off.
+        const bridging = part.type !== "rotary6";
         const inputCount = nodes.length - 1;
-        const positionCount = inputCount * 2 - 1;
+        const positionCount = bridging ? inputCount * 2 - 1 : inputCount;
         const raw = Math.trunc(Number(part.params.switchPosition));
         const position = Number.isFinite(raw) && raw >= 0 && raw < positionCount ? raw : 0;
-        const primary = Math.floor(position / 2);
-        const bridgesNext = position % 2 === 1;
+        const primary = bridging ? Math.floor(position / 2) : position;
+        const bridgesNext = bridging && position % 2 === 1;
         for (let i = 0; i < inputCount; i++) {
           const closed = i === primary || (bridgesNext && i === primary + 1);
           elements.push({
