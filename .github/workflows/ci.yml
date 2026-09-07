@@ -43,3 +43,10 @@ jobs:
 
       - name: Production build
         run: npm run build
+
+      # E2E runs last: it is the slowest gate, and it exercises the build the previous step proved.
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E
+        run: npm run test:e2e

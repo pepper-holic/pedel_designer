@@ -37,6 +37,8 @@ export default defineConfig({
     }),
   ],
   test: {
+    // Playwright owns e2e/; without this vitest picks the specs up and fails on its imports.
+    exclude: ['e2e/**', 'node_modules/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text-summary', 'html'],

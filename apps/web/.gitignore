@@ -25,3 +25,6 @@ dist-ssr
 coverage
 
 dev-dist
+test-results
+playwright-report
+.playwright
