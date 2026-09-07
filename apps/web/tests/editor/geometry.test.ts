@@ -149,7 +149,7 @@ describe("fitView", () => {
     const bounds = [{ minX: 0, minY: 0, maxX: 4000, maxY: 400 }];
     const view = fitView(bounds, viewport, { minZoom: 0.05 });
     expect(view.zoom).toBeLessThan(1);
-    const left = 0 * view.zoom + view.panX;
+    const left = view.panX; // world x = 0 maps straight to the pan offset
     const right = 4000 * view.zoom + view.panX;
     expect(left).toBeGreaterThanOrEqual(0);
     expect(right).toBeLessThanOrEqual(viewport.width);
@@ -168,7 +168,7 @@ describe("fitView", () => {
       ],
       viewport,
     );
-    const left = 0 * view.zoom + view.panX;
+    const left = view.panX; // world x = 0 maps straight to the pan offset
     const right = 2000 * view.zoom + view.panX;
     expect(left).toBeGreaterThanOrEqual(0);
     expect(right).toBeLessThanOrEqual(viewport.width);

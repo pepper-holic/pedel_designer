@@ -41,7 +41,7 @@ function loadInitialState(): { snapshot: CircuitSnapshot; outputNode: string; in
 }
 
 export function SchematicEditor() {
-  const initial = useMemo(loadInitialState, []);
+  const initial = useMemo(() => loadInitialState(), []);
   const [leftTab, setLeftTab] = useState<LeftTab>("parts");
   const [history, setHistory] = useState(() => createHistory(initial.snapshot));
   const [loadedPresetId, setLoadedPresetId] = useState<string | null>(null);

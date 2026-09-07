@@ -196,8 +196,13 @@ export function SchematicCanvas({
 
   const resetView = () => setView({ zoom: 1, panX: 0, panY: 0 });
 
+  // Kept in a ref, and synced in an effect rather than during render, so the auto-fit effect below
+  // can read the current parts without listing them as a dependency - it must fire when the circuit
+  // is replaced, not on every drag. Declared above that effect so it has already run when it fires.
   const partsRef = useRef(parts);
-  partsRef.current = parts;
+  useEffect(() => {
+    partsRef.current = parts;
+  }, [parts]);
 
   // Reads parts through a ref so the auto-fit effect below depends only on the fit signal - it must
   // fire when the circuit is *replaced*, not on every part drag.
