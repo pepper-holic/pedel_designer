@@ -1,8 +1,17 @@
 import { useEffect, useRef } from "react";
 import type { AcPoint } from "../core/solver/ac";
 
+export interface ResponseSeries {
+  label: string;
+  points: AcPoint[];
+  color: string;
+}
+
 interface FrequencyResponseProps {
   points: AcPoint[];
+  /** Draw several curves on one set of axes instead of the single `points` line - used by the
+   * parameter sweep, where the whole point is seeing the knob's positions side by side. */
+  series?: ResponseSeries[];
   width?: number;
   height?: number;
   minDb?: number;
@@ -14,17 +23,19 @@ interface FrequencyResponseProps {
 const LABEL_FREQS = [20, 100, 1000, 10000, 20000];
 
 /** Bode magnitude plot: log-scaled frequency axis, linear dB axis. */
-export function FrequencyResponse({ points, width = 800, height = 260, minDb = -60, maxDb = 20, band }: FrequencyResponseProps) {
+export function FrequencyResponse({ points, series, width = 800, height = 260, minDb = -60, maxDb = 20, band }: FrequencyResponseProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || points.length === 0) return;
+    const curves: ResponseSeries[] = series ?? [{ label: "", points, color: "#3c6b2e" }];
+    const axisPoints = curves.find((c) => c.points.length > 0)?.points;
+    if (!canvas || !axisPoints) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const fMin = points[0].frequencyHz;
-    const fMax = points[points.length - 1].frequencyHz;
+    const fMin = axisPoints[0].frequencyHz;
+    const fMax = axisPoints[axisPoints.length - 1].frequencyHz;
     const logMin = Math.log10(fMin);
     const logMax = Math.log10(fMax);
     const xOf = (f: number) => ((Math.log10(f) - logMin) / (logMax - logMin)) * width;
@@ -61,7 +72,7 @@ export function FrequencyResponse({ points, width = 800, height = 260, minDb = -
     ctx.lineTo(width, yOf(0));
     ctx.stroke();
 
-    if (band && band.minDb.length === points.length) {
+    if (band && !series && band.minDb.length === points.length) {
       ctx.fillStyle = "rgba(60, 107, 46, 0.18)";
       ctx.beginPath();
       points.forEach((p, i) => ctx.lineTo(xOf(p.frequencyHz), yOf(band.maxDb[i])));
@@ -70,17 +81,19 @@ export function FrequencyResponse({ points, width = 800, height = 260, minDb = -
       ctx.fill();
     }
 
-    ctx.strokeStyle = "#3c6b2e";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    points.forEach((p, i) => {
-      const x = xOf(p.frequencyHz);
-      const y = yOf(p.magnitudeDb);
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.stroke();
-  }, [points, width, height, minDb, maxDb, band]);
+    for (const curve of curves) {
+      ctx.strokeStyle = curve.color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      curve.points.forEach((p, i) => {
+        const x = xOf(p.frequencyHz);
+        const y = yOf(p.magnitudeDb);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    }
+  }, [points, series, width, height, minDb, maxDb, band]);
 
   return <canvas ref={canvasRef} width={width} height={height} style={{ width: "100%", display: "block" }} />;
 }

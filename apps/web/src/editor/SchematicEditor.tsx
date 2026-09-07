@@ -13,6 +13,7 @@ import { OutputAudioPanel } from "./OutputAudioPanel";
 import { BottomDock } from "./BottomDock";
 import { FrequencyResponseTab, type AcStatus } from "./FrequencyResponseTab";
 import { WaveformTab } from "./WaveformTab";
+import { SweepTab } from "./SweepTab";
 import { ThdPanel } from "./ThdPanel";
 import { MonteCarloPanel } from "./MonteCarloPanel";
 import { ChainPanel } from "./ChainPanel";
@@ -376,6 +377,12 @@ export function SchematicEditor() {
           onCabinetVariantChange={setCabinetVariant}
         />
       ),
+    },
+    {
+      key: "sweep",
+      label: "노브 스윕",
+      helpText: "톤/볼륨 노브나 셀렉터를 위치별로 돌렸을 때의 주파수 응답을 한 그래프에 겹쳐서 비교합니다.",
+      content: <SweepTab parts={parts} wires={wires} outputNode={outputNode} />,
     },
     {
       key: "thd",
