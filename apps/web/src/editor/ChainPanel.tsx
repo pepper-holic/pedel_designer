@@ -76,6 +76,14 @@ export function ChainPanel({ options, chain, onAddStage, onRemoveStage, onMoveSt
         )}
       </div>
       {chain.length === 0 && <p className="canvas-hint">체인이 비어 있습니다. 위에서 회로를 추가하세요.</p>}
+      {/* The chain hands each stage's output waveform to the next as an ideal source, so it cannot
+          show a later stage loading an earlier one. That is fine between buffered pedals and wrong
+          between a passive guitar and a low-impedance input - see docs/plan-guitar-wiring.md §8. */}
+      <p className="canvas-hint">
+        ⓘ 체인은 각 단의 출력 파형을 다음 단의 이상적 입력으로 넘깁니다 — 뒷단이 앞단에 거는 부하는 반영되지 않습니다. 패시브 기타와
+        첫 페달 사이처럼 로딩이 핵심인 구간은 체인 대신 <strong>같은 캔버스에 함께 배치</strong>하세요(넷리스트가 하나로 합쳐져 상호작용까지
+        계산됩니다). "기타 배선 → 신호 경로" 프리셋이 그 예입니다.
+      </p>
       {status && <p className="status-text">{status}</p>}
     </div>
   );
