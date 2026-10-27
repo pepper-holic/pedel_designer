@@ -1,6 +1,6 @@
 import { buildTopology, nodeOf } from "./topology";
 import { voltageAt } from "./solution";
-import { solveNewton } from "./newton";
+import { solveNewton, NewtonWorkspace, type NewtonResult } from "./newton";
 import { updateCapacitorHistory, updateCoupledInductorsHistory, updateInductorHistory, updateOpAmpHistory } from "../components";
 import type { Netlist, NodeId, VoltageSourceElement } from "./types";
 import type { IntegrationMethod } from "../components/context";
@@ -41,6 +41,9 @@ export interface TransientResult {
    * throwing or producing NaN) but are not a solved operating point, so their accuracy is suspect.
    * Non-zero here means the circuit is numerically stiff for this waveform - worth a UI warning. */
   nonConvergentSampleCount: number;
+  /** Largest last-iteration voltage change among the non-converged samples (0 when there are
+   * none): a few microvolts means "settled to rounding noise", tenths of a volt means oscillating. */
+  worstNonConvergentDelta: number;
 }
 
 /**
@@ -69,6 +72,9 @@ function applySlewRateLimiting(
   }
 }
 
+/** Sub-step counts tried, in order, for a step whose Newton solve does not converge. */
+const SUBSTEPS = [4, 16, 64];
+
 /** Runs a time-domain simulation, sample-by-sample, feeding `inputSamples` through a voltage source. */
 export function runTransient(netlist: Netlist, options: TransientOptions): TransientResult {
   const oversample = options.oversample ?? 1;
@@ -94,10 +100,63 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
   }
   const slewHistory = new Map<string, number>();
   let nonConvergentSampleCount = 0;
+  let worstNonConvergentDelta = 0;
   const warmStart = options.warmStart ?? true;
   const integration: IntegrationMethod = options.integration ?? "backwardEuler";
   let previousSolution: Float64Array | undefined;
+  // One matrix for the whole run, cleared and restamped each Newton iteration.
+  const workspace = new NewtonWorkspace(topology.size);
 
+  /** Stamps-in a solved step: slew limiting, then every reactive element's history. */
+  const commitStep = (solution: Float64Array, stepDt: number, stepIntegration: IntegrationMethod) => {
+    applySlewRateLimiting(netlist, topology, solution, slewHistory, stepDt);
+    for (const element of netlist.elements) {
+      if (element.type === "capacitor") updateCapacitorHistory(element, topology, history, solution, stepDt, stepIntegration);
+      if (element.type === "inductor") updateInductorHistory(element, topology, history, stepDt, solution, stepIntegration);
+      if (element.type === "coupledInductors") updateCoupledInductorsHistory(element, topology, history, stepDt, solution);
+      if (element.type === "opamp") updateOpAmpHistory(element, topology, history, solution);
+    }
+  };
+
+  /**
+   * Retries a step that did not converge as `parts` shorter sub-steps, ramping the input across
+   * them. A smaller step keeps each solve close to where the last one ended, which is what settles
+   * a fuzz whose two junctions otherwise make Newton overshoot back and forth (the standard
+   * simulator remedy: cut the timestep). History is restored first if a finer split is needed.
+   */
+  const subdivide = (fromDrive: number, toDrive: number, guess: Float64Array | undefined, stepIntegration: IntegrationMethod): NewtonResult => {
+    let worstSubstepDelta = 0;
+    const savedHistory = new Map(history);
+    const savedSlew = new Map(slewHistory);
+    let last: NewtonResult | null = null;
+    for (const parts of SUBSTEPS) {
+      history.clear();
+      for (const [k, v] of savedHistory) history.set(k, v);
+      slewHistory.clear();
+      for (const [k, v] of savedSlew) slewHistory.set(k, v);
+      let ok = true;
+      worstSubstepDelta = 0;
+      let g = guess;
+      for (let s = 1; s <= parts; s++) {
+        const d = fromDrive + ((toDrive - fromDrive) * s) / parts;
+        for (const el of drivenElements) el.voltage = d;
+        last = solveNewton(netlist, topology, history, dt / parts, { integration: stepIntegration, workspace, ...(warmStart && g ? { initialGuess: g } : {}) });
+        if (!last.converged) {
+          ok = false;
+          worstSubstepDelta = Math.max(worstSubstepDelta, last.lastDelta ?? Infinity);
+        }
+        commitStep(last.solution, dt / parts, stepIntegration);
+        g = last.solution;
+      }
+      if (ok) return { solution: last!.solution, converged: true };
+    }
+    // Report the step as failed if any of its finest sub-steps failed, with the worst of them.
+    return { solution: last!.solution, converged: false, lastDelta: worstSubstepDelta };
+  };
+
+  let olderSolution: Float64Array | undefined;
+  const predicted = new Float64Array(topology.size);
+  let previousDrive = options.inputSamples.length > 0 ? options.inputSamples[0] : 0;
   const totalSteps = n * oversample;
   for (let step = 0; step < totalSteps; step++) {
     const i = Math.floor(step / oversample);
@@ -115,23 +174,37 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
     // "startup" step; using it here only for step 0 fixes the first sample without touching the
     // steady accuracy gain over the rest of the run.
     const stepIntegration: IntegrationMethod = step === 0 ? "backwardEuler" : integration;
-    const { solution, converged } = solveNewton(netlist, topology, history, dt, {
-      integration: stepIntegration,
-      ...(warmStart ? { initialGuess: previousSolution } : {}),
-    });
-    if (warmStart) previousSolution = solution;
-    if (!converged) nonConvergentSampleCount++;
-    applySlewRateLimiting(netlist, topology, solution, slewHistory, dt);
+    // Start from where the last two samples say this one is heading (linear extrapolation): on a
+    // smooth waveform that lands much closer than the previous sample alone, saving Newton steps.
+    if (warmStart && previousSolution && olderSolution) {
+      for (let k = 0; k < predicted.length; k++) predicted[k] = 2 * previousSolution[k] - olderSolution[k];
+    }
+    let result: NewtonResult;
+    try {
+      result = solveNewton(netlist, topology, history, dt, {
+        integration: stepIntegration,
+        workspace,
+        ...(warmStart ? { initialGuess: previousSolution && olderSolution ? predicted : previousSolution, limitReference: previousSolution } : {}),
+      });
+    } catch {
+      // A degenerate linearisation (e.g. an exponential overflow) - treat like non-convergence.
+      result = { solution: new Float64Array(topology.size), converged: false, lastDelta: Infinity };
+    }
+    let { solution, converged, lastDelta } = result;
+    if (converged) commitStep(solution, dt, stepIntegration);
+    else ({ solution, converged, lastDelta } = subdivide(previousDrive, drive, previousSolution, stepIntegration));
+    previousDrive = drive;
+    if (warmStart) {
+      olderSolution = previousSolution;
+      previousSolution = solution;
+    }
+    if (!converged) {
+      nonConvergentSampleCount++;
+      worstNonConvergentDelta = Math.max(worstNonConvergentDelta, lastDelta ?? Infinity);
+    }
 
     for (const node of options.tapNodes) {
       accum.set(node, accum.get(node)! + voltageAt(topology, solution, node));
-    }
-
-    for (const element of netlist.elements) {
-      if (element.type === "capacitor") updateCapacitorHistory(element, topology, history, solution, dt, stepIntegration);
-      if (element.type === "inductor") updateInductorHistory(element, topology, history, dt, solution, stepIntegration);
-      if (element.type === "coupledInductors") updateCoupledInductorsHistory(element, topology, history, dt, solution);
-      if (element.type === "opamp") updateOpAmpHistory(element, topology, history, solution);
     }
 
     if ((step + 1) % oversample === 0) {
@@ -142,5 +215,5 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
     }
   }
 
-  return { traces, nonConvergentSampleCount };
+  return { traces, nonConvergentSampleCount, worstNonConvergentDelta };
 }

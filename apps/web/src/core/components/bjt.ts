@@ -49,8 +49,9 @@ export function stampBjt(el: BjtElement, ctx: StampContext): void {
   const vbcRaw = sign * (voltageAt(ctx.topology, ctx.solutionGuess, el.nodes[0]) - voltageAt(ctx.topology, ctx.solutionGuess, el.nodes[1]));
 
   const vcrit = criticalVoltage(el.saturationCurrent, el.thermalVoltage);
-  const vbeOld = ctx.limitState.get(`${el.id}:be`) ?? 0;
-  const vbcOld = ctx.limitState.get(`${el.id}:bc`) ?? 0;
+  const ref = ctx.limitReference;
+  const vbeOld = ctx.limitState.get(`${el.id}:be`) ?? (ref ? sign * (voltageAt(ctx.topology, ref, el.nodes[0]) - voltageAt(ctx.topology, ref, el.nodes[2])) : 0);
+  const vbcOld = ctx.limitState.get(`${el.id}:bc`) ?? (ref ? sign * (voltageAt(ctx.topology, ref, el.nodes[0]) - voltageAt(ctx.topology, ref, el.nodes[1])) : 0);
   const vbe = limitVoltage(vbeRaw, vbeOld, el.thermalVoltage, vcrit);
   const vbc = limitVoltage(vbcRaw, vbcOld, el.thermalVoltage, vcrit);
   ctx.limitState.set(`${el.id}:be`, vbe);

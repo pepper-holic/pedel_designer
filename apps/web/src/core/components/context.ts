@@ -24,4 +24,12 @@ export interface StampContext {
   integration?: IntegrationMethod;
   /** Per-element scratch state that persists only across Newton iterations within a single timestep (e.g. diode voltage limiting). */
   limitState: Map<string, number>;
+  /**
+   * The last solved operating point (the previous sample's answer). Junction limiting measures each
+   * junction's first step from here instead of from 0V - otherwise every sample's first step would be
+   * clamped as if the junction were switching on from cold, throwing away the warm start. It is the
+   * *solved* point, not the (extrapolated) starting guess: an extrapolation can overshoot, and
+   * limiting is exactly what keeps that overshoot from blowing up the junction exponential.
+   */
+  limitReference?: Float64Array;
 }

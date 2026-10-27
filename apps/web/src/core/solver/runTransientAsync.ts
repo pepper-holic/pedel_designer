@@ -28,7 +28,7 @@ export function runTransientAsync(netlist: Netlist, options: TransientOptions, s
 
     worker.onmessage = (event: MessageEvent<TransientWorkerResponse>) => {
       const traces = new Map<NodeId, Float64Array>(event.data.traces);
-      resolve({ traces, nonConvergentSampleCount: event.data.nonConvergentSampleCount });
+      resolve({ traces, nonConvergentSampleCount: event.data.nonConvergentSampleCount, worstNonConvergentDelta: event.data.worstNonConvergentDelta });
       worker.terminate();
     };
     worker.onerror = (event) => {

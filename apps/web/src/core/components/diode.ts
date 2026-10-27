@@ -34,7 +34,8 @@ export function stampDiode(el: DiodeElement, ctx: StampContext): void {
   if (useRs) ctx.system.stampConductance(p, junctionP, 1 / el.seriesResistance!);
 
   const vdRaw = voltageAt(ctx.topology, ctx.solutionGuess, junctionNodeId) - voltageAt(ctx.topology, ctx.solutionGuess, el.nodes[1]);
-  const vold = ctx.limitState.get(el.id) ?? 0;
+  const ref = ctx.limitReference;
+  const vold = ctx.limitState.get(el.id) ?? (ref ? voltageAt(ctx.topology, ref, junctionNodeId) - voltageAt(ctx.topology, ref, el.nodes[1]) : 0);
   const vd = limitVoltage(vdRaw, vold, veff, criticalVoltage(is, veff));
   ctx.limitState.set(el.id, vd);
 
