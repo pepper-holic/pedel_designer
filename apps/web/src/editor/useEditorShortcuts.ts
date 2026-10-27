@@ -12,6 +12,8 @@ interface EditorShortcuts {
   onUndo: () => void;
   onRedo: () => void;
   onRotate: () => void;
+  /** M: flip the selected part top-to-bottom. */
+  onMirror: () => void;
   onDelete: () => void;
   onCopy: () => void;
   onPaste: () => void;
@@ -48,6 +50,7 @@ export function useEditorShortcuts({
   onUndo,
   onRedo,
   onRotate,
+  onMirror,
   onDelete,
   onCopy,
   onPaste,
@@ -131,6 +134,7 @@ export function useEditorShortcuts({
         return;
       }
       if (e.key === "r" || e.key === "R") onRotate();
+      if (e.key === "m" || e.key === "M") onMirror();
       if ((e.key === "p" || e.key === "P") && onToggleProbeMode) onToggleProbeMode();
       if (e.key === "Delete" || e.key === "Backspace") onDelete();
     };
@@ -140,6 +144,7 @@ export function useEditorShortcuts({
     onUndo,
     onRedo,
     onRotate,
+    onMirror,
     onDelete,
     onCopy,
     onPaste,

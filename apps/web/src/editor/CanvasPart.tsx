@@ -49,7 +49,7 @@ export function CanvasPart({ part, isSelected, pendingTerminal, onBodyMouseDown,
         onMouseDown={(e) => onBodyMouseDown(part, e)}
         style={{ cursor: "grab", pointerEvents: "all" }}
       />
-      <g transform={`rotate(${part.rotation})`}>
+      <g transform={part.mirror ? `rotate(${part.rotation}) scale(1,-1)` : `rotate(${part.rotation})`}>
         <PartSymbol part={part} />
         {def.terminals.map((t) => (
           <circle

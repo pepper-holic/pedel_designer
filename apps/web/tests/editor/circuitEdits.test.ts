@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { coerceParamValue, deleteBlock, deleteParts, movePartsBy, rotatePart, updatePartParams } from "../../src/editor/circuitEdits";
+import { coerceParamValue, deleteBlock, deleteParts, mirrorPart, movePartsBy, rotatePart, updatePartParams } from "../../src/editor/circuitEdits";
 import type { CircuitSnapshot } from "../../src/editor/historyStack";
 
 const snapshot: CircuitSnapshot = {
@@ -40,6 +40,13 @@ describe("circuitEdits", () => {
   it("rotatePart and updatePartParams touch only their part", () => {
     expect(rotatePart(snapshot, "R1").parts[0].rotation).toBe(90);
     expect(updatePartParams(snapshot, "R1", { resistance: 22 }).parts.map((p) => p.params.resistance)).toEqual([22, 1000, undefined]);
+  });
+
+  it("mirrorPart toggles only its part's mirror flag", () => {
+    const once = mirrorPart(snapshot, "R1");
+    expect(once.parts[0].mirror).toBe(true);
+    expect(once.parts[1].mirror).toBeUndefined();
+    expect(mirrorPart(once, "R1").parts[0].mirror).toBe(false);
   });
 
   it("coerceParamValue parses numbers, clamps to a minimum, and keeps text", () => {

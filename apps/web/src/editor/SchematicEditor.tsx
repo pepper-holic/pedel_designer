@@ -35,7 +35,7 @@ import { useEditorAudio } from "./useEditorAudio";
 import { PlayerView } from "./player/PlayerView";
 import { playerSections } from "./player/playerControls";
 import { pruneProbes } from "./probes";
-import { movePartsBy, deleteParts, deleteWire, deleteBlock, rotatePart, updatePartParams, coerceParamValue } from "./circuitEdits";
+import { movePartsBy, deleteParts, deleteWire, deleteBlock, rotatePart, mirrorPart, updatePartParams, coerceParamValue } from "./circuitEdits";
 import { computeOperatingPoint } from "./operatingPoint";
 import type { Probe } from "./types";
 import { canRedo, canUndo, createHistory, pushSnapshot, redo, undo, type CircuitSnapshot } from "./historyStack";
@@ -233,6 +233,10 @@ export function SchematicEditor() {
     if (selectedPartId) commit(rotatePart(history.present, selectedPartId));
   };
 
+  const handleMirrorSelected = () => {
+    if (selectedPartId) commit(mirrorPart(history.present, selectedPartId));
+  };
+
   const blockActions = useBlockActions({
     present: history.present,
     commit,
@@ -246,6 +250,7 @@ export function SchematicEditor() {
     onUndo: handleUndo,
     onRedo: handleRedo,
     onRotate: handleRotateSelected,
+    onMirror: handleMirrorSelected,
     onDelete: handleDeleteSelected,
     onCopy: clipboard.copy,
     onPaste: clipboard.paste,
@@ -441,6 +446,7 @@ export function SchematicEditor() {
           onParamChange={handleParamChange}
           onApplyModel={handleApplyModel}
           onRotate={handleRotateSelected}
+          onMirror={handleMirrorSelected}
           onDelete={handleDeleteSelected}
           onDeleteBlock={handleDeleteBlock}
           onSelectBlock={selection.selectBlock}

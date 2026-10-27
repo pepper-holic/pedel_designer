@@ -19,6 +19,11 @@ export interface PartInstance {
   y: number;
   /** Degrees clockwise, in 90-degree steps. */
   rotation: Rotation;
+  /** Flips the part top-to-bottom (vertical-axis mirror) before rotation is applied. Meaningful on
+   * parts whose terminals are not symmetric about their horizontal axis (op-amp, BJT, JFET,
+   * potentiometer) - e.g. it swaps an op-amp's drawn +/- side without changing which pin is which.
+   * Undefined means false; omitted from saved data when false so old files need no migration. */
+  mirror?: boolean;
   params: Record<string, number | string>;
   /** Only set on voltage sources - see PartRole. Undefined means "unclassified", which the input
    * source lookup treats as a possible audio input for backward compatibility. */

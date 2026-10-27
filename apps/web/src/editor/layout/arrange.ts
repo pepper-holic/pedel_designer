@@ -3,6 +3,7 @@ import { PART_DEFS } from "../partDefs";
 import { snapToGrid } from "../geometry";
 import { barycenterRows, layerDepths, type Adjacency } from "./layered";
 import { spineLayout } from "./spine";
+import { optimizePartOrientations } from "./orientation";
 import type { CircuitSnapshot } from "../historyStack";
 import type { PartInstance } from "../types";
 
@@ -177,5 +178,5 @@ export function arrangeParts(snapshot: CircuitSnapshot, inputPartId: string | nu
     const o = moved.get(owner)!;
     return { ...p, x: o.x, y: o.y + GROUND_OFFSET_Y };
   });
-  return { ...snapshot, parts: nextParts };
+  return { ...snapshot, parts: optimizePartOrientations(nextParts, snapshot.wires) };
 }

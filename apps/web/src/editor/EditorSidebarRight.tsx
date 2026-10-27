@@ -15,6 +15,7 @@ interface EditorSidebarRightProps {
   onParamChange: (key: string, value: string) => void;
   onApplyModel: (paramsOverride: Record<string, number | string>) => void;
   onRotate: () => void;
+  onMirror: () => void;
   onDelete: () => void;
   onDeleteBlock: (blockId: string) => void;
   probePanel: React.ComponentProps<typeof ProbePanel>;
@@ -61,6 +62,7 @@ export function EditorSidebarRight(props: EditorSidebarRightProps) {
           onParamChange={props.onParamChange}
           onApplyModel={props.onApplyModel}
           onRotate={props.onRotate}
+          onMirror={props.onMirror}
           onDelete={props.onDelete}
           onDeleteBlock={props.onDeleteBlock}
         />

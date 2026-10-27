@@ -19,10 +19,12 @@ export function rotateOffset(dx: number, dy: number, degrees: number): { x: numb
   return { x: dx * cos - dy * sin, y: dx * sin + dy * cos };
 }
 
-/** World-space position of a part's terminal, accounting for its rotation. */
+/** World-space position of a part's terminal, accounting for its mirror (applied first, so it flips
+ * the part's own top/bottom before rotation turns the whole thing) and its rotation. */
 export function terminalPosition(part: PartInstance, terminalId: string): { x: number; y: number } {
   const terminal = PART_DEFS[part.type].terminals.find((t) => t.id === terminalId)!;
-  const rotated = rotateOffset(terminal.dx, terminal.dy, part.rotation);
+  const dy = part.mirror ? -terminal.dy : terminal.dy;
+  const rotated = rotateOffset(terminal.dx, dy, part.rotation);
   return { x: part.x + rotated.x, y: part.y + rotated.y };
 }
 

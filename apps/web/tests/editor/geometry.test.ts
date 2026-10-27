@@ -41,6 +41,21 @@ describe("terminalPosition", () => {
     expect(pos.x).toBeCloseTo(100, 9);
     expect(pos.y).toBeCloseTo(130, 9);
   });
+
+  it("mirrors the terminal's dy before rotating, flipping it top-to-bottom", () => {
+    // opamp inMinus is at local (-35, 15); mirrored and unrotated it should land above center instead.
+    const part: PartInstance = { id: "U1", type: "opamp", x: 100, y: 100, rotation: 0, mirror: true, params: {} };
+    const pos = terminalPosition(part, "inMinus");
+    expect(pos.x).toBeCloseTo(65, 9);
+    expect(pos.y).toBeCloseTo(85, 9);
+  });
+
+  it("composes mirror and rotation: mirror first, then rotate the flipped offset", () => {
+    const part: PartInstance = { id: "U1", type: "opamp", x: 0, y: 0, rotation: 90, mirror: true, params: {} };
+    const pos = terminalPosition(part, "inMinus"); // local (-35, 15) -> mirrored (-35, -15) -> rotated 90
+    expect(pos.x).toBeCloseTo(15, 9);
+    expect(pos.y).toBeCloseTo(-35, 9);
+  });
 });
 
 describe("zoomAroundPoint", () => {

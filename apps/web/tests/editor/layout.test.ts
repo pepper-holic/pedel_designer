@@ -123,3 +123,29 @@ describe("layout quality across every preset", () => {
     expect(total).toBeLessThanOrEqual(30);
   });
 });
+
+describe("part orientation pass (L1)", () => {
+  it("turns the TS9 drive stage's antiparallel diode to face the opposite way, and mirrors the op-amp so feedback lands on top", () => {
+    const preset = presets.find((p) => p.id === "ts9-overdrive")!;
+    const { snapshot } = loadPedalPreset(preset);
+    const arranged = arrangeParts(snapshot, null);
+    const byId = new Map(arranged.parts.map((p) => [p.id, p]));
+    // D1 and D2 are antiparallel across the same two nodes - one of them must turn 180 degrees so
+    // each diode's anode/cathode line up with its own node instead of the wire routing around the body.
+    expect(byId.get("D1")!.rotation).not.toBe(byId.get("D2")!.rotation);
+    // U1's inverting input (-) carries the feedback network - mirroring brings it to the top (dy<0)
+    // instead of the bottom, matching the textbook inverting-amplifier drawing.
+    expect(byId.get("U1")!.mirror).toBe(true);
+  });
+
+  it("does not touch a pinned part's orientation even when it would score better", () => {
+    const preset = presets.find((p) => p.id === "ts9-overdrive")!;
+    const { snapshot } = loadPedalPreset(preset);
+    const pinned = { ...snapshot, parts: snapshot.parts.map((p) => (p.id === "D2" ? { ...p, pinned: true } : p)) };
+    const arranged = arrangeParts(pinned, null);
+    const original = pinned.parts.find((p) => p.id === "D2")!;
+    const after = arranged.parts.find((p) => p.id === "D2")!;
+    expect(after.rotation).toBe(original.rotation);
+    expect(after.mirror).toBe(original.mirror);
+  });
+});

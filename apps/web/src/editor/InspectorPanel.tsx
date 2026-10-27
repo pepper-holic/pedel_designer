@@ -17,6 +17,10 @@ const MODEL_MENUS: Partial<Record<PartType, Record<string, { label: string; para
   pickup: PICKUP_MODELS,
 };
 
+/** Part types whose terminals are not symmetric about the horizontal axis, so flipping them
+ * top-to-bottom changes which side the drawn +/- (or gate/base) ends up on - see types.ts `mirror`. */
+const MIRRORABLE_TYPES = new Set<PartType>(["opamp", "bjt", "jfet", "potentiometer"]);
+
 interface InspectorPanelProps {
   selectedPart: PartInstance | null;
   /** Set instead of `selectedPart` when the canvas selection is a wire - the two are mutually exclusive. */
@@ -25,6 +29,7 @@ interface InspectorPanelProps {
   onParamChange: (key: string, value: string) => void;
   onApplyModel: (paramsOverride: Record<string, number | string>) => void;
   onRotate: () => void;
+  onMirror: () => void;
   onDelete: () => void;
   onDeleteBlock: (blockId: string) => void;
   /** Selects the selected part's whole block (to collapse it, rename it, save it). */
@@ -46,6 +51,7 @@ export function InspectorPanel({
   onParamChange,
   onApplyModel,
   onRotate,
+  onMirror,
   onDelete,
   onDeleteBlock,
   onSelectBlock,
@@ -53,6 +59,7 @@ export function InspectorPanel({
   onResetWire,
   onPatchPart,
 }: InspectorPanelProps) {
+  const canMirror = !!selectedPart && MIRRORABLE_TYPES.has(selectedPart.type);
   const ownerBlock = selectedPart?.blockId ? (blocks.find((b) => b.id === selectedPart.blockId) ?? null) : null;
   const modelMenu = selectedPart ? MODEL_MENUS[selectedPart.type] : undefined;
   const switchPositions = selectedPart ? SWITCH_POSITION_LABELS[selectedPart.type] : undefined;
@@ -242,6 +249,11 @@ export function InspectorPanel({
             <button type="button" onClick={onRotate}>
               회전 (R)
             </button>
+            {canMirror && (
+              <button type="button" onClick={onMirror}>
+                반전 (M)
+              </button>
+            )}
             <button type="button" onClick={onDelete}>
               삭제 (Del)
             </button>

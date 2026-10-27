@@ -43,6 +43,10 @@ export function rotatePart(snapshot: CircuitSnapshot, id: string): CircuitSnapsh
   return { ...snapshot, parts: snapshot.parts.map((p) => (p.id === id ? { ...p, rotation: rotateClockwise(p.rotation) } : p)) };
 }
 
+export function mirrorPart(snapshot: CircuitSnapshot, id: string): CircuitSnapshot {
+  return { ...snapshot, parts: snapshot.parts.map((p) => (p.id === id ? { ...p, mirror: !p.mirror } : p)) };
+}
+
 export function updatePartParams(snapshot: CircuitSnapshot, id: string, patch: Record<string, number | string>): CircuitSnapshot {
   return { ...snapshot, parts: snapshot.parts.map((p) => (p.id === id ? { ...p, params: { ...p.params, ...patch } } : p)) };
 }
