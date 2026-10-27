@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ShapeSvg } from "./ShapeSvg";
 import type { Shape } from "./stripboardDrawing";
 import type { Hole } from "./stripboardTypes";
+import { Icon } from "../../ui/Icon";
 
 interface BoardViewportProps {
   shapes: Shape[];
@@ -69,13 +70,13 @@ export function ZoomControls({ zoom, onZoom, label }: { zoom: number; onZoom: (z
   return (
     <div className="board-zoom" role="group" aria-label={`${label} 확대/축소`}>
       <button type="button" onClick={() => onZoom(zoom / ZOOM_STEP)} aria-label="축소" disabled={zoom <= 0.5}>
-        −
+        <Icon name="minus" />
       </button>
       <button type="button" onClick={() => onZoom(1)} aria-pressed={zoom === 1} title="보드 전체가 보이게">
         맞춤
       </button>
       <button type="button" onClick={() => onZoom(zoom * ZOOM_STEP)} aria-label="확대" disabled={zoom >= 8}>
-        +
+        <Icon name="plus" />
       </button>
       <span className="board-zoom-value">{Math.round(zoom * 100)}%</span>
     </div>

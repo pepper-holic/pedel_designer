@@ -3,6 +3,7 @@ import type { PedalPreset, PresetCategory, PresetVariant } from "../core/library
 import { BLOCK_DEFS, BLOCK_CATEGORY_LABELS, BLOCK_CATEGORY_ORDER, type BlockDef } from "./blocks";
 import type { UserBlock } from "./userBlocks";
 import { WIRING_CATEGORY_ORDER, type WiringPreset } from "./wiring";
+import { Icon } from "../ui/Icon";
 
 interface LibraryExplorerProps {
   presets: PedalPreset[];
@@ -145,7 +146,9 @@ export function LibraryExplorer({
             aria-expanded={isSearching || !collapsedTop.has("presets")}
             onClick={() => toggleTop("presets")}
           >
-            <span className={isSearching || !collapsedTop.has("presets") ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+            <span className={isSearching || !collapsedTop.has("presets") ? "template-category-chevron expanded" : "template-category-chevron"}>
+              <Icon name="chevron-right" size={12} />
+            </span>
             페달 프리셋 (완성된 회로)
             <span className="template-category-count">{filteredPresets.length}</span>
           </button>
@@ -158,7 +161,9 @@ export function LibraryExplorer({
               return (
                 <div key={key} className="template-category-group">
                   <button type="button" className="template-category-header" aria-expanded={expanded} onClick={() => toggleCategory(key)}>
-                    <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+                    <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>
+                      <Icon name="chevron-right" size={12} />
+                    </span>
                     {category}
                     <span className="template-category-count">{items.length}</span>
                   </button>
@@ -213,7 +218,9 @@ export function LibraryExplorer({
             aria-expanded={isSearching || !collapsedTop.has("wiring")}
             onClick={() => toggleTop("wiring")}
           >
-            <span className={isSearching || !collapsedTop.has("wiring") ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+            <span className={isSearching || !collapsedTop.has("wiring") ? "template-category-chevron expanded" : "template-category-chevron"}>
+              <Icon name="chevron-right" size={12} />
+            </span>
             기타 배선 (픽업·볼륨·톤)
             <span className="template-category-count">{filteredWiring.length}</span>
           </button>
@@ -226,7 +233,9 @@ export function LibraryExplorer({
               return (
                 <div key={key} className="template-category-group">
                   <button type="button" className="template-category-header" aria-expanded={expanded} onClick={() => toggleCategory(key)}>
-                    <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+                    <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>
+                      <Icon name="chevron-right" size={12} />
+                    </span>
                     {category}
                     <span className="template-category-count">{items.length}</span>
                   </button>
@@ -260,7 +269,9 @@ export function LibraryExplorer({
             aria-expanded={isSearching || !collapsedTop.has("blocks")}
             onClick={() => toggleTop("blocks")}
           >
-            <span className={isSearching || !collapsedTop.has("blocks") ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+            <span className={isSearching || !collapsedTop.has("blocks") ? "template-category-chevron expanded" : "template-category-chevron"}>
+              <Icon name="chevron-right" size={12} />
+            </span>
             기능 블록 (조립 단위)
             <span className="template-category-count">{filteredBlocks.length + filteredUserBlocks.length}</span>
           </button>
@@ -273,7 +284,9 @@ export function LibraryExplorer({
               return (
                 <div key={key} className="template-category-group">
                   <button type="button" className="template-category-header" aria-expanded={expanded} onClick={() => toggleCategory(key)}>
-                    <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+                    <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>
+                      <Icon name="chevron-right" size={12} />
+                    </span>
                     {category === "custom" ? "내 블록" : BLOCK_CATEGORY_LABELS[category]}
                     <span className="template-category-count">{items.length + (category === "custom" ? filteredUserBlocks.length : 0)}</span>
                   </button>
@@ -305,7 +318,7 @@ export function LibraryExplorer({
                               aria-label={`${ub.label} 내 블록에서 삭제`}
                               onClick={() => window.confirm(`"${ub.label}"을(를) 내 블록에서 지울까요?`) && userBlocks?.onDelete(ub.id)}
                             >
-                              ✕
+                              <Icon name="close" />
                             </button>
                           </div>
                         ))}

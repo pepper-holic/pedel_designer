@@ -33,20 +33,20 @@ describe("TransportBar", () => {
   it("starts real-time playback from its button", async () => {
     const onToggle = vi.fn();
     renderBar({ ...idle, onToggle });
-    await userEvent.click(screen.getByRole("button", { name: "▶ 실시간 재생" }));
+    await userEvent.click(screen.getByRole("button", { name: "실시간 재생" }));
     expect(onToggle).toHaveBeenCalledOnce();
   });
 
   it("shows the solver load while playing and flags a heavy one", () => {
     renderBar({ supported: true, active: true, stats: { load: 0.92, level: 0.5, nonConvergent: 3 }, onToggle: () => {} });
-    expect(screen.getByRole("button", { name: "■ 실시간 정지" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "실시간 정지" })).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByText("부하 92%")).toHaveClass("transport-warn");
     expect(screen.getByText("수렴 실패 3")).toBeInTheDocument();
   });
 
   it("is disabled where the browser has no AudioWorklet", () => {
     renderBar({ ...idle, supported: false });
-    expect(screen.getByRole("button", { name: "▶ 실시간 재생" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "실시간 재생" })).toBeDisabled();
   });
 
   it("picks a built-in input signal and the point listened to", async () => {

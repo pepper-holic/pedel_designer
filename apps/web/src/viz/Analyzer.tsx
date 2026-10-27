@@ -43,7 +43,12 @@ interface LiveState {
 /** `color` with an alpha, for gradient stops (accepts #rrggbb; anything else is used as is). */
 function withAlpha(color: string, alpha: number): string {
   if (!/^#[0-9a-f]{6}$/i.test(color)) return color;
-  return color + Math.round(alpha * 255).toString(16).padStart(2, "0");
+  return (
+    color +
+    Math.round(alpha * 255)
+      .toString(16)
+      .padStart(2, "0")
+  );
 }
 
 /** A smooth, filled curve through (x, y) points: quadratic segments between midpoints. */
@@ -112,7 +117,19 @@ export function Analyzer({ series, height: fixedHeight }: { series: AnalyzerSeri
     [series, grid, settings.smoothing, settings.tilt],
   );
 
-  const live = useRef<LiveState>({ grid: null, pre: null, post: null, peak: null, buffers: new Map(), smoothed: null, scratch: null, lastFrame: 0, lastActive: 0, top: -Infinity, running: false });
+  const live = useRef<LiveState>({
+    grid: null,
+    pre: null,
+    post: null,
+    peak: null,
+    buffers: new Map(),
+    smoothed: null,
+    scratch: null,
+    lastFrame: 0,
+    lastActive: 0,
+    top: -Infinity,
+    running: false,
+  });
   const state = useRef({ fixed, settings, grid, width, height });
   useEffect(() => {
     state.current = { fixed, settings, grid, width, height };
@@ -182,7 +199,13 @@ export function Analyzer({ series, height: fixedHeight }: { series: AnalyzerSeri
     for (const c of curves) {
       for (let i = 0; i < g.length; i++) ys[i] = toY(c.db[i]);
       // Under a live analysis the fixed spectra step back to thin reference lines.
-      drawCurve(ctx, a, xs, ys, { color: c.color, fill: !liveVisible && !c.dashed, width: c.dashed ? 1 : 1.6, alpha: liveVisible ? 0.45 : 1, dashed: c.dashed });
+      drawCurve(ctx, a, xs, ys, {
+        color: c.color,
+        fill: !liveVisible && !c.dashed,
+        width: c.dashed ? 1 : 1.6,
+        alpha: liveVisible ? 0.45 : 1,
+        dashed: c.dashed,
+      });
     }
     if (liveVisible) {
       for (const [key, color] of [
@@ -289,7 +312,9 @@ export function Analyzer({ series, height: fixedHeight }: { series: AnalyzerSeri
             {settings.peakHold && <span style={{ color: LIVE_COLORS.post, opacity: 0.6 }}>─ 피크 홀드</span>}
           </>
         ) : (
-          <span title="실시간 재생, 결과 재생(▶), 노브 미리듣기 중에 회로의 입력/출력 스펙트럼이 실시간으로 겹쳐집니다">재생하면 실시간 분석(RTA) · 커서: 주파수·음이름·레벨</span>
+          <span title="실시간 재생, 결과 재생, 노브 미리듣기 중에 회로의 입력/출력 스펙트럼이 실시간으로 겹쳐집니다">
+            재생하면 실시간 분석(RTA) · 커서: 주파수·음이름·레벨
+          </span>
         )}
       </div>
       <div ref={ref} className="plot-box" style={fixedHeight ? { height: fixedHeight, minHeight: 0 } : undefined}>

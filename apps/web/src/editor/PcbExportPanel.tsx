@@ -3,6 +3,7 @@ import type { PartInstance } from "./types";
 import type { GraphNetlist } from "./netlistFromGraph";
 import { buildKicadNetlist } from "./kicadNetlist";
 import { buildBoardNetlist } from "./pcb/boardNetlist";
+import { Icon } from "../ui/Icon";
 
 interface PcbExportPanelProps {
   parts: PartInstance[];
@@ -49,7 +50,7 @@ export function PcbExportPanel({ parts, graph, outputNode }: PcbExportPanelProps
             "패드 번호가 맞춰진 심볼이 지정되고, 출력 잭·op-amp 전원 커넥터도 함께 들어갑니다."
           }
         >
-          ⓘ
+          <Icon name="info" />
         </span>
       </div>
       {!hasParts ? (

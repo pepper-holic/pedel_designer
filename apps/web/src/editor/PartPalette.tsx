@@ -2,6 +2,7 @@ import { useState } from "react";
 import { PART_DEFS, type PartType } from "./partDefs";
 import { PartSymbol } from "./symbols";
 import { DIODE_MODELS, TRANSISTOR_MODELS, JFET_MODELS, PICKUP_MODELS } from "../core/library/deviceModels";
+import { Icon } from "../ui/Icon";
 
 interface PartPaletteProps {
   onAdd: (type: PartType, paramsOverride?: Record<string, number | string>) => void;
@@ -40,17 +41,14 @@ export function PartPalette({ onAdd }: PartPaletteProps) {
 
         return (
           <div key={def.type} className="part-palette-menu-wrap">
-            <button
-              type="button"
-              className="part-palette-item"
-              aria-expanded={isOpen}
-              onClick={() => setOpenMenu(isOpen ? null : def.type)}
-            >
+            <button type="button" className="part-palette-item" aria-expanded={isOpen} onClick={() => setOpenMenu(isOpen ? null : def.type)}>
               <svg width={30} height={20} viewBox="-40 -30 80 60" className="part-palette-icon">
                 <PartSymbol part={{ id: "", type: def.type, x: 0, y: 0, rotation: 0, params: def.defaultParams }} />
               </svg>
               {def.label}
-              <span className={isOpen ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+              <span className={isOpen ? "template-category-chevron expanded" : "template-category-chevron"}>
+                <Icon name="chevron-right" size={12} />
+              </span>
             </button>
             {isOpen && (
               <div className="part-palette-submenu">

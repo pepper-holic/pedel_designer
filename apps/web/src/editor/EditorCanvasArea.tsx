@@ -51,6 +51,8 @@ export function EditorCanvasArea(props: EditorCanvasAreaProps) {
   // grow with the circuit inside a scrolling frame, so "fit to view" fitted the circuit to an SVG
   // larger than the screen and parts could sit in scrolled-away space.)
   const [size, setSize] = useState(FALLBACK_SIZE);
+  // The header slot the canvas toolbar is portalled into (a state, so the canvas re-renders once it exists).
+  const [toolbarSlot, setToolbarSlot] = useState<HTMLDivElement | null>(null);
   useEffect(() => {
     const frame = frameRef.current;
     if (!frame || typeof ResizeObserver === "undefined") return;
@@ -74,6 +76,7 @@ export function EditorCanvasArea(props: EditorCanvasAreaProps) {
     <div className="panel canvas-stage" ref={areaRef}>
       <div className="panel-head">
         <div className="panel-title">회로도</div>
+        <div className="panel-head-tools" ref={setToolbarSlot} />
         {props.headerExtra}
       </div>
       <div className="canvas-frame canvas-frame-scroll" ref={frameRef}>
@@ -107,6 +110,7 @@ export function EditorCanvasArea(props: EditorCanvasAreaProps) {
           onWireWaypoints={props.onWireWaypoints}
           onAutoArrange={props.onAutoArrange}
           fitSignal={props.fitSignal}
+          toolbarTarget={toolbarSlot}
         />
         {props.overlay}
       </div>

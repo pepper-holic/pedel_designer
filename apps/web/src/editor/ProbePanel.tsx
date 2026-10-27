@@ -1,5 +1,6 @@
 import { formatVoltage, type OperatingPoint } from "./operatingPoint";
 import { MAX_PROBES, type ResolvedProbe } from "./probes";
+import { Icon } from "../ui/Icon";
 
 interface ProbePanelProps {
   probes: ResolvedProbe[];
@@ -33,7 +34,7 @@ export function ProbePanel({ probes, probeMode, onProbeModeChange, onRename, onR
                   {dc !== undefined ? ` · ${formatVoltage(dc)}` : ""}
                 </span>
                 <button type="button" onClick={() => onRemove(p.id)} aria-label={`${p.label} 프로브 삭제`}>
-                  ✕
+                  <Icon name="close" />
                 </button>
               </li>
             );

@@ -56,7 +56,7 @@ export function CanvasProbeLayer({ parts, probes, terminalNet, operatingPoint, s
           const w = text.length * CHAR_WIDTH + 6;
           return (
             <g key={`dc-${net}`} transform={`translate(${pos.x + 6},${pos.y + 6})`} data-dc-net={net}>
-              <rect width={w} height={13} rx={3} fill="var(--bg-raised)" stroke="var(--border)" strokeWidth={0.8} opacity={0.95} />
+              <rect width={w} height={13} rx={1} fill="var(--bg-raised)" stroke="var(--border)" strokeWidth={0.8} opacity={0.95} />
               <text x={3} y={10} fill="var(--text-dim)">
                 {text}
               </text>
@@ -75,7 +75,7 @@ export function CanvasProbeLayer({ parts, probes, terminalNet, operatingPoint, s
             <circle cx={pos.x} cy={pos.y} r={7} fill="none" stroke={probe.color} strokeWidth={2.5} />
             <line x1={pos.x + 5} y1={pos.y - 5} x2={pos.x + 12} y2={pos.y - 14} stroke={probe.color} strokeWidth={1.5} />
             <g transform={`translate(${pos.x + 12},${pos.y - 14 - FLAG_HEIGHT})`}>
-              <rect width={w} height={FLAG_HEIGHT} rx={3} fill="var(--bg-inset)" stroke={probe.color} strokeWidth={1.2} />
+              <rect width={w} height={FLAG_HEIGHT} rx={1} fill="var(--bg-inset)" stroke={probe.color} strokeWidth={1.2} />
               <text x={4} y={11} fill="var(--text)" fontWeight={600}>
                 {text}
               </text>

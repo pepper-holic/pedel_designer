@@ -4,7 +4,6 @@ import { partValueLabel } from "./valueLabel";
 import type { PartInstance, TerminalRef } from "./types";
 import { PART_HALF_WIDTH, PART_HALF_HEIGHT } from "./partMetrics";
 
-
 interface CanvasPartProps {
   part: PartInstance;
   isSelected: boolean;
@@ -34,7 +33,7 @@ export function CanvasPart({ part, isSelected, pendingTerminal, onBodyMouseDown,
           y={-PART_HALF_HEIGHT}
           width={PART_HALF_WIDTH * 2}
           height={PART_HALF_HEIGHT * 2}
-          rx={6}
+          rx={2}
           fill="none"
           stroke="var(--select)"
           strokeWidth={1.2}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { MODES, type WorkMode } from "./modes";
+import { Icon } from "../../ui/Icon";
 
 interface AppBarProps {
   title: string;
@@ -86,14 +87,14 @@ export function AppBar(props: AppBarProps) {
 
       <div className="appbar-actions">
         <button type="button" className="appbar-icon" onClick={props.onUndo} disabled={!props.canUndo} aria-label="실행 취소" title="실행 취소 (Ctrl+Z)">
-          ↶
+          <Icon name="undo" size={16} />
         </button>
         <button type="button" className="appbar-icon" onClick={props.onRedo} disabled={!props.canRedo} aria-label="다시 실행" title="다시 실행 (Ctrl+Shift+Z)">
-          ↷
+          <Icon name="redo" size={16} />
         </button>
         <div className="appbar-menu" ref={menuRef}>
           <button type="button" aria-haspopup="menu" aria-expanded={fileOpen} onClick={() => setFileOpen((v) => !v)}>
-            파일 ▾
+            파일 <Icon name="chevron-down" size={12} />
           </button>
           {fileOpen && (
             <div className="appbar-menu-list" role="menu" aria-label="파일">
@@ -104,7 +105,7 @@ export function AppBar(props: AppBarProps) {
           )}
         </div>
         <button type="button" className="appbar-icon" onClick={props.onHelp} aria-label="단축키와 도움말" title="단축키와 도움말 (?)">
-          ?
+          <Icon name="help" size={16} />
         </button>
       </div>
     </header>

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Icon } from "../../ui/Icon";
 
 const GROUPS: { title: string; items: [string, string][] }[] = [
   {
@@ -51,7 +52,7 @@ export function ShortcutHelp({ onClose }: { onClose: () => void }) {
         <div className="modal-head">
           <h2>단축키와 조작</h2>
           <button ref={closeRef} type="button" onClick={onClose} aria-label="닫기">
-            ✕
+            <Icon name="close" />
           </button>
         </div>
         <div className="shortcut-groups">

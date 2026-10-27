@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { TEST_SIGNALS } from "../../audio/testSignals";
 import { CABINET_VARIANTS, type CabinetVariant } from "../../audio/cabinetIr";
+import { Icon } from "../../ui/Icon";
 
 export interface RealtimeControl {
   supported: boolean;
@@ -96,7 +97,8 @@ export function TransportBar(props: TransportBarProps) {
               : "이 브라우저는 AudioWorklet을 지원하지 않아 실시간 재생을 쓸 수 없습니다"
           }
         >
-          {realtime.active ? "■ 실시간 정지" : "▶ 실시간 재생"}
+          <Icon name={realtime.active ? "stop" : "play"} size={12} />
+          {realtime.active ? "실시간 정지" : "실시간 재생"}
         </button>
         {realtime.active && load !== null && (
           <span

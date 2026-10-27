@@ -23,7 +23,7 @@ const startCards = () => screen.queryByRole("region", { name: "시작하기" });
 
 /** 새 회로 lives in the 파일 menu. */
 async function clickNewCircuit(user: User) {
-  await user.click(screen.getByRole("button", { name: "파일 ▾" }));
+  await user.click(screen.getByRole("button", { name: "파일" }));
   await user.click(screen.getByRole("menuitem", { name: "새 회로" }));
 }
 
@@ -35,7 +35,7 @@ describe("SchematicEditor", () => {
     render(<SchematicEditor />);
     expect(startCards()).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /실행 취소/ })).toBeDisabled();
-    await user.click(screen.getByRole("button", { name: "파일 ▾" }));
+    await user.click(screen.getByRole("button", { name: "파일" }));
     expect(screen.getByRole("menuitem", { name: "새 회로" })).toBeDisabled();
   });
 
@@ -57,7 +57,7 @@ describe("SchematicEditor", () => {
 
     expect(startCards()).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: /실행 취소/ })).toBeEnabled();
-    await user.click(screen.getByRole("button", { name: "파일 ▾" }));
+    await user.click(screen.getByRole("button", { name: "파일" }));
     expect(screen.getByRole("menuitem", { name: "새 회로" })).toBeEnabled();
   });
 

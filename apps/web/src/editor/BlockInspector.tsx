@@ -2,6 +2,7 @@ import { BLOCK_CATEGORY_LABELS } from "./blocks";
 import { knobReadout } from "./blockOps";
 import { SWITCH_POSITION_LABELS } from "./switchLabels";
 import type { BlockInstance, BlockParam, BlockPort, PartInstance, PortKind } from "./types";
+import { Icon } from "../ui/Icon";
 
 const PORT_KIND_LABELS: Record<PortKind, string> = {
   in: "입력 (왼쪽)",
@@ -25,7 +26,15 @@ interface BlockInspectorProps {
   onUpdatePort: (portId: string, patch: Partial<Pick<BlockPort, "label" | "kind">>) => void;
 }
 
-function KnobControl({ param, part, onSetKnob }: { param: BlockParam; part: PartInstance | undefined; onSetKnob: (param: BlockParam, value: number | string) => void }) {
+function KnobControl({
+  param,
+  part,
+  onSetKnob,
+}: {
+  param: BlockParam;
+  part: PartInstance | undefined;
+  onSetKnob: (param: BlockParam, value: number | string) => void;
+}) {
   const value = part?.params[param.paramKey];
   if (param.paramKey === "position" && typeof value === "number") {
     return (
@@ -102,7 +111,7 @@ export function BlockInspector(props: BlockInspectorProps) {
               />
               <span className="field-value">{knobReadout(byId.get(param.partId), param.paramKey)}</span>
               <button type="button" aria-label={`${param.label} 노브 숨기기`} onClick={() => props.onUpdateParam(param.id, null)}>
-                ✕
+                <Icon name="close" />
               </button>
             </div>
             <KnobControl param={param} part={byId.get(param.partId)} onSetKnob={props.onSetKnob} />
@@ -117,8 +126,17 @@ export function BlockInspector(props: BlockInspectorProps) {
         <ul className="probe-list">
           {block.ports.map((port) => (
             <li key={port.id} className="probe-row">
-              <input aria-label={`${port.label} 포트 이름`} value={port.label} onChange={(e) => props.onUpdatePort(port.id, { label: e.target.value })} maxLength={8} />
-              <select aria-label={`${port.label} 포트 종류`} value={port.kind} onChange={(e) => props.onUpdatePort(port.id, { kind: e.target.value as PortKind })}>
+              <input
+                aria-label={`${port.label} 포트 이름`}
+                value={port.label}
+                onChange={(e) => props.onUpdatePort(port.id, { label: e.target.value })}
+                maxLength={8}
+              />
+              <select
+                aria-label={`${port.label} 포트 종류`}
+                value={port.kind}
+                onChange={(e) => props.onUpdatePort(port.id, { kind: e.target.value as PortKind })}
+              >
                 {Object.entries(PORT_KIND_LABELS).map(([kind, label]) => (
                   <option key={kind} value={kind}>
                     {label}

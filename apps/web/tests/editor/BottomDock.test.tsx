@@ -48,12 +48,12 @@ describe("BottomDock", () => {
   it("expands on request - from its own button or from the content inside", async () => {
     render(<BottomDock tabs={tabs} />);
     const normal = dockHeight();
-    await userEvent.click(screen.getByRole("button", { name: "▴ 크게 보기" }));
+    await userEvent.click(screen.getByRole("button", { name: "크게 보기" }));
     expect(dockHeight()).toBeGreaterThan(normal);
-    await userEvent.click(screen.getByRole("button", { name: "▾ 원래 크기" }));
+    await userEvent.click(screen.getByRole("button", { name: "원래 크기" }));
     expect(dockHeight()).toBe(normal);
     await userEvent.click(screen.getByRole("tab", { name: "B" }));
     await userEvent.click(screen.getByRole("button", { name: "보드 생성" }));
-    expect(screen.getByRole("button", { name: "▾ 원래 크기" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "원래 크기" })).toBeInTheDocument();
   });
 });

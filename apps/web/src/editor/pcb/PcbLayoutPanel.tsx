@@ -9,7 +9,7 @@ import { buildKicadPcb } from "./kicadPcb";
 import { generatePcbAsync } from "./generatePcbAsync";
 import { BoardViewport, ZoomControls } from "./BoardViewport";
 import { useDock } from "../dockContext";
-
+import { Icon } from "../../ui/Icon";
 
 const VIEWS: { id: PcbView; label: string }[] = [
   { id: "top", label: "위에서 보기" },
@@ -81,7 +81,7 @@ export function PcbLayoutPanel({ parts, graph, outputNode, onBoardSize }: PcbLay
           className="info-tip"
           title="회로도 배치(신호 흐름)에서 출발해 부품을 모으고, 0.635mm 격자에서 배선합니다(트랙 0.6mm, 간격 0.4mm). 단면은 남는 연결을 점퍼 와이어로, 양면은 비아로 처리합니다. 결과는 배선과 별개로 기하 DRC로 다시 검사합니다."
         >
-          ⓘ
+          <Icon name="info" />
         </span>
       </div>
       {!hasParts ? (
@@ -115,7 +115,8 @@ export function PcbLayoutPanel({ parts, graph, outputNode, onBoardSize }: PcbLay
           {layout && (
             <>
               <p className={issues.length === 0 ? "strip-ok" : "drc-error"} role="status">
-                {issues.length === 0 ? "✓ DRC 통과" : `✗ DRC ${issues.length}건`} · {layout.width.toFixed(1)}×{layout.height.toFixed(1)}mm · 트랙{" "}
+                <Icon name={issues.length === 0 ? "check" : "alert"} />
+                {issues.length === 0 ? "DRC 통과" : `DRC ${issues.length}건`} · {layout.width.toFixed(1)}×{layout.height.toFixed(1)}mm · 트랙{" "}
                 {layout.tracks.length} · 점퍼 {layout.links.length} · 비아 {layout.vias.length}
                 {layout.unrouted.length > 0 ? ` · 미배선 ${layout.unrouted.length}` : ""}
               </p>
@@ -143,9 +144,7 @@ export function PcbLayoutPanel({ parts, graph, outputNode, onBoardSize }: PcbLay
                 height={layout.height + PCB_MARGIN * 2}
                 label={`PCB ${VIEWS.find((v) => v.id === shownView)!.label}`}
               />
-              {layout.links.length > 0 && (
-                <p className="canvas-hint">점선은 부품면에 납땜하는 점퍼 와이어입니다 (단면 기판에서 배선하지 못한 연결).</p>
-              )}
+              {layout.links.length > 0 && <p className="canvas-hint">점선은 부품면에 납땜하는 점퍼 와이어입니다 (단면 기판에서 배선하지 못한 연결).</p>}
             </>
           )}
         </>

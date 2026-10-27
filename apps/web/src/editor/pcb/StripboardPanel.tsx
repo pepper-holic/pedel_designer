@@ -8,6 +8,7 @@ import { drawStripboard, MARGIN, stripboardBuildNotes, stripboardSheetSvg, type 
 import type { Hole, StripboardLayout } from "./stripboardTypes";
 import { BoardViewport, ZoomControls } from "./BoardViewport";
 import { useDock } from "../dockContext";
+import { Icon } from "../../ui/Icon";
 
 interface StripboardPanelProps {
   parts: PartInstance[];
@@ -94,7 +95,7 @@ export function StripboardPanel({ parts, graph, outputNode, onBoardSize }: Strip
           className="info-tip"
           title="가로 구리 스트립 보드(베로보드)에 부품을 자동 배치합니다. 생성 결과는 보드에서 넷리스트를 다시 읽어 원래 회로와 비교 검증합니다. 부품을 끌어 옮기거나 구멍을 클릭해 컷을 넣고 빼면 즉시 다시 검증합니다."
         >
-          ⓘ
+          <Icon name="info" />
         </span>
       </div>
       {!hasParts ? (
@@ -129,9 +130,10 @@ export function StripboardPanel({ parts, graph, outputNode, onBoardSize }: Strip
           {layout && check && (
             <>
               <p className={check.ok ? "strip-ok" : "drc-error"} role="status">
+                <Icon name={check.ok ? "check" : "alert"} />
                 {check.ok
-                  ? `✓ 회로와 일치 (역검증 통과) · ${layout.cols}×${layout.rows}구멍 · 컷 ${layout.cuts.length} · 점퍼 ${layout.jumpers.length}`
-                  : `✗ 회로와 다릅니다 (${check.problems.length}건)`}
+                  ? `회로와 일치 (역검증 통과) · ${layout.cols}×${layout.rows}구멍 · 컷 ${layout.cuts.length} · 점퍼 ${layout.jumpers.length}`
+                  : `회로와 다릅니다 (${check.problems.length}건)`}
               </p>
               {!check.ok && (
                 <ul className="build-notes">

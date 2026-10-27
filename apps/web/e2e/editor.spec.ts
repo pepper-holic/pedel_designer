@@ -195,8 +195,8 @@ test("plays the circuit in real time and keeps playing through a knob change", a
   await expect(load).toBeVisible();
   await expect(page.getByText(/미리듣기 재생/)).toHaveCount(0);
 
-  await page.getByRole("button", { name: "■ 실시간 정지" }).click();
-  await expect(page.getByRole("button", { name: "▶ 실시간 재생" })).toBeVisible();
+  await page.getByRole("button", { name: "실시간 정지" }).click();
+  await expect(page.getByRole("button", { name: "실시간 재생" })).toBeVisible();
 });
 
 test("player view: turn the TS9 drive live and watch the spectrum follow", async ({ page }) => {
@@ -228,7 +228,7 @@ test("turns a preset into a verified stripboard and a routed PCB", async ({ page
   // Placement and routing run in a worker: this also proves the worker chunk ships.
   await buildStep(page, "PCB");
   await page.getByRole("button", { name: "PCB 생성" }).click();
-  await expect(page.getByText(/✓ DRC 통과/)).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText(/DRC 통과/)).toBeVisible({ timeout: 20_000 });
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: ".kicad_pcb 다운로드" }).click();
   expect((await download).suggestedFilename()).toBe("pedal.kicad_pcb");

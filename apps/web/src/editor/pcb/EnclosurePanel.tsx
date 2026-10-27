@@ -2,7 +2,7 @@ import { useState } from "react";
 import { boardFit, checkHoles, defaultDrillPlan, ENCLOSURES, interior, smallestFit, type DrillHole, type PanelControl } from "./enclosure";
 import { drawEnclosure, enclosureSvg, sheetDeltaToFace, sheetSize } from "./enclosureDrawing";
 import { BoardViewport, ZoomControls } from "./BoardViewport";
-
+import { Icon } from "../../ui/Icon";
 
 export interface BoardSize {
   w: number;
@@ -63,7 +63,7 @@ export function EnclosurePanel({ controls, board }: EnclosurePanelProps) {
           className="info-tip"
           title="노출된 노브·스위치로 포트 구멍을, 표준 위치로 잭·DC·LED·풋스위치 구멍을 배치합니다. 구멍을 끌어 옮길 수 있고, 1:1로 인쇄해 상자에 붙이고 센터 펀치로 찍으면 됩니다."
         >
-          ⓘ
+          <Icon name="info" />
         </span>
       </div>
       <div className="run-row">

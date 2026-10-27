@@ -5,6 +5,7 @@ import { TAPER_OPTIONS } from "./taper";
 import { PARAM_META } from "./paramMeta";
 import { SWITCH_POSITION_LABELS } from "./switchLabels";
 import { defaultFootprintId, footprintOptions } from "./pcb/footprintAssign";
+import { Icon } from "../ui/Icon";
 
 /** Part types with more than one selectable named model - see PartPalette.tsx's MODEL_MENUS, which
  * this mirrors so the same variety is reachable after placement, not just at insert time. */
@@ -101,7 +102,7 @@ export function InspectorPanel({
             background: "var(--bg-inset)",
             color: "var(--text)",
             border: `1px solid ${isInvalid ? "var(--danger)" : "var(--border)"}`,
-            borderRadius: 6,
+            borderRadius: 2,
             padding: 6,
           }}
         />
@@ -217,7 +218,10 @@ export function InspectorPanel({
           {primaryParams.map(([key, value]) => renderParam(key, value))}
           {advancedParams.length > 0 && (
             <details className="inspector-section">
-              <summary>세부 파라미터 ({advancedParams.length})</summary>
+              <summary>
+                <Icon name="chevron-right" size={12} />
+                세부 파라미터 ({advancedParams.length})
+              </summary>
               {modelMenu && <p className="canvas-hint">위의 "소자 모델"을 고르면 함께 바뀝니다.</p>}
               {advancedParams.map(([key, value]) => renderParam(key, value))}
             </details>

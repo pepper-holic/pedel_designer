@@ -32,7 +32,7 @@ export function CanvasBlockSymbol({ block, layout, parts, selected, pendingTermi
         y={layout.top}
         width={layout.width}
         height={layout.height}
-        rx={8}
+        rx={2}
         fill="var(--bg-inset)"
         stroke={selected ? "var(--select)" : stroke}
         strokeWidth={selected ? 2.5 : 1.6}
@@ -40,7 +40,15 @@ export function CanvasBlockSymbol({ block, layout, parts, selected, pendingTermi
         onMouseDown={(e) => onBodyMouseDown(block, e)}
         onDoubleClick={() => onToggleCollapse(block.id)}
       />
-      <rect x={layout.left} y={layout.top} width={layout.width} height={BLOCK_HEADER_HEIGHT - 4} rx={8} fill={`var(--block-${block.category}-fill)`} pointerEvents="none" />
+      <rect
+        x={layout.left}
+        y={layout.top}
+        width={layout.width}
+        height={BLOCK_HEADER_HEIGHT - 4}
+        rx={2}
+        fill={`var(--block-${block.category}-fill)`}
+        pointerEvents="none"
+      />
       <text x={layout.cx} y={layout.top + 11} textAnchor="middle" fontSize={8.5} fontFamily="var(--font-mono)" fill={stroke} pointerEvents="none">
         {BLOCK_CATEGORY_LABELS[block.category].toUpperCase()}
       </text>

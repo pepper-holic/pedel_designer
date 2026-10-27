@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Waveform, type WaveformTrace } from "../viz/Waveform";
 import type { ResolvedProbe } from "./probes";
+import { Icon } from "../ui/Icon";
 
 interface WaveformTabProps {
   /** Every net's trace from the last run, labelled by net name. */
@@ -24,7 +25,7 @@ function TapButtons({ traces, onPlay, onCompare }: { traces: ShownTrace[]; onPla
       {traces.map((t) => (
         <span key={t.net} className="tap-button-pair">
           <button type="button" onClick={() => onPlay(t.net)} aria-label={`${t.label} 지점 소리 재생`}>
-            ▶ {t.label}
+            <Icon name="play" size={12} /> {t.label}
           </button>
           <button
             type="button"
@@ -44,7 +45,7 @@ function TapButtons({ traces, onPlay, onCompare }: { traces: ShownTrace[]; onPla
  * tap point (through the cabinet chosen in the transport bar, if any). */
 export function WaveformTab({ traces, durationSeconds, probes = [], onPlay, onCompare }: WaveformTabProps) {
   const [showAll, setShowAll] = useState(false);
-  if (!traces) return <p className="preset-description">위의 "▶ 시뮬레이션 실행"을 누르면 입력 신호를 회로에 통과시킨 파형이 여기에 표시됩니다.</p>;
+  if (!traces) return <p className="preset-description">위의 "시뮬레이션 실행"을 누르면 입력 신호를 회로에 통과시킨 파형이 여기에 표시됩니다.</p>;
 
   const byNet = new Map(traces.map((t) => [t.label, t]));
   const probed: ShownTrace[] = probes.flatMap((p) => {
@@ -66,7 +67,7 @@ export function WaveformTab({ traces, durationSeconds, probes = [], onPlay, onCo
       {rest.length > 0 && (
         <div className="waveform-more">
           <button type="button" onClick={() => setShowAll((v) => !v)} aria-expanded={showAll}>
-            {showAll ? "▾" : "▸"} 전체 노드 ({rest.length}개)
+            <Icon name={showAll ? "chevron-down" : "chevron-right"} size={12} /> 전체 노드 ({rest.length}개)
           </button>
           {showAll && (
             <>

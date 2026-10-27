@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import type { DockTab } from "../dockTabs";
+import { Icon } from "../../ui/Icon";
 
 interface AnalyzeWorkspaceProps {
   /** The schematic, for placing probes while looking at the plots. */
@@ -81,7 +82,8 @@ export function AnalyzeWorkspace({ canvas, probePanel, tabs, run }: AnalyzeWorks
               disabled={!run.canRun}
               title={run.blocker ?? "입력 신호를 회로에 통과시켜 모든 지점의 파형을 계산합니다"}
             >
-              {run.running ? "계산 중…" : run.hasResult ? "▶ 다시 실행" : "▶ 시뮬레이션 실행"}
+              <Icon name="play" size={12} />
+              {run.running ? "계산 중…" : run.hasResult ? "다시 계산" : "시뮬레이션 실행"}
             </button>
             <span className="analysis-run-info">
               {run.blocker ??

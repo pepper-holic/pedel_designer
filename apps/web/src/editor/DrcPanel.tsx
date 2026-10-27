@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { runDrc } from "./drc";
 import type { PartInstance, Wire } from "./types";
+import { Icon } from "../ui/Icon";
 
 interface DrcPanelProps {
   parts: PartInstance[];
@@ -20,7 +21,11 @@ export function DrcPanel({ parts, wires, outputNode, onSelectPart }: DrcPanelPro
   const warnings = issues.filter((i) => i.severity === "warning");
 
   if (issues.length === 0) {
-    return <p className="preset-description">✓ 문제 없음 — 접지·입력 신호원·배선이 모두 확인됐습니다.</p>;
+    return (
+      <p className="preset-description drc-ok">
+        <Icon name="check" /> 문제 없음 — 접지·입력 신호원·배선이 모두 확인됐습니다.
+      </p>
+    );
   }
 
   return (
@@ -35,12 +40,7 @@ export function DrcPanel({ parts, wires, outputNode, onSelectPart }: DrcPanelPro
             <span className="drc-badge">{issue.severity === "error" ? "오류" : "경고"}</span>
             <span className="drc-message">{issue.message}</span>
             {issue.partIds.length > 0 && (
-              <button
-                type="button"
-                className="drc-jump"
-                aria-label={`${issue.partIds[0]} 캔버스에서 선택`}
-                onClick={() => onSelectPart(issue.partIds[0])}
-              >
+              <button type="button" className="drc-jump" aria-label={`${issue.partIds[0]} 캔버스에서 선택`} onClick={() => onSelectPart(issue.partIds[0])}>
                 {issue.partIds[0]} 선택
               </button>
             )}

@@ -18,9 +18,8 @@ export function StartCards(props: StartCardsProps) {
     <div className="start-cards" role="region" aria-label="시작하기">
       <h2>무엇부터 시작할까요?</h2>
       <div className="start-card-grid">
-        {CARDS.map((c, i) => (
+        {CARDS.map((c) => (
           <button key={c.key} type="button" className="start-card" onClick={props[c.key]}>
-            <span className="start-card-num">{i + 1}</span>
             <strong>{c.title}</strong>
             <span>{c.body}</span>
           </button>

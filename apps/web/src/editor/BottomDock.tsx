@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { DockContext } from "./dockContext";
+import { Icon } from "../ui/Icon";
 
 export interface DockTab {
   key: string;
@@ -124,7 +125,7 @@ export function BottomDock({ tabs, storageKey = DEFAULT_KEY, collapsible = false
           ))}
         </div>
         <button type="button" className="dock-expand" aria-expanded={false} onClick={() => setCollapsed(false)}>
-          ▴ 펼치기
+          <Icon name="chevron-up" size={12} /> 펼치기
         </button>
       </div>
     );
@@ -167,7 +168,7 @@ export function BottomDock({ tabs, storageKey = DEFAULT_KEY, collapsible = false
           onClick={() => setExpanded((v) => !v)}
           title="분석 패널을 크게 보기 / 원래 크기로"
         >
-          {expanded ? "▾ 원래 크기" : "▴ 크게 보기"}
+          <Icon name={expanded ? "collapse" : "expand"} size={12} /> {expanded ? "원래 크기" : "크게 보기"}
         </button>
         {collapsible && (
           <button
@@ -177,7 +178,7 @@ export function BottomDock({ tabs, storageKey = DEFAULT_KEY, collapsible = false
             onClick={() => setCollapsed(true)}
             title="탭 줄만 남기고 접어 회로도를 넓게 봅니다"
           >
-            ▾ 접기
+            <Icon name="chevron-down" size={12} /> 접기
           </button>
         )}
       </div>

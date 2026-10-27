@@ -7,6 +7,7 @@ import type { UserBlock } from "../userBlocks";
 import { PartPalette } from "../PartPalette";
 import { LibraryExplorer } from "../LibraryExplorer";
 import { QuickAddPalette } from "../QuickAddPalette";
+import { Icon } from "../../ui/Icon";
 
 export type LibraryTab = "presets" | "blocks" | "parts";
 
@@ -86,7 +87,9 @@ export function LibraryPanel(props: LibraryPanelProps) {
               aria-expanded={quickAddExpanded}
               onClick={() => setQuickAddExpanded((v) => !v)}
             >
-              <span className={quickAddExpanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+              <span className={quickAddExpanded ? "template-category-chevron expanded" : "template-category-chevron"}>
+                <Icon name="chevron-right" size={12} />
+              </span>
               자주 쓰는 소자 값
             </button>
             {quickAddExpanded && <QuickAddPalette onAdd={props.onAddPart} />}

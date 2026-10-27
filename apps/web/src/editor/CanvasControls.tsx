@@ -1,3 +1,5 @@
+import { Icon } from "../ui/Icon";
+
 interface CanvasControlsProps {
   zoom: number;
   onZoomIn: () => void;
@@ -14,7 +16,11 @@ interface CanvasControlsProps {
   onBlocksCollapsedChange?: (collapsed: boolean) => void;
 }
 
-/** The control strip floating over the canvas: zoom, fit/reset, and the probe/DC view toggles. */
+/**
+ * The canvas toolbar - view (zoom, fit, reset) on the left, then what the canvas shows or does
+ * (arrange, probe, black boxes, DC). It sits in the schematic panel's header row, so it never
+ * covers the circuit.
+ */
 export function CanvasControls({
   zoom,
   onZoomIn,
@@ -30,63 +36,67 @@ export function CanvasControls({
   onBlocksCollapsedChange,
 }: CanvasControlsProps) {
   return (
-    <div className="canvas-zoom-controls">
-      <button type="button" onClick={onZoomIn}>
-        +
-      </button>
-      <span>{Math.round(zoom * 100)}%</span>
-      <button type="button" onClick={onZoomOut}>
-        −
-      </button>
-      <button type="button" className="canvas-tool-toggle" onClick={onFit} title="회로 전체가 보이도록 확대/축소와 위치를 맞춥니다">
-        화면 맞춤
-      </button>
-      <button type="button" className="canvas-tool-toggle" onClick={onReset}>
-        리셋
-      </button>
-      {onAutoArrange && (
-        <button
-          type="button"
-          className="canvas-tool-toggle"
-          onClick={onAutoArrange}
-          title="블록을 신호 순서대로, 블록 안 부품을 다시 배치하고 배선을 정리합니다. 직접 옮긴(고정된) 부품은 그대로 둡니다"
-        >
-          자동 정렬
+    <div className="canvas-zoom-controls" role="toolbar" aria-label="회로도 도구">
+      <div className="tool-group" role="group" aria-label="보기">
+        <button type="button" className="tool-icon" onClick={onZoomOut} aria-label="축소" title="축소 (휠)">
+          <Icon name="minus" />
         </button>
-      )}
-      {onProbeModeChange && (
-        <button
-          type="button"
-          className="canvas-tool-toggle"
-          aria-pressed={probeMode}
-          onClick={() => onProbeModeChange(!probeMode)}
-          title="켜면 단자나 배선을 클릭해 측정 지점(프로브)을 찍습니다. 같은 노드를 다시 클릭하면 지워집니다. 단축키 P"
-        >
-          프로브
+        <span className="tool-value">{Math.round(zoom * 100)}%</span>
+        <button type="button" className="tool-icon" onClick={onZoomIn} aria-label="확대" title="확대 (휠)">
+          <Icon name="plus" />
         </button>
-      )}
-      {onBlocksCollapsedChange && (
-        <button
-          type="button"
-          className="canvas-tool-toggle"
-          aria-pressed={blocksCollapsed}
-          onClick={() => onBlocksCollapsedChange(!blocksCollapsed)}
-          title="모든 기능 블록을 블랙박스(핀 달린 상자)로 접거나, 세부 회로로 펼칩니다"
-        >
-          블랙박스 보기
+        <button type="button" className="canvas-tool-toggle" onClick={onFit} title="회로 전체가 보이도록 확대/축소와 위치를 맞춥니다">
+          화면 맞춤
         </button>
-      )}
-      {onShowDcChange && (
-        <button
-          type="button"
-          className="canvas-tool-toggle"
-          aria-pressed={showDc}
-          onClick={() => onShowDcChange(!showDc)}
-          title="신호가 없을 때 각 노드의 DC 바이어스 전압을 회로도 위에 표시합니다"
-        >
-          DC 전압
+        <button type="button" className="canvas-tool-toggle" onClick={onReset}>
+          리셋
         </button>
-      )}
+      </div>
+      <div className="tool-group" role="group" aria-label="편집과 표시">
+        {onAutoArrange && (
+          <button
+            type="button"
+            className="canvas-tool-toggle"
+            onClick={onAutoArrange}
+            title="블록을 신호 순서대로, 블록 안 부품을 다시 배치하고 배선을 정리합니다. 직접 옮긴(고정된) 부품은 그대로 둡니다"
+          >
+            자동 정렬
+          </button>
+        )}
+        {onProbeModeChange && (
+          <button
+            type="button"
+            className="canvas-tool-toggle"
+            aria-pressed={probeMode}
+            onClick={() => onProbeModeChange(!probeMode)}
+            title="켜면 단자나 배선을 클릭해 측정 지점(프로브)을 찍습니다. 같은 노드를 다시 클릭하면 지워집니다. 단축키 P"
+          >
+            프로브
+          </button>
+        )}
+        {onBlocksCollapsedChange && (
+          <button
+            type="button"
+            className="canvas-tool-toggle"
+            aria-pressed={blocksCollapsed}
+            onClick={() => onBlocksCollapsedChange(!blocksCollapsed)}
+            title="모든 기능 블록을 블랙박스(핀 달린 상자)로 접거나, 세부 회로로 펼칩니다"
+          >
+            블랙박스 보기
+          </button>
+        )}
+        {onShowDcChange && (
+          <button
+            type="button"
+            className="canvas-tool-toggle"
+            aria-pressed={showDc}
+            onClick={() => onShowDcChange(!showDc)}
+            title="신호가 없을 때 각 노드의 DC 바이어스 전압을 회로도 위에 표시합니다"
+          >
+            DC 전압
+          </button>
+        )}
+      </div>
     </div>
   );
 }

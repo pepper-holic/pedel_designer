@@ -64,7 +64,7 @@ export function CanvasBlockLayer({ parts, blocks, selectedBlockId, onSelectBlock
               y={y}
               width={width}
               height={height}
-              rx={10}
+              rx={2}
               fill={`var(--block-${block.category}-fill)`}
               stroke={selected ? "var(--select)" : stroke}
               strokeWidth={selected ? 2 : 1.2}

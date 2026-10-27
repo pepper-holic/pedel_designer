@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { snapToGrid, GRID_SIZE } from "./geometry";
 import { useCanvasView } from "./useCanvasView";
 import { CanvasPart } from "./CanvasPart";
@@ -50,6 +51,8 @@ interface SchematicCanvasProps {
   /** Bump to auto-fit the view to the current parts - the editor changes this whenever the whole
    * circuit is replaced (template load, new circuit) so a freshly loaded preset arrives fully visible. */
   fitSignal?: number;
+  /** Where the toolbar goes (the panel's header row); without one it floats over the canvas. */
+  toolbarTarget?: HTMLElement | null;
   width?: number;
   height?: number;
 }
@@ -91,6 +94,7 @@ export function SchematicCanvas({
   onWireWaypoints,
   onAutoArrange,
   fitSignal = 0,
+  toolbarTarget,
   width = 900,
   height = 460,
 }: SchematicCanvasProps) {
@@ -125,7 +129,6 @@ export function SchematicCanvas({
     const rect = e.currentTarget.getBoundingClientRect();
     return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   };
-
 
   const handleBodyMouseDown = (part: PartInstance, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -253,22 +256,26 @@ export function SchematicCanvas({
     setPendingTerminal(null);
   };
 
+  const toolbar = (
+    <CanvasControls
+      zoom={view.zoom}
+      onZoomIn={canvasView.zoomIn}
+      onZoomOut={canvasView.zoomOut}
+      onFit={canvasView.fit}
+      onReset={canvasView.reset}
+      onAutoArrange={onAutoArrange}
+      probeMode={probeMode}
+      onProbeModeChange={onProbeModeChange}
+      showDc={showDc}
+      onShowDcChange={onShowDcChange}
+      blocksCollapsed={blocks.length > 0 && blocks.every((b) => b.collapsed)}
+      onBlocksCollapsedChange={blocks.length > 0 ? onSetAllCollapsed : undefined}
+    />
+  );
+
   return (
     <div style={{ position: "relative" }}>
-      <CanvasControls
-        zoom={view.zoom}
-        onZoomIn={canvasView.zoomIn}
-        onZoomOut={canvasView.zoomOut}
-        onFit={canvasView.fit}
-        onReset={canvasView.reset}
-        onAutoArrange={onAutoArrange}
-        probeMode={probeMode}
-        onProbeModeChange={onProbeModeChange}
-        showDc={showDc}
-        onShowDcChange={onShowDcChange}
-        blocksCollapsed={blocks.length > 0 && blocks.every((b) => b.collapsed)}
-        onBlocksCollapsedChange={blocks.length > 0 ? onSetAllCollapsed : undefined}
-      />
+      {toolbarTarget ? createPortal(toolbar, toolbarTarget) : toolbar}
       <svg
         ref={svgRef}
         width={width}
@@ -363,7 +370,14 @@ export function SchematicCanvas({
           ))}
 
           {(probes.length > 0 || showDc) && terminalNet && (
-            <CanvasProbeLayer parts={parts} probes={probes} terminalNet={terminalNet} operatingPoint={operatingPoint} showAllDc={showDc} endpoints={endpoints} />
+            <CanvasProbeLayer
+              parts={parts}
+              probes={probes}
+              terminalNet={terminalNet}
+              operatingPoint={operatingPoint}
+              showAllDc={showDc}
+              endpoints={endpoints}
+            />
           )}
 
           {selectBox && (
