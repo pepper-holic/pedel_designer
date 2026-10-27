@@ -10,6 +10,7 @@ import { MonteCarloPanel } from "./MonteCarloPanel";
 import { ChainPanel } from "./ChainPanel";
 import { BomPanel } from "./BomPanel";
 import { PcbExportPanel } from "./PcbExportPanel";
+import { StripboardPanel } from "./pcb/StripboardPanel";
 import type { MonteCarloResult } from "../core/analysis/montecarlo";
 import type { GraphNetlist } from "./netlistFromGraph";
 import type { PartInstance, Wire } from "./types";
@@ -145,8 +146,13 @@ export function buildDockTabs({
   {
     key: "pcb",
     label: "PCB",
-    helpText: "실제 기판으로 만들기: 부품별 풋프린트가 지정된 KiCad 넷리스트를 내보냅니다.",
-    content: <PcbExportPanel parts={parts} graph={graph} outputNode={outputNode} />,
+    helpText: "실제 기판으로 만들기: 풋프린트가 지정된 KiCad 넷리스트, 그리고 자동 생성·역검증되는 스트립보드 레이아웃.",
+    content: (
+      <>
+        <PcbExportPanel parts={parts} graph={graph} outputNode={outputNode} />
+        <StripboardPanel parts={parts} graph={graph} outputNode={outputNode} />
+      </>
+    ),
   },
   ];
 }

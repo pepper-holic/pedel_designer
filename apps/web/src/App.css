@@ -1344,3 +1344,34 @@
   color: var(--text-dim);
   line-height: 1.5;
 }
+
+.strip-ok {
+  color: var(--wire);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  margin: 8px 0;
+}
+
+.stripboard-scroll {
+  overflow: auto;
+  max-width: 100%;
+  margin-top: 8px;
+}
+
+.stripboard-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.stripboard-legend {
+  width: auto;
+  font-size: 0.75rem;
+}
+
+.stripboard-legend th {
+  text-align: left;
+  padding-right: 10px;
+  font-family: var(--font-mono);
+}
