@@ -1,11 +1,13 @@
 import { useMemo } from "react";
-import { computeWirePaths } from "./geometry";
+import { draggableCorners, renderWirePaths, type Point } from "./geometry";
+import { wireRoutes } from "./routing/wirePolylines";
 import type { CanvasEndpoints } from "./canvasEndpoints";
-import type { TerminalRef, Wire } from "./types";
+import type { PartInstance, TerminalRef, Wire } from "./types";
 
 // Transparent click target width for wires - the visible stroke is only 2px, which is not a
 // realistic mouse target on a dense schematic.
 const WIRE_HITBOX_WIDTH = 12;
+const HANDLE_SIZE = 9;
 
 function terminalKey(ref: TerminalRef): string {
   return `${ref.partId}:${ref.terminalId}`;
@@ -13,15 +15,21 @@ function terminalKey(ref: TerminalRef): string {
 
 interface CanvasWireLayerProps {
   endpoints: CanvasEndpoints;
+  parts: PartInstance[];
   wires: Wire[];
+  netOf: (ref: TerminalRef) => string | undefined;
+  /** Something is being dragged: use the plain route so the frame rate holds up. */
+  fast: boolean;
   selectedWireId: string | null;
   onWireClick: (wire: Wire, e: React.MouseEvent) => void;
+  /** Mouse down on a selected wire's segment handle - starts a segment drag. */
+  onSegmentMouseDown?: (wire: Wire, corners: Point[], segment: number, e: React.MouseEvent) => void;
 }
 
-/** Every wire's visible stroke, its fat transparent hit-target, and the junction dots where 3+ wire
- * ends meet. Drawn after block regions and before parts, so terminals (wiring) still win over wire
- * selection where they overlap. */
-export function CanvasWireLayer({ endpoints, wires, selectedWireId, onWireClick }: CanvasWireLayerProps) {
+/** Every wire's visible stroke, its fat transparent hit-target, the junction dots where 3+ wire
+ * ends meet, and - on the selected wire - handles to drag its segments. Drawn after block regions
+ * and before parts, so terminals (wiring) still win over wire selection where they overlap. */
+export function CanvasWireLayer({ endpoints, parts, wires, netOf, fast, selectedWireId, onWireClick, onSegmentMouseDown }: CanvasWireLayerProps) {
   // A junction dot is drawn wherever 3+ wire ends meet at the same terminal - a real electrical
   // junction, as opposed to a plain 2-wire pass-through or two wires merely crossing visually.
   const junctionPoints = useMemo(() => {
@@ -43,31 +51,16 @@ export function CanvasWireLayer({ endpoints, wires, selectedWireId, onWireClick 
     return points;
   }, [wires, endpoints]);
 
-  // Resolved (wire, endpoints) pairs for wires whose parts still exist, plus the crossing-aware
-  // path string for each - computed together in one pass so a hop on one wire accounts for every
-  // other wire currently on the canvas.
-  const resolvedWires = useMemo(() => {
-    const withEndpoints = wires
-      .map((wire) => {
-        if (endpoints.isHiddenWire(wire)) return null;
-        const a = endpoints.resolve(wire.a);
-        const b = endpoints.resolve(wire.b);
-        // Two ends that now land on the same pin (both on one port's net) would be a zero-length stub.
-        if (!a || !b || (a.x === b.x && a.y === b.y)) return null;
-        return { wire, a, b };
-      })
-      .filter((w): w is { wire: Wire; a: { x: number; y: number }; b: { x: number; y: number } } => w !== null);
-
-    const paths = computeWirePaths(withEndpoints.map((w) => [w.a, w.b]));
-    return withEndpoints.map((w, i) => ({ wire: w.wire, path: paths[i] }));
-  }, [wires, endpoints]);
+  const routes = useMemo(() => wireRoutes(wires, parts, endpoints, netOf, fast), [wires, parts, endpoints, netOf, fast]);
+  const paths = useMemo(() => renderWirePaths(routes.map((r) => r.points)), [routes]);
+  const selected = routes.find((r) => r.wire.id === selectedWireId);
 
   return (
     <>
-      {resolvedWires.map(({ wire, path }) => (
+      {routes.map(({ wire }, i) => (
         <path
           key={wire.id}
-          d={path}
+          d={paths[i]}
           stroke={wire.id === selectedWireId ? "var(--accent)" : "var(--wire)"}
           strokeWidth={wire.id === selectedWireId ? 3 : 2}
           fill="none"
@@ -77,11 +70,11 @@ export function CanvasWireLayer({ endpoints, wires, selectedWireId, onWireClick 
 
       {/* Transparent fat overlay per wire: a 2px stroke is far too thin to click reliably, so
           selection hit-testing runs against this instead. */}
-      {resolvedWires.map(({ wire, path }) => (
+      {routes.map(({ wire }, i) => (
         <path
           key={`hit-${wire.id}`}
           data-wire-id={wire.id}
-          d={path}
+          d={paths[i]}
           stroke="transparent"
           strokeWidth={WIRE_HITBOX_WIDTH}
           fill="none"
@@ -97,6 +90,37 @@ export function CanvasWireLayer({ endpoints, wires, selectedWireId, onWireClick 
       {junctionPoints.map((p, i) => (
         <circle key={i} cx={p.x} cy={p.y} r={3.5} fill="var(--wire)" />
       ))}
+
+      {selected &&
+        onSegmentMouseDown &&
+        (() => {
+          const corners = draggableCorners(selected.points);
+          return corners.slice(1, -2).map((p, k) => {
+            const q = corners[k + 2];
+            const horizontal = p.y === q.y;
+            return (
+              <rect
+                key={`seg-${k}`}
+                data-segment-handle={k + 1}
+                x={(p.x + q.x) / 2 - HANDLE_SIZE / 2}
+                y={(p.y + q.y) / 2 - HANDLE_SIZE / 2}
+                width={HANDLE_SIZE}
+                height={HANDLE_SIZE}
+                rx={2}
+                fill="var(--bg-inset)"
+                stroke="var(--accent)"
+                strokeWidth={2}
+                style={{ cursor: horizontal ? "ns-resize" : "ew-resize" }}
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                  onSegmentMouseDown(selected.wire, corners, k + 1, e);
+                }}
+              >
+                <title>끌어서 배선 경로 옮기기</title>
+              </rect>
+            );
+          });
+        })()}
     </>
   );
 }

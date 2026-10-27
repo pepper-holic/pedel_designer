@@ -34,17 +34,6 @@ export const bossStyleOverdrivePreset: PedalPreset = {
     ],
     disclaimer: "대표값 근사치이며 특정 상용 제품의 실측 회로도가 아닙니다.",
   },
-  layout: {
-    V1: { x: 60, y: 250 },
-    Rin: { x: 200, y: 250 },
-    U1: { x: 340, y: 250 },
-    Rf: { x: 280, y: 100 },
-    D1a: { x: 280, y: 400 },
-    D1b: { x: 340, y: 400 },
-    Rtone: { x: 480, y: 250 },
-    Ctone: { x: 550, y: 400 },
-    Ubuf: { x: 690, y: 250 },
-  },
   // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
   // collapsed into black boxes; knobs load as real potentiometers.
   blocks: [

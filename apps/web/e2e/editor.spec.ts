@@ -208,3 +208,54 @@ test("adds library blocks, wires their pins, and groups a selection into a new b
   await expect(page.getByText(/블록으로 묶었습니다/)).toBeVisible();
   await expect(page.getByText("선택된 블록")).toBeVisible();
 });
+
+test.describe("layout editing", () => {
+  // Drags need room: at the default 1280x720 the fitted canvas is small enough that handles and
+  // part bodies sit under the control strip.
+  test.use({ viewport: { width: 1600, height: 1000 } });
+
+  test("dragging a wire segment reroutes it, and the route can be reset", async ({ page }) => {
+    await loadPreset(page, /TS9 스타일 오버드라이브/);
+    // Click a point that is actually on a long wire's stroke (a bounding-box centre of an L-shaped
+    // wire is off the wire).
+    const point = await page.evaluate(() => {
+      // Longest wire whose midpoint is not covered by a part's click box.
+      const paths = [...document.querySelectorAll<SVGPathElement>("path[data-wire-id]")].sort((a, b) => b.getTotalLength() - a.getTotalLength());
+      for (const path of paths) {
+        const p = path.getPointAtLength(path.getTotalLength() / 2);
+        const m = path.getScreenCTM()!;
+        const x = p.x * m.a + p.y * m.c + m.e;
+        const y = p.x * m.b + p.y * m.d + m.f;
+        if (document.elementFromPoint(x, y) === path) return { x, y };
+      }
+      throw new Error("no clickable wire");
+    });
+    await page.mouse.click(point.x, point.y);
+    await expect(page.getByText("선택된 배선")).toBeVisible();
+    const handle = page.locator("rect[data-segment-handle]").first();
+    await expect(handle).toBeVisible();
+    const box = await handle.boundingBox();
+    if (!box) throw new Error("no handle");
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + 40, box.y + 40, { steps: 4 });
+    await page.mouse.up();
+    await page.getByRole("button", { name: "경로 초기화" }).click();
+    await expect(page.getByRole("button", { name: "경로 초기화" })).toHaveCount(0);
+  });
+
+  test("auto-arrange relays the circuit out but keeps a part the user placed", async ({ page }) => {
+    await loadPreset(page, /RAT 스타일/);
+    const part = page.locator("g[data-part-id='Rs'] rect[fill='transparent']");
+    const box = await part.boundingBox();
+    if (!box) throw new Error("no part");
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + 120, box.y + 90, { steps: 5 });
+    await page.mouse.up();
+    await expect(page.getByLabel(/위치 고정/)).toBeChecked();
+
+    await page.getByRole("button", { name: "자동 정렬" }).click();
+    await expect(page.getByText(/직접 옮긴 부품 1개는 그 자리에/)).toBeVisible();
+  });
+});

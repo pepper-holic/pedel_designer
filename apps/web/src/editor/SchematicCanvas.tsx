@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { zoomAroundPoint, fitView, GRID_SIZE } from "./geometry";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { snapToGrid, GRID_SIZE } from "./geometry";
+import { useCanvasView } from "./useCanvasView";
 import { CanvasPart } from "./CanvasPart";
 import { CanvasBlockLayer } from "./CanvasBlockLayer";
 import { CanvasWireLayer } from "./CanvasWireLayer";
@@ -43,6 +44,9 @@ interface SchematicCanvasProps {
   onSelectBlock?: (blockId: string) => void;
   onToggleCollapse?: (blockId: string) => void;
   onSetAllCollapsed?: (collapsed: boolean) => void;
+  /** Live update of a wire's dragged corners (committed by `onDragEnd`). */
+  onWireWaypoints?: (wireId: string, waypoints: { x: number; y: number }[]) => void;
+  onAutoArrange?: () => void;
   /** Bump to auto-fit the view to the current parts - the editor changes this whenever the whole
    * circuit is replaced (template load, new circuit) so a freshly loaded preset arrives fully visible. */
   fitSignal?: number;
@@ -50,8 +54,6 @@ interface SchematicCanvasProps {
   height?: number;
 }
 
-const MIN_ZOOM = 0.3;
-const MAX_ZOOM = 3;
 const PAN_DRAG_THRESHOLD = 4;
 // Half-extent used when fitting: a little wider than the part hit-box so the id/value text labels
 // drawn just outside it are inside the fitted view too.
@@ -86,50 +88,44 @@ export function SchematicCanvas({
   onSelectBlock,
   onToggleCollapse,
   onSetAllCollapsed,
+  onWireWaypoints,
+  onAutoArrange,
   fitSignal = 0,
   width = 900,
   height = 460,
 }: SchematicCanvasProps) {
   const [dragId, setDragId] = useState<string | null>(null);
+  // Dragging one segment of the selected wire: which wire, which segment, and the corners it started from.
+  const [segmentDrag, setSegmentDrag] = useState<{ wireId: string; segment: number; corners: { x: number; y: number }[] } | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [pendingTerminalState, setPendingTerminal] = useState<TerminalRef | null>(null);
-  const [view, setView] = useState({ zoom: 1, panX: 0, panY: 0 });
   const [panStart, setPanStart] = useState<{ mouseX: number; mouseY: number; panX: number; panY: number; moved: boolean } | null>(null);
   // Shift+drag on the background draws a selection box instead of panning. Panning is the more
   // frequent gesture, so it keeps the unmodified drag.
   const [selectBox, setSelectBox] = useState<SelectionBox | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const justBoxSelected = useRef(false);
-  const endpoints = useMemo(
-    () => buildCanvasEndpoints(parts, blocks, terminalNet ? (ref) => terminalNet.get(`${ref.partId}:${ref.terminalId}`) : undefined),
-    [parts, blocks, terminalNet],
-  );
+  const netOf = useCallback((ref: TerminalRef) => terminalNet?.get(`${ref.partId}:${ref.terminalId}`), [terminalNet]);
+  const endpoints = useMemo(() => buildCanvasEndpoints(parts, blocks, terminalNet ? netOf : undefined), [parts, blocks, terminalNet, netOf]);
   const visibleParts = useMemo(() => parts.filter((p) => !endpoints.hidden.has(p.id)), [parts, endpoints]);
 
-  // Attached as a native (non-passive) listener rather than React's onWheel: React registers
-  // wheel handlers as passive, which silently drops preventDefault() and lets the page scroll
-  // underneath the zoom gesture instead of stopping it.
-  useEffect(() => {
-    const svg = svgRef.current;
-    if (!svg) return;
-    const onWheelNative = (e: WheelEvent) => {
-      e.preventDefault();
-      const rect = svg.getBoundingClientRect();
-      const p = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-      const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
-      setView((v) => zoomAroundPoint(v, p, factor, MIN_ZOOM, MAX_ZOOM));
-    };
-    svg.addEventListener("wheel", onWheelNative, { passive: false });
-    return () => svg.removeEventListener("wheel", onWheelNative);
-  }, []);
+  // What fit should frame: visible parts plus collapsed blocks' boxes (a collapsed block's hidden
+  // parts can span far more than its box).
+  const fitBounds = useMemo(
+    () => [
+      ...visibleParts.map((p) => ({ minX: p.x - FIT_PART_MARGIN, minY: p.y - FIT_PART_MARGIN, maxX: p.x + FIT_PART_MARGIN, maxY: p.y + FIT_PART_MARGIN })),
+      ...[...endpoints.layouts.values()].map((l) => ({ minX: l.left - 30, minY: l.top - 20, maxX: l.left + l.width + 30, maxY: l.top + l.height + 20 })),
+    ],
+    [visibleParts, endpoints],
+  );
+  const canvasView = useCanvasView(svgRef, fitBounds, { width, height }, fitSignal);
+  const { view, setView, toWorld } = canvasView;
 
   const screenPoint = (e: React.MouseEvent<SVGSVGElement> | React.WheelEvent<SVGSVGElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   };
 
-  /** Converts a screen-space point (relative to the SVG's bounding box) into world (pre-zoom/pan) coordinates. */
-  const toWorld = (screen: { x: number; y: number }) => ({ x: (screen.x - view.panX) / view.zoom, y: (screen.y - view.panY) / view.zoom });
 
   const handleBodyMouseDown = (part: PartInstance, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -166,6 +162,19 @@ export function SchematicCanvas({
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (segmentDrag) {
+      const world = toWorld(screenPoint(e));
+      const { segment, corners } = segmentDrag;
+      const p = corners[segment];
+      const q = corners[segment + 1];
+      const next = corners.map((c) => ({ ...c }));
+      // A horizontal segment moves up/down, a vertical one left/right - both of its corners together,
+      // so the wire stays orthogonal.
+      if (p.y === q.y) next[segment].y = next[segment + 1].y = snapToGrid(world.y);
+      else next[segment].x = next[segment + 1].x = snapToGrid(world.x);
+      onWireWaypoints?.(segmentDrag.wireId, next.slice(1, -1));
+      return;
+    }
     if (selectBox) {
       const world = toWorld(screenPoint(e));
       setSelectBox({ ...selectBox, x2: world.x, y2: world.y });
@@ -226,28 +235,6 @@ export function SchematicCanvas({
   // the stale terminal is still live.
   const pendingTerminal = pendingTerminalState && parts.some((p) => p.id === pendingTerminalState.partId) ? pendingTerminalState : null;
 
-  const resetView = () => setView({ zoom: 1, panX: 0, panY: 0 });
-
-
-  // What is actually drawn: visible parts plus collapsed blocks' boxes (a collapsed block's hidden
-  // parts can span far more than its box). Kept in a ref, synced in an effect, so the auto-fit effect
-  // below fires when the circuit is replaced or a block is placed - not on every drag.
-  const boundsRef = useRef<{ minX: number; minY: number; maxX: number; maxY: number }[]>([]);
-  useEffect(() => {
-    boundsRef.current = [
-      ...visibleParts.map((p) => ({ minX: p.x - FIT_PART_MARGIN, minY: p.y - FIT_PART_MARGIN, maxX: p.x + FIT_PART_MARGIN, maxY: p.y + FIT_PART_MARGIN })),
-      ...[...endpoints.layouts.values()].map((l) => ({ minX: l.left - 30, minY: l.top - 20, maxX: l.left + l.width + 30, maxY: l.top + l.height + 20 })),
-    ];
-  }, [visibleParts, endpoints]);
-
-  const fitToContent = useCallback(() => {
-    setView(fitView(boundsRef.current, { width, height }, { minZoom: MIN_ZOOM }));
-  }, [width, height]);
-
-  useEffect(() => {
-    fitToContent();
-  }, [fitSignal, fitToContent]);
-
   const handleTerminalClick = (ref: TerminalRef, e: React.MouseEvent) => {
     e.stopPropagation();
     if (probeMode) {
@@ -270,10 +257,11 @@ export function SchematicCanvas({
     <div style={{ position: "relative" }}>
       <CanvasControls
         zoom={view.zoom}
-        onZoomIn={() => setView((v) => ({ ...v, zoom: Math.min(MAX_ZOOM, v.zoom * 1.2) }))}
-        onZoomOut={() => setView((v) => ({ ...v, zoom: Math.max(MIN_ZOOM, v.zoom / 1.2) }))}
-        onFit={fitToContent}
-        onReset={resetView}
+        onZoomIn={canvasView.zoomIn}
+        onZoomOut={canvasView.zoomOut}
+        onFit={canvasView.fit}
+        onReset={canvasView.reset}
+        onAutoArrange={onAutoArrange}
         probeMode={probeMode}
         onProbeModeChange={onProbeModeChange}
         showDc={showDc}
@@ -292,12 +280,20 @@ export function SchematicCanvas({
         style={{ display: "block", cursor: dragId ? "grabbing" : panStart ? "grabbing" : probeMode ? "crosshair" : "default" }}
         onMouseMove={handleMouseMove}
         onMouseUp={() => {
+          if (segmentDrag) {
+            setSegmentDrag(null);
+            onDragEnd?.();
+          }
           finishBoxSelect();
           if (dragId) onDragEnd?.();
           setDragId(null);
           setPanStart(null);
         }}
         onMouseLeave={() => {
+          if (segmentDrag) {
+            setSegmentDrag(null);
+            onDragEnd?.();
+          }
           finishBoxSelect();
           if (dragId) onDragEnd?.();
           setDragId(null);
@@ -327,7 +323,16 @@ export function SchematicCanvas({
             onToggleCollapse={(id) => onToggleCollapse?.(id)}
           />
 
-          <CanvasWireLayer endpoints={endpoints} wires={wires} selectedWireId={selectedWireId} onWireClick={(wire) => (probeMode ? onProbeTerminal?.(wire.a) : onSelectWire?.(wire.id))} />
+          <CanvasWireLayer
+            endpoints={endpoints}
+            parts={parts}
+            wires={wires}
+            netOf={netOf}
+            fast={dragId !== null || segmentDrag !== null}
+            selectedWireId={selectedWireId}
+            onWireClick={(wire) => (probeMode ? onProbeTerminal?.(wire.a) : onSelectWire?.(wire.id))}
+            onSegmentMouseDown={onWireWaypoints ? (wire, corners, segment) => setSegmentDrag({ wireId: wire.id, segment, corners }) : undefined}
+          />
 
           {[...endpoints.layouts].map(([blockId, layout]) => {
             const block = blocks.find((b) => b.id === blockId)!;

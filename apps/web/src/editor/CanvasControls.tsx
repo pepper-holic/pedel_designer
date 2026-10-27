@@ -4,6 +4,7 @@ interface CanvasControlsProps {
   onZoomOut: () => void;
   onFit: () => void;
   onReset: () => void;
+  onAutoArrange?: () => void;
   probeMode: boolean;
   onProbeModeChange?: (on: boolean) => void;
   showDc: boolean;
@@ -20,6 +21,7 @@ export function CanvasControls({
   onZoomOut,
   onFit,
   onReset,
+  onAutoArrange,
   probeMode,
   onProbeModeChange,
   showDc,
@@ -42,6 +44,16 @@ export function CanvasControls({
       <button type="button" className="canvas-tool-toggle" onClick={onReset}>
         리셋
       </button>
+      {onAutoArrange && (
+        <button
+          type="button"
+          className="canvas-tool-toggle"
+          onClick={onAutoArrange}
+          title="블록을 신호 순서대로, 블록 안 부품을 다시 배치하고 배선을 정리합니다. 직접 옮긴(고정된) 부품은 그대로 둡니다"
+        >
+          자동 정렬
+        </button>
+      )}
       {onProbeModeChange && (
         <button
           type="button"

@@ -1,5 +1,7 @@
 import { buildAnnotatedCircuit } from "./annotatedCircuit";
 import { snapToGrid } from "./geometry";
+import { arrangeParts } from "./layout/arrange";
+import { rewireNets } from "./layout/rewire";
 import type { BlockDef } from "./blocks";
 import type { BlockInstance, PartInstance, TerminalRef, Wire } from "./types";
 
@@ -26,6 +28,11 @@ export function instantiateBlock(def: BlockDef, instanceId: string, position: { 
     knobs: def.knobs,
     blocks: [{ id: instanceId, label: def.label, category: def.category, elements: def.build().elements.map((e) => e.id), ports: def.ports, collapsed }],
   });
+  if (!def.layout) {
+    const arranged = rewireNets(arrangeParts({ parts: built.parts, wires: built.wires, blocks: built.blocks }, null));
+    built.parts = arranged.parts;
+    built.wires = arranged.wires;
+  }
   const prefix = `${instanceId}_`;
   const ref = (r: TerminalRef): TerminalRef => ({ partId: `${prefix}${r.partId}`, terminalId: r.terminalId });
   const dx = position.x - LAYOUT_ORIGIN_X;

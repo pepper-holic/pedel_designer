@@ -1,5 +1,7 @@
 import { netlistFromGraph } from "./netlistFromGraph";
 import { buildAnnotatedCircuit } from "./annotatedCircuit";
+import { arrangeParts } from "./layout/arrange";
+import { rewireNets } from "./layout/rewire";
 import type { CircuitSnapshot } from "./historyStack";
 import type { PedalPreset, PresetVariant } from "../core/library/presets";
 import type { WiringPreset } from "./wiring";
@@ -42,6 +44,14 @@ export function loadPedalPreset(preset: PedalPreset, variant?: PresetVariant): L
     knobs: preset.knobs,
     nodesOfInterest: [preset.outputNode, ...preset.tapNodes],
   });
+  // A hand-tuned layout wins; otherwise blocks are laid out in signal order and each net is rewired
+  // as its shortest tree (fewer crossings on 22 of the 23 presets than the flat layout - see
+  // docs/plan-core-fundamentals.md, Stage C).
+  if (!preset.layout) {
+    const arranged = rewireNets(arrangeParts({ parts: built.parts, wires: built.wires, blocks: built.blocks }, preset.inputSourceId));
+    built.parts = arranged.parts;
+    built.wires = arranged.wires;
+  }
   const { terminalNet } = netlistFromGraph(built.parts, built.wires);
   const netOf = (node: string) => {
     const ref = built.nodeTerminals.get(node);

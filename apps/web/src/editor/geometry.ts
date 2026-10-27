@@ -196,7 +196,14 @@ function segmentPathWithHops(a: Point, b: Point, horizontal: boolean, hopPositio
  * depend on which wire happens to be declared first.
  */
 export function computeWirePaths(endpoints: [Point, Point][]): string[] {
-  const pointLists = endpoints.map(([a, b], wireIndex) => orthogonalPoints(a, b, laneOffsetFor(wireIndex)));
+  return renderWirePaths(endpoints.map(([a, b], wireIndex) => orthogonalPoints(a, b, laneOffsetFor(wireIndex))));
+}
+
+/**
+ * Path strings for already-decided orthogonal polylines (from the router, the user's waypoints, or
+ * the plain 2-bend route), with a hop wherever one wire crosses another mid-segment.
+ */
+export function renderWirePaths(pointLists: Point[][]): string[] {
   const allSegments = pointLists.flatMap((points, wireIndex) => segmentsOf(points, wireIndex));
   const horizontals = allSegments.filter((s) => s.horizontal);
   const verticals = allSegments.filter((s) => !s.horizontal);
@@ -225,4 +232,50 @@ export function computeWirePaths(endpoints: [Point, Point][]): string[] {
     }
     return d;
   });
+}
+
+/**
+ * An orthogonal polyline through `waypoints` from `a` to `b`. Consecutive points that are not
+ * aligned get one bend: horizontal-first, except into the final terminal, where the last leg is
+ * kept horizontal because part terminals face sideways.
+ */
+export function polylineThrough(a: Point, waypoints: Point[], b: Point): Point[] {
+  const pts = [a, ...waypoints, b];
+  const out: Point[] = [a];
+  for (let i = 1; i < pts.length; i++) {
+    const p = out[out.length - 1];
+    const q = pts[i];
+    if (p.x !== q.x && p.y !== q.y) out.push(i === pts.length - 1 ? { x: p.x, y: q.y } : { x: q.x, y: p.y });
+    out.push(q);
+  }
+  // Drop zero-length legs and collinear midpoints so segment handles and hops see clean corners.
+  const clean: Point[] = [];
+  for (const q of out) {
+    const last = clean[clean.length - 1];
+    if (last && last.x === q.x && last.y === q.y) continue;
+    const prev = clean[clean.length - 2];
+    if (prev && last && ((prev.x === last.x && last.x === q.x) || (prev.y === last.y && last.y === q.y))) clean.pop();
+    clean.push(q);
+  }
+  return clean;
+}
+
+/**
+ * The points a segment drag starts from. A wire with fewer than two interior corners has no inner
+ * segment to grab, so it is first given one: a straight run gets a jog, an L gets a 2-bend route.
+ */
+export function draggableCorners(points: Point[]): Point[] {
+  if (points.length >= 4) return points;
+  const a = points[0];
+  const b = points[points.length - 1];
+  if (a.x !== b.x && a.y !== b.y) return orthogonalPoints(a, b);
+  if (a.y === b.y && Math.abs(b.x - a.x) > 40) {
+    const s = Math.sign(b.x - a.x) * 20;
+    return [a, { x: a.x + s, y: a.y }, { x: b.x - s, y: b.y }, b];
+  }
+  if (a.x === b.x && Math.abs(b.y - a.y) > 40) {
+    const s = Math.sign(b.y - a.y) * 20;
+    return [a, { x: a.x, y: a.y + s }, { x: b.x, y: b.y - s }, b];
+  }
+  return points;
 }

@@ -13,7 +13,7 @@ const EMPTY_CIRCUIT_TIP =
 
 const CANVAS_HINT =
   "R: 회전 · Delete: 삭제 · Ctrl+C/V/D: 복사·붙여넣기·복제 · 방향키: 이동(Shift로 크게) · [ ]: 부품 순환 · Esc: 선택 해제 · " +
-  "휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · Shift+드래그: 범위 선택 · 부품 드래그: 이동 · 단자 클릭 2회: 배선 · 배선 클릭: 선택 · P: 프로브 모드 · Ctrl+G: 블록으로 묶기 · 블록 더블클릭: 접기/펼치기";
+  "휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · Shift+드래그: 범위 선택 · 부품 드래그: 이동 · 단자 클릭 2회: 배선 · 배선 클릭: 선택 · P: 프로브 모드 · Ctrl+G: 블록으로 묶기 · 블록 더블클릭: 접기/펼치기 · 선택한 배선의 네모 손잡이: 경로 옮기기";
 
 interface EditorCanvasAreaProps {
   parts: PartInstance[];
@@ -45,6 +45,8 @@ interface EditorCanvasAreaProps {
   onSelectBlock: (blockId: string) => void;
   onToggleCollapse: (blockId: string) => void;
   onSetAllCollapsed: (collapsed: boolean) => void;
+  onWireWaypoints: (wireId: string, waypoints: { x: number; y: number }[]) => void;
+  onAutoArrange: () => void;
 }
 
 /** Centre column: the schematic itself with the analysis dock underneath. */
@@ -118,6 +120,8 @@ export function EditorCanvasArea(props: EditorCanvasAreaProps) {
             onSelectBlock={props.onSelectBlock}
             onToggleCollapse={props.onToggleCollapse}
             onSetAllCollapsed={props.onSetAllCollapsed}
+            onWireWaypoints={props.onWireWaypoints}
+            onAutoArrange={props.onAutoArrange}
             fitSignal={props.fitSignal}
           />
         </div>

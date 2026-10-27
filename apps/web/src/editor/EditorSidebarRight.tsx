@@ -26,6 +26,8 @@ interface EditorSidebarRightProps {
   /** Set when a whole block is selected: its inspector replaces the part inspector. */
   blockInspector: React.ComponentProps<typeof BlockInspector> | null;
   onSelectBlock: (blockId: string) => void;
+  onResetWire: (wireId: string) => void;
+  onTogglePinned: (partId: string) => void;
   onExposeParam: (blockId: string, partId: string, paramKey: string) => void;
   preview: { enabled: boolean; onEnabledChange: (on: boolean) => void; busy: boolean };
 }
@@ -41,6 +43,8 @@ export function EditorSidebarRight(props: EditorSidebarRightProps) {
       <InspectorPanel
         onSelectBlock={props.onSelectBlock}
         onExposeParam={props.onExposeParam}
+        onResetWire={props.onResetWire}
+        onTogglePinned={props.onTogglePinned}
         selectedPart={props.selectedPart}
         selectedWire={props.selectedWire}
         blocks={props.blocks}

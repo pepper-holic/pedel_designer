@@ -26,6 +26,8 @@ export interface PartInstance {
   /** Set when this part was stamped onto the canvas as part of a functional block (buffer, gain
    * stage, clipper, tone stack, ...) rather than added one at a time - see BlockInstance. */
   blockId?: string;
+  /** Set when the user has placed this part by hand: "자동 정렬" leaves it where it is. */
+  pinned?: boolean;
 }
 
 import type { BlockCategory, PortKind } from "../core/library/types";
@@ -80,6 +82,9 @@ export interface Wire {
   id: string;
   a: TerminalRef;
   b: TerminalRef;
+  /** Corner points the user dragged the wire through. Absent = routed automatically. The ends still
+   * follow the terminals when parts move; only these interior points stay put. */
+  waypoints?: { x: number; y: number }[];
 }
 
 /**

@@ -29,6 +29,9 @@ interface InspectorPanelProps {
   onSelectBlock?: (blockId: string) => void;
   /** Surfaces one of this part's parameters as a knob on its block. */
   onExposeParam?: (blockId: string, partId: string, paramKey: string) => void;
+  /** Drops a wire's hand-dragged corners so it is routed automatically again. */
+  onResetWire?: (wireId: string) => void;
+  onTogglePinned?: (partId: string) => void;
 }
 
 export function InspectorPanel({
@@ -42,6 +45,8 @@ export function InspectorPanel({
   onDeleteBlock,
   onSelectBlock,
   onExposeParam,
+  onResetWire,
+  onTogglePinned,
 }: InspectorPanelProps) {
   const ownerBlock = selectedPart?.blockId ? (blocks.find((b) => b.id === selectedPart.blockId) ?? null) : null;
   const modelMenu = selectedPart ? MODEL_MENUS[selectedPart.type] : undefined;
@@ -55,11 +60,16 @@ export function InspectorPanel({
           <p className="preset-description">
             {selectedWire.a.partId}:{selectedWire.a.terminalId} ↔ {selectedWire.b.partId}:{selectedWire.b.terminalId}
           </p>
-          <p className="canvas-hint">잘못 이은 배선은 여기서 지울 수 있습니다. 부품은 그대로 남습니다.</p>
+          <p className="canvas-hint">잘못 이은 배선은 여기서 지울 수 있습니다. 부품은 그대로 남습니다. 네모 손잡이를 끌면 경로를 옮길 수 있습니다.</p>
           <div className="run-row">
             <button type="button" onClick={onDelete}>
               삭제 (Del)
             </button>
+            {selectedWire.waypoints?.length && onResetWire ? (
+              <button type="button" onClick={() => onResetWire(selectedWire.id)}>
+                경로 초기화
+              </button>
+            ) : null}
           </div>
         </>
       ) : selectedPart ? (
@@ -67,6 +77,13 @@ export function InspectorPanel({
           <p className="preset-description">
             {PART_DEFS[selectedPart.type].label} ({selectedPart.id})
           </p>
+          {onTogglePinned && (
+            <label className="field-row" title="고정된 부품은 '자동 정렬'이 옮기지 않습니다. 직접 끌어 옮기면 자동으로 고정됩니다.">
+              <span>
+                <input type="checkbox" checked={!!selectedPart.pinned} onChange={() => onTogglePinned(selectedPart.id)} /> 위치 고정 (자동 정렬 제외)
+              </span>
+            </label>
+          )}
           {ownerBlock && (
             <div className="field-row">
               <span className="canvas-hint">소속 블록: {ownerBlock.label}</span>

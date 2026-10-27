@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { PART_DEFS, type PartType } from "./partDefs";
 import type { TerminalRef } from "./types";
 import { netlistFromGraph } from "./netlistFromGraph";
@@ -27,7 +27,10 @@ import { pruneProbes } from "./probes";
 import { movePartsBy, deleteParts, deleteWire, deleteBlock, rotatePart, updatePartParams, coerceParamValue } from "./circuitEdits";
 import { computeOperatingPoint } from "./operatingPoint";
 import type { Probe } from "./types";
-import { canRedo, canUndo, commitPrevious, createHistory, pushSnapshot, redo, replacePresent, undo, type CircuitSnapshot } from "./historyStack";
+import { canRedo, canUndo, createHistory, pushSnapshot, redo, undo, type CircuitSnapshot } from "./historyStack";
+import { useDragEditing } from "./useDragEditing";
+import { arrangeParts } from "./layout/arrange";
+import { rewireNets } from "./layout/rewire";
 import { loadCircuitFromStorage, CURRENT_SCHEMA_VERSION } from "./circuitStorage";
 
 
@@ -54,7 +57,6 @@ export function SchematicEditor() {
   const [status, setStatus] = useState("");
   const [monteCarloResult, setMonteCarloResult] = useState<MonteCarloResult | null>(null);
   const [circuitVersion, setCircuitVersion] = useState(0);
-  const dragStartSnapshotRef = useRef<CircuitSnapshot | null>(null);
 
   const parts = history.present.parts;
   const wires = history.present.wires;
@@ -123,23 +125,24 @@ export function SchematicEditor() {
     commit({ parts: [...parts, { id, type, x, y, rotation: 0, params: { ...PART_DEFS[type].defaultParams, ...paramsOverride } }], wires, blocks });
   };
 
-  const handleMovePart = (id: string, x: number, y: number) => {
-    if (dragStartSnapshotRef.current === null) dragStartSnapshotRef.current = history.present;
-    const dragged = parts.find((p) => p.id === id);
-    if (!dragged) return;
-    // Dragging one part of a multi-selection moves the whole selection - leaving the others behind
-    // is the thing that makes box-select feel broken.
-    const moving = selectedPartIds.includes(id) ? new Set(selectedPartIds) : new Set([id]);
-    const dx = snapToGrid(x) - dragged.x;
-    const dy = snapToGrid(y) - dragged.y;
-    setHistory((h) => replacePresent(h, movePartsBy(history.present, moving, dx, dy)));
+  const drag = useDragEditing({ history, setHistory, selectedPartIds });
+  // Bumped by "자동 정렬" so the view re-fits the rearranged circuit.
+  const [arrangeCount, setArrangeCount] = useState(0);
+
+  /** Lays the whole circuit out again (blocks in signal order, parts within each block), leaving
+   * hand-placed (pinned) parts alone, then rewires each net as its shortest tree. */
+  const handleAutoArrange = () => {
+    commit(rewireNets(arrangeParts(history.present, graph.inputSourceId)));
+    setArrangeCount((n) => n + 1);
+    const pinned = parts.filter((p) => p.pinned).length;
+    setStatus(pinned > 0 ? `자동 정렬했습니다. 직접 옮긴 부품 ${pinned}개는 그 자리에 두었습니다.` : "자동 정렬했습니다.");
   };
 
-  const handleDragEnd = () => {
-    const preDrag = dragStartSnapshotRef.current;
-    dragStartSnapshotRef.current = null;
-    if (preDrag) setHistory((h) => commitPrevious(h, preDrag));
-  };
+  const handleResetWire = (wireId: string) =>
+    commit({ ...history.present, wires: wires.map((w) => (w.id === wireId ? { id: w.id, a: w.a, b: w.b } : w)) });
+
+  const handleTogglePinned = (partId: string) =>
+    commit({ ...history.present, parts: parts.map((p) => (p.id === partId ? { ...p, pinned: !p.pinned } : p)) });
 
   const handleAddWire = (a: TerminalRef, b: TerminalRef) => {
     commit({ parts, wires: [...wires, { id: `w${wires.length + 1}_${Date.now()}`, a, b }], blocks });
@@ -291,18 +294,20 @@ export function SchematicEditor() {
           parts={parts}
           wires={wires}
           blocks={blocks}
-          fitSignal={circuitVersion + blockActions.placedCount}
+          fitSignal={circuitVersion + blockActions.placedCount + arrangeCount}
+          onAutoArrange={handleAutoArrange}
           selectedPartId={selectedPartId}
           selectedPartIds={selectedPartIds}
           selectedWireId={selectedWireId}
           onBoxSelect={selection.selectParts}
           circuitVersion={circuitVersion}
           dockTabs={dockTabs}
-          onMovePart={handleMovePart}
+          onMovePart={drag.movePart}
+          onWireWaypoints={drag.setWireWaypoints}
           onSelectPart={handleSelectPart}
           onSelectWire={selection.selectWire}
           onAddWire={handleAddWire}
-          onDragEnd={handleDragEnd}
+          onDragEnd={drag.end}
           probeMode={probes.probeMode}
           onProbeModeChange={probes.setProbeMode}
           onProbeTerminal={probes.toggleAt}
@@ -337,6 +342,8 @@ export function SchematicEditor() {
           onDelete={handleDeleteSelected}
           onDeleteBlock={handleDeleteBlock}
           onSelectBlock={selection.selectBlock}
+          onResetWire={handleResetWire}
+          onTogglePinned={handleTogglePinned}
           onExposeParam={blockActions.exposeParam}
           blockInspector={
             selectedBlock && {
