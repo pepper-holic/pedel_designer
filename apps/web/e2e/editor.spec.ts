@@ -6,9 +6,9 @@ import { expect, test, type Page } from "@playwright/test";
  * production bundle.
  */
 
-/** Opens the library and loads a preset by the text on its row. */
+/** Opens the library's preset tab and loads a preset by the text on its row. */
 async function loadPreset(page: Page, name: string | RegExp, group?: string) {
-  await page.getByRole("button", { name: "템플릿/블록" }).click();
+  await page.getByRole("tab", { name: "프리셋" }).click();
   if (group) {
     const header = page.getByRole("button", { name: new RegExp(group) });
     if ((await header.getAttribute("aria-expanded")) === "false") await header.click();
@@ -17,6 +17,23 @@ async function loadPreset(page: Page, name: string | RegExp, group?: string) {
 }
 
 const partsOnCanvas = (page: Page) => page.locator("g[data-part-id]");
+
+/** Switches work step from the app bar. */
+const step = (page: Page, name: "설계" | "연주" | "분석" | "제작") =>
+  page.getByRole("navigation", { name: "작업 단계" }).getByRole("button", { name: new RegExp(name) }).click();
+
+/** Picks a built-in input signal in the transport bar. */
+const useSignal = (page: Page, id: "note" | "chord" | "sweep" | "impulse") => page.locator("#transport-input").selectOption(`signal:${id}`);
+
+/** Runs the transient simulation from the analysis step. */
+async function runSimulation(page: Page) {
+  await step(page, "분석");
+  await page.getByRole("button", { name: /시뮬레이션 실행/ }).click();
+  await expect(page.getByText("시뮬레이션 완료", { exact: false })).toBeVisible({ timeout: 60_000 });
+}
+
+/** A build step from the build workspace's list. */
+const buildStep = (page: Page, name: string) => page.getByRole("navigation", { name: "만들기 단계" }).getByRole("button", { name, exact: true }).click();
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
@@ -27,12 +44,14 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("loads a preset and renders it on the canvas", async ({ page }) => {
-  await expect(page.getByText(/회로가 비어 있습니다/)).toBeVisible();
+  await expect(page.getByRole("region", { name: "시작하기" })).toBeVisible();
 
   await loadPreset(page, /TS9 스타일 오버드라이브/);
 
   await expect(partsOnCanvas(page)).not.toHaveCount(0);
-  await expect(page.getByText(/템플릿 로드됨/)).toBeVisible();
+  await expect(page.getByRole("region", { name: "시작하기" })).toHaveCount(0);
+  await expect(page.getByRole("status")).toContainText("불러옴");
+  await expect(page.getByRole("banner")).toContainText("TS9 스타일 오버드라이브");
   // The output node is resolved automatically, which is what makes the analysis tabs work at all.
   await expect(page.locator("#output-node-select")).not.toHaveValue("");
 });
@@ -40,10 +59,8 @@ test("loads a preset and renders it on the canvas", async ({ page }) => {
 test("runs a simulation from a built-in signal and offers playback", async ({ page }) => {
   await loadPreset(page, /다이오드 클리퍼 \(대칭\)/);
 
-  await page.getByRole("button", { name: "단음 (감쇠)" }).click();
-  await page.getByRole("button", { name: "시뮬레이션 실행" }).click();
-
-  await expect(page.getByText("시뮬레이션 완료", { exact: false })).toBeVisible({ timeout: 60_000 });
+  await useSignal(page, "note");
+  await runSimulation(page);
   // No convergence warning: the warm-started solver should settle on every sample here.
   await expect(page.getByText(/수렴 실패/)).toHaveCount(0);
 
@@ -53,8 +70,9 @@ test("runs a simulation from a built-in signal and offers playback", async ({ pa
 });
 
 test("reports why a broken circuit does nothing, and clears once it is fixed", async ({ page }) => {
+  // With nothing selected the right column is the circuit summary, which carries the check.
+  await page.getByRole("tab", { name: "부품" }).click();
   await page.getByRole("button", { name: "저항", exact: true }).click();
-  await page.getByRole("tab", { name: "검사" }).click();
 
   await expect(page.getByText(/접지가 없습니다/)).toBeVisible();
   await expect(page.getByText(/입력 신호원이 없습니다/)).toBeVisible();
@@ -90,8 +108,8 @@ test("sweeps a knob and draws one curve per position", async ({ page }) => {
 
 test("exports a KiCad netlist for the loaded circuit", async ({ page }) => {
   await loadPreset(page, /다이오드 클리퍼 \(대칭\)/);
-  await page.getByRole("tab", { name: "PCB" }).click();
-  await page.getByRole("button", { name: "KiCad 넷리스트" }).click();
+  await step(page, "제작");
+  await buildStep(page, "KiCad 넷리스트");
 
   // The downloaded file is the deliverable, so the test reads it rather than trusting the button.
   const [download] = await Promise.all([
@@ -134,9 +152,8 @@ test("probes a preset's signal path and shows each point's spectrum after a run"
   await page.mouse.click(ring.x + ring.width / 2, ring.y + ring.height / 2);
   await expect(markers).toHaveCount(2);
 
-  await page.getByRole("button", { name: "코드" }).click();
-  await page.getByRole("button", { name: "시뮬레이션 실행" }).click();
-  await expect(page.getByText("시뮬레이션 완료", { exact: false })).toBeVisible({ timeout: 60_000 });
+  await useSignal(page, "chord");
+  await runSimulation(page);
 
   await page.getByRole("tab", { name: "스펙트럼" }).click();
   await expect(page.locator(".spectrum-peaks tr")).toHaveCount(3); // dry input + 2 probes
@@ -164,9 +181,11 @@ test("changing a value plays a short preview of the new sound", async ({ page })
 
 test("plays the circuit in real time and keeps playing through a knob change", async ({ page }) => {
   await loadPreset(page, /TS9 스타일 오버드라이브/);
-  await page.getByRole("button", { name: "▶ 실시간 재생" }).click();
+  // Space starts it from anywhere outside a control.
+  await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+  await page.keyboard.press("Space");
   // Stats only arrive from inside the running AudioWorklet, so seeing one proves it is solving.
-  const load = page.locator(".realtime-load");
+  const load = page.getByText(/^부하 \d+%$/);
   await expect(load).toHaveText(/부하 \d+%/, { timeout: 15_000 });
 
   const gain = page.locator("#input-gain-slider");
@@ -182,7 +201,7 @@ test("plays the circuit in real time and keeps playing through a knob change", a
 
 test("player view: turn the TS9 drive live and watch the spectrum follow", async ({ page }) => {
   await loadPreset(page, /TS9 스타일 오버드라이브/);
-  await page.getByRole("button", { name: "연주", exact: true }).click();
+  await step(page, "연주");
   await page.getByRole("button", { name: "실시간 재생 (풋스위치)" }).click();
   await expect(page.getByText(/ON · 부하 \d+%/)).toBeVisible({ timeout: 15_000 });
   // The analyzer switches to a live RTA fed by the running worklet.
@@ -202,18 +221,19 @@ test("player view: turn the TS9 drive live and watch the spectrum follow", async
 
 test("turns a preset into a verified stripboard and a routed PCB", async ({ page }) => {
   await loadPreset(page, /LPB-1 스타일/);
-  await page.getByRole("tab", { name: /PCB/ }).click();
+  await step(page, "제작");
+  await buildStep(page, "스트립보드");
   await page.getByRole("button", { name: "스트립보드 생성" }).click();
   await expect(page.getByText(/역검증 통과/)).toBeVisible();
   // Placement and routing run in a worker: this also proves the worker chunk ships.
-  await page.getByRole("button", { name: "PCB", exact: true }).click();
+  await buildStep(page, "PCB");
   await page.getByRole("button", { name: "PCB 생성" }).click();
   await expect(page.getByText(/✓ DRC 통과/)).toBeVisible({ timeout: 20_000 });
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: ".kicad_pcb 다운로드" }).click();
   expect((await download).suggestedFilename()).toBe("pedal.kicad_pcb");
   // The enclosure section checks the fresh board against the suggested box.
-  await page.getByRole("button", { name: "인클로저" }).click();
+  await buildStep(page, "인클로저");
   await expect(page.getByText(/PCB .*mm → 내부 약/)).toBeVisible();
 });
 
@@ -240,15 +260,14 @@ test("loads a preset as functional blocks, collapses them to black boxes, and tu
 });
 
 test("adds library blocks, wires their pins, and groups a selection into a new block", async ({ page }) => {
-  await page.getByRole("button", { name: "템플릿/블록" }).click();
-  await page.getByRole("button", { name: /기능 블록/ }).click();
+  await page.getByRole("tab", { name: "블록" }).click();
   await page.getByRole("button", { name: /출력 볼륨/ }).click();
   await expect(page.locator('g[data-block-id="blk1"]')).toHaveCount(1);
   await page.getByRole("button", { name: /접기 \(블랙박스\)/ }).click();
   await expect(page.locator('g[data-block-id="blk1"][data-collapsed="true"] [data-port-id]')).toHaveCount(2);
 
   // Group two loose parts with Ctrl+G.
-  await page.getByRole("button", { name: "소자 팔레트" }).click();
+  await page.getByRole("tab", { name: "부품" }).click();
   await page.getByRole("button", { name: "저항", exact: true }).click();
   await page.getByRole("button", { name: "커패시터", exact: true }).click();
   const svg = page.locator(".canvas-frame svg");
@@ -316,24 +335,22 @@ test.describe("layout editing", () => {
   });
 });
 
-/** Plots in the bottom dock are drawn for the space they get: every one fits inside the dock with
- * no scrolling, at the screen's pixel density, and grows when the dock does. */
+/** Plots are drawn for the space they get: every one fits its panel with no scrolling, at the
+ * screen's pixel density - in the analysis step's full-height panel and in the design step's quick
+ * dock, which they follow when it is resized. */
 for (const viewport of [
   { width: 1280, height: 720 },
   { width: 1440, height: 900 },
 ]) {
-  test.describe(`dock plots at ${viewport.width}x${viewport.height}`, () => {
+  test.describe(`plots at ${viewport.width}x${viewport.height}`, () => {
     test.use({ viewport });
 
-    test("fit the dock, stay sharp, and follow its height", async ({ page }) => {
+    test("fit their panel, stay sharp, and follow the dock's height", async ({ page }) => {
       await loadPreset(page, /TS9 스타일 오버드라이브/);
-      await page.getByRole("button", { name: "코드" }).first().click();
-      await page.getByRole("button", { name: "시뮬레이션 실행" }).click();
-      await expect(page.getByText(/시뮬레이션 완료/)).toBeVisible({ timeout: 20_000 });
+      await runSimulation(page);
 
-      const content = page.locator(".bottom-dock-content");
-      const measure = () =>
-        content.evaluate((el) => {
+      const measure = (selector: string) =>
+        page.locator(selector).evaluate((el) => {
           const box = el.getBoundingClientRect();
           const canvas = el.querySelector("canvas");
           const c = canvas?.getBoundingClientRect();
@@ -347,9 +364,11 @@ for (const viewport of [
 
       for (const tab of [/주파수 응답/, /파형/, /스펙트럼/, /노브 스윕/]) {
         await page.getByRole("tab", { name: tab }).click();
-        const m = await measure();
+        const m = await measure(".analysis-body");
         expect(m, String(tab)).toMatchObject({ inside: true, sharp: true });
         expect(m.overflow, String(tab)).toBeLessThanOrEqual(1);
+        // The analysis step gives a plot most of the window, not a slot.
+        expect(m.height, String(tab)).toBeGreaterThan(viewport.height * 0.35);
       }
 
       // Playing a result turns the spectrum tab's analyzer live (RTA).
@@ -358,14 +377,17 @@ for (const viewport of [
       await page.getByRole("tab", { name: /스펙트럼/ }).click();
       await expect(page.locator(".analyzer-legend")).toContainText("출력 (실시간)");
 
-      // Taller dock, taller plot.
+      // Design step: the quick dock starts folded; a tab opens it, and a taller dock is a taller plot.
+      await step(page, "설계");
+      await expect(page.locator(".bottom-dock-content")).toHaveCount(0);
       await page.getByRole("tab", { name: /주파수 응답/ }).click();
-      const before = (await measure()).height;
+      const docked = await measure(".bottom-dock-content");
+      expect(docked).toMatchObject({ inside: true, sharp: true });
       const resizer = page.getByRole("separator", { name: "분석 패널 높이 조절" });
       await resizer.focus();
       await page.keyboard.press("ArrowUp");
       await page.keyboard.press("ArrowUp");
-      await expect.poll(async () => (await measure()).height).toBeGreaterThan(before + 60);
+      await expect.poll(async () => (await measure(".bottom-dock-content")).height).toBeGreaterThan(docked.height + 60);
     });
   });
 }

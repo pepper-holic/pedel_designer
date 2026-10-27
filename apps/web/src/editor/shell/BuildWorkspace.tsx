@@ -41,7 +41,7 @@ export function BuildWorkspace({ parts, blocks, graph, outputNode }: BuildWorksp
         <ol>
           {STEPS.map((s, i) => (
             <li key={s.id}>
-              <button type="button" aria-current={step === s.id ? "step" : undefined} onClick={() => setStep(s.id)}>
+              <button type="button" aria-current={step === s.id ? "step" : undefined} onClick={() => setStep(s.id)} aria-label={s.label} title={s.hint}>
                 <span className="build-step-num">{i + 1}</span>
                 <span>
                   <strong>{s.label}</strong>
