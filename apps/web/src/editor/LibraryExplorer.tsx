@@ -12,9 +12,12 @@ interface LibraryExplorerProps {
   onLoadWiring: (preset: WiringPreset) => void;
   onAddBlock: (def: BlockDef) => void;
   userBlocks?: { items: UserBlock[]; onAdd: (ub: UserBlock) => void; onDelete: (id: string) => void };
+  /** Which top-level sections to show (default all) - the library panel splits them into tabs. */
+  sections?: TopSection[];
 }
 
-type TopSection = "presets" | "wiring" | "blocks";
+export type TopSection = "presets" | "wiring" | "blocks";
+const ALL_SECTIONS: TopSection[] = ["presets", "wiring", "blocks"];
 type PreviewItem = { label: string; description: string; archive?: boolean };
 
 /** Signal-chain-ish display order, not alphabetical, so the tree reads the way a pedal builder
@@ -26,7 +29,6 @@ function matchesQuery(haystack: string, query: string): boolean {
   return haystack.toLowerCase().includes(query.toLowerCase());
 }
 
-
 /**
  * Merged explorer for the two ways to start a circuit: a complete pedal preset ("특정 페달 프리셋
  * 버전") or an empty, unwired functional block you assemble by hand ("아예 비어있는 기본버전"). Both
@@ -36,9 +38,19 @@ function matchesQuery(haystack: string, query: string): boolean {
  * populated by whichever item was clicked most recently (loading/adding still happens on that same
  * click, this is purely about where the description text lives).
  */
-export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoadTemplate, onLoadWiring, onAddBlock, userBlocks }: LibraryExplorerProps) {
+export function LibraryExplorer({
+  presets,
+  wiringPresets,
+  loadedPresetId,
+  onLoadTemplate,
+  onLoadWiring,
+  onAddBlock,
+  userBlocks,
+  sections = ALL_SECTIONS,
+}: LibraryExplorerProps) {
   const [query, setQuery] = useState("");
-  const [collapsedTop, setCollapsedTop] = useState<Set<TopSection>>(new Set(["wiring", "blocks"]));
+  // With one tab per kind, everything shown starts open; the all-in-one view keeps the old default.
+  const [collapsedTop, setCollapsedTop] = useState<Set<TopSection>>(new Set(sections.length === ALL_SECTIONS.length ? ["wiring", "blocks"] : ["wiring"]));
   const [collapsedCategory, setCollapsedCategory] = useState<Set<string>>(new Set());
   const [preview, setPreview] = useState<PreviewItem | null>(null);
   // Which variant row to mark active. Cleared whenever a preset is loaded without one, so the
@@ -48,14 +60,8 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
 
   const filteredPresets = useMemo(() => presets.filter((p) => matchesQuery(`${p.name} ${p.description}`, query)), [presets, query]);
   const filteredBlocks = useMemo(() => BLOCK_DEFS.filter((b) => matchesQuery(`${b.label} ${b.description}`, query)), [query]);
-  const filteredUserBlocks = useMemo(
-    () => (userBlocks?.items ?? []).filter((b) => matchesQuery(`${b.label} ${b.description}`, query)),
-    [userBlocks, query],
-  );
-  const filteredWiring = useMemo(
-    () => wiringPresets.filter((p) => matchesQuery(`${p.name} ${p.description}`, query)),
-    [wiringPresets, query],
-  );
+  const filteredUserBlocks = useMemo(() => (userBlocks?.items ?? []).filter((b) => matchesQuery(`${b.label} ${b.description}`, query)), [userBlocks, query]);
+  const filteredWiring = useMemo(() => wiringPresets.filter((p) => matchesQuery(`${p.name} ${p.description}`, query)), [wiringPresets, query]);
 
   // Every category key that currently has at least one item - used by "모두 접기/펼치기" so it
   // touches exactly the groups actually rendered, not stale keys from a category that ended up empty.
@@ -66,14 +72,14 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
     for (const category of BLOCK_CATEGORY_ORDER) if (BLOCK_DEFS.some((b) => b.category === category)) keys.push(`block:${category}`);
     return keys;
   }, [presets, wiringPresets]);
-  const isAllCollapsed = collapsedTop.size >= 3;
+  const isAllCollapsed = sections.every((section) => collapsedTop.has(section));
 
   const toggleAll = () => {
     if (isAllCollapsed) {
       setCollapsedTop(new Set());
       setCollapsedCategory(new Set());
     } else {
-      setCollapsedTop(new Set<TopSection>(["presets", "wiring", "blocks"]));
+      setCollapsedTop(new Set<TopSection>(sections));
       setCollapsedCategory(new Set(allCategoryKeys));
     }
   };
@@ -119,7 +125,7 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
       <input
         type="search"
         className="template-search"
-        placeholder="프리셋/블록 검색..."
+        placeholder={sections.includes("presets") ? (sections.includes("blocks") ? "프리셋/블록 검색..." : "페달·배선 검색...") : "블록 검색..."}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         aria-label="템플릿 검색"
@@ -131,181 +137,185 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
         </button>
       </div>
 
-      <div className="library-section">
-        <button
-          type="button"
-          className="template-category-header library-top-header"
-          aria-expanded={isSearching || !collapsedTop.has("presets")}
-          onClick={() => toggleTop("presets")}
-        >
-          <span className={isSearching || !collapsedTop.has("presets") ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
-          페달 프리셋 (완성된 회로)
-          <span className="template-category-count">{filteredPresets.length}</span>
-        </button>
-        {(isSearching || !collapsedTop.has("presets")) &&
-          PRESET_CATEGORY_ORDER.map((category) => {
-            const items = filteredPresets.filter((p) => p.category === category);
-            if (items.length === 0) return null;
-            const key = `preset:${category}`;
-            const expanded = isSearching || !collapsedCategory.has(key);
-            return (
-              <div key={key} className="template-category-group">
-                <button type="button" className="template-category-header" aria-expanded={expanded} onClick={() => toggleCategory(key)}>
-                  <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
-                  {category}
-                  <span className="template-category-count">{items.length}</span>
-                </button>
-                {expanded && (
-                  <div className="template-category-items">
-                    {items.map((preset) => (
-                      <div key={preset.id}>
+      {sections.includes("presets") && (
+        <div className="library-section">
+          <button
+            type="button"
+            className="template-category-header library-top-header"
+            aria-expanded={isSearching || !collapsedTop.has("presets")}
+            onClick={() => toggleTop("presets")}
+          >
+            <span className={isSearching || !collapsedTop.has("presets") ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+            페달 프리셋 (완성된 회로)
+            <span className="template-category-count">{filteredPresets.length}</span>
+          </button>
+          {(isSearching || !collapsedTop.has("presets")) &&
+            PRESET_CATEGORY_ORDER.map((category) => {
+              const items = filteredPresets.filter((p) => p.category === category);
+              if (items.length === 0) return null;
+              const key = `preset:${category}`;
+              const expanded = isSearching || !collapsedCategory.has(key);
+              return (
+                <div key={key} className="template-category-group">
+                  <button type="button" className="template-category-header" aria-expanded={expanded} onClick={() => toggleCategory(key)}>
+                    <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+                    {category}
+                    <span className="template-category-count">{items.length}</span>
+                  </button>
+                  {expanded && (
+                    <div className="template-category-items">
+                      {items.map((preset) => (
+                        <div key={preset.id}>
+                          <button
+                            type="button"
+                            className={preset.id === loadedPresetId ? "library-item-row active" : "library-item-row"}
+                            onClick={() => selectPreset(preset)}
+                            title={preset.name}
+                          >
+                            <span className="library-item-label">{preset.name}</span>
+                            {preset.archive && <span className="template-archive-badge">아카이브</span>}
+                          </button>
+                          {/* Topology branches are always listed rather than revealed on selection -
+                            they are the only way to reach the non-default branch, so hiding them
+                            behind a prior click is how they stayed unreachable in the first place. */}
+                          {preset.variants && (
+                            <div className="library-variant-items">
+                              {preset.variants.map((variant) => (
+                                <button
+                                  key={variant.id}
+                                  type="button"
+                                  className={
+                                    preset.id === loadedPresetId && variant.id === loadedVariantId ? "library-variant-row active" : "library-variant-row"
+                                  }
+                                  onClick={() => selectPreset(preset, variant)}
+                                  title={`${preset.name} - ${variant.label}`}
+                                >
+                                  {variant.label}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+        </div>
+      )}
+
+      {sections.includes("wiring") && (
+        <div className="library-section">
+          <button
+            type="button"
+            className="template-category-header library-top-header"
+            aria-expanded={isSearching || !collapsedTop.has("wiring")}
+            onClick={() => toggleTop("wiring")}
+          >
+            <span className={isSearching || !collapsedTop.has("wiring") ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+            기타 배선 (픽업·볼륨·톤)
+            <span className="template-category-count">{filteredWiring.length}</span>
+          </button>
+          {(isSearching || !collapsedTop.has("wiring")) &&
+            WIRING_CATEGORY_ORDER.map((category) => {
+              const items = filteredWiring.filter((p) => p.category === category);
+              if (items.length === 0) return null;
+              const key = `wiring:${category}`;
+              const expanded = isSearching || !collapsedCategory.has(key);
+              return (
+                <div key={key} className="template-category-group">
+                  <button type="button" className="template-category-header" aria-expanded={expanded} onClick={() => toggleCategory(key)}>
+                    <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+                    {category}
+                    <span className="template-category-count">{items.length}</span>
+                  </button>
+                  {expanded && (
+                    <div className="template-category-items">
+                      {items.map((preset) => (
                         <button
+                          key={preset.id}
                           type="button"
                           className={preset.id === loadedPresetId ? "library-item-row active" : "library-item-row"}
-                          onClick={() => selectPreset(preset)}
+                          onClick={() => selectWiring(preset)}
                           title={preset.name}
                         >
                           <span className="library-item-label">{preset.name}</span>
                           {preset.archive && <span className="template-archive-badge">아카이브</span>}
                         </button>
-                        {/* Topology branches are always listed rather than revealed on selection -
-                            they are the only way to reach the non-default branch, so hiding them
-                            behind a prior click is how they stayed unreachable in the first place. */}
-                        {preset.variants && (
-                          <div className="library-variant-items">
-                            {preset.variants.map((variant) => (
-                              <button
-                                key={variant.id}
-                                type="button"
-                                className={
-                                  preset.id === loadedPresetId && variant.id === loadedVariantId
-                                    ? "library-variant-row active"
-                                    : "library-variant-row"
-                                }
-                                onClick={() => selectPreset(preset, variant)}
-                                title={`${preset.name} - ${variant.label}`}
-                              >
-                                {variant.label}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-      </div>
-
-      <div className="library-section">
-        <button
-          type="button"
-          className="template-category-header library-top-header"
-          aria-expanded={isSearching || !collapsedTop.has("wiring")}
-          onClick={() => toggleTop("wiring")}
-        >
-          <span className={isSearching || !collapsedTop.has("wiring") ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
-          기타 배선 (픽업·볼륨·톤)
-          <span className="template-category-count">{filteredWiring.length}</span>
-        </button>
-        {(isSearching || !collapsedTop.has("wiring")) &&
-          WIRING_CATEGORY_ORDER.map((category) => {
-            const items = filteredWiring.filter((p) => p.category === category);
-            if (items.length === 0) return null;
-            const key = `wiring:${category}`;
-            const expanded = isSearching || !collapsedCategory.has(key);
-            return (
-              <div key={key} className="template-category-group">
-                <button type="button" className="template-category-header" aria-expanded={expanded} onClick={() => toggleCategory(key)}>
-                  <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
-                  {category}
-                  <span className="template-category-count">{items.length}</span>
-                </button>
-                {expanded && (
-                  <div className="template-category-items">
-                    {items.map((preset) => (
-                      <button
-                        key={preset.id}
-                        type="button"
-                        className={preset.id === loadedPresetId ? "library-item-row active" : "library-item-row"}
-                        onClick={() => selectWiring(preset)}
-                        title={preset.name}
-                      >
-                        <span className="library-item-label">{preset.name}</span>
-                        {preset.archive && <span className="template-archive-badge">아카이브</span>}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-      </div>
-
-      <div className="library-section">
-        <button
-          type="button"
-          className="template-category-header library-top-header"
-          aria-expanded={isSearching || !collapsedTop.has("blocks")}
-          onClick={() => toggleTop("blocks")}
-        >
-          <span className={isSearching || !collapsedTop.has("blocks") ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
-          기능 블록 (조립 단위)
-          <span className="template-category-count">{filteredBlocks.length + filteredUserBlocks.length}</span>
-        </button>
-        {(isSearching || !collapsedTop.has("blocks")) &&
-          BLOCK_CATEGORY_ORDER.map((category) => {
-            const items = filteredBlocks.filter((b) => b.category === category);
-            if (items.length === 0 && !(category === "custom" && filteredUserBlocks.length > 0)) return null;
-            const key = `block:${category}`;
-            const expanded = isSearching || !collapsedCategory.has(key);
-            return (
-              <div key={key} className="template-category-group">
-                <button type="button" className="template-category-header" aria-expanded={expanded} onClick={() => toggleCategory(key)}>
-                  <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
-                  {category === "custom" ? "내 블록" : BLOCK_CATEGORY_LABELS[category]}
-                  <span className="template-category-count">{items.length + (category === "custom" ? filteredUserBlocks.length : 0)}</span>
-                </button>
-                {expanded && (
-                  <div className="template-category-items">
-                    {items.map((def) => (
-                      <button key={def.id} type="button" className="library-item-row" onClick={() => selectBlock(def)} title={def.label}>
-                        <span className="library-item-label">{def.label}</span>
-                      </button>
-                    ))}
-                    {category === "custom" &&
-                      filteredUserBlocks.map((ub) => (
-                        <div key={ub.id} className="library-user-block-row">
-                          <button
-                            type="button"
-                            className="library-item-row"
-                            onClick={() => {
-                              setPreview({ label: ub.label, description: ub.description });
-                              userBlocks?.onAdd(ub);
-                            }}
-                            title={ub.label}
-                          >
-                            <span className="library-item-label">{ub.label}</span>
-                            <span className="template-archive-badge">내 블록</span>
-                          </button>
-                          <button
-                            type="button"
-                            className="library-user-block-delete"
-                            aria-label={`${ub.label} 내 블록에서 삭제`}
-                            onClick={() => window.confirm(`"${ub.label}"을(를) 내 블록에서 지울까요?`) && userBlocks?.onDelete(ub.id)}
-                          >
-                            ✕
-                          </button>
-                        </div>
                       ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+        </div>
+      )}
+
+      {sections.includes("blocks") && (
+        <div className="library-section">
+          <button
+            type="button"
+            className="template-category-header library-top-header"
+            aria-expanded={isSearching || !collapsedTop.has("blocks")}
+            onClick={() => toggleTop("blocks")}
+          >
+            <span className={isSearching || !collapsedTop.has("blocks") ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+            기능 블록 (조립 단위)
+            <span className="template-category-count">{filteredBlocks.length + filteredUserBlocks.length}</span>
+          </button>
+          {(isSearching || !collapsedTop.has("blocks")) &&
+            BLOCK_CATEGORY_ORDER.map((category) => {
+              const items = filteredBlocks.filter((b) => b.category === category);
+              if (items.length === 0 && !(category === "custom" && filteredUserBlocks.length > 0)) return null;
+              const key = `block:${category}`;
+              const expanded = isSearching || !collapsedCategory.has(key);
+              return (
+                <div key={key} className="template-category-group">
+                  <button type="button" className="template-category-header" aria-expanded={expanded} onClick={() => toggleCategory(key)}>
+                    <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
+                    {category === "custom" ? "내 블록" : BLOCK_CATEGORY_LABELS[category]}
+                    <span className="template-category-count">{items.length + (category === "custom" ? filteredUserBlocks.length : 0)}</span>
+                  </button>
+                  {expanded && (
+                    <div className="template-category-items">
+                      {items.map((def) => (
+                        <button key={def.id} type="button" className="library-item-row" onClick={() => selectBlock(def)} title={def.label}>
+                          <span className="library-item-label">{def.label}</span>
+                        </button>
+                      ))}
+                      {category === "custom" &&
+                        filteredUserBlocks.map((ub) => (
+                          <div key={ub.id} className="library-user-block-row">
+                            <button
+                              type="button"
+                              className="library-item-row"
+                              onClick={() => {
+                                setPreview({ label: ub.label, description: ub.description });
+                                userBlocks?.onAdd(ub);
+                              }}
+                              title={ub.label}
+                            >
+                              <span className="library-item-label">{ub.label}</span>
+                              <span className="template-archive-badge">내 블록</span>
+                            </button>
+                            <button
+                              type="button"
+                              className="library-user-block-delete"
+                              aria-label={`${ub.label} 내 블록에서 삭제`}
+                              onClick={() => window.confirm(`"${ub.label}"을(를) 내 블록에서 지울까요?`) && userBlocks?.onDelete(ub.id)}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+        </div>
+      )}
 
       {isSearching && filteredPresets.length === 0 && filteredWiring.length === 0 && filteredBlocks.length === 0 && (
         <p className="template-empty">일치하는 프리셋/블록이 없습니다.</p>

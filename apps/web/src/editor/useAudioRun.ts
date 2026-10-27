@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { loadSampleFromFile, type LoadedSample } from "../audio/loadSample";
 import { TEST_SIGNALS, generateTestSignal } from "../audio/testSignals";
 import { playSamples } from "../audio/playback";
@@ -30,6 +30,12 @@ interface UseAudioRunOptions {
  */
 export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) {
   const [sample, setSample] = useState<LoadedSample | null>(null);
+  /** What the input is, for the transport bar: a built-in signal's id, or a file name. */
+  const [sampleSource, setSampleSource] = useState<{ kind: "signal" | "file"; id: string; label: string } | null>(null);
+  /** The circuit the current traces were simulated from - an edit since then makes them stale. */
+  const [tracesNetlist, setTracesNetlist] = useState<string | null>(null);
+  // Compared by content: moving a part on the canvas rebuilds the graph but changes nothing electrical.
+  const netlistKey = useMemo(() => JSON.stringify(graph.netlist), [graph]);
   const [waveTraces, setWaveTraces] = useState<WaveformTrace[] | null>(null);
   const [isSimulating, setIsSimulating] = useState(false);
   const [cabinetEnabled, setCabinetEnabled] = useState(false);
@@ -51,6 +57,7 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
     onStatus("샘플 디코딩 중...");
     const loaded = await loadSampleFromFile(file, getAudioContext());
     setSample(loaded);
+    setSampleSource({ kind: "file", id: file.name, label: file.name });
     onStatus(`샘플 로드 완료 (${loaded.samples.length}개 샘플, ${loaded.sampleRate}Hz)`);
   };
 
@@ -61,6 +68,7 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
     if (samples.length === 0) return;
     setSample({ samples, sampleRate: context.sampleRate });
     const label = TEST_SIGNALS.find((t) => t.id === id)?.label ?? id;
+    setSampleSource({ kind: "signal", id, label });
     onStatus(`내장 신호 사용: ${label}`);
   };
 
@@ -84,6 +92,7 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
         oversample: 4,
         ...(useTrapezoidal ? { integration: "trapezoidal" as const } : {}),
       });
+      setTracesNetlist(netlistKey);
       setWaveTraces(
         Array.from(traces.entries()).map(([label, data], i) => ({
           label,
@@ -140,7 +149,10 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
 
   return {
     sample,
+    sampleSource,
     waveTraces,
+    /** True when the circuit was edited after the traces were simulated. */
+    tracesStale: waveTraces !== null && tracesNetlist !== netlistKey,
     /** Called when the circuit is replaced - traces from the old circuit would be misleading. */
     clearTraces: () => setWaveTraces(null),
     isSimulating,
