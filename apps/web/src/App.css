@@ -23,30 +23,39 @@
   }
 }
 
-/* ---------- menu bar (black chrome, like a stompbox's hardware) ---------- */
-.menubar {
+/* ---------- app shell: app bar / workspace / transport ---------- */
+.app-shell {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Black chrome, like a stompbox's hardware: the bars around the work are dark, the work is paper. */
+.appbar {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: 14px;
+  min-height: 48px;
+  padding: 0 12px;
   background: var(--chrome-bg);
   border-bottom: 1px solid var(--chrome-border);
   color: var(--chrome-text-dim);
   flex-shrink: 0;
 }
 
-.menubar .brand {
+.appbar-brand {
   display: flex;
   align-items: center;
   gap: 8px;
   color: var(--chrome-text);
   font-weight: 600;
-  margin-right: 16px;
-  letter-spacing: 0.01em;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
-.menubar .brand .mark {
+.appbar-brand .mark {
   width: 14px;
   height: 14px;
   border: 1.5px solid var(--accent);
@@ -55,7 +64,7 @@
   flex-shrink: 0;
 }
 
-.menubar .brand .mark::after {
+.appbar-brand .mark::after {
   content: "";
   position: absolute;
   inset: 3px;
@@ -63,85 +72,217 @@
   border-radius: 1px;
 }
 
-.menubar .spacer {
-  flex: 1;
+.appbar-doc {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 0 1 280px;
+  padding-left: 14px;
+  border-left: 1px solid var(--chrome-border);
+  line-height: 1.25;
 }
 
-.menubar .proj {
+.appbar-title {
+  color: var(--chrome-text);
+  font-size: 0.88rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.appbar-saved {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.64rem;
   color: var(--chrome-text-dim);
 }
 
-/* ---------- status bar ---------- */
-.statusbar {
+.appbar-modes {
+  display: flex;
+  gap: 2px;
+  margin: 0 auto;
+  padding: 3px;
+  background: var(--chrome-bg-raised);
+  border: 1px solid var(--chrome-border);
+  border-radius: 9px;
+}
+
+.appbar-mode {
   display: flex;
   align-items: center;
-  gap: 18px;
-  padding: 4px 16px;
+  gap: 7px;
+  padding: 6px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--chrome-text-dim);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.appbar-mode:hover:not(:disabled) {
+  color: var(--chrome-text);
+}
+
+.appbar-mode.active {
   background: var(--accent);
   color: var(--accent-ink);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  flex-shrink: 0;
 }
 
-.statusbar .stat {
+.appbar-mode[data-empty="true"]:not(.active) {
+  opacity: 0.5;
+}
+
+.appbar-mode-num,
+.summary-next b,
+.empty-step b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+.appbar-actions {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 2px;
 }
 
-.statusbar .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent-ink);
+.appbar-actions > button,
+.appbar-menu > button {
+  background: transparent;
+  color: var(--chrome-text);
+  border: 1px solid transparent;
 }
 
-.statusbar .spacer {
-  flex: 1;
+.appbar-actions > button:hover:not(:disabled),
+.appbar-menu > button:hover:not(:disabled),
+.appbar-menu > button[aria-expanded="true"] {
+  background: var(--chrome-bg-raised);
+  border-color: var(--chrome-border);
 }
 
-/* ---------- workspace content: toolbar + 3-pane workbench body ---------- */
-.workspace-content {
+.appbar-icon {
+  width: 32px;
+  padding: 4px 0;
+  font-size: 1rem;
+}
+
+.appbar-menu {
+  position: relative;
+}
+
+.appbar-menu-list {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 30;
+  min-width: 190px;
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(19, 20, 9, 0.2);
+}
+
+.appbar-menu-list button {
+  display: flex;
+  justify-content: space-between;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 8px 10px;
+}
+
+.appbar-menu-list button:hover:not(:disabled) {
+  background: var(--accent-soft);
+}
+
+.workspace {
   flex: 1;
   min-height: 0;
+  display: flex;
+  padding: 10px 12px;
+  overflow: hidden;
+}
+
+.workspace > * {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ---------- 1 설계 ---------- */
+.design-workspace {
+  display: grid;
+  grid-template-columns: 252px minmax(0, 1fr) 300px;
+  gap: 10px;
+}
+
+.design-center {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 10px 16px 16px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.library-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0;
   overflow: hidden;
 }
 
-.toolbar {
+.segmented {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  overflow: hidden;
 }
 
-.toolbar .spacer {
+.segmented button {
   flex: 1;
+  border: none;
+  border-radius: 0;
+  background: var(--bg-inset);
+  padding: 6px 4px;
 }
 
-.workbench-body {
+.segmented button + button {
+  border-left: 1px solid var(--border);
+}
+
+.segmented button.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+
+.library-tabs {
+  margin: 10px 10px 8px;
+  flex: none;
+}
+
+.library-body {
   flex: 1;
   min-height: 0;
-  display: flex;
-  gap: 12px;
-  overflow: hidden;
-}
-
-.sidebar-left {
-  width: 230px;
-  flex-shrink: 0;
   overflow-y: auto;
+  padding: 0 10px 10px;
 }
 
 .sidebar-right {
-  width: 300px;
-  flex-shrink: 0;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -152,20 +293,461 @@
   margin-top: 0;
 }
 
-.canvas-area {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  overflow: hidden;
-}
-
 .canvas-stage {
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.panel-head .panel-title {
+  margin-bottom: 0;
+}
+
+.summary-counts {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.summary-next {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.summary-next > span {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.summary-next button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+/* Over the empty canvas: the ways to start. */
+.start-cards {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 24px;
+  background: color-mix(in srgb, var(--bg-inset) 88%, transparent);
+}
+
+.start-cards h2 {
+  font-size: 1.3rem;
+}
+
+.start-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 250px));
+  gap: 12px;
+}
+
+.start-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 16px;
+  text-align: left;
+  border-radius: 10px;
+  background: var(--bg-raised);
+  white-space: normal;
+}
+
+.start-card strong {
+  font-size: 0.95rem;
+}
+
+.start-card span:last-child {
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.start-card-num {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent-dim);
+}
+
+.start-card:hover:not(:disabled) {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* ---------- 3 분석 ---------- */
+.analyze-workspace {
+  display: grid;
+  grid-template-columns: minmax(340px, 2fr) minmax(0, 3fr);
+  gap: 10px;
+}
+
+.analyze-circuit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.analyze-circuit > .panel + .panel {
+  margin-top: 0;
+}
+
+.analyze-circuit > .panel:not(.canvas-stage) {
+  flex: none;
+  max-height: 36%;
+  overflow-y: auto;
+}
+
+.analysis-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.analysis-panel .dock-tab-row {
+  padding-right: 10px;
+}
+
+.analysis-run {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: 10px;
+}
+
+.analysis-run-info {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.stale-badge {
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #f3e3b5;
+  color: #634500;
+  font-size: 0.75rem;
+}
+
+.analysis-option {
+  margin-left: auto;
+}
+
+.analysis-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* ---------- 4 제작 ---------- */
+.build-workspace {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.build-steps {
+  overflow-y: auto;
+}
+
+.build-steps ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.build-steps button {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 8px;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+}
+
+.build-steps button[aria-current="step"] {
+  background: var(--accent-soft);
+  border-color: var(--accent-dim);
+}
+
+.build-steps strong {
+  display: block;
+  font-size: 0.86rem;
+}
+
+.build-steps small {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.build-step-num {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.build-steps button[aria-current="step"] .build-step-num {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.build-main {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* The step list already frames each step, so its panel drops the second frame. */
+.build-main > div > .panel {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ---------- no circuit yet ---------- */
+.empty-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+.empty-step h2 {
+  color: var(--text);
+  font-size: 1.2rem;
+}
+
+.empty-step p {
+  max-width: 440px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.empty-step button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---------- transport: hearing the circuit, the same in every step ---------- */
+.transport {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  min-height: 50px;
+  padding: 6px 12px;
+  background: var(--chrome-bg);
+  border-top: 1px solid var(--chrome-border);
+  color: var(--chrome-text);
+  flex-shrink: 0;
+}
+
+.transport-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transport label {
+  color: var(--chrome-text-dim);
+  font-size: 0.74rem;
+  white-space: nowrap;
+}
+
+.transport select {
+  max-width: 200px;
+  padding: 4px 8px;
+  background: var(--chrome-bg-raised);
+  color: var(--chrome-text);
+  border-color: var(--chrome-border);
+}
+
+.transport input[type="range"] {
+  width: 110px;
+  background: var(--chrome-border);
+}
+
+.transport input[type="range"]::-webkit-slider-thumb {
+  border-color: var(--chrome-bg);
+}
+
+.transport-value {
+  min-width: 46px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--chrome-text-dim);
+}
+
+.transport-warn {
+  color: #ff8f80;
+}
+
+.transport-play {
+  min-width: 132px;
+  padding: 7px 14px;
+  background: var(--chrome-bg-raised);
+  color: var(--chrome-text);
+  border-color: var(--chrome-border);
+  font-weight: 700;
+}
+
+.transport-play:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.transport-play.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.transport-check {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.transport-status {
+  margin: 0 0 0 auto;
+  max-width: 44ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--chrome-text-dim);
+}
+
+/* ---------- shortcut help ---------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(19, 20, 9, 0.45);
+}
+
+.modal {
+  width: 100%;
+  max-width: 760px;
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 18px 22px 22px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 24px 64px rgba(19, 20, 9, 0.28);
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.modal-head h2 {
+  font-size: 1.05rem;
+}
+
+.shortcut-groups {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 24px;
+}
+
+.shortcut-groups h3 {
+  margin-bottom: 8px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.shortcut-groups dl {
+  margin: 0;
+}
+
+.shortcut-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 0.8rem;
+}
+
+.shortcut-row dt,
+.shortcut-row dd {
+  margin: 0;
+}
+
+.shortcut-row dd {
+  color: var(--text-dim);
+  text-align: right;
+}
+
+kbd {
+  padding: 1px 6px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  white-space: nowrap;
 }
 
 .bottom-dock {
@@ -174,6 +756,17 @@
   height: 300px;
   display: flex;
   flex-direction: column;
+}
+
+.bottom-dock-collapsed {
+  height: auto;
+  padding-bottom: 0;
+}
+
+.bottom-dock-collapsed .dock-tab-row {
+  margin-bottom: 0;
+  border-bottom: none;
+  border-radius: 8px;
 }
 
 /* Grab strip along the dock's top edge. */
@@ -205,16 +798,25 @@
   background: var(--accent-dim);
 }
 
-.dock-expand {
+.dock-actions,
+.bottom-dock-collapsed > .dock-expand {
   position: absolute;
   top: 2px;
   right: 10px;
   z-index: 1;
+  display: flex;
+}
+
+.dock-expand {
   background: transparent;
   border: none;
   padding: 6px 4px;
   font-size: 0.68rem;
   color: var(--text-dim);
+}
+
+.dock-actions .dock-expand + .dock-expand {
+  margin-left: 8px;
 }
 
 .bottom-dock-content {
@@ -225,25 +827,33 @@
 }
 
 @media (max-width: 1100px) {
-  .workbench-body {
-    flex-direction: column;
+  .appbar {
+    flex-wrap: wrap;
+    padding: 6px 12px;
+  }
+
+  .workspace {
     overflow-y: auto;
   }
 
-  .sidebar-left,
-  .sidebar-right,
-  .canvas-area {
-    width: auto;
+  .workspace > * {
     flex: none;
   }
 
-  /* Stacked, the library tree is tall enough to push the canvas past the fold - so a preset click
-     produces no visible change and reads as a dead button. Capping the docks keeps the schematic
-     within reach of whatever the user just clicked. */
-  .sidebar-left,
-  .sidebar-right {
+  .design-workspace,
+  .analyze-workspace,
+  .build-workspace {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  /* Stacked, the library is tall enough to push the canvas past the fold - so a preset click would
+     produce no visible change. Capping the side panels keeps the schematic within reach. */
+  .library-panel,
+  .sidebar-right,
+  .build-steps {
     max-height: 42vh;
-    overflow-y: auto;
   }
 
   .canvas-stage {
@@ -251,9 +861,19 @@
     flex: none;
   }
 
-  .bottom-dock {
+  .bottom-dock:not(.bottom-dock-collapsed) {
     min-height: 260px;
     flex: none;
+  }
+
+  .analysis-panel {
+    min-height: 520px;
+  }
+
+  .transport-status {
+    flex-basis: 100%;
+    max-width: none;
+    margin-left: 0;
   }
 }
 
@@ -310,26 +930,6 @@
   gap: 8px;
   align-items: center;
   margin-top: 12px;
-}
-
-.realtime-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.realtime-load,
-.realtime-warn {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-dim);
-}
-
-.realtime-load-high,
-.realtime-warn {
-  color: var(--danger, #d0443a);
 }
 
 .status-text {
@@ -733,40 +1333,6 @@
   border-left-color: var(--accent);
   color: var(--accent-dim);
   font-weight: 600;
-}
-
-/* A file input styled as a toolbar button - the native control cannot be restyled, so the real
-   input is visually hidden inside this label. */
-.toolbar-file-button {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 12px;
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text);
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.toolbar-file-button:hover {
-  border-color: var(--accent-dim);
-}
-
-.toolbar-file-button:focus-within {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
-}
-
-.test-signal-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.test-signal-buttons button {
-  padding: 4px 9px;
-  font-size: 0.74rem;
 }
 
 .tap-button-pair {
@@ -1234,9 +1800,10 @@
    min-size, so the ResizeObserver can never feed the canvas size back into the layout. */
 .canvas-stage .canvas-frame-scroll {
   overflow: hidden;
+  position: relative;
 }
 
-/* ---- View toggle (회로도 / 연주) ---- */
+/* ---- Segmented toggle (stripboard/PCB view options) ---- */
 .view-toggle {
   display: inline-flex;
   margin-left: 12px;
@@ -1566,14 +2133,6 @@
   width: 100%;
 }
 
-.pcb-tab > .pcb-sections {
-  margin-bottom: 8px;
-}
-
-.pcb-tab > div > .panel {
-  margin: 0;
-}
-
 select {
   font-size: 0.82rem;
 }
@@ -1581,23 +2140,6 @@ select {
 .run-row select {
   width: auto;
   max-width: 100%;
-}
-
-/* Inside the PCB tab the sub-tabs already say what each section is: the panels drop their frame
-   and title so the board drawing gets the height. */
-.pcb-tab > div > .panel {
-  border: none;
-  background: none;
-  box-shadow: none;
-  padding: 0;
-}
-
-.pcb-tab > div > .panel > .panel-title {
-  display: none;
-}
-
-.pcb-tab > div > .panel .run-row {
-  margin-top: 0;
 }
 
 .waveform-reset {
