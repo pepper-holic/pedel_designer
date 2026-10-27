@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { PART_DEFS, type PartType } from "./partDefs";
 import type { PartInstance, TerminalRef, Wire } from "./types";
 import { cloneSelection } from "./selection";
 import { netlistFromGraph } from "./netlistFromGraph";
-import { graphFromNetlist, findEquivalentNode } from "./graphFromNetlist";
+import { loadPedalPreset, loadWiringPreset } from "./templateLoading";
 import { snapToGrid, rotateClockwise, GRID_SIZE } from "./geometry";
 import type { BlockDef } from "./blockDefs";
 import { instantiateBlock } from "./blockInstance";
@@ -19,18 +19,17 @@ import { presets, type PedalPreset, type PresetVariant } from "../core/library/p
 import { wiringPresets, type WiringPreset } from "./wiring";
 import { PARAM_META } from "./paramMeta";
 import { useAudioRun } from "./useAudioRun";
-import { runAcAnalysis, logFrequencySweep, type AcPoint } from "../core/solver/ac";
-import type { AcStatus } from "./FrequencyResponseTab";
+import { useFrequencyResponse } from "./useFrequencyResponse";
+import { useSelectionState } from "./useSelectionState";
+import { useCircuitPersistence } from "./useCircuitPersistence";
 import { canRedo, canUndo, commitPrevious, createHistory, pushSnapshot, redo, replacePresent, undo, type CircuitSnapshot } from "./historyStack";
-import { loadCircuitFromStorage, saveCircuitToStorage, CURRENT_SCHEMA_VERSION } from "./circuitStorage";
-import { circuitToFileText, parseCircuitFile } from "./circuitFile";
+import { loadCircuitFromStorage, CURRENT_SCHEMA_VERSION } from "./circuitStorage";
 
 let partCounter = 0;
 let blockCounter = 0;
 let pasteCounter = 0;
 /** Pasted copies land slightly off the originals so they are visibly a second object. */
 const PASTE_OFFSET = { dx: 30, dy: 30 };
-const AUTOSAVE_DEBOUNCE_MS = 400;
 
 type LeftTab = "parts" | "library";
 
@@ -45,14 +44,6 @@ export function SchematicEditor() {
   const [leftTab, setLeftTab] = useState<LeftTab>("parts");
   const [history, setHistory] = useState(() => createHistory(initial.snapshot));
   const [loadedPresetId, setLoadedPresetId] = useState<string | null>(null);
-  const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
-  // Parts and wires share one logical selection - selecting either clears the other, so Delete and
-  // the inspector always act on exactly one thing.
-  const [selectedWireId, setSelectedWireId] = useState<string | null>(null);
-  // The full selection. `selectedPartId` stays the one the inspector shows; this list is what
-  // move/copy/delete act on, so a box selection can cover many parts without the inspector having
-  // to grow a multi-part mode.
-  const [selectedPartIds, setSelectedPartIds] = useState<string[]>([]);
   const [clipboard, setClipboard] = useState<{ parts: PartInstance[]; wires: Wire[] } | null>(null);
   const [outputNode, setOutputNode] = useState<string>(initial.outputNode);
   const [inputGain, setInputGain] = useState(initial.inputGain);
@@ -68,27 +59,12 @@ export function SchematicEditor() {
   const blocks = history.present.blocks;
 
   const graph = useMemo(() => netlistFromGraph(parts, wires), [parts, wires]);
+  const selection = useSelectionState(parts);
+  const { selectedPartId, selectedPartIds, selectedWireId } = selection;
   const selectedPart = parts.find((p) => p.id === selectedPartId) ?? null;
   const selectedWire = wires.find((w) => w.id === selectedWireId) ?? null;
 
-  const handleSelectPart = (id: string | null) => {
-    setSelectedPartId(id);
-    setSelectedPartIds(id ? [id] : []);
-    setSelectedWireId(null);
-  };
-
-  const handleBoxSelect = (ids: string[]) => {
-    setSelectedPartIds(ids);
-    setSelectedPartId(ids[0] ?? null);
-    setSelectedWireId(null);
-  };
-
-  const handleSelectWire = (id: string | null) => {
-    setSelectedWireId(id);
-    setSelectedPartId(null);
-    setSelectedPartIds([]);
-  };
-
+  const handleSelectPart = selection.selectPart;
   const canvasSize = useMemo(() => {
     const margin = 120;
     const maxX = parts.reduce((max, p) => Math.max(max, p.x), 0);
@@ -96,27 +72,7 @@ export function SchematicEditor() {
     return { width: Math.max(900, maxX + margin), height: Math.max(460, maxY + margin) };
   }, [parts]);
 
-  const acResult = useMemo((): { points: AcPoint[]; status: AcStatus; error: string | null } => {
-    if (!outputNode) return { points: [], status: "no-output", error: null };
-    if (!graph.inputSourceId || graph.netlist.elements.length === 0) return { points: [], status: "no-source", error: null };
-    try {
-      return {
-        points: runAcAnalysis(graph.netlist, { inputSourceId: graph.inputSourceId, outputNode, frequenciesHz: logFrequencySweep(20, 20000, 40) }),
-        status: "ok",
-        error: null,
-      };
-    } catch (err) {
-      return { points: [], status: "error", error: err instanceof Error ? err.message : "알 수 없는 오류" };
-    }
-  }, [graph, outputNode]);
-  const acPoints = acResult.points;
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      saveCircuitToStorage(localStorage, { schemaVersion: CURRENT_SCHEMA_VERSION, parts, wires, blocks, outputNode, inputGain });
-    }, AUTOSAVE_DEBOUNCE_MS);
-    return () => clearTimeout(timer);
-  }, [parts, wires, blocks, outputNode, inputGain]);
+  const acResult = useFrequencyResponse(graph, outputNode);
 
   const commit = (next: CircuitSnapshot) => setHistory((h) => pushSnapshot(h, next));
 
@@ -133,9 +89,7 @@ export function SchematicEditor() {
     options: { outputNode: string; presetId: string | null; status: string; inputGain?: number },
   ) => {
     commit(snapshot);
-    setSelectedPartId(null);
-    setSelectedPartIds([]);
-    setSelectedWireId(null);
+    selection.deselect();
     setLoadedPresetId(options.presetId);
     setOutputNode(options.outputNode);
     if (options.inputGain !== undefined) setInputGain(options.inputGain);
@@ -151,39 +105,13 @@ export function SchematicEditor() {
   };
 
   const handleLoadTemplate = (preset: PedalPreset, variant?: PresetVariant) => {
-    // Variant params override the defaults, which is what makes a preset's non-default topology
-    // branch (King of Tone's clipMode, OCD's brightSwitch) reachable at all.
-    const originalNetlist = preset.build({ ...preset.defaultParams, ...(variant?.params ?? {}) });
-    const { parts: newParts, wires: newWires } = graphFromNetlist(originalNetlist, preset.inputSourceId, preset.layout);
-    const roundTripped = netlistFromGraph(newParts, newWires);
-    const equivalentOutput = findEquivalentNode(originalNetlist, preset.outputNode, roundTripped.netlist);
-
-    replaceCircuit(
-      { parts: newParts, wires: newWires, blocks: [] },
-      {
-        outputNode: equivalentOutput ?? "",
-        presetId: preset.id,
-        status: `템플릿 로드됨: ${preset.name}${variant ? ` - ${variant.label}` : ""}`,
-      },
-    );
+    const { snapshot, outputNode: out } = loadPedalPreset(preset, variant);
+    replaceCircuit(snapshot, { outputNode: out, presetId: preset.id, status: `템플릿 로드됨: ${preset.name}${variant ? ` - ${variant.label}` : ""}` });
   };
 
-  /** Wiring presets are stored as a part-level snapshot (see wiring/types.ts), so loading one is
-   * just a commit - no netlist round-trip, and composite parts (pickup, pots) stay composite.
-   * The arrays are module-level constants, so they are copied before entering the undo stack. */
   const handleLoadWiring = (preset: WiringPreset) => {
-    const newParts = preset.snapshot.parts.map((p) => ({ ...p, params: { ...p.params } }));
-    const newWires = preset.snapshot.wires.map((w) => ({ ...w, a: { ...w.a }, b: { ...w.b } }));
-    const outputKey = `${preset.outputTerminal.partId}:${preset.outputTerminal.terminalId}`;
-
-    replaceCircuit(
-      { parts: newParts, wires: newWires, blocks: [...preset.snapshot.blocks] },
-      {
-        outputNode: netlistFromGraph(newParts, newWires).terminalNet.get(outputKey) ?? "",
-        presetId: preset.id,
-        status: `배선 로드됨: ${preset.name}`,
-      },
-    );
+    const { snapshot, outputNode: out } = loadWiringPreset(preset);
+    replaceCircuit(snapshot, { outputNode: out, presetId: preset.id, status: `배선 로드됨: ${preset.name}` });
   };
 
   const handleAddPart = (type: PartType, paramsOverride?: Record<string, number | string>) => {
@@ -248,7 +176,7 @@ export function SchematicEditor() {
   const handleDeleteSelected = () => {
     if (selectedWireId) {
       commit({ parts, wires: wires.filter((w) => w.id !== selectedWireId), blocks });
-      setSelectedWireId(null);
+      selection.deselect();
       return;
     }
     if (selectedPartIds.length === 0) return;
@@ -260,8 +188,7 @@ export function SchematicEditor() {
       wires: wires.filter((w) => !removing.has(w.a.partId) && !removing.has(w.b.partId)),
       blocks: blocks.filter((b) => remainingBlockIds.has(b.id)),
     });
-    setSelectedPartId(null);
-    setSelectedPartIds([]);
+    selection.deselect();
   };
 
   /** Copy/paste and duplicate share one path: both stamp a clone of a selection onto the canvas. */
@@ -270,9 +197,7 @@ export function SchematicEditor() {
     const { parts: newParts, wires: newWires } = cloneSelection(source.parts, source.wires, sourceIds, PASTE_OFFSET, `cp${pasteCounter}`);
     if (newParts.length === 0) return;
     commit({ parts: [...parts, ...newParts], wires: [...wires, ...newWires], blocks });
-    const ids = newParts.map((p) => p.id);
-    setSelectedPartIds(ids);
-    setSelectedPartId(ids[0]);
+    selection.selectParts(newParts.map((p) => p.id));
     setStatus(`${newParts.length}개 부품을 붙여넣었습니다.`);
   };
 
@@ -309,27 +234,13 @@ export function SchematicEditor() {
     });
   };
 
-  const handleCycleSelection = (direction: 1 | -1) => {
-    if (parts.length === 0) return;
-    const current = parts.findIndex((p) => p.id === selectedPartId);
-    // Wraps, so the list is a loop rather than something you can fall off either end of.
-    const next = (current + direction + parts.length) % parts.length;
-    handleSelectPart(parts[current === -1 ? 0 : next].id);
-  };
-
-  const handleDeselect = () => {
-    setSelectedPartId(null);
-    setSelectedPartIds([]);
-    setSelectedWireId(null);
-  };
-
   const handleDeleteBlock = (blockId: string) => {
     commit({
       parts: parts.filter((p) => p.blockId !== blockId),
       wires: wires.filter((w) => w.a.partId.split("_")[0] !== blockId || w.b.partId.split("_")[0] !== blockId),
       blocks: blocks.filter((b) => b.id !== blockId),
     });
-    setSelectedPartId(null);
+    selection.deselect();
   };
 
   const handleRotateSelected = () => {
@@ -346,8 +257,8 @@ export function SchematicEditor() {
     onPaste: handlePaste,
     onDuplicate: handleDuplicate,
     onNudge: handleNudge,
-    onCycleSelection: handleCycleSelection,
-    onDeselect: handleDeselect,
+    onCycleSelection: selection.cycle,
+    onDeselect: selection.deselect,
   });
 
   const handleParamChange = (key: string, value: string) => {
@@ -363,31 +274,15 @@ export function SchematicEditor() {
     commit({ parts: parts.map((p) => (p.id === selectedPart.id ? { ...p, params: { ...p.params, ...paramsOverride } } : p)), wires, blocks });
   };
 
-  const handleSaveCircuitFile = () => {
-    const text = circuitToFileText({ schemaVersion: CURRENT_SCHEMA_VERSION, parts, wires, blocks, outputNode, inputGain });
-    const url = URL.createObjectURL(new Blob([text], { type: "application/json" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `pedal-designer-circuit-${new Date().toISOString().slice(0, 10)}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
-    setStatus("회로를 파일로 저장했습니다.");
-  };
-
-  const handleOpenCircuitFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = ""; // let the same file be picked again after a failed attempt
-    if (!file) return;
-    const { circuit, error } = parseCircuitFile(await file.text());
-    if (!circuit) {
-      setStatus(`불러오기 실패: ${error}`);
-      return;
-    }
-    replaceCircuit(
-      { parts: circuit.parts, wires: circuit.wires, blocks: circuit.blocks },
-      { outputNode: circuit.outputNode, presetId: null, status: `회로를 불러왔습니다: ${file.name}`, inputGain: circuit.inputGain },
-    );
-  };
+  const persistence = useCircuitPersistence({
+    circuit: { schemaVersion: CURRENT_SCHEMA_VERSION, parts, wires, blocks, outputNode, inputGain },
+    onStatus: setStatus,
+    onLoaded: (circuit, fileName) =>
+      replaceCircuit(
+        { parts: circuit.parts, wires: circuit.wires, blocks: circuit.blocks },
+        { outputNode: circuit.outputNode, presetId: null, status: `회로를 불러왔습니다: ${fileName}`, inputGain: circuit.inputGain },
+      ),
+  });
 
   const audio = useAudioRun({ graph, inputGain, onStatus: setStatus });
 
@@ -408,7 +303,7 @@ export function SchematicEditor() {
     graph,
     outputNode,
     onSelectPart: handleSelectPart,
-    acResult: { points: acPoints, status: acResult.status, error: acResult.error },
+    acResult,
     monteCarloResult,
     audio,
     analysis,
@@ -422,8 +317,8 @@ export function SchematicEditor() {
         hasParts={parts.length > 0}
         onUndo={handleUndo}
         onRedo={handleRedo}
-        onSaveFile={handleSaveCircuitFile}
-        onOpenFile={handleOpenCircuitFile}
+        onSaveFile={persistence.saveFile}
+        onOpenFile={persistence.openFile}
         onNewCircuit={handleNewCircuit}
       />
 
@@ -448,12 +343,12 @@ export function SchematicEditor() {
           selectedPartId={selectedPartId}
           selectedPartIds={selectedPartIds}
           selectedWireId={selectedWireId}
-          onBoxSelect={handleBoxSelect}
+          onBoxSelect={selection.selectParts}
           circuitVersion={circuitVersion}
           dockTabs={dockTabs}
           onMovePart={handleMovePart}
           onSelectPart={handleSelectPart}
-          onSelectWire={handleSelectWire}
+          onSelectWire={selection.selectWire}
           onAddWire={handleAddWire}
           onDragEnd={handleDragEnd}
         />

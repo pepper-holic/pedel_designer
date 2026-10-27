@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { terminalPosition, computeWirePaths, zoomAroundPoint, fitView, GRID_SIZE } from "./geometry";
-import { BLOCK_CATEGORY_LABELS } from "./blockDefs";
-import { CanvasPart, PART_HALF_WIDTH, PART_HALF_HEIGHT } from "./CanvasPart";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { zoomAroundPoint, fitView, GRID_SIZE } from "./geometry";
+import { CanvasPart } from "./CanvasPart";
+import { CanvasBlockLayer } from "./CanvasBlockLayer";
+import { CanvasWireLayer } from "./CanvasWireLayer";
 import { partsInBox, type SelectionBox } from "./selection";
 import type { BlockInstance, PartInstance, TerminalRef, Wire } from "./types";
 
@@ -28,48 +29,9 @@ interface SchematicCanvasProps {
   height?: number;
 }
 
-// Block regions hug their parts using the same margin as a part's own hit-box, so the tint lines up
-// with the selection outline rather than floating at some other offset.
-const BLOCK_PADDING = 22;
-
-interface BlockRegion {
-  block: BlockInstance;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-function computeBlockRegions(parts: PartInstance[], blocks: BlockInstance[]): BlockRegion[] {
-  const regions: BlockRegion[] = [];
-  for (const block of blocks) {
-    const blockParts = parts.filter((p) => p.blockId === block.id);
-    if (blockParts.length === 0) continue;
-    const minX = Math.min(...blockParts.map((p) => p.x - PART_HALF_WIDTH));
-    const maxX = Math.max(...blockParts.map((p) => p.x + PART_HALF_WIDTH));
-    const minY = Math.min(...blockParts.map((p) => p.y - PART_HALF_HEIGHT));
-    const maxY = Math.max(...blockParts.map((p) => p.y + PART_HALF_HEIGHT));
-    regions.push({
-      block,
-      x: minX - BLOCK_PADDING,
-      y: minY - BLOCK_PADDING - 18, // extra headroom above so the label doesn't overlap the topmost part
-      width: maxX - minX + BLOCK_PADDING * 2,
-      height: maxY - minY + BLOCK_PADDING * 2 + 18,
-    });
-  }
-  return regions;
-}
-
-function terminalKey(ref: TerminalRef): string {
-  return `${ref.partId}:${ref.terminalId}`;
-}
-
 const MIN_ZOOM = 0.3;
 const MAX_ZOOM = 3;
 const PAN_DRAG_THRESHOLD = 4;
-// Transparent click target width for wires - the visible stroke is only 2px, which is not a
-// realistic mouse target on a dense schematic.
-const WIRE_HITBOX_WIDTH = 12;
 // Half-extent used when fitting: a little wider than the part hit-box so the id/value text labels
 // drawn just outside it are inside the fitted view too.
 const FIT_PART_MARGIN = 50;
@@ -97,7 +59,7 @@ export function SchematicCanvas({
 }: SchematicCanvasProps) {
   const [dragId, setDragId] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const [pendingTerminal, setPendingTerminal] = useState<TerminalRef | null>(null);
+  const [pendingTerminalState, setPendingTerminal] = useState<TerminalRef | null>(null);
   const [view, setView] = useState({ zoom: 1, panX: 0, panY: 0 });
   const [panStart, setPanStart] = useState<{ mouseX: number; mouseY: number; panX: number; panY: number; moved: boolean } | null>(null);
   // Shift+drag on the background draws a selection box instead of panning. Panning is the more
@@ -185,14 +147,13 @@ export function SchematicCanvas({
   };
 
   // A wire is drawn by clicking two terminals in sequence, so between those clicks the first one
-  // lives in `pendingTerminal`. If its part disappears in between - deleted, or the whole circuit
-  // replaced by "새 회로"/a template - the half-finished wire has to be abandoned. Otherwise the
-  // next terminal click completes it against a part that no longer exists, producing a wire that
-  // is in the circuit data but never rendered (its endpoints can't be resolved), and so can be
-  // neither seen nor deleted.
-  useEffect(() => {
-    if (pendingTerminal && !parts.some((p) => p.id === pendingTerminal.partId)) setPendingTerminal(null);
-  }, [parts, pendingTerminal]);
+  // is held as pending. If its part disappears in between - deleted, or the whole circuit replaced
+  // by "새 회로"/a template - the half-finished wire has to be abandoned. Otherwise the next terminal
+  // click completes it against a part that no longer exists, producing a wire that is in the circuit
+  // data but never rendered (its endpoints can't be resolved), and so can be neither seen nor
+  // deleted. Derived during render rather than cleared in an effect, so there is no frame in which
+  // the stale terminal is still live.
+  const pendingTerminal = pendingTerminalState && parts.some((p) => p.id === pendingTerminalState.partId) ? pendingTerminalState : null;
 
   const resetView = () => setView({ zoom: 1, panX: 0, panY: 0 });
 
@@ -233,43 +194,6 @@ export function SchematicCanvas({
     onAddWire(pendingTerminal, ref);
     setPendingTerminal(null);
   };
-
-  // A junction dot is drawn wherever 3+ wire ends meet at the same terminal - a real electrical
-  // junction, as opposed to a plain 2-wire pass-through or two wires merely crossing visually.
-  const junctionPoints = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const wire of wires) {
-      counts.set(terminalKey(wire.a), (counts.get(terminalKey(wire.a)) ?? 0) + 1);
-      counts.set(terminalKey(wire.b), (counts.get(terminalKey(wire.b)) ?? 0) + 1);
-    }
-    const points: { x: number; y: number }[] = [];
-    for (const [key, count] of counts) {
-      if (count < 3) continue;
-      const [partId, terminalId] = key.split(":");
-      const part = parts.find((p) => p.id === partId);
-      if (part) points.push(terminalPosition(part, terminalId));
-    }
-    return points;
-  }, [wires, parts]);
-
-  // Resolved (wire, endpoints) pairs for wires whose parts still exist, plus the crossing-aware
-  // path string for each - computed together in one pass so a hop on one wire accounts for every
-  // other wire currently on the canvas.
-  const resolvedWires = useMemo(() => {
-    const withEndpoints = wires
-      .map((wire) => {
-        const partA = parts.find((p) => p.id === wire.a.partId);
-        const partB = parts.find((p) => p.id === wire.b.partId);
-        if (!partA || !partB) return null;
-        return { wire, a: terminalPosition(partA, wire.a.terminalId), b: terminalPosition(partB, wire.b.terminalId) };
-      })
-      .filter((w): w is { wire: Wire; a: { x: number; y: number }; b: { x: number; y: number } } => w !== null);
-
-    const paths = computeWirePaths(withEndpoints.map((w) => [w.a, w.b]));
-    return withEndpoints.map((w, i) => ({ wire: w.wire, path: paths[i] }));
-  }, [wires, parts]);
-
-  const blockRegions = useMemo(() => computeBlockRegions(parts, blocks), [parts, blocks]);
 
   return (
     <div style={{ position: "relative" }}>
@@ -326,59 +250,9 @@ export function SchematicCanvas({
         <rect width={width} height={height} fill="url(#schematic-grid)" pointerEvents="none" />
 
         <g transform={`translate(${view.panX},${view.panY}) scale(${view.zoom})`}>
-          {blockRegions.map(({ block, x, y, width: w, height: h }) => (
-            <g key={block.id} pointerEvents="none">
-              <rect
-                x={x}
-                y={y}
-                width={w}
-                height={h}
-                rx={10}
-                fill={`var(--block-${block.category}-fill)`}
-                stroke={`var(--block-${block.category}-stroke)`}
-                strokeWidth={1.2}
-                strokeDasharray="5 4"
-              />
-              <text x={x + 8} y={y + 13} fontSize={10} fontFamily="var(--font-mono)" fill={`var(--block-${block.category}-stroke)`}>
-                {BLOCK_CATEGORY_LABELS[block.category].toUpperCase()} · {block.label}
-              </text>
-            </g>
-          ))}
+          <CanvasBlockLayer parts={parts} blocks={blocks} />
 
-          {resolvedWires.map(({ wire, path }) => (
-            <path
-              key={wire.id}
-              d={path}
-              stroke={wire.id === selectedWireId ? "var(--accent)" : "var(--wire)"}
-              strokeWidth={wire.id === selectedWireId ? 3 : 2}
-              fill="none"
-              pointerEvents="none"
-            />
-          ))}
-
-          {/* Transparent fat overlay per wire: a 2px stroke is far too thin to click reliably, so
-              selection hit-testing runs against this instead. Drawn after the visible strokes but
-              before the parts, so terminals (wiring) still win over wire selection where they overlap. */}
-          {resolvedWires.map(({ wire, path }) => (
-            <path
-              key={`hit-${wire.id}`}
-              data-wire-id={wire.id}
-              d={path}
-              stroke="transparent"
-              strokeWidth={WIRE_HITBOX_WIDTH}
-              fill="none"
-              pointerEvents="stroke"
-              style={{ cursor: "pointer" }}
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelectWire?.(wire.id);
-              }}
-            />
-          ))}
-
-          {junctionPoints.map((p, i) => (
-            <circle key={i} cx={p.x} cy={p.y} r={3.5} fill="var(--wire)" />
-          ))}
+          <CanvasWireLayer parts={parts} wires={wires} selectedWireId={selectedWireId} onWireClick={(wire) => onSelectWire?.(wire.id)} />
 
           {parts.map((part) => (
             <CanvasPart
