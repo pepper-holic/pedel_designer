@@ -149,7 +149,12 @@ export class TransientStream {
     this.topology = topology;
     this.bindDrivenElements();
     this.tapIndex = Int32Array.from(this.options.tapNodes.map((node) => (topology.nodeIndex.has(node) || node === "0" ? nodeOf(topology, node) : -1)));
-    if (keep) return;
+    if (!keep) this.reset();
+  }
+
+  /** Puts the circuit back at rest (every capacitor discharged), as if the stream had just started. */
+  reset(): void {
+    const { topology } = this;
     this.workspace = new NewtonWorkspace(topology.size);
     this.predicted = new Float64Array(topology.size);
     this.history.clear();

@@ -30,6 +30,7 @@ interface EditorSidebarRightProps {
   onTogglePinned: (partId: string) => void;
   onExposeParam: (blockId: string, partId: string, paramKey: string) => void;
   preview: { enabled: boolean; onEnabledChange: (on: boolean) => void; busy: boolean };
+  realtime: React.ComponentProps<typeof OutputAudioPanel>["realtime"];
 }
 
 /** Right dock: what is selected on top, what to do with the whole circuit's output below. */
@@ -72,6 +73,7 @@ export function EditorSidebarRight(props: EditorSidebarRightProps) {
         canRun={audio.sample !== null && !!graph.inputSourceId && !audio.isSimulating}
         onRun={audio.handleRun}
         preview={props.preview}
+        realtime={props.realtime}
         status={props.status}
       />
     </div>

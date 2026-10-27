@@ -16,6 +16,15 @@ interface OutputAudioPanelProps {
   status: string;
   /** Knob preview: re-simulate and play a short clip whenever a value is changed. */
   preview?: { enabled: boolean; onEnabledChange: (on: boolean) => void; busy: boolean };
+  /** Real-time playback: the circuit runs live and every edit is heard as it happens. */
+  realtime?: RealtimeControl;
+}
+
+export interface RealtimeControl {
+  supported: boolean;
+  active: boolean;
+  stats: { load: number; level: number; nonConvergent: number } | null;
+  onToggle: () => void;
 }
 
 export function OutputAudioPanel({
@@ -33,6 +42,7 @@ export function OutputAudioPanel({
   onRun,
   status,
   preview,
+  realtime,
 }: OutputAudioPanelProps) {
   return (
     <div className="panel">
@@ -96,6 +106,7 @@ export function OutputAudioPanel({
           시뮬레이션 실행
         </button>
       </div>
+      {realtime && <RealtimeRow realtime={realtime} />}
       {preview && (
         <div className="field-row" style={{ marginTop: 8 }}>
           <label>
@@ -114,6 +125,34 @@ export function OutputAudioPanel({
       <p className="status-text" role="status" aria-live="polite">
         {status}
       </p>
+    </div>
+  );
+}
+
+function RealtimeRow({ realtime }: { realtime: RealtimeControl }) {
+  const { supported, active, stats, onToggle } = realtime;
+  const load = stats ? Math.round(stats.load * 100) : null;
+  return (
+    <div className="realtime-row">
+      <button type="button" className={active ? "primary" : ""} onClick={onToggle} disabled={!supported} aria-pressed={active}>
+        {active ? "■ 실시간 정지" : "▶ 실시간 재생"}
+      </button>
+      {active && load !== null && (
+        <span className={`realtime-load${stats!.load > 0.8 ? " realtime-load-high" : ""}`} title="회로 계산에 드는 시간 / 재생 시간. 100%를 넘으면 소리가 끊깁니다.">
+          부하 {load}%
+        </span>
+      )}
+      {active && stats && stats.nonConvergent > 0 && <span className="realtime-warn">수렴 실패 {stats.nonConvergent}</span>}
+      <span
+        className="info-tip"
+        title={
+          supported
+            ? "회로를 브라우저 오디오 스레드에서 직접 돌립니다. 선택한 신호(없으면 내장 코드)를 반복 재생하고, 노브·값을 바꾸면 그 즉시 소리가 바뀝니다. 음량은 자동으로 맞춥니다."
+            : "이 브라우저는 AudioWorklet을 지원하지 않아 실시간 재생을 쓸 수 없습니다. 노브 미리듣기를 사용하세요."
+        }
+      >
+        ⓘ
+      </span>
     </div>
   );
 }

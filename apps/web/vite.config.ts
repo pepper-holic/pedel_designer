@@ -5,6 +5,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // ES-module workers: the real-time AudioWorklet is loaded with addModule, which has no
+  // importScripts - the classic-worker wrapper Vite would otherwise put around it in dev.
+  worker: { format: 'es' },
   plugins: [
     react(),
     // Everything this app does - solving, plotting, exporting - runs in the browser with no server

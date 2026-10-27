@@ -271,6 +271,26 @@
   margin-top: 12px;
 }
 
+.realtime-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.realtime-load,
+.realtime-warn {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.realtime-load-high,
+.realtime-warn {
+  color: var(--danger, #d0443a);
+}
+
 .status-text {
   font-family: var(--font-mono);
   font-size: 0.78rem;

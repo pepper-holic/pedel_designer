@@ -23,6 +23,7 @@ import { useSelectionState } from "./useSelectionState";
 import { useCircuitPersistence } from "./useCircuitPersistence";
 import { useProbes } from "./useProbes";
 import { useKnobPreview } from "./useKnobPreview";
+import { useRealtimeAudio } from "./useRealtimeAudio";
 import { pruneProbes } from "./probes";
 import { movePartsBy, deleteParts, deleteWire, deleteBlock, rotatePart, updatePartParams, coerceParamValue } from "./circuitEdits";
 import { computeOperatingPoint } from "./operatingPoint";
@@ -183,7 +184,7 @@ export function SchematicEditor() {
     commit,
     selection,
     onStatus: setStatus,
-    onKnobChanged: () => preview.request(),
+    onKnobChanged: () => requestPreview(),
   });
   const selectedBlock = blocks.find((b) => b.id === selection.selectedBlockId) ?? null;
 
@@ -209,13 +210,13 @@ export function SchematicEditor() {
   const handleParamChange = (key: string, value: string) => {
     if (!selectedPart) return;
     commit(updatePartParams(history.present, selectedPart.id, { [key]: coerceParamValue(key, value) }));
-    preview.request();
+    requestPreview();
   };
 
   const handleApplyModel = (paramsOverride: Record<string, number | string>) => {
     if (!selectedPart) return;
     commit(updatePartParams(history.present, selectedPart.id, paramsOverride));
-    preview.request();
+    requestPreview();
   };
 
   const persistence = useCircuitPersistence({
@@ -238,6 +239,21 @@ export function SchematicEditor() {
     cabinet: audio.cabinetEnabled ? audio.cabinetVariant : null,
     onStatus: setStatus,
   });
+
+  const realtime = useRealtimeAudio({
+    graph,
+    outputNode,
+    inputGain,
+    sample: audio.sample,
+    getAudioContext: audio.getAudioContext,
+    cabinet: audio.cabinetEnabled ? audio.cabinetVariant : null,
+    onStatus: setStatus,
+  });
+  // While the circuit plays live, every edit is already being heard - a preview clip on top would
+  // only talk over it.
+  const requestPreview = () => {
+    if (!realtime.active) preview.request();
+  };
 
   const analysis = useAnalysisPanels({
     graph,
@@ -332,7 +348,7 @@ export function SchematicEditor() {
           inputGain={inputGain}
           onInputGainChange={(gain) => {
             setInputGain(gain);
-            preview.request();
+            requestPreview();
           }}
           status={status}
           audio={audio}
@@ -360,6 +376,7 @@ export function SchematicEditor() {
             }
           }
           preview={{ enabled: preview.enabled, onEnabledChange: preview.setEnabled, busy: preview.busy }}
+          realtime={{ supported: realtime.supported, active: realtime.active, stats: realtime.stats, onToggle: realtime.toggle }}
           probePanel={{
             probes: probes.resolved,
             probeMode: probes.probeMode,

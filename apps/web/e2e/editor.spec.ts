@@ -161,6 +161,24 @@ test("changing a value plays a short preview of the new sound", async ({ page })
   await expect(page.getByText(/미리듣기 재생/)).toBeVisible({ timeout: 15_000 });
 });
 
+test("plays the circuit in real time and keeps playing through a knob change", async ({ page }) => {
+  await loadPreset(page, /TS9 스타일 오버드라이브/);
+  await page.getByRole("button", { name: "▶ 실시간 재생" }).click();
+  // Stats only arrive from inside the running AudioWorklet, so seeing one proves it is solving.
+  const load = page.locator(".realtime-load");
+  await expect(load).toHaveText(/부하 \d+%/, { timeout: 15_000 });
+
+  const gain = page.locator("#input-gain-slider");
+  await gain.focus();
+  await page.keyboard.press("ArrowRight");
+  // Still live after the edit, and no preview clip was started on top of it.
+  await expect(load).toBeVisible();
+  await expect(page.getByText(/미리듣기 재생/)).toHaveCount(0);
+
+  await page.getByRole("button", { name: "■ 실시간 정지" }).click();
+  await expect(page.getByRole("button", { name: "▶ 실시간 재생" })).toBeVisible();
+});
+
 test("loads a preset as functional blocks, collapses them to black boxes, and turns a block knob", async ({ page }) => {
   await loadPreset(page, /Big Muff 스타일/);
   // Expanded: tinted regions over the parts.
