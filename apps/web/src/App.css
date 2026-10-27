@@ -221,6 +221,15 @@
   min-height: 0;
 }
 
+/* The layouts space their panels with gap; the stacked-panel margin would double it. */
+.design-workspace > .panel + .panel,
+.design-center > .panel + .panel,
+.analyze-workspace > .panel + .panel,
+.analyze-circuit > .panel + .panel,
+.build-workspace > .panel + .panel {
+  margin-top: 0;
+}
+
 /* ---------- 1 설계 ---------- */
 .design-workspace {
   display: grid;
@@ -412,10 +421,6 @@
   gap: 10px;
   min-width: 0;
   min-height: 0;
-}
-
-.analyze-circuit > .panel + .panel {
-  margin-top: 0;
 }
 
 .analyze-circuit > .panel:not(.canvas-stage) {
@@ -760,11 +765,11 @@ kbd {
 
 .bottom-dock-collapsed {
   height: auto;
-  padding-bottom: 0;
+  padding: 0;
 }
 
 .bottom-dock-collapsed .dock-tab-row {
-  margin-bottom: 0;
+  margin: 0;
   border-bottom: none;
   border-radius: 8px;
 }
@@ -836,7 +841,11 @@ kbd {
     overflow-y: auto;
   }
 
-  .workspace > * {
+  .workspace > *,
+  .design-center,
+  .analyze-circuit,
+  .library-panel,
+  .sidebar-right {
     flex: none;
   }
 
@@ -995,10 +1004,8 @@ kbd {
   border: none;
   border-bottom: 2px solid transparent;
   border-radius: 0;
-  padding: 6px 4px;
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  padding: 7px 6px;
+  font-size: 0.76rem;
   color: var(--text-faint);
 }
 

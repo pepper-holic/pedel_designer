@@ -16,35 +16,62 @@ afterEach(() => {
   cleanup();
 });
 
+type User = ReturnType<typeof userEvent.setup>;
+
+/** The start cards cover the canvas while the circuit is empty. */
+const startCards = () => screen.queryByRole("region", { name: "시작하기" });
+
+/** 새 회로 lives in the 파일 menu. */
+async function clickNewCircuit(user: User) {
+  await user.click(screen.getByRole("button", { name: "파일 ▾" }));
+  await user.click(screen.getByRole("menuitem", { name: "새 회로" }));
+}
+
+const showTab = (user: User, name: "프리셋" | "블록" | "부품") => user.click(screen.getByRole("tab", { name }));
+
 describe("SchematicEditor", () => {
-  it("renders the empty-circuit hint and a disabled undo/새 회로 on first load", () => {
+  it("renders the start cards and a disabled undo/새 회로 on first load", async () => {
+    const user = userEvent.setup();
     render(<SchematicEditor />);
-    expect(screen.getByText(/회로가 비어 있습니다/)).toBeInTheDocument();
+    expect(startCards()).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /실행 취소/ })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "새 회로" })).toBeDisabled();
+    await user.click(screen.getByRole("button", { name: "파일 ▾" }));
+    expect(screen.getByRole("menuitem", { name: "새 회로" })).toBeDisabled();
   });
 
-  it("adding a part from the palette enables undo and clears the empty-circuit hint", async () => {
+  it("the start cards lead to the matching library tab", async () => {
+    const user = userEvent.setup();
+    render(<SchematicEditor />);
+    await user.click(screen.getByRole("button", { name: /부품부터 배치/ }));
+    expect(screen.getByRole("tab", { name: "부품" })).toHaveAttribute("aria-selected", "true");
+    await user.click(screen.getByRole("button", { name: /블록으로 조립/ }));
+    expect(screen.getByRole("tab", { name: "블록" })).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("adding a part from the palette enables undo and clears the start cards", async () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
+    await showTab(user, "부품");
     await user.click(screen.getByRole("button", { name: "저항" }));
 
-    expect(screen.queryByText(/회로가 비어 있습니다/)).not.toBeInTheDocument();
+    expect(startCards()).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: /실행 취소/ })).toBeEnabled();
-    expect(screen.getByRole("button", { name: "새 회로" })).toBeEnabled();
+    await user.click(screen.getByRole("button", { name: "파일 ▾" }));
+    expect(screen.getByRole("menuitem", { name: "새 회로" })).toBeEnabled();
   });
 
   it("undo removes the just-added part and re-disables itself", async () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
+    await showTab(user, "부품");
     await user.click(screen.getByRole("button", { name: "저항" }));
     expect(screen.getByRole("button", { name: /실행 취소/ })).toBeEnabled();
 
     await user.click(screen.getByRole("button", { name: /실행 취소/ }));
 
-    expect(screen.getByText(/회로가 비어 있습니다/)).toBeInTheDocument();
+    expect(startCards()).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /실행 취소/ })).toBeDisabled();
   });
 
@@ -52,12 +79,14 @@ describe("SchematicEditor", () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
-    await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
     await user.click(screen.getByRole("button", { name: /다이오드 클리퍼 \(대칭\)/ }));
 
-    expect(screen.getByText(/템플릿 로드됨: 다이오드 클리퍼 \(대칭\)/)).toBeInTheDocument();
-    const outputSelect = screen.getByLabelText("출력 노드") as HTMLSelectElement;
+    expect(screen.getByRole("status")).toHaveTextContent(/불러옴: 다이오드 클리퍼 \(대칭\)/);
+    const outputSelect = screen.getByLabelText("듣는 지점") as HTMLSelectElement;
     expect(outputSelect.value).not.toBe("");
+    // The app bar names the circuit, and the right column offers the next steps.
+    expect(screen.getByRole("banner")).toHaveTextContent("다이오드 클리퍼 (대칭)");
+    expect(screen.getByRole("button", { name: /연주하며 들어보기/ })).toBeInTheDocument();
   });
 
   it("새 회로 asks for confirmation and does nothing when the user cancels", async () => {
@@ -65,11 +94,12 @@ describe("SchematicEditor", () => {
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(false);
     render(<SchematicEditor />);
 
+    await showTab(user, "부품");
     await user.click(screen.getByRole("button", { name: "저항" }));
-    await user.click(screen.getByRole("button", { name: "새 회로" }));
+    await clickNewCircuit(user);
 
     expect(confirmSpy).toHaveBeenCalled();
-    expect(screen.queryByText(/회로가 비어 있습니다/)).not.toBeInTheDocument(); // part was NOT cleared
+    expect(startCards()).not.toBeInTheDocument(); // part was NOT cleared
     confirmSpy.mockRestore();
   });
 
@@ -78,10 +108,11 @@ describe("SchematicEditor", () => {
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
     render(<SchematicEditor />);
 
+    await showTab(user, "부품");
     await user.click(screen.getByRole("button", { name: "저항" }));
-    await user.click(screen.getByRole("button", { name: "새 회로" }));
+    await clickNewCircuit(user);
 
-    expect(screen.getByText(/회로가 비어 있습니다/)).toBeInTheDocument();
+    expect(startCards()).toBeInTheDocument();
     confirmSpy.mockRestore();
   });
 
@@ -89,6 +120,7 @@ describe("SchematicEditor", () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
+    await showTab(user, "부품");
     await user.click(screen.getByRole("button", { name: "저항" }));
     // partCounter is module-level and keeps incrementing across tests in this file, so the id
     // isn't always "resistor1" - match whichever "resistorN" label the canvas actually rendered.
@@ -108,11 +140,10 @@ describe("SchematicEditor", () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
-    await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
-    await user.click(screen.getByRole("button", { name: /기능 블록/ }));
+    await showTab(user, "블록");
     await user.click(screen.getByRole("button", { name: /버퍼 \(Op-Amp 팔로워\)/ }));
 
-    expect(screen.queryByText(/회로가 비어 있습니다/)).not.toBeInTheDocument();
+    expect(startCards()).not.toBeInTheDocument();
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     // The buffer block's only element is a single op-amp instance, id-prefixed with the block's
     // instance id (blkN_U1) - match loosely since blockCounter is module-level like partCounter.
@@ -124,8 +155,7 @@ describe("SchematicEditor", () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
-    await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
-    await user.click(screen.getByRole("button", { name: /기능 블록/ }));
+    await showTab(user, "블록");
     await user.click(screen.getByRole("button", { name: /버퍼 \(Op-Amp 팔로워\)/ }));
 
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
@@ -138,14 +168,13 @@ describe("SchematicEditor", () => {
     expect(within(inspector).getByText(/소속 블록: 버퍼 \(Op-Amp 팔로워\)/)).toBeInTheDocument();
 
     await user.click(within(inspector).getByRole("button", { name: "블록 전체 삭제" }));
-    expect(screen.getByText(/회로가 비어 있습니다/)).toBeInTheDocument();
+    expect(startCards()).toBeInTheDocument();
   });
 
   it("clicking a wire selects it and the inspector offers to delete it", async () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
-    await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
     await user.click(screen.getByRole("button", { name: /다이오드 클리퍼 \(대칭\)/ }));
 
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
@@ -164,7 +193,6 @@ describe("SchematicEditor", () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
-    await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
     await user.click(screen.getByRole("button", { name: /다이오드 클리퍼 \(대칭\)/ }));
 
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
@@ -184,7 +212,6 @@ describe("SchematicEditor", () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
-    await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
     await user.click(screen.getByRole("button", { name: /다이오드 클리퍼 \(대칭\)/ }));
 
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
@@ -214,9 +241,10 @@ describe("SchematicEditor", () => {
       Array.from(canvasPanel.querySelectorAll("g[data-part-id]")).map((g) => g.getAttribute("data-part-id")!);
 
     // Start one wire, then throw the whole circuit away before finishing it.
+    await showTab(user, "부품");
     await user.click(screen.getByRole("button", { name: "저항" }));
     await user.click(terminalsOf(idsOnCanvas()[0])[0]);
-    await user.click(screen.getByRole("button", { name: "새 회로" }));
+    await clickNewCircuit(user);
 
     // Two fresh parts, wired to each other. The stale pending terminal must not have eaten the
     // first of these two clicks to make an invisible wire to the part that no longer exists.
@@ -234,7 +262,6 @@ describe("SchematicEditor", () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
-    await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
     await user.click(screen.getByRole("button", { name: /듀얼 보이싱 오버드라이브/ }));
 
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
@@ -263,6 +290,7 @@ describe("SchematicEditor keyboard navigation", () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
+    await showTab(user, "부품");
     await user.click(screen.getByRole("button", { name: /^저항$/ }));
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const [id] = idsOnCanvas(canvasPanel);
@@ -279,6 +307,7 @@ describe("SchematicEditor keyboard navigation", () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
+    await showTab(user, "부품");
     await user.click(screen.getByRole("button", { name: "커패시터" }));
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const [id] = idsOnCanvas(canvasPanel);
@@ -298,6 +327,7 @@ describe("SchematicEditor keyboard navigation", () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
+    await showTab(user, "부품");
     await user.click(screen.getByRole("button", { name: /^저항$/ }));
     await user.click(screen.getByRole("button", { name: "커패시터" }));
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
@@ -314,15 +344,18 @@ describe("SchematicEditor keyboard navigation", () => {
     expect(idsOnCanvas(canvasPanel).length).toBe(2);
   });
 
-  it("clears the selection on Escape", async () => {
+  it("clears the selection on Escape, bringing back the circuit summary", async () => {
     const user = userEvent.setup();
     render(<SchematicEditor />);
 
+    await showTab(user, "부품");
     await user.click(screen.getByRole("button", { name: /^저항$/ }));
     await user.keyboard("]");
-    expect(screen.queryByText(/캔버스에서 소자나 배선을 클릭해 선택하세요/)).not.toBeInTheDocument();
+    expect(screen.getByText("선택된 소자")).toBeInTheDocument();
+    expect(screen.queryByText("다음 단계")).not.toBeInTheDocument();
 
     await user.keyboard("{Escape}");
-    expect(screen.getByText(/캔버스에서 소자나 배선을 클릭해 선택하세요/)).toBeInTheDocument();
+    expect(screen.queryByText("선택된 소자")).not.toBeInTheDocument();
+    expect(screen.getByText("다음 단계")).toBeInTheDocument();
   });
 });

@@ -12,7 +12,7 @@ beforeEach(() => {
 afterEach(() => cleanup());
 
 async function addLibraryBlock(user: ReturnType<typeof userEvent.setup>, name: RegExp) {
-  await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
+  await user.click(screen.getByRole("tab", { name: "블록" }));
   const blocksHeader = screen.getByRole("button", { name: /기능 블록/ });
   if (blocksHeader.getAttribute("aria-expanded") === "false") await user.click(blocksHeader);
   await user.click(screen.getByRole("button", { name }));
