@@ -9,7 +9,18 @@ export interface LayoutMetrics {
   wireLength: number;
   /** Wire segments that run through some other part's body. */
   bodyHits: number;
+  /** Segments on two different wires of the SAME net that run close together, parallel, and overlap
+   * in range - the same node drawn as two side-by-side lines instead of one shared trunk (see
+   * docs/plan-schematic-layout.md L3). Coincident segments (the actual point of a shared trunk - same
+   * offset) are not counted, and neither are segments merely sharing a net from opposite ends of the
+   * schematic (same offset range, but far apart - e.g. two unrelated ground drops); 0 unless `netOf`
+   * is given. */
+  parallelDuplicates: number;
 }
+
+/** How close two same-net parallel segments have to run to read as "the same line drawn twice"
+ * rather than two unrelated same-net connections that happen to share an x/y range. */
+const NEAR_DUPLICATE_DISTANCE = 60;
 
 /** A part's body without its terminal stubs: the area a wire should not run through. */
 export function bodyRect(part: PartInstance): { x1: number; y1: number; x2: number; y2: number } {
@@ -26,8 +37,9 @@ function segmentHitsRect(a: Point, b: Point, r: { x1: number; y1: number; x2: nu
   return a.x > r.x1 && a.x < r.x2 && Math.max(a.y, b.y) > r.y1 && Math.min(a.y, b.y) < r.y2;
 }
 
-/** Quality numbers for a drawn circuit, given each wire's polyline (default: the plain 2-bend route). */
-export function layoutMetrics(snapshot: CircuitSnapshot, polylines?: Point[][]): LayoutMetrics {
+/** Quality numbers for a drawn circuit, given each wire's polyline (default: the plain 2-bend route).
+ * `netOf` (wire id -> net id) is only needed for the parallelDuplicates count. */
+export function layoutMetrics(snapshot: CircuitSnapshot, polylines?: Point[][], netOf?: (wireId: string) => string | undefined): LayoutMetrics {
   const byId = new Map(snapshot.parts.map((p) => [p.id, p]));
   const lines =
     polylines ??
@@ -52,5 +64,31 @@ export function layoutMetrics(snapshot: CircuitSnapshot, polylines?: Point[][]):
       if (segmentHitsRect(s.a, s.b, bodyRect(p))) bodyHits++;
     }
   }
-  return { crossings, wireLength, bodyHits };
+  let parallelDuplicates = 0;
+  if (netOf) {
+    const netOfWire = snapshot.wires.map((w) => netOf(w.id));
+    for (let i = 0; i < segs.length; i++) {
+      const s1 = segs[i];
+      const horizontal1 = s1.a.y === s1.b.y;
+      const net1 = netOfWire[s1.wi];
+      if (!net1) continue;
+      for (let j = i + 1; j < segs.length; j++) {
+        const s2 = segs[j];
+        if (s1.wi === s2.wi) continue;
+        if (netOfWire[s2.wi] !== net1) continue;
+        const horizontal2 = s2.a.y === s2.b.y;
+        if (horizontal1 !== horizontal2) continue;
+        if (horizontal1) {
+          if (s1.a.y === s2.a.y) continue; // same offset - the shared trunk itself, not a duplicate
+          if (Math.abs(s1.a.y - s2.a.y) > NEAR_DUPLICATE_DISTANCE) continue;
+          if (Math.min(s1.a.x, s1.b.x) < Math.max(s2.a.x, s2.b.x) && Math.min(s2.a.x, s2.b.x) < Math.max(s1.a.x, s1.b.x)) parallelDuplicates++;
+        } else {
+          if (s1.a.x === s2.a.x) continue;
+          if (Math.abs(s1.a.x - s2.a.x) > NEAR_DUPLICATE_DISTANCE) continue;
+          if (Math.min(s1.a.y, s1.b.y) < Math.max(s2.a.y, s2.b.y) && Math.min(s2.a.y, s2.b.y) < Math.max(s1.a.y, s1.b.y)) parallelDuplicates++;
+        }
+      }
+    }
+  }
+  return { crossings, wireLength, bodyHits, parallelDuplicates };
 }

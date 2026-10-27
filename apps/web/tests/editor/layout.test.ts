@@ -47,6 +47,30 @@ describe("router", () => {
     const [r] = routeWires([{ a: { x: 0, y: 0 }, b: { x: 200, y: 0 }, net: "n" }], [{ x1: 170, y1: -40, x2: 230, y2: -11 }, { x1: 170, y1: 11, x2: 230, y2: 40 }, { x1: 170, y1: -40, x2: 189, y2: 40 }, { x1: 211, y1: -40, x2: 230, y2: 40 }], { maxExpansions: 5000 });
     expect(r === null || r.length >= 2).toBe(true);
   });
+
+  it("pulls a second wire of the SAME net onto the first one's track instead of each cutting its own parallel path (L3)", () => {
+    const requests = [
+      { a: { x: 0, y: 0 }, b: { x: 60, y: 100 }, net: "n" },
+      { a: { x: 20, y: 0 }, b: { x: 80, y: 100 }, net: "n" },
+    ];
+    const [r1, r2] = routeWires(requests, []);
+    // Both run vertical-first, then share one horizontal run at the same y (a coincident rail,
+    // not two parallel lines a few px apart).
+    const lastLegY = (route: { x: number; y: number }[]) => route[route.length - 2].y;
+    expect(lastLegY(r1!)).toBe(lastLegY(r2!));
+    expect(lastLegY(r1!)).toBe(100);
+  });
+
+  it("does NOT pull a second wire of a DIFFERENT net onto the first one's track", () => {
+    const requests = [
+      { a: { x: 0, y: 0 }, b: { x: 60, y: 100 }, net: "n" },
+      { a: { x: 20, y: 0 }, b: { x: 80, y: 100 }, net: "m" },
+    ];
+    const [r1, r2] = routeWires(requests, []);
+    const lastLegY = (route: { x: number; y: number }[]) => route[route.length - 2].y;
+    expect(lastLegY(r1!)).toBe(100);
+    expect(lastLegY(r2!)).not.toBe(100);
+  });
 });
 
 describe("waypoints", () => {
@@ -107,21 +131,30 @@ describe("arrange", () => {
 });
 
 describe("layout quality across every preset", () => {
-  it("no routed wire runs through a part, and crossings stay low", () => {
-    let total = 0;
+  it("no routed wire runs through a part, crossings stay low, and same-net wires don't double-draw a node", () => {
+    let totalCrossings = 0;
+    let totalDuplicates = 0;
     for (const preset of presets) {
       const { snapshot } = loadPedalPreset(preset);
       const g = netlistFromGraph(snapshot.parts, snapshot.wires);
       const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
+      const wireNetOf = (wireId: string) => netOf(snapshot.wires.find((w) => w.id === wireId)!.a);
       const routes = wireRoutes(snapshot.wires, snapshot.parts, buildCanvasEndpoints(snapshot.parts, snapshot.blocks, netOf), netOf, false);
-      const m = layoutMetrics({ ...snapshot, wires: routes.map((r) => r.wire) }, routes.map((r) => r.points));
+      const m = layoutMetrics({ ...snapshot, wires: routes.map((r) => r.wire) }, routes.map((r) => r.points), wireNetOf);
       expect(m.bodyHits, preset.id).toBe(0);
       expect(m.crossings, preset.id).toBeLessThanOrEqual(8);
-      total += m.crossings;
+      totalCrossings += m.crossings;
+      totalDuplicates += m.parallelDuplicates;
     }
-    // Baseline before Stage C (flat layout, plain 2-bend wires): 64.
-    // L1 (part orientation pass) brought it to 23, L2 (op-amp stage template) to 19. Plan target: <=15.
-    expect(total).toBeLessThanOrEqual(22);
+    // Baseline before Stage C (flat layout, plain 2-bend wires): 64 crossings.
+    // L1 (part orientation pass): 23. L2 (op-amp stage template): 19.
+    // L3 (same-net wires attracted onto a shared track - routing/astar.ts alongBonus): 18. Plan target: <=15.
+    expect(totalCrossings).toBeLessThanOrEqual(20);
+    // L3 target: same node drawn as one trunk, not two parallel lines a few px apart. A handful of
+    // multi-diode clipping networks the op-amp template doesn't recognize (L2's scope) still draw a
+    // net's branches as separate nearby runs rather than merging onto one; tracked here so further
+    // routing work (or a future L2 extension) can be measured against this count.
+    expect(totalDuplicates).toBeLessThanOrEqual(21);
   });
 });
 
@@ -168,4 +201,18 @@ describe("part orientation pass (L1)", () => {
     expect(after.rotation).toBe(original.rotation);
     expect(after.mirror).toBe(original.mirror);
   });
+});
+
+describe("node-level wiring (L3)", () => {
+  it("draws TS9's n2 and n3 as a single shared track per node, with no near-duplicate parallel run", () => {
+    const preset = presets.find((p) => p.id === "ts9-overdrive")!;
+    const { snapshot } = loadPedalPreset(preset);
+    const g = netlistFromGraph(snapshot.parts, snapshot.wires);
+    const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
+    const wireNetOf = (wireId: string) => netOf(snapshot.wires.find((w) => w.id === wireId)!.a);
+    const routes = wireRoutes(snapshot.wires, snapshot.parts, buildCanvasEndpoints(snapshot.parts, snapshot.blocks, netOf), netOf, false);
+    const m = layoutMetrics({ ...snapshot, wires: routes.map((r) => r.wire) }, routes.map((r) => r.points), wireNetOf);
+    expect(m.parallelDuplicates).toBe(0);
+  });
+
 });

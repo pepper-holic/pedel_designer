@@ -22,6 +22,10 @@ export interface RouterOptions {
   overlapCost?: number;
   /** Cost of crossing another net's track at right angles. */
   crossCost?: number;
+  /** Discount off the normal per-cell cost for riding along a cell the SAME net already occupies -
+   * what pulls a net's later (and often longer) wires onto an earlier wire's track instead of each
+   * cutting its own parallel path a few grid steps away (L3: "same node drawn as two lines"). */
+  alongBonus?: number;
   /** Give up on a wire after this many expansions and fall back to the plain route. */
   maxExpansions?: number;
 }
@@ -112,6 +116,7 @@ export function routeWires(requests: RouteRequest[], obstacles: Rect[], options:
   const bendCost = options.bendCost ?? 6;
   const overlapCost = options.overlapCost ?? 12;
   const crossCost = options.crossCost ?? 12;
+  const alongBonus = options.alongBonus ?? 0.7;
   const maxExpansions = options.maxExpansions ?? 60_000;
   if (requests.length === 0) return [];
 
@@ -199,7 +204,7 @@ export function routeWires(requests: RouteRequest[], obstacles: Rect[], options:
         if (cameFrom[s] !== -1 && nd !== d) cost += bendCost;
         const along = horizontal ? hOcc[nc] : vOcc[nc];
         const across = horizontal ? vOcc[nc] : hOcc[nc];
-        if (along && along !== net) cost += overlapCost;
+        if (along) cost += along === net ? -alongBonus : overlapCost;
         if (across && across !== net) cost += crossCost;
         const ns = nc * 4 + nd;
         const tentative = base + cost;
