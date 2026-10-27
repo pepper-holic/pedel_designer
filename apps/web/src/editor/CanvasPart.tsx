@@ -36,7 +36,7 @@ export function CanvasPart({ part, isSelected, pendingTerminal, onBodyMouseDown,
           height={PART_HALF_HEIGHT * 2}
           rx={6}
           fill="none"
-          stroke="var(--accent)"
+          stroke="var(--select)"
           strokeWidth={1.2}
           strokeDasharray="3 2"
         />
@@ -58,7 +58,7 @@ export function CanvasPart({ part, isSelected, pendingTerminal, onBodyMouseDown,
             cx={t.dx}
             cy={t.dy}
             r={4}
-            fill={pendingTerminal?.partId === part.id && pendingTerminal.terminalId === t.id ? "var(--accent)" : "var(--wire)"}
+            fill={pendingTerminal?.partId === part.id && pendingTerminal.terminalId === t.id ? "var(--select)" : "var(--wire)"}
             onClick={(e) => onTerminalClick({ partId: part.id, terminalId: t.id }, e)}
             style={{ cursor: "crosshair" }}
           />

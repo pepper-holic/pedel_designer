@@ -57,8 +57,8 @@ export interface PlotArea {
 }
 
 export const AXIS_FONT = "11px 'JetBrains Mono', monospace";
-export const GRID_COLOR = "#e3e7d3";
-export const LABEL_COLOR = "#6f735a";
+export const GRID_COLOR = "#ececef";
+export const LABEL_COLOR = "#71717a";
 
 export function plotArea(width: number, height: number): PlotArea {
   return { left: 46, top: 8, right: width - 10, bottom: height - 20 };
@@ -110,7 +110,7 @@ export function drawLogDbAxes(
     ctx.fillText(f >= 1000 ? `${f / 1000}k` : `${f}`, x, area.bottom + 4);
     lastLabelX = x;
   }
-  ctx.strokeStyle = "#c9ceb6";
+  ctx.strokeStyle = "#d4d4d8";
   ctx.strokeRect(area.left + 0.5, area.top + 0.5, area.right - area.left, area.bottom - area.top);
   ctx.textAlign = "start";
   ctx.textBaseline = "alphabetic";

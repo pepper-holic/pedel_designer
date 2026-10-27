@@ -10,7 +10,7 @@ import type { BlockParam } from "../types";
 import { Knob } from "./Knob";
 import type { PlayerControl, PlayerSection } from "./playerControls";
 
-const OUTPUT_COLOR = "#191a10";
+const OUTPUT_COLOR = "#18181b";
 const PLOT_HEIGHT = 170;
 
 export interface PlayerViewProps {

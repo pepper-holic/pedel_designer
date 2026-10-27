@@ -13,7 +13,7 @@ export interface AnalyzerSeries {
   spectrum: Spectrum;
 }
 
-const LIVE_COLORS = { post: "#2f7fb5", pre: "#8b8e75" };
+const LIVE_COLORS = { post: "#2563eb", pre: "#a1a1aa" };
 
 const F_MIN = 20;
 const F_MAX = 20000;
@@ -212,7 +212,7 @@ export function Analyzer({ series, height: fixedHeight }: { series: AnalyzerSeri
         parts.push(`실시간 출력 ${(10 * Math.log10(l.post![i] + 1e-30) + tiltDb(g[i], s.tilt)).toFixed(1)}dB`);
         parts.push(`실시간 입력 ${(10 * Math.log10(l.pre![i] + 1e-30) + tiltDb(g[i], s.tilt)).toFixed(1)}dB`);
       }
-      ctx.strokeStyle = "rgba(25, 26, 16, 0.45)";
+      ctx.strokeStyle = "rgba(24, 24, 27, 0.45)";
       ctx.beginPath();
       ctx.moveTo(hx + 0.5, a.top);
       ctx.lineTo(hx + 0.5, a.bottom);
@@ -223,7 +223,7 @@ export function Analyzer({ series, height: fixedHeight }: { series: AnalyzerSeri
       const tx = Math.min(Math.max(a.left + 4, hx + 8), a.right - tw - 8);
       ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
       ctx.fillRect(tx - 4, a.top + 4, tw + 8, 18);
-      ctx.fillStyle = "#191a10";
+      ctx.fillStyle = "#18181b";
       ctx.fillText(text, tx, a.top + 17);
     }
   };

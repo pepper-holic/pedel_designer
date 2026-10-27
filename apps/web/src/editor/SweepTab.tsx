@@ -16,7 +16,7 @@ const SWEEP_FREQUENCIES = logFrequencySweep(20, 20000, 40);
 
 /** Dark-to-light along one hue, so the curves read as an ordered series (knob down to knob up)
  * rather than as unrelated categories. */
-const CURVE_COLORS = ["#1f3a17", "#2f5623", "#3c6b2e", "#6b9455", "#9dbd84", "#c4d6b0"];
+const CURVE_COLORS = ["#18181b", "#3f3f46", "#52525b", "#71717a", "#a1a1aa", "#c4c4cc"];
 
 /**
  * Bottom-dock "노브 스윕" tab: plots one frequency response per position of a chosen knob or switch,

@@ -61,7 +61,7 @@ export function CanvasWireLayer({ endpoints, parts, wires, netOf, fast, selected
         <path
           key={wire.id}
           d={paths[i]}
-          stroke={wire.id === selectedWireId ? "var(--accent)" : "var(--wire)"}
+          stroke={wire.id === selectedWireId ? "var(--select)" : "var(--wire)"}
           strokeWidth={wire.id === selectedWireId ? 3 : 2}
           fill="none"
           pointerEvents="none"
@@ -108,7 +108,7 @@ export function CanvasWireLayer({ endpoints, parts, wires, netOf, fast, selected
                 height={HANDLE_SIZE}
                 rx={2}
                 fill="var(--bg-inset)"
-                stroke="var(--accent)"
+                stroke="var(--select)"
                 strokeWidth={2}
                 style={{ cursor: horizontal ? "ns-resize" : "ew-resize" }}
                 onMouseDown={(e) => {

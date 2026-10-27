@@ -100,7 +100,7 @@ export function InspectorPanel({
             width: "100%",
             background: "var(--bg-inset)",
             color: "var(--text)",
-            border: `1px solid ${isInvalid ? "#c0392b" : "var(--border)"}`,
+            border: `1px solid ${isInvalid ? "var(--danger)" : "var(--border)"}`,
             borderRadius: 6,
             padding: 6,
           }}

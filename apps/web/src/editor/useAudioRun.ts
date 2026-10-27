@@ -14,7 +14,7 @@ const AB_GAP_SEC = 0.25;
 const DEFAULT_SIGNAL = "chord";
 
 /** Trace colours, in the order nodes come out of the netlist. */
-const TRACE_COLORS = ["#3c6b2e", "#7c9300", "#8a4a2a", "#191a10"];
+const TRACE_COLORS = ["#27272a", "#2563eb", "#71717a", "#a1a1aa"];
 
 interface UseAudioRunOptions {
   graph: GraphNetlist;

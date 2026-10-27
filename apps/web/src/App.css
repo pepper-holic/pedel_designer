@@ -191,7 +191,7 @@
   background: var(--bg-inset);
   border: 1px solid var(--border);
   border-radius: 8px;
-  box-shadow: 0 10px 28px rgba(19, 20, 9, 0.2);
+  box-shadow: 0 10px 28px rgba(24, 24, 27, 0.12);
 }
 
 .appbar-menu-list button {
@@ -456,8 +456,8 @@
 .stale-badge {
   padding: 2px 7px;
   border-radius: 4px;
-  background: #f3e3b5;
-  color: #634500;
+  background: var(--warning-soft);
+  color: var(--warning);
   font-size: 0.75rem;
 }
 
@@ -633,7 +633,7 @@
 }
 
 .transport-warn {
-  color: #ff8f80;
+  color: var(--danger);
 }
 
 .transport-play {
@@ -681,7 +681,7 @@
   align-items: center;
   justify-content: center;
   padding: 16px;
-  background: rgba(19, 20, 9, 0.45);
+  background: rgba(24, 24, 27, 0.3);
 }
 
 .modal {
@@ -693,7 +693,7 @@
   background: var(--bg-raised);
   border: 1px solid var(--border);
   border-radius: 12px;
-  box-shadow: 0 24px 64px rgba(19, 20, 9, 0.28);
+  box-shadow: 0 24px 64px rgba(24, 24, 27, 0.18);
 }
 
 .modal-head {
@@ -1394,11 +1394,11 @@ kbd {
 }
 
 .drc-error {
-  border-left-color: #c0392b;
+  border-left-color: var(--danger);
 }
 
 .drc-warning {
-  border-left-color: #c7822b;
+  border-left-color: var(--warning);
 }
 
 .drc-badge {
@@ -1409,11 +1409,11 @@ kbd {
 }
 
 .drc-error .drc-badge {
-  color: #c0392b;
+  color: var(--danger);
 }
 
 .drc-warning .drc-badge {
-  color: #c7822b;
+  color: var(--warning);
 }
 
 .drc-message {
@@ -1968,25 +1968,25 @@ kbd {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #4a1d1d;
+  background: #e4e4e7;
 }
 
 .pedal-led-on {
-  background: #ff3b30;
-  box-shadow: 0 0 10px #ff3b30;
+  background: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
 }
 
 .pedal-footswitch {
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #d9dccb, #7d8070);
+  background: radial-gradient(circle at 35% 35%, #fafafa, #a1a1aa);
   border: 3px solid var(--chrome-border);
 }
 
 .pedal-footswitch[aria-pressed="true"] {
   transform: translateY(1px);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 .pedal-footer-text {

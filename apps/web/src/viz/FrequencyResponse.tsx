@@ -48,7 +48,7 @@ export function FrequencyResponse({ points, series, width: fixedWidth, height: f
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const curves: ResponseSeries[] = series ?? [{ label: "", points, color: "#3c6b2e" }];
+    const curves: ResponseSeries[] = series ?? [{ label: "", points, color: "#18181b" }];
     const axisPoints = curves.find((c) => c.points.length > 0)?.points;
     if (!canvas || !axisPoints) return;
     const ctx = prepareCanvas(canvas, width, height);
@@ -64,7 +64,7 @@ export function FrequencyResponse({ points, series, width: fixedWidth, height: f
     });
 
     // 0dB reference line.
-    ctx.strokeStyle = "#b8bda3";
+    ctx.strokeStyle = "#d4d4d8";
     ctx.beginPath();
     ctx.moveTo(area.left, yOf(0));
     ctx.lineTo(area.right, yOf(0));
@@ -75,7 +75,7 @@ export function FrequencyResponse({ points, series, width: fixedWidth, height: f
     ctx.rect(area.left, area.top, area.right - area.left, area.bottom - area.top);
     ctx.clip();
     if (band && !series && band.minDb.length === points.length) {
-      ctx.fillStyle = "rgba(60, 107, 46, 0.18)";
+      ctx.fillStyle = "rgba(37, 99, 235, 0.12)";
       ctx.beginPath();
       points.forEach((p, i) => ctx.lineTo(xOf(p.frequencyHz), yOf(band.maxDb[i])));
       for (let i = points.length - 1; i >= 0; i--) ctx.lineTo(xOf(points[i].frequencyHz), yOf(band.minDb[i]));

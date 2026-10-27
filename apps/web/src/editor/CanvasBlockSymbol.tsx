@@ -34,7 +34,7 @@ export function CanvasBlockSymbol({ block, layout, parts, selected, pendingTermi
         height={layout.height}
         rx={8}
         fill="var(--bg-inset)"
-        stroke={selected ? "var(--accent)" : stroke}
+        stroke={selected ? "var(--select)" : stroke}
         strokeWidth={selected ? 2.5 : 1.6}
         style={{ cursor: "grab" }}
         onMouseDown={(e) => onBodyMouseDown(block, e)}
@@ -83,7 +83,7 @@ export function CanvasBlockSymbol({ block, layout, parts, selected, pendingTermi
               cx={pin.x}
               cy={pin.y}
               r={4.5}
-              fill={pending ? "var(--accent)" : "var(--wire)"}
+              fill={pending ? "var(--select)" : "var(--wire)"}
               style={{ cursor: "crosshair" }}
               onClick={(e) => onPinClick(pin.port.terminal, e)}
             >

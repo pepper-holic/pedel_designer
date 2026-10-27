@@ -115,13 +115,13 @@ export function Waveform({ traces, heightPerTrace, durationSeconds }: WaveformPr
       const y = (v: number) => mid - v * scale;
 
       if (index > 0) {
-        ctx.strokeStyle = "#e3e7d3";
+        ctx.strokeStyle = "#ececef";
         ctx.beginPath();
         ctx.moveTo(0, top + 0.5);
         ctx.lineTo(width, top + 0.5);
         ctx.stroke();
       }
-      ctx.strokeStyle = "#d3d9c1";
+      ctx.strokeStyle = "#d4d4d8";
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(0, Math.round(mid) + 0.5);
@@ -197,7 +197,7 @@ export function Waveform({ traces, heightPerTrace, durationSeconds }: WaveformPr
 
     if (durationSeconds) {
       ctx.font = "11px 'JetBrains Mono', monospace";
-      ctx.fillStyle = "#6f735a";
+      ctx.fillStyle = "#71717a";
       ctx.textBaseline = "top";
       const t0 = view.start * durationSeconds;
       const span = (view.end - view.start) * durationSeconds;

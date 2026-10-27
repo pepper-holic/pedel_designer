@@ -16,7 +16,7 @@ interface FrequencyResponseTabProps {
   band: MonteCarloResult | null;
 }
 
-const OUTPUT_COLOR = "#191a10";
+const OUTPUT_COLOR = "#18181b";
 
 /** Bottom-dock "주파수 응답" tab: renders the Bode plot once an output node or probe is picked,
  * otherwise explains what's missing (nothing to measure, no source in the circuit, or a solver error). */
@@ -27,7 +27,7 @@ export function FrequencyResponseTab({ status, error, points, probeSeries = [], 
   if (status === "no-source") return <p className="preset-description">회로에 입력 전압원이 없습니다. 전압원(입력) 소자를 추가하고 배선하세요.</p>;
   if (status === "error") {
     return (
-      <p className="preset-description" style={{ color: "#c0392b" }}>
+      <p className="preset-description" style={{ color: "var(--danger)" }}>
         ⚠ 계산 실패: 회로 구성을 확인하세요 (플로팅 노드, 닫히지 않은 루프 등). {error}
       </p>
     );

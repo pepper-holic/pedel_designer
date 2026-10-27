@@ -18,8 +18,8 @@ interface SpectrumTabProps {
   inputNet: string | null;
 }
 
-const OUTPUT_COLOR = "#191a10";
-const INPUT_COLOR = "#8b8e75";
+const OUTPUT_COLOR = "#18181b";
+const INPUT_COLOR = "#a1a1aa";
 const PEAKS_PER_SERIES = 6;
 
 function formatHz(f: number): string {

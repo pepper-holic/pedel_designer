@@ -372,9 +372,9 @@ export function SchematicCanvas({
               y={Math.min(selectBox.y1, selectBox.y2)}
               width={Math.abs(selectBox.x2 - selectBox.x1)}
               height={Math.abs(selectBox.y2 - selectBox.y1)}
-              fill="var(--accent)"
+              fill="var(--select)"
               fillOpacity={0.1}
-              stroke="var(--accent)"
+              stroke="var(--select)"
               strokeWidth={1}
               strokeDasharray="4 3"
               pointerEvents="none"

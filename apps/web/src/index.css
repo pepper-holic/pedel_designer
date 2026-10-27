@@ -1,59 +1,71 @@
 :root {
-  /* workspace (paper/canvas side) */
-  --bg: #eaeee0;
-  --bg-raised: #f6f8ee;
+  /* Neutral and quiet: the circuit is the subject, so the interface stays white and grey and the
+     one colour (--select) marks what is selected on the canvas. */
+
+  /* workspace */
+  --bg: #f4f4f5;
+  --bg-raised: #ffffff;
   --bg-inset: #ffffff;
-  --bg-panel-header: #e4e8d5;
-  --border: #d3d9c1;
-  --border-soft: #e3e7d3;
+  --bg-panel-header: #fafafa;
+  --border: #e4e4e7;
+  --border-soft: #f0f0f2;
   /* schematic canvas snap-grid dots - faint enough to read as paper texture, not UI chrome */
-  --grid-dot: #d8dcc7;
-  --text: #191a10;
-  --text-dim: #5c5f49;
-  /* darkened from the original #8b8e75 - that failed WCAG AA (~3.4:1) for the small hint/description
-     text it's used on against the light panel backgrounds; this hits ~4.9:1. */
-  --text-faint: #6f735a;
+  --grid-dot: #e1e1e5;
+  --text: #18181b;
+  --text-dim: #52525b;
+  /* ~4.8:1 on white - still passes WCAG AA for the small hint text it is used on. */
+  --text-faint: #71717a;
 
-  /* chrome (hardware/knobs side - menubar, toolbar, status bar) */
-  --chrome-bg: #131409;
-  --chrome-bg-raised: #1c1e11;
-  --chrome-border: #2e3018;
-  --chrome-text: #e4e8d0;
-  --chrome-text-dim: #8d9077;
+  /* bars around the work (app bar, transport) - white like the rest, set apart by a hairline */
+  --chrome-bg: #ffffff;
+  --chrome-bg-raised: #f4f4f5;
+  --chrome-border: #e4e4e7;
+  --chrome-text: #18181b;
+  --chrome-text-dim: #71717a;
 
-  /* TS9 acid green - the one loud color, spent sparingly on active/interactive elements */
-  --accent: #a8c400;
-  --accent-dim: #7c9300;
-  --accent-soft: rgba(168, 196, 0, 0.16);
-  --accent-ink: #14150a;
+  /* "accent" is ink: active tabs and primary buttons are black on white, not a hue */
+  --accent: #18181b;
+  --accent-dim: #3f3f46;
+  --accent-soft: rgba(24, 24, 27, 0.06);
+  --accent-ink: #ffffff;
 
-  /* circuit-trace green, used for wires and waveform ink - distinct from the accent so pops still read as "active" */
-  --wire: #3c6b2e;
-  --wire-dim: #a9c19c;
+  /* the single colour: selection, a half-made wire, probe mode */
+  --select: #2563eb;
+  --select-soft: rgba(37, 99, 235, 0.12);
 
-  /* functional-block overlays on the schematic canvas (buffer/gain/clipping/tone) - translucent
-     tints + matching label color, one hue per category, styled after annotated reference schematics
-     that shade a pedal's circuit into labeled functional regions. */
-  --block-buffer-fill: rgba(74, 122, 191, 0.14);
-  --block-buffer-stroke: #4a7abf;
-  --block-gain-fill: rgba(199, 130, 43, 0.14);
-  --block-gain-stroke: #c7822b;
-  --block-clipping-fill: rgba(178, 63, 63, 0.14);
-  --block-clipping-stroke: #b23f3f;
-  --block-tone-fill: rgba(122, 78, 168, 0.14);
-  --block-tone-stroke: #7a4ea8;
-  --block-load-fill: rgba(90, 122, 90, 0.14);
-  --block-load-stroke: #5a7a5a;
-  --block-input-fill: rgba(46, 125, 140, 0.14);
-  --block-input-stroke: #2e7d8c;
-  --block-fuzz-fill: rgba(196, 72, 120, 0.14);
-  --block-fuzz-stroke: #b03a6a;
-  --block-output-fill: rgba(60, 107, 46, 0.14);
-  --block-output-stroke: #3c6b2e;
-  --block-power-fill: rgba(150, 120, 20, 0.14);
-  --block-power-stroke: #8a6d0a;
-  --block-custom-fill: rgba(92, 95, 73, 0.12);
-  --block-custom-stroke: #5c5f49;
+  /* status */
+  --danger: #b42318;
+  --warning: #b54708;
+  --warning-soft: #fef6e7;
+
+  /* wires and terminals */
+  --wire: #3f3f46;
+  --wire-dim: #d4d4d8;
+
+  /* functional-block regions on the canvas - one neutral tint for every category, so blocks group
+     the circuit without colour-coding it (the category is in the block's label). */
+  --block-fill: rgba(113, 113, 122, 0.05);
+  --block-stroke: #71717a;
+  --block-buffer-fill: var(--block-fill);
+  --block-buffer-stroke: var(--block-stroke);
+  --block-gain-fill: var(--block-fill);
+  --block-gain-stroke: var(--block-stroke);
+  --block-clipping-fill: var(--block-fill);
+  --block-clipping-stroke: var(--block-stroke);
+  --block-tone-fill: var(--block-fill);
+  --block-tone-stroke: var(--block-stroke);
+  --block-load-fill: var(--block-fill);
+  --block-load-stroke: var(--block-stroke);
+  --block-input-fill: var(--block-fill);
+  --block-input-stroke: var(--block-stroke);
+  --block-fuzz-fill: var(--block-fill);
+  --block-fuzz-stroke: var(--block-stroke);
+  --block-output-fill: var(--block-fill);
+  --block-output-stroke: var(--block-stroke);
+  --block-power-fill: var(--block-fill);
+  --block-power-stroke: var(--block-stroke);
+  --block-custom-fill: var(--block-fill);
+  --block-custom-stroke: var(--block-stroke);
 
   --font-display: "Space Grotesk", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
@@ -140,7 +152,9 @@ button {
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;
-  transition: border-color 0.15s ease, transform 0.1s ease;
+  transition:
+    border-color 0.15s ease,
+    transform 0.1s ease;
 }
 
 button:hover:not(:disabled) {
@@ -164,7 +178,8 @@ button.primary {
 }
 
 button.primary:hover:not(:disabled) {
-  filter: brightness(1.05);
+  background: #3f3f46;
+  border-color: #3f3f46;
 }
 
 .visually-hidden {

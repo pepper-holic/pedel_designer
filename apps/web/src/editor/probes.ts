@@ -1,10 +1,10 @@
 import type { PartInstance, Probe, TerminalRef } from "./types";
 
 /**
- * Probe colours: distinct hues that stay apart from the wire green and the block tints, and read on
- * both the light canvas and the white plot backgrounds. Assigned in order and reused round-robin.
+ * Probe colours: muted hues - just enough apart to tell overlaid curves from each other, quiet
+ * enough not to compete with the grey schematic. Assigned in order and reused round-robin.
  */
-export const PROBE_COLORS = ["#d1495b", "#1f78b4", "#e08a00", "#7b3fa6", "#00897b", "#6d4c41"];
+export const PROBE_COLORS = ["#4a6fa5", "#b0694a", "#5b8a6f", "#8572a8", "#a85a72", "#71717a"];
 
 /** More than this and the overlaid plots stop being readable - the user should drop one first. */
 export const MAX_PROBES = 6;
@@ -32,7 +32,9 @@ export function resolveProbes(probes: Probe[], parts: PartInstance[], terminalNe
     const net = terminalNet.get(key(probe.terminal));
     if (!net || net === "0" || seenNets.has(net)) continue;
     seenNets.add(net);
-    resolved.push({ ...probe, net });
+    // A probe saved under an older palette is drawn in the current one.
+    const color = PROBE_COLORS.includes(probe.color) ? probe.color : PROBE_COLORS[resolved.length % PROBE_COLORS.length];
+    resolved.push({ ...probe, net, color });
   }
   return resolved;
 }
