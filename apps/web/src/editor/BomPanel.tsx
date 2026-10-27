@@ -45,14 +45,16 @@ export function BomPanel({ parts, graph }: BomPanelProps) {
             <thead>
               <tr>
                 <th>부품</th>
+                <th>패키지</th>
                 <th>수량</th>
                 <th>소자 ID</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.label}>
+                <tr key={`${row.label}|${row.package}`}>
                   <td>{row.label}</td>
+                  <td>{row.package}</td>
                   <td>{row.quantity}</td>
                   <td className="bom-ids">{row.partIds.join(", ")}</td>
                 </tr>

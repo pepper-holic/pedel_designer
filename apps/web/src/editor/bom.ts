@@ -2,9 +2,12 @@ import type { PartInstance } from "./types";
 import { PART_DEFS, type PartType } from "./partDefs";
 import { DIODE_MODELS } from "../core/library/deviceModels";
 import { partValueLabel } from "./valueLabel";
+import { footprintFor } from "./pcb/footprintAssign";
 
 export interface BomRow {
   label: string;
+  /** Physical package (footprint), so a 100nF film box and a 100nF ceramic are separate lines. */
+  package: string;
   quantity: number;
   partIds: string[];
 }
@@ -54,17 +57,19 @@ export function buildBom(parts: PartInstance[]): BomRow[] {
   for (const part of parts) {
     if (NON_PURCHASABLE_TYPES.includes(part.type)) continue;
     const { key, label } = bomKeyAndLabel(part);
-    if (!rows.has(key)) rows.set(key, { label, quantity: 0, partIds: [] });
-    const row = rows.get(key)!;
+    const pkg = footprintFor(part)?.label ?? "";
+    const rowKey = `${key}|${pkg}`;
+    if (!rows.has(rowKey)) rows.set(rowKey, { label, package: pkg, quantity: 0, partIds: [] });
+    const row = rows.get(rowKey)!;
     row.quantity += 1;
     row.partIds.push(part.id);
   }
-  return Array.from(rows.values()).sort((a, b) => a.label.localeCompare(b.label, "ko"));
+  return Array.from(rows.values()).sort((a, b) => a.label.localeCompare(b.label, "ko") || a.package.localeCompare(b.package, "ko"));
 }
 
-/** Tab-separated text (label, quantity, part ids) suitable for pasting into a spreadsheet. */
+/** Tab-separated text (label, package, quantity, part ids) suitable for pasting into a spreadsheet. */
 export function bomToText(rows: BomRow[]): string {
-  const header = "부품\t수량\t소자 ID";
-  const lines = rows.map((r) => `${r.label}\t${r.quantity}\t${r.partIds.join(", ")}`);
+  const header = "부품\t패키지\t수량\t소자 ID";
+  const lines = rows.map((r) => `${r.label}\t${r.package}\t${r.quantity}\t${r.partIds.join(", ")}`);
   return [header, ...lines].join("\n");
 }

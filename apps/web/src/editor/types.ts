@@ -28,6 +28,9 @@ export interface PartInstance {
   blockId?: string;
   /** Set when the user has placed this part by hand: "자동 정렬" leaves it where it is. */
   pinned?: boolean;
+  /** Chosen PCB footprint (see pcb/footprints.ts). Absent = the default for the part's type and
+   * value. A physical property only - it never reaches the simulation. */
+  footprintId?: string;
 }
 
 import type { BlockCategory, PortKind } from "../core/library/types";

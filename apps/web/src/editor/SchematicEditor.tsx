@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { PART_DEFS, type PartType } from "./partDefs";
 import type { TerminalRef } from "./types";
+import type { PartPatch } from "./InspectorPanel";
 import { netlistFromGraph } from "./netlistFromGraph";
 import { loadPedalPreset, loadWiringPreset } from "./templateLoading";
 import { snapToGrid, GRID_SIZE } from "./geometry";
@@ -142,8 +143,8 @@ export function SchematicEditor() {
   const handleResetWire = (wireId: string) =>
     commit({ ...history.present, wires: wires.map((w) => (w.id === wireId ? { id: w.id, a: w.a, b: w.b } : w)) });
 
-  const handleTogglePinned = (partId: string) =>
-    commit({ ...history.present, parts: parts.map((p) => (p.id === partId ? { ...p, pinned: !p.pinned } : p)) });
+  const handlePatchPart = (partId: string, patch: PartPatch) =>
+    commit({ ...history.present, parts: parts.map((p) => (p.id === partId ? { ...p, ...patch } : p)) });
 
   const handleAddWire = (a: TerminalRef, b: TerminalRef) => {
     commit({ parts, wires: [...wires, { id: `w${wires.length + 1}_${Date.now()}`, a, b }], blocks });
@@ -353,7 +354,7 @@ export function SchematicEditor() {
             onDeleteBlock={handleDeleteBlock}
             onSelectBlock={selection.selectBlock}
             onResetWire={handleResetWire}
-            onTogglePinned={handleTogglePinned}
+            onPatchPart={handlePatchPart}
             onExposeParam={blockActions.exposeParam}
             blockInspector={
               selectedBlock && {

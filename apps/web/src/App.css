@@ -1336,3 +1336,11 @@
     width: auto;
   }
 }
+
+.build-notes {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}

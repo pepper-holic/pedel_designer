@@ -1,4 +1,4 @@
-import { InspectorPanel } from "./InspectorPanel";
+import { InspectorPanel, type PartPatch } from "./InspectorPanel";
 import { OutputAudioPanel } from "./OutputAudioPanel";
 import { ProbePanel } from "./ProbePanel";
 import { BlockInspector } from "./BlockInspector";
@@ -27,7 +27,7 @@ interface EditorSidebarRightProps {
   blockInspector: React.ComponentProps<typeof BlockInspector> | null;
   onSelectBlock: (blockId: string) => void;
   onResetWire: (wireId: string) => void;
-  onTogglePinned: (partId: string) => void;
+  onPatchPart: (partId: string, patch: PartPatch) => void;
   onExposeParam: (blockId: string, partId: string, paramKey: string) => void;
   preview: { enabled: boolean; onEnabledChange: (on: boolean) => void; busy: boolean };
   realtime: React.ComponentProps<typeof OutputAudioPanel>["realtime"];
@@ -45,7 +45,7 @@ export function EditorSidebarRight(props: EditorSidebarRightProps) {
         onSelectBlock={props.onSelectBlock}
         onExposeParam={props.onExposeParam}
         onResetWire={props.onResetWire}
-        onTogglePinned={props.onTogglePinned}
+        onPatchPart={props.onPatchPart}
         selectedPart={props.selectedPart}
         selectedWire={props.selectedWire}
         blocks={props.blocks}

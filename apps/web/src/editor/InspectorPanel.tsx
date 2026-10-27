@@ -4,6 +4,7 @@ import { DIODE_MODELS, OPAMP_MODELS, TRANSISTOR_MODELS, JFET_MODELS, PICKUP_MODE
 import { TAPER_OPTIONS } from "./taper";
 import { PARAM_META } from "./paramMeta";
 import { SWITCH_POSITION_LABELS } from "./switchLabels";
+import { defaultFootprintId, footprintOptions } from "./pcb/footprintAssign";
 
 /** Part types with more than one selectable named model - see PartPalette.tsx's MODEL_MENUS, which
  * this mirrors so the same variety is reachable after placement, not just at insert time. */
@@ -31,8 +32,11 @@ interface InspectorPanelProps {
   onExposeParam?: (blockId: string, partId: string, paramKey: string) => void;
   /** Drops a wire's hand-dragged corners so it is routed automatically again. */
   onResetWire?: (wireId: string) => void;
-  onTogglePinned?: (partId: string) => void;
+  /** Physical (non-electrical) properties: pinned position, PCB footprint. */
+  onPatchPart?: (partId: string, patch: PartPatch) => void;
 }
+
+export type PartPatch = Partial<Pick<PartInstance, "pinned" | "footprintId">>;
 
 export function InspectorPanel({
   selectedPart,
@@ -46,7 +50,7 @@ export function InspectorPanel({
   onSelectBlock,
   onExposeParam,
   onResetWire,
-  onTogglePinned,
+  onPatchPart,
 }: InspectorPanelProps) {
   const ownerBlock = selectedPart?.blockId ? (blocks.find((b) => b.id === selectedPart.blockId) ?? null) : null;
   const modelMenu = selectedPart ? MODEL_MENUS[selectedPart.type] : undefined;
@@ -77,13 +81,14 @@ export function InspectorPanel({
           <p className="preset-description">
             {PART_DEFS[selectedPart.type].label} ({selectedPart.id})
           </p>
-          {onTogglePinned && (
+          {onPatchPart && (
             <label className="field-row" title="고정된 부품은 '자동 정렬'이 옮기지 않습니다. 직접 끌어 옮기면 자동으로 고정됩니다.">
               <span>
-                <input type="checkbox" checked={!!selectedPart.pinned} onChange={() => onTogglePinned(selectedPart.id)} /> 위치 고정 (자동 정렬 제외)
+                <input type="checkbox" checked={!!selectedPart.pinned} onChange={() => onPatchPart(selectedPart.id, { pinned: !selectedPart.pinned })} /> 위치 고정 (자동 정렬 제외)
               </span>
             </label>
           )}
+          {onPatchPart && <FootprintField part={selectedPart} onChange={(footprintId) => onPatchPart(selectedPart.id, { footprintId })} />}
           {ownerBlock && (
             <div className="field-row">
               <span className="canvas-hint">소속 블록: {ownerBlock.label}</span>
@@ -235,6 +240,27 @@ export function InspectorPanel({
       ) : (
         <p className="preset-description">캔버스에서 소자나 배선을 클릭해 선택하세요.</p>
       )}
+    </div>
+  );
+}
+
+/** PCB footprint choice. "기본" follows the part's value (a 10µF cap becomes an electrolytic). */
+function FootprintField({ part, onChange }: { part: PartInstance; onChange: (footprintId: string | undefined) => void }) {
+  const options = footprintOptions(part.type);
+  if (options.length === 0) return null;
+  const defaultId = defaultFootprintId(part);
+  const defaultLabel = options.find((f) => f.id === defaultId)?.label ?? "";
+  return (
+    <div className="field">
+      <label htmlFor="footprint-select">풋프린트 (PCB)</label>
+      <select id="footprint-select" value={part.footprintId ?? ""} onChange={(e) => onChange(e.target.value || undefined)}>
+        <option value="">기본: {defaultLabel}</option>
+        {options.map((f) => (
+          <option key={f.id} value={f.id}>
+            {f.label}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }

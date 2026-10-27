@@ -55,9 +55,25 @@ describe("buildBom", () => {
 
 describe("bomToText", () => {
   it("renders a tab-separated table with a header row", () => {
-    const text = bomToText([{ label: "저항 4.7kΩ", quantity: 2, partIds: ["R1", "R2"] }]);
+    const text = bomToText([{ label: "저항 4.7kΩ", package: "저항 축형 1/4W, 10.16mm", quantity: 2, partIds: ["R1", "R2"] }]);
     const lines = text.split("\n");
-    expect(lines[0]).toBe("부품\t수량\t소자 ID");
-    expect(lines[1]).toBe("저항 4.7kΩ\t2\tR1, R2");
+    expect(lines[0]).toBe("부품\t패키지\t수량\t소자 ID");
+    expect(lines[1]).toBe("저항 4.7kΩ\t저항 축형 1/4W, 10.16mm\t2\tR1, R2");
+  });
+
+  it("lists the same value in different packages on separate lines", () => {
+    const parts: PartInstance[] = [
+      part({ id: "C1", type: "capacitor", params: { capacitance: 100e-9 } }),
+      part({ id: "C2", type: "capacitor", params: { capacitance: 100e-9 }, footprintId: "c-disc-2.5" }),
+      part({ id: "C3", type: "capacitor", params: { capacitance: 10e-6 } }),
+    ];
+    const rows = buildBom(parts);
+    expect(rows.map((r) => [r.partIds.join(), r.package])).toEqual(
+      expect.arrayContaining([
+        ["C1", "필름 박스 5mm"],
+        ["C2", "세라믹 디스크 2.5mm"],
+        ["C3", "전해 5mm, 2mm 피치"],
+      ]),
+    );
   });
 });

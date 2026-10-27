@@ -145,8 +145,8 @@ export function buildDockTabs({
   {
     key: "pcb",
     label: "PCB",
-    helpText: "이 회로의 연결 정보를 KiCad에서 바로 불러올 수 있는 넷리스트 파일로 내보냅니다(기판 배치/배선은 KiCad에서 직접).",
-    content: <PcbExportPanel parts={parts} graph={graph} />,
+    helpText: "실제 기판으로 만들기: 부품별 풋프린트가 지정된 KiCad 넷리스트를 내보냅니다.",
+    content: <PcbExportPanel parts={parts} graph={graph} outputNode={outputNode} />,
   },
   ];
 }
