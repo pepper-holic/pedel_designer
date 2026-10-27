@@ -147,3 +147,15 @@ test("shows the DC bias voltage of every node on request", async ({ page }) => {
   await expect(page.locator("g[data-dc-net]").first()).toBeVisible();
   await expect(page.locator("g[data-dc-net] text").first()).toHaveText(/V$/);
 });
+
+test("changing a value plays a short preview of the new sound", async ({ page }) => {
+  await loadPreset(page, /TS9 스타일 오버드라이브/);
+  const toggle = page.getByLabel("노브 미리듣기");
+  await expect(toggle).toBeChecked();
+
+  const gain = page.locator("#input-gain-slider");
+  await gain.focus();
+  await page.keyboard.press("ArrowRight");
+
+  await expect(page.getByText(/미리듣기 재생/)).toBeVisible({ timeout: 15_000 });
+});

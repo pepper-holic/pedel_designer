@@ -22,6 +22,7 @@ import { useFrequencyResponse } from "./useFrequencyResponse";
 import { useSelectionState } from "./useSelectionState";
 import { useCircuitPersistence } from "./useCircuitPersistence";
 import { useProbes } from "./useProbes";
+import { useKnobPreview } from "./useKnobPreview";
 import { pruneProbes } from "./probes";
 import { movePartsBy, deleteParts, deleteWire, deleteBlock, rotatePart, updatePartParams, coerceParamValue } from "./circuitEdits";
 import { computeOperatingPoint } from "./operatingPoint";
@@ -253,11 +254,15 @@ export function SchematicEditor() {
   });
 
   const handleParamChange = (key: string, value: string) => {
-    if (selectedPart) commit(updatePartParams(history.present, selectedPart.id, { [key]: coerceParamValue(key, value) }));
+    if (!selectedPart) return;
+    commit(updatePartParams(history.present, selectedPart.id, { [key]: coerceParamValue(key, value) }));
+    preview.request();
   };
 
   const handleApplyModel = (paramsOverride: Record<string, number | string>) => {
-    if (selectedPart) commit(updatePartParams(history.present, selectedPart.id, paramsOverride));
+    if (!selectedPart) return;
+    commit(updatePartParams(history.present, selectedPart.id, paramsOverride));
+    preview.request();
   };
 
   const persistence = useCircuitPersistence({
@@ -271,6 +276,15 @@ export function SchematicEditor() {
   });
 
   const audio = useAudioRun({ graph, inputGain, onStatus: setStatus });
+  const preview = useKnobPreview({
+    graph,
+    outputNode,
+    inputGain,
+    sample: audio.sample,
+    getAudioContext: audio.getAudioContext,
+    cabinet: audio.cabinetEnabled ? audio.cabinetVariant : null,
+    onStatus: setStatus,
+  });
 
   const analysis = useAnalysisPanels({
     graph,
@@ -356,7 +370,10 @@ export function SchematicEditor() {
           outputNode={outputNode}
           onOutputNodeChange={setOutputNode}
           inputGain={inputGain}
-          onInputGainChange={setInputGain}
+          onInputGainChange={(gain) => {
+            setInputGain(gain);
+            preview.request();
+          }}
           status={status}
           audio={audio}
           onParamChange={handleParamChange}
@@ -364,6 +381,7 @@ export function SchematicEditor() {
           onRotate={handleRotateSelected}
           onDelete={handleDeleteSelected}
           onDeleteBlock={handleDeleteBlock}
+          preview={{ enabled: preview.enabled, onEnabledChange: preview.setEnabled, busy: preview.busy }}
           probePanel={{
             probes: probes.resolved,
             probeMode: probes.probeMode,

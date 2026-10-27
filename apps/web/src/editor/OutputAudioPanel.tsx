@@ -14,6 +14,8 @@ interface OutputAudioPanelProps {
   canRun: boolean;
   onRun: () => void;
   status: string;
+  /** Knob preview: re-simulate and play a short clip whenever a value is changed. */
+  preview?: { enabled: boolean; onEnabledChange: (on: boolean) => void; busy: boolean };
 }
 
 export function OutputAudioPanel({
@@ -30,6 +32,7 @@ export function OutputAudioPanel({
   canRun,
   onRun,
   status,
+  preview,
 }: OutputAudioPanelProps) {
   return (
     <div className="panel">
@@ -93,6 +96,20 @@ export function OutputAudioPanel({
           시뮬레이션 실행
         </button>
       </div>
+      {preview && (
+        <div className="field-row" style={{ marginTop: 8 }}>
+          <label>
+            <input type="checkbox" checked={preview.enabled} onChange={(e) => preview.onEnabledChange(e.target.checked)} /> 노브 미리듣기
+            {preview.busy ? " (계산 중...)" : ""}
+          </label>
+          <span
+            className="info-tip"
+            title="노브·부품값·입력 게인을 바꾸고 손을 떼면, 출력 노드의 소리를 0.6초 동안 바로 들려줍니다. 불러온 오디오가 있으면 그 앞부분을, 없으면 내장 코드 신호를 씁니다."
+          >
+            ⓘ
+          </span>
+        </div>
+      )}
       {/* Simulation progress and failures arrive asynchronously, so they have to be announced. */}
       <p className="status-text" role="status" aria-live="polite">
         {status}

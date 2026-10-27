@@ -22,6 +22,7 @@ interface EditorSidebarRightProps {
   onDelete: () => void;
   onDeleteBlock: (blockId: string) => void;
   probePanel: React.ComponentProps<typeof ProbePanel>;
+  preview: { enabled: boolean; onEnabledChange: (on: boolean) => void; busy: boolean };
 }
 
 /** Right dock: what is selected on top, what to do with the whole circuit's output below. */
@@ -55,6 +56,7 @@ export function EditorSidebarRight(props: EditorSidebarRightProps) {
         onUseTrapezoidalChange={audio.setUseTrapezoidal}
         canRun={audio.sample !== null && !!graph.inputSourceId && !audio.isSimulating}
         onRun={audio.handleRun}
+        preview={props.preview}
         status={props.status}
       />
     </div>

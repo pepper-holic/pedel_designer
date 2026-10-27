@@ -8,9 +8,23 @@ import type { TransientWorkerRequest, TransientWorkerResponse } from "./transien
  * simulation core audit flagged). A fresh worker per call is simpler than pooling one, and this is
  * only invoked on explicit user actions (Run, not per-keystroke), so the spin-up cost is fine.
  */
-export function runTransientAsync(netlist: Netlist, options: TransientOptions): Promise<TransientResult> {
+export function runTransientAsync(netlist: Netlist, options: TransientOptions, signal?: AbortSignal): Promise<TransientResult> {
   return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(new DOMException("aborted", "AbortError"));
+      return;
+    }
     const worker = new Worker(new URL("./transientWorker.ts", import.meta.url), { type: "module" });
+    // Superseded runs (a knob moved again before the last preview finished) are killed outright -
+    // the solve is synchronous inside the worker, so terminating is the only way to stop it.
+    signal?.addEventListener(
+      "abort",
+      () => {
+        worker.terminate();
+        reject(new DOMException("aborted", "AbortError"));
+      },
+      { once: true },
+    );
 
     worker.onmessage = (event: MessageEvent<TransientWorkerResponse>) => {
       const traces = new Map<NodeId, Float64Array>(event.data.traces);
