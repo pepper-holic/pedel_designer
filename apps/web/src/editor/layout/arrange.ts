@@ -4,6 +4,7 @@ import { snapToGrid } from "../geometry";
 import { barycenterRows, layerDepths, type Adjacency } from "./layered";
 import { spineLayout } from "./spine";
 import { optimizePartOrientations } from "./orientation";
+import { detectOpAmpStage, opAmpStageLayout } from "./opampStage";
 import type { CircuitSnapshot } from "../historyStack";
 import type { PartInstance } from "../types";
 
@@ -103,16 +104,22 @@ export function arrangeParts(snapshot: CircuitSnapshot, inputPartId: string | nu
     const entries = (blockId ? portParts(blockId, "in") : []).concat(members.filter((m) => neighbourDepths(m).some((d) => d < myDepth)));
     const exits = (blockId ? portParts(blockId, "out") : []).concat(members.filter((m) => neighbourDepths(m).some((d) => d > myDepth)));
     const innerAdj: Adjacency = new Map(members.map((m) => [m, new Set([...(partAdj.get(m) ?? [])].filter((n) => memberSet.has(n)))]));
-    const placement = spineLayout({
-      members,
-      adjacency: innerAdj,
-      entries: [...new Set(entries)].filter((m) => memberSet.has(m)),
-      exits: [...new Set(exits)].filter((m) => memberSet.has(m)),
-      touchesGround: (id) => netsOf(id).includes(groundNet),
-      touchesSupply: (id) => netsOf(id).some((n) => supplyOnly.has(n)),
-      order: (a, b) => byId.get(a)!.x - byId.get(b)!.x || byId.get(a)!.y - byId.get(b)!.y,
-      weight: (id) => SPINE_WEIGHT[byId.get(id)!.type] ?? 3,
-    });
+    const touchesGround = (id: string) => netsOf(id).includes(groundNet);
+    const touchesSupply = (id: string) => netsOf(id).some((n) => supplyOnly.has(n));
+    const order = (a: string, b: string) => byId.get(a)!.x - byId.get(b)!.x || byId.get(a)!.y - byId.get(b)!.y;
+    const opAmpStage = detectOpAmpStage({ members, byId, terminalNet, touchesGround, touchesSupply, order });
+    const placement = opAmpStage
+      ? opAmpStageLayout(opAmpStage)
+      : spineLayout({
+          members,
+          adjacency: innerAdj,
+          entries: [...new Set(entries)].filter((m) => memberSet.has(m)),
+          exits: [...new Set(exits)].filter((m) => memberSet.has(m)),
+          touchesGround,
+          touchesSupply,
+          order,
+          weight: (id) => SPINE_WEIGHT[byId.get(id)!.type] ?? 3,
+        });
     const minRow = Math.min(...[...placement.values()].map((p) => p.row));
     const maxRow = Math.max(...[...placement.values()].map((p) => p.row));
     const maxCol = Math.max(...[...placement.values()].map((p) => p.col));

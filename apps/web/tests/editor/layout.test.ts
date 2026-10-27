@@ -119,8 +119,28 @@ describe("layout quality across every preset", () => {
       expect(m.crossings, preset.id).toBeLessThanOrEqual(8);
       total += m.crossings;
     }
-    // Baseline before Stage C (flat layout, plain 2-bend wires): 64. Keep it from creeping back up.
-    expect(total).toBeLessThanOrEqual(30);
+    // Baseline before Stage C (flat layout, plain 2-bend wires): 64.
+    // L1 (part orientation pass) brought it to 23, L2 (op-amp stage template) to 19. Plan target: <=15.
+    expect(total).toBeLessThanOrEqual(22);
+  });
+});
+
+describe("op-amp stage template (L2)", () => {
+  it("draws the TS9 drive stage as a feedback ladder directly over the op-amp, input on the same row", () => {
+    const preset = presets.find((p) => p.id === "ts9-overdrive")!;
+    const { snapshot } = loadPedalPreset(preset);
+    const arranged = arrangeParts(snapshot, null);
+    const byId = new Map(arranged.parts.map((p) => [p.id, p]));
+    const [rin, u1, drive, d1, d2] = ["Rin", "U1", "DRIVE", "D1", "D2"].map((id) => byId.get(id)!);
+
+    // Input and op-amp sit on the same signal row.
+    expect(rin.y).toBe(u1.y);
+    // Every feedback element (the gain pot and both clipping diodes) shares the op-amp's column...
+    for (const p of [drive, d1, d2]) expect(p.x).toBe(u1.x);
+    // ...stacked at distinct heights above it, not piled in one spot or spread sideways.
+    const ys = new Set([drive.y, d1.y, d2.y]);
+    expect(ys.size).toBe(3);
+    for (const y of ys) expect(y).toBeLessThan(u1.y);
   });
 });
 

@@ -18,7 +18,13 @@ function presetBoard(id: string) {
 }
 
 /** Known exception to the plan's "≤2 jumpers single-sided for ≤15 parts": three single op-amps. */
-const KNOWN_JUMPERS: Record<string, number> = { "klon-style-blend": 4 };
+const KNOWN_JUMPERS: Record<string, number> = {
+  "klon-style-blend": 4,
+  // Two op-amp drive stages, each now laid out as its own textbook feedback ladder (L2 of
+  // docs/plan-schematic-layout.md) - a clearer schematic, but one more jumper for the single-sided
+  // strip-board router than before that change.
+  "multi-stage-drive": 3,
+};
 
 // Placing and routing a busy board takes a second or two - several under coverage instrumentation.
 const SLOW = 60_000;
