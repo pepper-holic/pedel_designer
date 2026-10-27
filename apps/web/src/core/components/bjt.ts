@@ -1,3 +1,4 @@
+import { stateKey } from "./keys";
 import { nodeOf } from "../solver/topology";
 import { voltageAt } from "../solver/solution";
 import type { BjtElement } from "../solver/types";
@@ -50,12 +51,12 @@ export function stampBjt(el: BjtElement, ctx: StampContext): void {
 
   const vcrit = criticalVoltage(el.saturationCurrent, el.thermalVoltage);
   const ref = ctx.limitReference;
-  const vbeOld = ctx.limitState.get(`${el.id}:be`) ?? (ref ? sign * (voltageAt(ctx.topology, ref, el.nodes[0]) - voltageAt(ctx.topology, ref, el.nodes[2])) : 0);
-  const vbcOld = ctx.limitState.get(`${el.id}:bc`) ?? (ref ? sign * (voltageAt(ctx.topology, ref, el.nodes[0]) - voltageAt(ctx.topology, ref, el.nodes[1])) : 0);
+  const vbeOld = ctx.limitState.get(stateKey(el.id, ":be")) ?? (ref ? sign * (voltageAt(ctx.topology, ref, el.nodes[0]) - voltageAt(ctx.topology, ref, el.nodes[2])) : 0);
+  const vbcOld = ctx.limitState.get(stateKey(el.id, ":bc")) ?? (ref ? sign * (voltageAt(ctx.topology, ref, el.nodes[0]) - voltageAt(ctx.topology, ref, el.nodes[1])) : 0);
   const vbe = limitVoltage(vbeRaw, vbeOld, el.thermalVoltage, vcrit);
   const vbc = limitVoltage(vbcRaw, vbcOld, el.thermalVoltage, vcrit);
-  ctx.limitState.set(`${el.id}:be`, vbe);
-  ctx.limitState.set(`${el.id}:bc`, vbc);
+  ctx.limitState.set(stateKey(el.id, ":be"), vbe);
+  ctx.limitState.set(stateKey(el.id, ":bc"), vbc);
 
   const { gpi, gmu, gm, go, ib0, ic0 } = linearizeBjt(el, vbe, vbc);
 

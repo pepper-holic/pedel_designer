@@ -1,3 +1,4 @@
+import { stateKey } from "./keys";
 import { nodeOf, type CircuitTopology } from "../solver/topology";
 import { voltageAt } from "../solver/solution";
 import type { CoupledInductorsElement } from "../solver/types";
@@ -72,8 +73,8 @@ export function stampCoupledInductors(el: CoupledInductorsElement, ctx: StampCon
 
   // Two history values share the ordinary Map<string, number> by suffixing the key, rather than
   // widening StampContext's history type for this one element.
-  ctx.system.stampCurrentSource(n1, p1, ctx.history.get(`${el.id}#1`) ?? 0);
-  ctx.system.stampCurrentSource(n2, p2, ctx.history.get(`${el.id}#2`) ?? 0);
+  ctx.system.stampCurrentSource(n1, p1, ctx.history.get(stateKey(el.id, "#1")) ?? 0);
+  ctx.system.stampCurrentSource(n2, p2, ctx.history.get(stateKey(el.id, "#2")) ?? 0);
 }
 
 export function updateCoupledInductorsHistory(
@@ -88,8 +89,8 @@ export function updateCoupledInductorsHistory(
   if (!terms) return;
   const v1 = voltageAt(topology, solution, el.nodes[0]) - voltageAt(topology, solution, el.nodes[1]);
   const v2 = voltageAt(topology, solution, el.nodes[2]) - voltageAt(topology, solution, el.nodes[3]);
-  history.set(`${el.id}#1`, dt * (terms.g11 * v1 + terms.g12 * v2) + (history.get(`${el.id}#1`) ?? 0));
-  history.set(`${el.id}#2`, dt * (terms.g12 * v1 + terms.g22 * v2) + (history.get(`${el.id}#2`) ?? 0));
+  history.set(stateKey(el.id, "#1"), dt * (terms.g11 * v1 + terms.g12 * v2) + (history.get(stateKey(el.id, "#1")) ?? 0));
+  history.set(stateKey(el.id, "#2"), dt * (terms.g12 * v1 + terms.g22 * v2) + (history.get(stateKey(el.id, "#2")) ?? 0));
 }
 
 /** AC susceptance terms: Y = Linv / (j*omega), so each entry is a negative susceptance of

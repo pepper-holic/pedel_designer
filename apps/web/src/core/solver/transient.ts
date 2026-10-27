@@ -1,5 +1,4 @@
 import { buildTopology, nodeOf } from "./topology";
-import { voltageAt } from "./solution";
 import { solveNewton, NewtonWorkspace, type NewtonResult } from "./newton";
 import { updateCapacitorHistory, updateCoupledInductorsHistory, updateInductorHistory, updateOpAmpHistory } from "../components";
 import type { Netlist, NodeId, VoltageSourceElement } from "./types";
@@ -93,10 +92,8 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
 
   const n = options.inputSamples.length;
   const traces = new Map<NodeId, Float64Array>();
-  const accum = new Map<NodeId, number>();
   for (const node of options.tapNodes) {
     traces.set(node, new Float64Array(n));
-    accum.set(node, 0);
   }
   const slewHistory = new Map<string, number>();
   let nonConvergentSampleCount = 0;
@@ -154,6 +151,12 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
     return { solution: last!.solution, converged: false, lastDelta: worstSubstepDelta };
   };
 
+  // Tap nodes resolved to solution indices once - the UI taps every net, so per-sample map lookups
+  // here added up.
+  const tapCount = options.tapNodes.length;
+  const tapIndex = Int32Array.from(options.tapNodes.map((node) => nodeOf(topology, node)));
+  const tapTraces = options.tapNodes.map((node) => traces.get(node)!);
+  const tapSum = new Float64Array(tapCount);
   let olderSolution: Float64Array | undefined;
   const predicted = new Float64Array(topology.size);
   let previousDrive = options.inputSamples.length > 0 ? options.inputSamples[0] : 0;
@@ -203,14 +206,12 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
       worstNonConvergentDelta = Math.max(worstNonConvergentDelta, lastDelta ?? Infinity);
     }
 
-    for (const node of options.tapNodes) {
-      accum.set(node, accum.get(node)! + voltageAt(topology, solution, node));
-    }
+    for (let t = 0; t < tapCount; t++) tapSum[t] += tapIndex[t] < 0 ? 0 : solution[tapIndex[t]];
 
     if ((step + 1) % oversample === 0) {
-      for (const node of options.tapNodes) {
-        traces.get(node)![i] = accum.get(node)! / oversample;
-        accum.set(node, 0);
+      for (let t = 0; t < tapCount; t++) {
+        tapTraces[t][i] = tapSum[t] / oversample;
+        tapSum[t] = 0;
       }
     }
   }

@@ -1,3 +1,4 @@
+import { stateKey } from "./keys";
 import { nodeOf, type CircuitTopology } from "../solver/topology";
 import { voltageAt } from "../solver/solution";
 import type { InductorElement } from "../solver/types";
@@ -22,7 +23,7 @@ export function stampInductor(el: InductorElement, ctx: StampContext): void {
   const trapezoidal = ctx.integration === "trapezoidal";
   const geq = trapezoidal ? ctx.dt / (2 * el.inductance) : ctx.dt / el.inductance;
   const prevCurrent = ctx.history.get(el.id) ?? 0;
-  const prevVoltage = trapezoidal ? (ctx.history.get(`${el.id}#v`) ?? 0) : 0;
+  const prevVoltage = trapezoidal ? (ctx.history.get(stateKey(el.id, "#v")) ?? 0) : 0;
   ctx.system.stampConductance(p, n, geq);
   ctx.system.stampCurrentSource(n, p, prevCurrent + geq * prevVoltage);
 }
@@ -40,9 +41,9 @@ export function updateInductorHistory(
   const trapezoidal = integration === "trapezoidal";
   const geq = trapezoidal ? dt / (2 * el.inductance) : dt / el.inductance;
   const prevCurrent = history.get(el.id) ?? 0;
-  const prevVoltage = trapezoidal ? (history.get(`${el.id}#v`) ?? 0) : 0;
+  const prevVoltage = trapezoidal ? (history.get(stateKey(el.id, "#v")) ?? 0) : 0;
   history.set(el.id, geq * voltage + prevCurrent + (trapezoidal ? geq * prevVoltage : 0));
   // Tracked on every step regardless of method, for the same reason the capacitor's `#i` is - see
   // the comment there.
-  history.set(`${el.id}#v`, voltage);
+  history.set(stateKey(el.id, "#v"), voltage);
 }

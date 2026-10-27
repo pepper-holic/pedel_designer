@@ -1,3 +1,4 @@
+import { stateKey } from "./keys";
 import { nodeOf } from "../solver/topology";
 import { voltageAt } from "../solver/solution";
 import type { CapacitorElement } from "../solver/types";
@@ -21,7 +22,7 @@ export function stampCapacitor(el: CapacitorElement, ctx: StampContext): void {
   const trapezoidal = ctx.integration === "trapezoidal";
   const geq = (trapezoidal ? 2 : 1) * (el.capacitance / ctx.dt);
   const prevVoltage = ctx.history.get(el.id) ?? 0;
-  const prevCurrent = trapezoidal ? (ctx.history.get(`${el.id}#i`) ?? 0) : 0;
+  const prevCurrent = trapezoidal ? (ctx.history.get(stateKey(el.id, "#i")) ?? 0) : 0;
   ctx.system.stampConductance(p, n, geq);
   ctx.system.stampCurrentSource(p, n, geq * prevVoltage + prevCurrent);
 }
@@ -44,8 +45,8 @@ export function updateCapacitorHistory(
     const trapezoidal = integration === "trapezoidal";
     const geq = (trapezoidal ? 2 : 1) * (el.capacitance / dt);
     const prevVoltage = history.get(el.id) ?? 0;
-    const prevCurrent = trapezoidal ? (history.get(`${el.id}#i`) ?? 0) : 0;
-    history.set(`${el.id}#i`, geq * voltage - (geq * prevVoltage + prevCurrent));
+    const prevCurrent = trapezoidal ? (history.get(stateKey(el.id, "#i")) ?? 0) : 0;
+    history.set(stateKey(el.id, "#i"), geq * voltage - (geq * prevVoltage + prevCurrent));
   }
   history.set(el.id, voltage);
 }
