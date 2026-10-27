@@ -315,3 +315,27 @@ DIY 커뮤니티(Tagboard Effects, Dirtbox Layouts 류)의 사실상 표준 산�
 - 넷리스트 포맷, `Wire`/`TerminalRef` 타입, 프리셋의 `build()`/`inputSourceId`/`outputNode` 계약.
 - BOM/KiCad export, DRC, 몬테카를로, 체인 — 블록은 평면 넷리스트로 풀린 뒤 들어가므로 그대로 동작한다.
   (Stage E는 KiCad export의 풋프린트를 채우고 보드 출력을 **추가**하는 것이지 넷리스트 export를 바꾸지 않는다.)
+
+## 10. 진행 기록
+
+### 2026-10-27 — Stage 0 완료
+- `SchematicEditor.tsx` 481→376줄: 선택 상태(`useSelectionState`), 저장/열기(`useCircuitPersistence`), 주파수 응답
+  (`useFrequencyResponse`) 훅과 템플릿 로딩 순수 함수(`templateLoading.ts`)로 분리.
+- `SchematicCanvas.tsx` 412→286줄: 블록 영역(`CanvasBlockLayer`)·배선(`CanvasWireLayer`) 레이어로 분리.
+- Oxlint 경고 해소: pending 단자를 effect에서 지우던 것을 렌더 중 파생으로 변경.
+- `npm run bench` 신설, §1 기준선 표 기록.
+
+### 2026-10-27 — Stage A 완료
+- **프로브**: 단자 기준 저장(`Probe`), 캔버스 프로브 모드(툴바 버튼·단축키 P·Esc로 해제), 같은 노드 재클릭 시 제거,
+  최대 6개, 우측 사이드바 프로브 패널(이름 변경·삭제·DC 전압). 페달 프리셋은 `tapNodes`가, 배선 프리셋은 출력 단자가
+  로드 즉시 프로브가 된다. **설계 변경**: 프로브는 계획(A-1)과 달리 `CircuitSnapshot`(undo 이력)이 아니라 출력 노드와 같은
+  "보기 상태"로 둔다 — 배선 undo가 프로브까지 지우면 안 되기 때문. 저장 포맷에는 선택 필드 `probes`로 들어가 schemaVersion 1 유지.
+- **다중 지점 주파수 응답**: `runAcAnalysisMulti` — 주파수당 복소 해 1번으로 모든 노드를 읽는다. 프로브마다 곡선 + 출력.
+  그래프 dB 범위 자동 확장(고게인 드라이브 곡선이 화면 밖으로 나가던 문제).
+- **스펙트럼 탭**: `computeSpectrum`(Welch, Hann, 1V 피크=0dB 보정) + 로그축 차트 + 커서 판독 + 주요 피크 표 + 입력 신호
+  점선 겹쳐 보기.
+- **DC 동작점**: `computeOperatingPoint`(입력원 0V 고정) — 프로브 깃발과 사이드바에 전압 표시, "DC 전압" 토글로 모든 노드 표시.
+- 파형 탭: 프로브 지점을 이름·색으로 먼저, 나머지 노드는 "전체 노드" 접힘 아래로.
+- 겸사겸사 수정: 블록 삭제 시 블록 밖에서 들어오던 배선이 남던 버그(`deleteBlock`), 캔버스 "화면 맞춤/리셋" 버튼이 22px 폭에
+  눌려 세로 글자로 보이던 문제. 편집 동작을 순수 함수(`circuitEdits.ts`)로 분리.
+- 테스트: 366 → 400개, E2E 6 → 8개.

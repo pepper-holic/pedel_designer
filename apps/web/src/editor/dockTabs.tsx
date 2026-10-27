@@ -1,5 +1,7 @@
-import { FrequencyResponseTab, type AcStatus } from "./FrequencyResponseTab";
+import { FrequencyResponseTab } from "./FrequencyResponseTab";
 import { WaveformTab } from "./WaveformTab";
+import { SpectrumTab } from "./SpectrumTab";
+import type { ResolvedProbe } from "./probes";
 import { SweepTab } from "./SweepTab";
 import { DrcPanel } from "./DrcPanel";
 import { ImpedancePanel } from "./ImpedancePanel";
@@ -8,12 +10,12 @@ import { MonteCarloPanel } from "./MonteCarloPanel";
 import { ChainPanel } from "./ChainPanel";
 import { BomPanel } from "./BomPanel";
 import { PcbExportPanel } from "./PcbExportPanel";
-import type { AcPoint } from "../core/solver/ac";
 import type { MonteCarloResult } from "../core/analysis/montecarlo";
 import type { GraphNetlist } from "./netlistFromGraph";
 import type { PartInstance, Wire } from "./types";
 import type { useAnalysisPanels } from "./useAnalysisPanels";
 import type { useAudioRun } from "./useAudioRun";
+import type { FrequencyResponseResult } from "./useFrequencyResponse";
 
 export interface DockTab {
   key: string;
@@ -29,7 +31,8 @@ interface DockTabsInput {
   graph: GraphNetlist;
   outputNode: string;
   onSelectPart: (id: string) => void;
-  acResult: { points: AcPoint[]; status: AcStatus; error: string | null };
+  acResult: FrequencyResponseResult;
+  probes: ResolvedProbe[];
   monteCarloResult: MonteCarloResult | null;
   audio: ReturnType<typeof useAudioRun>;
   analysis: ReturnType<typeof useAnalysisPanels>;
@@ -49,10 +52,13 @@ export function buildDockTabs({
   outputNode,
   onSelectPart,
   acResult,
+  probes,
   monteCarloResult,
   audio,
   analysis,
 }: DockTabsInput): DockTab[] {
+  const inputElement = graph.netlist.elements.find((e) => e.id === graph.inputSourceId);
+  const inputNet = inputElement ? inputElement.nodes[0] : null;
   return [
   {
     key: "drc",
@@ -63,8 +69,17 @@ export function buildDockTabs({
   {
     key: "response",
     label: `주파수 응답${outputNode ? ` (→ ${outputNode})` : ""}`,
-    helpText: "이 회로가 저음/고음을 얼마나 통과시키거나 깎는지 주파수별로 보여줍니다.",
-    content: <FrequencyResponseTab status={acResult.status} error={acResult.error} points={acResult.points} band={monteCarloResult} />,
+    helpText: "이 회로가 저음/고음을 얼마나 통과시키거나 깎는지 주파수별로 보여줍니다. 프로브를 찍으면 지점마다 곡선을 겹쳐 그립니다.",
+    content: (
+      <FrequencyResponseTab
+        status={acResult.status}
+        error={acResult.error}
+        points={acResult.points}
+        probeSeries={acResult.probeSeries}
+        outputNode={outputNode}
+        band={monteCarloResult}
+      />
+    ),
   },
   {
     key: "waveform",
@@ -73,6 +88,7 @@ export function buildDockTabs({
     content: (
       <WaveformTab
         traces={audio.waveTraces}
+        probes={probes}
         onPlay={audio.handlePlay}
         onCompare={audio.handleCompare}
         cabinetEnabled={audio.cabinetEnabled}
@@ -80,6 +96,14 @@ export function buildDockTabs({
         cabinetVariant={audio.cabinetVariant}
         onCabinetVariantChange={audio.setCabinetVariant}
       />
+    ),
+  },
+  {
+    key: "spectrum",
+    label: "스펙트럼",
+    helpText: "시뮬레이션 결과에 어떤 주파수(배음)가 얼마나 들어 있는지 보여줍니다. 클리핑은 입력에 없던 배음 사다리로, 톤 회로는 기울기로 나타납니다.",
+    content: (
+      <SpectrumTab traces={audio.waveTraces} sampleRate={audio.sample?.sampleRate ?? null} probes={probes} outputNode={outputNode} inputNet={inputNet} />
     ),
   },
   {

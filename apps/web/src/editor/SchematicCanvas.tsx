@@ -3,6 +3,9 @@ import { zoomAroundPoint, fitView, GRID_SIZE } from "./geometry";
 import { CanvasPart } from "./CanvasPart";
 import { CanvasBlockLayer } from "./CanvasBlockLayer";
 import { CanvasWireLayer } from "./CanvasWireLayer";
+import { CanvasProbeLayer } from "./CanvasProbeLayer";
+import type { ResolvedProbe } from "./probes";
+import type { OperatingPoint } from "./operatingPoint";
 import { partsInBox, type SelectionBox } from "./selection";
 import type { BlockInstance, PartInstance, TerminalRef, Wire } from "./types";
 
@@ -22,6 +25,16 @@ interface SchematicCanvasProps {
   onSelectWire?: (id: string | null) => void;
   onAddWire: (a: TerminalRef, b: TerminalRef) => void;
   onDragEnd?: () => void;
+  /** Probe mode: terminal and wire clicks place/remove a probe instead of drawing a wire. */
+  probeMode?: boolean;
+  onProbeModeChange?: (on: boolean) => void;
+  onProbeTerminal?: (ref: TerminalRef) => void;
+  probes?: ResolvedProbe[];
+  /** partId:terminalId -> net, for placing DC voltage labels on nets. */
+  terminalNet?: Map<string, string>;
+  operatingPoint?: OperatingPoint | null;
+  showDc?: boolean;
+  onShowDcChange?: (on: boolean) => void;
   /** Bump to auto-fit the view to the current parts - the editor changes this whenever the whole
    * circuit is replaced (template load, new circuit) so a freshly loaded preset arrives fully visible. */
   fitSignal?: number;
@@ -53,6 +66,14 @@ export function SchematicCanvas({
   onSelectWire,
   onAddWire,
   onDragEnd,
+  probeMode = false,
+  onProbeModeChange,
+  onProbeTerminal,
+  probes = [],
+  terminalNet,
+  operatingPoint = null,
+  showDc = false,
+  onShowDcChange,
   fitSignal = 0,
   width = 900,
   height = 460,
@@ -183,6 +204,10 @@ export function SchematicCanvas({
 
   const handleTerminalClick = (ref: TerminalRef, e: React.MouseEvent) => {
     e.stopPropagation();
+    if (probeMode) {
+      onProbeTerminal?.(ref);
+      return;
+    }
     if (!pendingTerminal) {
       setPendingTerminal(ref);
       return;
@@ -205,12 +230,34 @@ export function SchematicCanvas({
         <button type="button" onClick={() => setView((v) => ({ ...v, zoom: Math.max(MIN_ZOOM, v.zoom / 1.2) }))}>
           −
         </button>
-        <button type="button" onClick={fitToContent} title="회로 전체가 보이도록 확대/축소와 위치를 맞춥니다">
+        <button type="button" className="canvas-tool-toggle" onClick={fitToContent} title="회로 전체가 보이도록 확대/축소와 위치를 맞춥니다">
           화면 맞춤
         </button>
-        <button type="button" onClick={resetView}>
+        <button type="button" className="canvas-tool-toggle" onClick={resetView}>
           리셋
         </button>
+        {onProbeModeChange && (
+          <button
+            type="button"
+            className="canvas-tool-toggle"
+            aria-pressed={probeMode}
+            onClick={() => onProbeModeChange(!probeMode)}
+            title="켜면 단자나 배선을 클릭해 측정 지점(프로브)을 찍습니다. 같은 노드를 다시 클릭하면 지워집니다. 단축키 P"
+          >
+            프로브
+          </button>
+        )}
+        {onShowDcChange && (
+          <button
+            type="button"
+            className="canvas-tool-toggle"
+            aria-pressed={showDc}
+            onClick={() => onShowDcChange(!showDc)}
+            title="신호가 없을 때 각 노드의 DC 바이어스 전압을 회로도 위에 표시합니다"
+          >
+            DC 전압
+          </button>
+        )}
       </div>
       <svg
         ref={svgRef}
@@ -220,7 +267,7 @@ export function SchematicCanvas({
         // Naming it with a live count at least tells a screen-reader user what is on the canvas.
         role="img"
         aria-label={`회로도: 부품 ${parts.length}개, 배선 ${wires.length}개`}
-        style={{ display: "block", cursor: dragId ? "grabbing" : panStart ? "grabbing" : "default" }}
+        style={{ display: "block", cursor: dragId ? "grabbing" : panStart ? "grabbing" : probeMode ? "crosshair" : "default" }}
         onMouseMove={handleMouseMove}
         onMouseUp={() => {
           finishBoxSelect();
@@ -252,7 +299,7 @@ export function SchematicCanvas({
         <g transform={`translate(${view.panX},${view.panY}) scale(${view.zoom})`}>
           <CanvasBlockLayer parts={parts} blocks={blocks} />
 
-          <CanvasWireLayer parts={parts} wires={wires} selectedWireId={selectedWireId} onWireClick={(wire) => onSelectWire?.(wire.id)} />
+          <CanvasWireLayer parts={parts} wires={wires} selectedWireId={selectedWireId} onWireClick={(wire) => (probeMode ? onProbeTerminal?.(wire.a) : onSelectWire?.(wire.id))} />
 
           {parts.map((part) => (
             <CanvasPart
@@ -264,6 +311,10 @@ export function SchematicCanvas({
               onTerminalClick={handleTerminalClick}
             />
           ))}
+
+          {(probes.length > 0 || showDc) && terminalNet && (
+            <CanvasProbeLayer parts={parts} probes={probes} terminalNet={terminalNet} operatingPoint={operatingPoint} showAllDc={showDc} />
+          )}
 
           {selectBox && (
             <rect

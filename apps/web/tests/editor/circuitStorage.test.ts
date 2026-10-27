@@ -30,6 +30,7 @@ const sample: StoredCircuit = {
   blocks: [],
   outputNode: "n2",
   inputGain: 0.75,
+  probes: [{ id: "P1", terminal: { partId: "r1", terminalId: "a" }, label: "입력", color: "#d1495b" }],
 };
 
 describe("circuitStorage", () => {
@@ -59,9 +60,14 @@ describe("circuitStorage", () => {
     expect(deserializeCircuit(JSON.stringify({ foo: "bar" }))).toBeNull();
   });
 
-  it("defaults schemaVersion/outputNode/inputGain/blocks when absent", () => {
+  it("defaults schemaVersion/outputNode/inputGain/blocks/probes when absent", () => {
     const partial = deserializeCircuit(JSON.stringify({ parts: [], wires: [] }));
-    expect(partial).toEqual({ schemaVersion: 1, parts: [], wires: [], blocks: [], outputNode: "", inputGain: 0.5 });
+    expect(partial).toEqual({ schemaVersion: 1, parts: [], wires: [], blocks: [], outputNode: "", inputGain: 0.5, probes: [] });
+  });
+
+  it("drops malformed probe entries instead of rejecting the whole circuit", () => {
+    const raw = JSON.stringify({ ...sample, probes: [...sample.probes!, { id: "P2" }, null, "x"] });
+    expect(deserializeCircuit(raw)?.probes).toEqual(sample.probes);
   });
 
   it("clearCircuitStorage removes the stored entry", () => {

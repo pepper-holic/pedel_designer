@@ -47,13 +47,59 @@ export interface AcPoint {
  * networks this tool targets first).
  */
 export function runAcAnalysis(netlist: Netlist, options: AcOptions): AcPoint[] {
-  const topology = buildTopology(netlist);
-  const { solution: dcSolution } = solveNewton(netlist, topology, new Map(), 0);
-  const outIndex = nodeOf(topology, options.outputNode);
-  // The named input plus every source flagged as carrying the signal (see VoltageSourceElement).
-  const isDriven = (el: { id: string; isSignalSource?: boolean }) => el.id === options.inputSourceId || el.isSignalSource === true;
+  return runAcAnalysisMulti(netlist, { inputSourceId: options.inputSourceId, outputNodes: [options.outputNode], frequenciesHz: options.frequenciesHz }).get(
+    options.outputNode,
+  )!;
+}
 
-  return options.frequenciesHz.map((frequencyHz) => {
+export interface AcMultiOptions {
+  inputSourceId: string;
+  /** Every node to report a transfer function for. One complex solve per frequency serves them all. */
+  outputNodes: NodeId[];
+  frequenciesHz: number[];
+}
+
+/**
+ * Same small-signal sweep as `runAcAnalysis`, reporting the response at several nodes at once.
+ * Each frequency point is still one complex MNA solve - the solution vector already holds every
+ * node's voltage, so probing more points along the signal path costs nothing extra.
+ */
+export function runAcAnalysisMulti(netlist: Netlist, options: AcMultiOptions): Map<NodeId, AcPoint[]> {
+  const topology = buildTopology(netlist);
+  const solutions = solveAcSweep(netlist, topology, options.inputSourceId, options.frequenciesHz);
+  const srcBranch = branchOf(topology, options.inputSourceId);
+  const result = new Map<NodeId, AcPoint[]>();
+  for (const node of options.outputNodes) {
+    const outIndex = nodeOf(topology, node);
+    result.set(
+      node,
+      solutions.map(({ frequencyHz, re, im }) => {
+        const outRe = outIndex < 0 ? 0 : re[outIndex];
+        const outIm = outIndex < 0 ? 0 : im[outIndex];
+        const magnitude = Math.hypot(outRe, outIm); // input magnitude is 1V, so this is the transfer function magnitude directly
+        return {
+          frequencyHz,
+          magnitudeDb: 20 * Math.log10(Math.max(magnitude, 1e-12)),
+          phaseDeg: (Math.atan2(outIm, outRe) * 180) / Math.PI,
+          sourceCurrentMagA: srcBranch < 0 ? 0 : Math.hypot(re[srcBranch], im[srcBranch]),
+        };
+      }),
+    );
+  }
+  return result;
+}
+
+function solveAcSweep(
+  netlist: Netlist,
+  topology: ReturnType<typeof buildTopology>,
+  inputSourceId: string,
+  frequenciesHz: number[],
+): { frequencyHz: number; re: Float64Array; im: Float64Array }[] {
+  const { solution: dcSolution } = solveNewton(netlist, topology, new Map(), 0);
+  // The named input plus every source flagged as carrying the signal (see VoltageSourceElement).
+  const isDriven = (el: { id: string; isSignalSource?: boolean }) => el.id === inputSourceId || el.isSignalSource === true;
+
+  return frequenciesHz.map((frequencyHz) => {
     const omega = 2 * Math.PI * frequencyHz;
     const n = topology.size;
     const reA = new Float64Array(n * n);
@@ -223,16 +269,6 @@ export function runAcAnalysis(netlist: Netlist, options: AcOptions): AcPoint[] {
     }
 
     const x = solveComplexLinear(reA, imA, reZ, imZ, n);
-    const srcBranch = branchOf(topology, options.inputSourceId);
-    const outRe = outIndex < 0 ? 0 : x.re[outIndex];
-    const outIm = outIndex < 0 ? 0 : x.im[outIndex];
-    const magnitude = Math.hypot(outRe, outIm); // input magnitude is 1V, so this is the transfer function magnitude directly
-
-    return {
-      frequencyHz,
-      magnitudeDb: 20 * Math.log10(Math.max(magnitude, 1e-12)),
-      phaseDeg: (Math.atan2(outIm, outRe) * 180) / Math.PI,
-      sourceCurrentMagA: srcBranch < 0 ? 0 : Math.hypot(x.re[srcBranch], x.im[srcBranch]),
-    };
+    return { frequencyHz, re: x.re, im: x.im };
   });
 }

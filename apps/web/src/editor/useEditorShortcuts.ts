@@ -21,6 +21,8 @@ interface EditorShortcuts {
   /** Bracket keys, +1 or -1, so the canvas is reachable without a mouse. */
   onCycleSelection: (direction: 1 | -1) => void;
   onDeselect: () => void;
+  /** P: toggle probe mode. */
+  onToggleProbeMode?: () => void;
 }
 
 /**
@@ -41,6 +43,7 @@ export function useEditorShortcuts({
   onNudge,
   onCycleSelection,
   onDeselect,
+  onToggleProbeMode,
 }: EditorShortcuts): void {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -85,9 +88,10 @@ export function useEditorShortcuts({
         return;
       }
       if (e.key === "r" || e.key === "R") onRotate();
+      if ((e.key === "p" || e.key === "P") && onToggleProbeMode) onToggleProbeMode();
       if (e.key === "Delete" || e.key === "Backspace") onDelete();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onUndo, onRedo, onRotate, onDelete, onCopy, onPaste, onDuplicate, onNudge, onCycleSelection, onDeselect]);
+  }, [onUndo, onRedo, onRotate, onDelete, onCopy, onPaste, onDuplicate, onNudge, onCycleSelection, onDeselect, onToggleProbeMode]);
 }

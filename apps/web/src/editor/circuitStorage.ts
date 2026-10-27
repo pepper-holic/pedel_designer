@@ -1,4 +1,4 @@
-import type { BlockInstance, PartInstance, Wire } from "./types";
+import type { BlockInstance, PartInstance, Probe, Wire } from "./types";
 
 export const CIRCUIT_STORAGE_KEY = "pedal-designer:circuit";
 
@@ -14,10 +14,24 @@ export interface StoredCircuit {
   blocks: BlockInstance[];
   outputNode: string;
   inputGain: number;
+  /** Measurement points. Optional and additive - saves from before probes existed load with none. */
+  probes?: Probe[];
 }
 
 export function serializeCircuit(circuit: StoredCircuit): string {
   return JSON.stringify(circuit);
+}
+
+function isProbe(value: unknown): value is Probe {
+  const p = value as Probe;
+  return (
+    !!p &&
+    typeof p.id === "string" &&
+    typeof p.label === "string" &&
+    typeof p.color === "string" &&
+    typeof p.terminal?.partId === "string" &&
+    typeof p.terminal?.terminalId === "string"
+  );
 }
 
 export function deserializeCircuit(raw: string): StoredCircuit | null {
@@ -35,6 +49,7 @@ export function deserializeCircuit(raw: string): StoredCircuit | null {
       blocks: Array.isArray(parsed.blocks) ? parsed.blocks : [],
       outputNode: typeof parsed.outputNode === "string" ? parsed.outputNode : "",
       inputGain: typeof parsed.inputGain === "number" ? parsed.inputGain : 0.5,
+      probes: Array.isArray(parsed.probes) ? parsed.probes.filter(isProbe) : [],
     };
   } catch {
     return null;

@@ -1,5 +1,6 @@
 import { InspectorPanel } from "./InspectorPanel";
 import { OutputAudioPanel } from "./OutputAudioPanel";
+import { ProbePanel } from "./ProbePanel";
 import type { BlockInstance, PartInstance, Wire } from "./types";
 import type { GraphNetlist } from "./netlistFromGraph";
 import type { useAudioRun } from "./useAudioRun";
@@ -20,6 +21,7 @@ interface EditorSidebarRightProps {
   onRotate: () => void;
   onDelete: () => void;
   onDeleteBlock: (blockId: string) => void;
+  probePanel: React.ComponentProps<typeof ProbePanel>;
 }
 
 /** Right dock: what is selected on top, what to do with the whole circuit's output below. */
@@ -37,6 +39,8 @@ export function EditorSidebarRight(props: EditorSidebarRightProps) {
         onDelete={props.onDelete}
         onDeleteBlock={props.onDeleteBlock}
       />
+
+      <ProbePanel {...props.probePanel} />
 
       <OutputAudioPanel
         outputNode={props.outputNode}

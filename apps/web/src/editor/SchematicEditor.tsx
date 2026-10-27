@@ -4,7 +4,7 @@ import type { PartInstance, TerminalRef, Wire } from "./types";
 import { cloneSelection } from "./selection";
 import { netlistFromGraph } from "./netlistFromGraph";
 import { loadPedalPreset, loadWiringPreset } from "./templateLoading";
-import { snapToGrid, rotateClockwise, GRID_SIZE } from "./geometry";
+import { snapToGrid, GRID_SIZE } from "./geometry";
 import type { BlockDef } from "./blockDefs";
 import { instantiateBlock } from "./blockInstance";
 import { PartsSidebar } from "./PartsSidebar";
@@ -17,11 +17,15 @@ import { useAnalysisPanels } from "./useAnalysisPanels";
 import type { MonteCarloResult } from "../core/analysis/montecarlo";
 import { presets, type PedalPreset, type PresetVariant } from "../core/library/presets";
 import { wiringPresets, type WiringPreset } from "./wiring";
-import { PARAM_META } from "./paramMeta";
 import { useAudioRun } from "./useAudioRun";
 import { useFrequencyResponse } from "./useFrequencyResponse";
 import { useSelectionState } from "./useSelectionState";
 import { useCircuitPersistence } from "./useCircuitPersistence";
+import { useProbes } from "./useProbes";
+import { pruneProbes } from "./probes";
+import { movePartsBy, deleteParts, deleteWire, deleteBlock, rotatePart, updatePartParams, coerceParamValue } from "./circuitEdits";
+import { computeOperatingPoint } from "./operatingPoint";
+import type { Probe } from "./types";
 import { canRedo, canUndo, commitPrevious, createHistory, pushSnapshot, redo, replacePresent, undo, type CircuitSnapshot } from "./historyStack";
 import { loadCircuitFromStorage, CURRENT_SCHEMA_VERSION } from "./circuitStorage";
 
@@ -33,10 +37,15 @@ const PASTE_OFFSET = { dx: 30, dy: 30 };
 
 type LeftTab = "parts" | "library";
 
-function loadInitialState(): { snapshot: CircuitSnapshot; outputNode: string; inputGain: number } {
+function loadInitialState(): { snapshot: CircuitSnapshot; outputNode: string; inputGain: number; probes: Probe[] } {
   const stored = loadCircuitFromStorage(localStorage);
-  if (!stored) return { snapshot: { parts: [], wires: [], blocks: [] }, outputNode: "", inputGain: 0.5 };
-  return { snapshot: { parts: stored.parts, wires: stored.wires, blocks: stored.blocks }, outputNode: stored.outputNode, inputGain: stored.inputGain };
+  if (!stored) return { snapshot: { parts: [], wires: [], blocks: [] }, outputNode: "", inputGain: 0.5, probes: [] };
+  return {
+    snapshot: { parts: stored.parts, wires: stored.wires, blocks: stored.blocks },
+    outputNode: stored.outputNode,
+    inputGain: stored.inputGain,
+    probes: stored.probes ?? [],
+  };
 }
 
 export function SchematicEditor() {
@@ -72,7 +81,11 @@ export function SchematicEditor() {
     return { width: Math.max(900, maxX + margin), height: Math.max(460, maxY + margin) };
   }, [parts]);
 
-  const acResult = useFrequencyResponse(graph, outputNode);
+  const probes = useProbes(initial.probes, parts, graph, setStatus);
+  const [showDc, setShowDc] = useState(false);
+  const wantsOperatingPoint = showDc || probes.resolved.length > 0;
+  const operatingPoint = useMemo(() => (wantsOperatingPoint ? computeOperatingPoint(graph) : null), [graph, wantsOperatingPoint]);
+  const acResult = useFrequencyResponse(graph, outputNode, probes.resolved);
 
   const commit = (next: CircuitSnapshot) => setHistory((h) => pushSnapshot(h, next));
 
@@ -86,10 +99,11 @@ export function SchematicEditor() {
    */
   const replaceCircuit = (
     snapshot: CircuitSnapshot,
-    options: { outputNode: string; presetId: string | null; status: string; inputGain?: number },
+    options: { outputNode: string; presetId: string | null; status: string; inputGain?: number; probes?: Probe[] },
   ) => {
     commit(snapshot);
     selection.deselect();
+    probes.replaceAll(options.probes ?? []);
     setLoadedPresetId(options.presetId);
     setOutputNode(options.outputNode);
     if (options.inputGain !== undefined) setInputGain(options.inputGain);
@@ -105,13 +119,13 @@ export function SchematicEditor() {
   };
 
   const handleLoadTemplate = (preset: PedalPreset, variant?: PresetVariant) => {
-    const { snapshot, outputNode: out } = loadPedalPreset(preset, variant);
-    replaceCircuit(snapshot, { outputNode: out, presetId: preset.id, status: `템플릿 로드됨: ${preset.name}${variant ? ` - ${variant.label}` : ""}` });
+    const { snapshot, outputNode: out, probes: presetProbes } = loadPedalPreset(preset, variant);
+    replaceCircuit(snapshot, { outputNode: out, probes: presetProbes, presetId: preset.id, status: `템플릿 로드됨: ${preset.name}${variant ? ` - ${variant.label}` : ""}` });
   };
 
   const handleLoadWiring = (preset: WiringPreset) => {
-    const { snapshot, outputNode: out } = loadWiringPreset(preset);
-    replaceCircuit(snapshot, { outputNode: out, presetId: preset.id, status: `배선 로드됨: ${preset.name}` });
+    const { snapshot, outputNode: out, probes: presetProbes } = loadWiringPreset(preset);
+    replaceCircuit(snapshot, { outputNode: out, probes: presetProbes, presetId: preset.id, status: `배선 로드됨: ${preset.name}` });
   };
 
   const handleAddPart = (type: PartType, paramsOverride?: Record<string, number | string>) => {
@@ -154,13 +168,7 @@ export function SchematicEditor() {
     const moving = selectedPartIds.includes(id) ? new Set(selectedPartIds) : new Set([id]);
     const dx = snapToGrid(x) - dragged.x;
     const dy = snapToGrid(y) - dragged.y;
-    setHistory((h) =>
-      replacePresent(h, {
-        parts: parts.map((p) => (moving.has(p.id) ? { ...p, x: p.x + dx, y: p.y + dy } : p)),
-        wires,
-        blocks,
-      }),
-    );
+    setHistory((h) => replacePresent(h, movePartsBy(history.present, moving, dx, dy)));
   };
 
   const handleDragEnd = () => {
@@ -174,20 +182,9 @@ export function SchematicEditor() {
   };
 
   const handleDeleteSelected = () => {
-    if (selectedWireId) {
-      commit({ parts, wires: wires.filter((w) => w.id !== selectedWireId), blocks });
-      selection.deselect();
-      return;
-    }
-    if (selectedPartIds.length === 0) return;
-    const removing = new Set(selectedPartIds);
-    const nextParts = parts.filter((p) => !removing.has(p.id));
-    const remainingBlockIds = new Set(nextParts.map((p) => p.blockId).filter((id): id is string => id !== undefined));
-    commit({
-      parts: nextParts,
-      wires: wires.filter((w) => !removing.has(w.a.partId) && !removing.has(w.b.partId)),
-      blocks: blocks.filter((b) => remainingBlockIds.has(b.id)),
-    });
+    if (selectedWireId) commit(deleteWire(history.present, selectedWireId));
+    else if (selectedPartIds.length > 0) commit(deleteParts(history.present, selectedPartIds));
+    else return;
     selection.deselect();
   };
 
@@ -226,26 +223,16 @@ export function SchematicEditor() {
       if (parts.length > 0) handleSelectPart(parts[0].id);
       return;
     }
-    const moving = new Set(selectedPartIds);
-    commit({
-      parts: parts.map((p) => (moving.has(p.id) ? { ...p, x: p.x + dx * GRID_SIZE, y: p.y + dy * GRID_SIZE } : p)),
-      wires,
-      blocks,
-    });
+    commit(movePartsBy(history.present, selectedPartIds, dx * GRID_SIZE, dy * GRID_SIZE));
   };
 
   const handleDeleteBlock = (blockId: string) => {
-    commit({
-      parts: parts.filter((p) => p.blockId !== blockId),
-      wires: wires.filter((w) => w.a.partId.split("_")[0] !== blockId || w.b.partId.split("_")[0] !== blockId),
-      blocks: blocks.filter((b) => b.id !== blockId),
-    });
+    commit(deleteBlock(history.present, blockId));
     selection.deselect();
   };
 
   const handleRotateSelected = () => {
-    if (!selectedPartId) return;
-    commit({ parts: parts.map((p) => (p.id === selectedPartId ? { ...p, rotation: rotateClockwise(p.rotation) } : p)), wires, blocks });
+    if (selectedPartId) commit(rotatePart(history.present, selectedPartId));
   };
 
   useEditorShortcuts({
@@ -258,29 +245,28 @@ export function SchematicEditor() {
     onDuplicate: handleDuplicate,
     onNudge: handleNudge,
     onCycleSelection: selection.cycle,
-    onDeselect: selection.deselect,
+    onDeselect: () => {
+      selection.deselect();
+      probes.setProbeMode(false);
+    },
+    onToggleProbeMode: () => probes.setProbeMode(!probes.probeMode),
   });
 
   const handleParamChange = (key: string, value: string) => {
-    if (!selectedPart) return;
-    const parsed = Number(value);
-    const meta = PARAM_META[key];
-    const nextValue = Number.isFinite(parsed) && value.trim() !== "" ? (meta?.min !== undefined ? Math.max(parsed, meta.min) : parsed) : value;
-    commit({ parts: parts.map((p) => (p.id === selectedPart.id ? { ...p, params: { ...p.params, [key]: nextValue } } : p)), wires, blocks });
+    if (selectedPart) commit(updatePartParams(history.present, selectedPart.id, { [key]: coerceParamValue(key, value) }));
   };
 
   const handleApplyModel = (paramsOverride: Record<string, number | string>) => {
-    if (!selectedPart) return;
-    commit({ parts: parts.map((p) => (p.id === selectedPart.id ? { ...p, params: { ...p.params, ...paramsOverride } } : p)), wires, blocks });
+    if (selectedPart) commit(updatePartParams(history.present, selectedPart.id, paramsOverride));
   };
 
   const persistence = useCircuitPersistence({
-    circuit: { schemaVersion: CURRENT_SCHEMA_VERSION, parts, wires, blocks, outputNode, inputGain },
+    circuit: { schemaVersion: CURRENT_SCHEMA_VERSION, parts, wires, blocks, outputNode, inputGain, probes: pruneProbes(probes.probes, parts) },
     onStatus: setStatus,
     onLoaded: (circuit, fileName) =>
       replaceCircuit(
         { parts: circuit.parts, wires: circuit.wires, blocks: circuit.blocks },
-        { outputNode: circuit.outputNode, presetId: null, status: `회로를 불러왔습니다: ${fileName}`, inputGain: circuit.inputGain },
+        { outputNode: circuit.outputNode, presetId: null, status: `회로를 불러왔습니다: ${fileName}`, inputGain: circuit.inputGain, probes: circuit.probes },
       ),
   });
 
@@ -304,6 +290,7 @@ export function SchematicEditor() {
     outputNode,
     onSelectPart: handleSelectPart,
     acResult,
+    probes: probes.resolved,
     monteCarloResult,
     audio,
     analysis,
@@ -351,6 +338,14 @@ export function SchematicEditor() {
           onSelectWire={selection.selectWire}
           onAddWire={handleAddWire}
           onDragEnd={handleDragEnd}
+          probeMode={probes.probeMode}
+          onProbeModeChange={probes.setProbeMode}
+          onProbeTerminal={probes.toggleAt}
+          probes={probes.resolved}
+          terminalNet={graph.terminalNet}
+          operatingPoint={operatingPoint}
+          showDc={showDc}
+          onShowDcChange={setShowDc}
         />
 
         <EditorSidebarRight
@@ -369,6 +364,14 @@ export function SchematicEditor() {
           onRotate={handleRotateSelected}
           onDelete={handleDeleteSelected}
           onDeleteBlock={handleDeleteBlock}
+          probePanel={{
+            probes: probes.resolved,
+            probeMode: probes.probeMode,
+            onProbeModeChange: probes.setProbeMode,
+            onRename: probes.rename,
+            onRemove: probes.remove,
+            operatingPoint,
+          }}
         />
       </div>
     </div>

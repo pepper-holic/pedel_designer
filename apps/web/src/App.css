@@ -966,3 +966,95 @@
   text-align: center;
   color: var(--text-dim);
 }
+
+/* Text toggles in the canvas control strip (probe mode, DC labels) - the strip's square 22px
+   buttons are sized for +/- glyphs, not words. */
+.canvas-zoom-controls button.canvas-tool-toggle {
+  width: auto;
+  padding: 0 7px;
+}
+
+.canvas-zoom-controls button.canvas-tool-toggle[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent-dim);
+}
+
+.spectrum-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 1.6em;
+  padding: 2px 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.spectrum-peaks {
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.spectrum-peaks caption {
+  text-align: left;
+  color: var(--text-dim);
+  padding-bottom: 4px;
+}
+
+.spectrum-peaks th {
+  text-align: left;
+  padding: 3px 8px 3px 0;
+  white-space: nowrap;
+}
+
+.spectrum-peaks td {
+  padding: 3px 8px;
+  border-left: 1px solid var(--border-soft);
+  white-space: nowrap;
+}
+
+.spectrum-peaks td span {
+  color: var(--text-faint);
+}
+
+.probe-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.probe-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.probe-swatch {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.probe-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.probe-row .probe-meta {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+}
+
+.waveform-more {
+  margin-top: 8px;
+}

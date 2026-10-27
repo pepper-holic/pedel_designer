@@ -23,7 +23,20 @@ interface FrequencyResponseProps {
 const LABEL_FREQS = [20, 100, 1000, 10000, 20000];
 
 /** Bode magnitude plot: log-scaled frequency axis, linear dB axis. */
-export function FrequencyResponse({ points, series, width = 800, height = 260, minDb = -60, maxDb = 20, band }: FrequencyResponseProps) {
+export function FrequencyResponse({ points, series, width = 800, height = 260, minDb: minDbProp, maxDb: maxDbProp, band }: FrequencyResponseProps) {
+  // Default range is -60..+20dB, widened in 10dB steps when a curve leaves it - a high-gain drive
+  // (TS9 style, ~+34dB) would otherwise be drawn entirely off the top of the plot.
+  let dataMax = -Infinity;
+  let dataMin = Infinity;
+  for (const curve of series ?? [{ points }]) {
+    for (const p of curve.points) {
+      if (!Number.isFinite(p.magnitudeDb)) continue;
+      dataMax = Math.max(dataMax, p.magnitudeDb);
+      dataMin = Math.max(-140, Math.min(dataMin, p.magnitudeDb));
+    }
+  }
+  const maxDb = maxDbProp ?? Math.max(20, Number.isFinite(dataMax) ? Math.ceil((dataMax + 3) / 10) * 10 : 20);
+  const minDb = minDbProp ?? Math.min(-60, Number.isFinite(dataMin) ? Math.floor(dataMin / 10) * 10 : -60, maxDb - 80);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {

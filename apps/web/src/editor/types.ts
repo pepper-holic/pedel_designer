@@ -51,3 +51,16 @@ export interface Wire {
   a: TerminalRef;
   b: TerminalRef;
 }
+
+/**
+ * A measurement point the user pinned on the canvas. Anchored to a terminal rather than a net name,
+ * because net names ("n1", "n2", ...) are reassigned by union-find on every edit and are not stable
+ * properties of the circuit - the same reason WiringPreset.outputTerminal is a terminal.
+ */
+export interface Probe {
+  id: string;
+  terminal: TerminalRef;
+  /** User-facing name ("P1", or whatever the user renamed it to - e.g. "클리핑 전"). */
+  label: string;
+  color: string;
+}

@@ -110,3 +110,40 @@ test("exports a KiCad netlist for the loaded circuit", async ({ page }) => {
   // The clipper's diodes must survive into the export, not just the passives.
   expect(netlist).toMatch(/\(ref "?D1"?/);
 });
+
+test("probes a preset's signal path and shows each point's spectrum after a run", async ({ page }) => {
+  await loadPreset(page, /TS9 스타일 오버드라이브/);
+
+  // The preset's own tap nodes arrive as probes - drawn on the canvas and listed in the sidebar.
+  const markers = page.locator("g[data-probe-id]");
+  await expect(markers).toHaveCount(3);
+  await expect(page.locator(".probe-row")).toHaveCount(3);
+
+  // Frequency response overlays one curve per probe plus the output.
+  await page.getByRole("tab", { name: /주파수 응답/ }).click();
+  await expect(page.locator(".sweep-legend-item")).not.toHaveCount(0);
+
+  // Probe mode: clicking a probed terminal again removes that probe.
+  await page.getByRole("button", { name: "프로브", exact: true }).click();
+  await expect(page.getByRole("button", { name: "프로브", exact: true })).toHaveAttribute("aria-pressed", "true");
+  // Markers ignore pointer events, so a click on one lands on the probed terminal underneath.
+  const ring = await markers.first().locator("circle").boundingBox();
+  if (!ring) throw new Error("probe marker has no box");
+  await page.mouse.click(ring.x + ring.width / 2, ring.y + ring.height / 2);
+  await expect(markers).toHaveCount(2);
+
+  await page.getByRole("button", { name: "코드" }).click();
+  await page.getByRole("button", { name: "시뮬레이션 실행" }).click();
+  await expect(page.getByText("시뮬레이션 완료", { exact: false })).toBeVisible({ timeout: 60_000 });
+
+  await page.getByRole("tab", { name: "스펙트럼" }).click();
+  await expect(page.locator(".spectrum-peaks tr")).toHaveCount(3); // dry input + 2 probes
+  await expect(page.locator(".spectrum-peaks td").first()).toContainText("Hz");
+});
+
+test("shows the DC bias voltage of every node on request", async ({ page }) => {
+  await loadPreset(page, /LPB-1 스타일/);
+  await page.getByRole("button", { name: "DC 전압" }).click();
+  await expect(page.locator("g[data-dc-net]").first()).toBeVisible();
+  await expect(page.locator("g[data-dc-net] text").first()).toHaveText(/V$/);
+});

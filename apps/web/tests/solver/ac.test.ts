@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { runAcAnalysis } from "../../src/core/solver/ac";
+import { runAcAnalysis, runAcAnalysisMulti } from "../../src/core/solver/ac";
 import type { Netlist } from "../../src/core/solver/types";
 
 describe("AC frequency response", () => {
@@ -50,5 +50,27 @@ describe("AC frequency response", () => {
     // the actual -3dB corner value, since the real curve is 3dB below the
     // asymptote right at the corner and converges onto it away from there.
     expect(points[1].magnitudeDb).toBeCloseTo(-20, 0);
+  });
+});
+
+describe("runAcAnalysisMulti (multi-node)", () => {
+  it("reports every requested node from one sweep, matching single-node runs", () => {
+    const netlist: Netlist = {
+      elements: [
+        { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },
+        { id: "R1", type: "resistor", nodes: ["in", "mid"], resistance: 1000 },
+        { id: "C1", type: "capacitor", nodes: ["mid", "0"], capacitance: 1e-7 },
+        { id: "R2", type: "resistor", nodes: ["mid", "out"], resistance: 1000 },
+        { id: "C2", type: "capacitor", nodes: ["out", "0"], capacitance: 1e-7 },
+      ],
+    };
+    const frequenciesHz = [100, 1000, 10000];
+    const multi = runAcAnalysisMulti(netlist, { inputSourceId: "V1", outputNodes: ["mid", "out"], frequenciesHz });
+    for (const node of ["mid", "out"]) {
+      const single = runAcAnalysis(netlist, { inputSourceId: "V1", outputNode: node, frequenciesHz });
+      expect(multi.get(node)).toEqual(single);
+    }
+    // Two RC poles roll off faster than one, so "out" is below "mid" at high frequency.
+    expect(multi.get("out")![2].magnitudeDb).toBeLessThan(multi.get("mid")![2].magnitudeDb);
   });
 });
