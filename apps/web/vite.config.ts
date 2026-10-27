@@ -57,10 +57,10 @@ export default defineConfig({
       thresholds: {
         // Set just under where the suite currently sits, so a real regression fails the build but
         // ordinary churn does not. Raise them when the number climbs, never lower them to pass.
-        statements: 72,
-        branches: 62,
-        functions: 69,
-        lines: 74,
+        statements: 79,
+        branches: 71,
+        functions: 76,
+        lines: 80,
       },
     },
   },

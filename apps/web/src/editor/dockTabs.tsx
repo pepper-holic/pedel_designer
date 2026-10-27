@@ -9,12 +9,10 @@ import { ThdPanel } from "./ThdPanel";
 import { MonteCarloPanel } from "./MonteCarloPanel";
 import { ChainPanel } from "./ChainPanel";
 import { BomPanel } from "./BomPanel";
-import { PcbExportPanel } from "./PcbExportPanel";
-import { StripboardPanel } from "./pcb/StripboardPanel";
-import { PcbLayoutPanel } from "./pcb/PcbLayoutPanel";
+import { PcbTab } from "./pcb/PcbTab";
 import type { MonteCarloResult } from "../core/analysis/montecarlo";
 import type { GraphNetlist } from "./netlistFromGraph";
-import type { PartInstance, Wire } from "./types";
+import type { BlockInstance, PartInstance, Wire } from "./types";
 import type { useAnalysisPanels } from "./useAnalysisPanels";
 import type { useAudioRun } from "./useAudioRun";
 import type { FrequencyResponseResult } from "./useFrequencyResponse";
@@ -29,6 +27,7 @@ export interface DockTab {
 
 interface DockTabsInput {
   parts: PartInstance[];
+  blocks: BlockInstance[];
   wires: Wire[];
   graph: GraphNetlist;
   outputNode: string;
@@ -49,6 +48,7 @@ interface DockTabsInput {
  */
 export function buildDockTabs({
   parts,
+  blocks,
   wires,
   graph,
   outputNode,
@@ -147,14 +147,8 @@ export function buildDockTabs({
   {
     key: "pcb",
     label: "PCB",
-    helpText: "실제 기판으로 만들기: 풋프린트가 지정된 KiCad 넷리스트, 역검증되는 스트립보드 레이아웃, 자동 배치·배선 PCB(.kicad_pcb, 1:1 인쇄).",
-    content: (
-      <>
-        <PcbExportPanel parts={parts} graph={graph} outputNode={outputNode} />
-        <StripboardPanel parts={parts} graph={graph} outputNode={outputNode} />
-        <PcbLayoutPanel parts={parts} graph={graph} outputNode={outputNode} />
-      </>
-    ),
+    helpText: "실제로 만들기: 풋프린트가 지정된 KiCad 넷리스트, 역검증되는 스트립보드, 자동 배치·배선 PCB(.kicad_pcb, 1:1 인쇄), 인클로저 드릴 템플릿.",
+    content: <PcbTab parts={parts} blocks={blocks} graph={graph} outputNode={outputNode} />,
   },
   ];
 }

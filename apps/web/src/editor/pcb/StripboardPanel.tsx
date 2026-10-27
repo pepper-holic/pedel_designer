@@ -14,6 +14,8 @@ interface StripboardPanelProps {
   parts: PartInstance[];
   graph: GraphNetlist;
   outputNode: string;
+  /** Called with the board's size in mm whenever a layout is generated. */
+  onBoardSize?: (width: number, height: number) => void;
 }
 
 function download(name: string, text: string, type: string) {
@@ -59,7 +61,7 @@ function toggleCut(layout: StripboardLayout, hole: Hole): StripboardLayout {
  * hand (drag a part, click a hole to add or remove a cut - re-checked instantly), and take it to
  * the bench as a 1:1 print and a build list.
  */
-export function StripboardPanel({ parts, graph, outputNode }: StripboardPanelProps) {
+export function StripboardPanel({ parts, graph, outputNode, onBoardSize }: StripboardPanelProps) {
   const board = useMemo(() => buildBoardNetlist(parts, graph, outputNode), [parts, graph, outputNode]);
   const [layout, setLayout] = useState<StripboardLayout | null>(null);
   const [side, setSide] = useState<BoardSide>("component");
@@ -70,7 +72,9 @@ export function StripboardPanel({ parts, graph, outputNode }: StripboardPanelPro
 
   const generate = () => {
     try {
-      setLayout(generateStripboard(board, new Map(parts.map((p) => [p.id, p.x]))));
+      const next = generateStripboard(board, new Map(parts.map((p) => [p.id, p.x])));
+      setLayout(next);
+      onBoardSize?.(next.cols * 2.54, next.rows * 2.54);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "알 수 없는 오류");

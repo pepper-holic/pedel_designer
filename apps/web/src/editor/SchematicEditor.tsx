@@ -250,6 +250,7 @@ export function SchematicEditor() {
 
   const dockTabs = buildDockTabs({
     parts,
+    blocks,
     wires,
     graph,
     outputNode,

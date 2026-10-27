@@ -23,6 +23,8 @@ interface PcbLayoutPanelProps {
   parts: PartInstance[];
   graph: GraphNetlist;
   outputNode: string;
+  /** Called with the board's size in mm whenever a board is generated. */
+  onBoardSize?: (width: number, height: number) => void;
 }
 
 function download(name: string, text: string, type: string) {
@@ -38,7 +40,7 @@ function download(name: string, text: string, type: string) {
  * PCB tab (plan Stage E-3): automatic placement and routing, a geometric DRC, and the outputs - a
  * KiCad board to keep editing, and true-size prints for etching at home and for assembly.
  */
-export function PcbLayoutPanel({ parts, graph, outputNode }: PcbLayoutPanelProps) {
+export function PcbLayoutPanel({ parts, graph, outputNode, onBoardSize }: PcbLayoutPanelProps) {
   const board = useMemo(() => buildBoardNetlist(parts, graph, outputNode), [parts, graph, outputNode]);
   const [singleSided, setSingleSided] = useState(true);
   const [layout, setLayout] = useState<PcbLayout | null>(null);
@@ -55,7 +57,10 @@ export function PcbLayoutPanel({ parts, graph, outputNode }: PcbLayoutPanelProps
     setError(null);
     try {
       const result = await generatePcbAsync(board, new Map(parts.map((p) => [p.id, { x: p.x, y: p.y }])), { ...DEFAULT_RULES, singleSided });
-      if (id === run.current) setLayout(result);
+      if (id === run.current) {
+        setLayout(result);
+        onBoardSize?.(result.width, result.height);
+      }
     } catch (err) {
       if (id === run.current) setError(err instanceof Error ? err.message : "알 수 없는 오류");
     } finally {

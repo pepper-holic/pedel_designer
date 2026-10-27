@@ -209,6 +209,8 @@ test("turns a preset into a verified stripboard and a routed PCB", async ({ page
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: ".kicad_pcb 다운로드" }).click();
   expect((await download).suggestedFilename()).toBe("pedal.kicad_pcb");
+  // The enclosure section checks the fresh board against the suggested box.
+  await expect(page.getByText(/PCB .*mm → 내부 약/)).toBeVisible();
 });
 
 test("loads a preset as functional blocks, collapses them to black boxes, and turns a block knob", async ({ page }) => {
