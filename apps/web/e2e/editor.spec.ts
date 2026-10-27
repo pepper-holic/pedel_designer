@@ -91,6 +91,7 @@ test("sweeps a knob and draws one curve per position", async ({ page }) => {
 test("exports a KiCad netlist for the loaded circuit", async ({ page }) => {
   await loadPreset(page, /다이오드 클리퍼 \(대칭\)/);
   await page.getByRole("tab", { name: "PCB" }).click();
+  await page.getByRole("button", { name: "KiCad 넷리스트" }).click();
 
   // The downloaded file is the deliverable, so the test reads it rather than trusting the button.
   const [download] = await Promise.all([
@@ -204,12 +205,14 @@ test("turns a preset into a verified stripboard and a routed PCB", async ({ page
   await page.getByRole("button", { name: "스트립보드 생성" }).click();
   await expect(page.getByText(/역검증 통과/)).toBeVisible();
   // Placement and routing run in a worker: this also proves the worker chunk ships.
+  await page.getByRole("button", { name: "PCB", exact: true }).click();
   await page.getByRole("button", { name: "PCB 생성" }).click();
   await expect(page.getByText(/✓ DRC 통과/)).toBeVisible({ timeout: 20_000 });
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: ".kicad_pcb 다운로드" }).click();
   expect((await download).suggestedFilename()).toBe("pedal.kicad_pcb");
   // The enclosure section checks the fresh board against the suggested box.
+  await page.getByRole("button", { name: "인클로저" }).click();
   await expect(page.getByText(/PCB .*mm → 내부 약/)).toBeVisible();
 });
 
@@ -311,3 +314,51 @@ test.describe("layout editing", () => {
     await expect(page.getByText(/직접 옮긴 부품 1개는 그 자리에/)).toBeVisible();
   });
 });
+
+/** Plots in the bottom dock are drawn for the space they get: every one fits inside the dock with
+ * no scrolling, at the screen's pixel density, and grows when the dock does. */
+for (const viewport of [
+  { width: 1280, height: 720 },
+  { width: 1440, height: 900 },
+]) {
+  test.describe(`dock plots at ${viewport.width}x${viewport.height}`, () => {
+    test.use({ viewport });
+
+    test("fit the dock, stay sharp, and follow its height", async ({ page }) => {
+      await loadPreset(page, /TS9 스타일 오버드라이브/);
+      await page.getByRole("button", { name: "코드" }).first().click();
+      await page.getByRole("button", { name: "시뮬레이션 실행" }).click();
+      await expect(page.getByText(/시뮬레이션 완료/)).toBeVisible({ timeout: 20_000 });
+
+      const content = page.locator(".bottom-dock-content");
+      const measure = () =>
+        content.evaluate((el) => {
+          const box = el.getBoundingClientRect();
+          const canvas = el.querySelector("canvas");
+          const c = canvas?.getBoundingClientRect();
+          return {
+            overflow: el.scrollHeight - el.clientHeight,
+            inside: !!c && c.top >= box.top - 1 && c.bottom <= box.bottom + 1 && c.right <= box.right + 1,
+            sharp: !!canvas && Math.abs(canvas.width - c!.width * devicePixelRatio) <= 2,
+            height: c?.height ?? 0,
+          };
+        });
+
+      for (const tab of [/주파수 응답/, /파형/, /스펙트럼/, /노브 스윕/]) {
+        await page.getByRole("tab", { name: tab }).click();
+        const m = await measure();
+        expect(m, String(tab)).toMatchObject({ inside: true, sharp: true });
+        expect(m.overflow, String(tab)).toBeLessThanOrEqual(1);
+      }
+
+      // Taller dock, taller plot.
+      await page.getByRole("tab", { name: /주파수 응답/ }).click();
+      const before = (await measure()).height;
+      const resizer = page.getByRole("separator", { name: "분석 패널 높이 조절" });
+      await resizer.focus();
+      await page.keyboard.press("ArrowUp");
+      await page.keyboard.press("ArrowUp");
+      await expect.poll(async () => (await measure()).height).toBeGreaterThan(before + 60);
+    });
+  });
+}

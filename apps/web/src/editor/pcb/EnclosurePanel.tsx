@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { boardFit, checkHoles, defaultDrillPlan, ENCLOSURES, interior, smallestFit, type DrillHole, type PanelControl } from "./enclosure";
 import { drawEnclosure, enclosureSvg, sheetDeltaToFace, sheetSize } from "./enclosureDrawing";
-import { ShapeSvg } from "./ShapeSvg";
+import { BoardViewport, ZoomControls } from "./BoardViewport";
 
-/** Screen pixels per millimetre. */
-const SCALE = 2.6;
 
 export interface BoardSize {
   w: number;
@@ -44,11 +42,12 @@ export function EnclosurePanel({ controls, board }: EnclosurePanelProps) {
   const issues = checkHoles(enclosure, holes);
   const fit = board ? boardFit(enclosure, board.w, board.h) : null;
   const inside = interior(enclosure);
-  const [drag, setDrag] = useState<{ id: string; x: number; y: number } | null>(null);
+  const [dragStart, setDragStart] = useState<DrillHole[] | null>(null);
+  const [zoom, setZoom] = useState(1);
   const size = sheetSize(enclosure);
 
-  const moveHole = (id: string, dxSheet: number, dySheet: number) => {
-    const next = holes.map((h) => {
+  const moveHole = (from: DrillHole[], id: string, dxSheet: number, dySheet: number) => {
+    const next = from.map((h) => {
       if (h.id !== id) return h;
       const d = sheetDeltaToFace(h.face, dxSheet, dySheet);
       return { ...h, x: Math.round((h.x + d.dx) * 2) / 2, y: Math.round((h.y + d.dy) * 2) / 2 };
@@ -82,6 +81,7 @@ export function EnclosurePanel({ controls, board }: EnclosurePanelProps) {
         <button type="button" onClick={() => download(`${enclosure.id}-drill.svg`, enclosureSvg(enclosure, holes))}>
           1:1 SVG 다운로드
         </button>
+        <ZoomControls zoom={zoom} onZoom={setZoom} label="드릴 템플릿" />
       </div>
       <p className={fit && !fit.fits ? "drc-error" : "canvas-hint"} role="status">
         {board
@@ -97,28 +97,20 @@ export function EnclosurePanel({ controls, board }: EnclosurePanelProps) {
           ))}
         </ul>
       )}
-      <div className="stripboard-scroll">
-        <ShapeSvg
-          shapes={drawEnclosure(enclosure, holes, new Set(issues.map((i) => i.holeId)))}
-          width={size.w}
-          height={size.h}
-          scale={SCALE}
-          label={`${enclosure.id} 드릴 템플릿`}
-          onPartPointerDown={(id, e) => {
-            (e.target as Element).setPointerCapture?.(e.pointerId);
-            setDrag({ id, x: e.clientX, y: e.clientY });
-          }}
-          onPointerMove={(e) => {
-            if (!drag) return;
-            const dx = (e.clientX - drag.x) / SCALE;
-            const dy = (e.clientY - drag.y) / SCALE;
-            if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) return;
-            moveHole(drag.id, dx, dy);
-            setDrag({ ...drag, x: e.clientX, y: e.clientY });
-          }}
-          onPointerUp={() => setDrag(null)}
-        />
-      </div>
+      <BoardViewport
+        zoom={zoom}
+        shapes={drawEnclosure(enclosure, holes, new Set(issues.map((i) => i.holeId)))}
+        width={size.w}
+        height={size.h}
+        label={`${enclosure.id} 드릴 템플릿`}
+        onDrag={(id, dx, dy) => {
+          // Moves are relative to where the hole was when the drag started.
+          const start = dragStart ?? holes;
+          if (!dragStart) setDragStart(holes);
+          moveHole(start, id, dx, dy);
+        }}
+        onDragEnd={() => setDragStart(null)}
+      />
     </div>
   );
 }

@@ -6,9 +6,8 @@ import { generateStripboard } from "./stripboard";
 import { verifyStripboard } from "./stripboardVerify";
 import { drawStripboard, MARGIN, stripboardBuildNotes, stripboardSheetSvg, type BoardSide } from "./stripboardDrawing";
 import type { Hole, StripboardLayout } from "./stripboardTypes";
-import { ShapeSvg } from "./ShapeSvg";
-
-const SCALE = 30;
+import { BoardViewport, ZoomControls } from "./BoardViewport";
+import { useDock } from "../dockContext";
 
 interface StripboardPanelProps {
   parts: PartInstance[];
@@ -63,10 +62,12 @@ function toggleCut(layout: StripboardLayout, hole: Hole): StripboardLayout {
  */
 export function StripboardPanel({ parts, graph, outputNode, onBoardSize }: StripboardPanelProps) {
   const board = useMemo(() => buildBoardNetlist(parts, graph, outputNode), [parts, graph, outputNode]);
+  const dock = useDock();
+  const [zoom, setZoom] = useState(1);
   const [layout, setLayout] = useState<StripboardLayout | null>(null);
   const [side, setSide] = useState<BoardSide>("component");
   const [error, setError] = useState<string | null>(null);
-  const [drag, setDrag] = useState<{ ref: string; x: number; y: number; delta: Hole } | null>(null);
+  const [drag, setDrag] = useState<{ ref: string; delta: Hole } | null>(null);
   const check = useMemo(() => (layout ? verifyStripboard(layout, board) : null), [layout, board]);
   const hasParts = parts.some((p) => p.type !== "ground");
 
@@ -75,6 +76,7 @@ export function StripboardPanel({ parts, graph, outputNode, onBoardSize }: Strip
       const next = generateStripboard(board, new Map(parts.map((p) => [p.id, p.x])));
       setLayout(next);
       onBoardSize?.(next.cols * 2.54, next.rows * 2.54);
+      dock.expand();
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "알 수 없는 오류");
@@ -119,6 +121,7 @@ export function StripboardPanel({ parts, graph, outputNode, onBoardSize }: Strip
                 <button type="button" onClick={() => download("stripboard-build.txt", stripboardBuildNotes(layout), "text/plain")}>
                   빌드 노트 (.txt)
                 </button>
+                <ZoomControls zoom={zoom} onZoom={setZoom} label="스트립보드" />
               </>
             )}
           </div>
@@ -138,33 +141,31 @@ export function StripboardPanel({ parts, graph, outputNode, onBoardSize }: Strip
                 </ul>
               )}
               <div className="stripboard-body">
-                <div className="stripboard-scroll">
-                  <ShapeSvg
-                    shapes={shapes}
-                    width={layout.cols + MARGIN * 2}
-                    height={layout.rows + MARGIN * 2}
-                    scale={SCALE}
-                    label={`스트립보드 ${side === "component" ? "부품면" : "동박면"}`}
-                    onHoleClick={(hole) => setLayout(toggleCut(layout, hole))}
-                    onPartPointerDown={
-                      side === "component"
-                        ? (ref, e) => {
-                            (e.target as Element).setPointerCapture?.(e.pointerId);
-                            setDrag({ ref, x: e.clientX, y: e.clientY, delta: { row: 0, col: 0 } });
-                          }
-                        : undefined
-                    }
-                    onPointerMove={(e) => {
-                      if (!drag) return;
-                      const delta = { row: Math.round((e.clientY - drag.y) / SCALE), col: Math.round((e.clientX - drag.x) / SCALE) };
-                      if (delta.row !== drag.delta.row || delta.col !== drag.delta.col) setDrag({ ...drag, delta });
-                    }}
-                    onPointerUp={() => {
-                      if (drag && (drag.delta.row !== 0 || drag.delta.col !== 0)) setLayout(movePart(layout, drag.ref, drag.delta));
-                      setDrag(null);
-                    }}
-                  />
-                </div>
+                <BoardViewport
+                  zoom={zoom}
+                  shapes={shapes}
+                  width={layout.cols + MARGIN * 2}
+                  height={layout.rows + MARGIN * 2}
+                  label={`스트립보드 ${side === "component" ? "부품면" : "동박면"}`}
+                  onHoleClick={(hole) => setLayout(toggleCut(layout, hole))}
+                  onDrag={
+                    side === "component"
+                      ? (ref, dx, dy) => {
+                          const delta = { row: Math.round(dy), col: Math.round(dx) };
+                          if (!drag || drag.ref !== ref || delta.row !== drag.delta.row || delta.col !== drag.delta.col) setDrag({ ref, delta });
+                        }
+                      : undefined
+                  }
+                  onDragEnd={
+                    side === "component"
+                      ? (ref, dx, dy) => {
+                          const delta = { row: Math.round(dy), col: Math.round(dx) };
+                          if (delta.row !== 0 || delta.col !== 0) setLayout(movePart(layout, ref, delta));
+                          setDrag(null);
+                        }
+                      : undefined
+                  }
+                />
                 <table className="bom-table stripboard-legend">
                   <tbody>
                     {layout.placements.map((p) => (

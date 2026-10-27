@@ -169,10 +169,52 @@
 }
 
 .bottom-dock {
+  position: relative;
   flex-shrink: 0;
   height: 300px;
   display: flex;
   flex-direction: column;
+}
+
+/* Grab strip along the dock's top edge. */
+.dock-resizer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -6px;
+  height: 10px;
+  cursor: row-resize;
+  z-index: 2;
+  touch-action: none;
+}
+
+.dock-resizer::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 3px;
+  width: 44px;
+  height: 4px;
+  margin-left: -22px;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+.dock-resizer:hover::after,
+.dock-resizer:focus-visible::after {
+  background: var(--accent-dim);
+}
+
+.dock-expand {
+  position: absolute;
+  top: 2px;
+  right: 10px;
+  z-index: 1;
+  background: transparent;
+  border: none;
+  padding: 6px 4px;
+  font-size: 0.68rem;
+  color: var(--text-dim);
 }
 
 .bottom-dock-content {
@@ -210,7 +252,6 @@
   }
 
   .bottom-dock {
-    height: auto;
     min-height: 260px;
     flex: none;
   }
@@ -343,7 +384,7 @@
   flex-wrap: wrap;
   gap: 4px;
   margin: -12px -12px 10px;
-  padding: 4px 10px 0;
+  padding: 4px 96px 0 10px;
   border-bottom: 1px solid var(--border);
   background: var(--bg-panel-header);
   border-radius: 8px 8px 0 0;
@@ -1011,12 +1052,26 @@
   color: var(--text-dim);
 }
 
+.spectrum-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.spectrum-body > .plot-frame {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+
 .spectrum-peaks {
-  width: 100%;
-  margin-top: 8px;
+  flex: 0 1 230px;
+  align-self: flex-start;
   border-collapse: collapse;
   font-family: var(--font-mono);
   font-size: 0.72rem;
+  line-height: 1.5;
 }
 
 .spectrum-peaks caption {
@@ -1027,18 +1082,34 @@
 
 .spectrum-peaks th {
   text-align: left;
+  vertical-align: top;
   padding: 3px 8px 3px 0;
   white-space: nowrap;
 }
 
 .spectrum-peaks td {
-  padding: 3px 8px;
+  padding: 3px 0 3px 8px;
   border-left: 1px solid var(--border-soft);
-  white-space: nowrap;
+  color: var(--text-dim);
 }
 
-.spectrum-peaks td span {
-  color: var(--text-faint);
+/* One line of controls above a plot: picker, legend, toggles. */
+.plot-toolbar {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  font-size: 0.8rem;
+}
+
+.plot-toolbar select {
+  width: auto;
+  max-width: 280px;
+}
+
+.plot-toolbar .sweep-legend {
+  padding: 0;
 }
 
 .probe-list {
@@ -1352,12 +1423,6 @@
   margin: 8px 0;
 }
 
-.stripboard-scroll {
-  overflow: auto;
-  max-width: 100%;
-  margin-top: 8px;
-}
-
 .stripboard-body {
   display: flex;
   flex-wrap: wrap;
@@ -1374,4 +1439,132 @@
   text-align: left;
   padding-right: 10px;
   font-family: var(--font-mono);
+}
+
+/* ---- Plots that fill the space they are given ---- */
+/* A dock tab whose plot takes whatever height is left after its controls and legend. */
+.dock-fill {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  min-height: 0;
+}
+
+.dock-fill > .field,
+.dock-fill > .field-row,
+.dock-fill > .sweep-legend,
+.dock-fill > .tap-buttons,
+.dock-fill > .waveform-more,
+.dock-fill > table,
+.dock-fill > p {
+  flex: none;
+}
+
+.plot-frame {
+  flex: 1 1 auto;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.plot-stack {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.plot-box {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 130px;
+}
+
+.plot-toolbar .tap-buttons {
+  margin: 0;
+}
+
+.plot-box > canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+}
+
+.plot-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ---- Board drawings (stripboard, PCB, enclosure) ---- */
+.board-viewport {
+  position: relative;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* Zoom buttons sit at the right end of the panel's button row. */
+.board-zoom {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.board-zoom button {
+  min-width: 30px;
+  padding: 2px 8px;
+  font-size: 0.78rem;
+}
+
+.board-zoom button[aria-pressed="true"] {
+  border-color: var(--accent-dim);
+}
+
+.board-zoom-value {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-left: 4px;
+}
+
+.board-frame {
+  overflow: auto;
+  width: 100%;
+}
+
+.pcb-tab > .pcb-sections {
+  margin-bottom: 8px;
+}
+
+.pcb-tab > div > .panel {
+  margin: 0;
+}
+
+select {
+  font-size: 0.82rem;
+}
+
+.run-row select {
+  width: auto;
+  max-width: 100%;
+}
+
+/* Inside the PCB tab the sub-tabs already say what each section is: the panels drop their frame
+   and title so the board drawing gets the height. */
+.pcb-tab > div > .panel {
+  border: none;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.pcb-tab > div > .panel > .panel-title {
+  display: none;
+}
+
+.pcb-tab > div > .panel .run-row {
+  margin-top: 0;
 }

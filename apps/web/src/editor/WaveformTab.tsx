@@ -6,6 +6,8 @@ import type { ResolvedProbe } from "./probes";
 interface WaveformTabProps {
   /** Every net's trace from the last run, labelled by net name. */
   traces: WaveformTrace[] | null;
+  /** Length of the run, for the time axis. */
+  durationSeconds?: number;
   /** When there are probes, their traces lead (named and coloured as on the canvas) and the rest of
    * the nets fold away under "전체 노드". */
   probes?: ResolvedProbe[];
@@ -45,7 +47,7 @@ function TapButtons({ traces, onPlay, onCompare }: { traces: ShownTrace[]; onPla
 
 /** Bottom-dock "파형" tab: plots the last transient-simulation result and lets the user play back
  * any tap point, optionally through a cabinet IR. */
-export function WaveformTab({ traces, probes = [], onPlay, onCompare, cabinetEnabled, onCabinetEnabledChange, cabinetVariant, onCabinetVariantChange }: WaveformTabProps) {
+export function WaveformTab({ traces, durationSeconds, probes = [], onPlay, onCompare, cabinetEnabled, onCabinetEnabledChange, cabinetVariant, onCabinetVariantChange }: WaveformTabProps) {
   const [showAll, setShowAll] = useState(false);
   if (!traces) return <p className="preset-description">시뮬레이션을 실행하면 결과 파형이 여기에 표시됩니다.</p>;
 
@@ -59,35 +61,22 @@ export function WaveformTab({ traces, probes = [], onPlay, onCompare, cabinetEna
   const rest = probed.length > 0 ? all.filter((t) => !probes.some((p) => p.net === t.net)) : [];
 
   return (
-    <>
-      <div className="canvas-frame">
-        <Waveform traces={primary} />
+    <div className="dock-fill">
+      <div className="canvas-frame plot-frame">
+        <Waveform traces={primary} durationSeconds={durationSeconds} />
       </div>
-      <TapButtons traces={primary} onPlay={onPlay} onCompare={onCompare} />
-      {rest.length > 0 && (
-        <div className="waveform-more">
-          <button type="button" onClick={() => setShowAll((v) => !v)} aria-expanded={showAll}>
-            {showAll ? "▾" : "▸"} 전체 노드 ({rest.length}개)
-          </button>
-          {showAll && (
-            <>
-              <div className="canvas-frame">
-                <Waveform traces={rest} heightPerTrace={80} />
-              </div>
-              <TapButtons traces={rest} onPlay={onPlay} onCompare={onCompare} />
-            </>
-          )}
-        </div>
-      )}
-      <div className="field-row" style={{ marginTop: 10 }}>
+      {/* Playback and cabinet on one wrapping line under the plot, so the plot keeps the height. */}
+      <div className="plot-toolbar">
+        <TapButtons traces={primary} onPlay={onPlay} onCompare={onCompare} />
         <label>
-          <input type="checkbox" checked={cabinetEnabled} onChange={(e) => onCabinetEnabledChange(e.target.checked)} /> IR 적용 (제네릭 캐비닛 시뮬레이션)
+          <input type="checkbox" checked={cabinetEnabled} onChange={(e) => onCabinetEnabledChange(e.target.checked)} /> 캐비닛 IR
         </label>
         <select
           value={cabinetVariant}
           onChange={(e) => onCabinetVariantChange(e.target.value as CabinetVariant)}
           disabled={!cabinetEnabled}
-          style={{ maxWidth: 220 }}
+          aria-label="캐비닛 종류"
+          title="제네릭 캐비닛 시뮬레이션"
         >
           {Object.entries(CABINET_VARIANTS).map(([key, label]) => (
             <option key={key} value={key}>
@@ -96,6 +85,21 @@ export function WaveformTab({ traces, probes = [], onPlay, onCompare, cabinetEna
           ))}
         </select>
       </div>
-    </>
+      {rest.length > 0 && (
+        <div className="waveform-more">
+          <button type="button" onClick={() => setShowAll((v) => !v)} aria-expanded={showAll}>
+            {showAll ? "▾" : "▸"} 전체 노드 ({rest.length}개)
+          </button>
+          {showAll && (
+            <>
+              <div className="canvas-frame">
+                <Waveform traces={rest} heightPerTrace={72} durationSeconds={durationSeconds} />
+              </div>
+              <TapButtons traces={rest} onPlay={onPlay} onCompare={onCompare} />
+            </>
+          )}
+        </div>
+      )}
+    </div>
   );
 }

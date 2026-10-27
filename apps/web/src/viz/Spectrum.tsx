@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Spectrum as SpectrumData } from "../core/analysis/spectrum";
+import { drawLogDbAxes, plotArea, prepareCanvas, usePlotSize } from "./usePlotSize";
 
 export interface SpectrumSeries {
   label: string;
@@ -11,6 +12,7 @@ export interface SpectrumSeries {
 
 interface SpectrumProps {
   series: SpectrumSeries[];
+  /** Pin the plot's CSS size; by default it fills its box. */
   width?: number;
   height?: number;
   minHz?: number;
@@ -37,9 +39,10 @@ function binOf(spectrum: SpectrumData, f: number): number {
  * out every series' level at the cursor frequency - the way to answer "how loud is the 3rd harmonic
  * after the clipper versus before it".
  */
-export function Spectrum({ series, width = 800, height = 260, minHz = 20, maxHz = 20000, rangeDb = 100 }: SpectrumProps) {
+export function Spectrum({ series, width: fixedWidth, height: fixedHeight, minHz = 20, maxHz = 20000, rangeDb = 100 }: SpectrumProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hoverHz, setHoverHz] = useState<number | null>(null);
+  const { ref, width, height } = usePlotSize<HTMLDivElement>({ width: fixedWidth, height: fixedHeight });
 
   let peakDb = -Infinity;
   for (const s of series) {
@@ -55,34 +58,17 @@ export function Spectrum({ series, width = 800, height = 260, minHz = 20, maxHz 
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    if (!canvas || !ctx) return;
-    const xOf = (f: number) => ((Math.log10(f) - logMin) / (logMax - logMin)) * width;
-    const yOf = (db: number) => height - ((Math.max(db, minDb) - minDb) / (maxDb - minDb)) * height;
+    if (!canvas) return;
+    const ctx = prepareCanvas(canvas, width, height);
+    if (!ctx) return;
+    const area = plotArea(width, height);
+    const { xOf, yOf: rawY } = drawLogDbAxes(ctx, area, { fMin: minHz, fMax: maxHz, minDb, maxDb, freqLabels: LABEL_FREQS });
+    const yOf = (db: number) => rawY(Math.max(db, minDb));
 
-    ctx.clearRect(0, 0, width, height);
-    ctx.strokeStyle = "#e3e7d3";
-    ctx.fillStyle = "#6f735a";
-    ctx.font = "11px 'JetBrains Mono', monospace";
-    ctx.lineWidth = 1;
-    for (let db = minDb; db <= maxDb; db += 10) {
-      const y = yOf(db);
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
-      ctx.stroke();
-      ctx.fillText(`${db}dB`, 4, y - 2);
-    }
-    for (const f of LABEL_FREQS) {
-      if (f < minHz || f > maxHz) continue;
-      const x = xOf(f);
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
-      ctx.stroke();
-      ctx.fillText(f >= 1000 ? `${f / 1000}k` : `${f}`, x + 2, height - 4);
-    }
-
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(area.left, area.top, area.right - area.left, area.bottom - area.top);
+    ctx.clip();
     for (const s of series) {
       const { frequenciesHz, magnitudeDb } = s.spectrum;
       ctx.strokeStyle = s.color;
@@ -122,21 +108,25 @@ export function Spectrum({ series, width = 800, height = 260, minHz = 20, maxHz 
       ctx.strokeStyle = "#191a10";
       ctx.globalAlpha = 0.4;
       ctx.beginPath();
-      ctx.moveTo(xOf(hoverHz), 0);
-      ctx.lineTo(xOf(hoverHz), height);
+      ctx.moveTo(xOf(hoverHz), area.top);
+      ctx.lineTo(xOf(hoverHz), area.bottom);
       ctx.stroke();
       ctx.globalAlpha = 1;
     }
-  }, [series, width, height, minDb, maxDb, logMin, logMax, minHz, maxHz, hoverHz]);
+    ctx.restore();
+  }, [series, width, height, minDb, maxDb, minHz, maxHz, hoverHz]);
 
   const handleMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const fraction = (e.clientX - rect.left) / rect.width;
+    const area = plotArea(width, height);
+    const x = ((e.clientX - rect.left) / (rect.width || 1)) * width;
+    if (x < area.left || x > area.right) return setHoverHz(null);
+    const fraction = (x - area.left) / (area.right - area.left);
     setHoverHz(10 ** (logMin + fraction * (logMax - logMin)));
   };
 
   return (
-    <div>
+    <div className="plot-stack">
       <div className="spectrum-readout" aria-live="off">
         {hoverHz === null ? (
           <span>그래프 위에 커서를 올리면 그 주파수의 레벨을 보여줍니다.</span>
@@ -151,16 +141,15 @@ export function Spectrum({ series, width = 800, height = 260, minHz = 20, maxHz 
           </>
         )}
       </div>
-      <canvas
-        ref={canvasRef}
-        width={width}
-        height={height}
-        style={{ width: "100%", display: "block" }}
-        onMouseMove={handleMove}
-        onMouseLeave={() => setHoverHz(null)}
-        role="img"
-        aria-label={`스펙트럼: ${series.map((s) => s.label).join(", ")}`}
-      />
+      <div ref={ref} className="plot-box" style={fixedHeight ? { height: fixedHeight, minHeight: 0 } : undefined}>
+        <canvas
+          ref={canvasRef}
+          onMouseMove={handleMove}
+          onMouseLeave={() => setHoverHz(null)}
+          role="img"
+          aria-label={`스펙트럼: ${series.map((s) => s.label).join(", ")}`}
+        />
+      </div>
     </div>
   );
 }

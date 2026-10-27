@@ -34,8 +34,10 @@ export function FrequencyResponseTab({ status, error, points, probeSeries = [], 
   }
   if (probeSeries.length === 0) {
     return (
-      <div className="canvas-frame">
-        <FrequencyResponse points={points} band={band ?? undefined} />
+      <div className="dock-fill">
+        <div className="canvas-frame plot-frame">
+          <FrequencyResponse points={points} band={band ?? undefined} />
+        </div>
       </div>
     );
   }
@@ -46,9 +48,9 @@ export function FrequencyResponseTab({ status, error, points, probeSeries = [], 
     series.push({ label: `출력 (${outputNode})`, points, color: OUTPUT_COLOR });
   }
   return (
-    <div>
+    <div className="dock-fill">
       <SeriesLegend series={series} />
-      <div className="canvas-frame">
+      <div className="canvas-frame plot-frame">
         <FrequencyResponse points={[]} series={series} />
       </div>
       {band && <p className="preset-description">부품 공차 범위(음영)는 프로브가 없을 때 출력 곡선에만 표시됩니다.</p>}

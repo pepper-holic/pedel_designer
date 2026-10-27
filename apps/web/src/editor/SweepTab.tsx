@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { logFrequencySweep } from "../core/solver/ac";
+import { SeriesLegend } from "../viz/SeriesLegend";
 import { FrequencyResponse, type ResponseSeries } from "../viz/FrequencyResponse";
 import { sweepCandidates, sweepParameter } from "./paramSweep";
 import type { PartInstance, Wire } from "./types";
@@ -54,11 +55,10 @@ export function SweepTab({ parts, wires, outputNode }: SweepTabProps) {
   }
 
   return (
-    <div>
-      <div className="field">
-        <div className="field-row">
-          <label htmlFor="sweep-target-select">스윕할 컨트롤</label>
-        </div>
+    <div className="dock-fill">
+      {/* Control picker and colour key share one line, leaving the height to the plot. */}
+      <div className="plot-toolbar">
+        <label htmlFor="sweep-target-select">스윕할 컨트롤</label>
         <select id="sweep-target-select" value={target?.partId ?? ""} onChange={(e) => setSelectedId(e.target.value)}>
           {candidates.map((c) => (
             <option key={c.partId} value={c.partId}>
@@ -66,24 +66,15 @@ export function SweepTab({ parts, wires, outputNode }: SweepTabProps) {
             </option>
           ))}
         </select>
+        {series.length > 0 && <SeriesLegend series={series} />}
       </div>
 
       {series.length === 0 ? (
         <p className="preset-description">이 컨트롤로는 응답을 계산할 수 없습니다. 배선과 출력 노드를 확인하세요.</p>
       ) : (
-        <>
-          <div className="sweep-legend">
-            {series.map((s) => (
-              <span key={s.label} className="sweep-legend-item">
-                <span className="sweep-legend-swatch" style={{ background: s.color }} />
-                {s.label}
-              </span>
-            ))}
-          </div>
-          <div className="canvas-frame">
-            <FrequencyResponse points={[]} series={series} />
-          </div>
-        </>
+        <div className="canvas-frame plot-frame">
+          <FrequencyResponse points={[]} series={series} />
+        </div>
       )}
     </div>
   );

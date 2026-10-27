@@ -56,33 +56,37 @@ export function SpectrumTab({ traces, sampleRate, probes, outputNode, inputNet }
   }
 
   return (
-    <div>
-      <div className="field-row" style={{ marginBottom: 6 }}>
+    <div className="dock-fill">
+      <div className="plot-toolbar">
         <SeriesLegend series={series} />
         <label>
           <input type="checkbox" checked={showInput} onChange={(e) => setShowInput(e.target.checked)} /> 입력 신호 겹쳐 보기
         </label>
       </div>
-      <div className="canvas-frame">
-        <Spectrum series={series} />
-      </div>
-      <table className="spectrum-peaks">
-        <caption>주요 피크 (큰 순서)</caption>
-        <tbody>
-          {series.map((s) => (
-            <tr key={s.label}>
-              <th scope="row" style={{ color: s.color }}>
-                {s.label}
-              </th>
-              {findSpectrumPeaks(s.spectrum, PEAKS_PER_SERIES).map((p) => (
-                <td key={p.frequencyHz}>
-                  {formatHz(p.frequencyHz)}Hz <span>{p.magnitudeDb.toFixed(1)}dB</span>
+      {/* Plot and peak list side by side when there is room, so the list does not eat the plot's
+          height; stacked on a narrow screen. */}
+      <div className="spectrum-body">
+        <div className="canvas-frame plot-frame">
+          <Spectrum series={series} />
+        </div>
+        <table className="spectrum-peaks">
+          <caption>주요 피크 (큰 순서)</caption>
+          <tbody>
+            {series.map((s) => (
+              <tr key={s.label}>
+                <th scope="row" style={{ color: s.color }}>
+                  {s.label}
+                </th>
+                <td>
+                  {findSpectrumPeaks(s.spectrum, PEAKS_PER_SERIES)
+                    .map((p) => `${formatHz(p.frequencyHz)}Hz ${p.magnitudeDb.toFixed(1)}dB`)
+                    .join(" · ")}
                 </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

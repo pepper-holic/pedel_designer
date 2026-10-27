@@ -12,7 +12,6 @@ import { Knob } from "./Knob";
 import type { PlayerControl, PlayerSection } from "./playerControls";
 
 const OUTPUT_COLOR = "#191a10";
-const PLOT_WIDTH = 420;
 const PLOT_HEIGHT = 170;
 
 export interface PlayerViewProps {
@@ -142,7 +141,7 @@ export function PlayerView(props: PlayerViewProps) {
         <div className="panel">
           <div className="panel-title">주파수 응답 (소신호)</div>
           {props.response.length > 0 ? (
-            <FrequencyResponse points={props.response} width={PLOT_WIDTH} height={PLOT_HEIGHT} />
+            <FrequencyResponse points={props.response} height={PLOT_HEIGHT} />
           ) : (
             <p className="canvas-hint">출력 노드를 정하면 응답 곡선이 나타납니다.</p>
           )}
@@ -150,7 +149,7 @@ export function PlayerView(props: PlayerViewProps) {
         <div className="panel">
           <div className="panel-title">출력 스펙트럼 {realtime.active ? "(실시간)" : preview.lastClip ? "(마지막 미리듣기)" : ""}</div>
           {spectrum ? (
-            <Spectrum series={[{ label: "출력", spectrum, color: OUTPUT_COLOR }]} width={PLOT_WIDTH} height={PLOT_HEIGHT} rangeDb={80} />
+            <Spectrum series={[{ label: "출력", spectrum, color: OUTPUT_COLOR }]} height={PLOT_HEIGHT} rangeDb={80} />
           ) : (
             <p className="canvas-hint">풋스위치를 밟거나 노브를 돌리면 지금 들리는 소리의 스펙트럼이 나타납니다.</p>
           )}

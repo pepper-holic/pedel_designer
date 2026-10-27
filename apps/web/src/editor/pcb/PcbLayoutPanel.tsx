@@ -7,10 +7,9 @@ import { drawPcb, pcbSvg, PCB_MARGIN, type PcbView } from "./pcbDrawing";
 import { DEFAULT_RULES, type PcbLayout } from "./pcbTypes";
 import { buildKicadPcb } from "./kicadPcb";
 import { generatePcbAsync } from "./generatePcbAsync";
-import { ShapeSvg } from "./ShapeSvg";
+import { BoardViewport, ZoomControls } from "./BoardViewport";
+import { useDock } from "../dockContext";
 
-/** Screen pixels per millimetre. */
-const SCALE = 6;
 
 const VIEWS: { id: PcbView; label: string }[] = [
   { id: "top", label: "위에서 보기" },
@@ -42,6 +41,8 @@ function download(name: string, text: string, type: string) {
  */
 export function PcbLayoutPanel({ parts, graph, outputNode, onBoardSize }: PcbLayoutPanelProps) {
   const board = useMemo(() => buildBoardNetlist(parts, graph, outputNode), [parts, graph, outputNode]);
+  const dock = useDock();
+  const [zoom, setZoom] = useState(1);
   const [singleSided, setSingleSided] = useState(true);
   const [layout, setLayout] = useState<PcbLayout | null>(null);
   const [busy, setBusy] = useState(false);
@@ -60,6 +61,7 @@ export function PcbLayoutPanel({ parts, graph, outputNode, onBoardSize }: PcbLay
       if (id === run.current) {
         setLayout(result);
         onBoardSize?.(result.width, result.height);
+        dock.expand();
       }
     } catch (err) {
       if (id === run.current) setError(err instanceof Error ? err.message : "알 수 없는 오류");
@@ -124,22 +126,23 @@ export function PcbLayoutPanel({ parts, graph, outputNode, onBoardSize }: PcbLay
                   ))}
                 </ul>
               )}
-              <div className="view-toggle" role="group" aria-label="PCB 보기">
-                {views.map((v) => (
-                  <button key={v.id} type="button" aria-pressed={shownView === v.id} onClick={() => setView(v.id)}>
-                    {v.label}
-                  </button>
-                ))}
+              <div className="run-row">
+                <div className="view-toggle" role="group" aria-label="PCB 보기">
+                  {views.map((v) => (
+                    <button key={v.id} type="button" aria-pressed={shownView === v.id} onClick={() => setView(v.id)}>
+                      {v.label}
+                    </button>
+                  ))}
+                </div>
+                <ZoomControls zoom={zoom} onZoom={setZoom} label="PCB" />
               </div>
-              <div className="stripboard-scroll">
-                <ShapeSvg
-                  shapes={drawPcb(layout, board, shownView)}
-                  width={layout.width + PCB_MARGIN * 2}
-                  height={layout.height + PCB_MARGIN * 2}
-                  scale={SCALE}
-                  label={`PCB ${VIEWS.find((v) => v.id === shownView)!.label}`}
-                />
-              </div>
+              <BoardViewport
+                zoom={zoom}
+                shapes={drawPcb(layout, board, shownView)}
+                width={layout.width + PCB_MARGIN * 2}
+                height={layout.height + PCB_MARGIN * 2}
+                label={`PCB ${VIEWS.find((v) => v.id === shownView)!.label}`}
+              />
               {layout.links.length > 0 && (
                 <p className="canvas-hint">점선은 부품면에 납땜하는 점퍼 와이어입니다 (단면 기판에서 배선하지 못한 연결).</p>
               )}

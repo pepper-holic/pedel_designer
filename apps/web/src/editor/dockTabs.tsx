@@ -90,6 +90,7 @@ export function buildDockTabs({
     content: (
       <WaveformTab
         traces={audio.waveTraces}
+        durationSeconds={audio.sample ? audio.sample.samples.length / audio.sample.sampleRate : undefined}
         probes={probes}
         onPlay={audio.handlePlay}
         onCompare={audio.handleCompare}
