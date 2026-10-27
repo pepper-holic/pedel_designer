@@ -6,30 +6,33 @@ export interface ParamMeta {
   min?: number;
   /** When set, renders as a <input type="range"> slider (min..max) instead of a text input. */
   slider?: { max: number; step: number };
+  /** A device-model detail (Is, hFE, GBWP...) - folded under "세부 파라미터", since picking a model
+   * sets these and few users want to type them. */
+  advanced?: boolean;
 }
 
 export const PARAM_META: Record<string, ParamMeta> = {
   resistance: { label: "저항값", unit: "Ω", min: 0.001 },
-  seriesResistance: { label: "직렬 저항", unit: "Ω", min: 0 },
+  seriesResistance: { label: "직렬 저항", unit: "Ω", min: 0, advanced: true },
   capacitance: { label: "커패시턴스", unit: "F", min: 1e-15 },
   inductance: { label: "인덕턴스", unit: "H", min: 1e-9 },
   inductanceA: { label: "1차 인덕턴스", unit: "H", min: 1e-9 },
   inductanceB: { label: "2차 인덕턴스", unit: "H", min: 1e-9 },
   coupling: { label: "결합 계수 k", min: 0, slider: { max: 1, step: 0.01 } },
-  dcResistance: { label: "코일 DC 저항", unit: "Ω", min: 1 },
-  selfCapacitance: { label: "코일 자기용량", unit: "F", min: 1e-15 },
+  dcResistance: { label: "코일 DC 저항", unit: "Ω", min: 1, advanced: true },
+  selfCapacitance: { label: "코일 자기용량", unit: "F", min: 1e-15, advanced: true },
   voltage: { label: "전압", unit: "V" },
   position: { label: "포텐셔미터 위치", unit: "", min: 0, slider: { max: 1, step: 0.01 } },
-  openLoopGain: { label: "개루프 이득", unit: "", min: 1 },
-  gbwpHz: { label: "이득대역폭곱 (GBWP)", unit: "Hz", min: 0 },
-  slewRateVPerUs: { label: "슬루레이트", unit: "V/us", min: 0 },
-  railPositive: { label: "양(+) 레일 전압", unit: "V" },
-  railNegative: { label: "음(-) 레일 전압", unit: "V" },
-  saturationCurrent: { label: "포화 전류 (Is)", unit: "A", min: 0 },
-  thermalVoltage: { label: "열전압 (Vt)", unit: "V", min: 0 },
-  emissionCoefficient: { label: "방출 계수 (N)", unit: "", min: 0.1 },
-  forwardBeta: { label: "순방향 전류 이득 (hFE)", unit: "", min: 0 },
-  reverseBeta: { label: "역방향 전류 이득", unit: "", min: 0 },
-  idss: { label: "포화 드레인 전류 (Idss)", unit: "A", min: 0 },
-  pinchOffVoltage: { label: "핀치오프 전압", unit: "V" },
+  openLoopGain: { label: "개루프 이득", unit: "", min: 1, advanced: true },
+  gbwpHz: { label: "이득대역폭곱 (GBWP)", unit: "Hz", min: 0, advanced: true },
+  slewRateVPerUs: { label: "슬루레이트", unit: "V/us", min: 0, advanced: true },
+  railPositive: { label: "양(+) 레일 전압", unit: "V", advanced: true },
+  railNegative: { label: "음(-) 레일 전압", unit: "V", advanced: true },
+  saturationCurrent: { label: "포화 전류 (Is)", unit: "A", min: 0, advanced: true },
+  thermalVoltage: { label: "열전압 (Vt)", unit: "V", min: 0, advanced: true },
+  emissionCoefficient: { label: "방출 계수 (N)", unit: "", min: 0.1, advanced: true },
+  forwardBeta: { label: "순방향 전류 이득 (hFE)", unit: "", min: 0, advanced: true },
+  reverseBeta: { label: "역방향 전류 이득", unit: "", min: 0, advanced: true },
+  idss: { label: "포화 드레인 전류 (Idss)", unit: "A", min: 0, advanced: true },
+  pinchOffVoltage: { label: "핀치오프 전압", unit: "V", advanced: true },
 };

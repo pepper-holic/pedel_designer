@@ -60,7 +60,15 @@ export function TransportBar(props: TransportBarProps) {
           {props.source?.kind === "file" && <option value={sourceValue}>{props.source.label}</option>}
           <option value={FILE_OPTION}>오디오 파일 열기…</option>
         </select>
-        <input ref={fileInput} type="file" accept="audio/*" onChange={props.onFileChange} className="visually-hidden" aria-label="오디오 파일 선택" tabIndex={-1} />
+        <input
+          ref={fileInput}
+          type="file"
+          accept="audio/*"
+          onChange={props.onFileChange}
+          className="visually-hidden"
+          aria-label="오디오 파일 선택"
+          tabIndex={-1}
+        />
         <input
           id="input-gain-slider"
           type="range"
@@ -91,11 +99,16 @@ export function TransportBar(props: TransportBarProps) {
           {realtime.active ? "■ 실시간 정지" : "▶ 실시간 재생"}
         </button>
         {realtime.active && load !== null && (
-          <span className={`transport-value${realtime.stats!.load > 0.8 ? " transport-warn" : ""}`} title="회로 계산에 드는 시간 / 재생 시간 - 100%를 넘으면 소리가 끊깁니다">
+          <span
+            className={`transport-value${realtime.stats!.load > 0.8 ? " transport-warn" : ""}`}
+            title="회로 계산에 드는 시간 / 재생 시간 - 100%를 넘으면 소리가 끊깁니다"
+          >
             부하 {load}%
           </span>
         )}
-        {realtime.active && realtime.stats && realtime.stats.nonConvergent > 0 && <span className="transport-warn">수렴 실패 {realtime.stats.nonConvergent}</span>}
+        {realtime.active && realtime.stats && realtime.stats.nonConvergent > 0 && (
+          <span className="transport-warn">수렴 실패 {realtime.stats.nonConvergent}</span>
+        )}
         <label className="transport-check" title="실시간 재생이 꺼져 있을 때, 노브나 값을 바꾸고 손을 떼면 0.6초 미리듣기를 들려줍니다">
           <input type="checkbox" checked={preview.enabled} onChange={(e) => preview.onEnabledChange(e.target.checked)} /> 노브 미리듣기
           {preview.busy ? "…" : ""}

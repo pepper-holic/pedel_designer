@@ -46,3 +46,23 @@
 - 프리셋을 불러오면: 회로도가 화면에 맞춰지고, 회로 요약에 "다음: 2 연주에서 들어보기 / 3 분석" 안내.
 - 어느 단계에서든 ▶ 실시간 재생 → 노브·값을 바꾸면 바로 들림. 분석 단계의 RTA가 같이 움직임.
 - 키보드: 1–4 단계 전환, `?` 단축키 도움말, Space 실시간 재생 켜기/끄기(입력 칸 밖에서).
+
+## 5. 구현 결과 (2026-10-27)
+
+| 항목 | 위치 |
+|---|---|
+| 앱 바 (회로 이름 · 단계 탭 1–4 · ↶↷ · 파일 메뉴 · ?) | `src/editor/shell/AppBar.tsx` |
+| 트랜스포트 바 (입력 신호/파일 · 레벨 · ▶ 실시간 · 미리듣기 · 듣는 지점 · 캐비닛 · 상태) | `src/editor/shell/TransportBar.tsx` |
+| 설계: 라이브러리 탭(프리셋/블록/부품) · 캔버스 · 회로 요약/인스펙터 · 접히는 빠른 분석(주파수 응답·노브 스윕) | `shell/LibraryPanel.tsx`, `shell/CircuitSummary.tsx`, `EditorSidebarRight.tsx`, `BottomDock.tsx`(collapsible) |
+| 빈 회로의 시작 카드 / 회로 없는 단계의 "설계로 가기" | `shell/StartCards.tsx`, `shell/EmptyStep.tsx` |
+| 연주: 입력 패널 중복 제거 (트랜스포트로) | `player/PlayerView.tsx` |
+| 분석: 왼쪽 회로도+프로브, 오른쪽 전체 높이 분석 탭, 실행 버튼 · 결과가 오래됐는지 표시 · 정밀 적분 | `shell/AnalyzeWorkspace.tsx` |
+| 제작: 단계 목록(부품 목록 → 스트립보드 → PCB → KiCad → 인클로저) + 전체 높이 작업 영역 | `shell/BuildWorkspace.tsx` (옛 `PcbTab` 대체) |
+| 단축키 도움말 오버레이 (캔버스 위 단축키 문단 제거) | `shell/ShortcutHelp.tsx` |
+| 인스펙터: 일상 값 → 모델 선택 → 접힌 "세부 파라미터"(Is·hFE·GBWP…) → 배치·제작 | `InspectorPanel.tsx`, `paramMeta.ts`(`advanced`) |
+
+흐름 보완:
+- 입력 신호를 고르지 않고 "시뮬레이션 실행"을 눌러도 코드 신호로 바로 실행 (실시간 재생과 같은 기본값).
+- 단계·분석 탭·빠른 분석 접힘 상태는 다시 열어도 유지 (localStorage).
+- 키: 1–4 단계, Space 실시간 재생, ? 도움말 — 입력 칸·버튼·슬라이더에 포커스가 있을 땐 그 컨트롤의 키로 남김.
+- 삭제: `EditorToolbar`, `PartsSidebar`, `OutputAudioPanel`, `pcb/PcbTab`, 앱의 옛 메뉴바·"준비됨" 상태바.

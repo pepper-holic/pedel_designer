@@ -170,7 +170,10 @@ export function SchematicEditor() {
   };
 
   const handleAddPart = (type: PartType, paramsOverride?: Record<string, number | string>) => {
-    const id = nextFreeId(type, parts.map((p) => p.id));
+    const id = nextFreeId(
+      type,
+      parts.map((p) => p.id),
+    );
     // Fresh parts fill a loose grid in order of arrival, so a burst of clicks does not stack them.
     const slot = parts.filter((p) => !p.blockId).length;
     const x = snapToGrid(80 + (slot % 6) * 130);
@@ -191,8 +194,7 @@ export function SchematicEditor() {
     setStatus(pinned > 0 ? `자동 정렬했습니다. 직접 옮긴 부품 ${pinned}개는 그 자리에 두었습니다.` : "자동 정렬했습니다.");
   };
 
-  const handleResetWire = (wireId: string) =>
-    commit({ ...history.present, wires: wires.map((w) => (w.id === wireId ? { id: w.id, a: w.a, b: w.b } : w)) });
+  const handleResetWire = (wireId: string) => commit({ ...history.present, wires: wires.map((w) => (w.id === wireId ? { id: w.id, a: w.a, b: w.b } : w)) });
 
   const handlePatchPart = (partId: string, patch: PartPatch) =>
     commit({ ...history.present, parts: parts.map((p) => (p.id === partId ? { ...p, ...patch } : p)) });

@@ -160,11 +160,23 @@ export function BottomDock({ tabs, storageKey = DEFAULT_KEY, collapsible = false
         }}
       />
       <div className="dock-actions">
-        <button type="button" className="dock-expand" aria-pressed={expanded} onClick={() => setExpanded((v) => !v)} title="분석 패널을 크게 보기 / 원래 크기로">
+        <button
+          type="button"
+          className="dock-expand"
+          aria-pressed={expanded}
+          onClick={() => setExpanded((v) => !v)}
+          title="분석 패널을 크게 보기 / 원래 크기로"
+        >
           {expanded ? "▾ 원래 크기" : "▴ 크게 보기"}
         </button>
         {collapsible && (
-          <button type="button" className="dock-expand" aria-expanded={true} onClick={() => setCollapsed(true)} title="탭 줄만 남기고 접어 회로도를 넓게 봅니다">
+          <button
+            type="button"
+            className="dock-expand"
+            aria-expanded={true}
+            onClick={() => setCollapsed(true)}
+            title="탭 줄만 남기고 접어 회로도를 넓게 봅니다"
+          >
             ▾ 접기
           </button>
         )}

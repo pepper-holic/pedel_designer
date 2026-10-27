@@ -245,7 +245,7 @@
   min-height: 0;
 }
 
-.library-panel {
+.panel.library-panel {
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -763,7 +763,7 @@ kbd {
   flex-direction: column;
 }
 
-.bottom-dock-collapsed {
+.panel.bottom-dock-collapsed {
   height: auto;
   padding: 0;
 }
@@ -2156,4 +2156,27 @@ select {
   padding: 2px 8px;
   font-size: 0.72rem;
   z-index: 1;
+}
+
+/* ---- Inspector: everyday values first, model details folded, placement last ---- */
+.inspector-section,
+.inspector-group {
+  margin: 10px 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.inspector-section > summary {
+  cursor: pointer;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.inspector-group-title {
+  margin-bottom: 6px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
 }

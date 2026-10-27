@@ -237,8 +237,7 @@ describe("SchematicEditor", () => {
       Array.from(canvasPanel.querySelector(`g[data-part-id="${partId}"]`)!.querySelectorAll<SVGCircleElement>("circle")).filter(
         (c) => c.getAttribute("r") === "4",
       );
-    const idsOnCanvas = () =>
-      Array.from(canvasPanel.querySelectorAll("g[data-part-id]")).map((g) => g.getAttribute("data-part-id")!);
+    const idsOnCanvas = () => Array.from(canvasPanel.querySelectorAll("g[data-part-id]")).map((g) => g.getAttribute("data-part-id")!);
 
     // Start one wire, then throw the whole circuit away before finishing it.
     await showTab(user, "부품");
@@ -280,11 +279,9 @@ describe("SchematicEditor", () => {
 });
 
 describe("SchematicEditor keyboard navigation", () => {
-  const transformOf = (canvasPanel: HTMLElement, id: string) =>
-    canvasPanel.querySelector(`g[data-part-id="${id}"]`)!.getAttribute("transform")!;
+  const transformOf = (canvasPanel: HTMLElement, id: string) => canvasPanel.querySelector(`g[data-part-id="${id}"]`)!.getAttribute("transform")!;
 
-  const idsOnCanvas = (canvasPanel: HTMLElement) =>
-    Array.from(canvasPanel.querySelectorAll("g[data-part-id]")).map((g) => g.getAttribute("data-part-id")!);
+  const idsOnCanvas = (canvasPanel: HTMLElement) => Array.from(canvasPanel.querySelectorAll("g[data-part-id]")).map((g) => g.getAttribute("data-part-id")!);
 
   it("moves the selected part with the arrow keys", async () => {
     const user = userEvent.setup();

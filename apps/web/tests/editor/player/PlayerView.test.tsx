@@ -42,7 +42,8 @@ describe("Knob", () => {
 });
 
 /** The app bar's work-step buttons. */
-const step = (name: "설계" | "연주" | "분석" | "제작") => within(screen.getByRole("navigation", { name: "작업 단계" })).getByRole("button", { name: new RegExp(name) });
+const step = (name: "설계" | "연주" | "분석" | "제작") =>
+  within(screen.getByRole("navigation", { name: "작업 단계" })).getByRole("button", { name: new RegExp(name) });
 
 describe("player view", () => {
   it("shows a loaded preset's knobs, and turning one changes the circuit", async () => {

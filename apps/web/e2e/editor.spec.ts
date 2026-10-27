@@ -20,7 +20,10 @@ const partsOnCanvas = (page: Page) => page.locator("g[data-part-id]");
 
 /** Switches work step from the app bar. */
 const step = (page: Page, name: "설계" | "연주" | "분석" | "제작") =>
-  page.getByRole("navigation", { name: "작업 단계" }).getByRole("button", { name: new RegExp(name) }).click();
+  page
+    .getByRole("navigation", { name: "작업 단계" })
+    .getByRole("button", { name: new RegExp(name) })
+    .click();
 
 /** Picks a built-in input signal in the transport bar. */
 const useSignal = (page: Page, id: "note" | "chord" | "sweep" | "impulse") => page.locator("#transport-input").selectOption(`signal:${id}`);
@@ -112,10 +115,7 @@ test("exports a KiCad netlist for the loaded circuit", async ({ page }) => {
   await buildStep(page, "KiCad 넷리스트");
 
   // The downloaded file is the deliverable, so the test reads it rather than trusting the button.
-  const [download] = await Promise.all([
-    page.waitForEvent("download"),
-    page.getByRole("button", { name: ".net 파일 다운로드" }).click(),
-  ]);
+  const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: ".net 파일 다운로드" }).click()]);
   const stream = await download.createReadStream();
   const netlist = await new Promise<string>((resolve, reject) => {
     let text = "";

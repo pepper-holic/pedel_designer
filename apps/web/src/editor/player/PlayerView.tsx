@@ -62,7 +62,11 @@ export function PlayerView(props: PlayerViewProps) {
   const { realtime, preview, sections } = props;
   // The live analyzer takes over while anything plays; between times the last preview clip stays up.
   const lastClip = preview.lastClip;
-  const series = useMemo((): AnalyzerSeries[] => (lastClip ? [{ label: "마지막 미리듣기", spectrum: computeSpectrum(lastClip.samples, lastClip.sampleRate, { fftSize: 16384 }), color: OUTPUT_COLOR }] : []), [lastClip]);
+  const series = useMemo(
+    (): AnalyzerSeries[] =>
+      lastClip ? [{ label: "마지막 미리듣기", spectrum: computeSpectrum(lastClip.samples, lastClip.sampleRate, { fftSize: 16384 }), color: OUTPUT_COLOR }] : [],
+    [lastClip],
+  );
   const load = realtime.stats ? Math.round(realtime.stats.load * 100) : null;
 
   return (

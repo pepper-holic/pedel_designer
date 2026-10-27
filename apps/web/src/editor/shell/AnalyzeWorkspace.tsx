@@ -74,7 +74,13 @@ export function AnalyzeWorkspace({ canvas, probePanel, tabs, run }: AnalyzeWorks
             ))}
           </div>
           <div className="analysis-run">
-            <button type="button" className="primary" onClick={run.onRun} disabled={!run.canRun} title={run.blocker ?? "입력 신호를 회로에 통과시켜 모든 지점의 파형을 계산합니다"}>
+            <button
+              type="button"
+              className="primary"
+              onClick={run.onRun}
+              disabled={!run.canRun}
+              title={run.blocker ?? "입력 신호를 회로에 통과시켜 모든 지점의 파형을 계산합니다"}
+            >
               {run.running ? "계산 중…" : run.hasResult ? "▶ 다시 실행" : "▶ 시뮬레이션 실행"}
             </button>
             <span className="analysis-run-info">
@@ -89,12 +95,21 @@ export function AnalyzeWorkspace({ canvas, probePanel, tabs, run }: AnalyzeWorks
                   `입력: ${run.sourceLabel ?? "-"} · 파형·스펙트럼·THD에 쓰입니다`
                 ))}
             </span>
-            <label className="analysis-option" title="기본값(backward Euler)은 어떤 회로에도 안정적입니다. 켜면 고음역이 더 정확하지만 피드백이 강한 회로에서는 진동이 생길 수 있습니다.">
+            <label
+              className="analysis-option"
+              title="기본값(backward Euler)은 어떤 회로에도 안정적입니다. 켜면 고음역이 더 정확하지만 피드백이 강한 회로에서는 진동이 생길 수 있습니다."
+            >
               <input type="checkbox" checked={run.useTrapezoidal} onChange={(e) => run.onUseTrapezoidalChange(e.target.checked)} /> 정밀 적분
             </label>
           </div>
         </div>
-        <div className="analysis-body" role="tabpanel" id="analysis-tab-panel" aria-labelledby={active ? `analysis-tab-${active.key}` : undefined} data-fit-container>
+        <div
+          className="analysis-body"
+          role="tabpanel"
+          id="analysis-tab-panel"
+          aria-labelledby={active ? `analysis-tab-${active.key}` : undefined}
+          data-fit-container
+        >
           {active?.content}
         </div>
       </section>

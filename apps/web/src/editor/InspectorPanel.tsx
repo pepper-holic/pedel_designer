@@ -55,6 +55,59 @@ export function InspectorPanel({
   const ownerBlock = selectedPart?.blockId ? (blocks.find((b) => b.id === selectedPart.blockId) ?? null) : null;
   const modelMenu = selectedPart ? MODEL_MENUS[selectedPart.type] : undefined;
   const switchPositions = selectedPart ? SWITCH_POSITION_LABELS[selectedPart.type] : undefined;
+  const shownParams = selectedPart
+    ? Object.entries(selectedPart.params)
+        .filter(([key]) => !(selectedPart.type === "potentiometer" && key === "taper"))
+        .filter(([key]) => !(switchPositions && key === "switchPosition"))
+    : [];
+  const primaryParams = shownParams.filter(([key]) => !PARAM_META[key]?.advanced);
+  const advancedParams = shownParams.filter(([key]) => PARAM_META[key]?.advanced);
+
+  const renderParam = (key: string, value: number | string) => {
+    const meta = PARAM_META[key];
+    const isInvalid = typeof value === "number" && meta?.min !== undefined && value < meta.min;
+
+    if (meta?.slider && typeof value === "number") {
+      return (
+        <div className="field" key={key}>
+          <div className="field-row">
+            <label>{meta?.label ?? key}</label>
+            <span className="field-value">{value.toFixed(2)}</span>
+          </div>
+          <input
+            type="range"
+            min={meta.min ?? 0}
+            max={meta.slider.max}
+            step={meta.slider.step}
+            value={value}
+            onChange={(e) => onParamChange(key, e.target.value)}
+          />
+        </div>
+      );
+    }
+
+    return (
+      <div className="field" key={key}>
+        <div className="field-row">
+          <label>{meta?.label ?? key}</label>
+          {meta?.unit && <span className="field-value">{meta.unit}</span>}
+        </div>
+        <input
+          type="text"
+          value={String(value)}
+          onChange={(e) => onParamChange(key, e.target.value)}
+          style={{
+            width: "100%",
+            background: "var(--bg-inset)",
+            color: "var(--text)",
+            border: `1px solid ${isInvalid ? "#c0392b" : "var(--border)"}`,
+            borderRadius: 6,
+            padding: 6,
+          }}
+        />
+      </div>
+    );
+  };
 
   return (
     <div className="panel">
@@ -81,14 +134,6 @@ export function InspectorPanel({
           <p className="preset-description">
             {PART_DEFS[selectedPart.type].label} ({selectedPart.id})
           </p>
-          {onPatchPart && (
-            <label className="field-row" title="고정된 부품은 '자동 정렬'이 옮기지 않습니다. 직접 끌어 옮기면 자동으로 고정됩니다.">
-              <span>
-                <input type="checkbox" checked={!!selectedPart.pinned} onChange={() => onPatchPart(selectedPart.id, { pinned: !selectedPart.pinned })} /> 위치 고정 (자동 정렬 제외)
-              </span>
-            </label>
-          )}
-          {onPatchPart && <FootprintField part={selectedPart} onChange={(footprintId) => onPatchPart(selectedPart.id, { footprintId })} />}
           {ownerBlock && (
             <div className="field-row">
               <span className="canvas-hint">소속 블록: {ownerBlock.label}</span>
@@ -102,11 +147,7 @@ export function InspectorPanel({
           {ownerBlock && onExposeParam && (
             <div className="field-row">
               <label htmlFor="expose-param-select">블록 노브로 표시</label>
-              <select
-                id="expose-param-select"
-                value=""
-                onChange={(e) => e.target.value && onExposeParam(ownerBlock.id, selectedPart.id, e.target.value)}
-              >
+              <select id="expose-param-select" value="" onChange={(e) => e.target.value && onExposeParam(ownerBlock.id, selectedPart.id, e.target.value)}>
                 <option value="">파라미터 선택...</option>
                 {Object.entries(selectedPart.params)
                   .filter(([key, v]) => typeof v === "number" && !ownerBlock.params.some((p) => p.partId === selectedPart.id && p.paramKey === key))
@@ -148,9 +189,7 @@ export function InspectorPanel({
               </div>
               <select
                 id="switch-position-select"
-                value={String(
-                  Math.min(Math.max(Math.trunc(Number(selectedPart.params.switchPosition)) || 0, 0), switchPositions.length - 1),
-                )}
+                value={String(Math.min(Math.max(Math.trunc(Number(selectedPart.params.switchPosition)) || 0, 0), switchPositions.length - 1))}
                 onChange={(e) => onParamChange("switchPosition", e.target.value)}
               >
                 {switchPositions.map((label, i) => (
@@ -175,54 +214,26 @@ export function InspectorPanel({
               </select>
             </div>
           )}
-          {Object.entries(selectedPart.params)
-            .filter(([key]) => !(selectedPart.type === "potentiometer" && key === "taper"))
-            .filter(([key]) => !(switchPositions && key === "switchPosition"))
-            .map(([key, value]) => {
-              const meta = PARAM_META[key];
-              const isInvalid = typeof value === "number" && meta?.min !== undefined && value < meta.min;
-
-              if (meta?.slider && typeof value === "number") {
-                return (
-                  <div className="field" key={key}>
-                    <div className="field-row">
-                      <label>{meta?.label ?? key}</label>
-                      <span className="field-value">{value.toFixed(2)}</span>
-                    </div>
-                    <input
-                      type="range"
-                      min={meta.min ?? 0}
-                      max={meta.slider.max}
-                      step={meta.slider.step}
-                      value={value}
-                      onChange={(e) => onParamChange(key, e.target.value)}
-                    />
-                  </div>
-                );
-              }
-
-              return (
-                <div className="field" key={key}>
-                  <div className="field-row">
-                    <label>{meta?.label ?? key}</label>
-                    {meta?.unit && <span className="field-value">{meta.unit}</span>}
-                  </div>
-                  <input
-                    type="text"
-                    value={String(value)}
-                    onChange={(e) => onParamChange(key, e.target.value)}
-                    style={{
-                      width: "100%",
-                      background: "var(--bg-inset)",
-                      color: "var(--text)",
-                      border: `1px solid ${isInvalid ? "#c0392b" : "var(--border)"}`,
-                      borderRadius: 6,
-                      padding: 6,
-                    }}
-                  />
-                </div>
-              );
-            })}
+          {primaryParams.map(([key, value]) => renderParam(key, value))}
+          {advancedParams.length > 0 && (
+            <details className="inspector-section">
+              <summary>세부 파라미터 ({advancedParams.length})</summary>
+              {modelMenu && <p className="canvas-hint">위의 "소자 모델"을 고르면 함께 바뀝니다.</p>}
+              {advancedParams.map(([key, value]) => renderParam(key, value))}
+            </details>
+          )}
+          {onPatchPart && (
+            <div className="inspector-group">
+              <div className="inspector-group-title">배치 · 제작</div>
+              <label className="field-row" title="고정된 부품은 '자동 정렬'이 옮기지 않습니다. 직접 끌어 옮기면 자동으로 고정됩니다.">
+                <span>
+                  <input type="checkbox" checked={!!selectedPart.pinned} onChange={() => onPatchPart(selectedPart.id, { pinned: !selectedPart.pinned })} /> 위치
+                  고정 (자동 정렬 제외)
+                </span>
+              </label>
+              <FootprintField part={selectedPart} onChange={(footprintId) => onPatchPart(selectedPart.id, { footprintId })} />
+            </div>
+          )}
           <div className="run-row">
             <button type="button" onClick={onRotate}>
               회전 (R)
