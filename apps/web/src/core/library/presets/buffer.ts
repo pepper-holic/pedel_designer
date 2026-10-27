@@ -10,6 +10,11 @@ export const bufferPreset: PedalPreset = {
   tapNodes: ["in", "out"],
   outputNode: "out",
   defaultParams: {},
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "buffer", label: "버퍼 (Op-Amp 팔로워)", category: "buffer", elements: ["U1"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "out" }] },
+  ],
   build: () => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

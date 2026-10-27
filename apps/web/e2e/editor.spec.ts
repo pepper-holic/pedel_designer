@@ -160,3 +160,51 @@ test("changing a value plays a short preview of the new sound", async ({ page })
 
   await expect(page.getByText(/미리듣기 재생/)).toBeVisible({ timeout: 15_000 });
 });
+
+test("loads a preset as functional blocks, collapses them to black boxes, and turns a block knob", async ({ page }) => {
+  await loadPreset(page, /Big Muff 스타일/);
+  // Expanded: tinted regions over the parts.
+  await expect(page.locator('g[data-block-id][data-collapsed="false"]')).toHaveCount(5);
+
+  await page.getByRole("button", { name: "블랙박스 보기" }).click();
+  await expect(page.locator('g[data-block-id][data-collapsed="true"]')).toHaveCount(5);
+  // The parts inside are hidden; only the input source stays on the canvas as a part.
+  await expect(page.locator("g[data-part-id]")).toHaveCount(2); // V1 and its ground symbol
+
+  // Selecting the tone box shows its knob; turning it changes the tone (a preview is requested).
+  await page.locator('g[data-block-id="tone"] rect').first().click();
+  const knob = page.getByLabel("TONE 노브", { exact: true });
+  await knob.focus();
+  await page.keyboard.press("End");
+  await expect(page.locator('g[data-block-id="tone"]')).toContainText("TONE 100%");
+
+  // Double-click opens a block back up.
+  await page.locator('g[data-block-id="tone"] rect').first().dblclick();
+  await expect(page.locator('g[data-block-id="tone"][data-collapsed="false"]')).toHaveCount(1);
+});
+
+test("adds library blocks, wires their pins, and groups a selection into a new block", async ({ page }) => {
+  await page.getByRole("button", { name: "템플릿/블록" }).click();
+  await page.getByRole("button", { name: /기능 블록/ }).click();
+  await page.getByRole("button", { name: /출력 볼륨/ }).click();
+  await expect(page.locator('g[data-block-id="blk1"]')).toHaveCount(1);
+  await page.getByRole("button", { name: /접기 \(블랙박스\)/ }).click();
+  await expect(page.locator('g[data-block-id="blk1"][data-collapsed="true"] [data-port-id]')).toHaveCount(2);
+
+  // Group two loose parts with Ctrl+G.
+  await page.getByRole("button", { name: "소자 팔레트" }).click();
+  await page.getByRole("button", { name: "저항", exact: true }).click();
+  await page.getByRole("button", { name: "커패시터", exact: true }).click();
+  const svg = page.locator(".canvas-frame svg");
+  const box = await svg.boundingBox();
+  if (!box) throw new Error("no canvas");
+  await page.keyboard.down("Shift");
+  await page.mouse.move(box.x + 5, box.y + 40);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width - 5, box.y + box.height - 5, { steps: 5 });
+  await page.mouse.up();
+  await page.keyboard.up("Shift");
+  await page.keyboard.press("Control+g");
+  await expect(page.getByText(/블록으로 묶었습니다/)).toBeVisible();
+  await expect(page.getByText("선택된 블록")).toBeVisible();
+});

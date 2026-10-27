@@ -20,6 +20,14 @@ export const activeShelfEqPreset: PedalPreset = {
     inputResistance: 10_000,
     feedbackResistance: 100_000,
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "eq", label: "능동 고음 셸프 EQ", category: "tone", elements: ["Rin", "Rboost", "Cboost", "Rf", "U1"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "out" }] },
+  ],
+  knobs: [
+    { kind: "rheostat", id: "TREBLE", label: "TREBLE", element: "Rboost", maxResistance: 100_000, taper: "B" },
+  ],
   build: (params) => {
     const rBoost = Math.max(params.tone * 100_000, 1);
     return {

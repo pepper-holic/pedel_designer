@@ -18,6 +18,14 @@ export const opampDrivePreset: PedalPreset = {
     inputResistance: 10_000,
     feedbackResistance: 500_000,
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "drive", label: "드라이브 단 (피드백 다이오드)", category: "clipping", elements: ["Rin", "Rf", "D1", "D2", "U1"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "out" }] },
+  ],
+  knobs: [
+    { kind: "rheostat", id: "DRIVE", label: "DRIVE", element: "Rf", maxResistance: 1_000_000, taper: "A" },
+  ],
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

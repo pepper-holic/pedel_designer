@@ -35,6 +35,16 @@ export const ocdStyleOverdrivePreset: PedalPreset = {
     ],
     disclaimer: "대표값 근사치이며 특정 상용 제품의 실측 회로도가 아닙니다.",
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "gain", label: "게인 단 (인버팅)", category: "gain", elements: ["Rin", "Rf", "U1"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "opout" }] },
+    { id: "clip", label: "비대칭 하드 클리핑 (Si+Ge)", category: "clipping", elements: ["Rs", "D1", "D2", "Cbright"], ports: [{ kind: "in", node: "opout" }, { kind: "out", node: "out" }] },
+    { id: "output", label: "출력 커플링", category: "output", elements: ["Cout", "Rload"], ports: [{ kind: "in", node: "out" }, { kind: "out", node: "outAC" }] },
+  ],
+  knobs: [
+    { kind: "rheostat", id: "DRIVE", label: "DRIVE", element: "Rf", maxResistance: 100_000, taper: "B" },
+  ],
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

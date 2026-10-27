@@ -45,6 +45,17 @@ export const klonStyleBlendPreset: PedalPreset = {
     Rblend2: { x: 600, y: 450 },
     Uout: { x: 770, y: 300 },
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "clean", label: "클린 버퍼", category: "buffer", elements: ["Uclean"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "cleanOut" }] },
+    { id: "drive", label: "드라이브 단 (피드백 다이오드)", category: "clipping", elements: ["Rin", "Rf", "D1", "D2", "Udrive"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "driveOut" }] },
+    { id: "blend", label: "블렌드 + 출력 버퍼", category: "output", elements: ["Rblend1", "Rblend2", "Uout"], ports: [{ kind: "in", node: "cleanOut", label: "CLEAN" }, { kind: "aux", node: "driveOut", label: "DRIVE" }, { kind: "out", node: "out" }] },
+  ],
+  knobs: [
+    { kind: "rheostat", id: "GAIN", label: "GAIN", element: "Rf", maxResistance: 400_000, taper: "B" },
+    { kind: "pot", id: "BLEND", label: "BLEND", upper: "Rblend1", lower: "Rblend2", taper: "B" },
+  ],
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

@@ -1,5 +1,5 @@
 import { netlistFromGraph } from "./netlistFromGraph";
-import { graphFromNetlist, findEquivalentNode } from "./graphFromNetlist";
+import { buildAnnotatedCircuit } from "./annotatedCircuit";
 import type { CircuitSnapshot } from "./historyStack";
 import type { PedalPreset, PresetVariant } from "../core/library/presets";
 import type { WiringPreset } from "./wiring";
@@ -27,28 +27,39 @@ function terminalOnNet(net: string, parts: PartInstance[], terminalNet: Map<stri
 }
 
 /**
- * Lays a pedal preset out on the canvas. Variant params override the defaults, which is what makes a
- * preset's non-default topology branch (King of Tone's clipMode, OCD's brightSwitch) reachable at all.
- *
- * Net names are reassigned by the canvas round-trip, so the preset's output node is located again
- * by electrical equivalence rather than by name.
+ * Lays a pedal preset out on the canvas: its functional blocks (input, gain, clipping, tone,
+ * output, power) as labelled groups, its knobs as real potentiometers, and its tap nodes as probes.
+ * Variant params override the defaults, which is what makes a preset's non-default topology branch
+ * (King of Tone's clipMode, OCD's brightSwitch) reachable at all.
  */
 export function loadPedalPreset(preset: PedalPreset, variant?: PresetVariant): LoadedCircuit {
-  const originalNetlist = preset.build({ ...preset.defaultParams, ...(variant?.params ?? {}) });
-  const { parts, wires } = graphFromNetlist(originalNetlist, preset.inputSourceId, preset.layout);
-  const roundTripped = netlistFromGraph(parts, wires);
-  const outputNode = findEquivalentNode(originalNetlist, preset.outputNode, roundTripped.netlist) ?? "";
+  const netlist = preset.build({ ...preset.defaultParams, ...(variant?.params ?? {}) });
+  const built = buildAnnotatedCircuit({
+    netlist,
+    inputSourceId: preset.inputSourceId,
+    layout: preset.layout,
+    blocks: preset.blocks,
+    knobs: preset.knobs,
+    nodesOfInterest: [preset.outputNode, ...preset.tapNodes],
+  });
+  const { terminalNet } = netlistFromGraph(built.parts, built.wires);
+  const netOf = (node: string) => {
+    const ref = built.nodeTerminals.get(node);
+    return ref ? terminalNet.get(`${ref.partId}:${ref.terminalId}`) : undefined;
+  };
 
   let probes: Probe[] = [];
   for (const tap of preset.tapNodes) {
-    const net = findEquivalentNode(originalNetlist, tap, roundTripped.netlist);
-    const terminal = net ? terminalOnNet(net, parts, roundTripped.terminalNet) : null;
+    const ref = built.nodeTerminals.get(tap);
+    const terminal = ref && terminalNet.get(`${ref.partId}:${ref.terminalId}`) ? terminalOnNet(terminalNet.get(`${ref.partId}:${ref.terminalId}`)!, built.parts, terminalNet) : null;
     if (!terminal) continue;
-    const next = toggleProbe(probes, terminal, roundTripped.terminalNet);
+    const next = toggleProbe(probes, terminal, terminalNet);
     // toggleProbe removes on a repeat net - two tap names on one node should just keep the first.
     if (next.length > probes.length) probes = next.map((p, i) => (i === next.length - 1 ? { ...p, label: tap } : p));
   }
-  return { snapshot: { parts, wires, blocks: [] }, outputNode, probes };
+  // Tagged with their preset so the inspector does not present them as hand-grouped.
+  const blocks = built.blocks.map((b) => ({ ...b, defId: `preset:${preset.id}` }));
+  return { snapshot: { parts: built.parts, wires: built.wires, blocks }, outputNode: netOf(preset.outputNode) ?? "", probes };
 }
 
 /** Wiring presets are stored as a part-level snapshot (see wiring/types.ts), so loading one needs no

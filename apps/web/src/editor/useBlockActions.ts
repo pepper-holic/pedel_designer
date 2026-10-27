@@ -55,7 +55,9 @@ export function useBlockActions({ present, commit, selection, onStatus, onKnobCh
     }
   };
 
-  const newBlockId = () => nextFreeId("blk", present.blocks.map((b) => b.id));
+  // Block ids prefix their parts' ids ("blk1_R1"), and parts keep those ids after the block is
+  // ungrouped - so an id is taken while any part still starts with it, not only while the block exists.
+  const newBlockId = () => nextFreeId("blk", [...present.blocks.map((b) => b.id), ...present.parts.map((p) => p.id.split("_")[0])]);
 
   const place = (placed: PlacedBlock, label: string) => {
     commit({ parts: [...present.parts, ...placed.parts], wires: [...present.wires, ...placed.wires], blocks: [...present.blocks, placed.block] });
@@ -72,6 +74,16 @@ export function useBlockActions({ present, commit, selection, onStatus, onKnobCh
     if (!block) return;
     commit(setBlockCollapsed(present, blockId, !block.collapsed));
     selection.selectBlock(blockId);
+  };
+
+  /** Collapses (or expands) every block at once - the whole circuit as a chain of black boxes, or
+   * as its full schematic. */
+  const setAllCollapsed = (collapsed: boolean) => {
+    let next = present;
+    for (const b of present.blocks) next = setBlockCollapsed(next, b.id, collapsed);
+    if (next === present) return;
+    commit(next);
+    setPlacedCount((n) => n + 1); // re-fit: the drawn extent changes a lot either way
   };
 
   const groupSelection = () => {
@@ -142,6 +154,7 @@ export function useBlockActions({ present, commit, selection, onStatus, onKnobCh
     addUserBlock,
     deleteUserBlock,
     toggleCollapse,
+    setAllCollapsed,
     groupSelection,
     ungroup,
     rename,

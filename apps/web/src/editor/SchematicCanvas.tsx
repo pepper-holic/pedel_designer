@@ -42,6 +42,7 @@ interface SchematicCanvasProps {
   /** Selects a whole block (its parts become the selection). */
   onSelectBlock?: (blockId: string) => void;
   onToggleCollapse?: (blockId: string) => void;
+  onSetAllCollapsed?: (collapsed: boolean) => void;
   /** Bump to auto-fit the view to the current parts - the editor changes this whenever the whole
    * circuit is replaced (template load, new circuit) so a freshly loaded preset arrives fully visible. */
   fitSignal?: number;
@@ -84,6 +85,7 @@ export function SchematicCanvas({
   selectedBlockId = null,
   onSelectBlock,
   onToggleCollapse,
+  onSetAllCollapsed,
   fitSignal = 0,
   width = 900,
   height = 460,
@@ -97,6 +99,7 @@ export function SchematicCanvas({
   // frequent gesture, so it keeps the unmodified drag.
   const [selectBox, setSelectBox] = useState<SelectionBox | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const justBoxSelected = useRef(false);
   const endpoints = useMemo(
     () => buildCanvasEndpoints(parts, blocks, terminalNet ? (ref) => terminalNet.get(`${ref.partId}:${ref.terminalId}`) : undefined),
     [parts, blocks, terminalNet],
@@ -185,6 +188,12 @@ export function SchematicCanvas({
 
   const handleBackgroundClick = () => {
     if (panStart?.moved) return; // just finished a pan-drag, not a deselect click
+    // The click that follows a rubber-band drag lands on the background too; without this it would
+    // throw away the selection the drag just made.
+    if (justBoxSelected.current) {
+      justBoxSelected.current = false;
+      return;
+    }
     onSelectPart(null);
     onSelectWire?.(null);
   };
@@ -204,6 +213,7 @@ export function SchematicCanvas({
       for (const p of parts) if (p.blockId === blockId) ids.add(p.id);
     }
     onBoxSelect?.([...ids]);
+    justBoxSelected.current = true;
     setSelectBox(null);
   };
 
@@ -268,6 +278,8 @@ export function SchematicCanvas({
         onProbeModeChange={onProbeModeChange}
         showDc={showDc}
         onShowDcChange={onShowDcChange}
+        blocksCollapsed={blocks.length > 0 && blocks.every((b) => b.collapsed)}
+        onBlocksCollapsedChange={blocks.length > 0 ? onSetAllCollapsed : undefined}
       />
       <svg
         ref={svgRef}

@@ -38,6 +38,13 @@ export const rangemasterStyleTrebleBoostPreset: PedalPreset = {
     ],
     disclaimer: "대표값 근사치이며 특정 상용 제품의 실측 회로도가 아닙니다.",
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "power", label: "전원 (-9V)", category: "power", elements: ["Vcc", "Vdd"], ports: [{ kind: "supply", node: "vcc", label: "-9V" }] },
+    { id: "boost", label: "트레블 부스트 (게르마늄 PNP)", category: "gain", elements: ["Cin", "Rb1", "Rb2", "Q1", "Rc", "Re", "Ce"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "coll" }, { kind: "supply", node: "vcc", label: "-9V" }] },
+    { id: "output", label: "출력 커플링", category: "output", elements: ["Cout", "Rload"], ports: [{ kind: "in", node: "coll" }, { kind: "out", node: "out" }] },
+  ],
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

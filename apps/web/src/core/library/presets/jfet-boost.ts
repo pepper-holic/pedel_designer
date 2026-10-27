@@ -21,6 +21,13 @@ export const jfetBoostPreset: PedalPreset = {
     sourceResistance: 1_000,
     gateResistance: 1_000_000,
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "power", label: "전원 (9V)", category: "power", elements: ["Vcc", "Vdd"], ports: [{ kind: "supply", node: "vdd", label: "9V" }] },
+    { id: "boost", label: "JFET 공통 소스 부스트", category: "gain", elements: ["Cin", "Rg", "Q1", "Rd", "Rs", "Cs"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "drain" }, { kind: "supply", node: "vdd", label: "V+" }] },
+    { id: "output", label: "출력 커플링", category: "output", elements: ["Cout", "Rload"], ports: [{ kind: "in", node: "drain" }, { kind: "out", node: "outAC" }] },
+  ],
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

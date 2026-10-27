@@ -18,6 +18,65 @@ export interface PresetVariant {
   params: Record<string, number>;
 }
 
+/** Functional role of a block - decides its colour and where it sits in the library. */
+export type BlockCategory = "input" | "buffer" | "gain" | "clipping" | "fuzz" | "tone" | "output" | "power" | "load" | "custom";
+
+/** What a block's connection point is for. Decides which side of the collapsed symbol it sits on
+ * (in/aux left, out right, supply/bias top, ground bottom) and how it is labelled. */
+export type PortKind = "in" | "out" | "supply" | "bias" | "ground" | "aux";
+
+/**
+ * A real knob hidden inside a netlist. Netlists only know resistors, so a pot is described as the
+ * two resistors either side of its wiper, or a variable resistor as one resistor and its maximum. On
+ * the canvas these become one potentiometer part the user can turn.
+ */
+export type KnobSpec =
+  | {
+      kind: "pot";
+      /** Part id of the potentiometer on the canvas (e.g. "TONE"). */
+      id: string;
+      label: string;
+      /** Resistor between the pot's "a" lug and the wiper. */
+      upper: string;
+      /** Resistor between the wiper and the "b" lug. Must share exactly one node with `upper`. */
+      lower: string;
+      taper?: "A" | "B" | "C";
+    }
+  | {
+      kind: "rheostat";
+      id: string;
+      label: string;
+      /** The resistor whose value the knob sets; its first node becomes lug "a", its second the wiper. */
+      element: string;
+      maxResistance: number;
+      taper?: "A" | "B" | "C";
+      /** Wire it the other way round, so turning up *lowers* the resistance (e.g. a series tone
+       * control where clockwise should be brighter). */
+      reverse?: boolean;
+    };
+
+export interface PortSpec {
+  kind: PortKind;
+  /** Node of the netlist the port exposes. */
+  node: NodeId;
+  label?: string;
+  id?: string;
+}
+
+/**
+ * One functional block within a netlist: which elements belong to it and where it connects out.
+ * Element ids missing from a particular build (a topology variant that drops them) are ignored, so
+ * one annotation can cover every variant of a preset.
+ */
+export interface BlockAnnotation {
+  id: string;
+  label: string;
+  category: BlockCategory;
+  elements: string[];
+  ports: PortSpec[];
+  collapsed?: boolean;
+}
+
 export interface PedalPreset {
   id: string;
   name: string;
@@ -41,6 +100,14 @@ export interface PedalPreset {
    * (or every element, if the field is omitted) fall back to the automatic layout.
    */
   layout?: Record<string, { x: number; y: number }>;
+  /**
+   * The preset decomposed into functional blocks (input, gain, clipping, tone, output, power...),
+   * so it loads as labelled stages that can be collapsed into black boxes. Every element except the
+   * audio input source belongs to exactly one block (enforced by preset-blocks.test.ts).
+   */
+  blocks?: BlockAnnotation[];
+  /** Resistors that are really knobs on the pedal - loaded as potentiometers the user can turn. */
+  knobs?: KnobSpec[];
   /**
    * Present only for presets re-derived from publicly documented, community DIY circuit topologies
    * (see docs/plan-circuit-archive.md) rather than designed from scratch for this app. Component

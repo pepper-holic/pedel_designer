@@ -13,6 +13,11 @@ export const asymmetricClipperPreset: PedalPreset = {
   defaultParams: {
     seriesResistance: 10_000,
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "clip", label: "비대칭 클리핑 (실리콘+LED)", category: "clipping", elements: ["R1", "D1", "D2"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "out" }] },
+  ],
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

@@ -8,10 +8,25 @@ interface CanvasControlsProps {
   onProbeModeChange?: (on: boolean) => void;
   showDc: boolean;
   onShowDcChange?: (on: boolean) => void;
+  /** Present when the circuit has blocks: collapses/expands all of them. */
+  blocksCollapsed?: boolean;
+  onBlocksCollapsedChange?: (collapsed: boolean) => void;
 }
 
 /** The control strip floating over the canvas: zoom, fit/reset, and the probe/DC view toggles. */
-export function CanvasControls({ zoom, onZoomIn, onZoomOut, onFit, onReset, probeMode, onProbeModeChange, showDc, onShowDcChange }: CanvasControlsProps) {
+export function CanvasControls({
+  zoom,
+  onZoomIn,
+  onZoomOut,
+  onFit,
+  onReset,
+  probeMode,
+  onProbeModeChange,
+  showDc,
+  onShowDcChange,
+  blocksCollapsed,
+  onBlocksCollapsedChange,
+}: CanvasControlsProps) {
   return (
     <div className="canvas-zoom-controls">
       <button type="button" onClick={onZoomIn}>
@@ -36,6 +51,17 @@ export function CanvasControls({ zoom, onZoomIn, onZoomOut, onFit, onReset, prob
           title="켜면 단자나 배선을 클릭해 측정 지점(프로브)을 찍습니다. 같은 노드를 다시 클릭하면 지워집니다. 단축키 P"
         >
           프로브
+        </button>
+      )}
+      {onBlocksCollapsedChange && (
+        <button
+          type="button"
+          className="canvas-tool-toggle"
+          aria-pressed={blocksCollapsed}
+          onClick={() => onBlocksCollapsedChange(!blocksCollapsed)}
+          title="모든 기능 블록을 블랙박스(핀 달린 상자)로 접거나, 세부 회로로 펼칩니다"
+        >
+          블랙박스 보기
         </button>
       )}
       {onShowDcChange && (

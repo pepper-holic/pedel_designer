@@ -22,6 +22,14 @@ export const passiveToneTiltPreset: PedalPreset = {
     tone: 0.5, // 0 = darkest (max series resistance), 1 = brightest (near-zero series resistance)
     shuntCapacitance: 4.7e-9,
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "tone", label: "패시브 톤", category: "tone", elements: ["Rtone", "Cshunt"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "out" }] },
+  ],
+  knobs: [
+    { kind: "rheostat", id: "TONE", label: "TONE", element: "Rtone", maxResistance: 100_000, taper: "B", reverse: true },
+  ],
   build: (params) => {
     const seriesResistance = Math.max(POT_TOTAL * (1 - params.tone), MIN_SERIES);
     return {

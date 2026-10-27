@@ -1,59 +1,12 @@
 import { graphFromNetlist } from "./graphFromNetlist";
 import { PART_DEFS } from "./partDefs";
 import { applyTaper, type TaperType } from "./taper";
+import type { BlockAnnotation, KnobSpec } from "../core/library/types";
 import type { Netlist, NodeId } from "../core/solver/types";
 import { GROUND } from "../core/solver/types";
-import type { BlockCategory, BlockInstance, BlockParam, BlockPort, PartInstance, PortKind, TerminalRef, Wire } from "./types";
+import type { BlockInstance, BlockParam, BlockPort, PartInstance, PortKind, TerminalRef, Wire } from "./types";
 
-/**
- * A real knob hidden inside a netlist. Netlists only know resistors, so presets and blocks describe
- * a pot as the two resistors either side of its wiper, or a variable resistor as one resistor and
- * its maximum. On the canvas these become one potentiometer part the user can turn - which is what
- * lets a black-box block show "DRIVE" and "TONE" instead of "Rf = 500kΩ".
- */
-export type KnobSpec =
-  | {
-      kind: "pot";
-      /** Part id of the potentiometer on the canvas (e.g. "TONE"). */
-      id: string;
-      label: string;
-      /** Resistor between the pot's "a" lug and the wiper. */
-      upper: string;
-      /** Resistor between the wiper and the "b" lug. Must share exactly one node with `upper`. */
-      lower: string;
-      taper?: TaperType;
-    }
-  | {
-      kind: "rheostat";
-      id: string;
-      label: string;
-      /** The resistor whose value the knob sets; its first node becomes lug "a", its second the wiper. */
-      element: string;
-      maxResistance: number;
-      taper?: TaperType;
-      /** Wire it the other way round, so turning up *lowers* the resistance (e.g. a series tone
-       * control where clockwise should be brighter). */
-      reverse?: boolean;
-    };
-
-export interface PortSpec {
-  kind: PortKind;
-  /** Node of the netlist the port exposes. */
-  node: NodeId;
-  label?: string;
-  id?: string;
-}
-
-/** One functional block within a netlist: which elements belong to it and where it connects out. */
-export interface BlockAnnotation {
-  id: string;
-  label: string;
-  category: BlockCategory;
-  /** Netlist element ids (before knob conversion - a converted resistor's knob joins its block). */
-  elements: string[];
-  ports: PortSpec[];
-  collapsed?: boolean;
-}
+export type { KnobSpec, PortSpec, BlockAnnotation } from "../core/library/types";
 
 export interface AnnotatedCircuitInput {
   netlist: Netlist;
@@ -104,12 +57,15 @@ export function buildAnnotatedCircuit(input: AnnotatedCircuitInput): AnnotatedCi
   const elementById = new Map(netlist.elements.map((e) => [e.id, e]));
 
   // --- block membership (ground symbols follow the part they serve) -----------------------------
-  const blockOfElement = new Map<string, string>();
-  for (const b of input.blocks ?? []) for (const id of b.elements) blockOfElement.set(id, b.id);
+  const blockOfElement = new Map<string, BlockAnnotation>();
+  for (const b of input.blocks ?? []) for (const id of b.elements) blockOfElement.set(id, b);
   parts = parts.map((p) => {
     const owner = graph.groundOwners.get(p.id) ?? p.id;
-    const blockId = blockOfElement.get(owner);
-    return blockId ? { ...p, blockId } : p;
+    const block = blockOfElement.get(owner);
+    if (!block) return p;
+    // A source inside a power block is a supply rail, never the audio input.
+    const role = block.category === "power" && p.type === "vsource" && !p.role ? { role: "supply" as const } : {};
+    return { ...p, blockId: block.id, ...role };
   });
 
   // --- a terminal for a node, optionally restricted to a set of parts ----------------------------
@@ -141,7 +97,8 @@ export function buildAnnotatedCircuit(input: AnnotatedCircuitInput): AnnotatedCi
     for (const spec of b.ports) {
       if (spec.node === GROUND) continue;
       const terminal = terminalForNode(spec.node, (id) => members.has(id));
-      if (!terminal) throw new Error(`block ${b.id}: no member terminal on port node "${spec.node}"`);
+      // A variant that drops the elements on this node simply has no such port.
+      if (!terminal) continue;
       const n = (used.get(spec.kind) ?? 0) + 1;
       used.set(spec.kind, n);
       ports.push({
@@ -158,6 +115,8 @@ export function buildAnnotatedCircuit(input: AnnotatedCircuitInput): AnnotatedCi
   const remap = new Map<string, TerminalRef>();
   const extraWires: Wire[] = [];
   for (const knob of knobs) {
+    // Variants may drop a knob's resistor(s); the knob just does not exist in that build.
+    if (knob.kind === "pot" ? !elementById.has(knob.upper) || !elementById.has(knob.lower) : !elementById.has(knob.element)) continue;
     if (knob.kind === "pot") {
       const upper = elementById.get(knob.upper);
       const lower = elementById.get(knob.lower);
@@ -173,7 +132,7 @@ export function buildAnnotatedCircuit(input: AnnotatedCircuitInput): AnnotatedCi
       remap.set(`${lower.id}:${t[li]}`, { partId: knob.id, terminalId: "wiper" });
       remap.set(`${lower.id}:${t[1 - li]}`, { partId: knob.id, terminalId: "b" });
       const total = upper.resistance + lower.resistance;
-      const taper = knob.taper ?? "B";
+      const taper: TaperType = knob.taper ?? "B";
       const host = parts.find((p) => p.id === upper.id)!;
       parts = parts.filter((p) => p.id !== upper.id && p.id !== lower.id);
       parts.push({
@@ -192,7 +151,7 @@ export function buildAnnotatedCircuit(input: AnnotatedCircuitInput): AnnotatedCi
       const tied = knob.reverse ? "a" : "b";
       remap.set(`${el.id}:a`, { partId: knob.id, terminalId: end });
       remap.set(`${el.id}:b`, { partId: knob.id, terminalId: "wiper" });
-      const taper = knob.taper ?? "B";
+      const taper: TaperType = knob.taper ?? "B";
       const fraction = el.resistance / knob.maxResistance;
       const host = parts.find((p) => p.id === el.id)!;
       parts = parts.filter((p) => p.id !== el.id);

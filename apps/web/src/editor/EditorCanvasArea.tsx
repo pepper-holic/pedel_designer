@@ -44,6 +44,7 @@ interface EditorCanvasAreaProps {
   selectedBlockId: string | null;
   onSelectBlock: (blockId: string) => void;
   onToggleCollapse: (blockId: string) => void;
+  onSetAllCollapsed: (collapsed: boolean) => void;
 }
 
 /** Centre column: the schematic itself with the analysis dock underneath. */
@@ -116,6 +117,7 @@ export function EditorCanvasArea(props: EditorCanvasAreaProps) {
             selectedBlockId={props.selectedBlockId}
             onSelectBlock={props.onSelectBlock}
             onToggleCollapse={props.onToggleCollapse}
+            onSetAllCollapsed={props.onSetAllCollapsed}
             fitSignal={props.fitSignal}
           />
         </div>

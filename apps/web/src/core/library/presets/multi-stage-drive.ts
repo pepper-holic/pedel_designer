@@ -30,6 +30,16 @@ export const multiStageDrivePreset: PedalPreset = {
     D2a: { x: 480, y: 200 },
     D2b: { x: 540, y: 200 },
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "stage1", label: "1단 드라이브", category: "clipping", elements: ["Rin1", "Rf1", "D1a", "D1b", "U1"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "stage1" }] },
+    { id: "stage2", label: "2단 드라이브", category: "clipping", elements: ["Rin2", "Rf2", "D2a", "D2b", "U2"], ports: [{ kind: "in", node: "stage1" }, { kind: "out", node: "out" }] },
+  ],
+  knobs: [
+    { kind: "rheostat", id: "GAIN1", label: "GAIN 1", element: "Rf1", maxResistance: 200_000, taper: "B" },
+    { kind: "rheostat", id: "GAIN2", label: "GAIN 2", element: "Rf2", maxResistance: 200_000, taper: "B" },
+  ],
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

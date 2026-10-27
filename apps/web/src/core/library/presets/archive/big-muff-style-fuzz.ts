@@ -60,6 +60,18 @@ export const bigMuffStyleFuzzPreset: PedalPreset = {
     Rload: { x: 1120, y: 300 },
     Vcc: { x: 60, y: 40 },
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "power", label: "전원 (9V)", category: "power", elements: ["Vcc", "Vdd"], ports: [{ kind: "supply", node: "vcc", label: "9V" }] },
+    { id: "stage1", label: "1단 증폭 + 클리핑", category: "fuzz", elements: ["Cin", "Rb1", "Q1", "Rc1", "Re1", "Ce1", "D1a", "D1b"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "c1" }, { kind: "supply", node: "vcc", label: "V+" }] },
+    { id: "stage2", label: "2단 증폭 + 클리핑", category: "fuzz", elements: ["C1", "Rb2", "Q2", "Rc2", "Re2", "Ce2", "D2a", "D2b"], ports: [{ kind: "in", node: "c1" }, { kind: "out", node: "c2" }, { kind: "supply", node: "vcc", label: "V+" }] },
+    { id: "tone", label: "톤", category: "tone", elements: ["Rtone", "Ctone"], ports: [{ kind: "in", node: "c2" }, { kind: "out", node: "tone" }] },
+    { id: "output", label: "출력 커플링", category: "output", elements: ["Cout", "Rload"], ports: [{ kind: "in", node: "tone" }, { kind: "out", node: "outAC" }] },
+  ],
+  knobs: [
+    { kind: "rheostat", id: "TONE", label: "TONE", element: "Rtone", maxResistance: 100_000, taper: "B", reverse: true },
+  ],
   build: (params) => {
     const seriesResistance = Math.max(POT_TOTAL * (1 - params.tone), MIN_SERIES);
     return {

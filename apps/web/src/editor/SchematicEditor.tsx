@@ -314,6 +314,7 @@ export function SchematicEditor() {
           selectedBlockId={selection.selectedBlockId}
           onSelectBlock={selection.selectBlock}
           onToggleCollapse={blockActions.toggleCollapse}
+          onSetAllCollapsed={blockActions.setAllCollapsed}
         />
 
         <EditorSidebarRight

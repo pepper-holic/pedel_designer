@@ -37,6 +37,18 @@ export const kingOfToneStyleOverdrivePreset: PedalPreset = {
     ],
     disclaimer: "대표값 근사치이며 특정 상용 제품의 실측 회로도가 아닙니다.",
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "gain", label: "입력 + 게인 단 (논인버팅)", category: "gain", elements: ["Cin", "Rbias", "Rg", "Rf1", "U1"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "boosted" }] },
+    { id: "clip", label: "클리핑 단 (피드백/션트 전환)", category: "clipping", elements: ["Rin2", "Rf2", "U2", "D1a", "D1b", "D2a", "D2b", "Rs", "D1", "D2"], ports: [{ kind: "in", node: "boosted" }, { kind: "out", node: "clipped" }] },
+    { id: "tone", label: "톤", category: "tone", elements: ["Rtone", "Ctone"], ports: [{ kind: "in", node: "clipped" }, { kind: "out", node: "toned" }] },
+    { id: "output", label: "출력 커플링", category: "output", elements: ["Cout", "Rload"], ports: [{ kind: "in", node: "toned" }, { kind: "out", node: "out" }] },
+  ],
+  knobs: [
+    { kind: "rheostat", id: "DRIVE", label: "DRIVE", element: "Rf1", maxResistance: 200_000, taper: "B" },
+    { kind: "rheostat", id: "TONE", label: "TONE", element: "Rtone", maxResistance: 100_000, taper: "B", reverse: true },
+  ],
   build: (params) => {
     const firstStage: Element[] = [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

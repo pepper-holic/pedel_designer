@@ -45,6 +45,17 @@ export const bossStyleOverdrivePreset: PedalPreset = {
     Ctone: { x: 550, y: 400 },
     Ubuf: { x: 690, y: 250 },
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "drive", label: "드라이브 단 (피드백 다이오드)", category: "clipping", elements: ["Rin", "Rf", "D1a", "D1b", "U1"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "stage1out" }] },
+    { id: "tone", label: "톤", category: "tone", elements: ["Rtone", "Ctone"], ports: [{ kind: "in", node: "stage1out" }, { kind: "out", node: "tone" }] },
+    { id: "buffer", label: "출력 버퍼", category: "buffer", elements: ["Ubuf"], ports: [{ kind: "in", node: "tone" }, { kind: "out", node: "out" }] },
+  ],
+  knobs: [
+    { kind: "rheostat", id: "DRIVE", label: "DRIVE", element: "Rf", maxResistance: 400_000, taper: "B" },
+    { kind: "rheostat", id: "TONE", label: "TONE", element: "Rtone", maxResistance: 100_000, taper: "B", reverse: true },
+  ],
   build: (params) => {
     const seriesResistance = Math.max(POT_TOTAL * (1 - params.tone), MIN_SERIES);
     return {

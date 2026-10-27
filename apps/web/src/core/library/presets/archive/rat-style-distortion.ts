@@ -34,6 +34,15 @@ export const ratStyleDistortionPreset: PedalPreset = {
     ],
     disclaimer: "대표값 근사치이며 특정 상용 제품의 실측 회로도가 아닙니다.",
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "gain", label: "게인 단 (LM308 스타일 인버팅)", category: "gain", elements: ["Rin", "Rf", "U1"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "opout" }] },
+    { id: "clip", label: "하드 클리핑 (실리콘 션트)", category: "clipping", elements: ["Rs", "D1", "D2"], ports: [{ kind: "in", node: "opout" }, { kind: "out", node: "out" }] },
+  ],
+  knobs: [
+    { kind: "rheostat", id: "DISTORTION", label: "DISTORTION", element: "Rf", maxResistance: 100_000, taper: "B" },
+  ],
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

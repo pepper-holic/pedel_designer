@@ -36,6 +36,16 @@ export const distortionPlusStylePreset: PedalPreset = {
     ],
     disclaimer: "대표값 근사치이며 특정 상용 제품의 실측 회로도가 아닙니다.",
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "input", label: "입력 커플링 + 바이어스", category: "input", elements: ["Cin", "Rbias"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "vplus" }] },
+    { id: "gain", label: "게인 단 (논인버팅)", category: "gain", elements: ["U1", "Rg", "Rf"], ports: [{ kind: "in", node: "vplus" }, { kind: "out", node: "opout" }] },
+    { id: "clip", label: "션트 클리핑", category: "clipping", elements: ["Rs", "D1", "D2", "Rload"], ports: [{ kind: "in", node: "opout" }, { kind: "out", node: "out" }] },
+  ],
+  knobs: [
+    { kind: "rheostat", id: "DISTORTION", label: "DISTORTION", element: "Rf", maxResistance: 1_000_000, taper: "A" },
+  ],
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

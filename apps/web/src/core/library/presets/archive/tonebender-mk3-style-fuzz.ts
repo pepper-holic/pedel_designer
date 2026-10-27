@@ -36,6 +36,14 @@ export const tonebenderMk3StyleFuzzPreset: PedalPreset = {
     ],
     disclaimer: "대표값 근사치이며 특정 상용 제품의 실측 회로도가 아닙니다.",
   },
+  // Functional decomposition (docs/plan-core-fundamentals.md B-5): loads as labelled blocks that can be
+  // collapsed into black boxes; knobs load as real potentiometers.
+  blocks: [
+    { id: "power", label: "전원 (-9V)", category: "power", elements: ["Vcc", "Vdd"], ports: [{ kind: "supply", node: "vneg", label: "-9V" }] },
+    { id: "stage1", label: "1단 증폭", category: "gain", elements: ["Cin", "Rb1a", "Rb1b", "Q1", "Rc1", "Re1"], ports: [{ kind: "in", node: "in" }, { kind: "out", node: "q1coll" }, { kind: "supply", node: "vneg", label: "-9V" }] },
+    { id: "fuzz", label: "퍼즈 코어 (2-TR 피드백)", category: "fuzz", elements: ["Csustain", "Rsustain", "Rfb", "Q2", "Re2", "Rc2", "Q3", "Rc3", "Re3", "Ce3"], ports: [{ kind: "in", node: "q1coll" }, { kind: "out", node: "outc" }, { kind: "supply", node: "vneg", label: "-9V" }] },
+    { id: "output", label: "출력 커플링", category: "output", elements: ["Cout", "Rload"], ports: [{ kind: "in", node: "outc" }, { kind: "out", node: "outAC" }] },
+  ],
   build: (params) => ({
     elements: [
       { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },

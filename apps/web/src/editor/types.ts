@@ -28,11 +28,8 @@ export interface PartInstance {
   blockId?: string;
 }
 
-export type BlockCategory = "input" | "buffer" | "gain" | "clipping" | "fuzz" | "tone" | "output" | "power" | "load" | "custom";
-
-/** What a block's connection point is for. Decides which side of the collapsed symbol it sits on
- * (in/aux left, out right, supply/bias top, ground bottom) and how it is labelled. */
-export type PortKind = "in" | "out" | "supply" | "bias" | "ground" | "aux";
+import type { BlockCategory, PortKind } from "../core/library/types";
+export type { BlockCategory, PortKind };
 
 /**
  * A block's connection point to the rest of the circuit. It names a real terminal *inside* the
