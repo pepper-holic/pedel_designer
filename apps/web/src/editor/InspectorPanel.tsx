@@ -3,6 +3,7 @@ import type { BlockInstance, PartInstance, Wire } from "./types";
 import { DIODE_MODELS, OPAMP_MODELS, TRANSISTOR_MODELS, JFET_MODELS, PICKUP_MODELS } from "../core/library/deviceModels";
 import { TAPER_OPTIONS } from "./taper";
 import { PARAM_META } from "./paramMeta";
+import { SWITCH_POSITION_LABELS } from "./switchLabels";
 
 /** Part types with more than one selectable named model - see PartPalette.tsx's MODEL_MENUS, which
  * this mirrors so the same variety is reachable after placement, not just at insert time. */
@@ -12,17 +13,6 @@ const MODEL_MENUS: Partial<Record<PartType, Record<string, { label: string; para
   bjt: TRANSISTOR_MODELS,
   jfet: JFET_MODELS,
   pickup: PICKUP_MODELS,
-};
-
-/** Position names per switch type. A switch has a handful of named states, not a continuous value,
- * so it gets a select rather than the numeric field the generic param loop would give it. */
-const SWITCH_POSITION_LABELS: Partial<Record<PartType, string[]>> = {
-  spst: ["열림 (OFF)", "닫힘 (ON)"],
-  spdt: ["위치 1 (단자 1)", "위치 2 (단자 2)"],
-  dpdt: ["위치 1 (단자 a)", "위치 2 (단자 b)"],
-  blade3: ["1 (입력 1)", "2 (입력 1+2)", "3 (입력 2)"],
-  blade5: ["1 (입력 1)", "2 (입력 1+2)", "3 (입력 2)", "4 (입력 2+3)", "5 (입력 3)"],
-  rotary6: ["1단", "2단", "3단", "4단", "5단", "6단"],
 };
 
 interface InspectorPanelProps {
@@ -35,9 +25,24 @@ interface InspectorPanelProps {
   onRotate: () => void;
   onDelete: () => void;
   onDeleteBlock: (blockId: string) => void;
+  /** Selects the selected part's whole block (to collapse it, rename it, save it). */
+  onSelectBlock?: (blockId: string) => void;
+  /** Surfaces one of this part's parameters as a knob on its block. */
+  onExposeParam?: (blockId: string, partId: string, paramKey: string) => void;
 }
 
-export function InspectorPanel({ selectedPart, selectedWire = null, blocks, onParamChange, onApplyModel, onRotate, onDelete, onDeleteBlock }: InspectorPanelProps) {
+export function InspectorPanel({
+  selectedPart,
+  selectedWire = null,
+  blocks,
+  onParamChange,
+  onApplyModel,
+  onRotate,
+  onDelete,
+  onDeleteBlock,
+  onSelectBlock,
+  onExposeParam,
+}: InspectorPanelProps) {
   const ownerBlock = selectedPart?.blockId ? (blocks.find((b) => b.id === selectedPart.blockId) ?? null) : null;
   const modelMenu = selectedPart ? MODEL_MENUS[selectedPart.type] : undefined;
   const switchPositions = selectedPart ? SWITCH_POSITION_LABELS[selectedPart.type] : undefined;
@@ -62,7 +67,35 @@ export function InspectorPanel({ selectedPart, selectedWire = null, blocks, onPa
           <p className="preset-description">
             {PART_DEFS[selectedPart.type].label} ({selectedPart.id})
           </p>
-          {ownerBlock && <p className="canvas-hint">소속 블록: {ownerBlock.label}</p>}
+          {ownerBlock && (
+            <div className="field-row">
+              <span className="canvas-hint">소속 블록: {ownerBlock.label}</span>
+              {onSelectBlock && (
+                <button type="button" onClick={() => onSelectBlock(ownerBlock.id)}>
+                  블록 선택
+                </button>
+              )}
+            </div>
+          )}
+          {ownerBlock && onExposeParam && (
+            <div className="field-row">
+              <label htmlFor="expose-param-select">블록 노브로 표시</label>
+              <select
+                id="expose-param-select"
+                value=""
+                onChange={(e) => e.target.value && onExposeParam(ownerBlock.id, selectedPart.id, e.target.value)}
+              >
+                <option value="">파라미터 선택...</option>
+                {Object.entries(selectedPart.params)
+                  .filter(([key, v]) => typeof v === "number" && !ownerBlock.params.some((p) => p.partId === selectedPart.id && p.paramKey === key))
+                  .map(([key]) => (
+                    <option key={key} value={key}>
+                      {PARAM_META[key]?.label ?? key}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          )}
           {modelMenu && (
             <div className="field">
               <div className="field-row">

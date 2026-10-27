@@ -24,7 +24,7 @@ function fakeStorage() {
 }
 
 const sample: StoredCircuit = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   parts: [{ id: "r1", type: "resistor", x: 10, y: 20, rotation: 0, params: { resistance: 1000 } }],
   wires: [],
   blocks: [],
@@ -62,7 +62,14 @@ describe("circuitStorage", () => {
 
   it("defaults schemaVersion/outputNode/inputGain/blocks/probes when absent", () => {
     const partial = deserializeCircuit(JSON.stringify({ parts: [], wires: [] }));
-    expect(partial).toEqual({ schemaVersion: 1, parts: [], wires: [], blocks: [], outputNode: "", inputGain: 0.5, probes: [] });
+    expect(partial).toEqual({ schemaVersion: 2, parts: [], wires: [], blocks: [], outputNode: "", inputGain: 0.5, probes: [] });
+  });
+
+  it("migrates version-1 blocks (a tint only) to version 2 with no ports, no knobs, expanded", () => {
+    const v1 = JSON.stringify({ ...sample, schemaVersion: 1, blocks: [{ id: "blk1", defId: "buffer-follower", label: "버퍼", category: "buffer" }] });
+    const loaded = deserializeCircuit(v1)!;
+    expect(loaded.schemaVersion).toBe(2);
+    expect(loaded.blocks).toEqual([{ id: "blk1", defId: "buffer-follower", label: "버퍼", category: "buffer", ports: [], params: [], collapsed: false }]);
   });
 
   it("drops malformed probe entries instead of rejecting the whole circuit", () => {

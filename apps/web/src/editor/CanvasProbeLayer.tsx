@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { terminalPosition } from "./geometry";
 import { formatVoltage, type OperatingPoint } from "./operatingPoint";
 import type { ResolvedProbe } from "./probes";
+import type { CanvasEndpoints } from "./canvasEndpoints";
 import type { PartInstance } from "./types";
 
 interface CanvasProbeLayerProps {
@@ -11,6 +11,7 @@ interface CanvasProbeLayerProps {
   /** When set, every net gets its DC bias voltage drawn next to one of its terminals. */
   operatingPoint: OperatingPoint | null;
   showAllDc: boolean;
+  endpoints: CanvasEndpoints;
 }
 
 const FLAG_HEIGHT = 15;
@@ -18,15 +19,16 @@ const CHAR_WIDTH = 6.4;
 
 /** One representative on-canvas point per net: the first terminal found on a non-ground part, so
  * the voltage label sits where the node is, not on a ground symbol. */
-function netAnchors(parts: PartInstance[], terminalNet: Map<string, string>): Map<string, { x: number; y: number }> {
+function netAnchors(parts: PartInstance[], terminalNet: Map<string, string>, endpoints: CanvasEndpoints): Map<string, { x: number; y: number }> {
   const byId = new Map(parts.map((p) => [p.id, p]));
   const anchors = new Map<string, { x: number; y: number }>();
   for (const [terminalKey, net] of terminalNet) {
     if (net === "0" || anchors.has(net)) continue;
     const [partId, terminalId] = terminalKey.split(":");
     const part = byId.get(partId);
-    if (!part || part.type === "ground") continue;
-    anchors.set(net, terminalPosition(part, terminalId));
+    // Nodes inside a collapsed block have no visible place to put a label.
+    if (!part || part.type === "ground" || endpoints.hidden.has(part.id)) continue;
+    anchors.set(net, endpoints.resolve({ partId, terminalId })!);
   }
   return anchors;
 }
@@ -36,9 +38,8 @@ function netAnchors(parts: PartInstance[], terminalNet: Map<string, string>): Ma
  * and, optionally, the DC bias voltage of every node. Drawn above parts, with pointer events off so
  * a marker never steals the click that would remove or rewire it.
  */
-export function CanvasProbeLayer({ parts, probes, terminalNet, operatingPoint, showAllDc }: CanvasProbeLayerProps) {
-  const byId = useMemo(() => new Map(parts.map((p) => [p.id, p])), [parts]);
-  const anchors = useMemo(() => (showAllDc ? netAnchors(parts, terminalNet) : new Map()), [showAllDc, parts, terminalNet]);
+export function CanvasProbeLayer({ parts, probes, terminalNet, operatingPoint, showAllDc, endpoints }: CanvasProbeLayerProps) {
+  const anchors = useMemo(() => (showAllDc ? netAnchors(parts, terminalNet, endpoints) : new Map()), [showAllDc, parts, terminalNet, endpoints]);
   const probedNets = new Set(probes.map((p) => p.net));
   const dcOf = (net: string) => {
     const v = operatingPoint?.voltages.get(net);
@@ -64,9 +65,8 @@ export function CanvasProbeLayer({ parts, probes, terminalNet, operatingPoint, s
         })}
 
       {probes.map((probe) => {
-        const part = byId.get(probe.terminal.partId);
-        if (!part) return null;
-        const pos = terminalPosition(part, probe.terminal.terminalId);
+        const pos = endpoints.resolve(probe.terminal);
+        if (!pos) return null;
         const dc = dcOf(probe.net);
         const text = dc ? `${probe.label} · ${dc}` : probe.label;
         const w = text.length * CHAR_WIDTH + 8;

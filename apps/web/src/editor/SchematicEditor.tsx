@@ -1,12 +1,12 @@
 import { useMemo, useRef, useState } from "react";
 import { PART_DEFS, type PartType } from "./partDefs";
-import type { PartInstance, TerminalRef, Wire } from "./types";
-import { cloneSelection } from "./selection";
+import type { TerminalRef } from "./types";
 import { netlistFromGraph } from "./netlistFromGraph";
 import { loadPedalPreset, loadWiringPreset } from "./templateLoading";
 import { snapToGrid, GRID_SIZE } from "./geometry";
-import type { BlockDef } from "./blockDefs";
-import { instantiateBlock } from "./blockInstance";
+import { useBlockActions } from "./useBlockActions";
+import { useClipboard } from "./useClipboard";
+import { nextFreeId } from "./ids";
 import { PartsSidebar } from "./PartsSidebar";
 import { EditorToolbar } from "./EditorToolbar";
 import { EditorCanvasArea } from "./EditorCanvasArea";
@@ -30,11 +30,6 @@ import type { Probe } from "./types";
 import { canRedo, canUndo, commitPrevious, createHistory, pushSnapshot, redo, replacePresent, undo, type CircuitSnapshot } from "./historyStack";
 import { loadCircuitFromStorage, CURRENT_SCHEMA_VERSION } from "./circuitStorage";
 
-let partCounter = 0;
-let blockCounter = 0;
-let pasteCounter = 0;
-/** Pasted copies land slightly off the originals so they are visibly a second object. */
-const PASTE_OFFSET = { dx: 30, dy: 30 };
 
 type LeftTab = "parts" | "library";
 
@@ -54,15 +49,12 @@ export function SchematicEditor() {
   const [leftTab, setLeftTab] = useState<LeftTab>("parts");
   const [history, setHistory] = useState(() => createHistory(initial.snapshot));
   const [loadedPresetId, setLoadedPresetId] = useState<string | null>(null);
-  const [clipboard, setClipboard] = useState<{ parts: PartInstance[]; wires: Wire[] } | null>(null);
   const [outputNode, setOutputNode] = useState<string>(initial.outputNode);
   const [inputGain, setInputGain] = useState(initial.inputGain);
   const [status, setStatus] = useState("");
   const [monteCarloResult, setMonteCarloResult] = useState<MonteCarloResult | null>(null);
   const [circuitVersion, setCircuitVersion] = useState(0);
   const dragStartSnapshotRef = useRef<CircuitSnapshot | null>(null);
-  /** Which ids were selected when the clipboard was filled. */
-  const clipboardIdsRef = useRef<string[]>([]);
 
   const parts = history.present.parts;
   const wires = history.present.wires;
@@ -75,13 +67,6 @@ export function SchematicEditor() {
   const selectedWire = wires.find((w) => w.id === selectedWireId) ?? null;
 
   const handleSelectPart = selection.selectPart;
-  const canvasSize = useMemo(() => {
-    const margin = 120;
-    const maxX = parts.reduce((max, p) => Math.max(max, p.x), 0);
-    const maxY = parts.reduce((max, p) => Math.max(max, p.y), 0);
-    return { width: Math.max(900, maxX + margin), height: Math.max(460, maxY + margin) };
-  }, [parts]);
-
   const probes = useProbes(initial.probes, parts, graph, setStatus);
   const [showDc, setShowDc] = useState(false);
   const wantsOperatingPoint = showDc || probes.resolved.length > 0;
@@ -130,34 +115,12 @@ export function SchematicEditor() {
   };
 
   const handleAddPart = (type: PartType, paramsOverride?: Record<string, number | string>) => {
-    partCounter += 1;
-    const id = `${type}${partCounter}`;
-    const col = partCounter % 6;
-    const row = Math.floor(partCounter / 6);
-    commit({
-      parts: [
-        ...parts,
-        {
-          id,
-          type,
-          x: snapToGrid(80 + col * 130),
-          y: snapToGrid(80 + row * 100),
-          rotation: 0,
-          params: { ...PART_DEFS[type].defaultParams, ...paramsOverride },
-        },
-      ],
-      wires,
-      blocks,
-    });
-  };
-
-  const handleAddBlock = (def: BlockDef) => {
-    blockCounter += 1;
-    const instanceId = `blk${blockCounter}`;
-    const col = (blockCounter - 1) % 3;
-    const row = Math.floor((blockCounter - 1) / 3);
-    const { parts: blockParts, wires: blockWires, block } = instantiateBlock(def, instanceId, { x: 100 + col * 420, y: 100 + row * 260 });
-    commit({ parts: [...parts, ...blockParts], wires: [...wires, ...blockWires], blocks: [...blocks, block] });
+    const id = nextFreeId(type, parts.map((p) => p.id));
+    // Fresh parts fill a loose grid in order of arrival, so a burst of clicks does not stack them.
+    const slot = parts.filter((p) => !p.blockId).length;
+    const x = snapToGrid(80 + (slot % 6) * 130);
+    const y = snapToGrid(80 + Math.floor(slot / 6) * 100);
+    commit({ parts: [...parts, { id, type, x, y, rotation: 0, params: { ...PART_DEFS[type].defaultParams, ...paramsOverride } }], wires, blocks });
   };
 
   const handleMovePart = (id: string, x: number, y: number) => {
@@ -189,31 +152,7 @@ export function SchematicEditor() {
     selection.deselect();
   };
 
-  /** Copy/paste and duplicate share one path: both stamp a clone of a selection onto the canvas. */
-  const pasteClone = (source: { parts: PartInstance[]; wires: Wire[] }, sourceIds: string[]) => {
-    pasteCounter += 1;
-    const { parts: newParts, wires: newWires } = cloneSelection(source.parts, source.wires, sourceIds, PASTE_OFFSET, `cp${pasteCounter}`);
-    if (newParts.length === 0) return;
-    commit({ parts: [...parts, ...newParts], wires: [...wires, ...newWires], blocks });
-    selection.selectParts(newParts.map((p) => p.id));
-    setStatus(`${newParts.length}개 부품을 붙여넣었습니다.`);
-  };
-
-  const handleCopy = () => {
-    if (selectedPartIds.length === 0) return;
-    setClipboard({ parts, wires });
-    clipboardIdsRef.current = selectedPartIds;
-    setStatus(`${selectedPartIds.length}개 부품을 복사했습니다.`);
-  };
-
-  const handlePaste = () => {
-    if (!clipboard) return;
-    // The clipboard holds the whole canvas as it was at copy time plus the ids that were selected,
-    // so a paste still works after the originals have been edited or deleted.
-    pasteClone(clipboard, clipboardIdsRef.current);
-  };
-
-  const handleDuplicate = () => pasteClone({ parts, wires }, selectedPartIds);
+  const clipboard = useClipboard({ present: history.present, commit, selection, onStatus: setStatus });
 
   /**
    * Arrow-key move. With nothing selected it selects the first part instead of moving nothing -
@@ -236,14 +175,25 @@ export function SchematicEditor() {
     if (selectedPartId) commit(rotatePart(history.present, selectedPartId));
   };
 
+  const blockActions = useBlockActions({
+    present: history.present,
+    commit,
+    selection,
+    onStatus: setStatus,
+    onKnobChanged: () => preview.request(),
+  });
+  const selectedBlock = blocks.find((b) => b.id === selection.selectedBlockId) ?? null;
+
   useEditorShortcuts({
     onUndo: handleUndo,
     onRedo: handleRedo,
     onRotate: handleRotateSelected,
     onDelete: handleDeleteSelected,
-    onCopy: handleCopy,
-    onPaste: handlePaste,
-    onDuplicate: handleDuplicate,
+    onCopy: clipboard.copy,
+    onPaste: clipboard.paste,
+    onDuplicate: clipboard.duplicate,
+    onGroup: blockActions.groupSelection,
+    onUngroup: () => blockActions.ungroup(),
     onNudge: handleNudge,
     onCycleSelection: selection.cycle,
     onDeselect: () => {
@@ -328,7 +278,8 @@ export function SchematicEditor() {
           activeTab={leftTab}
           onTabChange={setLeftTab}
           onAddPart={handleAddPart}
-          onAddBlock={handleAddBlock}
+          onAddBlock={blockActions.addLibraryBlock}
+          userBlocks={{ items: blockActions.userBlocks, onAdd: blockActions.addUserBlock, onDelete: blockActions.deleteUserBlock }}
           presets={presets}
           wiringPresets={wiringPresets}
           loadedPresetId={loadedPresetId}
@@ -340,7 +291,7 @@ export function SchematicEditor() {
           parts={parts}
           wires={wires}
           blocks={blocks}
-          canvasSize={canvasSize}
+          fitSignal={circuitVersion + blockActions.placedCount}
           selectedPartId={selectedPartId}
           selectedPartIds={selectedPartIds}
           selectedWireId={selectedWireId}
@@ -360,6 +311,9 @@ export function SchematicEditor() {
           operatingPoint={operatingPoint}
           showDc={showDc}
           onShowDcChange={setShowDc}
+          selectedBlockId={selection.selectedBlockId}
+          onSelectBlock={selection.selectBlock}
+          onToggleCollapse={blockActions.toggleCollapse}
         />
 
         <EditorSidebarRight
@@ -381,6 +335,22 @@ export function SchematicEditor() {
           onRotate={handleRotateSelected}
           onDelete={handleDeleteSelected}
           onDeleteBlock={handleDeleteBlock}
+          onSelectBlock={selection.selectBlock}
+          onExposeParam={blockActions.exposeParam}
+          blockInspector={
+            selectedBlock && {
+              block: selectedBlock,
+              parts,
+              onRename: (label) => blockActions.rename(selectedBlock.id, label),
+              onToggleCollapse: () => blockActions.toggleCollapse(selectedBlock.id),
+              onUngroup: () => blockActions.ungroup(selectedBlock.id),
+              onSaveAsUserBlock: () => blockActions.saveAsUserBlock(selectedBlock.id),
+              onDelete: () => handleDeleteBlock(selectedBlock.id),
+              onSetKnob: blockActions.setKnob,
+              onUpdateParam: (paramId, patch) => blockActions.updateParam(selectedBlock.id, paramId, patch),
+              onUpdatePort: (portId, patch) => blockActions.updatePort(selectedBlock.id, portId, patch),
+            }
+          }
           preview={{ enabled: preview.enabled, onEnabledChange: preview.setEnabled, busy: preview.busy }}
           probePanel={{
             probes: probes.resolved,

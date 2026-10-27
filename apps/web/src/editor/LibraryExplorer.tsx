@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import type { PedalPreset, PresetCategory, PresetVariant } from "../core/library/presets";
-import { BLOCK_DEFS, BLOCK_CATEGORY_LABELS, type BlockDef } from "./blockDefs";
+import { BLOCK_DEFS, BLOCK_CATEGORY_LABELS, BLOCK_CATEGORY_ORDER, type BlockDef } from "./blocks";
+import type { UserBlock } from "./userBlocks";
 import { WIRING_CATEGORY_ORDER, type WiringPreset } from "./wiring";
-import type { BlockCategory } from "./types";
 
 interface LibraryExplorerProps {
   presets: PedalPreset[];
@@ -11,6 +11,7 @@ interface LibraryExplorerProps {
   onLoadTemplate: (preset: PedalPreset, variant?: PresetVariant) => void;
   onLoadWiring: (preset: WiringPreset) => void;
   onAddBlock: (def: BlockDef) => void;
+  userBlocks?: { items: UserBlock[]; onAdd: (ub: UserBlock) => void; onDelete: (id: string) => void };
 }
 
 type TopSection = "presets" | "wiring" | "blocks";
@@ -19,7 +20,6 @@ type PreviewItem = { label: string; description: string; archive?: boolean };
 /** Signal-chain-ish display order, not alphabetical, so the tree reads the way a pedal builder
  * thinks about gain staging. */
 const PRESET_CATEGORY_ORDER: PresetCategory[] = ["버퍼", "부스트", "오버드라이브", "디스토션", "퍼즈", "톤/EQ"];
-const BLOCK_CATEGORY_ORDER: BlockCategory[] = ["buffer", "gain", "clipping", "tone", "load"];
 
 function matchesQuery(haystack: string, query: string): boolean {
   if (!query) return true;
@@ -36,7 +36,7 @@ function matchesQuery(haystack: string, query: string): boolean {
  * populated by whichever item was clicked most recently (loading/adding still happens on that same
  * click, this is purely about where the description text lives).
  */
-export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoadTemplate, onLoadWiring, onAddBlock }: LibraryExplorerProps) {
+export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoadTemplate, onLoadWiring, onAddBlock, userBlocks }: LibraryExplorerProps) {
   const [query, setQuery] = useState("");
   const [collapsedTop, setCollapsedTop] = useState<Set<TopSection>>(new Set(["wiring", "blocks"]));
   const [collapsedCategory, setCollapsedCategory] = useState<Set<string>>(new Set());
@@ -48,6 +48,10 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
 
   const filteredPresets = useMemo(() => presets.filter((p) => matchesQuery(`${p.name} ${p.description}`, query)), [presets, query]);
   const filteredBlocks = useMemo(() => BLOCK_DEFS.filter((b) => matchesQuery(`${b.label} ${b.description}`, query)), [query]);
+  const filteredUserBlocks = useMemo(
+    () => (userBlocks?.items ?? []).filter((b) => matchesQuery(`${b.label} ${b.description}`, query)),
+    [userBlocks, query],
+  );
   const filteredWiring = useMemo(
     () => wiringPresets.filter((p) => matchesQuery(`${p.name} ${p.description}`, query)),
     [wiringPresets, query],
@@ -248,21 +252,21 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
           onClick={() => toggleTop("blocks")}
         >
           <span className={isSearching || !collapsedTop.has("blocks") ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
-          기능 블록 (빈 기본 단위)
-          <span className="template-category-count">{filteredBlocks.length}</span>
+          기능 블록 (조립 단위)
+          <span className="template-category-count">{filteredBlocks.length + filteredUserBlocks.length}</span>
         </button>
         {(isSearching || !collapsedTop.has("blocks")) &&
           BLOCK_CATEGORY_ORDER.map((category) => {
             const items = filteredBlocks.filter((b) => b.category === category);
-            if (items.length === 0) return null;
+            if (items.length === 0 && !(category === "custom" && filteredUserBlocks.length > 0)) return null;
             const key = `block:${category}`;
             const expanded = isSearching || !collapsedCategory.has(key);
             return (
               <div key={key} className="template-category-group">
                 <button type="button" className="template-category-header" aria-expanded={expanded} onClick={() => toggleCategory(key)}>
                   <span className={expanded ? "template-category-chevron expanded" : "template-category-chevron"}>▸</span>
-                  {BLOCK_CATEGORY_LABELS[category]}
-                  <span className="template-category-count">{items.length}</span>
+                  {category === "custom" ? "내 블록" : BLOCK_CATEGORY_LABELS[category]}
+                  <span className="template-category-count">{items.length + (category === "custom" ? filteredUserBlocks.length : 0)}</span>
                 </button>
                 {expanded && (
                   <div className="template-category-items">
@@ -271,6 +275,31 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
                         <span className="library-item-label">{def.label}</span>
                       </button>
                     ))}
+                    {category === "custom" &&
+                      filteredUserBlocks.map((ub) => (
+                        <div key={ub.id} className="library-user-block-row">
+                          <button
+                            type="button"
+                            className="library-item-row"
+                            onClick={() => {
+                              setPreview({ label: ub.label, description: ub.description });
+                              userBlocks?.onAdd(ub);
+                            }}
+                            title={ub.label}
+                          >
+                            <span className="library-item-label">{ub.label}</span>
+                            <span className="template-archive-badge">내 블록</span>
+                          </button>
+                          <button
+                            type="button"
+                            className="library-user-block-delete"
+                            aria-label={`${ub.label} 내 블록에서 삭제`}
+                            onClick={() => window.confirm(`"${ub.label}"을(를) 내 블록에서 지울까요?`) && userBlocks?.onDelete(ub.id)}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
                   </div>
                 )}
               </div>

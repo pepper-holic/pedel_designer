@@ -130,7 +130,8 @@ describe("SchematicEditor", () => {
 
     const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
     const idLabel = within(canvasPanel).getByText(/^blk\d+_U1$/);
-    const hitbox = idLabel.closest("g")!.querySelector<SVGRectElement>("rect")!;
+    // The body hit-box, not the selection outline (adding a block selects it, so the outline is drawn).
+    const hitbox = idLabel.closest("g")!.querySelector<SVGRectElement>('rect[fill="transparent"]')!;
     await user.click(hitbox);
 
     const inspector = screen.getByText("선택된 소자").closest<HTMLElement>(".panel")!;

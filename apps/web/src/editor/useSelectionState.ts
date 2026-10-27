@@ -13,26 +13,43 @@ export function useSelectionState(parts: PartInstance[]) {
   const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
   const [selectedWireId, setSelectedWireId] = useState<string | null>(null);
   const [selectedPartIds, setSelectedPartIds] = useState<string[]>([]);
+  // A selected block: its parts are the selection (so move/copy/delete act on all of them), and the
+  // inspector shows the block rather than whichever member happens to be first.
+  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
   const selectPart = (id: string | null) => {
+    setSelectedBlockId(null);
     setSelectedPartId(id);
     setSelectedPartIds(id ? [id] : []);
     setSelectedWireId(null);
   };
 
   const selectParts = (ids: string[]) => {
+    setSelectedBlockId(null);
     setSelectedPartIds(ids);
     setSelectedPartId(ids[0] ?? null);
     setSelectedWireId(null);
   };
 
   const selectWire = (id: string | null) => {
+    setSelectedBlockId(null);
     setSelectedWireId(id);
     setSelectedPartId(null);
     setSelectedPartIds([]);
   };
 
+  /** `memberIds` is for a block created in this same event - `parts` here is still the previous
+   * render's, so it does not know the new block's members yet. */
+  const selectBlock = (blockId: string, memberIds?: string[]) => {
+    const ids = memberIds ?? parts.filter((p) => p.blockId === blockId).map((p) => p.id);
+    setSelectedBlockId(blockId);
+    setSelectedPartIds(ids);
+    setSelectedPartId(null);
+    setSelectedWireId(null);
+  };
+
   const deselect = () => {
+    setSelectedBlockId(null);
     setSelectedPartId(null);
     setSelectedPartIds([]);
     setSelectedWireId(null);
@@ -46,5 +63,5 @@ export function useSelectionState(parts: PartInstance[]) {
     selectPart(parts[current === -1 ? 0 : next].id);
   };
 
-  return { selectedPartId, selectedPartIds, selectedWireId, selectPart, selectParts, selectWire, deselect, cycle };
+  return { selectedPartId, selectedPartIds, selectedWireId, selectedBlockId, selectPart, selectParts, selectWire, selectBlock, deselect, cycle };
 }

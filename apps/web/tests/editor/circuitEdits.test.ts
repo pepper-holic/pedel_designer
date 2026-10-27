@@ -12,7 +12,7 @@ const snapshot: CircuitSnapshot = {
     { id: "w1", a: { partId: "R1", terminalId: "b" }, b: { partId: "blk1_R1", terminalId: "a" } },
     { id: "w2", a: { partId: "blk1_R1", terminalId: "b" }, b: { partId: "blk1_C1", terminalId: "a" } },
   ],
-  blocks: [{ id: "blk1", defId: "tone-stack-passive", label: "톤", category: "tone" }],
+  blocks: [{ id: "blk1", defId: "tone-stack-passive", label: "톤", category: "tone", ports: [], params: [], collapsed: false }],
 };
 
 describe("circuitEdits", () => {

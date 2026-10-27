@@ -1,6 +1,7 @@
 import { rotateClockwise } from "./geometry";
 import { PARAM_META } from "./paramMeta";
 import type { CircuitSnapshot } from "./historyStack";
+import { pruneBlocks } from "./blockOps";
 
 /**
  * Pure snapshot -> snapshot edits behind the editor's commands. Kept out of the component so each
@@ -13,16 +14,15 @@ export function movePartsBy(snapshot: CircuitSnapshot, ids: Iterable<string>, dx
   return { ...snapshot, parts: snapshot.parts.map((p) => (moving.has(p.id) ? { ...p, x: p.x + dx, y: p.y + dy } : p)) };
 }
 
-/** Removes parts, every wire touching them, and any block left with no parts. */
+/** Removes parts, every wire touching them, any block left with no parts, and block ports/knobs
+ * that pointed at the removed parts. */
 export function deleteParts(snapshot: CircuitSnapshot, ids: Iterable<string>): CircuitSnapshot {
   const removing = new Set(ids);
-  const parts = snapshot.parts.filter((p) => !removing.has(p.id));
-  const remainingBlockIds = new Set(parts.map((p) => p.blockId).filter((id): id is string => id !== undefined));
-  return {
-    parts,
+  return pruneBlocks({
+    parts: snapshot.parts.filter((p) => !removing.has(p.id)),
     wires: snapshot.wires.filter((w) => !removing.has(w.a.partId) && !removing.has(w.b.partId)),
-    blocks: snapshot.blocks.filter((b) => remainingBlockIds.has(b.id)),
-  };
+    blocks: snapshot.blocks,
+  });
 }
 
 export function deleteWire(snapshot: CircuitSnapshot, wireId: string): CircuitSnapshot {

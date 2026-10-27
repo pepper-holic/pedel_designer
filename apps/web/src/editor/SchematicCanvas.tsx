@@ -1,9 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { zoomAroundPoint, fitView, GRID_SIZE } from "./geometry";
 import { CanvasPart } from "./CanvasPart";
 import { CanvasBlockLayer } from "./CanvasBlockLayer";
 import { CanvasWireLayer } from "./CanvasWireLayer";
 import { CanvasProbeLayer } from "./CanvasProbeLayer";
+import { CanvasBlockSymbol } from "./CanvasBlockSymbol";
+import { buildCanvasEndpoints } from "./canvasEndpoints";
+import { CanvasControls } from "./CanvasControls";
 import type { ResolvedProbe } from "./probes";
 import type { OperatingPoint } from "./operatingPoint";
 import { partsInBox, type SelectionBox } from "./selection";
@@ -35,6 +38,10 @@ interface SchematicCanvasProps {
   operatingPoint?: OperatingPoint | null;
   showDc?: boolean;
   onShowDcChange?: (on: boolean) => void;
+  selectedBlockId?: string | null;
+  /** Selects a whole block (its parts become the selection). */
+  onSelectBlock?: (blockId: string) => void;
+  onToggleCollapse?: (blockId: string) => void;
   /** Bump to auto-fit the view to the current parts - the editor changes this whenever the whole
    * circuit is replaced (template load, new circuit) so a freshly loaded preset arrives fully visible. */
   fitSignal?: number;
@@ -74,6 +81,9 @@ export function SchematicCanvas({
   operatingPoint = null,
   showDc = false,
   onShowDcChange,
+  selectedBlockId = null,
+  onSelectBlock,
+  onToggleCollapse,
   fitSignal = 0,
   width = 900,
   height = 460,
@@ -87,6 +97,11 @@ export function SchematicCanvas({
   // frequent gesture, so it keeps the unmodified drag.
   const [selectBox, setSelectBox] = useState<SelectionBox | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const endpoints = useMemo(
+    () => buildCanvasEndpoints(parts, blocks, terminalNet ? (ref) => terminalNet.get(`${ref.partId}:${ref.terminalId}`) : undefined),
+    [parts, blocks, terminalNet],
+  );
+  const visibleParts = useMemo(() => parts.filter((p) => !endpoints.hidden.has(p.id)), [parts, endpoints]);
 
   // Attached as a native (non-passive) listener rather than React's onWheel: React registers
   // wheel handlers as passive, which silently drops preventDefault() and lets the page scroll
@@ -121,6 +136,20 @@ export function SchematicCanvas({
     setDragId(part.id);
     setDragOffset({ x: world.x - part.x, y: world.y - part.y });
     onSelectPart(part.id);
+  };
+
+  /** Grabbing a collapsed block selects it and drags it by one of its (hidden) parts - the editor
+   * moves the whole selection together, so every member follows. */
+  const handleBlockMouseDown = (block: BlockInstance, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const anchor = parts.find((p) => p.blockId === block.id);
+    if (!anchor) return;
+    const svg = (e.currentTarget as SVGElement).ownerSVGElement!;
+    const rect = svg.getBoundingClientRect();
+    const world = toWorld({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    onSelectBlock?.(block.id);
+    setDragId(anchor.id);
+    setDragOffset({ x: world.x - anchor.x, y: world.y - anchor.y });
   };
 
   const handleBackgroundMouseDown = (e: React.MouseEvent<SVGRectElement>) => {
@@ -163,7 +192,18 @@ export function SchematicCanvas({
   /** Ends a rubber-band drag, reporting whatever it enclosed. */
   const finishBoxSelect = () => {
     if (!selectBox) return;
-    onBoxSelect?.(partsInBox(parts, selectBox));
+    // Visible parts by their own bodies; a collapsed block by its box (its parts are hidden, and
+    // grabbing half of a block's members would make no sense).
+    const ids = new Set(partsInBox(visibleParts, selectBox));
+    const left = Math.min(selectBox.x1, selectBox.x2);
+    const right = Math.max(selectBox.x1, selectBox.x2);
+    const top = Math.min(selectBox.y1, selectBox.y2);
+    const bottom = Math.max(selectBox.y1, selectBox.y2);
+    for (const [blockId, l] of endpoints.layouts) {
+      if (l.left + l.width < left || l.left > right || l.top + l.height < top || l.top > bottom) continue;
+      for (const p of parts) if (p.blockId === blockId) ids.add(p.id);
+    }
+    onBoxSelect?.([...ids]);
     setSelectBox(null);
   };
 
@@ -178,24 +218,20 @@ export function SchematicCanvas({
 
   const resetView = () => setView({ zoom: 1, panX: 0, panY: 0 });
 
-  // Kept in a ref, and synced in an effect rather than during render, so the auto-fit effect below
-  // can read the current parts without listing them as a dependency - it must fire when the circuit
-  // is replaced, not on every drag. Declared above that effect so it has already run when it fires.
-  const partsRef = useRef(parts);
-  useEffect(() => {
-    partsRef.current = parts;
-  }, [parts]);
 
-  // Reads parts through a ref so the auto-fit effect below depends only on the fit signal - it must
-  // fire when the circuit is *replaced*, not on every part drag.
+  // What is actually drawn: visible parts plus collapsed blocks' boxes (a collapsed block's hidden
+  // parts can span far more than its box). Kept in a ref, synced in an effect, so the auto-fit effect
+  // below fires when the circuit is replaced or a block is placed - not on every drag.
+  const boundsRef = useRef<{ minX: number; minY: number; maxX: number; maxY: number }[]>([]);
+  useEffect(() => {
+    boundsRef.current = [
+      ...visibleParts.map((p) => ({ minX: p.x - FIT_PART_MARGIN, minY: p.y - FIT_PART_MARGIN, maxX: p.x + FIT_PART_MARGIN, maxY: p.y + FIT_PART_MARGIN })),
+      ...[...endpoints.layouts.values()].map((l) => ({ minX: l.left - 30, minY: l.top - 20, maxX: l.left + l.width + 30, maxY: l.top + l.height + 20 })),
+    ];
+  }, [visibleParts, endpoints]);
+
   const fitToContent = useCallback(() => {
-    const bounds = partsRef.current.map((p) => ({
-      minX: p.x - FIT_PART_MARGIN,
-      minY: p.y - FIT_PART_MARGIN,
-      maxX: p.x + FIT_PART_MARGIN,
-      maxY: p.y + FIT_PART_MARGIN,
-    }));
-    setView(fitView(bounds, { width, height }, { minZoom: MIN_ZOOM }));
+    setView(fitView(boundsRef.current, { width, height }, { minZoom: MIN_ZOOM }));
   }, [width, height]);
 
   useEffect(() => {
@@ -222,43 +258,17 @@ export function SchematicCanvas({
 
   return (
     <div style={{ position: "relative" }}>
-      <div className="canvas-zoom-controls">
-        <button type="button" onClick={() => setView((v) => ({ ...v, zoom: Math.min(MAX_ZOOM, v.zoom * 1.2) }))}>
-          +
-        </button>
-        <span>{Math.round(view.zoom * 100)}%</span>
-        <button type="button" onClick={() => setView((v) => ({ ...v, zoom: Math.max(MIN_ZOOM, v.zoom / 1.2) }))}>
-          −
-        </button>
-        <button type="button" className="canvas-tool-toggle" onClick={fitToContent} title="회로 전체가 보이도록 확대/축소와 위치를 맞춥니다">
-          화면 맞춤
-        </button>
-        <button type="button" className="canvas-tool-toggle" onClick={resetView}>
-          리셋
-        </button>
-        {onProbeModeChange && (
-          <button
-            type="button"
-            className="canvas-tool-toggle"
-            aria-pressed={probeMode}
-            onClick={() => onProbeModeChange(!probeMode)}
-            title="켜면 단자나 배선을 클릭해 측정 지점(프로브)을 찍습니다. 같은 노드를 다시 클릭하면 지워집니다. 단축키 P"
-          >
-            프로브
-          </button>
-        )}
-        {onShowDcChange && (
-          <button
-            type="button"
-            className="canvas-tool-toggle"
-            aria-pressed={showDc}
-            onClick={() => onShowDcChange(!showDc)}
-            title="신호가 없을 때 각 노드의 DC 바이어스 전압을 회로도 위에 표시합니다"
-          >
-            DC 전압
-          </button>
-        )}
-      </div>
+      <CanvasControls
+        zoom={view.zoom}
+        onZoomIn={() => setView((v) => ({ ...v, zoom: Math.min(MAX_ZOOM, v.zoom * 1.2) }))}
+        onZoomOut={() => setView((v) => ({ ...v, zoom: Math.max(MIN_ZOOM, v.zoom / 1.2) }))}
+        onFit={fitToContent}
+        onReset={resetView}
+        probeMode={probeMode}
+        onProbeModeChange={onProbeModeChange}
+        showDc={showDc}
+        onShowDcChange={onShowDcChange}
+      />
       <svg
         ref={svgRef}
         width={width}
@@ -297,11 +307,34 @@ export function SchematicCanvas({
         <rect width={width} height={height} fill="url(#schematic-grid)" pointerEvents="none" />
 
         <g transform={`translate(${view.panX},${view.panY}) scale(${view.zoom})`}>
-          <CanvasBlockLayer parts={parts} blocks={blocks} />
+          <CanvasBlockLayer
+            parts={parts}
+            blocks={blocks}
+            selectedBlockId={selectedBlockId}
+            onSelectBlock={(id) => onSelectBlock?.(id)}
+            onToggleCollapse={(id) => onToggleCollapse?.(id)}
+          />
 
-          <CanvasWireLayer parts={parts} wires={wires} selectedWireId={selectedWireId} onWireClick={(wire) => (probeMode ? onProbeTerminal?.(wire.a) : onSelectWire?.(wire.id))} />
+          <CanvasWireLayer endpoints={endpoints} wires={wires} selectedWireId={selectedWireId} onWireClick={(wire) => (probeMode ? onProbeTerminal?.(wire.a) : onSelectWire?.(wire.id))} />
 
-          {parts.map((part) => (
+          {[...endpoints.layouts].map(([blockId, layout]) => {
+            const block = blocks.find((b) => b.id === blockId)!;
+            return (
+              <CanvasBlockSymbol
+                key={blockId}
+                block={block}
+                layout={layout}
+                parts={parts}
+                selected={blockId === selectedBlockId}
+                pendingTerminal={pendingTerminal}
+                onBodyMouseDown={handleBlockMouseDown}
+                onPinClick={handleTerminalClick}
+                onToggleCollapse={(id) => onToggleCollapse?.(id)}
+              />
+            );
+          })}
+
+          {visibleParts.map((part) => (
             <CanvasPart
               key={part.id}
               part={part}
@@ -313,7 +346,7 @@ export function SchematicCanvas({
           ))}
 
           {(probes.length > 0 || showDc) && terminalNet && (
-            <CanvasProbeLayer parts={parts} probes={probes} terminalNet={terminalNet} operatingPoint={operatingPoint} showAllDc={showDc} />
+            <CanvasProbeLayer parts={parts} probes={probes} terminalNet={terminalNet} operatingPoint={operatingPoint} showAllDc={showDc} endpoints={endpoints} />
           )}
 
           {selectBox && (

@@ -5,7 +5,7 @@ export const CIRCUIT_STORAGE_KEY = "pedal-designer:circuit";
 /** Bumped whenever the saved shape changes in a way old saves can't just default their way around
  * (a genuinely new/renamed field, not an additive one with an obvious empty default). Saves written
  * before this field existed are treated as version 1. */
-export const CURRENT_SCHEMA_VERSION = 1;
+export const CURRENT_SCHEMA_VERSION = 2;
 
 export interface StoredCircuit {
   schemaVersion: number;
@@ -20,6 +20,23 @@ export interface StoredCircuit {
 
 export function serializeCircuit(circuit: StoredCircuit): string {
   return JSON.stringify(circuit);
+}
+
+/**
+ * Version 1 blocks were only a tint over their parts: no ports, no knobs, never collapsed. Version 2
+ * adds those; a v1 block simply gets none, which renders exactly as before. (Ports are re-derived
+ * from the wiring the first time the block is collapsed - see setBlockCollapsed.)
+ */
+function migrateBlocks(blocks: unknown[]): BlockInstance[] {
+  return blocks
+    .filter((b): b is BlockInstance => !!b && typeof (b as BlockInstance).id === "string")
+    .map((b) => ({
+      ...b,
+      defId: typeof b.defId === "string" ? b.defId : null,
+      ports: Array.isArray(b.ports) ? b.ports : [],
+      params: Array.isArray(b.params) ? b.params : [],
+      collapsed: b.collapsed === true,
+    }));
 }
 
 function isProbe(value: unknown): value is Probe {
@@ -39,14 +56,14 @@ export function deserializeCircuit(raw: string): StoredCircuit | null {
     const parsed = JSON.parse(raw);
     if (!parsed || !Array.isArray(parsed.parts) || !Array.isArray(parsed.wires)) return null;
     return {
-      // Saves written before schemaVersion existed are version 1 by definition - there's been only
-      // one shape so far, so no migration branch is needed yet. Add one here the day version 2 ships.
-      schemaVersion: typeof parsed.schemaVersion === "number" ? parsed.schemaVersion : 1,
+      // Whatever version was read, what comes out is the current shape - migrateBlocks below is the
+      // only version-specific step so far.
+      schemaVersion: CURRENT_SCHEMA_VERSION,
       parts: parsed.parts,
       wires: parsed.wires,
       // Circuits saved before the block feature existed have no `blocks` field - default to empty
       // rather than rejecting the whole saved circuit.
-      blocks: Array.isArray(parsed.blocks) ? parsed.blocks : [],
+      blocks: Array.isArray(parsed.blocks) ? migrateBlocks(parsed.blocks) : [],
       outputNode: typeof parsed.outputNode === "string" ? parsed.outputNode : "",
       inputGain: typeof parsed.inputGain === "number" ? parsed.inputGain : 0.5,
       probes: Array.isArray(parsed.probes) ? parsed.probes.filter(isProbe) : [],

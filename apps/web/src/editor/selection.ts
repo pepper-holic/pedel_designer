@@ -1,4 +1,4 @@
-import { PART_HALF_HEIGHT, PART_HALF_WIDTH } from "./CanvasPart";
+import { PART_HALF_HEIGHT, PART_HALF_WIDTH } from "./partMetrics";
 import type { PartInstance, Wire } from "./types";
 
 export interface SelectionBox {

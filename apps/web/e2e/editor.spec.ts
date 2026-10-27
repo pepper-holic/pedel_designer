@@ -66,13 +66,14 @@ test("reports why a broken circuit does nothing, and clears once it is fixed", a
 test("wheel over the canvas zooms instead of scrolling the page", async ({ page }) => {
   await loadPreset(page, /TS9 스타일 오버드라이브/);
 
+  // A loaded preset is fitted to the frame, so the starting zoom depends on the window size.
   const zoomLabel = page.locator(".canvas-zoom-controls span");
-  await expect(zoomLabel).toHaveText("100%");
+  const before = await zoomLabel.textContent();
 
   await page.locator(".canvas-frame svg").hover();
   await page.mouse.wheel(0, -200);
 
-  await expect(zoomLabel).not.toHaveText("100%");
+  await expect(zoomLabel).not.toHaveText(before ?? "");
   // The page itself must not have moved - that was the bug the passive-listener fix addressed.
   expect(await page.evaluate(() => window.scrollY)).toBe(0);
 });

@@ -14,13 +14,17 @@ export interface JfetLinearization {
 /**
  * Shichman-Hodges square-law model, saturation region only (Id independent of Vds - fine for the
  * gate-biased buffer/boost stages this component targets, which keep the JFET well into pinch-off).
- * Id = Idss*(1 - Vgs/Vp)^2 for Vp < Vgs < 0, clamped flat to Idss above Vgs=0 and to 0 below Vgs=Vp
- * (real forward gate conduction / full cutoff are both outside the intended operating range).
+ * Id = Idss*(1 - Vgs/Vp)^2 above Vgs=Vp, 0 below (cutoff).
+ *
+ * The square law deliberately continues past Vgs=0 instead of flattening at Idss. A flat region has
+ * no slope for Newton to follow: a source follower whose solve starts from 0V sees Vgs=+4.5V, gets a
+ * constant Idss, overshoots into cutoff, gets a constant 0, and bounces between the two forever.
+ * Continuing the curve is also closer to a real JFET, whose drain current does keep rising a little
+ * above Vgs=0 (forward gate conduction, which clamps Vgs near +0.5V, is still not modelled).
  */
 export function linearizeJfet(el: JfetElement, vgs: number): JfetLinearization {
   const vp = el.pinchOffVoltage; // negative
   if (vgs <= vp) return { id0: 0, gm: 0 };
-  if (vgs >= 0) return { id0: el.idss, gm: 0 };
 
   const ratio = 1 - vgs / vp;
   const id0 = el.idss * ratio * ratio;

@@ -2,10 +2,8 @@ import { PART_DEFS } from "./partDefs";
 import { PartSymbol } from "./symbols";
 import { partValueLabel } from "./valueLabel";
 import type { PartInstance, TerminalRef } from "./types";
+import { PART_HALF_WIDTH, PART_HALF_HEIGHT } from "./partMetrics";
 
-/** Half-extent of the invisible body hit-box, shared with the selection outline and block regions. */
-export const PART_HALF_WIDTH = 40;
-export const PART_HALF_HEIGHT = 38;
 
 interface CanvasPartProps {
   part: PartInstance;

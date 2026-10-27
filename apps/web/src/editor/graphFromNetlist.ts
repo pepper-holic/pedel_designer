@@ -130,7 +130,7 @@ export function graphFromNetlist(
   netlist: Netlist,
   inputSourceId?: string,
   layout?: Record<string, { x: number; y: number }>,
-): { parts: PartInstance[]; wires: Wire[] } {
+): { parts: PartInstance[]; wires: Wire[]; groundOwners: Map<string, string> } {
   const neighbors = buildNeighborMap(netlist);
   const depth = computeSignalDepth(netlist, inputSourceId, neighbors);
   const rowOf = assignRows(netlist, depth, neighbors);
@@ -141,6 +141,7 @@ export function graphFromNetlist(
     const row = rowOf.get(element.id) ?? 0;
 
     const { id, type, nodes, ...rest } = element;
+    const { role, ...params } = rest as Record<string, unknown> & { role?: PartInstance["role"] };
     const override = layout?.[id];
     parts.push({
       id,
@@ -148,7 +149,8 @@ export function graphFromNetlist(
       x: override?.x ?? ORIGIN_X + column * COLUMN_SPACING,
       y: override?.y ?? ORIGIN_Y + row * ROW_SPACING,
       rotation: orientTwoTerminal(type, nodes),
-      params: rest as PartInstance["params"],
+      params: params as PartInstance["params"],
+      ...(role ? { role } : {}),
     });
   }
 
@@ -164,6 +166,12 @@ export function graphFromNetlist(
     element.nodes.forEach((node, i) => addTerminal(node, { partId: element.id, terminalId: terminals[i].id }));
   }
 
+  // Each element's grounded terminals connect only to that element's own local ground symbol. Every
+  // ground symbol is the same net (netlistFromGraph unions them), so chaining all grounded
+  // terminals together as well would add nothing electrically - and drew long wires across the
+  // sheet between parts that merely share ground.
+  const groundOwners = new Map<string, string>();
+  const localGroundWires: [TerminalRef, TerminalRef][] = [];
   let groundIndex = 0;
   for (const element of netlist.elements) {
     if (!element.nodes.includes(GROUND)) continue;
@@ -176,13 +184,19 @@ export function graphFromNetlist(
     groundIndex += 1;
     const groundPartId = `${GROUND_ID_PREFIX}${groundIndex}`;
     parts.push({ id: groundPartId, type: "ground", x: ownerX, y: ownerY + GROUND_LOCAL_OFFSET_Y, rotation: 0, params: {} });
-    addTerminal(GROUND, { partId: groundPartId, terminalId: "gnd" });
+    groundOwners.set(groundPartId, element.id);
+    const terminals = PART_DEFS[element.type].terminals;
+    element.nodes.forEach((node, i) => {
+      if (node === GROUND) localGroundWires.push([{ partId: groundPartId, terminalId: "gnd" }, { partId: element.id, terminalId: terminals[i].id }]);
+    });
   }
 
   const partById = new Map(parts.map((p) => [p.id, p]));
   const wires: Wire[] = [];
   let wireCount = 0;
-  for (const refs of terminalsByNode.values()) {
+  for (const [a, b] of localGroundWires) wires.push({ id: `w${wireCount++}`, a, b });
+  for (const [node, refs] of terminalsByNode) {
+    if (node === GROUND) continue;
     // Chain in layout order (left-to-right, then top-to-bottom) so each wire connects
     // geometrically nearby parts instead of whatever order they appeared in the netlist.
     const sorted = [...refs].sort((a, b) => {
@@ -195,7 +209,7 @@ export function graphFromNetlist(
     }
   }
 
-  return { parts, wires };
+  return { parts, wires, groundOwners };
 }
 
 /**

@@ -28,17 +28,50 @@ export interface PartInstance {
   blockId?: string;
 }
 
-export type BlockCategory = "buffer" | "gain" | "clipping" | "tone" | "load";
+export type BlockCategory = "input" | "buffer" | "gain" | "clipping" | "fuzz" | "tone" | "output" | "power" | "load" | "custom";
 
-/** A functional block (e.g. one "게인 스테이지" instance) stamped onto the canvas: a group of parts
- * + internal wires added together from a BlockDef, tracked here only for the schematic canvas's
- * tinted-region overlay and "delete whole block" - the parts themselves are otherwise ordinary,
- * independently wirable/editable PartInstances. */
+/** What a block's connection point is for. Decides which side of the collapsed symbol it sits on
+ * (in/aux left, out right, supply/bias top, ground bottom) and how it is labelled. */
+export type PortKind = "in" | "out" | "supply" | "bias" | "ground" | "aux";
+
+/**
+ * A block's connection point to the rest of the circuit. It names a real terminal *inside* the
+ * block, so wires always connect part to part and the netlist never has to know blocks exist -
+ * collapsing a block only changes how those wires are drawn (to the port's pin on the box).
+ */
+export interface BlockPort {
+  id: string;
+  label: string;
+  kind: PortKind;
+  terminal: TerminalRef;
+}
+
+/** A parameter inside the block surfaced on the block itself - the knobs a black-box user turns
+ * without opening it up (a pot's position, a switch, a gain-setting resistor). */
+export interface BlockParam {
+  id: string;
+  label: string;
+  partId: string;
+  paramKey: string;
+}
+
+/**
+ * A functional block (e.g. one "게인 스테이지" instance): a group of ordinary parts plus how the
+ * group presents itself. Expanded, it is a tinted region over its parts; collapsed, it is a box with
+ * port pins and knob names, and its parts and internal wires are hidden.
+ */
 export interface BlockInstance {
   id: string;
-  defId: string;
+  /** Library definition it was stamped from, or null for a block the user grouped by hand. */
+  defId: string | null;
   label: string;
   category: BlockCategory;
+  ports: BlockPort[];
+  params: BlockParam[];
+  /** Collapsed blocks draw as a box centred on their parts' bounding box - deriving the position
+   * from the parts (rather than storing one) means dragging, nudging or undoing parts can never
+   * leave the box somewhere else. */
+  collapsed: boolean;
 }
 
 export interface TerminalRef {

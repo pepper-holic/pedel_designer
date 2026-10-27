@@ -10,10 +10,13 @@ import type { JfetElement } from "../../src/core/solver/types";
 const el: JfetElement = { id: "Q1", type: "jfet", nodes: ["g", "d", "s"], idss: 2e-3, pinchOffVoltage: -2.5 };
 
 describe("linearizeJfet", () => {
-  it("returns Idss with zero transconductance at Vgs=0 (fully on)", () => {
+  it("returns Idss at Vgs=0, and keeps a slope there so Newton can move off it", () => {
     const { id0, gm } = linearizeJfet(el, 0);
     expect(id0).toBeCloseTo(2e-3, 6);
-    expect(gm).toBe(0);
+    // dId/dVgs of the square law at Vgs=0 is 2*Idss/|Vp|; a flat 0 here is what made a source
+    // follower's Newton solve bounce between "fully on" and "cut off" without converging.
+    expect(gm).toBeGreaterThan(0);
+    expect(linearizeJfet(el, 0.2).id0).toBeGreaterThan(id0);
   });
 
   it("returns zero current at/below pinch-off (fully off)", () => {

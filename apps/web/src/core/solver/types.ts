@@ -51,6 +51,12 @@ export interface VoltageSourceElement extends ElementBase {
    * pedal chain get it right for free, without every call site having to remember to pass it.
    */
   isSignalSource?: boolean;
+  /**
+   * What this source is for when the netlist is laid out on the canvas (see PartRole in
+   * editor/types.ts). The solver ignores it; graphFromNetlist copies it onto the part so a supply
+   * rail in a preset or block is never mistaken for the audio input.
+   */
+  role?: "signalSource" | "supply" | "bias";
 }
 
 export interface DiodeElement extends ElementBase {

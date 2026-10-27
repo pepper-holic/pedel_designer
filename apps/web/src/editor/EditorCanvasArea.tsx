@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SchematicCanvas } from "./SchematicCanvas";
 import { BottomDock } from "./BottomDock";
 import type { DockTab } from "./dockTabs";
@@ -13,13 +13,14 @@ const EMPTY_CIRCUIT_TIP =
 
 const CANVAS_HINT =
   "R: 회전 · Delete: 삭제 · Ctrl+C/V/D: 복사·붙여넣기·복제 · 방향키: 이동(Shift로 크게) · [ ]: 부품 순환 · Esc: 선택 해제 · " +
-  "휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · Shift+드래그: 범위 선택 · 부품 드래그: 이동 · 단자 클릭 2회: 배선 · 배선 클릭: 선택 · P: 프로브 모드";
+  "휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · Shift+드래그: 범위 선택 · 부품 드래그: 이동 · 단자 클릭 2회: 배선 · 배선 클릭: 선택 · P: 프로브 모드 · Ctrl+G: 블록으로 묶기 · 블록 더블클릭: 접기/펼치기";
 
 interface EditorCanvasAreaProps {
   parts: PartInstance[];
   wires: Wire[];
   blocks: BlockInstance[];
-  canvasSize: { width: number; height: number };
+  /** Bumped to re-fit the view to the circuit (replaced circuit, newly placed block). */
+  fitSignal: number;
   selectedPartId: string | null;
   selectedPartIds: string[];
   selectedWireId: string | null;
@@ -40,11 +41,31 @@ interface EditorCanvasAreaProps {
   operatingPoint: OperatingPoint | null;
   showDc: boolean;
   onShowDcChange: (on: boolean) => void;
+  selectedBlockId: string | null;
+  onSelectBlock: (blockId: string) => void;
+  onToggleCollapse: (blockId: string) => void;
 }
 
 /** Centre column: the schematic itself with the analysis dock underneath. */
+const FALLBACK_SIZE = { width: 900, height: 460 };
+
 export function EditorCanvasArea(props: EditorCanvasAreaProps) {
   const areaRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+  // The canvas is exactly the size of its visible frame; zoom and pan reach the rest. (It used to
+  // grow with the circuit inside a scrolling frame, so "fit to view" fitted the circuit to an SVG
+  // larger than the screen and parts could sit in scrolled-away space.)
+  const [size, setSize] = useState(FALLBACK_SIZE);
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      if (width > 50 && height > 50) setSize({ width: Math.floor(width), height: Math.floor(height) });
+    });
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, []);
 
   // On a narrow screen the three panes stack, and the canvas can sit below the fold - so loading a
   // preset changes nothing the user can see. `block: "nearest"` makes this a no-op on a wide screen
@@ -68,13 +89,13 @@ export function EditorCanvasArea(props: EditorCanvasAreaProps) {
         ) : (
           <p className="canvas-hint">{CANVAS_HINT}</p>
         )}
-        <div className="canvas-frame canvas-frame-scroll">
+        <div className="canvas-frame canvas-frame-scroll" ref={frameRef}>
           <SchematicCanvas
             parts={props.parts}
             wires={props.wires}
             blocks={props.blocks}
-            width={props.canvasSize.width}
-            height={props.canvasSize.height}
+            width={size.width}
+            height={size.height}
             selectedPartId={props.selectedPartId}
             selectedPartIds={props.selectedPartIds}
             selectedWireId={props.selectedWireId}
@@ -92,7 +113,10 @@ export function EditorCanvasArea(props: EditorCanvasAreaProps) {
             operatingPoint={props.operatingPoint}
             showDc={props.showDc}
             onShowDcChange={props.onShowDcChange}
-            fitSignal={props.circuitVersion}
+            selectedBlockId={props.selectedBlockId}
+            onSelectBlock={props.onSelectBlock}
+            onToggleCollapse={props.onToggleCollapse}
+            fitSignal={props.fitSignal}
           />
         </div>
       </div>

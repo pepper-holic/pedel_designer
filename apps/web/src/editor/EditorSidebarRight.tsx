@@ -1,6 +1,7 @@
 import { InspectorPanel } from "./InspectorPanel";
 import { OutputAudioPanel } from "./OutputAudioPanel";
 import { ProbePanel } from "./ProbePanel";
+import { BlockInspector } from "./BlockInspector";
 import type { BlockInstance, PartInstance, Wire } from "./types";
 import type { GraphNetlist } from "./netlistFromGraph";
 import type { useAudioRun } from "./useAudioRun";
@@ -22,6 +23,10 @@ interface EditorSidebarRightProps {
   onDelete: () => void;
   onDeleteBlock: (blockId: string) => void;
   probePanel: React.ComponentProps<typeof ProbePanel>;
+  /** Set when a whole block is selected: its inspector replaces the part inspector. */
+  blockInspector: React.ComponentProps<typeof BlockInspector> | null;
+  onSelectBlock: (blockId: string) => void;
+  onExposeParam: (blockId: string, partId: string, paramKey: string) => void;
   preview: { enabled: boolean; onEnabledChange: (on: boolean) => void; busy: boolean };
 }
 
@@ -30,7 +35,12 @@ export function EditorSidebarRight(props: EditorSidebarRightProps) {
   const { audio, graph } = props;
   return (
     <div className="sidebar-right">
+      {props.blockInspector ? (
+        <BlockInspector {...props.blockInspector} />
+      ) : (
       <InspectorPanel
+        onSelectBlock={props.onSelectBlock}
+        onExposeParam={props.onExposeParam}
         selectedPart={props.selectedPart}
         selectedWire={props.selectedWire}
         blocks={props.blocks}
@@ -40,6 +50,7 @@ export function EditorSidebarRight(props: EditorSidebarRightProps) {
         onDelete={props.onDelete}
         onDeleteBlock={props.onDeleteBlock}
       />
+      )}
 
       <ProbePanel {...props.probePanel} />
 

@@ -21,6 +21,9 @@ interface EditorShortcuts {
   /** Bracket keys, +1 or -1, so the canvas is reachable without a mouse. */
   onCycleSelection: (direction: 1 | -1) => void;
   onDeselect: () => void;
+  /** Ctrl+G / Ctrl+Shift+G: group the selection into a block / dissolve the selected block. */
+  onGroup?: () => void;
+  onUngroup?: () => void;
   /** P: toggle probe mode. */
   onToggleProbeMode?: () => void;
 }
@@ -43,6 +46,8 @@ export function useEditorShortcuts({
   onNudge,
   onCycleSelection,
   onDeselect,
+  onGroup,
+  onUngroup,
   onToggleProbeMode,
 }: EditorShortcuts): void {
   useEffect(() => {
@@ -58,6 +63,12 @@ export function useEditorShortcuts({
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
         e.preventDefault();
         onRedo();
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "g") {
+        e.preventDefault();
+        if (e.shiftKey) onUngroup?.();
+        else onGroup?.();
         return;
       }
       if (e.ctrlKey || e.metaKey) {
@@ -93,5 +104,5 @@ export function useEditorShortcuts({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onUndo, onRedo, onRotate, onDelete, onCopy, onPaste, onDuplicate, onNudge, onCycleSelection, onDeselect, onToggleProbeMode]);
+  }, [onUndo, onRedo, onRotate, onDelete, onCopy, onPaste, onDuplicate, onNudge, onCycleSelection, onDeselect, onGroup, onUngroup, onToggleProbeMode]);
 }
