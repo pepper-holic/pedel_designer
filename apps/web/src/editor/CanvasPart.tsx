@@ -1,6 +1,5 @@
 import { PART_DEFS } from "./partDefs";
 import { PartSymbol } from "./symbols";
-import { partValueLabel } from "./valueLabel";
 import type { PartInstance, TerminalRef } from "./types";
 import { PART_HALF_WIDTH, PART_HALF_HEIGHT } from "./partMetrics";
 
@@ -14,16 +13,16 @@ interface CanvasPartProps {
 }
 
 /**
- * One placed part: hit-box, symbol, terminals and labels.
+ * One placed part: hit-box, symbol and terminals. Its id/value text is drawn separately by
+ * CanvasLabelLayer, which places every part's and net's labels together so they can avoid each
+ * other and the wires - see layout/labels.ts.
  *
- * Rotation is scoped to an inner group (symbol + terminals only) rather than the outer one, so the
- * id/value text stays upright and stays put on screen instead of flipping upside-down - and sliding
- * to the opposite side - whenever a part is rotated 180, which auto-layout does routinely for
- * antiparallel diode pairs.
+ * Rotation is scoped to an inner group (symbol + terminals only) rather than the outer one, so a
+ * rotated part's terminals land correctly without needing the (separately drawn) label text to
+ * counter-rotate back upright.
  */
 export function CanvasPart({ part, isSelected, pendingTerminal, onBodyMouseDown, onTerminalClick }: CanvasPartProps) {
   const def = PART_DEFS[part.type];
-  const valueLabel = partValueLabel(part);
 
   return (
     <g data-part-id={part.id} transform={`translate(${part.x},${part.y})`}>
@@ -63,18 +62,6 @@ export function CanvasPart({ part, isSelected, pendingTerminal, onBodyMouseDown,
           />
         ))}
       </g>
-      <rect x={-19} y={-39} width={38} height={11} fill="var(--bg-inset)" opacity={0.85} pointerEvents="none" />
-      <text textAnchor="middle" y={-30} fill="var(--text-dim)" fontSize={10} fontFamily="var(--font-mono)" pointerEvents="none">
-        {part.id}
-      </text>
-      {valueLabel && (
-        <>
-          <rect x={-24} y={39} width={48} height={11} fill="var(--bg-inset)" opacity={0.85} pointerEvents="none" />
-          <text textAnchor="middle" y={46} fill="var(--text-dim)" fontSize={10} fontFamily="var(--font-mono)" pointerEvents="none">
-            {valueLabel}
-          </text>
-        </>
-      )}
     </g>
   );
 }

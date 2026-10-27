@@ -126,10 +126,13 @@ describe("SchematicEditor", () => {
     // isn't always "resistor1" - match whichever "resistorN" label the canvas actually rendered.
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const idLabel = within(canvasPanel).getByText(/^resistor\d+$/);
-    // The clickable hit target is a sibling <rect> (the mousedown handler), not the <text> label
-    // itself - the SVG canvas has no accessible role for its shapes, so this is a deliberate,
-    // narrowly-scoped DOM query rather than an accessible one (there is no accessible query for it).
-    const hitbox = idLabel.closest("g")!.querySelector<SVGRectElement>("rect")!;
+    // The id label is drawn by a separate layer (CanvasLabelLayer), not inside the part's own <g> -
+    // find the part's group by the id text it shows, then its clickable hit target, a sibling <rect>
+    // (the mousedown handler). The SVG canvas has no accessible role for its shapes, so this is a
+    // deliberate, narrowly-scoped DOM query rather than an accessible one (there is no accessible
+    // query for it).
+    const partGroup = canvasPanel.querySelector<SVGGElement>(`g[data-part-id="${idLabel.textContent}"]`)!;
+    const hitbox = partGroup.querySelector<SVGRectElement>("rect")!;
     await user.click(hitbox);
 
     const inspector = screen.getByText("선택된 소자").closest<HTMLElement>(".panel")!;
@@ -160,8 +163,11 @@ describe("SchematicEditor", () => {
 
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const idLabel = within(canvasPanel).getByText(/^blk\d+_U1$/);
-    // The body hit-box, not the selection outline (adding a block selects it, so the outline is drawn).
-    const hitbox = idLabel.closest("g")!.querySelector<SVGRectElement>('rect[fill="transparent"]')!;
+    // The id label is drawn by a separate layer (CanvasLabelLayer), not inside the part's own <g> -
+    // find the part's group by the id text it shows, then the body hit-box, not the selection
+    // outline (adding a block selects it, so the outline is drawn).
+    const partGroup = canvasPanel.querySelector<SVGGElement>(`g[data-part-id="${idLabel.textContent}"]`)!;
+    const hitbox = partGroup.querySelector<SVGRectElement>('rect[fill="transparent"]')!;
     await user.click(hitbox);
 
     const inspector = screen.getByText("선택된 소자").closest<HTMLElement>(".panel")!;

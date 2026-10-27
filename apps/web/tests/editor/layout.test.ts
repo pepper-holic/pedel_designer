@@ -4,6 +4,8 @@ import { wireRoutes } from "../../src/editor/routing/wirePolylines";
 import { arrangeParts } from "../../src/editor/layout/arrange";
 import { rewireNets } from "../../src/editor/layout/rewire";
 import { layoutMetrics } from "../../src/editor/layout/metrics";
+import { partLabelPlacements } from "../../src/editor/layout/partLabels";
+import { rectsOverlap } from "../../src/editor/layout/labels";
 import { bboxOfParts } from "../../src/editor/blockGeometry";
 import { buildCanvasEndpoints } from "../../src/editor/canvasEndpoints";
 import { draggableCorners, polylineThrough } from "../../src/editor/geometry";
@@ -214,5 +216,50 @@ describe("node-level wiring (L3)", () => {
     const m = layoutMetrics({ ...snapshot, wires: routes.map((r) => r.wire) }, routes.map((r) => r.points), wireNetOf);
     expect(m.parallelDuplicates).toBe(0);
   });
+});
 
+describe("label placement (L4)", () => {
+  it("places every part's id/value label with no label-label or label-wire overlap, across every preset", () => {
+    for (const preset of presets) {
+      const { snapshot } = loadPedalPreset(preset);
+      const g = netlistFromGraph(snapshot.parts, snapshot.wires);
+      const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
+      const endpoints = buildCanvasEndpoints(snapshot.parts, snapshot.blocks, netOf);
+      const { requests, placed } = partLabelPlacements(snapshot.parts, snapshot.wires, endpoints, netOf);
+      const rects = requests.map((r) => placed.get(r.id)!);
+
+      for (let i = 0; i < rects.length; i++) {
+        for (let j = i + 1; j < rects.length; j++) {
+          expect(rectsOverlap(rects[i], rects[j]), `${preset.id}: ${requests[i].id} / ${requests[j].id}`).toBe(false);
+        }
+      }
+
+      const routes = wireRoutes(snapshot.wires, snapshot.parts, endpoints, netOf, false);
+      const wireSegs = routes.flatMap(({ points }) => points.slice(1).map((b, i) => ({ a: points[i], b })));
+      for (let i = 0; i < rects.length; i++) {
+        for (const s of wireSegs) {
+          const horizontal = s.a.y === s.b.y;
+          const hit = horizontal
+            ? s.a.y > rects[i].y1 && s.a.y < rects[i].y2 && Math.max(s.a.x, s.b.x) > rects[i].x1 && Math.min(s.a.x, s.b.x) < rects[i].x2
+            : s.a.x > rects[i].x1 && s.a.x < rects[i].x2 && Math.max(s.a.y, s.b.y) > rects[i].y1 && Math.min(s.a.y, s.b.y) < rects[i].y2;
+          expect(hit, `${preset.id}: ${requests[i].id} crosses a wire`).toBe(false);
+        }
+      }
+    }
+  });
+
+  it("gives a potentiometer's label somewhere other than straight up, where its wiper indicator is drawn", () => {
+    const preset = presets.find((p) => p.id === "ts9-overdrive")!;
+    const { snapshot } = loadPedalPreset(preset);
+    const pot = snapshot.parts.find((p) => p.type === "potentiometer");
+    expect(pot).toBeDefined();
+    const g = netlistFromGraph(snapshot.parts, snapshot.wires);
+    const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
+    const endpoints = buildCanvasEndpoints(snapshot.parts, snapshot.blocks, netOf);
+    const { placed } = partLabelPlacements(snapshot.parts, snapshot.wires, endpoints, netOf);
+    const idRect = placed.get(`id-${pot!.id}`)!;
+    // "up" would put the box entirely above the anchor (y2 <= anchor.y); anything else keeps some
+    // part of the box at or below it.
+    expect(idRect.y2).toBeGreaterThan(pot!.y);
+  });
 });

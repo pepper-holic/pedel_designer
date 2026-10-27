@@ -5,6 +5,7 @@ import { useCanvasView } from "./useCanvasView";
 import { CanvasPart } from "./CanvasPart";
 import { CanvasBlockLayer } from "./CanvasBlockLayer";
 import { CanvasWireLayer } from "./CanvasWireLayer";
+import { CanvasLabelLayer } from "./CanvasLabelLayer";
 import { CanvasProbeLayer } from "./CanvasProbeLayer";
 import { CanvasBlockSymbol } from "./CanvasBlockSymbol";
 import { buildCanvasEndpoints } from "./canvasEndpoints";
@@ -368,6 +369,8 @@ export function SchematicCanvas({
               onTerminalClick={handleTerminalClick}
             />
           ))}
+
+          <CanvasLabelLayer parts={parts} wires={wires} endpoints={endpoints} netOf={netOf} />
 
           {(probes.length > 0 || showDc) && terminalNet && (
             <CanvasProbeLayer

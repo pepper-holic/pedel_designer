@@ -19,7 +19,9 @@ describe("footprint choice in the inspector", () => {
     await user.click(screen.getByRole("button", { name: "커패시터" }));
     const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const label = within(canvasPanel).getByText(/^capacitor\d+$/);
-    await user.click(label.closest("g")!.querySelector<SVGRectElement>("rect")!);
+    // The id label is drawn by a separate layer (CanvasLabelLayer), not inside the part's own <g>.
+    const partGroup = canvasPanel.querySelector<SVGGElement>(`g[data-part-id="${label.textContent}"]`)!;
+    await user.click(partGroup.querySelector<SVGRectElement>("rect")!);
 
     const select = screen.getByLabelText("풋프린트 (PCB)");
     // Default 1µF -> a small electrolytic.

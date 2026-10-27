@@ -85,7 +85,9 @@ describe("player view", () => {
     await userEvent.click(screen.getByRole("button", { name: "저항" }));
     const canvasPanel = () => screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const idLabel = within(canvasPanel()).getByText(/^resistor\d+$/);
-    await userEvent.click(idLabel.closest("g")!.querySelector<SVGRectElement>("rect")!);
+    // The id label is drawn by a separate layer (CanvasLabelLayer), not inside the part's own <g>.
+    const partGroup = canvasPanel().querySelector<SVGGElement>(`g[data-part-id="${idLabel.textContent}"]`)!;
+    await userEvent.click(partGroup.querySelector<SVGRectElement>("rect")!);
 
     await userEvent.click(step("연주"));
     fireEvent.keyDown(window, { key: "Delete" });
