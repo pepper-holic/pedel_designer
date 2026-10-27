@@ -10,6 +10,9 @@ import type { GraphNetlist } from "./netlistFromGraph";
 /** Silence between the dry and processed halves of an A/B, so the switch is audible as a switch. */
 const AB_GAP_SEC = 0.25;
 
+/** What a run uses when no input has been chosen. */
+const DEFAULT_SIGNAL = "chord";
+
 /** Trace colours, in the order nodes come out of the netlist. */
 const TRACE_COLORS = ["#3c6b2e", "#7c9300", "#8a4a2a", "#191a10"];
 
@@ -62,29 +65,35 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
   };
 
   /** Loads one of the built-in signals so a first simulation needs no audio file at all. */
-  const handleUseTestSignal = (id: string) => {
+  const handleUseTestSignal = (id: string): LoadedSample | null => {
     const context = getAudioContext();
     const samples = generateTestSignal(id, context.sampleRate);
-    if (samples.length === 0) return;
-    setSample({ samples, sampleRate: context.sampleRate });
+    if (samples.length === 0) return null;
+    const loaded = { samples, sampleRate: context.sampleRate };
+    setSample(loaded);
     const label = TEST_SIGNALS.find((t) => t.id === id)?.label ?? id;
     setSampleSource({ kind: "signal", id, label });
     onStatus(`내장 신호 사용: ${label}`);
+    return loaded;
   };
 
+  /** Runs the input through the circuit. With no input chosen yet it uses the built-in chord - the
+   * same default real-time playback uses - rather than asking for a signal first. */
   const handleRun = async () => {
-    if (!sample || !graph.inputSourceId) return;
+    if (!graph.inputSourceId) return;
+    const input = sample ?? handleUseTestSignal(DEFAULT_SIGNAL);
+    if (!input) return;
     setIsSimulating(true);
     onStatus("시뮬레이션 실행 중...");
-    const scaled = new Float64Array(sample.samples.length);
-    for (let i = 0; i < scaled.length; i++) scaled[i] = sample.samples[i] * inputGain;
+    const scaled = new Float64Array(input.samples.length);
+    for (let i = 0; i < scaled.length; i++) scaled[i] = input.samples[i] * inputGain;
     try {
       // Run off the main thread - a long user-uploaded file is enough per-sample Newton solving to
       // freeze the page if run inline (docs/ROADMAP.md §6).
       const { traces, nonConvergentSampleCount } = await runTransientAsync(graph.netlist, {
         inputSourceId: graph.inputSourceId,
         inputSamples: scaled,
-        sampleRate: sample.sampleRate,
+        sampleRate: input.sampleRate,
         tapNodes: graph.netNames.filter((n) => n !== "0"),
         // Resolves fast clipping knees (germanium diodes etc.) that a single 44.1/48kHz sample
         // period would otherwise alias away (docs/ROADMAP.md §6 risk 2). THD/Monte Carlo/chain use

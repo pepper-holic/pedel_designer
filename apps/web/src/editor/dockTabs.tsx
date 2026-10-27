@@ -3,16 +3,13 @@ import { WaveformTab } from "./WaveformTab";
 import { SpectrumTab } from "./SpectrumTab";
 import type { ResolvedProbe } from "./probes";
 import { SweepTab } from "./SweepTab";
-import { DrcPanel } from "./DrcPanel";
 import { ImpedancePanel } from "./ImpedancePanel";
 import { ThdPanel } from "./ThdPanel";
 import { MonteCarloPanel } from "./MonteCarloPanel";
 import { ChainPanel } from "./ChainPanel";
-import { BomPanel } from "./BomPanel";
-import { PcbTab } from "./pcb/PcbTab";
 import type { MonteCarloResult } from "../core/analysis/montecarlo";
 import type { GraphNetlist } from "./netlistFromGraph";
-import type { BlockInstance, PartInstance, Wire } from "./types";
+import type { PartInstance, Wire } from "./types";
 import type { useAnalysisPanels } from "./useAnalysisPanels";
 import type { useAudioRun } from "./useAudioRun";
 import type { FrequencyResponseResult } from "./useFrequencyResponse";
@@ -27,11 +24,9 @@ export interface DockTab {
 
 interface DockTabsInput {
   parts: PartInstance[];
-  blocks: BlockInstance[];
   wires: Wire[];
   graph: GraphNetlist;
   outputNode: string;
-  onSelectPart: (id: string) => void;
   acResult: FrequencyResponseResult;
   probes: ResolvedProbe[];
   monteCarloResult: MonteCarloResult | null;
@@ -40,19 +35,18 @@ interface DockTabsInput {
 }
 
 /**
- * The bottom dock's tabs, in the order they are meant to be reached: check the circuit first, then
- * look at what it does, then at what it costs to build.
+ * The analysis views, in the order they are meant to be reached: what the circuit does to the
+ * spectrum, then to a real signal, then how it reacts to knobs, loads, drive and part tolerances.
+ * The design step's quick dock shows a few of them; the analysis step shows them all.
  *
  * Kept out of SchematicEditor so that component stays about editing - the tab list is pure
  * configuration and grows every time an analysis is added.
  */
-export function buildDockTabs({
+export function buildAnalysisTabs({
   parts,
-  blocks,
   wires,
   graph,
   outputNode,
-  onSelectPart,
   acResult,
   probes,
   monteCarloResult,
@@ -62,12 +56,6 @@ export function buildDockTabs({
   const inputElement = graph.netlist.elements.find((e) => e.id === graph.inputSourceId);
   const inputNet = inputElement ? inputElement.nodes[0] : null;
   return [
-  {
-    key: "drc",
-    label: "검사",
-    helpText: "접지 누락, 떠 있는 단자처럼 회로가 동작하지 않는 원인을 찾아 알려줍니다. 분석 결과가 비어 있으면 먼저 여기를 보세요.",
-    content: <DrcPanel parts={parts} wires={wires} outputNode={outputNode} onSelectPart={onSelectPart} />,
-  },
   {
     key: "response",
     label: `주파수 응답${outputNode ? ` (→ ${outputNode})` : ""}`,
@@ -86,7 +74,7 @@ export function buildDockTabs({
   {
     key: "waveform",
     label: "파형",
-    helpText: "오디오 파일을 넣고 시뮬레이션을 실행하면 입력/출력 파형을 비교하고 소리로 들어볼 수 있습니다.",
+    helpText: "아래 소리 막대에서 입력 신호를 고르고 시뮬레이션을 실행하면, 지점마다 파형을 비교하고 소리로 들어볼 수 있습니다.",
     content: (
       <WaveformTab
         traces={audio.waveTraces}
@@ -94,10 +82,6 @@ export function buildDockTabs({
         probes={probes}
         onPlay={audio.handlePlay}
         onCompare={audio.handleCompare}
-        cabinetEnabled={audio.cabinetEnabled}
-        onCabinetEnabledChange={audio.setCabinetEnabled}
-        cabinetVariant={audio.cabinetVariant}
-        onCabinetVariantChange={audio.setCabinetVariant}
       />
     ),
   },
@@ -138,18 +122,6 @@ export function buildDockTabs({
     label: "페달 체인",
     helpText: "지금 만든 회로를 다른 프리셋과 직렬로 연결했을 때(예: 부스트 → 오버드라이브) 결과를 시뮬레이션합니다.",
     content: <ChainPanel {...analysis.chain} />,
-  },
-  {
-    key: "bom",
-    label: "BOM",
-    helpText: "부품 목록(Bill of Materials): 이 회로를 실제로 만들 때 구매해야 할 부품과 값을 정리해줍니다.",
-    content: <BomPanel parts={parts} graph={graph} />,
-  },
-  {
-    key: "pcb",
-    label: "PCB",
-    helpText: "실제로 만들기: 풋프린트가 지정된 KiCad 넷리스트, 역검증되는 스트립보드, 자동 배치·배선 PCB(.kicad_pcb, 1:1 인쇄), 인클로저 드릴 템플릿.",
-    content: <PcbTab parts={parts} blocks={blocks} graph={graph} outputNode={outputNode} />,
   },
   ];
 }

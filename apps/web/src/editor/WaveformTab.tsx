@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { CABINET_VARIANTS, type CabinetVariant } from "../audio/cabinetIr";
 import { Waveform, type WaveformTrace } from "../viz/Waveform";
 import type { ResolvedProbe } from "./probes";
 
@@ -13,10 +12,6 @@ interface WaveformTabProps {
   probes?: ResolvedProbe[];
   onPlay: (net: string) => void;
   onCompare: (net: string) => void;
-  cabinetEnabled: boolean;
-  onCabinetEnabledChange: (enabled: boolean) => void;
-  cabinetVariant: CabinetVariant;
-  onCabinetVariantChange: (variant: CabinetVariant) => void;
 }
 
 interface ShownTrace extends WaveformTrace {
@@ -45,11 +40,11 @@ function TapButtons({ traces, onPlay, onCompare }: { traces: ShownTrace[]; onPla
   );
 }
 
-/** Bottom-dock "파형" tab: plots the last transient-simulation result and lets the user play back
- * any tap point, optionally through a cabinet IR. */
-export function WaveformTab({ traces, durationSeconds, probes = [], onPlay, onCompare, cabinetEnabled, onCabinetEnabledChange, cabinetVariant, onCabinetVariantChange }: WaveformTabProps) {
+/** "파형" analysis tab: plots the last transient-simulation result and lets the user play back any
+ * tap point (through the cabinet chosen in the transport bar, if any). */
+export function WaveformTab({ traces, durationSeconds, probes = [], onPlay, onCompare }: WaveformTabProps) {
   const [showAll, setShowAll] = useState(false);
-  if (!traces) return <p className="preset-description">시뮬레이션을 실행하면 결과 파형이 여기에 표시됩니다.</p>;
+  if (!traces) return <p className="preset-description">위의 "▶ 시뮬레이션 실행"을 누르면 입력 신호를 회로에 통과시킨 파형이 여기에 표시됩니다.</p>;
 
   const byNet = new Map(traces.map((t) => [t.label, t]));
   const probed: ShownTrace[] = probes.flatMap((p) => {
@@ -65,25 +60,8 @@ export function WaveformTab({ traces, durationSeconds, probes = [], onPlay, onCo
       <div className="canvas-frame plot-frame">
         <Waveform traces={primary} durationSeconds={durationSeconds} />
       </div>
-      {/* Playback and cabinet on one wrapping line under the plot, so the plot keeps the height. */}
       <div className="plot-toolbar">
         <TapButtons traces={primary} onPlay={onPlay} onCompare={onCompare} />
-        <label>
-          <input type="checkbox" checked={cabinetEnabled} onChange={(e) => onCabinetEnabledChange(e.target.checked)} /> 캐비닛 IR
-        </label>
-        <select
-          value={cabinetVariant}
-          onChange={(e) => onCabinetVariantChange(e.target.value as CabinetVariant)}
-          disabled={!cabinetEnabled}
-          aria-label="캐비닛 종류"
-          title="제네릭 캐비닛 시뮬레이션"
-        >
-          {Object.entries(CABINET_VARIANTS).map(([key, label]) => (
-            <option key={key} value={key}>
-              {label}
-            </option>
-          ))}
-        </select>
       </div>
       {rest.length > 0 && (
         <div className="waveform-more">

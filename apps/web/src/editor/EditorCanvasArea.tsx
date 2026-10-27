@@ -1,19 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { SchematicCanvas } from "./SchematicCanvas";
-import { BottomDock } from "./BottomDock";
-import type { DockTab } from "./dockTabs";
 import type { BlockInstance, PartInstance, TerminalRef, Wire } from "./types";
 import type { ResolvedProbe } from "./probes";
 import type { OperatingPoint } from "./operatingPoint";
-
-const EMPTY_CIRCUIT_TIP =
-  '처음이신가요? "템플릿/블록" 탭에서 완성된 회로를 하나 불러온 뒤, 아래 "파형" 탭에서 오디오 파일을 넣고 ' +
-  '"시뮬레이션 실행"을 눌러보세요. THD는 소리가 얼마나 찌그러지는지, 부품 공차는 실제 부품값 오차가 소리에 얼마나 ' +
-  "영향을 주는지 보여주는 분석 도구입니다.";
-
-const CANVAS_HINT =
-  "R: 회전 · Delete: 삭제 · Ctrl+C/V/D: 복사·붙여넣기·복제 · 방향키: 이동(Shift로 크게) · [ ]: 부품 순환 · Esc: 선택 해제 · " +
-  "휠: 확대/축소 · 빈 배경 드래그: 화면 이동 · Shift+드래그: 범위 선택 · 부품 드래그: 이동 · 단자 클릭 2회: 배선 · 배선 클릭: 선택 · P: 프로브 모드 · Ctrl+G: 블록으로 묶기 · 블록 더블클릭: 접기/펼치기 · 선택한 배선의 네모 손잡이: 경로 옮기기";
 
 interface EditorCanvasAreaProps {
   parts: PartInstance[];
@@ -25,9 +14,12 @@ interface EditorCanvasAreaProps {
   selectedPartIds: string[];
   selectedWireId: string | null;
   onBoxSelect: (ids: string[]) => void;
-  /** Bumped whenever the whole circuit is replaced - re-fits the view and resets the dock. */
+  /** Bumped whenever the whole circuit is replaced - brings the canvas into view. */
   circuitVersion: number;
-  dockTabs: DockTab[];
+  /** Shown over the canvas (the start cards on an empty circuit). */
+  overlay?: ReactNode;
+  /** Right end of the panel's title row. */
+  headerExtra?: ReactNode;
   onMovePart: (id: string, x: number, y: number) => void;
   onSelectPart: (id: string | null) => void;
   onSelectWire: (id: string | null) => void;
@@ -49,7 +41,7 @@ interface EditorCanvasAreaProps {
   onAutoArrange: () => void;
 }
 
-/** Centre column: the schematic itself with the analysis dock underneath. */
+/** The schematic panel: title row, then the canvas filling whatever room the workspace gives it. */
 const FALLBACK_SIZE = { width: 900, height: 460 };
 
 export function EditorCanvasArea(props: EditorCanvasAreaProps) {
@@ -79,55 +71,45 @@ export function EditorCanvasArea(props: EditorCanvasAreaProps) {
   }, [props.circuitVersion]);
 
   return (
-    <div className="canvas-area" ref={areaRef}>
-      <div className="panel canvas-stage">
+    <div className="panel canvas-stage" ref={areaRef}>
+      <div className="panel-head">
         <div className="panel-title">회로도</div>
-        {props.parts.length === 0 ? (
-          <p className="preset-description">
-            회로가 비어 있습니다. 왼쪽 "소자 팔레트"에서 부품을 추가하거나, "템플릿" 탭에서 예제 회로를 불러와 시작하세요.
-            <span className="info-tip" title={EMPTY_CIRCUIT_TIP}>
-              ⓘ
-            </span>
-          </p>
-        ) : (
-          <p className="canvas-hint">{CANVAS_HINT}</p>
-        )}
-        <div className="canvas-frame canvas-frame-scroll" ref={frameRef}>
-          <SchematicCanvas
-            parts={props.parts}
-            wires={props.wires}
-            blocks={props.blocks}
-            width={size.width}
-            height={size.height}
-            selectedPartId={props.selectedPartId}
-            selectedPartIds={props.selectedPartIds}
-            selectedWireId={props.selectedWireId}
-            onBoxSelect={props.onBoxSelect}
-            onMovePart={props.onMovePart}
-            onSelectPart={props.onSelectPart}
-            onSelectWire={props.onSelectWire}
-            onAddWire={props.onAddWire}
-            onDragEnd={props.onDragEnd}
-            probeMode={props.probeMode}
-            onProbeModeChange={props.onProbeModeChange}
-            onProbeTerminal={props.onProbeTerminal}
-            probes={props.probes}
-            terminalNet={props.terminalNet}
-            operatingPoint={props.operatingPoint}
-            showDc={props.showDc}
-            onShowDcChange={props.onShowDcChange}
-            selectedBlockId={props.selectedBlockId}
-            onSelectBlock={props.onSelectBlock}
-            onToggleCollapse={props.onToggleCollapse}
-            onSetAllCollapsed={props.onSetAllCollapsed}
-            onWireWaypoints={props.onWireWaypoints}
-            onAutoArrange={props.onAutoArrange}
-            fitSignal={props.fitSignal}
-          />
-        </div>
+        {props.headerExtra}
       </div>
-
-      <BottomDock key={props.circuitVersion} tabs={props.dockTabs} />
+      <div className="canvas-frame canvas-frame-scroll" ref={frameRef}>
+        <SchematicCanvas
+          parts={props.parts}
+          wires={props.wires}
+          blocks={props.blocks}
+          width={size.width}
+          height={size.height}
+          selectedPartId={props.selectedPartId}
+          selectedPartIds={props.selectedPartIds}
+          selectedWireId={props.selectedWireId}
+          onBoxSelect={props.onBoxSelect}
+          onMovePart={props.onMovePart}
+          onSelectPart={props.onSelectPart}
+          onSelectWire={props.onSelectWire}
+          onAddWire={props.onAddWire}
+          onDragEnd={props.onDragEnd}
+          probeMode={props.probeMode}
+          onProbeModeChange={props.onProbeModeChange}
+          onProbeTerminal={props.onProbeTerminal}
+          probes={props.probes}
+          terminalNet={props.terminalNet}
+          operatingPoint={props.operatingPoint}
+          showDc={props.showDc}
+          onShowDcChange={props.onShowDcChange}
+          selectedBlockId={props.selectedBlockId}
+          onSelectBlock={props.onSelectBlock}
+          onToggleCollapse={props.onToggleCollapse}
+          onSetAllCollapsed={props.onSetAllCollapsed}
+          onWireWaypoints={props.onWireWaypoints}
+          onAutoArrange={props.onAutoArrange}
+          fitSignal={props.fitSignal}
+        />
+        {props.overlay}
+      </div>
     </div>
   );
 }

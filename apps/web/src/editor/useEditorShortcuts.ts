@@ -29,6 +29,12 @@ interface EditorShortcuts {
   /** False while the canvas is not shown (the player view): only undo/redo stay live, so an arrow
    * key meant for a knob cannot move a part nobody can see. */
   canvasActive?: boolean;
+  /** 1-4: switch work step (index 0-3). */
+  onMode?: (index: number) => void;
+  /** ?: the shortcut help. */
+  onHelp?: () => void;
+  /** Space: real-time playback on/off. */
+  onTogglePlay?: () => void;
 }
 
 /**
@@ -53,6 +59,9 @@ export function useEditorShortcuts({
   onUngroup,
   onToggleProbeMode,
   canvasActive = true,
+  onMode,
+  onHelp,
+  onTogglePlay,
 }: EditorShortcuts): void {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -68,6 +77,24 @@ export function useEditorShortcuts({
         e.preventDefault();
         onRedo();
         return;
+      }
+      if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+        if (onMode && e.key >= "1" && e.key <= "4") {
+          e.preventDefault();
+          onMode(Number(e.key) - 1);
+          return;
+        }
+        if (onHelp && e.key === "?") {
+          e.preventDefault();
+          onHelp();
+          return;
+        }
+        // On a focused button or slider Space is that control's own key.
+        if (onTogglePlay && e.key === " " && target.tagName !== "BUTTON" && target.getAttribute?.("role") !== "slider") {
+          e.preventDefault();
+          onTogglePlay();
+          return;
+        }
       }
       if (!canvasActive) return;
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "g") {
@@ -109,5 +136,23 @@ export function useEditorShortcuts({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onUndo, onRedo, onRotate, onDelete, onCopy, onPaste, onDuplicate, onNudge, onCycleSelection, onDeselect, onGroup, onUngroup, onToggleProbeMode, canvasActive]);
+  }, [
+    onUndo,
+    onRedo,
+    onRotate,
+    onDelete,
+    onCopy,
+    onPaste,
+    onDuplicate,
+    onNudge,
+    onCycleSelection,
+    onDeselect,
+    onGroup,
+    onUngroup,
+    onToggleProbeMode,
+    canvasActive,
+    onMode,
+    onHelp,
+    onTogglePlay,
+  ]);
 }

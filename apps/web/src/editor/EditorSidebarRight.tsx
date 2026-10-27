@@ -1,22 +1,17 @@
 import { InspectorPanel, type PartPatch } from "./InspectorPanel";
-import { OutputAudioPanel } from "./OutputAudioPanel";
 import { ProbePanel } from "./ProbePanel";
 import { BlockInspector } from "./BlockInspector";
+import { CircuitSummary } from "./shell/CircuitSummary";
 import type { BlockInstance, PartInstance, Wire } from "./types";
-import type { GraphNetlist } from "./netlistFromGraph";
-import type { useAudioRun } from "./useAudioRun";
+import type { WorkMode } from "./shell/modes";
 
 interface EditorSidebarRightProps {
+  parts: PartInstance[];
+  wires: Wire[];
   selectedPart: PartInstance | null;
   selectedWire: Wire | null;
   blocks: BlockInstance[];
-  graph: GraphNetlist;
   outputNode: string;
-  onOutputNodeChange: (node: string) => void;
-  inputGain: number;
-  onInputGainChange: (gain: number) => void;
-  status: string;
-  audio: ReturnType<typeof useAudioRun>;
   onParamChange: (key: string, value: string) => void;
   onApplyModel: (paramsOverride: Record<string, number | string>) => void;
   onRotate: () => void;
@@ -26,56 +21,52 @@ interface EditorSidebarRightProps {
   /** Set when a whole block is selected: its inspector replaces the part inspector. */
   blockInspector: React.ComponentProps<typeof BlockInspector> | null;
   onSelectBlock: (blockId: string) => void;
+  onSelectPart: (id: string) => void;
   onResetWire: (wireId: string) => void;
   onPatchPart: (partId: string, patch: PartPatch) => void;
   onExposeParam: (blockId: string, partId: string, paramKey: string) => void;
-  preview: { enabled: boolean; onEnabledChange: (on: boolean) => void; busy: boolean };
-  realtime: React.ComponentProps<typeof OutputAudioPanel>["realtime"];
+  onModeChange: (mode: WorkMode) => void;
 }
 
-/** Right dock: what is selected on top, what to do with the whole circuit's output below. */
+/**
+ * Design step's right column: whatever is selected, or - with nothing selected - the circuit as a
+ * whole (its check results and where to go next). Probes stay underneath either way. Everything
+ * about hearing the circuit moved to the transport bar, so selecting a part no longer pushes it off
+ * screen.
+ */
 export function EditorSidebarRight(props: EditorSidebarRightProps) {
-  const { audio, graph } = props;
+  const nothingSelected = !props.blockInspector && !props.selectedPart && !props.selectedWire;
   return (
-    <div className="sidebar-right">
+    <aside className="sidebar-right" aria-label="속성">
       {props.blockInspector ? (
         <BlockInspector {...props.blockInspector} />
+      ) : nothingSelected ? (
+        <CircuitSummary
+          parts={props.parts}
+          wires={props.wires}
+          blockCount={props.blocks.length}
+          outputNode={props.outputNode}
+          onSelectPart={props.onSelectPart}
+          onModeChange={props.onModeChange}
+        />
       ) : (
-      <InspectorPanel
-        onSelectBlock={props.onSelectBlock}
-        onExposeParam={props.onExposeParam}
-        onResetWire={props.onResetWire}
-        onPatchPart={props.onPatchPart}
-        selectedPart={props.selectedPart}
-        selectedWire={props.selectedWire}
-        blocks={props.blocks}
-        onParamChange={props.onParamChange}
-        onApplyModel={props.onApplyModel}
-        onRotate={props.onRotate}
-        onDelete={props.onDelete}
-        onDeleteBlock={props.onDeleteBlock}
-      />
+        <InspectorPanel
+          onSelectBlock={props.onSelectBlock}
+          onExposeParam={props.onExposeParam}
+          onResetWire={props.onResetWire}
+          onPatchPart={props.onPatchPart}
+          selectedPart={props.selectedPart}
+          selectedWire={props.selectedWire}
+          blocks={props.blocks}
+          onParamChange={props.onParamChange}
+          onApplyModel={props.onApplyModel}
+          onRotate={props.onRotate}
+          onDelete={props.onDelete}
+          onDeleteBlock={props.onDeleteBlock}
+        />
       )}
 
       <ProbePanel {...props.probePanel} />
-
-      <OutputAudioPanel
-        outputNode={props.outputNode}
-        onOutputNodeChange={props.onOutputNodeChange}
-        netNames={graph.netNames}
-        inputGain={props.inputGain}
-        onInputGainChange={props.onInputGainChange}
-        hasSample={audio.sample !== null}
-        onFileChange={audio.handleFileChange}
-        onUseTestSignal={audio.handleUseTestSignal}
-        useTrapezoidal={audio.useTrapezoidal}
-        onUseTrapezoidalChange={audio.setUseTrapezoidal}
-        canRun={audio.sample !== null && !!graph.inputSourceId && !audio.isSimulating}
-        onRun={audio.handleRun}
-        preview={props.preview}
-        realtime={props.realtime}
-        status={props.status}
-      />
-    </div>
+    </aside>
   );
 }

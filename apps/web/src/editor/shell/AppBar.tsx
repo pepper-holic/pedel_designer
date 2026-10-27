@@ -12,7 +12,8 @@ interface AppBarProps {
   onUndo: () => void;
   onRedo: () => void;
   onNew: () => void;
-  onOpen: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  /** Asks for a circuit file (the editor owns the file input, so the start cards can ask too). */
+  onOpen: () => void;
   onSave: () => void;
   onHelp: () => void;
 }
@@ -25,7 +26,6 @@ interface AppBarProps {
 export function AppBar(props: AppBarProps) {
   const [fileOpen, setFileOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!fileOpen) return;
@@ -98,12 +98,10 @@ export function AppBar(props: AppBarProps) {
           {fileOpen && (
             <div className="appbar-menu-list" role="menu" aria-label="파일">
               {item("새 회로", props.onNew, !props.hasCircuit)}
-              {item("회로 열기…", () => fileInput.current?.click())}
+              {item("회로 열기…", props.onOpen)}
               {item("회로 저장 (.json)", props.onSave, !props.hasCircuit)}
             </div>
           )}
-          {/* The native file input cannot be restyled, so the menu clicks this hidden one. */}
-          <input ref={fileInput} type="file" accept="application/json,.json" onChange={props.onOpen} className="visually-hidden" aria-label="회로 파일 선택" tabIndex={-1} />
         </div>
         <button type="button" className="appbar-icon" onClick={props.onHelp} aria-label="단축키와 도움말" title="단축키와 도움말 (?)">
           ?

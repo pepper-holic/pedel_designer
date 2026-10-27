@@ -34,7 +34,7 @@ export function BoardViewport({ shapes, width, height, label, onHoleClick, onDra
   useEffect(() => {
     const el = frame.current;
     if (!el || typeof ResizeObserver === "undefined") return;
-    const dock = el.closest<HTMLElement>(".bottom-dock-content");
+    const dock = el.closest<HTMLElement>("[data-fit-container]");
     const measure = () => {
       // Fitted, the drawing ends at the dock's bottom edge when the dock is scrolled to the top -
       // everything above it in the panel (title, buttons, status) is measured, not guessed.

@@ -12,9 +12,13 @@ export interface DockTab {
 
 interface BottomDockProps {
   tabs: DockTab[];
+  /** Where the height (and the collapsed state) is remembered - one key per place the dock is used. */
+  storageKey?: string;
+  /** Lets the dock fold down to its tab row, so it does not take canvas space until asked for. */
+  collapsible?: boolean;
 }
 
-const HEIGHT_KEY = "pedal-designer:dock-height";
+const DEFAULT_KEY = "pedal-designer:dock-height";
 const MIN_HEIGHT = 200;
 /** The schematic above keeps at least this much height. */
 const CANVAS_RESERVE = 200;
@@ -32,9 +36,9 @@ function defaultHeight(): number {
   return Math.min(460, Math.max(280, Math.round(h * 0.36)));
 }
 
-function readHeight(): number {
+function readHeight(key: string): number {
   try {
-    const stored = Number(localStorage.getItem(HEIGHT_KEY));
+    const stored = Number(localStorage.getItem(key));
     if (stored >= MIN_HEIGHT) return Math.min(stored, maxHeight());
   } catch {
     // storage unavailable - fall through to the default
@@ -45,10 +49,27 @@ function readHeight(): number {
 /** Tabbed dock for the analysis panels (frequency response, waveform, THD, tolerance, chain) so
  * they sit below the schematic canvas instead of stacking endlessly down a sidebar. Its height is
  * the user's: drag the top edge (or use the arrow keys on it), or expand it for a closer look. */
-export function BottomDock({ tabs }: BottomDockProps) {
+function readCollapsed(key: string): boolean {
+  try {
+    return localStorage.getItem(`${key}:collapsed`) !== "0";
+  } catch {
+    return true;
+  }
+}
+
+export function BottomDock({ tabs, storageKey = DEFAULT_KEY, collapsible = false }: BottomDockProps) {
   const [activeKey, setActiveKey] = useState(tabs[0]?.key);
   const activeTab = tabs.find((t) => t.key === activeKey) ?? tabs[0];
-  const [height, setHeightState] = useState(readHeight);
+  const [height, setHeightState] = useState(() => readHeight(storageKey));
+  const [collapsed, setCollapsedState] = useState(() => collapsible && readCollapsed(storageKey));
+  const setCollapsed = (c: boolean) => {
+    setCollapsedState(c);
+    try {
+      localStorage.setItem(`${storageKey}:collapsed`, c ? "1" : "0");
+    } catch {
+      // the state still applies for this session
+    }
+  };
   const [expanded, setExpanded] = useState(false);
   const drag = useRef<{ y: number; height: number } | null>(null);
   const dockRef = useRef<HTMLDivElement>(null);
@@ -59,7 +80,7 @@ export function BottomDock({ tabs }: BottomDockProps) {
     setHeightState(clamped);
     setExpanded(false);
     try {
-      localStorage.setItem(HEIGHT_KEY, String(clamped));
+      localStorage.setItem(storageKey, String(clamped));
     } catch {
       // the height still applies for this session
     }
@@ -80,6 +101,34 @@ export function BottomDock({ tabs }: BottomDockProps) {
 
   const shown = expanded ? max : height;
   const context = useMemo(() => ({ expand: () => setExpanded(true) }), []);
+
+  if (collapsed) {
+    return (
+      <div ref={dockRef} className="panel bottom-dock bottom-dock-collapsed">
+        <div className="dock-tab-row" role="tablist" aria-label="분석 패널">
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              type="button"
+              role="tab"
+              aria-selected={false}
+              className="dock-tab"
+              onClick={() => {
+                setActiveKey(tab.key);
+                setCollapsed(false);
+              }}
+              title={tab.helpText}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        <button type="button" className="dock-expand" aria-expanded={false} onClick={() => setCollapsed(false)}>
+          ▴ 펼치기
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div ref={dockRef} className="panel bottom-dock" style={{ height: shown }}>
@@ -110,9 +159,16 @@ export function BottomDock({ tabs }: BottomDockProps) {
           e.preventDefault();
         }}
       />
-      <button type="button" className="dock-expand" aria-pressed={expanded} onClick={() => setExpanded((v) => !v)} title="분석 패널을 크게 보기 / 원래 크기로">
-        {expanded ? "▾ 원래 크기" : "▴ 크게 보기"}
-      </button>
+      <div className="dock-actions">
+        <button type="button" className="dock-expand" aria-pressed={expanded} onClick={() => setExpanded((v) => !v)} title="분석 패널을 크게 보기 / 원래 크기로">
+          {expanded ? "▾ 원래 크기" : "▴ 크게 보기"}
+        </button>
+        {collapsible && (
+          <button type="button" className="dock-expand" aria-expanded={true} onClick={() => setCollapsed(true)} title="탭 줄만 남기고 접어 회로도를 넓게 봅니다">
+            ▾ 접기
+          </button>
+        )}
+      </div>
       {/* A real tablist, so a screen reader announces "tab 3 of 10" and arrow keys behave as
           users expect, rather than reading ten unrelated buttons. */}
       <div className="dock-tab-row" role="tablist" aria-label="분석 패널">
@@ -144,6 +200,7 @@ export function BottomDock({ tabs }: BottomDockProps) {
       </div>
       <div
         className="bottom-dock-content"
+        data-fit-container
         role="tabpanel"
         id="dock-tab-panel"
         aria-labelledby={activeTab ? `dock-tab-${activeTab.key}` : undefined}

@@ -3,9 +3,8 @@ import { computeSpectrum } from "../../core/analysis/spectrum";
 import type { AcPoint } from "../../core/solver/ac";
 import { FrequencyResponse } from "../../viz/FrequencyResponse";
 import { Analyzer, type AnalyzerSeries } from "../../viz/Analyzer";
-import { TEST_SIGNALS } from "../../audio/testSignals";
 import { SWITCH_POSITION_LABELS } from "../switchLabels";
-import type { RealtimeControl } from "../OutputAudioPanel";
+import type { RealtimeControl } from "../shell/TransportBar";
 import type { OutputSnapshot } from "../useRealtimeAudio";
 import type { BlockParam } from "../types";
 import { Knob } from "./Knob";
@@ -22,10 +21,6 @@ export interface PlayerViewProps {
   preview: { enabled: boolean; onEnabledChange: (on: boolean) => void; busy: boolean; lastClip: OutputSnapshot | null };
   /** Small-signal response at the output node, recomputed on every edit. */
   response: AcPoint[];
-  inputGain: number;
-  onInputGainChange: (gain: number) => void;
-  onUseTestSignal: (id: string) => void;
-  status: string;
 }
 
 function Control({ control, onSetControl }: { control: PlayerControl; onSetControl: PlayerViewProps["onSetControl"] }) {
@@ -61,6 +56,7 @@ function Control({ control, onSetControl }: { control: PlayerControl; onSetContr
  * The instrument player's view (plan Stage D-3): no schematic, just the pedal's face - the knobs
  * and switches its blocks expose - a footswitch that plays it live, and beside it the response
  * and the output spectrum, so "that sounds darker" can be checked against "the treble rolled off".
+ * The input signal, its level and the knob preview are in the transport bar below, as everywhere.
  */
 export function PlayerView(props: PlayerViewProps) {
   const { realtime, preview, sections } = props;
@@ -108,37 +104,6 @@ export function PlayerView(props: PlayerViewProps) {
 
       <aside className="player-side">
         <div className="panel">
-          <div className="panel-title">입력</div>
-          <div className="test-signal-buttons">
-            {TEST_SIGNALS.map((signal) => (
-              <button key={signal.id} type="button" onClick={() => props.onUseTestSignal(signal.id)} title={signal.hint}>
-                {signal.label}
-              </button>
-            ))}
-          </div>
-          <div className="field">
-            <div className="field-row">
-              <label htmlFor="player-input-gain">입력 레벨 (V)</label>
-              <span className="field-value">{props.inputGain.toFixed(2)}</span>
-            </div>
-            <input
-              id="player-input-gain"
-              type="range"
-              min={0.01}
-              max={5}
-              step={0.01}
-              value={props.inputGain}
-              onChange={(e) => props.onInputGainChange(Number(e.target.value))}
-            />
-          </div>
-          <label className="field-row">
-            <span>
-              <input type="checkbox" checked={preview.enabled} onChange={(e) => preview.onEnabledChange(e.target.checked)} /> 실시간이 꺼져 있을 때 노브 미리듣기
-              {preview.busy ? " (계산 중...)" : ""}
-            </span>
-          </label>
-        </div>
-        <div className="panel">
           <div className="panel-title">주파수 응답 (소신호)</div>
           {props.response.length > 0 ? (
             <FrequencyResponse points={props.response} height={PLOT_HEIGHT} />
@@ -150,9 +115,6 @@ export function PlayerView(props: PlayerViewProps) {
           <div className="panel-title">스펙트럼 (RTA)</div>
           <Analyzer series={series} height={PLOT_HEIGHT} />
         </div>
-        <p className="status-text" role="status" aria-live="polite">
-          {props.status}
-        </p>
       </aside>
     </div>
   );
