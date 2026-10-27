@@ -21,11 +21,9 @@ class PedalRealtimeProcessor extends AudioWorkletProcessor {
   }
 
   process(_inputs: Float32Array[][], outputs: Float32Array[][]): boolean {
+    // Channel 0 is heard; 1 and 2 carry the output and input in volts for the analyzer.
     const channels = outputs[0];
-    if (channels && channels.length > 0) {
-      this.engine.render(channels[0]);
-      for (let c = 1; c < channels.length; c++) channels[c].set(channels[0]);
-    }
+    if (channels && channels.length > 0) this.engine.render(channels[0], channels[1], channels[2]);
     for (const message of this.engine.drain()) this.port.postMessage(message);
     return true;
   }

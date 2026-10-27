@@ -1041,15 +1041,46 @@
   border-color: var(--accent-dim);
 }
 
-.spectrum-readout {
+.analyzer-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  align-items: center;
+  gap: 4px 12px;
   min-height: 1.6em;
-  padding: 2px 2px 6px;
+  padding: 2px 2px 4px;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-dim);
+}
+
+.analyzer-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e04848;
+  box-shadow: 0 0 6px #e04848;
+  margin-right: -6px;
+}
+
+.analyzer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-left: auto;
+}
+
+.analyzer-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.analyzer-control select {
+  padding: 2px 4px;
+  font-size: 0.72rem;
 }
 
 .spectrum-body {
@@ -1567,4 +1598,13 @@ select {
 
 .pcb-tab > div > .panel .run-row {
   margin-top: 0;
+}
+
+.waveform-reset {
+  position: absolute;
+  right: 6px;
+  top: 4px;
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  z-index: 1;
 }

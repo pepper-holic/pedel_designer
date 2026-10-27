@@ -106,11 +106,19 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
     }
   };
 
+  /** The input in volts, as the circuit saw it - what the analyzer's "pre" curve shows. */
+  const scaledInput = () => {
+    if (!sample) return undefined;
+    const out = new Float64Array(sample.samples.length);
+    for (let i = 0; i < out.length; i++) out[i] = sample.samples[i] * inputGain;
+    return out;
+  };
+
   const handlePlay = (label: string) => {
     if (!waveTraces || !sample) return;
     const trace = waveTraces.find((t) => t.label === label);
     if (!trace) return;
-    playSamples(trace.data, sample.sampleRate, getAudioContext(), cabinetEnabled ? cabinetVariant : null);
+    playSamples(trace.data, sample.sampleRate, getAudioContext(), cabinetEnabled ? cabinetVariant : null, { pre: scaledInput(), post: trace.data });
   };
 
   /**
@@ -124,10 +132,10 @@ export function useAudioRun({ graph, inputGain, onStatus }: UseAudioRunOptions) 
     const trace = waveTraces.find((t) => t.label === label);
     if (!trace) return;
     const context = getAudioContext();
-    playSamples(sample.samples, sample.sampleRate, context, null);
+    playSamples(sample.samples, sample.sampleRate, context, null, { pre: scaledInput() });
     const drySeconds = sample.samples.length / sample.sampleRate;
     await new Promise((resolve) => setTimeout(resolve, (drySeconds + AB_GAP_SEC) * 1000));
-    playSamples(trace.data, sample.sampleRate, context, cabinetEnabled ? cabinetVariant : null);
+    playSamples(trace.data, sample.sampleRate, context, cabinetEnabled ? cabinetVariant : null, { pre: scaledInput(), post: trace.data });
   };
 
   return {

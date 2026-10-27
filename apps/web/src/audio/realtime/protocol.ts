@@ -22,8 +22,5 @@ export type FromEngine =
       nonConvergent: number;
       /** Peak output level after the automatic gain, 0..1. */
       level: number;
-      /** The most recent output in volts (DC removed, before the automatic gain), oldest first -
-       * enough for a live spectrum that shows real level changes, not the normalised ones. */
-      snapshot: Float32Array;
     }
   | { type: "error"; message: string };

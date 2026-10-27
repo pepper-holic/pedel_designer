@@ -1,4 +1,5 @@
 import { generateCabinetIr, type CabinetVariant } from "./cabinetIr";
+import { monitorSignals, type MonitorSignals } from "./analyzerBus";
 
 /** Rescales simulated volt-domain samples to a safe [-1, 1] playback range, preserving relative peak. */
 export function normalizeForPlayback(samples: Float64Array): Float32Array<ArrayBuffer> {
@@ -11,8 +12,18 @@ export function normalizeForPlayback(samples: Float64Array): Float32Array<ArrayB
   return out;
 }
 
-/** Plays back simulated samples, optionally routed through a synthetic generic-cabinet IR convolution. */
-export function playSamples(samples: Float64Array, sampleRate: number, audioContext: AudioContext, cabinetVariant?: CabinetVariant | null): AudioBufferSourceNode {
+/**
+ * Plays back simulated samples, optionally routed through a synthetic generic-cabinet IR convolution.
+ * `monitor` feeds the real-time analyzer the same material in volts, in step with what is heard
+ * (see analyzerBus.ts); stopping the returned source stops that too.
+ */
+export function playSamples(
+  samples: Float64Array,
+  sampleRate: number,
+  audioContext: AudioContext,
+  cabinetVariant?: CabinetVariant | null,
+  monitor?: MonitorSignals,
+): AudioBufferSourceNode {
   const normalized = normalizeForPlayback(samples);
   const buffer = audioContext.createBuffer(1, normalized.length, sampleRate);
   buffer.copyToChannel(normalized, 0);
@@ -33,6 +44,11 @@ export function playSamples(samples: Float64Array, sampleRate: number, audioCont
     source.connect(audioContext.destination);
   }
 
-  source.start();
+  const when = audioContext.currentTime;
+  source.start(when);
+  if (monitor) {
+    const stopMonitor = monitorSignals(audioContext, monitor, sampleRate, when);
+    source.addEventListener("ended", stopMonitor);
+  }
   return source;
 }

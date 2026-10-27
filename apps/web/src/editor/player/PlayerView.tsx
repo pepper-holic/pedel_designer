@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { computeSpectrum } from "../../core/analysis/spectrum";
 import type { AcPoint } from "../../core/solver/ac";
 import { FrequencyResponse } from "../../viz/FrequencyResponse";
-import { Spectrum } from "../../viz/Spectrum";
+import { Analyzer, type AnalyzerSeries } from "../../viz/Analyzer";
 import { TEST_SIGNALS } from "../../audio/testSignals";
 import { SWITCH_POSITION_LABELS } from "../switchLabels";
 import type { RealtimeControl } from "../OutputAudioPanel";
@@ -18,7 +18,7 @@ export interface PlayerViewProps {
   title: string;
   sections: PlayerSection[];
   onSetControl: (param: BlockParam, value: number) => void;
-  realtime: RealtimeControl & { snapshot: OutputSnapshot | null };
+  realtime: RealtimeControl;
   preview: { enabled: boolean; onEnabledChange: (on: boolean) => void; busy: boolean; lastClip: OutputSnapshot | null };
   /** Small-signal response at the output node, recomputed on every edit. */
   response: AcPoint[];
@@ -64,9 +64,9 @@ function Control({ control, onSetControl }: { control: PlayerControl; onSetContr
  */
 export function PlayerView(props: PlayerViewProps) {
   const { realtime, preview, sections } = props;
-  // Live audio when it is playing, otherwise the last preview clip - either way, what was just heard.
-  const source = realtime.active ? realtime.snapshot : preview.lastClip;
-  const spectrum = useMemo(() => (source ? computeSpectrum(source.samples, source.sampleRate, { fftSize: 4096 }) : null), [source]);
+  // The live analyzer takes over while anything plays; between times the last preview clip stays up.
+  const lastClip = preview.lastClip;
+  const series = useMemo((): AnalyzerSeries[] => (lastClip ? [{ label: "마지막 미리듣기", spectrum: computeSpectrum(lastClip.samples, lastClip.sampleRate, { fftSize: 16384 }), color: OUTPUT_COLOR }] : []), [lastClip]);
   const load = realtime.stats ? Math.round(realtime.stats.load * 100) : null;
 
   return (
@@ -147,12 +147,8 @@ export function PlayerView(props: PlayerViewProps) {
           )}
         </div>
         <div className="panel">
-          <div className="panel-title">출력 스펙트럼 {realtime.active ? "(실시간)" : preview.lastClip ? "(마지막 미리듣기)" : ""}</div>
-          {spectrum ? (
-            <Spectrum series={[{ label: "출력", spectrum, color: OUTPUT_COLOR }]} height={PLOT_HEIGHT} rangeDb={80} />
-          ) : (
-            <p className="canvas-hint">풋스위치를 밟거나 노브를 돌리면 지금 들리는 소리의 스펙트럼이 나타납니다.</p>
-          )}
+          <div className="panel-title">스펙트럼 (RTA)</div>
+          <Analyzer series={series} height={PLOT_HEIGHT} />
         </div>
         <p className="status-text" role="status" aria-live="polite">
           {props.status}

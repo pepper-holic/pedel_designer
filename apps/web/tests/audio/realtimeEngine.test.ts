@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { RealtimeEngine, resampleLinear, SNAPSHOT_LENGTH } from "../../src/audio/realtime/realtimeEngine";
+import { RealtimeEngine, resampleLinear } from "../../src/audio/realtime/realtimeEngine";
 import { ts9OverdrivePreset } from "../../src/core/library/presets/ts9-overdrive";
 import type { Netlist } from "../../src/core/solver/types";
 
@@ -77,21 +77,29 @@ describe("RealtimeEngine", () => {
     expect(engine.drain()).toEqual([]);
   });
 
-  it("sends the latest output, in volts and in order, for a live spectrum", () => {
+  it("hands the analyzer the output and input in volts, alongside what is heard", () => {
     const engine = new RealtimeEngine(RATE, () => 0);
-    // A plain wire: output = input, so the snapshot must be the tail of the (DC-blocked) sine.
+    // A plain wire: output = input, so after the warm-up the output channel is the (DC-blocked) sine.
     const wire: Netlist = { elements: [{ id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 }, { id: "R1", type: "resistor", nodes: ["in", "0"], resistance: 1000 }] };
-    engine.handle({ type: "start", netlist: wire, inputSourceId: "V1", outputNode: "in", input: sine(1000, 0.5, 0.2), inputGain: 1 });
-    renderSeconds(engine, 1);
-    const stats = engine.drain().filter((m) => m.type === "stats");
-    const last = stats[stats.length - 1];
-    if (last.type !== "stats") throw new Error("no stats");
-    expect(last.snapshot.length).toBe(SNAPSHOT_LENGTH);
-    expect(peak(last.snapshot)).toBeCloseTo(0.2, 1);
-    // In time order: consecutive samples of a 1kHz sine at 48kHz differ by at most 2*pi*f/fs*A.
-    let worstStep = 0;
-    for (let i = 1; i < last.snapshot.length; i++) worstStep = Math.max(worstStep, Math.abs(last.snapshot[i] - last.snapshot[i - 1]));
-    expect(worstStep).toBeLessThan(((2 * Math.PI * 1000) / RATE) * 0.2 * 1.1);
+    engine.handle({ type: "start", netlist: wire, inputSourceId: "V1", outputNode: "in", input: sine(1000, 0.5, 0.2), inputGain: 2 });
+    const heard = new Float32Array(QUANTUM);
+    const post = new Float32Array(QUANTUM);
+    const pre = new Float32Array(QUANTUM);
+    let postPeak = 0;
+    let prePeak = 0;
+    let heardPeak = 0;
+    for (let b = 0; b < (RATE / QUANTUM) * 1; b++) {
+      engine.render(heard, post, pre);
+      if (b > (RATE / QUANTUM) * 0.6) {
+        postPeak = Math.max(postPeak, peak(post));
+        prePeak = Math.max(prePeak, peak(pre));
+        heardPeak = Math.max(heardPeak, peak(heard));
+      }
+    }
+    // Input gain 2 on a 0.2 sine: 0.4V in and out - real volts, not the auto-gained level heard.
+    expect(prePeak).toBeCloseTo(0.4, 2);
+    expect(postPeak).toBeCloseTo(0.4, 1);
+    expect(heardPeak).toBeGreaterThan(0.3);
   });
 
   it("takes a changed value without restarting from rest", () => {

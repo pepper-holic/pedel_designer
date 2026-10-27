@@ -105,7 +105,7 @@ export function useAnalysisPanels({
 
   const handlePlayChain = () => {
     if (!chainOutput || !sample) return;
-    playSamples(chainOutput, sample.sampleRate, getAudioContext(), cabinetEnabled ? cabinetVariant : null);
+    playSamples(chainOutput, sample.sampleRate, getAudioContext(), cabinetEnabled ? cabinetVariant : null, { post: chainOutput });
   };
 
   return {

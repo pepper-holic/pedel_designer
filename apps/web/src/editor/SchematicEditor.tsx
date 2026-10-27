@@ -231,7 +231,7 @@ export function SchematicEditor() {
       ),
   });
 
-  const { audio, preview, realtime, requestPreview, previewControl, realtimeControl } = useEditorAudio({ graph, outputNode, inputGain, onStatus: setStatus });
+  const { audio, preview, requestPreview, previewControl, realtimeControl } = useEditorAudio({ graph, outputNode, inputGain, onStatus: setStatus });
   const handleInputGainChange = (gain: number) => {
     setInputGain(gain);
     requestPreview();
@@ -282,7 +282,7 @@ export function SchematicEditor() {
           title={presets.find((p) => p.id === loadedPresetId)?.name ?? "내 회로"}
           sections={playerSections(blocks, parts)}
           onSetControl={blockActions.setKnob}
-          realtime={{ ...realtimeControl, snapshot: realtime.snapshot }}
+          realtime={realtimeControl}
           preview={{ ...previewControl, lastClip: preview.lastClip }}
           response={acResult.points}
           inputGain={inputGain}

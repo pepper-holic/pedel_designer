@@ -3,6 +3,7 @@ import workletUrl from "../audio/realtime/realtimeWorklet?worker&url";
 import { resampleLinear } from "../audio/realtime/realtimeEngine";
 import type { FromEngine, ToEngine } from "../audio/realtime/protocol";
 import { generateCabinetIr, type CabinetVariant } from "../audio/cabinetIr";
+import { analyzerBus, beginActivity } from "../audio/analyzerBus";
 import { generateTestSignal } from "../audio/testSignals";
 import type { LoadedSample } from "../audio/loadSample";
 import type { GraphNetlist } from "./netlistFromGraph";
@@ -51,9 +52,12 @@ function inputLoop(sample: LoadedSample | null, contextRate: number): Float32Arr
 export function useRealtimeAudio({ graph, outputNode, inputGain, sample, getAudioContext, cabinet, onStatus }: RealtimeAudioOptions) {
   const [active, setActive] = useState(false);
   const [stats, setStats] = useState<RealtimeStats | null>(null);
-  const [snapshot, setSnapshot] = useState<OutputSnapshot | null>(null);
-  const contextRate = useRef(48000);
   const node = useRef<AudioWorkletNode | null>(null);
+  /** Splits the worklet's three channels: heard / output volts / input volts (see the worklet). */
+  const splitter = useRef<ChannelSplitterNode | null>(null);
+  /** The heard channel, before the optional cabinet. */
+  const heard = useRef<GainNode | null>(null);
+  const endActivity = useRef<(() => void) | null>(null);
   const convolver = useRef<ConvolverNode | null>(null);
   const moduleLoaded = useRef<Promise<void> | null>(null);
   const overloadCount = useRef(0);
@@ -69,18 +73,23 @@ export function useRealtimeAudio({ graph, outputNode, inputGain, sample, getAudi
   const stop = (status?: string) => {
     post({ type: "stop" });
     node.current?.disconnect();
+    splitter.current?.disconnect();
+    heard.current?.disconnect();
     convolver.current?.disconnect();
     node.current = null;
+    splitter.current = null;
+    heard.current = null;
     convolver.current = null;
+    endActivity.current?.();
+    endActivity.current = null;
     setActive(false);
     setStats(null);
-    setSnapshot(null);
     if (status) latest.current.onStatus(status);
   };
 
-  /** Worklet -> (cabinet) -> speakers. Rebuilt whenever the cabinet choice changes. */
+  /** Heard channel -> (cabinet) -> speakers. Rebuilt whenever the cabinet choice changes. */
   const route = (context: AudioContext, cab: CabinetVariant | null) => {
-    const source = node.current;
+    const source = heard.current;
     if (!source) return;
     source.disconnect();
     convolver.current?.disconnect();
@@ -114,7 +123,6 @@ export function useRealtimeAudio({ graph, outputNode, inputGain, sample, getAudi
       return;
     }
     setStats({ load: message.load, level: message.level, nonConvergent: message.nonConvergent });
-    setSnapshot({ samples: message.snapshot, sampleRate: contextRate.current });
     overloadCount.current = message.load > 1 ? overloadCount.current + 1 : 0;
     if (overloadCount.current >= OVERLOAD_REPORTS) {
       stop(`이 회로는 실시간으로 계산하기에 무겁습니다 (부하 ${Math.round(message.load * 100)}%). 노브 미리듣기를 사용하세요.`);
@@ -129,7 +137,6 @@ export function useRealtimeAudio({ graph, outputNode, inputGain, sample, getAudi
       return;
     }
     const context = getAudioContext();
-    contextRate.current = context.sampleRate;
     try {
       moduleLoaded.current ??= context.audioWorklet.addModule(workletUrl);
       await moduleLoaded.current;
@@ -139,9 +146,19 @@ export function useRealtimeAudio({ graph, outputNode, inputGain, sample, getAudi
       latest.current.onStatus(`실시간 재생을 시작할 수 없습니다: ${err instanceof Error ? err.message : "알 수 없는 오류"}`);
       return;
     }
-    const worklet = new AudioWorkletNode(context, "pedal-realtime", { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [1] });
+    const worklet = new AudioWorkletNode(context, "pedal-realtime", { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [3] });
     worklet.port.onmessage = (event: MessageEvent<FromEngine>) => handleMessage(event.data);
     node.current = worklet;
+    const split = context.createChannelSplitter(3);
+    worklet.connect(split);
+    splitter.current = split;
+    heard.current = context.createGain();
+    split.connect(heard.current, 0);
+    // Output and input in volts go to the real-time analyzer, not the speakers.
+    const bus = analyzerBus(context);
+    split.connect(bus.post, 1);
+    split.connect(bus.pre, 2);
+    endActivity.current = beginActivity(bus);
     route(context, latest.current.cabinet);
     sendStart(context);
     setActive(true);
@@ -194,5 +211,5 @@ export function useRealtimeAudio({ graph, outputNode, inputGain, sample, getAudi
     else void start();
   };
 
-  return { supported: realtimeSupported(), active, stats, snapshot, toggle };
+  return { supported: realtimeSupported(), active, stats, toggle };
 }

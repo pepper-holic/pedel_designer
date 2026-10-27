@@ -94,7 +94,7 @@ export function useKnobPreview({ graph, outputNode, inputGain, sample, getAudioC
       if (!data || controller.signal.aborted) return;
       stopPlaying();
       setLastClip({ samples: data, sampleRate: clip.sampleRate });
-      playing.current = playSamples(applyEdgeFades(data, clip.sampleRate), clip.sampleRate, context, cab);
+      playing.current = playSamples(applyEdgeFades(data, clip.sampleRate), clip.sampleRate, context, cab, { pre: input, post: data });
       onStatus(`미리듣기 재생 (계산 ${((performance.now() - t0) / 1000).toFixed(2)}초)`);
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return;

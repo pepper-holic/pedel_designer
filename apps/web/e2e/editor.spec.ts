@@ -185,7 +185,8 @@ test("player view: turn the TS9 drive live and watch the spectrum follow", async
   await page.getByRole("button", { name: "연주", exact: true }).click();
   await page.getByRole("button", { name: "실시간 재생 (풋스위치)" }).click();
   await expect(page.getByText(/ON · 부하 \d+%/)).toBeVisible({ timeout: 15_000 });
-  await expect(page.getByText("출력 스펙트럼 (실시간)")).toBeVisible();
+  // The analyzer switches to a live RTA fed by the running worklet.
+  await expect(page.locator(".analyzer-legend")).toContainText("RTA");
 
   const drive = page.getByRole("slider", { name: "DRIVE 노브" });
   const box = (await drive.boundingBox())!;
@@ -350,6 +351,12 @@ for (const viewport of [
         expect(m, String(tab)).toMatchObject({ inside: true, sharp: true });
         expect(m.overflow, String(tab)).toBeLessThanOrEqual(1);
       }
+
+      // Playing a result turns the spectrum tab's analyzer live (RTA).
+      await page.getByRole("tab", { name: /파형/ }).click();
+      await page.getByRole("button", { name: /^out .*지점 소리 재생/ }).click();
+      await page.getByRole("tab", { name: /스펙트럼/ }).click();
+      await expect(page.locator(".analyzer-legend")).toContainText("출력 (실시간)");
 
       // Taller dock, taller plot.
       await page.getByRole("tab", { name: /주파수 응답/ }).click();
