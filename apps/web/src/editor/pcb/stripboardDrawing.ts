@@ -8,7 +8,7 @@ import { holeLabel, rowLabel, type Hole, type StripboardLayout, type StripPlacem
 export type Shape =
   | { kind: "rect"; x: number; y: number; w: number; h: number; fill: string; stroke?: string; sw?: number; rx?: number; opacity?: number; part?: string }
   | { kind: "circle"; cx: number; cy: number; r: number; fill: string; stroke?: string; sw?: number; part?: string; hole?: Hole }
-  | { kind: "line"; x1: number; y1: number; x2: number; y2: number; stroke: string; sw: number; part?: string }
+  | { kind: "line"; x1: number; y1: number; x2: number; y2: number; stroke: string; sw: number; part?: string; dash?: number }
   | { kind: "text"; x: number; y: number; text: string; size: number; fill: string; anchor?: "start" | "middle" | "end"; bold?: boolean };
 
 export type BoardSide = "component" | "copper";
@@ -149,7 +149,7 @@ function escapeXml(text: string): string {
 }
 
 /** Standalone SVG at true size (millimetres), for printing at 100% and transferring to the board. */
-export function shapesToSvg(shapes: Shape[], widthUnits: number, heightUnits: number): string {
+export function shapesToSvg(shapes: Shape[], widthUnits: number, heightUnits: number, mmPerUnit = PITCH_MM, background?: string): string {
   const body = shapes
     .map((s) => {
       switch (s.kind) {
@@ -158,15 +158,16 @@ export function shapesToSvg(shapes: Shape[], widthUnits: number, heightUnits: nu
         case "circle":
           return `<circle cx="${s.cx}" cy="${s.cy}" r="${s.r}" fill="${s.fill}"${s.stroke ? ` stroke="${s.stroke}" stroke-width="${s.sw ?? 0.05}"` : ""}/>`;
         case "line":
-          return `<line x1="${s.x1}" y1="${s.y1}" x2="${s.x2}" y2="${s.y2}" stroke="${s.stroke}" stroke-width="${s.sw}" stroke-linecap="round"/>`;
+          return `<line x1="${s.x1}" y1="${s.y1}" x2="${s.x2}" y2="${s.y2}" stroke="${s.stroke}" stroke-width="${s.sw}" stroke-linecap="round"${s.dash ? ` stroke-dasharray="${s.dash} ${s.dash}"` : ""}/>`;
         case "text":
           return `<text x="${s.x}" y="${s.y}" font-size="${s.size}" fill="${s.fill}" font-family="sans-serif"${s.anchor ? ` text-anchor="${s.anchor}"` : ""}${s.bold ? ' font-weight="600"' : ""}>${escapeXml(s.text)}</text>`;
       }
     })
     .join("\n");
-  const w = widthUnits * PITCH_MM;
-  const h = heightUnits * PITCH_MM;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}mm" height="${h}mm" viewBox="0 0 ${widthUnits} ${heightUnits}">\n${body}\n</svg>\n`;
+  const w = widthUnits * mmPerUnit;
+  const h = heightUnits * mmPerUnit;
+  const bg = background ? `<rect x="0" y="0" width="${widthUnits}" height="${heightUnits}" fill="${background}"/>\n` : "";
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}mm" height="${h}mm" viewBox="0 0 ${widthUnits} ${heightUnits}">\n${bg}${body}\n</svg>\n`;
 }
 
 /** Both sides, component side on top, as one printable 1:1 sheet. */

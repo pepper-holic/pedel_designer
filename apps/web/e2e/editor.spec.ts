@@ -198,6 +198,19 @@ test("player view: turn the TS9 drive live and watch the spectrum follow", async
   await expect(page.getByText(/미리듣기 재생/)).toHaveCount(0);
 });
 
+test("turns a preset into a verified stripboard and a routed PCB", async ({ page }) => {
+  await loadPreset(page, /LPB-1 스타일/);
+  await page.getByRole("tab", { name: /PCB/ }).click();
+  await page.getByRole("button", { name: "스트립보드 생성" }).click();
+  await expect(page.getByText(/역검증 통과/)).toBeVisible();
+  // Placement and routing run in a worker: this also proves the worker chunk ships.
+  await page.getByRole("button", { name: "PCB 생성" }).click();
+  await expect(page.getByText(/✓ DRC 통과/)).toBeVisible({ timeout: 20_000 });
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: ".kicad_pcb 다운로드" }).click();
+  expect((await download).suggestedFilename()).toBe("pedal.kicad_pcb");
+});
+
 test("loads a preset as functional blocks, collapses them to black boxes, and turns a block knob", async ({ page }) => {
   await loadPreset(page, /Big Muff 스타일/);
   // Expanded: tinted regions over the parts.

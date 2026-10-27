@@ -44,7 +44,20 @@ export function ShapeSvg({ shapes, width, height, scale, label, onHoleClick, onP
             );
           }
           case "line":
-            return <line key={i} x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} stroke={s.stroke} strokeWidth={s.sw} strokeLinecap="round" {...partProps} />;
+            return (
+              <line
+                key={i}
+                x1={s.x1}
+                y1={s.y1}
+                x2={s.x2}
+                y2={s.y2}
+                stroke={s.stroke}
+                strokeWidth={s.sw}
+                strokeLinecap="round"
+                strokeDasharray={s.dash ? `${s.dash} ${s.dash}` : undefined}
+                {...partProps}
+              />
+            );
           case "text":
             return (
               <text key={i} x={s.x} y={s.y} fontSize={s.size} fill={s.fill} textAnchor={s.anchor} fontWeight={s.bold ? 600 : undefined} pointerEvents="none">
