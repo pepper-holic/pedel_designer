@@ -26,6 +26,9 @@ interface EditorShortcuts {
   onUngroup?: () => void;
   /** P: toggle probe mode. */
   onToggleProbeMode?: () => void;
+  /** False while the canvas is not shown (the player view): only undo/redo stay live, so an arrow
+   * key meant for a knob cannot move a part nobody can see. */
+  canvasActive?: boolean;
 }
 
 /**
@@ -49,6 +52,7 @@ export function useEditorShortcuts({
   onGroup,
   onUngroup,
   onToggleProbeMode,
+  canvasActive = true,
 }: EditorShortcuts): void {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -65,6 +69,7 @@ export function useEditorShortcuts({
         onRedo();
         return;
       }
+      if (!canvasActive) return;
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "g") {
         e.preventDefault();
         if (e.shiftKey) onUngroup?.();
@@ -104,5 +109,5 @@ export function useEditorShortcuts({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onUndo, onRedo, onRotate, onDelete, onCopy, onPaste, onDuplicate, onNudge, onCycleSelection, onDeselect, onGroup, onUngroup, onToggleProbeMode]);
+  }, [onUndo, onRedo, onRotate, onDelete, onCopy, onPaste, onDuplicate, onNudge, onCycleSelection, onDeselect, onGroup, onUngroup, onToggleProbeMode, canvasActive]);
 }

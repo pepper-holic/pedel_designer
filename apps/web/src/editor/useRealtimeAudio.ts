@@ -20,6 +20,12 @@ interface RealtimeAudioOptions {
   onStatus: (message: string) => void;
 }
 
+/** The latest stretch of live output, for the player view's spectrum. */
+export interface OutputSnapshot {
+  samples: ArrayLike<number>;
+  sampleRate: number;
+}
+
 export interface RealtimeStats {
   load: number;
   level: number;
@@ -45,6 +51,8 @@ function inputLoop(sample: LoadedSample | null, contextRate: number): Float32Arr
 export function useRealtimeAudio({ graph, outputNode, inputGain, sample, getAudioContext, cabinet, onStatus }: RealtimeAudioOptions) {
   const [active, setActive] = useState(false);
   const [stats, setStats] = useState<RealtimeStats | null>(null);
+  const [snapshot, setSnapshot] = useState<OutputSnapshot | null>(null);
+  const contextRate = useRef(48000);
   const node = useRef<AudioWorkletNode | null>(null);
   const convolver = useRef<ConvolverNode | null>(null);
   const moduleLoaded = useRef<Promise<void> | null>(null);
@@ -66,6 +74,7 @@ export function useRealtimeAudio({ graph, outputNode, inputGain, sample, getAudi
     convolver.current = null;
     setActive(false);
     setStats(null);
+    setSnapshot(null);
     if (status) latest.current.onStatus(status);
   };
 
@@ -105,6 +114,7 @@ export function useRealtimeAudio({ graph, outputNode, inputGain, sample, getAudi
       return;
     }
     setStats({ load: message.load, level: message.level, nonConvergent: message.nonConvergent });
+    setSnapshot({ samples: message.snapshot, sampleRate: contextRate.current });
     overloadCount.current = message.load > 1 ? overloadCount.current + 1 : 0;
     if (overloadCount.current >= OVERLOAD_REPORTS) {
       stop(`이 회로는 실시간으로 계산하기에 무겁습니다 (부하 ${Math.round(message.load * 100)}%). 노브 미리듣기를 사용하세요.`);
@@ -119,6 +129,7 @@ export function useRealtimeAudio({ graph, outputNode, inputGain, sample, getAudi
       return;
     }
     const context = getAudioContext();
+    contextRate.current = context.sampleRate;
     try {
       moduleLoaded.current ??= context.audioWorklet.addModule(workletUrl);
       await moduleLoaded.current;
@@ -183,5 +194,5 @@ export function useRealtimeAudio({ graph, outputNode, inputGain, sample, getAudi
     else void start();
   };
 
-  return { supported: realtimeSupported(), active, stats, toggle };
+  return { supported: realtimeSupported(), active, stats, snapshot, toggle };
 }

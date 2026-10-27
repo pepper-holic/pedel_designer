@@ -17,13 +17,13 @@ import { useAnalysisPanels } from "./useAnalysisPanels";
 import type { MonteCarloResult } from "../core/analysis/montecarlo";
 import { presets, type PedalPreset, type PresetVariant } from "../core/library/presets";
 import { wiringPresets, type WiringPreset } from "./wiring";
-import { useAudioRun } from "./useAudioRun";
 import { useFrequencyResponse } from "./useFrequencyResponse";
 import { useSelectionState } from "./useSelectionState";
 import { useCircuitPersistence } from "./useCircuitPersistence";
 import { useProbes } from "./useProbes";
-import { useKnobPreview } from "./useKnobPreview";
-import { useRealtimeAudio } from "./useRealtimeAudio";
+import { useEditorAudio } from "./useEditorAudio";
+import { PlayerView } from "./player/PlayerView";
+import { playerSections } from "./player/playerControls";
 import { pruneProbes } from "./probes";
 import { movePartsBy, deleteParts, deleteWire, deleteBlock, rotatePart, updatePartParams, coerceParamValue } from "./circuitEdits";
 import { computeOperatingPoint } from "./operatingPoint";
@@ -33,7 +33,6 @@ import { useDragEditing } from "./useDragEditing";
 import { arrangeParts } from "./layout/arrange";
 import { rewireNets } from "./layout/rewire";
 import { loadCircuitFromStorage, CURRENT_SCHEMA_VERSION } from "./circuitStorage";
-
 
 type LeftTab = "parts" | "library";
 
@@ -58,6 +57,7 @@ export function SchematicEditor() {
   const [status, setStatus] = useState("");
   const [monteCarloResult, setMonteCarloResult] = useState<MonteCarloResult | null>(null);
   const [circuitVersion, setCircuitVersion] = useState(0);
+  const [view, setView] = useState<"schematic" | "player">("schematic");
 
   const parts = history.present.parts;
   const wires = history.present.wires;
@@ -205,6 +205,7 @@ export function SchematicEditor() {
       probes.setProbeMode(false);
     },
     onToggleProbeMode: () => probes.setProbeMode(!probes.probeMode),
+    canvasActive: view === "schematic",
   });
 
   const handleParamChange = (key: string, value: string) => {
@@ -229,30 +230,10 @@ export function SchematicEditor() {
       ),
   });
 
-  const audio = useAudioRun({ graph, inputGain, onStatus: setStatus });
-  const preview = useKnobPreview({
-    graph,
-    outputNode,
-    inputGain,
-    sample: audio.sample,
-    getAudioContext: audio.getAudioContext,
-    cabinet: audio.cabinetEnabled ? audio.cabinetVariant : null,
-    onStatus: setStatus,
-  });
-
-  const realtime = useRealtimeAudio({
-    graph,
-    outputNode,
-    inputGain,
-    sample: audio.sample,
-    getAudioContext: audio.getAudioContext,
-    cabinet: audio.cabinetEnabled ? audio.cabinetVariant : null,
-    onStatus: setStatus,
-  });
-  // While the circuit plays live, every edit is already being heard - a preview clip on top would
-  // only talk over it.
-  const requestPreview = () => {
-    if (!realtime.active) preview.request();
+  const { audio, preview, realtime, requestPreview, previewControl, realtimeControl } = useEditorAudio({ graph, outputNode, inputGain, onStatus: setStatus });
+  const handleInputGainChange = (gain: number) => {
+    setInputGain(gain);
+    requestPreview();
   };
 
   const analysis = useAnalysisPanels({
@@ -290,103 +271,117 @@ export function SchematicEditor() {
         onSaveFile={persistence.saveFile}
         onOpenFile={persistence.openFile}
         onNewCircuit={handleNewCircuit}
+        view={view}
+        onViewChange={setView}
       />
 
-      <div className="workbench-body">
-        <PartsSidebar
-          activeTab={leftTab}
-          onTabChange={setLeftTab}
-          onAddPart={handleAddPart}
-          onAddBlock={blockActions.addLibraryBlock}
-          userBlocks={{ items: blockActions.userBlocks, onAdd: blockActions.addUserBlock, onDelete: blockActions.deleteUserBlock }}
-          presets={presets}
-          wiringPresets={wiringPresets}
-          loadedPresetId={loadedPresetId}
-          onLoadTemplate={handleLoadTemplate}
-          onLoadWiring={handleLoadWiring}
-        />
-
-        <EditorCanvasArea
-          parts={parts}
-          wires={wires}
-          blocks={blocks}
-          fitSignal={circuitVersion + blockActions.placedCount + arrangeCount}
-          onAutoArrange={handleAutoArrange}
-          selectedPartId={selectedPartId}
-          selectedPartIds={selectedPartIds}
-          selectedWireId={selectedWireId}
-          onBoxSelect={selection.selectParts}
-          circuitVersion={circuitVersion}
-          dockTabs={dockTabs}
-          onMovePart={drag.movePart}
-          onWireWaypoints={drag.setWireWaypoints}
-          onSelectPart={handleSelectPart}
-          onSelectWire={selection.selectWire}
-          onAddWire={handleAddWire}
-          onDragEnd={drag.end}
-          probeMode={probes.probeMode}
-          onProbeModeChange={probes.setProbeMode}
-          onProbeTerminal={probes.toggleAt}
-          probes={probes.resolved}
-          terminalNet={graph.terminalNet}
-          operatingPoint={operatingPoint}
-          showDc={showDc}
-          onShowDcChange={setShowDc}
-          selectedBlockId={selection.selectedBlockId}
-          onSelectBlock={selection.selectBlock}
-          onToggleCollapse={blockActions.toggleCollapse}
-          onSetAllCollapsed={blockActions.setAllCollapsed}
-        />
-
-        <EditorSidebarRight
-          selectedPart={selectedPart}
-          selectedWire={selectedWire}
-          blocks={blocks}
-          graph={graph}
-          outputNode={outputNode}
-          onOutputNodeChange={setOutputNode}
+      {view === "player" ? (
+        <PlayerView
+          title={presets.find((p) => p.id === loadedPresetId)?.name ?? "내 회로"}
+          sections={playerSections(blocks, parts)}
+          onSetControl={blockActions.setKnob}
+          realtime={{ ...realtimeControl, snapshot: realtime.snapshot }}
+          preview={{ ...previewControl, lastClip: preview.lastClip }}
+          response={acResult.points}
           inputGain={inputGain}
-          onInputGainChange={(gain) => {
-            setInputGain(gain);
-            requestPreview();
-          }}
+          onInputGainChange={handleInputGainChange}
+          onUseTestSignal={audio.handleUseTestSignal}
           status={status}
-          audio={audio}
-          onParamChange={handleParamChange}
-          onApplyModel={handleApplyModel}
-          onRotate={handleRotateSelected}
-          onDelete={handleDeleteSelected}
-          onDeleteBlock={handleDeleteBlock}
-          onSelectBlock={selection.selectBlock}
-          onResetWire={handleResetWire}
-          onTogglePinned={handleTogglePinned}
-          onExposeParam={blockActions.exposeParam}
-          blockInspector={
-            selectedBlock && {
-              block: selectedBlock,
-              parts,
-              onRename: (label) => blockActions.rename(selectedBlock.id, label),
-              onToggleCollapse: () => blockActions.toggleCollapse(selectedBlock.id),
-              onUngroup: () => blockActions.ungroup(selectedBlock.id),
-              onSaveAsUserBlock: () => blockActions.saveAsUserBlock(selectedBlock.id),
-              onDelete: () => handleDeleteBlock(selectedBlock.id),
-              onSetKnob: blockActions.setKnob,
-              onUpdateParam: (paramId, patch) => blockActions.updateParam(selectedBlock.id, paramId, patch),
-              onUpdatePort: (portId, patch) => blockActions.updatePort(selectedBlock.id, portId, patch),
-            }
-          }
-          preview={{ enabled: preview.enabled, onEnabledChange: preview.setEnabled, busy: preview.busy }}
-          realtime={{ supported: realtime.supported, active: realtime.active, stats: realtime.stats, onToggle: realtime.toggle }}
-          probePanel={{
-            probes: probes.resolved,
-            probeMode: probes.probeMode,
-            onProbeModeChange: probes.setProbeMode,
-            onRename: probes.rename,
-            onRemove: probes.remove,
-            operatingPoint,
-          }}
         />
-      </div>
+      ) : (
+        <div className="workbench-body">
+          <PartsSidebar
+            activeTab={leftTab}
+            onTabChange={setLeftTab}
+            onAddPart={handleAddPart}
+            onAddBlock={blockActions.addLibraryBlock}
+            userBlocks={{ items: blockActions.userBlocks, onAdd: blockActions.addUserBlock, onDelete: blockActions.deleteUserBlock }}
+            presets={presets}
+            wiringPresets={wiringPresets}
+            loadedPresetId={loadedPresetId}
+            onLoadTemplate={handleLoadTemplate}
+            onLoadWiring={handleLoadWiring}
+          />
+
+          <EditorCanvasArea
+            parts={parts}
+            wires={wires}
+            blocks={blocks}
+            fitSignal={circuitVersion + blockActions.placedCount + arrangeCount}
+            onAutoArrange={handleAutoArrange}
+            selectedPartId={selectedPartId}
+            selectedPartIds={selectedPartIds}
+            selectedWireId={selectedWireId}
+            onBoxSelect={selection.selectParts}
+            circuitVersion={circuitVersion}
+            dockTabs={dockTabs}
+            onMovePart={drag.movePart}
+            onWireWaypoints={drag.setWireWaypoints}
+            onSelectPart={handleSelectPart}
+            onSelectWire={selection.selectWire}
+            onAddWire={handleAddWire}
+            onDragEnd={drag.end}
+            probeMode={probes.probeMode}
+            onProbeModeChange={probes.setProbeMode}
+            onProbeTerminal={probes.toggleAt}
+            probes={probes.resolved}
+            terminalNet={graph.terminalNet}
+            operatingPoint={operatingPoint}
+            showDc={showDc}
+            onShowDcChange={setShowDc}
+            selectedBlockId={selection.selectedBlockId}
+            onSelectBlock={selection.selectBlock}
+            onToggleCollapse={blockActions.toggleCollapse}
+            onSetAllCollapsed={blockActions.setAllCollapsed}
+          />
+
+          <EditorSidebarRight
+            selectedPart={selectedPart}
+            selectedWire={selectedWire}
+            blocks={blocks}
+            graph={graph}
+            outputNode={outputNode}
+            onOutputNodeChange={setOutputNode}
+            inputGain={inputGain}
+            onInputGainChange={handleInputGainChange}
+            status={status}
+            audio={audio}
+            onParamChange={handleParamChange}
+            onApplyModel={handleApplyModel}
+            onRotate={handleRotateSelected}
+            onDelete={handleDeleteSelected}
+            onDeleteBlock={handleDeleteBlock}
+            onSelectBlock={selection.selectBlock}
+            onResetWire={handleResetWire}
+            onTogglePinned={handleTogglePinned}
+            onExposeParam={blockActions.exposeParam}
+            blockInspector={
+              selectedBlock && {
+                block: selectedBlock,
+                parts,
+                onRename: (label) => blockActions.rename(selectedBlock.id, label),
+                onToggleCollapse: () => blockActions.toggleCollapse(selectedBlock.id),
+                onUngroup: () => blockActions.ungroup(selectedBlock.id),
+                onSaveAsUserBlock: () => blockActions.saveAsUserBlock(selectedBlock.id),
+                onDelete: () => handleDeleteBlock(selectedBlock.id),
+                onSetKnob: blockActions.setKnob,
+                onUpdateParam: (paramId, patch) => blockActions.updateParam(selectedBlock.id, paramId, patch),
+                onUpdatePort: (portId, patch) => blockActions.updatePort(selectedBlock.id, portId, patch),
+              }
+            }
+            preview={previewControl}
+            realtime={realtimeControl}
+            probePanel={{
+              probes: probes.resolved,
+              probeMode: probes.probeMode,
+              onProbeModeChange: probes.setProbeMode,
+              onRename: probes.rename,
+              onRemove: probes.remove,
+              operatingPoint,
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }

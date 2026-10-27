@@ -179,6 +179,25 @@ test("plays the circuit in real time and keeps playing through a knob change", a
   await expect(page.getByRole("button", { name: "▶ 실시간 재생" })).toBeVisible();
 });
 
+test("player view: turn the TS9 drive live and watch the spectrum follow", async ({ page }) => {
+  await loadPreset(page, /TS9 스타일 오버드라이브/);
+  await page.getByRole("button", { name: "연주", exact: true }).click();
+  await page.getByRole("button", { name: "실시간 재생 (풋스위치)" }).click();
+  await expect(page.getByText(/ON · 부하 \d+%/)).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText("출력 스펙트럼 (실시간)")).toBeVisible();
+
+  const drive = page.getByRole("slider", { name: "DRIVE 노브" });
+  const box = (await drive.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width / 2, box.y - 80, { steps: 8 });
+  await page.mouse.up();
+  await expect(drive).toHaveAttribute("aria-valuenow", "100");
+  // Still playing through the drag - no preview clip took over.
+  await expect(page.getByText(/ON · 부하 \d+%/)).toBeVisible();
+  await expect(page.getByText(/미리듣기 재생/)).toHaveCount(0);
+});
+
 test("loads a preset as functional blocks, collapses them to black boxes, and turns a block knob", async ({ page }) => {
   await loadPreset(page, /Big Muff 스타일/);
   // Expanded: tinted regions over the parts.

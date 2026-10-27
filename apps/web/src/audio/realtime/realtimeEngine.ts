@@ -15,6 +15,8 @@ const GAIN_FLOOR = 0.005;
 const RELEASE_SECONDS = 1.5;
 /** How fast the applied gain follows its target - slow enough not to pump on every note. */
 const GAIN_GLIDE_SECONDS = 0.15;
+/** Output samples kept for the live spectrum: ~0.17s at 48kHz, two 4096-point frames. */
+export const SNAPSHOT_LENGTH = 8192;
 /** DC blocker corner. Circuit outputs often sit on a bias voltage that is inaudible but would clip. */
 const DC_BLOCK_HZ = 8;
 
@@ -46,6 +48,8 @@ export class RealtimeEngine {
   private reportedNonConvergent = 0;
   private readonly statsWindow: number;
   private readonly pending: FromEngine[] = [];
+  private readonly recent = new Float32Array(SNAPSHOT_LENGTH);
+  private recentAt = 0;
 
   private readonly sampleRate: number;
   private readonly now: () => number;
@@ -106,6 +110,8 @@ export class RealtimeEngine {
     this.peak = 0;
     this.gain = 1;
     this.reportedNonConvergent = 0;
+    this.recent.fill(0);
+    this.recentAt = 0;
   }
 
   /** Fills one render quantum. Silence when stopped. */
@@ -143,6 +149,8 @@ export class RealtimeEngine {
         out[i] = 0;
         continue;
       }
+      this.recent[this.recentAt] = blocked;
+      this.recentAt = (this.recentAt + 1) % SNAPSHOT_LENGTH;
       const magnitude = Math.abs(blocked);
       this.peak = Math.max(magnitude, this.peak * this.releaseCoefficient);
       const target = TARGET_LEVEL / Math.max(this.peak, GAIN_FLOOR);
@@ -162,12 +170,20 @@ export class RealtimeEngine {
         load: this.statsBusy / audioMs,
         nonConvergent: stream.nonConvergentSampleCount - this.reportedNonConvergent,
         level: this.statsLevel,
+        snapshot: this.snapshot(),
       });
       this.reportedNonConvergent = stream.nonConvergentSampleCount;
       this.statsSamples = 0;
       this.statsBusy = 0;
       this.statsLevel = 0;
     }
+  }
+
+  private snapshot(): Float32Array {
+    const out = new Float32Array(SNAPSHOT_LENGTH);
+    out.set(this.recent.subarray(this.recentAt), 0);
+    out.set(this.recent.subarray(0, this.recentAt), SNAPSHOT_LENGTH - this.recentAt);
+    return out;
   }
 
   /** Messages produced since the last call (stats, errors), for the worklet to post. */

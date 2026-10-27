@@ -41,6 +41,8 @@ interface KnobPreviewOptions {
 export function useKnobPreview({ graph, outputNode, inputGain, sample, getAudioContext, cabinet, onStatus }: KnobPreviewOptions) {
   const [enabled, setEnabledState] = useState(readEnabled);
   const [busy, setBusy] = useState(false);
+  /** The last clip played, in volts - what the player view's spectrum shows without live audio. */
+  const [lastClip, setLastClip] = useState<{ samples: Float64Array; sampleRate: number } | null>(null);
   const latest = useRef({ graph, outputNode, inputGain, sample, cabinet });
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const abort = useRef<AbortController | null>(null);
@@ -91,6 +93,7 @@ export function useKnobPreview({ graph, outputNode, inputGain, sample, getAudioC
       const data = traces.get(out);
       if (!data || controller.signal.aborted) return;
       stopPlaying();
+      setLastClip({ samples: data, sampleRate: clip.sampleRate });
       playing.current = playSamples(applyEdgeFades(data, clip.sampleRate), clip.sampleRate, context, cab);
       onStatus(`미리듣기 재생 (계산 ${((performance.now() - t0) / 1000).toFixed(2)}초)`);
     } catch (err) {
@@ -128,5 +131,5 @@ export function useKnobPreview({ graph, outputNode, inputGain, sample, getAudioC
     }
   };
 
-  return { enabled, setEnabled, busy, request };
+  return { enabled, setEnabled, busy, request, lastClip };
 }

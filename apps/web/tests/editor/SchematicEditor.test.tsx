@@ -92,7 +92,7 @@ describe("SchematicEditor", () => {
     await user.click(screen.getByRole("button", { name: "저항" }));
     // partCounter is module-level and keeps incrementing across tests in this file, so the id
     // isn't always "resistor1" - match whichever "resistorN" label the canvas actually rendered.
-    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const idLabel = within(canvasPanel).getByText(/^resistor\d+$/);
     // The clickable hit target is a sibling <rect> (the mousedown handler), not the <text> label
     // itself - the SVG canvas has no accessible role for its shapes, so this is a deliberate,
@@ -113,7 +113,7 @@ describe("SchematicEditor", () => {
     await user.click(screen.getByRole("button", { name: /버퍼 \(Op-Amp 팔로워\)/ }));
 
     expect(screen.queryByText(/회로가 비어 있습니다/)).not.toBeInTheDocument();
-    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     // The buffer block's only element is a single op-amp instance, id-prefixed with the block's
     // instance id (blkN_U1) - match loosely since blockCounter is module-level like partCounter.
     expect(within(canvasPanel).getByText(/^blk\d+_U1$/)).toBeInTheDocument();
@@ -128,7 +128,7 @@ describe("SchematicEditor", () => {
     await user.click(screen.getByRole("button", { name: /기능 블록/ }));
     await user.click(screen.getByRole("button", { name: /버퍼 \(Op-Amp 팔로워\)/ }));
 
-    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const idLabel = within(canvasPanel).getByText(/^blk\d+_U1$/);
     // The body hit-box, not the selection outline (adding a block selects it, so the outline is drawn).
     const hitbox = idLabel.closest("g")!.querySelector<SVGRectElement>('rect[fill="transparent"]')!;
@@ -148,7 +148,7 @@ describe("SchematicEditor", () => {
     await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
     await user.click(screen.getByRole("button", { name: /다이오드 클리퍼 \(대칭\)/ }));
 
-    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     // Wires are SVG paths with no accessible role, so this is the same kind of deliberate,
     // narrowly-scoped DOM query the part-selection tests above use for the part hit-boxes.
     const wireHitboxes = canvasPanel.querySelectorAll<SVGPathElement>("path[data-wire-id]");
@@ -167,7 +167,7 @@ describe("SchematicEditor", () => {
     await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
     await user.click(screen.getByRole("button", { name: /다이오드 클리퍼 \(대칭\)/ }));
 
-    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const wireCount = () => canvasPanel.querySelectorAll("path[data-wire-id]").length;
     const partCount = () => canvasPanel.querySelectorAll("g[data-part-id]").length;
     const wiresBefore = wireCount();
@@ -187,7 +187,7 @@ describe("SchematicEditor", () => {
     await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
     await user.click(screen.getByRole("button", { name: /다이오드 클리퍼 \(대칭\)/ }));
 
-    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const wireCount = () => canvasPanel.querySelectorAll("path[data-wire-id]").length;
     const wiresBefore = wireCount();
 
@@ -205,7 +205,7 @@ describe("SchematicEditor", () => {
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
     render(<SchematicEditor />);
 
-    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const terminalsOf = (partId: string) =>
       Array.from(canvasPanel.querySelector(`g[data-part-id="${partId}"]`)!.querySelectorAll<SVGCircleElement>("circle")).filter(
         (c) => c.getAttribute("r") === "4",
@@ -237,7 +237,7 @@ describe("SchematicEditor", () => {
     await user.click(screen.getByRole("button", { name: "템플릿/블록" }));
     await user.click(screen.getByRole("button", { name: /듀얼 보이싱 오버드라이브/ }));
 
-    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     // Default (clipMode 0) clips inside the feedback loop through four series diodes.
     expect(within(canvasPanel).getByText("D1a")).toBeInTheDocument();
     expect(within(canvasPanel).queryByText("Rs")).not.toBeInTheDocument();
@@ -264,7 +264,7 @@ describe("SchematicEditor keyboard navigation", () => {
     render(<SchematicEditor />);
 
     await user.click(screen.getByRole("button", { name: /^저항$/ }));
-    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const [id] = idsOnCanvas(canvasPanel);
 
     // Nothing selected yet: the first arrow press should pick a part rather than doing nothing.
@@ -280,7 +280,7 @@ describe("SchematicEditor keyboard navigation", () => {
     render(<SchematicEditor />);
 
     await user.click(screen.getByRole("button", { name: "커패시터" }));
-    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const [id] = idsOnCanvas(canvasPanel);
     const xOf = () => Number(transformOf(canvasPanel, id).match(/translate\((-?\d+)/)![1]);
 
@@ -300,7 +300,7 @@ describe("SchematicEditor keyboard navigation", () => {
 
     await user.click(screen.getByRole("button", { name: /^저항$/ }));
     await user.click(screen.getByRole("button", { name: "커패시터" }));
-    const canvasPanel = screen.getByText("회로도").closest<HTMLElement>(".panel")!;
+    const canvasPanel = screen.getByText("회로도", { selector: ".panel-title" }).closest<HTMLElement>(".panel")!;
     const inspector = () => screen.getByText("선택된 소자").closest<HTMLElement>(".panel")!;
 
     // The inspector's first description line names the selected part, e.g. "저항 (resistor1)".
