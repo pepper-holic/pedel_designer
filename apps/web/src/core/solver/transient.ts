@@ -74,54 +74,111 @@ function applySlewRateLimiting(
 /** Sub-step counts tried, in order, for a step whose Newton solve does not converge. */
 const SUBSTEPS = [4, 16, 64];
 
-/** Runs a time-domain simulation, sample-by-sample, feeding `inputSamples` through a voltage source. */
-export function runTransient(netlist: Netlist, options: TransientOptions): TransientResult {
-  const oversample = options.oversample ?? 1;
-  const topology = buildTopology(netlist);
-  const dt = 1 / (options.sampleRate * oversample);
-  const history = new Map<string, number>();
+type StreamOptions = Omit<TransientOptions, "inputSamples">;
 
-  const inputElement = netlist.elements.find((e) => e.id === options.inputSourceId);
-  if (!inputElement || inputElement.type !== "vsource") {
-    throw new Error(`Input source not found or not a vsource: ${options.inputSourceId}`);
-  }
-  // The named input plus every source flagged as carrying the signal (see VoltageSourceElement).
-  const drivenElements = netlist.elements.filter(
-    (e): e is VoltageSourceElement => e.type === "vsource" && (e.id === options.inputSourceId || e.isSignalSource === true),
-  );
+function sameShape(a: ReturnType<typeof buildTopology>, b: ReturnType<typeof buildTopology>): boolean {
+  if (a.size !== b.size || a.numNodes !== b.numNodes) return false;
+  for (const [k, v] of a.nodeIndex) if (b.nodeIndex.get(k) !== v) return false;
+  for (const [k, v] of a.branchIndex) if (b.branchIndex.get(k) !== v) return false;
+  return true;
+}
 
-  const n = options.inputSamples.length;
-  const traces = new Map<NodeId, Float64Array>();
-  for (const node of options.tapNodes) {
-    traces.set(node, new Float64Array(n));
+/**
+ * The transient simulation as a stream: feed it one input sample at a time and it advances the
+ * circuit by one output sample, keeping every bit of state (reactive history, last solutions, slew
+ * state) between calls. `runTransient` is this run over a whole buffer; the real-time audio worklet
+ * runs it 128 samples at a time.
+ */
+export class TransientStream {
+  private netlist: Netlist;
+  private topology: ReturnType<typeof buildTopology>;
+  private readonly options: StreamOptions;
+  private readonly oversample: number;
+  private readonly dt: number;
+  private readonly warmStart: boolean;
+  private readonly integration: IntegrationMethod;
+  private history = new Map<string, number>();
+  private slewHistory = new Map<string, number>();
+  private drivenElements: VoltageSourceElement[] = [];
+  private workspace: NewtonWorkspace;
+  private tapIndex: Int32Array;
+  private readonly tapSum: Float64Array;
+  private previousSolution: Float64Array | undefined;
+  private olderSolution: Float64Array | undefined;
+  private predicted: Float64Array;
+  private previousDrive = 0;
+  private step = 0;
+  nonConvergentSampleCount = 0;
+  worstNonConvergentDelta = 0;
+
+  constructor(netlist: Netlist, options: StreamOptions) {
+    this.options = options;
+    this.oversample = options.oversample ?? 1;
+    this.dt = 1 / (options.sampleRate * this.oversample);
+    this.warmStart = options.warmStart ?? true;
+    this.integration = options.integration ?? "backwardEuler";
+    this.netlist = netlist;
+    this.topology = buildTopology(netlist);
+    this.workspace = new NewtonWorkspace(this.topology.size);
+    this.predicted = new Float64Array(this.topology.size);
+    this.tapIndex = Int32Array.from(options.tapNodes.map((node) => nodeOf(this.topology, node)));
+    this.tapSum = new Float64Array(options.tapNodes.length);
+    this.bindDrivenElements();
   }
-  const slewHistory = new Map<string, number>();
-  let nonConvergentSampleCount = 0;
-  let worstNonConvergentDelta = 0;
-  const warmStart = options.warmStart ?? true;
-  const integration: IntegrationMethod = options.integration ?? "backwardEuler";
-  let previousSolution: Float64Array | undefined;
-  // One matrix for the whole run, cleared and restamped each Newton iteration.
-  const workspace = new NewtonWorkspace(topology.size);
+
+  private bindDrivenElements() {
+    const inputElement = this.netlist.elements.find((e) => e.id === this.options.inputSourceId);
+    if (!inputElement || inputElement.type !== "vsource") {
+      throw new Error(`Input source not found or not a vsource: ${this.options.inputSourceId}`);
+    }
+    // The named input plus every source flagged as carrying the signal (see VoltageSourceElement).
+    this.drivenElements = this.netlist.elements.filter(
+      (e): e is VoltageSourceElement => e.type === "vsource" && (e.id === this.options.inputSourceId || e.isSignalSource === true),
+    );
+  }
+
+  /**
+   * Swaps in a changed circuit mid-stream - a turned knob, a changed part value. When the new
+   * netlist has the same nodes and branches (the usual case: values change, wiring does not), the
+   * circuit keeps its state and carries on without a click; otherwise it starts from rest.
+   */
+  replaceNetlist(netlist: Netlist): void {
+    const topology = buildTopology(netlist);
+    const keep = sameShape(this.topology, topology);
+    this.netlist = netlist;
+    this.topology = topology;
+    this.bindDrivenElements();
+    this.tapIndex = Int32Array.from(this.options.tapNodes.map((node) => (topology.nodeIndex.has(node) || node === "0" ? nodeOf(topology, node) : -1)));
+    if (keep) return;
+    this.workspace = new NewtonWorkspace(topology.size);
+    this.predicted = new Float64Array(topology.size);
+    this.history.clear();
+    this.slewHistory.clear();
+    this.previousSolution = undefined;
+    this.olderSolution = undefined;
+    this.step = 0;
+  }
 
   /** Stamps-in a solved step: slew limiting, then every reactive element's history. */
-  const commitStep = (solution: Float64Array, stepDt: number, stepIntegration: IntegrationMethod) => {
-    applySlewRateLimiting(netlist, topology, solution, slewHistory, stepDt);
+  private commitStep(solution: Float64Array, stepDt: number, stepIntegration: IntegrationMethod) {
+    const { netlist, topology, history } = this;
+    applySlewRateLimiting(netlist, topology, solution, this.slewHistory, stepDt);
     for (const element of netlist.elements) {
       if (element.type === "capacitor") updateCapacitorHistory(element, topology, history, solution, stepDt, stepIntegration);
       if (element.type === "inductor") updateInductorHistory(element, topology, history, stepDt, solution, stepIntegration);
       if (element.type === "coupledInductors") updateCoupledInductorsHistory(element, topology, history, stepDt, solution);
       if (element.type === "opamp") updateOpAmpHistory(element, topology, history, solution);
     }
-  };
+  }
 
   /**
-   * Retries a step that did not converge as `parts` shorter sub-steps, ramping the input across
-   * them. A smaller step keeps each solve close to where the last one ended, which is what settles
-   * a fuzz whose two junctions otherwise make Newton overshoot back and forth (the standard
-   * simulator remedy: cut the timestep). History is restored first if a finer split is needed.
+   * Retries a step that did not converge as shorter sub-steps, ramping the input across them. A
+   * smaller step keeps each solve close to where the last one ended, which is what settles a fuzz
+   * whose two junctions otherwise make Newton overshoot back and forth (the standard simulator
+   * remedy: cut the timestep). History is restored before each finer attempt.
    */
-  const subdivide = (fromDrive: number, toDrive: number, guess: Float64Array | undefined, stepIntegration: IntegrationMethod): NewtonResult => {
+  private subdivide(fromDrive: number, toDrive: number, guess: Float64Array | undefined, stepIntegration: IntegrationMethod): NewtonResult {
+    const { netlist, topology, history, slewHistory, workspace, dt } = this;
     let worstSubstepDelta = 0;
     const savedHistory = new Map(history);
     const savedSlew = new Map(slewHistory);
@@ -136,85 +193,92 @@ export function runTransient(netlist: Netlist, options: TransientOptions): Trans
       let g = guess;
       for (let s = 1; s <= parts; s++) {
         const d = fromDrive + ((toDrive - fromDrive) * s) / parts;
-        for (const el of drivenElements) el.voltage = d;
-        last = solveNewton(netlist, topology, history, dt / parts, { integration: stepIntegration, workspace, ...(warmStart && g ? { initialGuess: g } : {}) });
+        for (const el of this.drivenElements) el.voltage = d;
+        last = solveNewton(netlist, topology, history, dt / parts, { integration: stepIntegration, workspace, ...(this.warmStart && g ? { initialGuess: g } : {}) });
         if (!last.converged) {
           ok = false;
           worstSubstepDelta = Math.max(worstSubstepDelta, last.lastDelta ?? Infinity);
         }
-        commitStep(last.solution, dt / parts, stepIntegration);
+        this.commitStep(last.solution, dt / parts, stepIntegration);
         g = last.solution;
       }
       if (ok) return { solution: last!.solution, converged: true };
     }
     // Report the step as failed if any of its finest sub-steps failed, with the worst of them.
     return { solution: last!.solution, converged: false, lastDelta: worstSubstepDelta };
-  };
-
-  // Tap nodes resolved to solution indices once - the UI taps every net, so per-sample map lookups
-  // here added up.
-  const tapCount = options.tapNodes.length;
-  const tapIndex = Int32Array.from(options.tapNodes.map((node) => nodeOf(topology, node)));
-  const tapTraces = options.tapNodes.map((node) => traces.get(node)!);
-  const tapSum = new Float64Array(tapCount);
-  let olderSolution: Float64Array | undefined;
-  const predicted = new Float64Array(topology.size);
-  let previousDrive = options.inputSamples.length > 0 ? options.inputSamples[0] : 0;
-  const totalSteps = n * oversample;
-  for (let step = 0; step < totalSteps; step++) {
-    const i = Math.floor(step / oversample);
-    const frac = (step % oversample) / oversample;
-    const curr = options.inputSamples[i];
-    const next = i + 1 < n ? options.inputSamples[i + 1] : curr;
-    const drive = curr + (next - curr) * frac;
-    for (const el of drivenElements) el.voltage = drive;
-
-    // Trapezoidal needs a consistent i(t-dt) for every reactive element, and at step 0 that history
-    // is empty - defaulting it to zero silently assumes nothing was happening before the run
-    // started, which is wrong the instant the input is not already zero (e.g. a hard step). That
-    // mismatch shows up as a single badly-off first sample rather than the improved accuracy
-    // trapezoidal is there for. Real simulators sidestep exactly this with a backward-Euler
-    // "startup" step; using it here only for step 0 fixes the first sample without touching the
-    // steady accuracy gain over the rest of the run.
-    const stepIntegration: IntegrationMethod = step === 0 ? "backwardEuler" : integration;
-    // Start from where the last two samples say this one is heading (linear extrapolation): on a
-    // smooth waveform that lands much closer than the previous sample alone, saving Newton steps.
-    if (warmStart && previousSolution && olderSolution) {
-      for (let k = 0; k < predicted.length; k++) predicted[k] = 2 * previousSolution[k] - olderSolution[k];
-    }
-    let result: NewtonResult;
-    try {
-      result = solveNewton(netlist, topology, history, dt, {
-        integration: stepIntegration,
-        workspace,
-        ...(warmStart ? { initialGuess: previousSolution && olderSolution ? predicted : previousSolution, limitReference: previousSolution } : {}),
-      });
-    } catch {
-      // A degenerate linearisation (e.g. an exponential overflow) - treat like non-convergence.
-      result = { solution: new Float64Array(topology.size), converged: false, lastDelta: Infinity };
-    }
-    let { solution, converged, lastDelta } = result;
-    if (converged) commitStep(solution, dt, stepIntegration);
-    else ({ solution, converged, lastDelta } = subdivide(previousDrive, drive, previousSolution, stepIntegration));
-    previousDrive = drive;
-    if (warmStart) {
-      olderSolution = previousSolution;
-      previousSolution = solution;
-    }
-    if (!converged) {
-      nonConvergentSampleCount++;
-      worstNonConvergentDelta = Math.max(worstNonConvergentDelta, lastDelta ?? Infinity);
-    }
-
-    for (let t = 0; t < tapCount; t++) tapSum[t] += tapIndex[t] < 0 ? 0 : solution[tapIndex[t]];
-
-    if ((step + 1) % oversample === 0) {
-      for (let t = 0; t < tapCount; t++) {
-        tapTraces[t][i] = tapSum[t] / oversample;
-        tapSum[t] = 0;
-      }
-    }
   }
 
-  return { traces, nonConvergentSampleCount, worstNonConvergentDelta };
+  /**
+   * Advances one output sample. `curr` is this input sample and `next` the following one (used to
+   * interpolate the input across oversampled sub-steps; pass `curr` again when it is not known).
+   * Writes each tap node's voltage, averaged over the sub-steps, into `out`.
+   */
+  advance(curr: number, next: number, out: Float64Array): void {
+    const { oversample, topology, dt, warmStart, tapIndex, tapSum } = this;
+    if (this.step === 0) this.previousDrive = curr;
+    for (let sub = 0; sub < oversample; sub++) {
+      const drive = curr + ((next - curr) * sub) / oversample;
+      for (const el of this.drivenElements) el.voltage = drive;
+
+      // Trapezoidal needs a consistent i(t-dt) for every reactive element, and at step 0 that
+      // history is empty - defaulting it to zero silently assumes nothing was happening before the
+      // run started, which is wrong the instant the input is not already zero (e.g. a hard step).
+      // Real simulators sidestep exactly this with a backward-Euler "startup" step; using it only
+      // for step 0 fixes the first sample without touching trapezoidal's accuracy afterwards.
+      const stepIntegration: IntegrationMethod = this.step === 0 ? "backwardEuler" : this.integration;
+      // Start from where the last two samples say this one is heading (linear extrapolation): on a
+      // smooth waveform that lands much closer than the previous sample alone, saving Newton steps.
+      const prev = this.previousSolution;
+      const older = this.olderSolution;
+      if (warmStart && prev && older) for (let k = 0; k < this.predicted.length; k++) this.predicted[k] = 2 * prev[k] - older[k];
+      let result: NewtonResult;
+      try {
+        result = solveNewton(this.netlist, topology, this.history, dt, {
+          integration: stepIntegration,
+          workspace: this.workspace,
+          ...(warmStart ? { initialGuess: prev && older ? this.predicted : prev, limitReference: prev } : {}),
+        });
+      } catch {
+        // A degenerate linearisation (e.g. an exponential overflow) - treat like non-convergence.
+        result = { solution: new Float64Array(topology.size), converged: false, lastDelta: Infinity };
+      }
+      let { solution, converged, lastDelta } = result;
+      if (converged) this.commitStep(solution, dt, stepIntegration);
+      else ({ solution, converged, lastDelta } = this.subdivide(this.previousDrive, drive, prev, stepIntegration));
+      this.previousDrive = drive;
+      if (warmStart) {
+        this.olderSolution = prev;
+        this.previousSolution = solution;
+      }
+      if (!converged) {
+        this.nonConvergentSampleCount++;
+        this.worstNonConvergentDelta = Math.max(this.worstNonConvergentDelta, lastDelta ?? Infinity);
+      }
+      for (let t = 0; t < tapIndex.length; t++) tapSum[t] += tapIndex[t] < 0 ? 0 : solution[tapIndex[t]];
+      this.step++;
+    }
+    for (let t = 0; t < tapIndex.length; t++) {
+      out[t] = tapSum[t] / oversample;
+      tapSum[t] = 0;
+    }
+  }
+}
+
+/** Runs a time-domain simulation, sample-by-sample, feeding `inputSamples` through a voltage source. */
+export function runTransient(netlist: Netlist, options: TransientOptions): TransientResult {
+  const stream = new TransientStream(netlist, options);
+  const input = options.inputSamples;
+  const n = input.length;
+  const traces = new Map<NodeId, Float64Array>();
+  const columns = options.tapNodes.map((node) => {
+    const column = new Float64Array(n);
+    traces.set(node, column);
+    return column;
+  });
+  const out = new Float64Array(options.tapNodes.length);
+  for (let i = 0; i < n; i++) {
+    stream.advance(input[i], i + 1 < n ? input[i + 1] : input[i], out);
+    for (let t = 0; t < columns.length; t++) columns[t][i] = out[t];
+  }
+  return { traces, nonConvergentSampleCount: stream.nonConvergentSampleCount, worstNonConvergentDelta: stream.worstNonConvergentDelta };
 }
