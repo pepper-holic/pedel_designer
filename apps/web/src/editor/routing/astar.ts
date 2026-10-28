@@ -214,16 +214,11 @@ export function routeWires(requests: RouteRequest[], obstacles: Rect[], options:
     // leaves from, which is what reads as "a short straight run, then it bends" when drawn.
     //
     // Two parts sitting exactly in line (same column or row - e.g. feedback elements stacked directly
-    // above an op-amp) are a special case: the direct connection between them is already a dead-straight
-    // line, so the ordinary penalty above never outweighs it, and the wire skips its own lead entirely -
-    // reading as if it teleports out of the part sideways. Charge much more for that one specific
-    // situation (a pin whose own axis doesn't match the only zero-bend path), so it takes a short stub
-    // out and back instead; everywhere else (the common case: two points that aren't perfectly aligned,
-    // where a real alternate route exists) stays at the ordinary tie-break so unrelated routing elsewhere
-    // doesn't sprout pointless jogs.
-    const colinearButWrongAxis =
-      req.axisA !== undefined && ((req.a.x === req.b.x && req.axisA === 0) || (req.a.y === req.b.y && req.axisA === 1));
-    const startAxisPenalty = colinearButWrongAxis ? bendCost + 20 : bendCost + 1;
+    // above an op-amp) are deliberately NOT special-cased into a forced stub here: real schematics draw
+    // that case as one uninterrupted bus line straight through every junction (see reference pedal
+    // schematics) - the fix for "this looks wrong" there is aligning the PARTS so the straight line is
+    // the correct one, not inserting a jog to manufacture a lead that isn't there.
+    const startAxisPenalty = bendCost + 1;
     let found = -1;
     let expansions = 0;
     while (heap.size > 0 && expansions < maxExpansions) {

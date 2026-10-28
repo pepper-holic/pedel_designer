@@ -16,20 +16,13 @@ import { runAcAnalysis } from "../../src/core/solver/ac";
 import type { PartInstance } from "../../src/editor/types";
 
 describe("router", () => {
-  it("still gives a part's lead a visible stub even when it's already perfectly in line with the goal (e.g. a feedback ladder stacked directly over an op-amp)", () => {
-    // Without this, two horizontally-leaded parts stacked exactly one above the other connect with a
-    // dead-straight vertical line - the ordinary tie-break never outweighs a path that's already the
-    // shortest possible, so the wire looks like it leaves the pin sideways with no lead at all.
+  it("leaves a dead-straight line alone when two parts are already perfectly in line (e.g. a feedback ladder stacked directly over an op-amp) - a real schematic draws that as one uninterrupted bus, not a manufactured jog", () => {
     const [route] = routeWires([{ a: { x: 0, y: 0 }, b: { x: 0, y: 100 }, net: "n", axisA: 0, axisB: 0 }], []);
-    expect(route![0].y).toBe(route![1].y); // leaves horizontally first
-    expect(route![0].x).not.toBe(route![1].x); // an actual stub, not an immediate turn
+    expect(route).toEqual([
+      { x: 0, y: 0 },
+      { x: 0, y: 100 },
+    ]);
   });
-
-  it("does NOT add that stub when the two points simply aren't aligned - only the exact zero-bend-otherwise case", () => {
-    const [route] = routeWires([{ a: { x: 0, y: 0 }, b: { x: 50, y: 100 }, net: "n", axisA: 0, axisB: 0 }], []);
-    expect(route!.length).toBeLessThanOrEqual(4); // no extra out-and-back jog tacked on
-  });
-
 
   it("goes around an obstacle instead of through it", () => {
     const [route] = routeWires([{ a: { x: 0, y: 0 }, b: { x: 200, y: 0 }, net: "n1" }], [{ x1: 80, y1: -30, x2: 120, y2: 30 }]);
@@ -222,12 +215,8 @@ describe("layout quality across every preset", () => {
     // net's branches as separate nearby runs rather than merging onto one; tracked here so further
     // routing work (or a future L2 extension) can be measured against this count.
     // L5/L6 traded a few more of these (21 -> 26) for far fewer crossings and no more loop-back
-    // zigzags or body detours - each terminal now reliably gets a straight stub. astar.ts's
-    // colinearButWrongAxis (a feedback ladder's own stacked elements now also get a stub, not a
-    // dead-straight pass-through line) adds a handful more (-> 32): the stub-and-back itself can read
-    // as a near-duplicate pair of short parallel runs to this metric, even though each one is a single
-    // part's own lead, not the same node drawn twice.
-    expect(totalDuplicates).toBeLessThanOrEqual(34);
+    // zigzags or body detours - each terminal now reliably gets a straight stub.
+    expect(totalDuplicates).toBeLessThanOrEqual(28);
   });
 });
 
