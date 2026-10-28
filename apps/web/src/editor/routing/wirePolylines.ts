@@ -1,4 +1,4 @@
-import { laneOffsetFor, orthogonalPoints, polylineThrough, type Point } from "../geometry";
+import { laneOffsetFor, orthogonalPoints, polylineThrough, terminalExitDirection, type Point } from "../geometry";
 import { bodyRect } from "../layout/metrics";
 import { routeWires, type Rect, type RouteRequest } from "./astar";
 import type { CanvasEndpoints } from "../canvasEndpoints";
@@ -38,7 +38,14 @@ export function wireRoutes(
       ...parts.filter((p) => p.type !== "ground" && !endpoints.hidden.has(p.id)).map(bodyRect),
       ...[...endpoints.layouts.values()].map((l) => ({ x1: l.left - 2, y1: l.top - 2, x2: l.left + l.width + 2, y2: l.top + l.height + 2 })),
     ];
-    const requests: RouteRequest[] = toRoute.map((v) => ({ a: v.a, b: v.b, net: netOf(v.wire.a) ?? v.wire.id }));
+    const byId = new Map(parts.map((p) => [p.id, p]));
+    // A plain (uncollapsed) terminal's own lead direction - undefined for a collapsed block's pin,
+    // which has no single part to take it from.
+    const exitDir = (ref: TerminalRef) => {
+      const part = !endpoints.hidden.has(ref.partId) ? byId.get(ref.partId) : undefined;
+      return part ? terminalExitDirection(part, ref.terminalId) : undefined;
+    };
+    const requests: RouteRequest[] = toRoute.map((v) => ({ a: v.a, b: v.b, net: netOf(v.wire.a) ?? v.wire.id, dirA: exitDir(v.wire.a), dirB: exitDir(v.wire.b) }));
     routeWires(requests, obstacles).forEach((pts, i) => {
       if (pts) routed.set(toRoute[i].wire.id, pts);
     });

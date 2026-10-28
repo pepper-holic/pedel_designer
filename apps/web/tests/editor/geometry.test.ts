@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { snapToGrid, rotateClockwise, rotateOffset, terminalPosition, orthogonalPath, computeWirePaths, zoomAroundPoint, fitView, GRID_SIZE } from "../../src/editor/geometry";
+import { snapToGrid, rotateClockwise, rotateOffset, terminalPosition, terminalExitDirection, orthogonalPath, computeWirePaths, zoomAroundPoint, fitView, GRID_SIZE } from "../../src/editor/geometry";
 import type { PartInstance } from "../../src/editor/types";
 import type { Point } from "../../src/editor/geometry";
 
@@ -55,6 +55,27 @@ describe("terminalPosition", () => {
     const pos = terminalPosition(part, "inMinus"); // local (-35, 15) -> mirrored (-35, -15) -> rotated 90
     expect(pos.x).toBeCloseTo(15, 9);
     expect(pos.y).toBeCloseTo(-35, 9);
+  });
+});
+
+describe("terminalExitDirection", () => {
+  it("points along a two-terminal part's own axis", () => {
+    const part: PartInstance = { id: "R1", type: "resistor", x: 0, y: 0, rotation: 0, params: { resistance: 1000 } };
+    expect(terminalExitDirection(part, "a")).toBe(2); // local (-30, 0): leaves to the left
+    expect(terminalExitDirection(part, "b")).toBe(0); // local (30, 0): leaves to the right
+  });
+
+  it("follows the part's rotation", () => {
+    const part: PartInstance = { id: "R1", type: "resistor", x: 0, y: 0, rotation: 90, params: { resistance: 1000 } };
+    expect(terminalExitDirection(part, "b")).toBe(1); // +x rotated 90 degrees clockwise -> +y
+  });
+
+  it("mirrors dy before picking the dominant axis", () => {
+    // opamp inMinus is at local (-35, 15), dominant axis x (|-35| > |15|): leaves left either way.
+    const plain: PartInstance = { id: "U1", type: "opamp", x: 0, y: 0, rotation: 0, params: {} };
+    const mirrored: PartInstance = { id: "U1", type: "opamp", x: 0, y: 0, rotation: 0, mirror: true, params: {} };
+    expect(terminalExitDirection(plain, "inMinus")).toBe(2);
+    expect(terminalExitDirection(mirrored, "inMinus")).toBe(2);
   });
 });
 

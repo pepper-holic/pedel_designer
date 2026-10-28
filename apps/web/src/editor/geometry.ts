@@ -28,6 +28,21 @@ export function terminalPosition(part: PartInstance, terminalId: string): { x: n
   return { x: part.x + rotated.x, y: part.y + rotated.y };
 }
 
+/** Direction code a router step uses: 0 = +x, 1 = +y, 2 = -x, 3 = -y (matches routing/astar.ts's DIRS). */
+export type DirCode = 0 | 1 | 2 | 3;
+
+/** The direction a terminal's own lead points away from the part body - e.g. a resistor's right-hand
+ * pin points further right. A wire should leave (or arrive at) a terminal along this direction before
+ * it bends, the way a hand-drawn schematic always gives a pin a short straight stub first. */
+export function terminalExitDirection(part: PartInstance, terminalId: string): DirCode {
+  const terminal = PART_DEFS[part.type].terminals.find((t) => t.id === terminalId)!;
+  const dy = part.mirror ? -terminal.dy : terminal.dy;
+  const local = Math.abs(terminal.dx) >= Math.abs(dy) ? { x: Math.sign(terminal.dx) || 1, y: 0 } : { x: 0, y: Math.sign(dy) || 1 };
+  const rotated = rotateOffset(local.x, local.y, part.rotation);
+  if (Math.abs(rotated.x) >= Math.abs(rotated.y)) return rotated.x >= 0 ? 0 : 2;
+  return rotated.y >= 0 ? 1 : 3;
+}
+
 export interface CanvasView {
   zoom: number;
   panX: number;

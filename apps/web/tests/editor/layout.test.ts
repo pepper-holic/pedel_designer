@@ -34,6 +34,15 @@ describe("router", () => {
     ]);
   });
 
+  it("leaves/arrives along the terminal's own lead direction instead of bending right at the pin (L5)", () => {
+    const [route] = routeWires([{ a: { x: 0, y: 0 }, b: { x: 100, y: 100 }, net: "n", dirA: 1, dirB: 0 }], []);
+    expect(route).toEqual([
+      { x: 0, y: 0 },
+      { x: 0, y: 100 },
+      { x: 100, y: 100 },
+    ]);
+  });
+
   it("puts a second net on its own track rather than on top of the first", () => {
     const [a, b] = routeWires(
       [
@@ -150,13 +159,17 @@ describe("layout quality across every preset", () => {
     }
     // Baseline before Stage C (flat layout, plain 2-bend wires): 64 crossings.
     // L1 (part orientation pass): 23. L2 (op-amp stage template): 19.
-    // L3 (same-net wires attracted onto a shared track - routing/astar.ts alongBonus): 18. Plan target: <=15.
+    // L3 (same-net wires attracted onto a shared track - routing/astar.ts alongBonus): 18.
+    // L5 (terminal lead-direction bias - geometry.ts's terminalExitDirection, astar.ts's dirA/dirB): 19
+    // crossings (+1; a few routes now take a stub-then-bend instead of a bend-at-the-pin shortcut).
+    // Plan target: <=15.
     expect(totalCrossings).toBeLessThanOrEqual(20);
     // L3 target: same node drawn as one trunk, not two parallel lines a few px apart. A handful of
     // multi-diode clipping networks the op-amp template doesn't recognize (L2's scope) still draw a
     // net's branches as separate nearby runs rather than merging onto one; tracked here so further
     // routing work (or a future L2 extension) can be measured against this count.
-    expect(totalDuplicates).toBeLessThanOrEqual(21);
+    // L5 also pulled several of these onto a shared stub direction, cutting it 21 -> 18.
+    expect(totalDuplicates).toBeLessThanOrEqual(18);
   });
 });
 
