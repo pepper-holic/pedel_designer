@@ -1,6 +1,6 @@
 import { netlistFromGraph } from "../netlistFromGraph";
 import { PART_DEFS } from "../partDefs";
-import { snapToGrid } from "../geometry";
+import { snapToGrid, terminalPosition } from "../geometry";
 import { barycenterRows, layerDepths, type Adjacency } from "./layered";
 import { spineLayout } from "./spine";
 import { optimizePartOrientations } from "./orientation";
@@ -17,6 +17,16 @@ const ORIGIN = { x: 100, y: 100 };
 const GROUND_OFFSET_Y = 70;
 /** See spineLayout: the signal path prefers amplifiers, avoids diodes. */
 const SPINE_WEIGHT: Partial<Record<PartInstance["type"], number>> = { opamp: 1, bjt: 1, jfet: 1, coupledInductors: 2, diode: 6 };
+
+/** Row placement lines a part's CENTRE up with its row - fine for a resistor/cap/diode, whose two
+ * terminals sit level with its centre, but a signal source's output pin sits off to one side of its
+ * own symbol (vsource's "positive" is drawn above centre). Left as-is, the wire into the next part has
+ * to detour around the source's own body just to clear it before it can turn toward its target - this
+ * returns how far to shift the part so its OWN connecting pin, not its drawn centre, lands on the row. */
+export function rowAnchorOffset(part: PartInstance): number {
+  if (part.type !== "vsource" || part.role === "supply" || part.role === "bias") return 0;
+  return part.y - terminalPosition(part, "positive").y;
+}
 
 interface Group {
   id: string;
@@ -123,7 +133,7 @@ export function arrangeParts(snapshot: CircuitSnapshot, inputPartId: string | nu
     const minRow = Math.min(...[...placement.values()].map((p) => p.row));
     const maxRow = Math.max(...[...placement.values()].map((p) => p.row));
     const maxCol = Math.max(...[...placement.values()].map((p) => p.col));
-    for (const [m, p] of placement) local.set(m, { x: p.col * COLUMN_SPACING, y: (p.row - minRow) * ROW_SPACING });
+    for (const [m, p] of placement) local.set(m, { x: p.col * COLUMN_SPACING, y: (p.row - minRow) * ROW_SPACING + rowAnchorOffset(byId.get(m)!) });
     size.set(g.id, { w: maxCol * COLUMN_SPACING, h: (maxRow - minRow) * ROW_SPACING });
     spineY.set(g.id, -minRow * ROW_SPACING);
   }

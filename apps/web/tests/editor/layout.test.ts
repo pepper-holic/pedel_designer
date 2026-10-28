@@ -1,18 +1,19 @@
 import { describe, expect, it } from "vitest";
 import { routeWires } from "../../src/editor/routing/astar";
 import { wireRoutes } from "../../src/editor/routing/wirePolylines";
-import { arrangeParts } from "../../src/editor/layout/arrange";
+import { arrangeParts, rowAnchorOffset } from "../../src/editor/layout/arrange";
 import { rewireNets } from "../../src/editor/layout/rewire";
 import { layoutMetrics } from "../../src/editor/layout/metrics";
 import { partLabelPlacements } from "../../src/editor/layout/partLabels";
 import { rectsOverlap } from "../../src/editor/layout/labels";
 import { bboxOfParts } from "../../src/editor/blockGeometry";
 import { buildCanvasEndpoints } from "../../src/editor/canvasEndpoints";
-import { draggableCorners, polylineThrough } from "../../src/editor/geometry";
+import { draggableCorners, polylineThrough, terminalPosition } from "../../src/editor/geometry";
 import { loadPedalPreset } from "../../src/editor/templateLoading";
 import { netlistFromGraph } from "../../src/editor/netlistFromGraph";
 import { presets } from "../../src/core/library/presets";
 import { runAcAnalysis } from "../../src/core/solver/ac";
+import type { PartInstance } from "../../src/editor/types";
 
 describe("router", () => {
   it("goes around an obstacle instead of through it", () => {
@@ -254,6 +255,38 @@ describe("node-level wiring (L3)", () => {
     const routes = wireRoutes(snapshot.wires, snapshot.parts, buildCanvasEndpoints(snapshot.parts, snapshot.blocks, netOf), netOf, false);
     const m = layoutMetrics({ ...snapshot, wires: routes.map((r) => r.wire) }, routes.map((r) => r.points), wireNetOf);
     expect(m.parallelDuplicates).toBe(0);
+  });
+});
+
+describe("row-anchored source placement (L6)", () => {
+  it("shifts a signal vsource down so its own OUTPUT pin, not its drawn centre, sits flush with the row it's placed on", () => {
+    const preset = presets.find((p) => p.id === "rat-style-distortion")!;
+    const { snapshot } = loadPedalPreset(preset);
+    const arranged = arrangeParts(snapshot, "V1");
+    const byId = new Map(arranged.parts.map((p) => [p.id, p]));
+    const v1 = byId.get("V1")!;
+    const rin = byId.get("Rin")!;
+    expect(terminalPosition(v1, "positive").y).toBeCloseTo(terminalPosition(rin, "a").y, 9);
+  });
+
+  it("leaves the connecting wire a dead-straight run instead of a detour around the source's own body", () => {
+    const preset = presets.find((p) => p.id === "rat-style-distortion")!;
+    const { snapshot } = loadPedalPreset(preset);
+    const arranged = arrangeParts(snapshot, "V1");
+    const g = netlistFromGraph(arranged.parts, arranged.wires);
+    const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
+    const routes = wireRoutes(arranged.wires, arranged.parts, buildCanvasEndpoints(arranged.parts, arranged.blocks, netOf), netOf, false);
+    const rw0 = routes.find((r) => r.wire.a.partId === "V1" && r.wire.b.partId === "Rin")!;
+    expect(rw0.points).toHaveLength(2);
+  });
+
+  it("leaves a power/bias source's own centre on the row - it isn't part of the signal spine", () => {
+    const supply: PartInstance = { id: "Vcc", type: "vsource", x: 0, y: 0, rotation: 0, role: "supply", params: { voltage: 9 } };
+    const bias: PartInstance = { id: "Vbias", type: "vsource", x: 0, y: 0, rotation: 0, role: "bias", params: { voltage: 4.5 } };
+    const signal: PartInstance = { id: "V1", type: "vsource", x: 0, y: 0, rotation: 0, params: { voltage: 0 } };
+    expect(rowAnchorOffset(supply)).toBe(0);
+    expect(rowAnchorOffset(bias)).toBe(0);
+    expect(rowAnchorOffset(signal)).not.toBe(0);
   });
 });
 
