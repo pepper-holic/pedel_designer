@@ -1830,7 +1830,10 @@ p.drc-error {
   overflow: auto;
 }
 
-/* Pedal-shaped: controls along the top, footswitch at the bottom, everything centred. */
+/* Pedal-shaped: controls along the top, footswitch at the bottom, everything centred. Colours and
+   font come from the pedal's own --pedal-* custom properties (PlayerView sets them inline from
+   PedalAppearance) - the var(..., fallback) keeps a circuit that never touched its appearance
+   looking exactly like the app's own chrome, same as before this existed. */
 .pedal-face {
   flex: 0 1 620px;
   min-width: 320px;
@@ -1841,16 +1844,57 @@ p.drc-error {
   gap: 16px;
   padding: 24px 24px;
   border-radius: var(--radius);
-  background: var(--chrome-bg);
-  color: var(--chrome-text);
+  background: var(--pedal-body, var(--chrome-bg));
+  color: var(--pedal-text, var(--chrome-text));
+  font-family: var(--pedal-font, inherit);
   border: 1px solid var(--chrome-border);
   overflow-y: auto;
+}
+
+.pedal-appearance {
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--fs-xs);
+}
+
+.pedal-appearance-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  color: var(--chrome-text-dim);
+}
+
+.pedal-appearance-swatch input[type="color"] {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--chrome-border);
+  border-radius: 50%;
+  cursor: pointer;
+  background: none;
+}
+
+.pedal-appearance select {
+  font-size: var(--fs-xs);
+  padding: 2px 4px;
+}
+
+.pedal-appearance-reset {
+  font-size: var(--fs-xs);
+  padding: 2px 8px;
+  color: var(--chrome-text-dim);
+  background: none;
+  border: 1px solid var(--chrome-border);
 }
 
 .pedal-title {
   font-size: var(--fs-lg);
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--pedal-accent, var(--accent));
   font-weight: 600;
 }
 
@@ -1914,13 +1958,13 @@ p.drc-error {
 
 .knob-arc {
   fill: none;
-  stroke: var(--accent);
+  stroke: var(--pedal-accent, var(--accent));
   stroke-width: 3;
   stroke-linecap: round;
 }
 
 .knob-pointer {
-  stroke: var(--chrome-text);
+  stroke: var(--pedal-text, var(--chrome-text));
   stroke-width: 3;
   stroke-linecap: round;
 }

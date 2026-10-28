@@ -43,6 +43,7 @@ import { useDragEditing } from "./useDragEditing";
 import { arrangeParts } from "./layout/arrange";
 import { rewireNets } from "./layout/rewire";
 import { loadCircuitFromStorage, CURRENT_SCHEMA_VERSION } from "./circuitStorage";
+import { DEFAULT_APPEARANCE, type PedalAppearance } from "./player/pedalAppearance";
 
 const MODE_KEY = "pedal-designer:mode";
 const TITLE_KEY = "pedal-designer:title";
@@ -70,14 +71,15 @@ function readMode(): WorkMode {
   return MODES.some((m) => m.id === stored) ? (stored as WorkMode) : "design";
 }
 
-function loadInitialState(): { snapshot: CircuitSnapshot; outputNode: string; inputGain: number; probes: Probe[] } {
+function loadInitialState(): { snapshot: CircuitSnapshot; outputNode: string; inputGain: number; probes: Probe[]; appearance: PedalAppearance } {
   const stored = loadCircuitFromStorage(localStorage);
-  if (!stored) return { snapshot: { parts: [], wires: [], blocks: [] }, outputNode: "", inputGain: 0.5, probes: [] };
+  if (!stored) return { snapshot: { parts: [], wires: [], blocks: [] }, outputNode: "", inputGain: 0.5, probes: [], appearance: DEFAULT_APPEARANCE };
   return {
     snapshot: { parts: stored.parts, wires: stored.wires, blocks: stored.blocks },
     outputNode: stored.outputNode,
     inputGain: stored.inputGain,
     probes: stored.probes ?? [],
+    appearance: stored.appearance ?? DEFAULT_APPEARANCE,
   };
 }
 
@@ -115,6 +117,7 @@ export function SchematicEditor() {
   const selectedWire = wires.find((w) => w.id === selectedWireId) ?? null;
 
   const handleSelectPart = selection.selectPart;
+  const [appearance, setAppearance] = useState<PedalAppearance>(initial.appearance);
   const probes = useProbes(initial.probes, parts, graph, setStatus);
   const [showDc, setShowDc] = useState(false);
   const wantsOperatingPoint = showDc || probes.resolved.length > 0;
@@ -133,7 +136,7 @@ export function SchematicEditor() {
    */
   const replaceCircuit = (
     snapshot: CircuitSnapshot,
-    options: { outputNode: string; presetId: string | null; status: string; title: string; inputGain?: number; probes?: Probe[] },
+    options: { outputNode: string; presetId: string | null; status: string; title: string; inputGain?: number; probes?: Probe[]; appearance?: PedalAppearance },
   ) => {
     commit(snapshot);
     setTitle(options.title);
@@ -142,6 +145,7 @@ export function SchematicEditor() {
     setLoadedPresetId(options.presetId);
     setOutputNode(options.outputNode);
     if (options.inputGain !== undefined) setInputGain(options.inputGain);
+    setAppearance(options.appearance ?? DEFAULT_APPEARANCE);
     audio.clearTraces();
     setMonteCarloResult(null);
     setCircuitVersion((v) => v + 1);
@@ -283,7 +287,7 @@ export function SchematicEditor() {
   };
 
   const persistence = useCircuitPersistence({
-    circuit: { schemaVersion: CURRENT_SCHEMA_VERSION, parts, wires, blocks, outputNode, inputGain, probes: pruneProbes(probes.probes, parts) },
+    circuit: { schemaVersion: CURRENT_SCHEMA_VERSION, parts, wires, blocks, outputNode, inputGain, probes: pruneProbes(probes.probes, parts), appearance },
     onStatus: setStatus,
     onLoaded: (circuit, fileName) =>
       replaceCircuit(
@@ -295,6 +299,7 @@ export function SchematicEditor() {
           title: fileName.replace(/\.json$/i, ""),
           inputGain: circuit.inputGain,
           probes: circuit.probes,
+          appearance: circuit.appearance,
         },
       ),
   });
@@ -385,6 +390,8 @@ export function SchematicEditor() {
           realtime={realtimeControl}
           preview={{ ...previewControl, lastClip: preview.lastClip }}
           response={acResult.points}
+          appearance={appearance}
+          onAppearanceChange={setAppearance}
         />
       );
     if (mode === "analyze")

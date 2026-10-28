@@ -8,6 +8,7 @@ import {
   serializeCircuit,
   type StoredCircuit,
 } from "../../src/editor/circuitStorage";
+import { DEFAULT_APPEARANCE } from "../../src/editor/player/pedalAppearance";
 
 function fakeStorage() {
   const map = new Map<string, string>();
@@ -31,6 +32,7 @@ const sample: StoredCircuit = {
   outputNode: "n2",
   inputGain: 0.75,
   probes: [{ id: "P1", terminal: { partId: "r1", terminalId: "a" }, label: "입력", color: "#d1495b" }],
+  appearance: DEFAULT_APPEARANCE,
 };
 
 describe("circuitStorage", () => {
@@ -62,7 +64,16 @@ describe("circuitStorage", () => {
 
   it("defaults schemaVersion/outputNode/inputGain/blocks/probes when absent", () => {
     const partial = deserializeCircuit(JSON.stringify({ parts: [], wires: [] }));
-    expect(partial).toEqual({ schemaVersion: 2, parts: [], wires: [], blocks: [], outputNode: "", inputGain: 0.5, probes: [] });
+    expect(partial).toEqual({
+      schemaVersion: 2,
+      parts: [],
+      wires: [],
+      blocks: [],
+      outputNode: "",
+      inputGain: 0.5,
+      probes: [],
+      appearance: DEFAULT_APPEARANCE,
+    });
   });
 
   it("migrates version-1 blocks (a tint only) to version 2 with no ports, no knobs, expanded", () => {

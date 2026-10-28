@@ -9,6 +9,8 @@ import type { OutputSnapshot } from "../useRealtimeAudio";
 import type { BlockParam } from "../types";
 import { Knob } from "./Knob";
 import type { PlayerControl, PlayerSection } from "./playerControls";
+import { PedalAppearanceEditor } from "./PedalAppearanceEditor";
+import type { PedalAppearance } from "./pedalAppearance";
 
 const OUTPUT_COLOR = "#18181b";
 const PLOT_HEIGHT = 170;
@@ -21,6 +23,9 @@ export interface PlayerViewProps {
   preview: { enabled: boolean; onEnabledChange: (on: boolean) => void; busy: boolean; lastClip: OutputSnapshot | null };
   /** Small-signal response at the output node, recomputed on every edit. */
   response: AcPoint[];
+  /** Cosmetic only - the pedal face's colours and font. */
+  appearance: PedalAppearance;
+  onAppearanceChange: (next: PedalAppearance) => void;
 }
 
 function Control({ control, onSetControl }: { control: PlayerControl; onSetControl: PlayerViewProps["onSetControl"] }) {
@@ -69,9 +74,18 @@ export function PlayerView(props: PlayerViewProps) {
   );
   const load = realtime.stats ? Math.round(realtime.stats.load * 100) : null;
 
+  const { appearance } = props;
+  const faceStyle = {
+    "--pedal-body": appearance.bodyColor,
+    "--pedal-text": appearance.textColor,
+    "--pedal-accent": appearance.accentColor,
+    "--pedal-font": `"${appearance.fontFamily}", var(--font-display)`,
+  } as React.CSSProperties;
+
   return (
     <div className="player-view" data-player-view>
-      <div className="pedal-face">
+      <div className="pedal-face" style={faceStyle}>
+        <PedalAppearanceEditor appearance={appearance} onChange={props.onAppearanceChange} />
         <div className="pedal-title">{props.title}</div>
         {sections.length === 0 ? (
           <p className="canvas-hint">

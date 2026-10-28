@@ -1,4 +1,5 @@
 import type { BlockInstance, PartInstance, Probe, Wire } from "./types";
+import { DEFAULT_APPEARANCE, isPedalAppearance, type PedalAppearance } from "./player/pedalAppearance";
 
 export const CIRCUIT_STORAGE_KEY = "pedal-designer:circuit";
 
@@ -16,6 +17,10 @@ export interface StoredCircuit {
   inputGain: number;
   /** Measurement points. Optional and additive - saves from before probes existed load with none. */
   probes?: Probe[];
+  /** Cosmetic only - the player view's pedal face and exported enclosure art. Optional and
+   * additive; a save from before this existed (or that never touched it) gets DEFAULT_APPEARANCE,
+   * which matches the look those saves always had. */
+  appearance?: PedalAppearance;
 }
 
 export function serializeCircuit(circuit: StoredCircuit): string {
@@ -67,6 +72,7 @@ export function deserializeCircuit(raw: string): StoredCircuit | null {
       outputNode: typeof parsed.outputNode === "string" ? parsed.outputNode : "",
       inputGain: typeof parsed.inputGain === "number" ? parsed.inputGain : 0.5,
       probes: Array.isArray(parsed.probes) ? parsed.probes.filter(isProbe) : [],
+      appearance: isPedalAppearance(parsed.appearance) ? parsed.appearance : DEFAULT_APPEARANCE,
     };
   } catch {
     return null;
