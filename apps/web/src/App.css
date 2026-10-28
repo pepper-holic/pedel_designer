@@ -1840,19 +1840,19 @@ p.drc-error {
      actually inside, clamped between min/max so it neither looks cramped nor runs away wide. */
   flex: 0 1 auto;
   width: fit-content;
-  min-width: 320px;
+  min-width: 240px;
   max-width: 620px;
   align-items: center;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding: 26px 24px;
-  border-radius: 22px;
+  gap: 10px;
+  padding: 16px 20px;
+  border-radius: 18px;
   background-color: var(--pedal-body, var(--chrome-bg));
   color: var(--pedal-text, var(--chrome-text));
   font-family: var(--pedal-font, inherit);
-  border: 3px solid var(--pedal-text, var(--chrome-border));
+  border: 2.5px solid var(--pedal-text, var(--chrome-border));
   overflow-y: auto;
   position: relative;
   isolation: isolate;
@@ -1881,7 +1881,7 @@ p.drc-error {
   align-self: flex-end;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   font-size: var(--fs-xs);
 }
 
@@ -1889,14 +1889,14 @@ p.drc-error {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 1px;
   cursor: pointer;
   color: var(--chrome-text-dim);
 }
 
 .pedal-appearance-swatch input[type="color"] {
-  width: 22px;
-  height: 22px;
+  width: 16px;
+  height: 16px;
   padding: 0;
   border: 1px solid var(--chrome-border);
   border-radius: 50%;
@@ -1921,28 +1921,28 @@ p.drc-error {
    die-cut outline, and a drop "edge" underneath it so it reads as a separate glossy sticker stuck
    onto the pedal body - the way a boutique pedal's screen-printed logo works. */
 .pedal-title {
-  font-size: var(--fs-lg);
+  font-size: var(--fs-md);
   text-transform: uppercase;
   color: var(--pedal-body, #fff);
   font-weight: 800;
   letter-spacing: 0.01em;
-  padding: 7px 22px;
+  padding: 4px 14px;
   border-radius: 999px;
   background: var(--pedal-accent, var(--accent));
-  border: 2.5px solid var(--pedal-text, var(--chrome-text));
+  border: 2px solid var(--pedal-text, var(--chrome-text));
   transform: rotate(-2deg);
-  box-shadow: 0 3px 0 0 var(--pedal-text, var(--chrome-text));
+  box-shadow: 0 2px 0 0 var(--pedal-text, var(--chrome-text));
 }
 
 .pedal-sections {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 16px 32px;
+  gap: 10px 20px;
 }
 
 .pedal-section h3 {
-  margin: 0 0 12px;
+  margin: 0 0 6px;
   font-size: var(--fs-xs);
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -1953,7 +1953,7 @@ p.drc-error {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 16px;
+  gap: 10px;
 }
 
 .pedal-control {
@@ -2068,7 +2068,7 @@ p.drc-error {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 /* LED jewel: a chrome bezel ring around a convex lens, dark glass when off, lit and glowing
