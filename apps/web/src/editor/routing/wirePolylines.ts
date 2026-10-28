@@ -10,17 +10,24 @@ export interface WireRoute {
 }
 
 /**
- * Decides every visible wire's path: the user's waypoints when it has them, otherwise the
- * obstacle-avoiding router - or, while something is being dragged (`fast`), the plain 2-bend route,
- * so dragging stays smooth on a big circuit and the proper route settles when the mouse is let go.
+ * While a part is being dragged: `movingIds` is who's actually moving (that part, or its whole
+ * multi-selection, or every member of a block being dragged by its collapsed box) and `settled` is
+ * the last properly-routed shape of every wire, from just before the drag started.
  */
-export function wireRoutes(
-  wires: Wire[],
-  parts: PartInstance[],
-  endpoints: CanvasEndpoints,
-  netOf: (ref: TerminalRef) => string | undefined,
-  fast: boolean,
-): WireRoute[] {
+export interface DragRouting {
+  movingIds: ReadonlySet<string>;
+  settled: ReadonlyMap<string, Point[]>;
+}
+
+/**
+ * Decides every visible wire's path: the user's waypoints when it has them, otherwise the
+ * obstacle-avoiding router - or, for a wire actually touching what's being dragged (`drag`), the
+ * plain 2-bend route, so that one wire stays smooth while it's moving. Every OTHER wire keeps
+ * exactly the shape `drag.settled` recorded, instead of the whole schematic flattening to the cheap
+ * route just because one part elsewhere is moving; the proper route resettles for everyone once the
+ * drag ends and `drag` goes back to `null`.
+ */
+export function wireRoutes(wires: Wire[], parts: PartInstance[], endpoints: CanvasEndpoints, netOf: (ref: TerminalRef) => string | undefined, drag: DragRouting | null): WireRoute[] {
   const visible = wires
     .map((wire, index) => {
       if (endpoints.isHiddenWire(wire)) return null;
@@ -33,7 +40,7 @@ export function wireRoutes(
 
   const routed = new Map<string, Point[]>();
   const toRoute = visible.filter((v) => !v.wire.waypoints?.length);
-  if (!fast && toRoute.length > 0) {
+  if (!drag && toRoute.length > 0) {
     const obstacles: Rect[] = [
       ...parts.filter((p) => p.type !== "ground" && !endpoints.hidden.has(p.id)).map(bodyRect),
       ...[...endpoints.layouts.values()].map((l) => ({ x1: l.left - 2, y1: l.top - 2, x2: l.left + l.width + 2, y2: l.top + l.height + 2 })),
@@ -51,8 +58,13 @@ export function wireRoutes(
     });
   }
 
-  return visible.map(({ wire, index, a, b }) => ({
-    wire,
-    points: wire.waypoints?.length ? polylineThrough(a, wire.waypoints, b) : (routed.get(wire.id) ?? orthogonalPoints(a, b, laneOffsetFor(index))),
-  }));
+  return visible.map(({ wire, index, a, b }) => {
+    if (wire.waypoints?.length) return { wire, points: polylineThrough(a, wire.waypoints, b) };
+    if (drag) {
+      const touchesMoving = drag.movingIds.has(wire.a.partId) || drag.movingIds.has(wire.b.partId);
+      const cached = !touchesMoving ? drag.settled.get(wire.id) : undefined;
+      return { wire, points: cached ?? orthogonalPoints(a, b, laneOffsetFor(index)) };
+    }
+    return { wire, points: routed.get(wire.id) ?? orthogonalPoints(a, b, laneOffsetFor(index)) };
+  });
 }

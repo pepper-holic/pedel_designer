@@ -145,7 +145,7 @@ describe("waypoints", () => {
     const wires = loaded.snapshot.wires.map((w) => (w.id === wire.id ? { ...w, waypoints: [{ x: 500, y: 500 }] } : w));
     const g = netlistFromGraph(loaded.snapshot.parts, wires);
     const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
-    const route = wireRoutes(wires, loaded.snapshot.parts, buildCanvasEndpoints(loaded.snapshot.parts, [], netOf), netOf, false).find((r) => r.wire.id === wire.id)!;
+    const route = wireRoutes(wires, loaded.snapshot.parts, buildCanvasEndpoints(loaded.snapshot.parts, [], netOf), netOf, null).find((r) => r.wire.id === wire.id)!;
     // The corner itself may be simplified away when it is collinear, but the path must pass through it.
     expect(route.points.some((p) => p.x === 500)).toBe(true);
   });
@@ -192,7 +192,7 @@ describe("layout quality across every preset", () => {
       const g = netlistFromGraph(snapshot.parts, snapshot.wires);
       const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
       const wireNetOf = (wireId: string) => netOf(snapshot.wires.find((w) => w.id === wireId)!.a);
-      const routes = wireRoutes(snapshot.wires, snapshot.parts, buildCanvasEndpoints(snapshot.parts, snapshot.blocks, netOf), netOf, false);
+      const routes = wireRoutes(snapshot.wires, snapshot.parts, buildCanvasEndpoints(snapshot.parts, snapshot.blocks, netOf), netOf, null);
       const m = layoutMetrics({ ...snapshot, wires: routes.map((r) => r.wire) }, routes.map((r) => r.points), wireNetOf);
       expect(m.bodyHits, preset.id).toBe(0);
       expect(m.crossings, preset.id).toBeLessThanOrEqual(8);
@@ -272,7 +272,7 @@ describe("node-level wiring (L3)", () => {
     const g = netlistFromGraph(snapshot.parts, snapshot.wires);
     const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
     const wireNetOf = (wireId: string) => netOf(snapshot.wires.find((w) => w.id === wireId)!.a);
-    const routes = wireRoutes(snapshot.wires, snapshot.parts, buildCanvasEndpoints(snapshot.parts, snapshot.blocks, netOf), netOf, false);
+    const routes = wireRoutes(snapshot.wires, snapshot.parts, buildCanvasEndpoints(snapshot.parts, snapshot.blocks, netOf), netOf, null);
     const m = layoutMetrics({ ...snapshot, wires: routes.map((r) => r.wire) }, routes.map((r) => r.points), wireNetOf);
     expect(m.parallelDuplicates).toBe(0);
   });
@@ -299,7 +299,7 @@ describe("row-anchored source placement (L6)", () => {
     const arranged = arrangeParts(snapshot, "V1");
     const g = netlistFromGraph(arranged.parts, arranged.wires);
     const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
-    const routes = wireRoutes(arranged.wires, arranged.parts, buildCanvasEndpoints(arranged.parts, arranged.blocks, netOf), netOf, false);
+    const routes = wireRoutes(arranged.wires, arranged.parts, buildCanvasEndpoints(arranged.parts, arranged.blocks, netOf), netOf, null);
     const rw0 = routes.find((r) => r.wire.a.partId === "V1" && r.wire.b.partId === "Rin")!;
     const pts = rw0.points;
     expect(pts).toHaveLength(3); // exactly one bend - no detour around V1's own body needed
@@ -333,7 +333,7 @@ describe("label placement (L4)", () => {
         }
       }
 
-      const routes = wireRoutes(snapshot.wires, snapshot.parts, endpoints, netOf, false);
+      const routes = wireRoutes(snapshot.wires, snapshot.parts, endpoints, netOf, null);
       const wireSegs = routes.flatMap(({ points }) => points.slice(1).map((b, i) => ({ a: points[i], b })));
       for (let i = 0; i < rects.length; i++) {
         for (const s of wireSegs) {

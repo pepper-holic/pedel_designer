@@ -22,7 +22,7 @@ function labelWidth(text: string, minWidth: number): number {
 
 /** Thin rectangles along every drawn wire segment, so a label never lands on top of a wire. */
 function wireObstacles(wires: Wire[], parts: PartInstance[], endpoints: CanvasEndpoints, netOf: (ref: TerminalRef) => string | undefined): Rect[] {
-  const routes = wireRoutes(wires, parts, endpoints, netOf, false);
+  const routes = wireRoutes(wires, parts, endpoints, netOf, null);
   return routes.flatMap(({ points }) =>
     points.slice(1).map((b, i) => {
       const a = points[i];

@@ -1,8 +1,10 @@
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { draggableCorners, renderWirePaths, type Point } from "./geometry";
 import { wireRoutes } from "./routing/wirePolylines";
 import type { CanvasEndpoints } from "./canvasEndpoints";
 import type { PartInstance, TerminalRef, Wire } from "./types";
+
+const NONE_MOVING = new Set<string>();
 
 // Transparent click target width for wires - the visible stroke is only 2px, which is not a
 // realistic mouse target on a dense schematic.
@@ -20,6 +22,9 @@ interface CanvasWireLayerProps {
   netOf: (ref: TerminalRef) => string | undefined;
   /** Something is being dragged: use the plain route so the frame rate holds up. */
   fast: boolean;
+  /** While `fast`, the part ids actually moving - every other wire keeps its last settled shape
+   * instead of also flattening to the plain route. Ignored when `fast` is false. */
+  movingIds?: ReadonlySet<string>;
   selectedWireId: string | null;
   onWireClick: (wire: Wire, e: React.MouseEvent) => void;
   /** Mouse down on a selected wire's segment handle - starts a segment drag. */
@@ -29,7 +34,7 @@ interface CanvasWireLayerProps {
 /** Every wire's visible stroke, its fat transparent hit-target, the junction dots where 3+ wire
  * ends meet, and - on the selected wire - handles to drag its segments. Drawn after block regions
  * and before parts, so terminals (wiring) still win over wire selection where they overlap. */
-export function CanvasWireLayer({ endpoints, parts, wires, netOf, fast, selectedWireId, onWireClick, onSegmentMouseDown }: CanvasWireLayerProps) {
+export function CanvasWireLayer({ endpoints, parts, wires, netOf, fast, movingIds, selectedWireId, onWireClick, onSegmentMouseDown }: CanvasWireLayerProps) {
   // A junction dot is drawn wherever 3+ wire ends meet at the same terminal - a real electrical
   // junction, as opposed to a plain 2-wire pass-through or two wires merely crossing visually.
   const junctionPoints = useMemo(() => {
@@ -51,7 +56,19 @@ export function CanvasWireLayer({ endpoints, parts, wires, netOf, fast, selected
     return points;
   }, [wires, endpoints]);
 
-  const routes = useMemo(() => wireRoutes(wires, parts, endpoints, netOf, fast), [wires, parts, endpoints, netOf, fast]);
+  // The properly-routed shape of every wire, kept across drag frames: while `fast` is true this
+  // still holds whatever each wire looked like just before the drag started, so a wire that isn't
+  // touching what's moving can keep exactly that shape instead of the router re-running (slow) or
+  // the whole schematic falling back to the plain route (ugly) on every mouse-move.
+  const settled = useRef<Map<string, Point[]>>(new Map());
+  const routes = useMemo(() => {
+    if (!fast) {
+      const fresh = wireRoutes(wires, parts, endpoints, netOf, null);
+      settled.current = new Map(fresh.map((r) => [r.wire.id, r.points]));
+      return fresh;
+    }
+    return wireRoutes(wires, parts, endpoints, netOf, { movingIds: movingIds ?? NONE_MOVING, settled: settled.current });
+  }, [wires, parts, endpoints, netOf, fast, movingIds]);
   const paths = useMemo(() => renderWirePaths(routes.map((r) => r.points)), [routes]);
   const selected = routes.find((r) => r.wire.id === selectedWireId);
 

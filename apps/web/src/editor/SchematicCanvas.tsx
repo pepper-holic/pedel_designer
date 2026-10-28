@@ -110,6 +110,17 @@ export function SchematicCanvas({
   const [selectBox, setSelectBox] = useState<SelectionBox | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const justBoxSelected = useRef(false);
+  // Who's actually moving right now: the dragged part, its whole multi-selection if it's part of
+  // one, or every member of a block being dragged by its collapsed box. Lets CanvasWireLayer freeze
+  // every other wire in place instead of flattening the whole schematic's routing while one part
+  // moves (see wirePolylines.ts).
+  const movingIds = useMemo(() => {
+    if (!dragId) return undefined;
+    const base = selectedPartIds?.includes(dragId) ? selectedPartIds : [dragId];
+    const dragged = parts.find((p) => p.id === dragId);
+    if (!dragged?.blockId) return new Set(base);
+    return new Set([...base, ...parts.filter((p) => p.blockId === dragged.blockId).map((p) => p.id)]);
+  }, [dragId, selectedPartIds, parts]);
   const netOf = useCallback((ref: TerminalRef) => terminalNet?.get(`${ref.partId}:${ref.terminalId}`), [terminalNet]);
   const endpoints = useMemo(() => buildCanvasEndpoints(parts, blocks, terminalNet ? netOf : undefined), [parts, blocks, terminalNet, netOf]);
   const visibleParts = useMemo(() => parts.filter((p) => !endpoints.hidden.has(p.id)), [parts, endpoints]);
@@ -337,6 +348,7 @@ export function SchematicCanvas({
             wires={wires}
             netOf={netOf}
             fast={dragId !== null || segmentDrag !== null}
+            movingIds={movingIds}
             selectedWireId={selectedWireId}
             onWireClick={(wire) => (probeMode ? onProbeTerminal?.(wire.a) : onSelectWire?.(wire.id))}
             onSegmentMouseDown={onWireWaypoints ? (wire, corners, segment) => setSegmentDrag({ wireId: wire.id, segment, corners }) : undefined}
