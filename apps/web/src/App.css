@@ -1994,6 +1994,23 @@ p.drc-error {
 @media (max-width: 1100px) {
   .player-view {
     flex-direction: column;
+    /* `justify-content: center` centers along the row layout's horizontal axis above, which is fine
+       there - once the column flip above makes it vertical, and the stacked pedal face + charts are
+       taller than the viewport (the usual case here), centering overflows equally above AND below the
+       container instead of just below it. That leaves the top part of the content - the knobs - sitting
+       above where .player-view's own scroll range starts, so the page never naturally scrolls to it. */
+    justify-content: flex-start;
+  }
+  /* .pedal-face's `flex: 0 1 620px` sets its WIDTH basis for the row layout above - once the
+     container turns to a column, that same basis governs its HEIGHT instead, and its own
+     `overflow-y: auto` resets its flex min-height to 0 (the spec's automatic-minimum-size rule only
+     keeps a flex item from shrinking below its content when overflow is visible) - so flex-shrink
+     crushes it down to whatever's left over after .player-side, instead of sizing to its content. The
+     result: the knob and footswitch render at near-zero height, underneath/behind the chart below
+     them, both effectively invisible and unclickable. flex-shrink: 0 stops that - .player-view's own
+     overflow: auto already lets the whole column scroll if it's taller than the viewport. */
+  .pedal-face {
+    flex: 0 0 auto;
   }
   .player-side {
     width: auto;
