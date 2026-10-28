@@ -31,6 +31,12 @@ export interface RouterOptions {
    * what pulls a net's later (and often longer) wires onto an earlier wire's track instead of each
    * cutting its own parallel path a few grid steps away (L3: "same node drawn as two lines"). */
   alongBonus?: number;
+  /** Per-grid-step cost for straying from the straight line between a wire's two ends - small enough
+   * to only break ties between paths that already cost the same, e.g. several equally valid places to
+   * clear an obstacle before turning toward the goal. Without it the router's tie-break is an
+   * implementation detail of expansion order, which can pick the LAST valid turning point instead of
+   * the first, overshooting past where it needs to turn before finally doing so. */
+  straightBias?: number;
   /** Give up on a wire after this many expansions and fall back to the plain route. */
   maxExpansions?: number;
 }
@@ -123,6 +129,9 @@ export function routeWires(requests: RouteRequest[], obstacles: Rect[], options:
   const crossCost = options.crossCost ?? 12;
   const alongBonus = options.alongBonus ?? 0.7;
   const maxExpansions = options.maxExpansions ?? 60_000;
+  // Tiny: must never outweigh a real bendCost (6) over any path this grid can produce, only break
+  // ties between paths that already cost the same.
+  const straightBias = options.straightBias ?? 0.002;
   if (requests.length === 0) return [];
 
   const xs = [...requests.flatMap((r) => [r.a.x, r.b.x]), ...obstacles.flatMap((o) => [o.x1, o.x2])];
@@ -175,6 +184,17 @@ export function routeWires(requests: RouteRequest[], obstacles: Rect[], options:
     const gx = goal % cols;
     const gy = Math.floor(goal / cols);
     const h = (c: number) => Math.abs((c % cols) - gx) + Math.abs(Math.floor(c / cols) - gy);
+    // Tie-break toward the straight line from a to b: among otherwise-equal-cost paths (e.g. several
+    // places to clear an obstacle before turning), this nudges the router to turn as soon as it can
+    // instead of overshooting past the goal's row/column first and only then turning - the same reason
+    // a hand-drawn wire hugs the direct line instead of wandering off it when it doesn't have to.
+    const lineDx = req.b.x - req.a.x;
+    const lineDy = req.b.y - req.a.y;
+    const lineLen = Math.hypot(lineDx, lineDy) || 1;
+    const crossTrack = (c: number): number => {
+      const p = pointOf(c);
+      return Math.abs((p.x - req.a.x) * lineDy - (p.y - req.a.y) * lineDx) / lineLen;
+    };
     const heap = new Heap();
     // Leaving along a terminal's own lead axis (either direction on it) gets a free start; leaving
     // across it costs a bend, the same as turning mid-path - so the wire takes a short straight stub
@@ -217,6 +237,7 @@ export function routeWires(requests: RouteRequest[], obstacles: Rect[], options:
         // Symmetric with the start bias: arriving at the goal along its own lead axis is free, crossing
         // it costs a bend - so the far end gets a straight stub too.
         if (nc === goal && req.axisB !== undefined && ((nd % 2) as 0 | 1) !== req.axisB) cost += bendCost;
+        cost += straightBias * crossTrack(nc);
         const ns = nc * 4 + nd;
         const tentative = base + cost;
         if (stamp[ns] === epoch && gScore[ns] <= tentative) continue;
