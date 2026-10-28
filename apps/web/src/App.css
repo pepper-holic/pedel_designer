@@ -1841,44 +1841,30 @@ p.drc-error {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 28px 24px;
-  border-radius: 14px;
+  gap: 18px;
+  padding: 26px 24px;
+  border-radius: 22px;
   background-color: var(--pedal-body, var(--chrome-bg));
   color: var(--pedal-text, var(--chrome-text));
   font-family: var(--pedal-font, inherit);
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  border: 3px solid var(--pedal-text, var(--chrome-border));
   overflow-y: auto;
   position: relative;
   isolation: isolate;
+  /* A flat colour-block "sticker" card, not a metal box: a soft lift off the page plus a thin
+     top sheen, the way a glossy vinyl graphic catches light - no brushed texture, no screws. */
   box-shadow:
-    0 22px 44px -16px rgba(0, 0, 0, 0.5),
-    0 1px 0 rgba(255, 255, 255, 0.12) inset,
-    0 -14px 22px rgba(0, 0, 0, 0.22) inset;
+    0 20px 40px -14px rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(255, 255, 255, 0.25) inset;
 }
 
-/* Powder-coat/brushed-metal enclosure finish: diagonal brush streaks, a top-lit/bottom-shadowed
-   vignette, and the four corner mounting screws real stompbox enclosures are built with. Drawn as
-   blended background layers (not DOM nodes) so it rides on top of whatever body colour the player
-   picked, the same way an anodised finish reads under light regardless of its base colour. */
 .pedal-face::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  /* Plain alpha compositing, not a blend mode: mix-blend-mode: overlay washes out on a light body
-     colour (overlay degrades to screen-only above ~50% lightness, so dark screw shadows and
-     streaks all but disappear on a white/cream pedal) - normal blending stays visible on any
-     chosen body colour, light or dark. */
-  background-image:
-    radial-gradient(ellipse 140% 55% at 50% -12%, rgba(255, 255, 255, 0.3), transparent 60%),
-    radial-gradient(ellipse 140% 45% at 50% 112%, rgba(0, 0, 0, 0.35), transparent 60%),
-    repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.035) 0px, rgba(0, 0, 0, 0.035) 1px, transparent 1px, transparent 3px),
-    radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0.95) 2px, rgba(0, 0, 0, 0.75) 3px, transparent 6px),
-    radial-gradient(circle at calc(100% - 20px) 20px, rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0.95) 2px, rgba(0, 0, 0, 0.75) 3px, transparent 6px),
-    radial-gradient(circle at 20px calc(100% - 20px), rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0.95) 2px, rgba(0, 0, 0, 0.75) 3px, transparent 6px),
-    radial-gradient(circle at calc(100% - 20px) calc(100% - 20px), rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0.95) 2px, rgba(0, 0, 0, 0.75) 3px, transparent 6px);
+  background-image: radial-gradient(ellipse 120% 45% at 50% -8%, rgba(255, 255, 255, 0.22), transparent 65%);
 }
 
 .pedal-face > * {
@@ -1926,21 +1912,21 @@ p.drc-error {
   border: 1px solid var(--chrome-border);
 }
 
+/* A brand-logo sticker, not an engraved plate: a tilted rounded badge in the accent colour, a
+   die-cut outline, and a drop "edge" underneath it so it reads as a separate glossy sticker stuck
+   onto the pedal body - the way a boutique pedal's screen-printed logo works. */
 .pedal-title {
   font-size: var(--fs-lg);
   text-transform: uppercase;
-  color: var(--pedal-accent, var(--accent));
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  padding: 6px 20px;
-  border-radius: 5px;
-  background: rgba(0, 0, 0, 0.14);
-  box-shadow:
-    inset 0 1px 2px rgba(0, 0, 0, 0.45),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
-  text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.18),
-    0 -1px 1px rgba(0, 0, 0, 0.35);
+  color: var(--pedal-body, #fff);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  padding: 7px 22px;
+  border-radius: 999px;
+  background: var(--pedal-accent, var(--accent));
+  border: 2.5px solid var(--pedal-text, var(--chrome-text));
+  transform: rotate(-2deg);
+  box-shadow: 0 3px 0 0 var(--pedal-text, var(--chrome-text));
 }
 
 .pedal-sections {
@@ -2100,8 +2086,8 @@ p.drc-error {
     inset 0 1px 2px rgba(255, 255, 255, 0.4);
 }
 
-/* Stomp switch: a chrome mounting bezel around a rubber-topped button, the way a 3PDT footswitch
-   actually looks - not a flat grey circle. */
+/* Stomp switch: a chrome mounting bezel around a glossy button in the pedal's own accent colour -
+   boutique pedals almost never leave this plain black/grey, it's the loudest part of the graphic. */
 .pedal-footswitch {
   width: 62px;
   height: 62px;
@@ -2110,12 +2096,17 @@ p.drc-error {
      square, so the ring is a second background painted into the border-box instead. */
   border: 5px solid transparent;
   background:
-    radial-gradient(circle at 32% 28%, #3a3a3e, #0e0e10 75%) padding-box,
+    radial-gradient(
+        circle at 32% 28%,
+        color-mix(in srgb, var(--pedal-accent, var(--accent)) 70%, white),
+        var(--pedal-accent, var(--accent)) 70%
+      )
+      padding-box,
     linear-gradient(145deg, #e8e8ec, #8a8a90 45%, #4a4a4e 100%) border-box;
   box-shadow:
     0 3px 6px rgba(0, 0, 0, 0.4),
-    inset 0 2px 3px rgba(255, 255, 255, 0.08),
-    inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+    inset 0 2px 3px rgba(255, 255, 255, 0.35),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.35);
 }
 
 .pedal-footswitch[aria-pressed="true"] {
