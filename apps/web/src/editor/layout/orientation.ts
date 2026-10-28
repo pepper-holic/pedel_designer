@@ -25,16 +25,22 @@ function orientationOf(part: PartInstance): Orientation {
 
 /**
  * The alternative directions worth trying for a part, besides the one it already has.
- * Two-terminal parts (diodes especially) can only sensibly face one way or the reverse - a 90/270
- * rotation would turn them perpendicular to their own wires. Parts with asymmetric terminal layouts
- * (op-amp, BJT, JFET, pot) instead get a mirror candidate, which keeps every pin's rotation-derived
- * position but swaps which side (top/bottom) each one draws on.
+ * Two-terminal parts get all four cardinal rotations: a real schematic draws a series element (R/C
+ * in the signal path) horizontally but a shunt element (branching off to ground/rail) vertically, so
+ * the part needs 90/270 as real candidates, not just the 180 flip - the score function (wire length +
+ * crossings) already picks whichever one actually fits the wiring, no separate "is this a shunt"
+ * classification needed. Parts with asymmetric terminal layouts (op-amp, BJT, JFET, pot) instead get
+ * a mirror candidate, which keeps every pin's rotation-derived position but swaps which side
+ * (top/bottom) each one draws on.
  */
 function candidateOrientations(part: PartInstance): Orientation[] {
   const current = orientationOf(part);
   if (MIRRORABLE.has(part.type)) return [current, { ...current, mirror: !current.mirror }];
   if (PART_DEFS[part.type].terminals.length === 2) {
-    return [current, { rotation: rotateClockwise(rotateClockwise(current.rotation)), mirror: current.mirror }];
+    const r90 = rotateClockwise(current.rotation);
+    const r180 = rotateClockwise(r90);
+    const r270 = rotateClockwise(r180);
+    return [current, { rotation: r90, mirror: current.mirror }, { rotation: r180, mirror: current.mirror }, { rotation: r270, mirror: current.mirror }];
   }
   return [current];
 }

@@ -1,5 +1,5 @@
 import { blockSymbolLayout, type BlockSymbolLayout } from "./blockGeometry";
-import { terminalPosition } from "./geometry";
+import { terminalLeadOutward, terminalPosition, type LeadOutward } from "./geometry";
 import type { BlockInstance, PartInstance, TerminalRef, Wire } from "./types";
 
 export interface CanvasEndpoints {
@@ -10,6 +10,11 @@ export interface CanvasEndpoints {
   /** Where a terminal is drawn: its own position, or - inside a collapsed block - the matching port
    * pin (or the box centre if it has no port). Null when the part does not exist. */
   resolve: (ref: TerminalRef) => { x: number; y: number } | null;
+  /** The direction a terminal's own lead runs in (see `terminalLeadOutward`), so a router can give it
+   * a straight stub before bending instead of turning right at the pin or doubling back across the
+   * part's own body. Null for a hidden terminal (a collapsed block's pin has no single physical lead
+   * to align with) or a part that does not exist. */
+  leadOutward: (ref: TerminalRef) => LeadOutward | null;
   /** Both ends inside the same collapsed block: drawn nowhere, the box stands for it. */
   isHiddenWire: (wire: Wire) => boolean;
 }
@@ -49,10 +54,16 @@ export function buildCanvasEndpoints(parts: PartInstance[], blocks: BlockInstanc
     return sameNet ? { x: sameNet.x, y: sameNet.y } : { x: layout.cx, y: layout.cy };
   };
 
+  const leadOutward = (ref: TerminalRef): LeadOutward | null => {
+    if (hidden.has(ref.partId)) return null;
+    const part = byId.get(ref.partId);
+    return part ? terminalLeadOutward(part, ref.terminalId) : null;
+  };
+
   const isHiddenWire = (wire: Wire) => {
     const a = hidden.get(wire.a.partId);
     return !!a && a === hidden.get(wire.b.partId);
   };
 
-  return { hidden, layouts, resolve, isHiddenWire };
+  return { hidden, layouts, resolve, leadOutward, isHiddenWire };
 }

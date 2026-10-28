@@ -1,6 +1,7 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { snapToGrid, GRID_SIZE } from "./geometry";
+import { snapToGrid, insertCorner, singleBendPoints, polylineThrough, renderWirePaths, distanceToSegment, GRID_SIZE, type Point } from "./geometry";
+import { wireRoutes } from "./routing/wirePolylines";
 import { useCanvasView } from "./useCanvasView";
 import { CanvasPart } from "./CanvasPart";
 import { CanvasBlockLayer } from "./CanvasBlockLayer";
@@ -10,6 +11,7 @@ import { CanvasProbeLayer } from "./CanvasProbeLayer";
 import { CanvasBlockSymbol } from "./CanvasBlockSymbol";
 import { buildCanvasEndpoints } from "./canvasEndpoints";
 import { CanvasControls } from "./CanvasControls";
+import { PART_DEFS } from "./partDefs";
 import type { ResolvedProbe } from "./probes";
 import type { OperatingPoint } from "./operatingPoint";
 import { partsInBox, type SelectionBox } from "./selection";
@@ -29,7 +31,10 @@ interface SchematicCanvasProps {
   onMovePart: (id: string, x: number, y: number) => void;
   onSelectPart: (id: string | null) => void;
   onSelectWire?: (id: string | null) => void;
-  onAddWire: (a: TerminalRef, b: TerminalRef) => void;
+  /** `waypoints`: any intermediate points the user clicked while drawing, in order, before finishing
+   * on the second terminal - lets a wire be laid out freely (like a real schematic tool's wire
+   * tool) instead of always getting the plain auto-routed shape. */
+  onAddWire: (a: TerminalRef, b: TerminalRef, waypoints?: Point[]) => void;
   onDragEnd?: () => void;
   /** Probe mode: terminal and wire clicks place/remove a probe instead of drawing a wire. */
   probeMode?: boolean;
@@ -104,26 +109,21 @@ export function SchematicCanvas({
   const [segmentDrag, setSegmentDrag] = useState<{ wireId: string; segment: number; corners: { x: number; y: number }[] } | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [pendingTerminalState, setPendingTerminal] = useState<TerminalRef | null>(null);
+  // Points the user has clicked so far while drawing a wire (see pendingTerminal below) - laid down
+  // in order between the starting terminal and wherever the cursor is now, so a wire can be routed
+  // freely by hand instead of always taking the plain auto shape.
+  const [pendingWaypoints, setPendingWaypoints] = useState<Point[]>([]);
+  const [cursorWorld, setCursorWorld] = useState<Point | null>(null);
   const [panStart, setPanStart] = useState<{ mouseX: number; mouseY: number; panX: number; panY: number; moved: boolean } | null>(null);
   // Shift+drag on the background draws a selection box instead of panning. Panning is the more
   // frequent gesture, so it keeps the unmodified drag.
   const [selectBox, setSelectBox] = useState<SelectionBox | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const justBoxSelected = useRef(false);
-  // Who's actually moving right now: the dragged part, its whole multi-selection if it's part of
-  // one, or every member of a block being dragged by its collapsed box. Lets CanvasWireLayer freeze
-  // every other wire in place instead of flattening the whole schematic's routing while one part
-  // moves (see wirePolylines.ts).
-  const movingIds = useMemo(() => {
-    if (!dragId) return undefined;
-    const base = selectedPartIds?.includes(dragId) ? selectedPartIds : [dragId];
-    const dragged = parts.find((p) => p.id === dragId);
-    if (!dragged?.blockId) return new Set(base);
-    return new Set([...base, ...parts.filter((p) => p.blockId === dragged.blockId).map((p) => p.id)]);
-  }, [dragId, selectedPartIds, parts]);
   const netOf = useCallback((ref: TerminalRef) => terminalNet?.get(`${ref.partId}:${ref.terminalId}`), [terminalNet]);
   const endpoints = useMemo(() => buildCanvasEndpoints(parts, blocks, terminalNet ? netOf : undefined), [parts, blocks, terminalNet, netOf]);
   const visibleParts = useMemo(() => parts.filter((p) => !endpoints.hidden.has(p.id)), [parts, endpoints]);
+  const routes = useMemo(() => wireRoutes(wires, endpoints), [wires, endpoints]);
 
   // What fit should frame: visible parts plus collapsed blocks' boxes (a collapsed block's hidden
   // parts can span far more than its box).
@@ -142,14 +142,57 @@ export function SchematicCanvas({
     return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   };
 
+  /** Bakes the current shape of every not-yet-manually-routed wire touching `movingIds` into an
+   * explicit waypoint, right before a drag starts - the same "drag" semantics real schematic tools
+   * use (KiCad's G-drag, etc.): existing bends stay exactly where they are, and only the segment
+   * actually touching the part being moved stretches to follow it (see wirePolylines.ts's
+   * polylineThrough), instead of the whole wire recomputing a fresh "optimal" bend every frame. A
+   * wire that's still a plain straight line has no bend to preserve, so it's left alone - it picks
+   * up a bend the normal way (singleBendPoints) only once the move actually requires one. */
+  const freezeWiresTouching = (movingIds: ReadonlySet<string>) => {
+    if (!onWireWaypoints) return;
+    for (const wire of wires) {
+      if (wire.waypoints?.length) continue;
+      if (!movingIds.has(wire.a.partId) && !movingIds.has(wire.b.partId)) continue;
+      const a = endpoints.resolve(wire.a);
+      const b = endpoints.resolve(wire.b);
+      if (!a || !b) continue;
+      const route = singleBendPoints(a, b, endpoints.leadOutward(wire.a) ?? undefined, endpoints.leadOutward(wire.b) ?? undefined);
+      if (route.length > 2) onWireWaypoints(wire.id, route.slice(1, -1));
+    }
+  };
+
   const handleBodyMouseDown = (part: PartInstance, e: React.MouseEvent) => {
     e.stopPropagation();
     const svg = (e.currentTarget as SVGElement).ownerSVGElement!;
     const rect = svg.getBoundingClientRect();
     const world = toWorld({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    if (pendingTerminal && !probeMode) {
+      const term = nearestTerminal(part, world);
+      const wireEnd = nearestWireEnd(world);
+      const picked = wireEnd && (!term || wireEnd.dist < term.dist) ? wireEnd : term;
+      if (picked) completeWireTo(picked.ref);
+      return;
+    }
+    const base = selectedPartIds?.includes(part.id) ? selectedPartIds : [part.id];
+    const movingIds = new Set(part.blockId ? [...base, ...parts.filter((p) => p.blockId === part.blockId).map((p) => p.id)] : base);
+    freezeWiresTouching(movingIds);
     setDragId(part.id);
     setDragOffset({ x: world.x - part.x, y: world.y - part.y });
     onSelectPart(part.id);
+  };
+
+  /** Double-click on a wire splits whichever segment the click landed closest to into a small real
+   * dogleg right there, giving the wire one more draggable corner - repeatable segment by segment to
+   * build up a manually-routed path with as many bends as needed. */
+  const handleWireDoubleClick = (wire: Wire, corners: Point[], e: React.MouseEvent) => {
+    const svg = (e.currentTarget as SVGElement).ownerSVGElement!;
+    const rect = svg.getBoundingClientRect();
+    const world = toWorld({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    const next = insertCorner(corners, world);
+    if (next === corners) return;
+    onWireWaypoints?.(wire.id, next.slice(1, -1));
+    onSelectWire?.(wire.id);
   };
 
   /** Grabbing a collapsed block selects it and drags it by one of its (hidden) parts - the editor
@@ -161,6 +204,7 @@ export function SchematicCanvas({
     const svg = (e.currentTarget as SVGElement).ownerSVGElement!;
     const rect = svg.getBoundingClientRect();
     const world = toWorld({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    freezeWiresTouching(new Set(parts.filter((p) => p.blockId === block.id).map((p) => p.id)));
     onSelectBlock?.(block.id);
     setDragId(anchor.id);
     setDragOffset({ x: world.x - anchor.x, y: world.y - anchor.y });
@@ -177,6 +221,7 @@ export function SchematicCanvas({
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (pendingTerminal) setCursorWorld(toWorld(screenPoint(e)));
     if (segmentDrag) {
       const world = toWorld(screenPoint(e));
       const { segment, corners } = segmentDrag;
@@ -210,12 +255,19 @@ export function SchematicCanvas({
     }
   };
 
-  const handleBackgroundClick = () => {
+  const handleBackgroundClick = (e: React.MouseEvent<SVGRectElement>) => {
     if (panStart?.moved) return; // just finished a pan-drag, not a deselect click
     // The click that follows a rubber-band drag lands on the background too; without this it would
     // throw away the selection the drag just made.
     if (justBoxSelected.current) {
       justBoxSelected.current = false;
+      return;
+    }
+    // Mid wire-draw: empty space lays down another corner instead of deselecting, so the wire can be
+    // routed freely point by point before it's finished on the second terminal.
+    if (pendingTerminal) {
+      const world = toWorld(screenPoint(e as unknown as React.MouseEvent<SVGSVGElement>));
+      setPendingWaypoints((pts) => [...pts, { x: snapToGrid(world.x), y: snapToGrid(world.y) }]);
       return;
     }
     onSelectPart(null);
@@ -250,6 +302,78 @@ export function SchematicCanvas({
   // the stale terminal is still live.
   const pendingTerminal = pendingTerminalState && parts.some((p) => p.id === pendingTerminalState.partId) ? pendingTerminalState : null;
 
+  // Escape abandons a wire mid-draw - the usual way every drawing tool lets you back out.
+  useEffect(() => {
+    if (!pendingTerminal) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setPendingTerminal(null);
+        setPendingWaypoints([]);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [pendingTerminal]);
+
+  /** Finishes (or cancels, if `ref` is the same terminal the wire started from) the wire currently
+   * being drawn. Shared by every way of picking the destination: clicking its exact terminal dot,
+   * clicking anywhere on its part's body (nearest terminal), or clicking an existing wire (its
+   * nearer end) - a real drawing tool doesn't make you hit a 4px dot. */
+  const completeWireTo = (ref: TerminalRef) => {
+    if (!pendingTerminal) return false;
+    if (pendingTerminal.partId === ref.partId && pendingTerminal.terminalId === ref.terminalId) {
+      setPendingTerminal(null);
+      setPendingWaypoints([]);
+      return true;
+    }
+    onAddWire(pendingTerminal, ref, pendingWaypoints);
+    setPendingTerminal(null);
+    setPendingWaypoints([]);
+    return true;
+  };
+
+  /** The terminal of `part` closest to `world`, with its distance - lets a click anywhere on a
+   * part's body (while drawing a wire) connect to whichever pin makes sense, instead of requiring
+   * the exact dot. */
+  const nearestTerminal = (part: PartInstance, world: Point): { ref: TerminalRef; dist: number } | null => {
+    let best: TerminalRef | null = null;
+    let bestDist = Infinity;
+    for (const t of PART_DEFS[part.type].terminals) {
+      const ref = { partId: part.id, terminalId: t.id };
+      const pos = endpoints.resolve(ref);
+      if (!pos) continue;
+      const d = Math.hypot(pos.x - world.x, pos.y - world.y);
+      if (d < bestDist) {
+        bestDist = d;
+        best = ref;
+      }
+    }
+    return best ? { ref: best, dist: bestDist } : null;
+  };
+
+  /** The end (a or b) of whichever wire runs closest to `world`, with that distance - a part's own
+   * mousedown hit-box (±40×38) is much bigger than its drawn body and often covers a wire that
+   * visually runs right past or under it, so a click meant for that wire must still be able to win
+   * over "nearest terminal of the part I happened to land on". */
+  const nearestWireEnd = (world: Point): { ref: TerminalRef; dist: number } | null => {
+    let best: TerminalRef | null = null;
+    let bestDist = Infinity;
+    for (const { wire, points } of routes) {
+      for (let i = 0; i < points.length - 1; i++) {
+        const d = distanceToSegment(world, points[i], points[i + 1]);
+        if (d >= bestDist) continue;
+        const a = endpoints.resolve(wire.a);
+        const b = endpoints.resolve(wire.b);
+        if (!a || !b) continue;
+        const distA = Math.hypot(a.x - world.x, a.y - world.y);
+        const distB = Math.hypot(b.x - world.x, b.y - world.y);
+        bestDist = d;
+        best = distA <= distB ? wire.a : wire.b;
+      }
+    }
+    return best ? { ref: best, dist: bestDist } : null;
+  };
+
   const handleTerminalClick = (ref: TerminalRef, e: React.MouseEvent) => {
     e.stopPropagation();
     if (probeMode) {
@@ -258,15 +382,44 @@ export function SchematicCanvas({
     }
     if (!pendingTerminal) {
       setPendingTerminal(ref);
+      setPendingWaypoints([]);
       return;
     }
-    if (pendingTerminal.partId === ref.partId && pendingTerminal.terminalId === ref.terminalId) {
-      setPendingTerminal(null);
-      return;
-    }
-    onAddWire(pendingTerminal, ref);
-    setPendingTerminal(null);
+    completeWireTo(ref);
   };
+
+  /** Clicking an existing wire while drawing a new one connects to it (its nearer end) instead of
+   * just selecting it - branching off an existing net is as normal a move as starting from a bare
+   * terminal, and a real tool doesn't make you hunt down a free pin on it first. */
+  const handleWireClick = (wire: Wire, e: React.MouseEvent) => {
+    if (probeMode) {
+      onProbeTerminal?.(wire.a);
+      return;
+    }
+    if (pendingTerminal) {
+      const svg = (e.currentTarget as SVGElement).ownerSVGElement!;
+      const rect = svg.getBoundingClientRect();
+      const world = toWorld({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      const a = endpoints.resolve(wire.a);
+      const b = endpoints.resolve(wire.b);
+      const distA = a ? Math.hypot(a.x - world.x, a.y - world.y) : Infinity;
+      const distB = b ? Math.hypot(b.x - world.x, b.y - world.y) : Infinity;
+      completeWireTo(distA <= distB ? wire.a : wire.b);
+      return;
+    }
+    onSelectWire?.(wire.id);
+  };
+
+  // Live preview of the wire being drawn: from the starting terminal, through every corner clicked
+  // so far, to wherever the cursor is right now - so the free-form routing has visible feedback
+  // before the second terminal click actually commits it.
+  const pendingPreview = useMemo(() => {
+    if (!pendingTerminal || !cursorWorld) return null;
+    const start = endpoints.resolve(pendingTerminal);
+    if (!start) return null;
+    const points = polylineThrough(start, pendingWaypoints, cursorWorld);
+    return { points, d: renderWirePaths([points])[0] };
+  }, [pendingTerminal, pendingWaypoints, cursorWorld, endpoints]);
 
   const toolbar = (
     <CanvasControls
@@ -344,15 +497,21 @@ export function SchematicCanvas({
 
           <CanvasWireLayer
             endpoints={endpoints}
-            parts={parts}
             wires={wires}
-            netOf={netOf}
-            fast={dragId !== null || segmentDrag !== null}
-            movingIds={movingIds}
             selectedWireId={selectedWireId}
-            onWireClick={(wire) => (probeMode ? onProbeTerminal?.(wire.a) : onSelectWire?.(wire.id))}
+            onWireClick={handleWireClick}
             onSegmentMouseDown={onWireWaypoints ? (wire, corners, segment) => setSegmentDrag({ wireId: wire.id, segment, corners }) : undefined}
+            onWireDoubleClick={onWireWaypoints ? handleWireDoubleClick : undefined}
           />
+
+          {pendingPreview && (
+            <>
+              <path d={pendingPreview.d} stroke="var(--select)" strokeWidth={2} strokeDasharray="4 3" fill="none" pointerEvents="none" />
+              {pendingWaypoints.map((p, i) => (
+                <circle key={i} cx={p.x} cy={p.y} r={3} fill="var(--select)" pointerEvents="none" />
+              ))}
+            </>
+          )}
 
           {[...endpoints.layouts].map(([blockId, layout]) => {
             const block = blocks.find((b) => b.id === blockId)!;
@@ -382,7 +541,7 @@ export function SchematicCanvas({
             />
           ))}
 
-          <CanvasLabelLayer parts={parts} wires={wires} endpoints={endpoints} netOf={netOf} />
+          <CanvasLabelLayer parts={parts} wires={wires} endpoints={endpoints} />
 
           {(probes.length > 0 || showDc) && terminalNet && (
             <CanvasProbeLayer

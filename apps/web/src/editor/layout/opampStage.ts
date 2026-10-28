@@ -106,18 +106,30 @@ export function detectOpAmpStage(input: DetectOpAmpStageInput): OpAmpStage | nul
 /**
  * The textbook amplifier-stage placement for a recognized op-amp stage: the input element (if any)
  * and the op-amp on one row, left to right, with any output-side continuation after it; feedback
- * elements stacked directly above the op-amp as parallel horizontal rungs rather than spilling into
- * further columns (a single part per row, however many there are - this is the one place arrange.ts
- * doesn't apply MAX_STACK, because a feedback ladder is exactly the "tower" spineLayout's general
- * placement avoids elsewhere); the bias/ground leg (if any) directly below.
+ * elements stacked above the op-amp as parallel horizontal rungs; the bias/ground leg (if any)
+ * directly below.
+ *
+ * A feedback network commonly mixes two different things: a single gain-setting element (a resistor
+ * or pot) and a clipping pair (two diodes wired antiparallel between the same two nets, which reads
+ * as one recognizable cluster when stacked tight). Piling all of them into one column regardless of
+ * kind makes a 3-element feedback network a three-storey tower with barely any of the canvas's width
+ * used - the taller a group gets, the more its own bus wires run the full height right past the
+ * bodies of the rungs they don't connect to. Splitting the diode cluster into its own column keeps
+ * the pair's convention (stacked tight) while spending height on width instead everywhere else.
  */
-export function opAmpStageLayout(stage: OpAmpStage): SpinePlacement {
+export function opAmpStageLayout(stage: OpAmpStage, isDiode: (id: string) => boolean): SpinePlacement {
   const placement: SpinePlacement = new Map();
   const opampCol = stage.inputId ? 1 : 0;
   if (stage.inputId) placement.set(stage.inputId, { col: 0, row: 0 });
   placement.set(stage.opampId, { col: opampCol, row: 0 });
   if (stage.outAdjacentId) placement.set(stage.outAdjacentId, { col: opampCol + 1, row: 0 });
-  stage.feedbackIds.forEach((id, i) => placement.set(id, { col: opampCol, row: -(i + 1) }));
+
+  const diodeFeedback = stage.feedbackIds.filter(isDiode);
+  const otherFeedback = stage.feedbackIds.filter((id) => !isDiode(id));
+  otherFeedback.forEach((id, i) => placement.set(id, { col: opampCol, row: -(i + 1) }));
+  const diodeCol = otherFeedback.length > 0 ? opampCol + 1 : opampCol;
+  diodeFeedback.forEach((id, i) => placement.set(id, { col: diodeCol, row: -(i + 1) }));
+
   if (stage.groundLegId) placement.set(stage.groundLegId, { col: opampCol, row: 1 });
   return placement;
 }

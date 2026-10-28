@@ -130,7 +130,7 @@ export function arrangeParts(snapshot: CircuitSnapshot, inputPartId: string | nu
     const order = (a: string, b: string) => byId.get(a)!.x - byId.get(b)!.x || byId.get(a)!.y - byId.get(b)!.y;
     const opAmpStage = detectOpAmpStage({ members, byId, terminalNet, touchesGround, touchesSupply, order });
     const placement = opAmpStage
-      ? opAmpStageLayout(opAmpStage)
+      ? opAmpStageLayout(opAmpStage, (id) => byId.get(id)!.type === "diode")
       : spineLayout({
           members,
           adjacency: innerAdj,

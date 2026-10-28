@@ -4,7 +4,7 @@ import type { TerminalRef } from "./types";
 import type { PartPatch } from "./InspectorPanel";
 import { netlistFromGraph } from "./netlistFromGraph";
 import { loadPedalPreset, loadWiringPreset } from "./templateLoading";
-import { snapToGrid, GRID_SIZE } from "./geometry";
+import { snapToGrid, GRID_SIZE, type Point } from "./geometry";
 import { useBlockActions } from "./useBlockActions";
 import { useClipboard } from "./useClipboard";
 import { nextFreeId } from "./ids";
@@ -203,8 +203,8 @@ export function SchematicEditor() {
   const handlePatchPart = (partId: string, patch: PartPatch) =>
     commit({ ...history.present, parts: parts.map((p) => (p.id === partId ? { ...p, ...patch } : p)) });
 
-  const handleAddWire = (a: TerminalRef, b: TerminalRef) => {
-    commit({ parts, wires: [...wires, { id: `w${wires.length + 1}_${Date.now()}`, a, b }], blocks });
+  const handleAddWire = (a: TerminalRef, b: TerminalRef, waypoints?: Point[]) => {
+    commit({ parts, wires: [...wires, { id: `w${wires.length + 1}_${Date.now()}`, a, b, ...(waypoints?.length ? { waypoints } : {}) }], blocks });
   };
 
   const handleDeleteSelected = () => {

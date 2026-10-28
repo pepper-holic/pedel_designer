@@ -84,10 +84,18 @@ export function spineLayout(input: SpineInput): SpinePlacement {
     const col = cols.length > 0 ? Math.round(cols.reduce((a, b) => a + b, 0) / cols.length) : spine.length;
     const down = input.touchesGround(id) && !input.touchesSupply(id);
     const stacks = down ? below : above;
+    const myNeighbours = adjacency.get(id) ?? new Set<string>();
+    // A part sharing a net directly with something already stacked in this column (e.g. the two
+    // legs of an antiparallel diode clipper, both wired to the same node) must not join that same
+    // column - stacked directly under one another they'd read as wired in series, and rewireNets'
+    // nearest-neighbour tree would draw exactly that, threading the connecting wire through the
+    // first part's body into the second. Side by side (the next column) each leg's own net wire runs
+    // straight to it instead of via its neighbour.
+    const stackSharesNet = (c: number) => [...placement].some(([other, p]) => p.col === c && Math.sign(p.row) === (down ? 1 : -1) && myNeighbours.has(other));
     // Spill into the next column rather than growing one tower - a block stays roughly as wide as it
     // is tall instead of becoming a column of bypass caps and diodes.
     let c = col;
-    while ((stacks.get(c) ?? 0) >= MAX_STACK) c++;
+    while ((stacks.get(c) ?? 0) >= MAX_STACK || stackSharesNet(c)) c++;
     const depth = (stacks.get(c) ?? 0) + 1;
     stacks.set(c, depth);
     placement.set(id, { col: c, row: down ? depth : -depth });

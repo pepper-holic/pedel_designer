@@ -43,18 +43,18 @@ describe("terminalPosition", () => {
   });
 
   it("mirrors the terminal's dy before rotating, flipping it top-to-bottom", () => {
-    // opamp inMinus is at local (-35, 15); mirrored and unrotated it should land above center instead.
+    // opamp inMinus is at local (-30, 20); mirrored and unrotated it should land above center instead.
     const part: PartInstance = { id: "U1", type: "opamp", x: 100, y: 100, rotation: 0, mirror: true, params: {} };
     const pos = terminalPosition(part, "inMinus");
-    expect(pos.x).toBeCloseTo(65, 9);
-    expect(pos.y).toBeCloseTo(85, 9);
+    expect(pos.x).toBeCloseTo(70, 9);
+    expect(pos.y).toBeCloseTo(80, 9);
   });
 
   it("composes mirror and rotation: mirror first, then rotate the flipped offset", () => {
     const part: PartInstance = { id: "U1", type: "opamp", x: 0, y: 0, rotation: 90, mirror: true, params: {} };
-    const pos = terminalPosition(part, "inMinus"); // local (-35, 15) -> mirrored (-35, -15) -> rotated 90
-    expect(pos.x).toBeCloseTo(15, 9);
-    expect(pos.y).toBeCloseTo(-35, 9);
+    const pos = terminalPosition(part, "inMinus"); // local (-30, 20) -> mirrored (-30, -20) -> rotated 90
+    expect(pos.x).toBeCloseTo(20, 9);
+    expect(pos.y).toBeCloseTo(-30, 9);
   });
 });
 
@@ -71,7 +71,7 @@ describe("terminalLeadAxis", () => {
   });
 
   it("is unaffected by mirror - flipping dy doesn't change which axis is dominant", () => {
-    // opamp inMinus is at local (-35, 15), dominant axis x (|-35| > |15|) either way.
+    // opamp inMinus is at local (-30, 20), dominant axis x (|-30| > |20|) either way.
     const plain: PartInstance = { id: "U1", type: "opamp", x: 0, y: 0, rotation: 0, params: {} };
     const mirrored: PartInstance = { id: "U1", type: "opamp", x: 0, y: 0, rotation: 0, mirror: true, params: {} };
     expect(terminalLeadAxis(plain, "inMinus")).toBe(0);

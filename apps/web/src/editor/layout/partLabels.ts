@@ -3,7 +3,7 @@ import { placeLabels, type LabelDirection, type LabelRequest, type Rect } from "
 import { wireRoutes } from "../routing/wirePolylines";
 import { partValueLabel } from "../valueLabel";
 import type { CanvasEndpoints } from "../canvasEndpoints";
-import type { PartInstance, TerminalRef, Wire } from "../types";
+import type { PartInstance, Wire } from "../types";
 
 const CHAR_WIDTH = 6.4;
 const LABEL_HEIGHT = 11;
@@ -21,8 +21,8 @@ function labelWidth(text: string, minWidth: number): number {
 }
 
 /** Thin rectangles along every drawn wire segment, so a label never lands on top of a wire. */
-function wireObstacles(wires: Wire[], parts: PartInstance[], endpoints: CanvasEndpoints, netOf: (ref: TerminalRef) => string | undefined): Rect[] {
-  const routes = wireRoutes(wires, parts, endpoints, netOf, null);
+function wireObstacles(wires: Wire[], endpoints: CanvasEndpoints): Rect[] {
+  const routes = wireRoutes(wires, endpoints);
   return routes.flatMap(({ points }) =>
     points.slice(1).map((b, i) => {
       const a = points[i];
@@ -45,9 +45,9 @@ export interface PartLabelRequest extends LabelRequest {
  * obstacles they must clear - part bodies and drawn wires. Pure and React-free (see layout/labels.ts)
  * so the result can be checked directly in a test; CanvasLabelLayer only turns it into SVG.
  */
-export function partLabelPlacements(parts: PartInstance[], wires: Wire[], endpoints: CanvasEndpoints, netOf: (ref: TerminalRef) => string | undefined): { requests: PartLabelRequest[]; placed: Map<string, Rect> } {
+export function partLabelPlacements(parts: PartInstance[], wires: Wire[], endpoints: CanvasEndpoints): { requests: PartLabelRequest[]; placed: Map<string, Rect> } {
   const visible = parts.filter((p) => !endpoints.hidden.has(p.id) && p.type !== "ground");
-  const obstacles = [...visible.map((p) => bodyRect(p)), ...wireObstacles(wires, parts, endpoints, netOf)];
+  const obstacles = [...visible.map((p) => bodyRect(p)), ...wireObstacles(wires, endpoints)];
 
   const requests: PartLabelRequest[] = [];
   for (const part of visible) {

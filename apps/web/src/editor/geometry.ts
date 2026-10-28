@@ -37,11 +37,21 @@ export type Axis = 0 | 1;
  * two directions: a lead reads just as cleanly whichever way the wire happens to approach along it,
  * and forcing one exact direction would make the router loop back on itself to satisfy it. */
 export function terminalLeadAxis(part: PartInstance, terminalId: string): Axis {
+  return terminalLeadOutward(part, terminalId).axis;
+}
+
+/** `terminalLeadAxis` plus which of that axis's two directions actually leads away from the part's
+ * own body (the side its terminal sits on relative to the part's centre). A router step that ignores
+ * this and always picks, say, the axis's "increasing" direction can send the first leg back through
+ * the part it just left - e.g. a capacitor's far lead needing to reach something level with the
+ * NEAREST lead would otherwise have its wire dive back across the whole symbol to get there. */
+export function terminalLeadOutward(part: PartInstance, terminalId: string): { axis: Axis; sign: 1 | -1 } {
   const terminal = PART_DEFS[part.type].terminals.find((t) => t.id === terminalId)!;
   const dy = part.mirror ? -terminal.dy : terminal.dy;
-  const local = Math.abs(terminal.dx) >= Math.abs(dy) ? { x: 1, y: 0 } : { x: 0, y: 1 };
-  const rotated = rotateOffset(local.x, local.y, part.rotation);
-  return Math.abs(rotated.x) >= Math.abs(rotated.y) ? 0 : 1;
+  const rotated = rotateOffset(terminal.dx, dy, part.rotation);
+  const axis: Axis = Math.abs(rotated.x) >= Math.abs(rotated.y) ? 0 : 1;
+  const magnitude = axis === 0 ? rotated.x : rotated.y;
+  return { axis, sign: magnitude >= 0 ? 1 : -1 };
 }
 
 export interface CanvasView {
@@ -135,6 +145,54 @@ export function orthogonalPoints(a: Point, b: Point, laneOffset = 0): Point[] {
   }
   const midY = shift((a.y + b.y) / 2, Math.min(a.y, b.y), Math.max(a.y, b.y));
   return [a, { x: a.x, y: midY }, { x: b.x, y: midY }, b];
+}
+
+/** A terminal's lead axis plus which of its two directions actually points away from the part's own
+ * body - see `terminalLeadOutward`. */
+export interface LeadOutward {
+  axis: Axis;
+  sign: 1 | -1;
+}
+
+/**
+ * The simple drawn shape for a wire with no waypoints of its own: a straight run when the two ends
+ * already share an axis, otherwise a single bend (never the 2-bend jog `orthogonalPoints` makes) -
+ * the shortest way to connect an L.
+ *
+ * Which corner to use is picked from each end's lead direction (see `terminalLeadOutward`) when
+ * known: the corner that leaves `a` outward along its own axis and arrives at `b` outward along its
+ * own axis, so the bend reads as a short straight stub off each pin instead of the wire turning the
+ * instant it leaves the lead - or, worse, doubling back across the part's own body to get there (a
+ * capacitor's far lead needing to reach something level with its near lead, say). When the two ends
+ * have the same axis a single bend cannot give both a stub - `a`'s wins, since the wire still reads
+ * cleanly leaving its source even though it meets `b` from the side - and if `a`'s own preferred
+ * corner would cut back through its body, the other corner is used instead even though it leaves `a`
+ * off-axis, since a wire that does not double back beats one that reads correctly but crosses itself.
+ * Distance (whichever axis covers more ground) is only the fallback once no direction is known for
+ * either end.
+ */
+export function singleBendPoints(a: Point, b: Point, outA?: LeadOutward, outB?: LeadOutward): Point[] {
+  if (a.x === b.x || a.y === b.y) return [a, b];
+  const corners: [Point, Point] = [
+    { x: b.x, y: a.y }, // leaves `a` along axis 0 (horizontal), arrives at `b` along axis 1 (vertical)
+    { x: a.x, y: b.y }, // the other way around
+  ];
+
+  const leavesClean = (corner: Point) => {
+    if (!outA) return true;
+    const delta = outA.axis === 0 ? corner.x - a.x : corner.y - a.y;
+    return delta === 0 || Math.sign(delta) === outA.sign;
+  };
+  const arrivesClean = (corner: Point) => {
+    if (!outB) return true;
+    const delta = outB.axis === 0 ? b.x - corner.x : b.y - corner.y;
+    return delta === 0 || Math.sign(delta) === -outB.sign;
+  };
+
+  const preferred = outA ? corners[outA.axis === 0 ? 0 : 1] : outB ? corners[outB.axis === 0 ? 1 : 0] : Math.abs(b.x - a.x) > Math.abs(b.y - a.y) ? corners[0] : corners[1];
+  const other = preferred === corners[0] ? corners[1] : corners[0];
+  const corner = leavesClean(preferred) && arrivesClean(preferred) ? preferred : leavesClean(other) && arrivesClean(other) ? other : preferred;
+  return [a, corner, b];
 }
 
 /** SVG path `d` string for a straight (no wire-crossing hops) orthogonal path between two points. */
@@ -296,4 +354,55 @@ export function draggableCorners(points: Point[]): Point[] {
     return [a, { x: a.x, y: a.y + s }, { x: b.x, y: b.y - s }, b];
   }
   return points;
+}
+
+/** Perpendicular distance from `at` to the orthogonal segment p-q, clamped to the segment's span -
+ * used to find which segment of a wire a click landed closest to. */
+export function distanceToSegment(at: Point, p: Point, q: Point): number {
+  if (p.x === q.x) {
+    const y = Math.min(Math.max(at.y, Math.min(p.y, q.y)), Math.max(p.y, q.y));
+    return Math.hypot(at.x - p.x, at.y - y);
+  }
+  const x = Math.min(Math.max(at.x, Math.min(p.x, q.x)), Math.max(p.x, q.x));
+  return Math.hypot(at.x - x, at.y - p.y);
+}
+
+/** How far a freshly inserted corner nudges off the segment it splits - small enough to read as a
+ * deliberate kink, not a stray jog, and large enough to grab again right away. */
+const INSERT_NUDGE = GRID_SIZE * 2;
+
+/**
+ * Splits whichever segment of `corners` (a full point list, e.g. from `draggableCorners` or a
+ * route's own points) lies closest to `at` into a small real dogleg positioned there, giving the
+ * wire one more draggable corner. Returns `corners` unchanged if the closest segment is too short
+ * to split cleanly.
+ */
+export function insertCorner(corners: Point[], at: Point): Point[] {
+  let bestIndex = 0;
+  let bestDist = Infinity;
+  for (let i = 0; i < corners.length - 1; i++) {
+    const d = distanceToSegment(at, corners[i], corners[i + 1]);
+    if (d < bestDist) {
+      bestDist = d;
+      bestIndex = i;
+    }
+  }
+  const p = corners[bestIndex];
+  const q = corners[bestIndex + 1];
+  const horizontal = p.y === q.y;
+  const lo = horizontal ? Math.min(p.x, q.x) : Math.min(p.y, q.y);
+  const hi = horizontal ? Math.max(p.x, q.x) : Math.max(p.y, q.y);
+  if (hi - lo <= 0) return corners; // a degenerate (zero-length) segment has nothing to split
+  const margin = Math.min(BEND_MARGIN, (hi - lo) / 2);
+
+  const dogleg = horizontal
+    ? (() => {
+        const cx = snapToGrid(Math.min(Math.max(at.x, lo + margin), hi - margin));
+        return [p, { x: cx, y: p.y }, { x: cx, y: p.y + INSERT_NUDGE }, { x: q.x, y: p.y + INSERT_NUDGE }, { x: q.x, y: q.y }];
+      })()
+    : (() => {
+        const cy = snapToGrid(Math.min(Math.max(at.y, lo + margin), hi - margin));
+        return [p, { x: p.x, y: cy }, { x: p.x + INSERT_NUDGE, y: cy }, { x: p.x + INSERT_NUDGE, y: q.y }, { x: q.x, y: q.y }];
+      })();
+  return [...corners.slice(0, bestIndex), ...dogleg, ...corners.slice(bestIndex + 2)];
 }

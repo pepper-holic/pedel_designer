@@ -21,6 +21,8 @@ function stageInput(parts: PartInstance[], wires: Wire[], members: string[]) {
   };
 }
 
+const isDiodeOf = (parts: PartInstance[]) => (id: string) => parts.find((p) => p.id === id)?.type === "diode";
+
 const opamp = (id: string): PartInstance => ({ id, type: "opamp", x: 0, y: 0, rotation: 0, params: {} });
 const resistor = (id: string): PartInstance => ({ id, type: "resistor", x: 0, y: 0, rotation: 0, params: { resistance: 1000 } });
 const diode = (id: string): PartInstance => ({ id, type: "diode", x: 0, y: 0, rotation: 0, params: {} });
@@ -37,13 +39,13 @@ describe("detectOpAmpStage", () => {
     const stage = detectOpAmpStage(stageInput(parts, wires, ["Rin", "D1", "U1"]));
     expect(stage).toEqual({ opampId: "U1", inputId: "Rin", feedbackIds: ["D1"], outAdjacentId: null, groundLegId: null });
 
-    const placement = opAmpStageLayout(stage!);
+    const placement = opAmpStageLayout(stage!, isDiodeOf(parts));
     expect(placement.get("Rin")).toEqual({ col: 0, row: 0 });
     expect(placement.get("U1")).toEqual({ col: 1, row: 0 });
     expect(placement.get("D1")).toEqual({ col: 1, row: -1 });
   });
 
-  it("stacks multiple feedback elements as separate rows in the same column, not spread across columns", () => {
+  it("keeps a diode clipping pair stacked together in their own column, apart from a non-diode feedback element", () => {
     const parts = [resistor("Rin"), resistor("Rf"), diode("D1"), diode("D2"), opamp("U1")];
     const wires: Wire[] = [
       { id: "w1", a: { partId: "Rin", terminalId: "b" }, b: { partId: "U1", terminalId: "inMinus" } },
@@ -57,10 +59,12 @@ describe("detectOpAmpStage", () => {
     const stage = detectOpAmpStage(stageInput(parts, wires, ["Rin", "Rf", "D1", "D2", "U1"]));
     expect(stage!.feedbackIds).toEqual(["D1", "D2", "Rf"]); // alphabetical, via `order`
 
-    const placement = opAmpStageLayout(stage!);
-    const feedbackCells = stage!.feedbackIds.map((id) => placement.get(id)!);
-    expect(new Set(feedbackCells.map((c) => c.col))).toEqual(new Set([1])); // all one column...
-    expect(new Set(feedbackCells.map((c) => c.row)).size).toBe(3); // ...each its own row
+    const placement = opAmpStageLayout(stage!, isDiodeOf(parts));
+    // Rf (the gain-setting element) stays in the op-amp's own column...
+    expect(placement.get("Rf")).toEqual({ col: 1, row: -1 });
+    // ...while D1/D2 (the antiparallel clipping pair) get a column of their own, stacked together.
+    expect(placement.get("D1")).toEqual({ col: 2, row: -1 });
+    expect(placement.get("D2")).toEqual({ col: 2, row: -2 });
   });
 
   it("recognizes a non-inverting stage: bias resistor to ground on one input, the other input bare (fed from outside the group)", () => {
@@ -74,7 +78,7 @@ describe("detectOpAmpStage", () => {
     const stage = detectOpAmpStage(stageInput(parts, wires, ["Rg", "Rf", "U1"]));
     expect(stage).toEqual({ opampId: "U1", inputId: null, feedbackIds: ["Rf"], outAdjacentId: null, groundLegId: "Rg" });
 
-    const placement = opAmpStageLayout(stage!);
+    const placement = opAmpStageLayout(stage!, isDiodeOf(parts));
     expect(placement.get("U1")).toEqual({ col: 0, row: 0 });
     expect(placement.get("Rg")).toEqual({ col: 0, row: 1 });
     expect(placement.get("Rf")).toEqual({ col: 0, row: -1 });
@@ -103,7 +107,7 @@ describe("detectOpAmpStage", () => {
     ];
     const stage = detectOpAmpStage(stageInput(parts, wires, ["Rin", "D1", "U1", "Cout"]));
     expect(stage!.outAdjacentId).toBe("Cout");
-    expect(opAmpStageLayout(stage!).get("Cout")).toEqual({ col: 2, row: 0 });
+    expect(opAmpStageLayout(stage!, isDiodeOf(parts)).get("Cout")).toEqual({ col: 2, row: 0 });
   });
 
   it("bails (returns null) when a group member can't be given a role", () => {

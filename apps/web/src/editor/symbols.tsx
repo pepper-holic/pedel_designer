@@ -63,12 +63,12 @@ function SpstSymbol({ closed }: { closed: boolean }) {
 function SpdtSymbol({ position }: { position: number }) {
   return (
     <>
-      <path d="M-30,0 h16 M14,-16 h16 M14,16 h16" stroke={stroke} strokeWidth={1.6} fill="none" />
+      <path d="M-30,0 h16 M14,-12 h16 M14,12 h16" stroke={stroke} strokeWidth={1.6} fill="none" />
       <circle cx={-14} cy={0} r={2.4} fill={stroke} />
-      <circle cx={14} cy={-16} r={2.4} fill={stroke} />
-      <circle cx={14} cy={16} r={2.4} fill={stroke} />
+      <circle cx={14} cy={-12} r={2.4} fill={stroke} />
+      <circle cx={14} cy={12} r={2.4} fill={stroke} />
       <path
-        d={position === 1 ? "M-14,0 L14,16" : "M-14,0 L14,-16"}
+        d={position === 1 ? "M-14,0 L14,12" : "M-14,0 L14,-12"}
         stroke={stroke}
         strokeWidth={1.8}
         fill="none"
@@ -188,11 +188,11 @@ function JfetSymbol() {
 function OpAmpSymbol() {
   return (
     <>
-      <path d="M-24,-24 L-24,24 L24,0 Z" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinejoin="round" />
-      <text x="-19" y="-9" fontSize={11} fontFamily="var(--font-mono)" fill={stroke}>
+      <path d="M-20,-24 L-20,24 L20,0 Z" stroke={stroke} strokeWidth={1.6} fill="none" strokeLinejoin="round" />
+      <text x="-15" y="-14" fontSize={11} fontFamily="var(--font-mono)" fill={stroke}>
         +
       </text>
-      <text x="-19" y="15" fontSize={11} fontFamily="var(--font-mono)" fill={stroke}>
+      <text x="-15" y="19" fontSize={11} fontFamily="var(--font-mono)" fill={stroke}>
         −
       </text>
     </>
@@ -240,9 +240,9 @@ export function PartSymbol({ part }: { part: PartInstance }) {
     case "dpdt":
       return <DpdtSymbol position={Number(part.params.switchPosition) === 1 ? 1 : 0} />;
     case "blade3":
-      return <BladeSymbol position={clampPosition(part.params.switchPosition, 3)} contactYs={[-18, 18]} />;
+      return <BladeSymbol position={clampPosition(part.params.switchPosition, 3)} contactYs={[-12, 12]} />;
     case "blade5":
-      return <BladeSymbol position={clampPosition(part.params.switchPosition, 5)} contactYs={[-24, 0, 24]} />;
+      return <BladeSymbol position={clampPosition(part.params.switchPosition, 5)} contactYs={[-12, 0, 12]} />;
     case "coupledInductors":
       return <CoupledInductorsSymbol />;
     case "rotary6":
