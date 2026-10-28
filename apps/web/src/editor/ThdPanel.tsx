@@ -22,7 +22,7 @@ export function ThdPanel({ canMeasure, result, onMeasure }: ThdPanelProps) {
         <>
           <p className="status-text">THD: {result.thdPercent.toFixed(3)}%</p>
           <p className="canvas-hint">
-            {result.harmonics.map((h) => `${h.order}차: ${h.magnitude.toExponential(2)}`).join(" · ")}
+            {result.harmonics.map((h) => `${h.order}차: ${h.percentOfFundamental.toFixed(2)}%`).join(" · ")}
           </p>
         </>
       )}

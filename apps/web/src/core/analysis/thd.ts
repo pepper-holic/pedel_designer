@@ -3,7 +3,13 @@ import { fft, nextPowerOfTwo } from "./fft";
 export interface HarmonicMagnitude {
   order: number; // 1 = fundamental, 2 = 2nd harmonic, ...
   frequencyHz: number;
+  /** Raw FFT bin magnitude - arbitrary units, not comparable across signals or to thdPercent on its
+   * own. Use percentOfFundamental for anything shown to a user or checked against thdPercent. */
   magnitude: number;
+  /** magnitude / fundamentalMagnitude * 100 - the same normalization thdPercent itself uses, so
+   * sqrt(sum of these^2)) reproduces thdPercent (a user sanity-checking the breakdown should land on
+   * the same number, not a raw FFT magnitude that has no fixed relationship to a percentage). */
+  percentOfFundamental: number;
 }
 
 export interface ThdResult {
@@ -54,7 +60,8 @@ export function computeThd(signal: Float64Array, sampleRate: number, fundamental
   for (let order = 2; order <= maxHarmonic; order++) {
     const frequencyHz = fundamentalHz * order;
     const magnitude = magnitudeAt(frequencyHz);
-    harmonics.push({ order, frequencyHz, magnitude });
+    const percentOfFundamental = fundamentalMagnitude > 0 ? (magnitude / fundamentalMagnitude) * 100 : 0;
+    harmonics.push({ order, frequencyHz, magnitude, percentOfFundamental });
     harmonicPower += magnitude * magnitude;
   }
 

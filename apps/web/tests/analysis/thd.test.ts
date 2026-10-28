@@ -51,4 +51,14 @@ describe("computeThd", () => {
     expect(result.harmonics.map((h) => h.order)).toEqual([2, 3, 4, 5]);
     expect(result.harmonics.every((h) => Number.isFinite(h.magnitude))).toBe(true);
   });
+
+  it("the per-order percentOfFundamental breakdown reconstructs thdPercent itself (not just the raw, unnormalized magnitude)", () => {
+    // A user reading the harmonic breakdown next to the headline THD% should be able to compute
+    // sqrt(sum of each order's %^2) and land back on thdPercent - the raw FFT-bin `magnitude` alone
+    // can't do that, since it isn't normalized to the fundamental at all.
+    const output = runTone(diodeClipperPreset, 3);
+    const result = computeThd(output, SAMPLE_RATE, FREQ_HZ);
+    const reconstructed = Math.sqrt(result.harmonics.reduce((sum, h) => sum + h.percentOfFundamental ** 2, 0));
+    expect(reconstructed).toBeCloseTo(result.thdPercent, 6);
+  });
 });
