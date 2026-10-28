@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 
 interface KnobProps {
   label: string;
@@ -27,8 +27,11 @@ function polar(cx: number, cy: number, r: number, degrees: number) {
  * Home/End). Vertical drag rather than circular because it is what every audio plugin does and
  * it works the same on a touchpad.
  */
+const KNURL_TEETH = 28;
+
 export function Knob({ label, value, onChange, size = 72 }: KnobProps) {
   const ref = useRef<SVGSVGElement>(null);
+  const gradientId = useId();
   const drag = useRef<{ y: number; value: number } | null>(null);
   const latest = useRef({ value, onChange });
   useEffect(() => {
@@ -64,13 +67,18 @@ export function Knob({ label, value, onChange, size = 72 }: KnobProps) {
   };
 
   const c = size / 2;
-  const r = size / 2 - 6;
+  // Outer ring (value track) sits in the recessed collar; the knurled skirt knob sits just inside
+  // it so the whole thing reads as a real pot mounted through a drilled hole, not a flat disc.
+  const ringR = size / 2 - 2;
+  const bodyR = size / 2 - 7;
+  const capR = bodyR * 0.58;
   const start = -SWEEP_DEGREES / 2;
   const angle = start + SWEEP_DEGREES * value;
-  const arcFrom = polar(c, c, r + 3, start);
-  const arcTo = polar(c, c, r + 3, angle);
-  const tip = polar(c, c, r - 6, angle);
+  const arcFrom = polar(c, c, ringR, start);
+  const arcTo = polar(c, c, ringR, angle);
+  const tip = polar(c, c, capR - 3, angle);
   const large = SWEEP_DEGREES * value > 180 ? 1 : 0;
+  const teeth = Array.from({ length: KNURL_TEETH }, (_, i) => start + (SWEEP_DEGREES * i) / (KNURL_TEETH - 1));
 
   return (
     <svg
@@ -100,9 +108,27 @@ export function Knob({ label, value, onChange, size = 72 }: KnobProps) {
       onPointerCancel={() => (drag.current = null)}
       onDoubleClick={() => set(0.5)}
     >
-      <circle className="knob-body" cx={c} cy={c} r={r} />
-      {value > 0.001 && <path className="knob-arc" d={`M ${arcFrom.x} ${arcFrom.y} A ${r + 3} ${r + 3} 0 ${large} 1 ${arcTo.x} ${arcTo.y}`} />}
-      <line className="knob-pointer" x1={c} y1={c} x2={tip.x} y2={tip.y} />
+      <defs>
+        <radialGradient id={gradientId} cx="35%" cy="30%" r="75%">
+          <stop offset="0%" className="knob-grad-hi" />
+          <stop offset="55%" className="knob-grad-mid" />
+          <stop offset="100%" className="knob-grad-lo" />
+        </radialGradient>
+      </defs>
+      {/* Recessed collar the knob sits in, like it's mounted through the enclosure. */}
+      <circle className="knob-collar" cx={c} cy={c} r={ringR + 2} />
+      <circle className="knob-track" cx={c} cy={c} r={ringR} />
+      {value > 0.001 && <path className="knob-arc" d={`M ${arcFrom.x} ${arcFrom.y} A ${ringR} ${ringR} 0 ${large} 1 ${arcTo.x} ${arcTo.y}`} />}
+      {/* Knurled skirt: the ridges a fingertip actually grips on a real pot. */}
+      <circle className="knob-body" cx={c} cy={c} r={bodyR} fill={`url(#${gradientId})`} />
+      {teeth.map((deg) => {
+        const outer = polar(c, c, bodyR - 1, deg);
+        const inner = polar(c, c, bodyR - 5, deg);
+        return <line key={deg} className="knob-tooth" x1={inner.x} y1={inner.y} x2={outer.x} y2={outer.y} />;
+      })}
+      {/* Flat top cap, screen-printed pointer line like the real thing. */}
+      <circle className="knob-cap" cx={c} cy={c} r={capR} />
+      <line className="knob-pointer" x1={polar(c, c, capR * 0.3, angle).x} y1={polar(c, c, capR * 0.3, angle).y} x2={tip.x} y2={tip.y} />
     </svg>
   );
 }

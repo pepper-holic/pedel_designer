@@ -1842,13 +1842,48 @@ p.drc-error {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 24px 24px;
-  border-radius: var(--radius);
-  background: var(--pedal-body, var(--chrome-bg));
+  padding: 28px 24px;
+  border-radius: 14px;
+  background-color: var(--pedal-body, var(--chrome-bg));
   color: var(--pedal-text, var(--chrome-text));
   font-family: var(--pedal-font, inherit);
-  border: 1px solid var(--chrome-border);
+  border: 1px solid rgba(0, 0, 0, 0.4);
   overflow-y: auto;
+  position: relative;
+  isolation: isolate;
+  box-shadow:
+    0 22px 44px -16px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.12) inset,
+    0 -14px 22px rgba(0, 0, 0, 0.22) inset;
+}
+
+/* Powder-coat/brushed-metal enclosure finish: diagonal brush streaks, a top-lit/bottom-shadowed
+   vignette, and the four corner mounting screws real stompbox enclosures are built with. Drawn as
+   blended background layers (not DOM nodes) so it rides on top of whatever body colour the player
+   picked, the same way an anodised finish reads under light regardless of its base colour. */
+.pedal-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  /* Plain alpha compositing, not a blend mode: mix-blend-mode: overlay washes out on a light body
+     colour (overlay degrades to screen-only above ~50% lightness, so dark screw shadows and
+     streaks all but disappear on a white/cream pedal) - normal blending stays visible on any
+     chosen body colour, light or dark. */
+  background-image:
+    radial-gradient(ellipse 140% 55% at 50% -12%, rgba(255, 255, 255, 0.3), transparent 60%),
+    radial-gradient(ellipse 140% 45% at 50% 112%, rgba(0, 0, 0, 0.35), transparent 60%),
+    repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.035) 0px, rgba(0, 0, 0, 0.035) 1px, transparent 1px, transparent 3px),
+    radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0.95) 2px, rgba(0, 0, 0, 0.75) 3px, transparent 6px),
+    radial-gradient(circle at calc(100% - 20px) 20px, rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0.95) 2px, rgba(0, 0, 0, 0.75) 3px, transparent 6px),
+    radial-gradient(circle at 20px calc(100% - 20px), rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0.95) 2px, rgba(0, 0, 0, 0.75) 3px, transparent 6px),
+    radial-gradient(circle at calc(100% - 20px) calc(100% - 20px), rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0.95) 2px, rgba(0, 0, 0, 0.75) 3px, transparent 6px);
+}
+
+.pedal-face > * {
+  position: relative;
+  z-index: 1;
 }
 
 .pedal-appearance {
@@ -1896,6 +1931,16 @@ p.drc-error {
   text-transform: uppercase;
   color: var(--pedal-accent, var(--accent));
   font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 6px 20px;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.14);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.18),
+    0 -1px 1px rgba(0, 0, 0, 0.35);
 }
 
 .pedal-sections {
@@ -1943,28 +1988,66 @@ p.drc-error {
   cursor: ns-resize;
   touch-action: none;
   outline: none;
+  overflow: visible;
 }
 
-.knob:focus-visible .knob-body {
-  stroke: var(--accent);
+.knob:focus-visible .knob-track {
+  stroke: var(--pedal-accent, var(--accent));
   stroke-width: 2;
 }
 
-.knob-body {
-  fill: var(--chrome-bg-raised);
-  stroke: var(--chrome-border);
-  stroke-width: 1.5;
+/* The hole the pot is mounted through: a dark recess so the knurled skirt reads as sitting proud
+   of the enclosure surface, not drawn flat on top of it. */
+.knob-collar {
+  fill: rgba(0, 0, 0, 0.3);
+  filter: blur(0.5px);
+}
+
+.knob-track {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.22);
+  stroke-width: 2;
 }
 
 .knob-arc {
   fill: none;
   stroke: var(--pedal-accent, var(--accent));
-  stroke-width: 3;
+  stroke-width: 2.5;
   stroke-linecap: round;
 }
 
+/* Knurled plastic/metal skirt - a radial gradient cap (set via the per-instance <radialGradient>)
+   plus a ring of ridge lines, the way a real chicken-head or ribbed pointer knob is moulded. */
+.knob-body {
+  stroke: rgba(0, 0, 0, 0.45);
+  stroke-width: 1;
+}
+
+.knob-grad-hi {
+  stop-color: color-mix(in srgb, var(--chrome-bg-raised) 55%, white);
+}
+
+.knob-grad-mid {
+  stop-color: var(--chrome-bg-raised);
+}
+
+.knob-grad-lo {
+  stop-color: color-mix(in srgb, var(--chrome-bg-raised) 60%, black);
+}
+
+.knob-tooth {
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 1;
+}
+
+.knob-cap {
+  fill: color-mix(in srgb, var(--chrome-bg-raised) 85%, white);
+  stroke: rgba(0, 0, 0, 0.25);
+  stroke-width: 1;
+}
+
 .knob-pointer {
-  stroke: var(--pedal-text, var(--chrome-text));
+  stroke: var(--pedal-accent, var(--accent));
   stroke-width: 3;
   stroke-linecap: round;
 }
@@ -1997,28 +2080,49 @@ p.drc-error {
   gap: 12px;
 }
 
+/* LED jewel: a chrome bezel ring around a convex lens, dark glass when off, lit and glowing
+   when on - like the indicator jewel on a real stompbox rather than a flat dot. */
 .pedal-led {
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
-  background: #e4e4e7;
+  background: radial-gradient(circle at 35% 30%, #5a5a5e, #1c1c1f 70%);
+  border: 2px solid #8a8a90;
+  box-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.25),
+    inset 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .pedal-led-on {
-  background: #ef4444;
+  background: radial-gradient(circle at 35% 30%, #ff8a80, #d1001f 75%);
+  box-shadow:
+    0 0 8px 2px rgba(239, 68, 68, 0.75),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
 }
 
+/* Stomp switch: a chrome mounting bezel around a rubber-topped button, the way a 3PDT footswitch
+   actually looks - not a flat grey circle. */
 .pedal-footswitch {
-  width: 58px;
-  height: 58px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fafafa, #a1a1aa);
-  border: 3px solid var(--chrome-border);
+  /* Gradient "chrome" border: border-image ignores border-radius and turns the circle into a
+     square, so the ring is a second background painted into the border-box instead. */
+  border: 5px solid transparent;
+  background:
+    radial-gradient(circle at 32% 28%, #3a3a3e, #0e0e10 75%) padding-box,
+    linear-gradient(145deg, #e8e8ec, #8a8a90 45%, #4a4a4e 100%) border-box;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.4),
+    inset 0 2px 3px rgba(255, 255, 255, 0.08),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.5);
 }
 
 .pedal-footswitch[aria-pressed="true"] {
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
+  transform: translateY(2px);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    inset 0 3px 8px rgba(0, 0, 0, 0.6);
 }
 
 .pedal-footer-text {
