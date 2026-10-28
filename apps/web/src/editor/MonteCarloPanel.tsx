@@ -33,7 +33,9 @@ export function MonteCarloPanel({ canRun, tolerancePercent, onTolerancePercentCh
       </div>
       {!canRun && <p className="canvas-hint">출력 노드를 선택해야 분석할 수 있습니다.</p>}
       {worstCaseSpreadDb !== null && (
-        <p className="status-text">최대 편차: {worstCaseSpreadDb.toFixed(2)} dB (주파수 응답 그래프의 음영 영역 참고)</p>
+        <p className="status-text">
+          편차(상하위 10% 제외): {worstCaseSpreadDb.toFixed(2)} dB (주파수 응답 그래프의 음영 영역 참고) - 게인을 최대로 올리면 극단적으로 커질 수 있습니다
+        </p>
       )}
     </div>
   );

@@ -17,6 +17,31 @@ export interface MonteCarloResult {
   maxDb: number[];
 }
 
+/** Linear interpolation into a value already sorted ascending, at percentile `p` (0-1). */
+function percentile(sorted: number[], p: number): number {
+  const idx = (sorted.length - 1) * p;
+  const lo = Math.floor(idx);
+  const hi = Math.ceil(idx);
+  if (lo === hi) return sorted[lo];
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
+}
+
+/** A robust stand-in for "worst-case spread": the 10th-to-90th-percentile band across runs, at
+ * whichever frequency it's widest, instead of the raw max-min. A non-ideal op-amp model with rail
+ * clipping can have its DC bias point pushed right up against a rail at high gain - a couple of
+ * component-tolerance draws out of (say) 20 then land the amplifier in hard clipping, where the
+ * linearized AC magnitude collapses toward zero and reads as tens or hundreds of dB "different" even
+ * though the real-world circuits involved just sound a bit more (or less) compressed. Trimming the
+ * top/bottom ~10% of runs drops that handful of clipped outliers without losing a genuine wide spread
+ * that most of the runs agree on. */
+export function robustSpreadDb(result: MonteCarloResult): number {
+  const perFrequencySpread = result.frequenciesHz.map((_, i) => {
+    const valuesAtFrequency = result.runs.map((run) => run[i]).sort((a, b) => a - b);
+    return percentile(valuesAtFrequency, 0.9) - percentile(valuesAtFrequency, 0.1);
+  });
+  return Math.max(...perFrequencySpread);
+}
+
 /** Only passive component values carry manufacturing tolerance in practice - semiconductor SPICE
  * parameters (diode/BJT/JFET/op-amp) are fixed device characteristics, not swept here. */
 function perturbElement(el: Element, tolerancePercent: number, rng: () => number): Element {

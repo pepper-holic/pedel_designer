@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { runMonteCarloAc } from "../../src/core/analysis/montecarlo";
+import { runMonteCarloAc, robustSpreadDb, type MonteCarloResult } from "../../src/core/analysis/montecarlo";
 import { logFrequencySweep } from "../../src/core/solver/ac";
 import { passiveToneTiltPreset } from "../../src/core/library/presets/passive-tone-tilt";
 
@@ -54,5 +54,32 @@ describe("runMonteCarloAc", () => {
     const narrowMaxSpread = Math.max(...frequenciesHz.map((_, i) => narrow.maxDb[i] - narrow.minDb[i]));
     const wideMaxSpread = Math.max(...frequenciesHz.map((_, i) => wide.maxDb[i] - wide.minDb[i]));
     expect(wideMaxSpread).toBeGreaterThan(narrowMaxSpread);
+  });
+});
+
+describe("robustSpreadDb", () => {
+  /** 20 runs at one frequency: 18 cluster near 0 dB, 2 are wild outliers (e.g. a non-ideal op-amp's
+   * DC bias pushed into hard clipping by that particular draw of component values) - the real-world
+   * situation that made the raw max-min "worst case" headline number explode into the hundreds of dB
+   * even though the circuit mostly behaves consistently. */
+  function resultWithOutliers(clustered: number[], outliers: number[]): MonteCarloResult {
+    const runs = [...clustered, ...outliers].map((db) => [db]);
+    return { frequenciesHz: [1000], runs, meanDb: [0], minDb: [Math.min(...outliers, ...clustered)], maxDb: [Math.max(...outliers, ...clustered)] };
+  }
+
+  it("is not dominated by a couple of clipped-run outliers the way raw max-min is", () => {
+    const clustered = Array.from({ length: 18 }, (_, i) => -1 + i * 0.1); // tight band around 0 dB
+    const result = resultWithOutliers(clustered, [-200, 40]); // two runs far outside the normal band
+    const rawSpread = Math.max(...result.maxDb.map((v, i) => v - result.minDb[i]));
+    expect(rawSpread).toBeGreaterThan(200); // the number the old code reported
+    expect(robustSpreadDb(result)).toBeLessThan(5); // the trimmed stat ignores those two
+  });
+
+  it("still reflects a genuine spread most runs agree on, not just the outliers", () => {
+    const clustered = Array.from({ length: 18 }, (_, i) => -10 + i * 1.2); // ~20 dB of real spread
+    const result = resultWithOutliers(clustered, [-200, 40]);
+    const spread = robustSpreadDb(result);
+    expect(spread).toBeGreaterThan(10);
+    expect(spread).toBeLessThan(200);
   });
 });

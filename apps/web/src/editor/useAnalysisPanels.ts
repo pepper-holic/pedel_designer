@@ -7,7 +7,7 @@ import { presets } from "../core/library/presets";
 import { logFrequencySweep } from "../core/solver/ac";
 import { measureThd } from "./thdMeasurement";
 import type { ThdResult } from "../core/analysis/thd";
-import { runMonteCarloAc, type MonteCarloResult } from "../core/analysis/montecarlo";
+import { runMonteCarloAc, robustSpreadDb, type MonteCarloResult } from "../core/analysis/montecarlo";
 import { runChainedTransient, type ChainStage } from "../core/analysis/chain";
 
 const CURRENT_CIRCUIT_CHAIN_ID = "__current__";
@@ -114,7 +114,7 @@ export function useAnalysisPanels({
       canRun: !!outputNode && !!graph.inputSourceId,
       tolerancePercent,
       onTolerancePercentChange: setTolerancePercent,
-      worstCaseSpreadDb: monteCarloResult ? Math.max(...monteCarloResult.maxDb.map((v, i) => v - monteCarloResult.minDb[i])) : null,
+      worstCaseSpreadDb: monteCarloResult ? robustSpreadDb(monteCarloResult) : null,
       onRun: handleRunMonteCarlo,
     },
     chain: {
