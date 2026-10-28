@@ -196,16 +196,23 @@ export function routeWires(requests: RouteRequest[], obstacles: Rect[], options:
       return Math.abs((p.x - req.a.x) * lineDy - (p.y - req.a.y) * lineDx) / lineLen;
     };
     const heap = new Heap();
-    // Leaving along a terminal's own lead axis (either direction on it) gets a free start; leaving
-    // across it costs a bend, the same as turning mid-path - so the wire takes a short straight stub
-    // off the pin before it bends, like a hand-drawn schematic, instead of bending right at the terminal.
+    // All 4 seed directions start even here - the axisA bias is charged on the first REAL move below,
+    // not baked into the seed. (Baking it into the seed doesn't work: the bend-cost check is skipped
+    // for a state's first move regardless of which seed it came from, so a search that "seeded" into
+    // the matching direction could still take its first actual step any which way for free, making the
+    // bias a no-op.)
     for (let d = 0; d < 4; d++) {
       const s = start * 4 + d;
       stamp[s] = epoch;
-      gScore[s] = req.axisA !== undefined && ((d % 2) as 0 | 1) !== req.axisA ? bendCost : 0;
+      gScore[s] = 0;
       cameFrom[s] = -1;
-      heap.push(s, gScore[s] + h(start));
+      heap.push(s, h(start));
     }
+    // A touch more than a plain bend (startAxisPenalty > bendCost): when a connection only needs one
+    // bend and both ends want it on the same axis, honoring the START's stub and honoring the GOAL's
+    // stub are otherwise exactly tied in cost - this breaks the tie toward the one the wire actually
+    // leaves from, which is what reads as "a short straight run, then it bends" when drawn.
+    const startAxisPenalty = bendCost + 1;
     let found = -1;
     let expansions = 0;
     while (heap.size > 0 && expansions < maxExpansions) {
@@ -229,7 +236,9 @@ export function routeWires(requests: RouteRequest[], obstacles: Rect[], options:
         if (blocked[nc] && nc !== goal) continue;
         const horizontal = nd === 0 || nd === 2;
         let cost = 1;
-        if (cameFrom[s] !== -1 && nd !== d) cost += bendCost;
+        if (cameFrom[s] === -1) {
+          if (req.axisA !== undefined && ((nd % 2) as 0 | 1) !== req.axisA) cost += startAxisPenalty;
+        } else if (nd !== d) cost += bendCost;
         const along = horizontal ? hOcc[nc] : vOcc[nc];
         const across = horizontal ? vOcc[nc] : hOcc[nc];
         if (along) cost += along === net ? -alongBonus : overlapCost;

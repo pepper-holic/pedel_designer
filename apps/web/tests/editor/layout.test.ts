@@ -54,6 +54,17 @@ describe("router", () => {
     expect(last[last.length - 1].y).toBe(last[last.length - 2].y); // final run is horizontal
   });
 
+  it("honors axisA on the wire's ACTUAL first move, not just a seed that can be swapped out for free (L5 regression)", () => {
+    // A bug let the router seed its search with a direction matching axisA (scoring it free) and then
+    // take its real first step any which way, since the very first move of a search never pays the
+    // ordinary turn cost - so the axisA bias never actually constrained anything. Both ends want the
+    // same axis here, so there's exactly one bend either way; it should land next to b (arriving on
+    // axisB would cost nothing extra), not at a immediately off of a.
+    const [route] = routeWires([{ a: { x: 0, y: 0 }, b: { x: 100, y: 10 }, net: "n", axisA: 0, axisB: 0 }], []);
+    expect(route).not.toBeNull();
+    expect(route![0].y).toBe(route![1].y); // leaves a horizontally, as axisA asks
+  });
+
   it("turns to clear an obstacle as close to the straight line as it can, not an arbitrary point further along (straightBias)", () => {
     // Mirrors a real case: a vsource's pin sits just above its own round body (the obstacle), and the
     // target resistor sits lower and to the right. Clearing the body only needs a small sidestep -
@@ -183,18 +194,16 @@ describe("layout quality across every preset", () => {
     // Baseline before Stage C (flat layout, plain 2-bend wires): 64 crossings.
     // L1 (part orientation pass): 23. L2 (op-amp stage template): 19.
     // L3 (same-net wires attracted onto a shared track - routing/astar.ts alongBonus): 18.
-    // L5 (terminal lead-axis bias - geometry.ts's terminalLeadAxis, astar.ts's axisA/axisB; plus a
-    // tiny astar.ts straightBias tie-break that pulls an otherwise-equal-cost detour's turn back
-    // toward the straight line between a wire's ends, instead of an arbitrary later one): 16 (-2 net
-    // from L3's 18 - straightBias costs a few crossings back versus axis-bias alone's 13, worth it for
-    // routes that no longer wander needlessly far off-line before turning).
-    // Plan target: <=15 - not quite; tracked here for further tuning.
-    expect(totalCrossings).toBeLessThanOrEqual(17);
+    // L5 (terminal lead-axis bias - geometry.ts's terminalLeadAxis, astar.ts's axisA/axisB - fixed to
+    // actually apply to a wire's real first move rather than its seed bookkeeping; plus straightBias,
+    // a tiny tie-break that pulls an otherwise-equal-cost detour's turn back toward the straight line
+    // between a wire's ends instead of an arbitrary later one): 14. Plan target: <=15 - met.
+    expect(totalCrossings).toBeLessThanOrEqual(15);
     // L3 target: same node drawn as one trunk, not two parallel lines a few px apart. A handful of
     // multi-diode clipping networks the op-amp template doesn't recognize (L2's scope) still draw a
     // net's branches as separate nearby runs rather than merging onto one; tracked here so further
     // routing work (or a future L2 extension) can be measured against this count.
-    // L5 traded a few more of these (21 -> 24) for far fewer crossings and no more loop-back zigzags -
+    // L5 traded a few more of these (21 -> 25) for far fewer crossings and no more loop-back zigzags -
     // each terminal now reliably gets a straight stub, which was the more visible defect.
     expect(totalDuplicates).toBeLessThanOrEqual(26);
   });
