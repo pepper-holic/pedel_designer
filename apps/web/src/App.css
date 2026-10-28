@@ -1835,8 +1835,13 @@ p.drc-error {
    PedalAppearance) - the var(..., fallback) keeps a circuit that never touched its appearance
    looking exactly like the app's own chrome, same as before this existed. */
 .pedal-face {
-  flex: 0 1 620px;
+  /* Hugs its content instead of always claiming 620px: a one-knob circuit got exactly as much
+     empty card as a five-knob one. `width: fit-content` (not a flex-basis) sizes it to whatever's
+     actually inside, clamped between min/max so it neither looks cramped nor runs away wide. */
+  flex: 0 1 auto;
+  width: fit-content;
   min-width: 320px;
+  max-width: 620px;
   align-items: center;
   text-align: center;
   display: flex;
@@ -2140,14 +2145,13 @@ p.drc-error {
        above where .player-view's own scroll range starts, so the page never naturally scrolls to it. */
     justify-content: flex-start;
   }
-  /* .pedal-face's `flex: 0 1 620px` sets its WIDTH basis for the row layout above - once the
-     container turns to a column, that same basis governs its HEIGHT instead, and its own
-     `overflow-y: auto` resets its flex min-height to 0 (the spec's automatic-minimum-size rule only
-     keeps a flex item from shrinking below its content when overflow is visible) - so flex-shrink
-     crushes it down to whatever's left over after .player-side, instead of sizing to its content. The
-     result: the knob and footswitch render at near-zero height, underneath/behind the chart below
-     them, both effectively invisible and unclickable. flex-shrink: 0 stops that - .player-view's own
-     overflow: auto already lets the whole column scroll if it's taller than the viewport. */
+  /* Once the row above flips to a column, .pedal-face's own `overflow-y: auto` resets its flex
+     min-height to 0 (the spec's automatic-minimum-size rule only keeps a flex item from shrinking
+     below its content when overflow is visible) - so flex-shrink crushes it down to whatever's left
+     over after .player-side, instead of sizing to its content. The result: the knob and footswitch
+     render at near-zero height, underneath/behind the chart below them, both effectively invisible
+     and unclickable. flex-shrink: 0 stops that - .player-view's own overflow: auto already lets the
+     whole column scroll if it's taller than the viewport. */
   .pedal-face {
     flex: 0 0 auto;
   }
