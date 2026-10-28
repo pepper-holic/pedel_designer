@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { boardFit, checkHoles, defaultDrillPlan, ENCLOSURES, interior, smallestFit, type DrillHole, type PanelControl } from "./enclosure";
 import { drawEnclosure, enclosureSvg, sheetDeltaToFace, sheetSize } from "./enclosureDrawing";
+import { enclosureArtShapes, enclosureArtSvg } from "./enclosureArt";
 import { BoardViewport, ZoomControls } from "./BoardViewport";
 import { Icon } from "../../ui/Icon";
+import type { PedalAppearance } from "../player/pedalAppearance";
 
 export interface BoardSize {
   w: number;
@@ -13,7 +15,11 @@ export interface BoardSize {
 interface EnclosurePanelProps {
   controls: PanelControl[];
   board: BoardSize | null;
+  appearance: PedalAppearance;
+  title: string;
 }
+
+type View = "drill" | "art";
 
 function download(name: string, text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: "image/svg+xml" }));
@@ -29,9 +35,10 @@ function download(name: string, text: string) {
  * circuit exposes plus jacks, DC, LED and footswitch, drag holes to taste, check the board fits,
  * print the unfolded box at true size.
  */
-export function EnclosurePanel({ controls, board }: EnclosurePanelProps) {
+export function EnclosurePanel({ controls, board, appearance, title }: EnclosurePanelProps) {
   const suggested = board ? smallestFit(board.w, board.h) : null;
   const [chosen, setChosen] = useState<string | null>(null);
+  const [view, setView] = useState<View>("drill");
   const enclosure = ENCLOSURES.find((e) => e.id === (chosen ?? suggested?.id ?? "1590B"))!;
   const controlsKey = controls.map((c) => `${c.kind}:${c.label}`).join("|");
   // Moved holes, per box and control set: changing either starts from the default layout again.
@@ -44,7 +51,7 @@ export function EnclosurePanel({ controls, board }: EnclosurePanelProps) {
   const inside = interior(enclosure);
   const [dragStart, setDragStart] = useState<DrillHole[] | null>(null);
   const [zoom, setZoom] = useState(1);
-  const size = sheetSize(enclosure);
+  const size = view === "drill" ? sheetSize(enclosure) : { w: enclosure.width, h: enclosure.length };
 
   const moveHole = (from: DrillHole[], id: string, dxSheet: number, dySheet: number) => {
     const next = from.map((h) => {
@@ -78,11 +85,31 @@ export function EnclosurePanel({ controls, board }: EnclosurePanelProps) {
         <button type="button" onClick={() => setMoved(null)} disabled={moved?.key !== planKey}>
           기본 배치로
         </button>
-        <button type="button" onClick={() => download(`${enclosure.id}-drill.svg`, enclosureSvg(enclosure, holes))}>
-          1:1 SVG 다운로드
-        </button>
-        <ZoomControls zoom={zoom} onZoom={setZoom} label="드릴 템플릿" />
+        <div className="run-row" role="group" aria-label="보기 전환">
+          <button type="button" aria-pressed={view === "drill"} onClick={() => setView("drill")}>
+            드릴 템플릿
+          </button>
+          <button type="button" aria-pressed={view === "art"} onClick={() => setView("art")}>
+            데칼 그래픽
+          </button>
+        </div>
+        {view === "drill" ? (
+          <button type="button" onClick={() => download(`${enclosure.id}-drill.svg`, enclosureSvg(enclosure, holes))}>
+            1:1 SVG 다운로드
+          </button>
+        ) : (
+          <button type="button" onClick={() => download(`${enclosure.id}-decal.svg`, enclosureArtSvg(enclosure, holes, appearance, title))}>
+            1:1 SVG 다운로드
+          </button>
+        )}
+        <ZoomControls zoom={zoom} onZoom={setZoom} label={view === "drill" ? "드릴 템플릿" : "데칼 그래픽"} />
       </div>
+      {view === "art" && (
+        <p className="canvas-hint">
+          연주 화면에서 고른 색·글꼴로 윗면 그래픽을 1:1로 인쇄합니다. 라미네이트해 붙인 뒤 그 위로 드릴 템플릿을 대고 구멍을 뚫으세요. 저장한 SVG 파일을 브라우저가 아닌 다른 프로그램에서 열면
+          선택한 글꼴이 기본 글꼴로 바뀔 수 있습니다.
+        </p>
+      )}
       <p className={fit && !fit.fits ? "drc-error" : "canvas-hint"} role="status">
         {board
           ? fit!.fits
@@ -99,17 +126,21 @@ export function EnclosurePanel({ controls, board }: EnclosurePanelProps) {
       )}
       <BoardViewport
         zoom={zoom}
-        shapes={drawEnclosure(enclosure, holes, new Set(issues.map((i) => i.holeId)))}
+        shapes={view === "drill" ? drawEnclosure(enclosure, holes, new Set(issues.map((i) => i.holeId))) : enclosureArtShapes(enclosure, holes, appearance, title)}
         width={size.w}
         height={size.h}
-        label={`${enclosure.id} 드릴 템플릿`}
-        onDrag={(id, dx, dy) => {
-          // Moves are relative to where the hole was when the drag started.
-          const start = dragStart ?? holes;
-          if (!dragStart) setDragStart(holes);
-          moveHole(start, id, dx, dy);
-        }}
-        onDragEnd={() => setDragStart(null)}
+        label={view === "drill" ? `${enclosure.id} 드릴 템플릿` : `${enclosure.id} 데칼 그래픽`}
+        onDrag={
+          view === "drill"
+            ? (id, dx, dy) => {
+                // Moves are relative to where the hole was when the drag started.
+                const start = dragStart ?? holes;
+                if (!dragStart) setDragStart(holes);
+                moveHole(start, id, dx, dy);
+              }
+            : undefined
+        }
+        onDragEnd={view === "drill" ? () => setDragStart(null) : undefined}
       />
     </div>
   );

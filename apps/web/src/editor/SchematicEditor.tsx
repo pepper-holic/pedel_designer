@@ -413,7 +413,7 @@ export function SchematicEditor() {
           }}
         />
       );
-    if (mode === "build") return <BuildWorkspace parts={parts} blocks={blocks} graph={graph} outputNode={outputNode} />;
+    if (mode === "build") return <BuildWorkspace parts={parts} blocks={blocks} graph={graph} outputNode={outputNode} appearance={appearance} title={title} />;
     return (
       <div className="design-workspace">
         <LibraryPanel

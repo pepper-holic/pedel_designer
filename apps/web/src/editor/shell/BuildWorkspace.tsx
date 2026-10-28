@@ -7,12 +7,15 @@ import { playerSections } from "../player/playerControls";
 import { StripboardPanel } from "../pcb/StripboardPanel";
 import { PcbLayoutPanel } from "../pcb/PcbLayoutPanel";
 import { EnclosurePanel, type BoardSize } from "../pcb/EnclosurePanel";
+import type { PedalAppearance } from "../player/pedalAppearance";
 
 interface BuildWorkspaceProps {
   parts: PartInstance[];
   blocks: BlockInstance[];
   graph: GraphNetlist;
   outputNode: string;
+  appearance: PedalAppearance;
+  title: string;
 }
 
 const STEPS = [
@@ -30,7 +33,7 @@ type Step = (typeof STEPS)[number]["id"];
  * step stays mounted (hidden), so a generated board survives looking at the parts list; the board
  * generated last is what the enclosure is checked against.
  */
-export function BuildWorkspace({ parts, blocks, graph, outputNode }: BuildWorkspaceProps) {
+export function BuildWorkspace({ parts, blocks, graph, outputNode, appearance, title }: BuildWorkspaceProps) {
   const [board, setBoard] = useState<BoardSize | null>(null);
   const [step, setStep] = useState<Step>("bom");
   const controls = playerSections(blocks, parts).flatMap((s) => s.controls.map((c) => ({ label: c.param.label, kind: c.kind })));
@@ -66,7 +69,7 @@ export function BuildWorkspace({ parts, blocks, graph, outputNode }: BuildWorksp
           <PcbLayoutPanel parts={parts} graph={graph} outputNode={outputNode} onBoardSize={(w, h) => setBoard({ w, h, source: "PCB" })} />
         </div>
         <div hidden={step !== "enclosure"}>
-          <EnclosurePanel controls={controls} board={board} />
+          <EnclosurePanel controls={controls} board={board} appearance={appearance} title={title} />
         </div>
       </div>
     </div>

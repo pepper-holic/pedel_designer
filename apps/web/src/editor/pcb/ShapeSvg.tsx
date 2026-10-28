@@ -84,7 +84,17 @@ export function ShapeSvg({ shapes, width, height, scale, label, onHoleClick, onD
             );
           case "text":
             return (
-              <text key={i} x={s.x} y={s.y} fontSize={s.size} fill={s.fill} textAnchor={s.anchor} fontWeight={s.bold ? 600 : undefined} pointerEvents="none">
+              <text
+                key={i}
+                x={s.x}
+                y={s.y}
+                fontSize={s.size}
+                fill={s.fill}
+                textAnchor={s.anchor}
+                fontWeight={s.bold ? 600 : undefined}
+                fontFamily={s.fontFamily}
+                pointerEvents="none"
+              >
                 {s.text}
               </text>
             );

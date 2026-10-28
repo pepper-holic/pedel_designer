@@ -9,7 +9,7 @@ export type Shape =
   | { kind: "rect"; x: number; y: number; w: number; h: number; fill: string; stroke?: string; sw?: number; rx?: number; opacity?: number; part?: string }
   | { kind: "circle"; cx: number; cy: number; r: number; fill: string; stroke?: string; sw?: number; part?: string; hole?: Hole }
   | { kind: "line"; x1: number; y1: number; x2: number; y2: number; stroke: string; sw: number; part?: string; dash?: number }
-  | { kind: "text"; x: number; y: number; text: string; size: number; fill: string; anchor?: "start" | "middle" | "end"; bold?: boolean };
+  | { kind: "text"; x: number; y: number; text: string; size: number; fill: string; anchor?: "start" | "middle" | "end"; bold?: boolean; fontFamily?: string };
 
 export type BoardSide = "component" | "copper";
 
@@ -160,7 +160,7 @@ export function shapesToSvg(shapes: Shape[], widthUnits: number, heightUnits: nu
         case "line":
           return `<line x1="${s.x1}" y1="${s.y1}" x2="${s.x2}" y2="${s.y2}" stroke="${s.stroke}" stroke-width="${s.sw}" stroke-linecap="round"${s.dash ? ` stroke-dasharray="${s.dash} ${s.dash}"` : ""}/>`;
         case "text":
-          return `<text x="${s.x}" y="${s.y}" font-size="${s.size}" fill="${s.fill}" font-family="sans-serif"${s.anchor ? ` text-anchor="${s.anchor}"` : ""}${s.bold ? ' font-weight="600"' : ""}>${escapeXml(s.text)}</text>`;
+          return `<text x="${s.x}" y="${s.y}" font-size="${s.size}" fill="${s.fill}" font-family="${s.fontFamily ?? "sans-serif"}"${s.anchor ? ` text-anchor="${s.anchor}"` : ""}${s.bold ? ' font-weight="600"' : ""}>${escapeXml(s.text)}</text>`;
       }
     })
     .join("\n");
