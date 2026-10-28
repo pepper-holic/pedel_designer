@@ -212,7 +212,18 @@ export function routeWires(requests: RouteRequest[], obstacles: Rect[], options:
     // bend and both ends want it on the same axis, honoring the START's stub and honoring the GOAL's
     // stub are otherwise exactly tied in cost - this breaks the tie toward the one the wire actually
     // leaves from, which is what reads as "a short straight run, then it bends" when drawn.
-    const startAxisPenalty = bendCost + 1;
+    //
+    // Two parts sitting exactly in line (same column or row - e.g. feedback elements stacked directly
+    // above an op-amp) are a special case: the direct connection between them is already a dead-straight
+    // line, so the ordinary penalty above never outweighs it, and the wire skips its own lead entirely -
+    // reading as if it teleports out of the part sideways. Charge much more for that one specific
+    // situation (a pin whose own axis doesn't match the only zero-bend path), so it takes a short stub
+    // out and back instead; everywhere else (the common case: two points that aren't perfectly aligned,
+    // where a real alternate route exists) stays at the ordinary tie-break so unrelated routing elsewhere
+    // doesn't sprout pointless jogs.
+    const colinearButWrongAxis =
+      req.axisA !== undefined && ((req.a.x === req.b.x && req.axisA === 0) || (req.a.y === req.b.y && req.axisA === 1));
+    const startAxisPenalty = colinearButWrongAxis ? bendCost + 20 : bendCost + 1;
     let found = -1;
     let expansions = 0;
     while (heap.size > 0 && expansions < maxExpansions) {
