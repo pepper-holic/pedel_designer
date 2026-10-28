@@ -196,16 +196,19 @@ describe("layout quality across every preset", () => {
     // L3 (same-net wires attracted onto a shared track - routing/astar.ts alongBonus): 18.
     // L5 (terminal lead-axis bias - geometry.ts's terminalLeadAxis, astar.ts's axisA/axisB - fixed to
     // actually apply to a wire's real first move rather than its seed bookkeeping; plus straightBias,
-    // a tiny tie-break that pulls an otherwise-equal-cost detour's turn back toward the straight line
-    // between a wire's ends instead of an arbitrary later one): 14. Plan target: <=15 - met.
+    // a tiny tie-break toward the straight line between a wire's ends) + L6 (arrange.ts's
+    // rowAnchorOffset shifts a signal source PAST its row instead of up to it, so its pin ends up on
+    // the side of the row away from its own body - the wire runs away from the body on its way to the
+    // row, not through it, so no detour-around-the-body is needed even with a visible stub): 13.
+    // Plan target: <=15 - met.
     expect(totalCrossings).toBeLessThanOrEqual(15);
     // L3 target: same node drawn as one trunk, not two parallel lines a few px apart. A handful of
     // multi-diode clipping networks the op-amp template doesn't recognize (L2's scope) still draw a
     // net's branches as separate nearby runs rather than merging onto one; tracked here so further
     // routing work (or a future L2 extension) can be measured against this count.
-    // L5 traded a few more of these (21 -> 25) for far fewer crossings and no more loop-back zigzags -
-    // each terminal now reliably gets a straight stub, which was the more visible defect.
-    expect(totalDuplicates).toBeLessThanOrEqual(26);
+    // L5/L6 traded a few more of these (21 -> 26) for far fewer crossings and no more loop-back
+    // zigzags or body detours - each terminal now reliably gets a straight stub.
+    expect(totalDuplicates).toBeLessThanOrEqual(28);
   });
 });
 
@@ -268,19 +271,21 @@ describe("node-level wiring (L3)", () => {
 });
 
 describe("row-anchored source placement (L6)", () => {
-  it("shifts a signal vsource down close to the row it's placed on, but leaves a short stub rather than flushing its pin flat onto it", () => {
+  it("shifts a signal vsource PAST the row, so its own pin ends up on the far side from its body", () => {
     const preset = presets.find((p) => p.id === "rat-style-distortion")!;
     const { snapshot } = loadPedalPreset(preset);
     const arranged = arrangeParts(snapshot, "V1");
     const byId = new Map(arranged.parts.map((p) => [p.id, p]));
     const v1 = byId.get("V1")!;
     const rin = byId.get("Rin")!;
-    const gap = terminalPosition(rin, "a").y - terminalPosition(v1, "positive").y;
-    expect(gap).toBeGreaterThan(0); // still off the row - a bend is still needed
-    expect(gap).toBeLessThan(30); // but much closer than the part's own unshifted centre was
+    // The pin sits BELOW Rin's row (overshooting flush), not above it - so the wire runs away from
+    // V1's own body on its way up to the row, instead of toward it.
+    const gap = terminalPosition(v1, "positive").y - terminalPosition(rin, "a").y;
+    expect(gap).toBeGreaterThan(0);
+    expect(gap).toBeLessThan(30);
   });
 
-  it("leaves the connecting wire a short stub off V1's own pin, clears V1's own round body, then runs straight into Rin - not a long detour, and not a flush zero-bend line either", () => {
+  it("leaves V1 running straight up off its own pin - away from its body, not through it - then one bend into Rin", () => {
     const preset = presets.find((p) => p.id === "rat-style-distortion")!;
     const { snapshot } = loadPedalPreset(preset);
     const arranged = arrangeParts(snapshot, "V1");
@@ -289,14 +294,9 @@ describe("row-anchored source placement (L6)", () => {
     const routes = wireRoutes(arranged.wires, arranged.parts, buildCanvasEndpoints(arranged.parts, arranged.blocks, netOf), netOf, false);
     const rw0 = routes.find((r) => r.wire.a.partId === "V1" && r.wire.b.partId === "Rin")!;
     const pts = rw0.points;
-    // V1's own round body leaves almost no clear air directly below its pin, so even a short vertical
-    // stub still has to jog sideways first to clear the body before it can drop to Rin's row - that
-    // jog should stay short and close to V1, not wander most of the way to Rin before turning.
-    expect(pts[pts.length - 1].y).toBe(pts[pts.length - 2].y); // arrives at Rin on a straight run
-    const v1 = arranged.parts.find((p) => p.id === "V1")!;
-    const rin = arranged.parts.find((p) => p.id === "Rin")!;
-    const turnX = pts.find((p) => p.x !== pts[0].x)!.x;
-    expect(turnX - v1.x).toBeLessThan((rin.x - v1.x) / 2);
+    expect(pts).toHaveLength(3); // exactly one bend - no detour around V1's own body needed
+    expect(pts[0].x).toBe(pts[1].x); // leaves V1 vertically, along its own lead
+    expect(pts[1].y).toBe(pts[2].y); // then one straight run into Rin
   });
 
   it("leaves a power/bias source's own centre on the row - it isn't part of the signal spine", () => {

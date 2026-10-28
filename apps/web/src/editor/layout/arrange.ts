@@ -18,22 +18,25 @@ const GROUND_OFFSET_Y = 70;
 /** See spineLayout: the signal path prefers amplifiers, avoids diodes. */
 const SPINE_WEIGHT: Partial<Record<PartInstance["type"], number>> = { opamp: 1, bjt: 1, jfet: 1, coupledInductors: 2, diode: 6 };
 
-/** How much of a part's own lead stays visible above/below the row instead of being flushed flat onto
- * it. A real schematic always shows a short straight run off a pin before a wire bends onto a
- * different axis - flushing all the way to zero would erase that and read as the wire just teleporting
- * sideways out of the part, not as a lead that happens to bend. */
+/** How far a signal source's pin ends up on the FAR side of its row from its own body, instead of
+ * flush with it. A real schematic always shows a short straight run off a pin before a wire bends onto
+ * a different axis - flushing to zero would erase that. Overshooting (rather than stopping short of
+ * flush) matters because the part's own round body sits only on ONE side of its pin: stopping short
+ * still leaves the wire's path toward the row passing through that body, forcing a detour around it.
+ * Push the pin all the way past the row instead, and the wire runs AWAY from the body the whole way -
+ * same short visible stub, no detour. */
 const ROW_ANCHOR_STUB = 20;
 
 /** Row placement lines a part's CENTRE up with its row - fine for a resistor/cap/diode, whose two
  * terminals sit level with its centre, but a signal source's output pin sits off to one side of its
  * own symbol (vsource's "positive" is drawn above centre). Left as-is, the wire into the next part has
  * to detour around the source's own body just to clear it before it can turn toward its target - this
- * returns how far to shift the part so its OWN connecting pin lands close to the row (leaving a short,
- * deliberate stub of ROW_ANCHOR_STUB) instead of far off it. */
+ * returns how far to shift the part so its OWN connecting pin lands ROW_ANCHOR_STUB past the row, on
+ * the side away from its body. */
 export function rowAnchorOffset(part: PartInstance): number {
   if (part.type !== "vsource" || part.role === "supply" || part.role === "bias") return 0;
   const gap = part.y - terminalPosition(part, "positive").y; // +30 when the pin sits above centre
-  return Math.sign(gap || 1) * Math.max(0, Math.abs(gap) - ROW_ANCHOR_STUB);
+  return Math.sign(gap || 1) * (Math.abs(gap) + ROW_ANCHOR_STUB);
 }
 
 interface Group {
