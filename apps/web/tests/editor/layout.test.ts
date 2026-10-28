@@ -34,13 +34,23 @@ describe("router", () => {
     ]);
   });
 
-  it("leaves/arrives along the terminal's own lead direction instead of bending right at the pin (L5)", () => {
-    const [route] = routeWires([{ a: { x: 0, y: 0 }, b: { x: 100, y: 100 }, net: "n", dirA: 1, dirB: 0 }], []);
+  it("leaves/arrives along the terminal's own lead axis instead of bending right at the pin (L5)", () => {
+    const [route] = routeWires([{ a: { x: 0, y: 0 }, b: { x: 100, y: 100 }, net: "n", axisA: 1, axisB: 0 }], []);
     expect(route).toEqual([
       { x: 0, y: 0 },
       { x: 0, y: 100 },
       { x: 100, y: 100 },
     ]);
+  });
+
+  it("doesn't force a specific direction on that axis - arriving from either side is free, so a nearby goal doesn't loop back on itself (L5)", () => {
+    // A naive "exact direction" bias (rather than axis-only) would force the wire to approach b from
+    // further +x and double back, since b's own lead happens to point -x; axis-only lets it take the
+    // natural, shortest route and still arrive on a horizontal final run.
+    const [route] = routeWires([{ a: { x: 0, y: 0 }, b: { x: 100, y: 20 }, net: "n", axisB: 0 }], []);
+    expect(route).toHaveLength(3); // exactly one bend, not a detour-and-loop-back
+    const last = route!;
+    expect(last[last.length - 1].y).toBe(last[last.length - 2].y); // final run is horizontal
   });
 
   it("puts a second net on its own track rather than on top of the first", () => {
@@ -160,16 +170,18 @@ describe("layout quality across every preset", () => {
     // Baseline before Stage C (flat layout, plain 2-bend wires): 64 crossings.
     // L1 (part orientation pass): 23. L2 (op-amp stage template): 19.
     // L3 (same-net wires attracted onto a shared track - routing/astar.ts alongBonus): 18.
-    // L5 (terminal lead-direction bias - geometry.ts's terminalExitDirection, astar.ts's dirA/dirB): 19
-    // crossings (+1; a few routes now take a stub-then-bend instead of a bend-at-the-pin shortcut).
-    // Plan target: <=15.
-    expect(totalCrossings).toBeLessThanOrEqual(20);
+    // L5 (terminal lead-axis bias - geometry.ts's terminalLeadAxis, astar.ts's axisA/axisB): 13 (-5;
+    // a pin's own lead axis, not an exact direction, is free - so the router no longer loops a wire
+    // back on itself to force one particular side of that axis, which also means fewer bends overall).
+    // Plan target: <=15 - already met.
+    expect(totalCrossings).toBeLessThanOrEqual(15);
     // L3 target: same node drawn as one trunk, not two parallel lines a few px apart. A handful of
     // multi-diode clipping networks the op-amp template doesn't recognize (L2's scope) still draw a
     // net's branches as separate nearby runs rather than merging onto one; tracked here so further
     // routing work (or a future L2 extension) can be measured against this count.
-    // L5 also pulled several of these onto a shared stub direction, cutting it 21 -> 18.
-    expect(totalDuplicates).toBeLessThanOrEqual(18);
+    // L5 traded a few more of these (21 -> 25) for far fewer crossings and no more loop-back zigzags -
+    // each terminal now reliably gets a straight stub, which was the more visible defect.
+    expect(totalDuplicates).toBeLessThanOrEqual(26);
   });
 });
 

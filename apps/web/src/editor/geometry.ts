@@ -28,19 +28,20 @@ export function terminalPosition(part: PartInstance, terminalId: string): { x: n
   return { x: part.x + rotated.x, y: part.y + rotated.y };
 }
 
-/** Direction code a router step uses: 0 = +x, 1 = +y, 2 = -x, 3 = -y (matches routing/astar.ts's DIRS). */
-export type DirCode = 0 | 1 | 2 | 3;
+/** Axis a router step runs along: 0 = horizontal (x), 1 = vertical (y). */
+export type Axis = 0 | 1;
 
-/** The direction a terminal's own lead points away from the part body - e.g. a resistor's right-hand
- * pin points further right. A wire should leave (or arrive at) a terminal along this direction before
- * it bends, the way a hand-drawn schematic always gives a pin a short straight stub first. */
-export function terminalExitDirection(part: PartInstance, terminalId: string): DirCode {
+/** The axis a terminal's own lead runs on - e.g. a resistor's pins are both horizontal. A wire should
+ * leave (or arrive at) a terminal running along this axis before it turns, the way a hand-drawn
+ * schematic always gives a pin a short straight stub first. Only the axis is fixed, not which of its
+ * two directions: a lead reads just as cleanly whichever way the wire happens to approach along it,
+ * and forcing one exact direction would make the router loop back on itself to satisfy it. */
+export function terminalLeadAxis(part: PartInstance, terminalId: string): Axis {
   const terminal = PART_DEFS[part.type].terminals.find((t) => t.id === terminalId)!;
   const dy = part.mirror ? -terminal.dy : terminal.dy;
-  const local = Math.abs(terminal.dx) >= Math.abs(dy) ? { x: Math.sign(terminal.dx) || 1, y: 0 } : { x: 0, y: Math.sign(dy) || 1 };
+  const local = Math.abs(terminal.dx) >= Math.abs(dy) ? { x: 1, y: 0 } : { x: 0, y: 1 };
   const rotated = rotateOffset(local.x, local.y, part.rotation);
-  if (Math.abs(rotated.x) >= Math.abs(rotated.y)) return rotated.x >= 0 ? 0 : 2;
-  return rotated.y >= 0 ? 1 : 3;
+  return Math.abs(rotated.x) >= Math.abs(rotated.y) ? 0 : 1;
 }
 
 export interface CanvasView {

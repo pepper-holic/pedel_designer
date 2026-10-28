@@ -12,11 +12,11 @@ export interface RouteRequest {
   b: Point;
   /** Wires of the same net may share track; different nets pay to overlap. */
   net: string;
-  /** Preferred direction code (0=+x,1=+y,2=-x,3=-y, matches DIRS) to leave `a` / arrive at `b` along -
-   * a terminal's own lead direction (geometry.ts's terminalExitDirection). Discouraged, not forbidden:
-   * a wire can still bend right at the pin if that's the only way through. */
-  dirA?: 0 | 1 | 2 | 3;
-  dirB?: 0 | 1 | 2 | 3;
+  /** Preferred axis (0=horizontal,1=vertical) to leave `a` / arrive at `b` along - a terminal's own
+   * lead axis (geometry.ts's terminalLeadAxis). Only the axis is fixed, not the direction along it:
+   * discouraged, not forbidden, a wire can still bend right at the pin if that's the only way through. */
+  axisA?: 0 | 1;
+  axisB?: 0 | 1;
 }
 
 export interface RouterOptions {
@@ -176,13 +176,13 @@ export function routeWires(requests: RouteRequest[], obstacles: Rect[], options:
     const gy = Math.floor(goal / cols);
     const h = (c: number) => Math.abs((c % cols) - gx) + Math.abs(Math.floor(c / cols) - gy);
     const heap = new Heap();
-    // A terminal's own lead direction gets a free start; leaving any other way costs a bend, the same
-    // as turning mid-path - so the wire takes a short straight stub off the pin before it bends, like a
-    // hand-drawn schematic, instead of bending right at the terminal.
+    // Leaving along a terminal's own lead axis (either direction on it) gets a free start; leaving
+    // across it costs a bend, the same as turning mid-path - so the wire takes a short straight stub
+    // off the pin before it bends, like a hand-drawn schematic, instead of bending right at the terminal.
     for (let d = 0; d < 4; d++) {
       const s = start * 4 + d;
       stamp[s] = epoch;
-      gScore[s] = req.dirA !== undefined && d !== req.dirA ? bendCost : 0;
+      gScore[s] = req.axisA !== undefined && ((d % 2) as 0 | 1) !== req.axisA ? bendCost : 0;
       cameFrom[s] = -1;
       heap.push(s, gScore[s] + h(start));
     }
@@ -214,9 +214,9 @@ export function routeWires(requests: RouteRequest[], obstacles: Rect[], options:
         const across = horizontal ? vOcc[nc] : hOcc[nc];
         if (along) cost += along === net ? -alongBonus : overlapCost;
         if (across && across !== net) cost += crossCost;
-        // Symmetric with the start bias: arriving at the goal along its own lead direction is free,
-        // any other arrival angle costs a bend - so the far end gets a straight stub too.
-        if (nc === goal && req.dirB !== undefined && nd !== req.dirB) cost += bendCost;
+        // Symmetric with the start bias: arriving at the goal along its own lead axis is free, crossing
+        // it costs a bend - so the far end gets a straight stub too.
+        if (nc === goal && req.axisB !== undefined && ((nd % 2) as 0 | 1) !== req.axisB) cost += bendCost;
         const ns = nc * 4 + nd;
         const tentative = base + cost;
         if (stamp[ns] === epoch && gScore[ns] <= tentative) continue;

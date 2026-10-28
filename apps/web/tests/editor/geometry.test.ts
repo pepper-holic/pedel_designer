@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { snapToGrid, rotateClockwise, rotateOffset, terminalPosition, terminalExitDirection, orthogonalPath, computeWirePaths, zoomAroundPoint, fitView, GRID_SIZE } from "../../src/editor/geometry";
+import { snapToGrid, rotateClockwise, rotateOffset, terminalPosition, terminalLeadAxis, orthogonalPath, computeWirePaths, zoomAroundPoint, fitView, GRID_SIZE } from "../../src/editor/geometry";
 import type { PartInstance } from "../../src/editor/types";
 import type { Point } from "../../src/editor/geometry";
 
@@ -58,24 +58,24 @@ describe("terminalPosition", () => {
   });
 });
 
-describe("terminalExitDirection", () => {
-  it("points along a two-terminal part's own axis", () => {
+describe("terminalLeadAxis", () => {
+  it("reads a two-terminal part's own axis - both pins run horizontal", () => {
     const part: PartInstance = { id: "R1", type: "resistor", x: 0, y: 0, rotation: 0, params: { resistance: 1000 } };
-    expect(terminalExitDirection(part, "a")).toBe(2); // local (-30, 0): leaves to the left
-    expect(terminalExitDirection(part, "b")).toBe(0); // local (30, 0): leaves to the right
+    expect(terminalLeadAxis(part, "a")).toBe(0); // local (-30, 0)
+    expect(terminalLeadAxis(part, "b")).toBe(0); // local (30, 0)
   });
 
   it("follows the part's rotation", () => {
     const part: PartInstance = { id: "R1", type: "resistor", x: 0, y: 0, rotation: 90, params: { resistance: 1000 } };
-    expect(terminalExitDirection(part, "b")).toBe(1); // +x rotated 90 degrees clockwise -> +y
+    expect(terminalLeadAxis(part, "b")).toBe(1); // horizontal local axis rotated 90 degrees -> vertical
   });
 
-  it("mirrors dy before picking the dominant axis", () => {
-    // opamp inMinus is at local (-35, 15), dominant axis x (|-35| > |15|): leaves left either way.
+  it("is unaffected by mirror - flipping dy doesn't change which axis is dominant", () => {
+    // opamp inMinus is at local (-35, 15), dominant axis x (|-35| > |15|) either way.
     const plain: PartInstance = { id: "U1", type: "opamp", x: 0, y: 0, rotation: 0, params: {} };
     const mirrored: PartInstance = { id: "U1", type: "opamp", x: 0, y: 0, rotation: 0, mirror: true, params: {} };
-    expect(terminalExitDirection(plain, "inMinus")).toBe(2);
-    expect(terminalExitDirection(mirrored, "inMinus")).toBe(2);
+    expect(terminalLeadAxis(plain, "inMinus")).toBe(0);
+    expect(terminalLeadAxis(mirrored, "inMinus")).toBe(0);
   });
 });
 
