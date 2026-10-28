@@ -9,7 +9,7 @@ import type { CircuitSnapshot } from "../historyStack";
 import type { PartInstance } from "../types";
 
 const COLUMN_SPACING = 160;
-const ROW_SPACING = 150;
+const ROW_SPACING = 130;
 /** Space between neighbouring blocks - room for a block's region padding and its label. */
 const GROUP_GAP_X = 120;
 const GROUP_GAP_Y = 130;
