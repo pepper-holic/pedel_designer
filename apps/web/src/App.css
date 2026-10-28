@@ -1830,6 +1830,25 @@ p.drc-error {
   overflow: auto;
 }
 
+/* Wraps the pedal graphic and its caption as one column, so the caption sits under the card
+   instead of beside it in .player-view's row, and the pair sizes together within that row. */
+.pedal-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 0 1 auto;
+}
+
+/* The caption real pedal faces don't have: which block each row of knobs belongs to. Plain,
+   muted, outside the coloured card - not screen-printed onto the "metal" like the knob labels. */
+.pedal-caption {
+  max-width: 320px;
+  font-size: var(--fs-xs);
+  color: var(--text-dim);
+  text-align: center;
+}
+
 /* Pedal-shaped: controls along the top, footswitch at the bottom, everything centred. Colours and
    font come from the pedal's own --pedal-* custom properties (PlayerView sets them inline from
    PedalAppearance) - the var(..., fallback) keeps a circuit that never touched its appearance
@@ -1837,11 +1856,13 @@ p.drc-error {
 .pedal-face {
   /* Hugs its content instead of always claiming 620px: a one-knob circuit got exactly as much
      empty card as a five-knob one. `width: fit-content` (not a flex-basis) sizes it to whatever's
-     actually inside, clamped between min/max so it neither looks cramped nor runs away wide. */
-  flex: 0 1 auto;
+     actually inside, clamped between min/max so it neither looks cramped nor runs away wide.
+     `aspect-ratio` then makes that width read as an actual stompbox, not a wide slab: the footer's
+     own `margin-top: auto` pushes the footswitch down to fill whatever height that ratio adds. */
   width: fit-content;
   min-width: 240px;
   max-width: 620px;
+  aspect-ratio: 2 / 3;
   align-items: center;
   text-align: center;
   display: flex;
@@ -2146,13 +2167,13 @@ p.drc-error {
     justify-content: flex-start;
   }
   /* Once the row above flips to a column, .pedal-face's own `overflow-y: auto` resets its flex
-     min-height to 0 (the spec's automatic-minimum-size rule only keeps a flex item from shrinking
-     below its content when overflow is visible) - so flex-shrink crushes it down to whatever's left
-     over after .player-side, instead of sizing to its content. The result: the knob and footswitch
-     render at near-zero height, underneath/behind the chart below them, both effectively invisible
-     and unclickable. flex-shrink: 0 stops that - .player-view's own overflow: auto already lets the
-     whole column scroll if it's taller than the viewport. */
-  .pedal-face {
+     min-height to 0 inside .pedal-stage (the spec's automatic-minimum-size rule only keeps a flex
+     item from shrinking below its content when overflow is visible) - so flex-shrink crushes the
+     stage down to whatever's left over after .player-side, instead of sizing to its content. The
+     result: the knob and footswitch render at near-zero height, underneath/behind the chart below
+     them, both effectively invisible and unclickable. flex-shrink: 0 stops that - .player-view's own
+     overflow: auto already lets the whole column scroll if it's taller than the viewport. */
+  .pedal-stage {
     flex: 0 0 auto;
   }
   .player-side {

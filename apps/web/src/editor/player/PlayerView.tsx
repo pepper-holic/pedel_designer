@@ -84,40 +84,44 @@ export function PlayerView(props: PlayerViewProps) {
 
   return (
     <div className="player-view" data-player-view>
-      <div className="pedal-face" style={faceStyle}>
-        <PedalAppearanceEditor appearance={appearance} onChange={props.onAppearanceChange} />
-        <div className="pedal-title">{props.title}</div>
-        {sections.length === 0 ? (
-          <p className="canvas-hint">
-            노출된 노브나 스위치가 없습니다. 회로도에서 블록을 선택하고 블록 인스펙터에서 파라미터를 노출하거나, 가변저항·스위치를 배치하세요.
-          </p>
-        ) : (
-          <div className="pedal-sections">
-            {sections.map((section) => (
-              <section key={section.id} className="pedal-section" aria-label={section.label}>
-                <h3>{section.label}</h3>
-                <div className="pedal-controls">
-                  {section.controls.map((control) => (
-                    <Control key={control.param.id} control={control} onSetControl={props.onSetControl} />
-                  ))}
-                </div>
-              </section>
-            ))}
+      <div className="pedal-stage">
+        <div className="pedal-face" style={faceStyle}>
+          <PedalAppearanceEditor appearance={appearance} onChange={props.onAppearanceChange} />
+          <div className="pedal-title">{props.title}</div>
+          {sections.length === 0 ? (
+            <p className="canvas-hint">
+              노출된 노브나 스위치가 없습니다. 회로도에서 블록을 선택하고 블록 인스펙터에서 파라미터를 노출하거나, 가변저항·스위치를 배치하세요.
+            </p>
+          ) : (
+            <div className="pedal-sections">
+              {sections.map((section) => (
+                <section key={section.id} className="pedal-section" aria-label={section.label}>
+                  <div className="pedal-controls">
+                    {section.controls.map((control) => (
+                      <Control key={control.param.id} control={control} onSetControl={props.onSetControl} />
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          )}
+          <div className="pedal-footer">
+            <span className={`pedal-led${realtime.active ? " pedal-led-on" : ""}`} aria-hidden="true" />
+            <button
+              type="button"
+              className="pedal-footswitch"
+              aria-pressed={realtime.active}
+              aria-label="실시간 재생 (풋스위치)"
+              disabled={!realtime.supported}
+              onClick={realtime.onToggle}
+              title={realtime.supported ? "밟으면 회로가 실시간으로 울립니다" : "이 브라우저는 실시간 재생을 지원하지 않습니다"}
+            />
+            <span className="pedal-footer-text">{realtime.active ? `ON · 부하 ${load ?? "-"}%` : "OFF"}</span>
           </div>
-        )}
-        <div className="pedal-footer">
-          <span className={`pedal-led${realtime.active ? " pedal-led-on" : ""}`} aria-hidden="true" />
-          <button
-            type="button"
-            className="pedal-footswitch"
-            aria-pressed={realtime.active}
-            aria-label="실시간 재생 (풋스위치)"
-            disabled={!realtime.supported}
-            onClick={realtime.onToggle}
-            title={realtime.supported ? "밟으면 회로가 실시간으로 울립니다" : "이 브라우저는 실시간 재생을 지원하지 않습니다"}
-          />
-          <span className="pedal-footer-text">{realtime.active ? `ON · 부하 ${load ?? "-"}%` : "OFF"}</span>
         </div>
+        {/* The block each row of knobs belongs to - real pedal faces don't print this, so it sits
+            under the pedal graphic instead of inside it. */}
+        {sections.length > 0 && <p className="pedal-caption">{sections.map((s) => s.label).join(" · ")}</p>}
       </div>
 
       <aside className="player-side">
