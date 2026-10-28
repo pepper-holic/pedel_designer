@@ -18,14 +18,22 @@ const GROUND_OFFSET_Y = 70;
 /** See spineLayout: the signal path prefers amplifiers, avoids diodes. */
 const SPINE_WEIGHT: Partial<Record<PartInstance["type"], number>> = { opamp: 1, bjt: 1, jfet: 1, coupledInductors: 2, diode: 6 };
 
+/** How much of a part's own lead stays visible above/below the row instead of being flushed flat onto
+ * it. A real schematic always shows a short straight run off a pin before a wire bends onto a
+ * different axis - flushing all the way to zero would erase that and read as the wire just teleporting
+ * sideways out of the part, not as a lead that happens to bend. */
+const ROW_ANCHOR_STUB = 20;
+
 /** Row placement lines a part's CENTRE up with its row - fine for a resistor/cap/diode, whose two
  * terminals sit level with its centre, but a signal source's output pin sits off to one side of its
  * own symbol (vsource's "positive" is drawn above centre). Left as-is, the wire into the next part has
  * to detour around the source's own body just to clear it before it can turn toward its target - this
- * returns how far to shift the part so its OWN connecting pin, not its drawn centre, lands on the row. */
+ * returns how far to shift the part so its OWN connecting pin lands close to the row (leaving a short,
+ * deliberate stub of ROW_ANCHOR_STUB) instead of far off it. */
 export function rowAnchorOffset(part: PartInstance): number {
   if (part.type !== "vsource" || part.role === "supply" || part.role === "bias") return 0;
-  return part.y - terminalPosition(part, "positive").y;
+  const gap = part.y - terminalPosition(part, "positive").y; // +30 when the pin sits above centre
+  return Math.sign(gap || 1) * Math.max(0, Math.abs(gap) - ROW_ANCHOR_STUB);
 }
 
 interface Group {
