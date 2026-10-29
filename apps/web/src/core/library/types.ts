@@ -115,6 +115,9 @@ export interface PedalPreset {
    * trace of any specific commercial product's exact schematic - `name`/`description` intentionally
    * describe the circuit's *style* rather than naming a trademarked product.
    */
+  /** Present on presets generated from a DIY kit's board (core/library/kits): which kit, and the
+   * pedal it reproduces, so the library can list them as kits. */
+  kit?: { goodsNo: string; kitName: string; motif: string; family: string };
   archive?: {
     /** Public reference material consulted for the general topology/values - not copied text or images. */
     sourceRefs: { label: string; url: string }[];

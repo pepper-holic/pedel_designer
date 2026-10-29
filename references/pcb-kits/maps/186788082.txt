@@ -1,0 +1,65 @@
+id pp-cdos
+goods 186788082
+name CDOS
+motif Colorsound Overdriver
+type overdrive
+desc 2N5088 직결 2단(Q2 이미터→Q1 베이스 150K 바이어스, 드라이브 팟이 Q1 이미터 바이패스 조절) + Q3 반전단의 박산달 액티브 베이스/트레블
+image img_01.jpg
+# Checked against the Pedal Parts UK "Vintage POW!" Overdriver schematic (2015): every connection
+# matches. Values that differ on this kit: Q1 collector 100K (120K), Q1-Q2 Miller cap 500p (220p),
+# the two coupling caps 4.7uF (10uF), Q1 emitter bypass 10uF (22uF); the 100n across the bass pot
+# is not on this board or in its parts list; a 1M input pulldown is added.
+BOM 1M 150Kx2 100K 39K 33K 12K 6.8K 5.6K 4.7Kx2 1.8Kx2 470Rx2 220nx2 100n 10nx2 500p 22uFx3 10uF 4.7uFx2 2N5088x3 A100K B100Kx2 B10K
+io IN=8 OUT=82 V9=5 GND=4
+
+STAGE input input 입력
+C 220n 21 33
+R 1M 15 16
+
+STAGE pre gain 프리앰프 (Q1·Q2 직결)
+Q 2N5088 c=42 b=51 e=59 Q1
+R 100K 9 10
+R 6.8K 58 80
+C 500p 45 61
+Q 2N5088 c=44 b=52 e=60 Q2
+R 1.8K 11 12
+R 470R 62 81
+C 22uF 68 72
+
+STAGE feedback custom 피드백·바이어스
+R 150K 78 79
+R 12K 43 67
+
+STAGE drive custom 드라이브 (Q1 이미터 바이패스)
+C 10uF 66 71
+POT B10K DRIVE 47 63 74   # lug1 at the top ("1" on the silk); signal on lug3 so clockwise lowers the emitter resistance
+
+STAGE tone tone 톤 (박산달 베이스·트레블)
+C 4.7uF 46 36
+R 4.7K 34 35
+R 4.7K 22 23
+POT B100K BASS 27 26 25
+C 10n 28 29
+C 10n 38 39
+POT B100K TREBLE 32 31 30
+R 39K 17 18
+R 5.6K 19 20
+C 100n 37 53
+
+STAGE recovery gain 톤 복원단 (Q3)
+Q 2N5088 c=50 b=54 e=65 Q3
+R 150K 24 40
+R 33K 56 77
+R 1.8K 13 14
+R 470R 55 76
+C 22uF 69 73
+C 4.7uF 41 49
+
+STAGE output output 출력 (레벨)
+C 220n 57 70
+POT A100K LEVEL 75 64 48  # ground on lug1, so clockwise is louder
+
+STAGE power power 전원
+C 22uF 6 7
+# status LED and its resistor are off the audio path
+NC 0 1 2 3 86

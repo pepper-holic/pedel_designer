@@ -7,6 +7,7 @@ import { Icon } from "../ui/Icon";
 import { LibraryRow } from "./library/LibraryRow";
 import { LibraryGroup } from "./library/LibraryGroup";
 import { presetMotif } from "../core/library/presetMotifs";
+import { KIT_FAMILY_ORDER, kitFamilyOf } from "./library/kitFamilies";
 import "./library/library.css";
 
 interface LibraryExplorerProps {
@@ -57,6 +58,9 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
   const isSearching = query.trim().length > 0;
 
   const filteredPresets = useMemo(() => presets.filter((p) => matchesQuery(`${p.name} ${p.description} ${p.category}`, query)), [presets, query]);
+  // Circuits read off DIY kit boards list apart from the hand-written style presets, by family.
+  const filteredStyle = filteredPresets.filter((p) => !p.kit);
+  const filteredKits = filteredPresets.filter((p) => p.kit);
   const filteredBlocks = useMemo(() => BLOCK_DEFS.filter((b) => matchesQuery(`${b.label} ${b.description}`, query)), [query]);
   const filteredUserBlocks = useMemo(() => (userBlocks?.items ?? []).filter((b) => matchesQuery(`${b.label} ${b.description}`, query)), [userBlocks, query]);
   const filteredWiring = useMemo(() => wiringPresets.filter((p) => matchesQuery(`${p.name} ${p.description} ${p.category}`, query)), [wiringPresets, query]);
@@ -65,7 +69,8 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
   // touches exactly the groups actually rendered, not stale keys from a category that ended up empty.
   const allCategoryKeys = useMemo(() => {
     const keys: string[] = [];
-    for (const category of PRESET_CATEGORY_ORDER) if (presets.some((p) => p.category === category)) keys.push(`preset:${category}`);
+    for (const category of PRESET_CATEGORY_ORDER) if (presets.some((p) => !p.kit && p.category === category)) keys.push(`preset:${category}`);
+    for (const [family] of KIT_FAMILY_ORDER) if (presets.some((p) => p.kit && kitFamilyOf(p.kit.family) === family)) keys.push(`kit:${family}`);
     for (const category of WIRING_CATEGORY_ORDER) if (wiringPresets.some((p) => p.category === category)) keys.push(`wiring:${category}`);
     for (const category of BLOCK_CATEGORY_ORDER) if (BLOCK_DEFS.some((b) => b.category === category)) keys.push(`block:${category}`);
     return keys;
@@ -130,9 +135,9 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
         </div>
 
         {sections.includes("presets") && (
-          <LibraryGroup top label="페달 프리셋 (완성된 회로)" count={filteredPresets.length} expanded={topOpen("presets")} onToggle={() => toggleIn(setCollapsedTop, "presets")}>
+          <LibraryGroup top label="페달 프리셋 (완성된 회로)" count={filteredStyle.length} expanded={topOpen("presets")} onToggle={() => toggleIn(setCollapsedTop, "presets")}>
             {PRESET_CATEGORY_ORDER.map((category) => {
-              const items = filteredPresets.filter((p) => p.category === category);
+              const items = filteredStyle.filter((p) => p.category === category);
               if (items.length === 0) return null;
               const key = `preset:${category}`;
               return (
@@ -170,6 +175,25 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
                         />
                       );
                     })}
+                  </div>
+                </LibraryGroup>
+              );
+            })}
+          </LibraryGroup>
+        )}
+
+        {sections.includes("presets") && filteredKits.length > 0 && (
+          <LibraryGroup top label="키트 기판 회로 (페달파츠)" count={filteredKits.length} expanded={topOpen("presets")} onToggle={() => toggleIn(setCollapsedTop, "presets")}>
+            {KIT_FAMILY_ORDER.map(([family, label]) => {
+              const items = filteredKits.filter((p) => kitFamilyOf(p.kit!.family) === family);
+              if (items.length === 0) return null;
+              const key = `kit:${family}`;
+              return (
+                <LibraryGroup key={key} label={label} count={items.length} expanded={categoryOpen(key)} onToggle={() => toggleIn(setCollapsedCategory, key)}>
+                  <div className="library-list">
+                    {items.map((preset) => (
+                      <LibraryRow key={preset.id} name={preset.name} primary={`${preset.kit!.motif} 스타일`} secondary={preset.kit!.kitName} active={preset.id === loadedPresetId} badge="키트" verb="불러오기" onClick={() => selectPreset(preset)} />
+                    ))}
                   </div>
                 </LibraryGroup>
               );

@@ -29,6 +29,7 @@ import { MODES, type WorkMode } from "./shell/modes";
 import { useAnalysisPanels } from "./useAnalysisPanels";
 import type { MonteCarloResult } from "../core/analysis/montecarlo";
 import { presets, type PedalPreset, type PresetVariant } from "../core/library/presets";
+import { kitPresets } from "../core/library/kits";
 import { wiringPresets, type WiringPreset } from "./wiring";
 import { useFrequencyResponse } from "./useFrequencyResponse";
 import { useSelectionState } from "./useSelectionState";
@@ -85,6 +86,8 @@ function loadInitialState(): { snapshot: CircuitSnapshot; outputNode: string; in
     appearance: stored.appearance ?? DEFAULT_APPEARANCE,
   };
 }
+
+const libraryPresets = [...presets, ...kitPresets];
 
 export function SchematicEditor() {
   const initial = useMemo(() => loadInitialState(), []);
@@ -450,7 +453,7 @@ export function SchematicEditor() {
           onAddPart={handleAddPart}
           onAddBlock={blockActions.addLibraryBlock}
           userBlocks={{ items: blockActions.userBlocks, onAdd: blockActions.addUserBlock, onDelete: blockActions.deleteUserBlock }}
-          presets={presets}
+          presets={libraryPresets}
           wiringPresets={wiringPresets}
           loadedPresetId={loadedPresetId}
           onLoadTemplate={handleLoadTemplate}

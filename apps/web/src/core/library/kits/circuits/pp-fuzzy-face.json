@@ -1,0 +1,172 @@
+{
+ "id": "pp-fuzzy-face",
+ "goodsNo": "186788132",
+ "kitName": "FUZZY FACE",
+ "motif": "Fuzz Face",
+ "type": "fuzz",
+ "description": "BC183 실리콘 NPN 2석 직결 퍼즈페이스 - Q2 이미터→Q1 베이스 100K 피드백, 퍼즈 팟+22uF로 Q2 이미터 바이패스, 330R/8.2K 분기점 출력",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "2.2uF",
+   "nodes": [
+    "n1",
+    "in"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "BC183",
+   "nodes": {
+    "e": "0",
+    "b": "n1",
+    "c": "n2"
+   }
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "n2",
+    "vcc"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "BC183C",
+   "nodes": {
+    "e": "n3",
+    "b": "n2",
+    "c": "n4"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "330R",
+   "nodes": [
+    "vcc",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "8.2K",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n3",
+    "n1"
+   ]
+  },
+  {
+   "ref": "FUZZ",
+   "kind": "POT",
+   "value": "B1K",
+   "nodes": [
+    "0",
+    "n6",
+    "n3"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n7",
+    "n5"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A500K",
+   "nodes": [
+    "0",
+    "out",
+    "n7"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "C1",
+    "R1"
+   ]
+  },
+  {
+   "id": "core",
+   "category": "fuzz",
+   "label": "퍼즈 코어 (Q1·Q2 직결)",
+   "parts": [
+    "Q1",
+    "R2",
+    "Q2",
+    "R3",
+    "R4"
+   ]
+  },
+  {
+   "id": "feedback",
+   "category": "custom",
+   "label": "피드백 (Q2 이미터 → Q1 베이스)",
+   "parts": [
+    "R5"
+   ]
+  },
+  {
+   "id": "fuzz",
+   "category": "custom",
+   "label": "퍼즈 (Q2 이미터 바이패스)",
+   "parts": [
+    "FUZZ",
+    "C2"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "C3",
+    "VOLUME"
+   ]
+  }
+ ]
+}
