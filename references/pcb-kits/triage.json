@@ -1,0 +1,7240 @@
+[
+ {
+  "goodsNo": "186788214",
+  "name": "@ KLOUD LIFT Parts pack",
+  "type": "buffer-boost",
+  "about": "LSK389C은 SOIC-8 패키지로 작은 소자입니다. 납땜에 약간 스킬이 필요합니다. 초보이신 분들은 납땜 옵션을 선택하세요 위치를 조정하고 ",
+  "board": 0,
+  "image": "img_00.jpg",
+  "sameBoardAs": null,
+  "bomImages": [],
+  "pads": 7,
+  "groundPads": 6,
+  "nets": 2,
+  "multiPadNets": 1,
+  "loneNonGroundPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 12088,
+  "topLayerPixels": 9511,
+  "size": [
+   700,
+   417
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787697",
+  "name": "[1K] BOMB Parts pack",
+  "type": "buffer-boost",
+  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 제이에이치에스",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [],
+  "pads": 24,
+  "groundPads": 9,
+  "nets": 8,
+  "multiPadNets": 6,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 807,
+  "topLayerPixels": 3954,
+  "size": [
+   241,
+   271
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787695",
+  "name": "[1K] LPB1 Parts pack",
+  "type": "buffer-boost",
+  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 일렉트로하모닉",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 31,
+  "groundPads": 10,
+  "nets": 8,
+  "multiPadNets": 8,
+  "loneNonGroundPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1911,
+  "topLayerPixels": 5760,
+  "size": [
+   286,
+   278
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186788132",
+  "name": "@ FUZZY FACE Parts pack",
+  "type": "fuzz",
+  "about": "앵글 팟을 이용하여 제작하기 쉽게 준비되었습니다. 구매 가능한 상태입니다 B1K가변저항이 이런 경우가 있으나 B1K가 맞으니 안심하고 제작하세요",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [],
+  "pads": 33,
+  "groundPads": 8,
+  "nets": 11,
+  "multiPadNets": 11,
+  "loneNonGroundPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 10975,
+  "size": [
+   600,
+   257
+  ],
+  "twoLayer": false,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787689",
+  "name": "@ Jay Buffer Parts Pack",
+  "type": "buffer-boost",
+  "about": "제이에이치에스 리틀 블랙 오피앰프 버퍼입니다. 아주 작은 사이즈로 1590LB, 1590A케이스에 사용 가능합니다. 버퍼는 이펙팅 효과는 없기 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [],
+  "pads": 35,
+  "groundPads": 11,
+  "nets": 9,
+  "multiPadNets": 8,
+  "loneNonGroundPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1404,
+  "topLayerPixels": 3818,
+  "size": [
+   286,
+   279
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186788027",
+  "name": "@ Green Giant Parts pack",
+  "type": "overdrive",
+  "about": "그리어 앰프 그린 자이언트 드라이브 페달입니다. 단순한 회로로 원초적인 드라이브 질감입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 35,
+  "groundPads": 10,
+  "nets": 11,
+  "multiPadNets": 10,
+  "loneNonGroundPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 539,
+  "topLayerPixels": 6843,
+  "size": [
+   362,
+   263
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186788277",
+  "name": "@ FUZZY FACE 풀키트 (노브, 케이스 제외)",
+  "type": "fuzz",
+  "about": "풀키트로 구성되어 있습니다.케이스와노브는추가하셔야합니다. (풋스위치,풋스위치기판,풀림방지와셔,디씨잭,배터리스냅,박스잭,3파이LED,보호저항) 케",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [],
+  "pads": 35,
+  "groundPads": 9,
+  "nets": 11,
+  "multiPadNets": 11,
+  "loneNonGroundPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 14427,
+  "size": [
+   700,
+   251
+  ],
+  "twoLayer": false,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787694",
+  "name": "[1K] ANDY Parts pack",
+  "type": "buffer-boost",
+  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 앤디 플러스 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 36,
+  "groundPads": 11,
+  "nets": 8,
+  "multiPadNets": 7,
+  "loneNonGroundPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1456,
+  "topLayerPixels": 5574,
+  "size": [
+   286,
+   279
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787696",
+  "name": "[1K] JTM Parts pack",
+  "type": "overdrive",
+  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 러브페달 JT",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 37,
+  "groundPads": 12,
+  "nets": 9,
+  "multiPadNets": 8,
+  "loneNonGroundPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1653,
+  "topLayerPixels": 6840,
+  "size": [
+   286,
+   279
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787844",
+  "name": "@ Arrow Booster Parts pack",
+  "type": "buffer-boost",
+  "about": "기본적으로 톤을 밝게 해주는 부스터 페달이며 퍼즈 페달의 어두운 톤에 선명함을 주고 싶을때 사용하는 용도입니다.",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 37,
+  "groundPads": 11,
+  "nets": 9,
+  "multiPadNets": 9,
+  "loneNonGroundPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1599,
+  "topLayerPixels": 5262,
+  "size": [
+   421,
+   226
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186788026",
+  "name": "@ Green Ghetto Parts pack",
+  "type": "overdrive",
+  "about": "그리어 앰프 게토 드라이브 페달입니다. 단순한 회로로 원초적인 드라이브 질감입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 39,
+  "groundPads": 12,
+  "nets": 12,
+  "multiPadNets": 10,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1290,
+  "topLayerPixels": 8478,
+  "size": [
+   541,
+   211
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787513",
+  "name": "@ Pete Buffer Parts Pack",
+  "type": "buffer-boost",
+  "about": "Pete Buffer Parts Pack 피트코니시 페달 초단에 있는 안정적 구성의 TR버퍼입니다. 1590LB케이스에는 장착이 어렵습니다. 최",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 41,
+  "groundPads": 8,
+  "nets": 12,
+  "multiPadNets": 10,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2025,
+  "topLayerPixels": 6894,
+  "size": [
+   341,
+   244
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186788663",
+  "name": "@ LONESTAR FUZZ Parts pack",
+  "type": "fuzz",
+  "about": "스티비 레이 본의 퍼즈페이스를 직접 수리, 모디해준걸로 알려진 시저 디아즈(Cesar Diaz)가 그의 퍼즈페이스에 적용되었던 사항들을 반영해서",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 41,
+  "groundPads": 11,
+  "nets": 12,
+  "multiPadNets": 10,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1941,
+  "topLayerPixels": 22007,
+  "size": [
+   800,
+   422
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787690",
+  "name": "[1K] FUZZ Parts pack",
+  "type": "fuzz",
+  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 2N2222를",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 42,
+  "groundPads": 11,
+  "nets": 11,
+  "multiPadNets": 11,
+  "loneNonGroundPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1918,
+  "topLayerPixels": 9368,
+  "size": [
+   316,
+   286
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787692",
+  "name": "[1K] WRECK Parts pack",
+  "type": "distortion",
+  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 웸플러 트라이",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 43,
+  "groundPads": 10,
+  "nets": 12,
+  "multiPadNets": 11,
+  "loneNonGroundPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 585,
+  "topLayerPixels": 10747,
+  "size": [
+   316,
+   279
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186788504",
+  "name": "@ MUFF KILLER Parts pack",
+  "type": "fuzz",
+  "about": "Devi Ever FX 에서 빅머프 킬러라는 별명의 거친 퍼즈입니다 특이하게 버전2에 오실레이션 콘트롤이 있는데 이것은 톤을 만드는데 관련은 없",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [],
+  "pads": 47,
+  "groundPads": 7,
+  "nets": 15,
+  "multiPadNets": 13,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1035,
+  "topLayerPixels": 19270,
+  "size": [
+   700,
+   382
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186788537",
+  "name": "@ DB BOX-1 Parts pack",
+  "type": "buffer-boost",
+  "about": "단 한번도 리버스 되지 않은 덤블에서 제작한 부스트 페달이고 존메이어의 기어로도 유명합니 다. JHS가 존메이어에게서 페달들을 빌려 리버스해서 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 48,
+  "groundPads": 11,
+  "nets": 16,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 14341,
+  "size": [
+   700,
+   338
+  ],
+  "twoLayer": false,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186788500",
+  "name": "@ SODA Master Parts pack",
+  "type": "fuzz",
+  "about": "Devi Ever FX 에서 나온 거친 퍼즈입니다. 기타와 베이스에 사용가능한 굉장히 거칠도 하이게인을 지향하는 퍼즈입니다 스매쉬펌킨즈같은 톤으",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 51,
+  "groundPads": 11,
+  "nets": 15,
+  "multiPadNets": 13,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 948,
+  "topLayerPixels": 13077,
+  "size": [
+   700,
+   300
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186788501",
+  "name": "@ FUZZ Master Parts pack",
+  "type": "fuzz",
+  "about": "Devi Ever FX 에서 나온 거친 퍼즈입니다. SODA Master와 기판을 공유하며 Q4의 2N2907A를 180도 돌려 꼽으면 됩니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": "186788500",
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 51,
+  "groundPads": 11,
+  "nets": 15,
+  "multiPadNets": 13,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 948,
+  "topLayerPixels": 13077,
+  "size": [
+   700,
+   300
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186788444",
+  "name": "@ STRA BLASTER 풀키트",
+  "type": "preamp",
+  "about": "알렘빅 스트라토 블라스터 프리앰프입니다. 펜더 스트라토 캐스터 잭 플레이트를 걷어내고 장착하는 특이한 스타일의 프리앰프입니다. 그레이트풀 데드의",
+  "board": 0,
+  "image": "img_07.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_08.jpg"
+  ],
+  "pads": 28,
+  "groundPads": 0,
+  "nets": 20,
+  "multiPadNets": 5,
+  "loneNonGroundPads": 15,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5842,
+  "topLayerPixels": 16977,
+  "size": [
+   770,
+   426
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186785995",
+  "name": "@ Love Bias II Parts Pack",
+  "type": "overdrive",
+  "about": "Love Bias II Parts Pack 러브페달의 COT50 이라는 오버드라이브 페달입니다. 미샬 플렉시 사운드를 재현하고 있습니다.",
+  "board": 0,
+  "image": "img_00.jpg",
+  "sameBoardAs": null,
+  "bomImages": [],
+  "pads": 30,
+  "groundPads": 10,
+  "nets": 13,
+  "multiPadNets": 6,
+  "loneNonGroundPads": 7,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9865,
+  "topLayerPixels": 20569,
+  "size": [
+   540,
+   585
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787688",
+  "name": "@ Klon Buffer Parts Pack",
+  "type": "buffer-boost",
+  "about": "클론센타우르 페달 초단에 있는 오피앰프 버퍼입니다. 아주 작은 사이즈로 1590LB, 1590A케이스에 사용 가능합니다. 버퍼는 이펙팅 효과는 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 33,
+  "groundPads": 8,
+  "nets": 15,
+  "multiPadNets": 6,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3836,
+  "topLayerPixels": 16421,
+  "size": [
+   571,
+   556
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787691",
+  "name": "[1K] BIAS Parts pack",
+  "type": "overdrive",
+  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 러브페달 CO",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 33,
+  "groundPads": 11,
+  "nets": 11,
+  "multiPadNets": 7,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2605,
+  "topLayerPixels": 6181,
+  "size": [
+   286,
+   279
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788496",
+  "name": "@ SoLa Face BC108c Parts pack",
+  "type": "fuzz",
+  "about": "아날로그맨 아저씨의 썬페이스 실리콘 퍼즈입니다. BC108C 2개를 사용하며 퍼즈페이스의 아날로그맨 아저씨의 현대적 해석입니다. INPUT CL",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 46,
+  "groundPads": 9,
+  "nets": 19,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3698,
+  "topLayerPixels": 14393,
+  "size": [
+   700,
+   389
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788497",
+  "name": "@ LuNa Face BC109c Parts pack",
+  "type": "fuzz",
+  "about": "아날로그맨 아저씨의 썬페이스 실리콘 퍼즈입니다. BC108C 보다 HFE가 높은 BC109C 2개를 사용하며 퍼즈페이스의 아날로그맨 아저씨의 현",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": "186788496",
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 46,
+  "groundPads": 9,
+  "nets": 19,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3698,
+  "topLayerPixels": 14393,
+  "size": [
+   700,
+   389
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787843",
+  "name": "@ RAM Fuzz Parts pack",
+  "type": "fuzz",
+  "about": "LM386 파워앰프 칩을 이용한 기타, 베이스용 퍼즈페달입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 47,
+  "groundPads": 10,
+  "nets": 19,
+  "multiPadNets": 14,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2573,
+  "topLayerPixels": 7435,
+  "size": [
+   421,
+   286
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788664",
+  "name": "@ LONESTAR RANGER Parts pack",
+  "type": "fuzz",
+  "about": "로터리 스위치는 앵글타입 가변저항 보다 약간 높이가 낮습니다. 로터리 스위치는 반드시 케이스에 결합한 상태에서 납떔하세요 (혹은 기판에서 2mm",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 48,
+  "groundPads": 11,
+  "nets": 17,
+  "multiPadNets": 11,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3579,
+  "topLayerPixels": 19553,
+  "size": [
+   800,
+   422
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788463",
+  "name": "@ AIR FRYER TB Parts Pack",
+  "type": "fuzz",
+  "about": "그레그 프라이어에서 피트코니쉬 트레블부스터를 모디파이 하여 출시한 페달입니다. 기본 구조는 동일하고 몇가지 회로 보완이 있습니다 트랜지스터는 오",
+  "board": 0,
+  "image": "img_00.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_01.jpg"
+  ],
+  "pads": 51,
+  "groundPads": 15,
+  "nets": 15,
+  "multiPadNets": 10,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 16583,
+  "size": [
+   700,
+   388
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788465",
+  "name": "@ KONISH 83TB Parts Pack",
+  "type": "buffer-boost",
+  "about": "피트코니쉬 트레블 부스터는 퀸의 브라이언메이 톤의 핵심인 이펙터입니다. 기판을 에어프라이어 트레블부스터와 공유하고 있습니다 아래 기판 사진을 참",
+  "board": 0,
+  "image": "img_00.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_01.jpg"
+  ],
+  "pads": 51,
+  "groundPads": 15,
+  "nets": 15,
+  "multiPadNets": 10,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 16553,
+  "size": [
+   700,
+   388
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787537",
+  "name": "@ Jubelee Parts pack",
+  "type": "distortion",
+  "about": "마샬 실버쥬빌레 앰프톤을 재현하는 드라이브 페달입니다. JRC386D와 같은 게인의 LM386-N3이 포함됩니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 52,
+  "groundPads": 14,
+  "nets": 18,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1992,
+  "topLayerPixels": 10798,
+  "size": [
+   511,
+   256
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788031",
+  "name": "@ Green Punch Parts pack",
+  "type": "overdrive",
+  "about": "그리어 앰프 써커펀치 드라이브 페달입니다. LM386을 이용한 퍼즈틱한 거친 드라이브 페달입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 52,
+  "groundPads": 15,
+  "nets": 17,
+  "multiPadNets": 14,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3035,
+  "topLayerPixels": 10556,
+  "size": [
+   541,
+   271
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186786574",
+  "name": "@ NEW MAMMOTH FUZZ Parts Pack",
+  "type": "fuzz",
+  "about": "지벡스의 울리 맘모쓰 기타, 베이스용 퍼즈 페달입니다. 앵글 타입 가변저항 사용가능하도록 새로 디자인 되어 입고 되었습니다. 적은 부품으로 가볍",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 55,
+  "groundPads": 3,
+  "nets": 27,
+  "multiPadNets": 13,
+  "loneNonGroundPads": 14,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 988,
+  "topLayerPixels": 16391,
+  "size": [
+   700,
+   294
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788471",
+  "name": "@ 1970 (2SC828) Parts pack",
+  "type": "fuzz",
+  "about": "@ 1970 FUZZ (2SC828) Parts pack 풀톤에서 실리콘 퍼즈페이스를 재해석해서 내놓은 페달입니다. 여러가지 TR이 사용된 버전",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 57,
+  "groundPads": 14,
+  "nets": 17,
+  "multiPadNets": 13,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2236,
+  "topLayerPixels": 14774,
+  "size": [
+   700,
+   369
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788542",
+  "name": "@ 1970 (BC108C) Parts pack",
+  "type": "fuzz",
+  "about": "풀톤에서 실리콘 퍼즈페이스를 재해석해서 내놓은 페달입니다. 여러가지 TR이 사용된 버전이 존재합니다. 이 버전은 BC108C를 사용한 버전입니다",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 57,
+  "groundPads": 14,
+  "nets": 17,
+  "multiPadNets": 13,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2357,
+  "topLayerPixels": 15148,
+  "size": [
+   700,
+   370
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186786840",
+  "name": "@ NEW EX 부스터 Parts Pack",
+  "type": "buffer-boost",
+  "about": "비비로 유명한 페달제작사에서 출시한 투명한 클린 부스트입니다. 2개의 토글 스위치는 베이스부스트와,브라이트이나 효과는 미미합니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 59,
+  "groundPads": 10,
+  "nets": 24,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8741,
+  "topLayerPixels": 22803,
+  "size": [
+   600,
+   554
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788016",
+  "name": "@ Pluto Blue Parts pack",
+  "type": "overdrive",
+  "about": "브라운앰프 프로틴의 블루사이드 페달입니다 프로틴으로 제작하실분은 BB케이스에 IN-->Pluto Green --> Pluto Blue -->Ou",
+  "board": 0,
+  "image": "img_00.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 59,
+  "groundPads": 2,
+  "nets": 26,
+  "multiPadNets": 18,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 496,
+  "topLayerPixels": 4494,
+  "size": [
+   350,
+   283
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787676",
+  "name": "@ How Solo Parts pack",
+  "type": "overdrive",
+  "about": "'59 트위드 베이스맨 4x10 콤보 사운드의 재현을 모티브로 하는 오버드라이브 페달입니다. 일본에서 제작된 페달로 RUST DRIVER와 함께",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 60,
+  "groundPads": 16,
+  "nets": 17,
+  "multiPadNets": 14,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2038,
+  "topLayerPixels": 12678,
+  "size": [
+   541,
+   328
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788345",
+  "name": "@ AXIS FUZZ 풀키트 (노브, 케이스 제외)",
+  "type": "fuzz",
+  "about": "풀키트로 구성되어 있습니다.케이스와노브는추가하셔야합니다. (풋스위치,풋스위치기판,풀림방지와셔,디씨잭,배터리스냅,박스잭,3파이LED,보호저항) 케",
+  "board": 0,
+  "image": "img_04.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_05.jpg"
+  ],
+  "pads": 61,
+  "groundPads": 1,
+  "nets": 33,
+  "multiPadNets": 16,
+  "loneNonGroundPads": 16,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2592,
+  "topLayerPixels": 16082,
+  "size": [
+   700,
+   376
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788513",
+  "name": "@ AXIS FUZZ Parts Pack",
+  "type": "fuzz",
+  "about": "로저 메이어 엑시스 퍼즈입니다. 퍼즈 페이즈와 다른 회로의 구조로 유명한 퍼즈 페달입니다. 드라이브 가변저항 3번 다리에 연결된 납땜 패드를 그",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": "186788345",
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 61,
+  "groundPads": 1,
+  "nets": 33,
+  "multiPadNets": 16,
+  "loneNonGroundPads": 16,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2592,
+  "topLayerPixels": 16082,
+  "size": [
+   700,
+   376
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788028",
+  "name": "@ Green Hawk Parts pack",
+  "type": "overdrive",
+  "about": "그리어 앰프 토마호크 드라이브 페달입니다. 부스트로 활용이 발군인 페달입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 62,
+  "groundPads": 15,
+  "nets": 20,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3930,
+  "topLayerPixels": 13151,
+  "size": [
+   541,
+   301
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788519",
+  "name": "@ RANGER GE Parts pack",
+  "type": "fuzz",
+  "about": "아래 카테고리에서 원하는 HFE값으로 함께 구매하시기 바랍니다. 실리콘 트랜지스터를 꼽으면 동작하지 않습니다. NPN형 게르마늄 트랜지스터도 동",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 62,
+  "groundPads": 11,
+  "nets": 22,
+  "multiPadNets": 17,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 24667,
+  "size": [
+   700,
+   497
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788521",
+  "name": "@ SOLA FACE GE Parts pack",
+  "type": "fuzz",
+  "about": "SOLA FACE GE Parts pack 아래 카테고리에서 원하는 HFE값으로 함께 구매하시기 바랍니다. 실리콘 트랜지스터를 꼽으면 동작하지 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 62,
+  "groundPads": 11,
+  "nets": 24,
+  "multiPadNets": 17,
+  "loneNonGroundPads": 7,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 22569,
+  "size": [
+   700,
+   510
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788529",
+  "name": "레인지마스터 풀키트",
+  "type": "fuzz",
+  "about": "구매하기 쉽도록 풀키트로 구성되어 있습니다. 케이스는 포함되어 있지 않습니다. 함께 주문하세요. 부품팩 + 풋스위치 + 풋스위치 기판 + 풋스위",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": "186788519",
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 62,
+  "groundPads": 11,
+  "nets": 22,
+  "multiPadNets": 17,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 24667,
+  "size": [
+   700,
+   497
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788530",
+  "name": "썬페이스퍼즈 풀키트",
+  "type": "fuzz",
+  "about": "썬페이스 퍼즈 풀키트 구매하기 쉽도록 풀키트로 구성되어 있습니다. 케이스는 포함되어 있지 않습니다. 함께 주문하세요. 부품팩 + 풋스위치 + 풋",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": "186788521",
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 62,
+  "groundPads": 11,
+  "nets": 24,
+  "multiPadNets": 17,
+  "loneNonGroundPads": 7,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 22569,
+  "size": [
+   700,
+   510
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787675",
+  "name": "@ How Lost Parts pack",
+  "type": "overdrive",
+  "about": "60년대 후반 마샬 플렉시 클래식 사운드의 재현을 모티브로 하는 오버드라이브 페달입니다. 일본에서 제작된 페달로 Sole Pressure와 함께",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 63,
+  "groundPads": 13,
+  "nets": 17,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2590,
+  "topLayerPixels": 15134,
+  "size": [
+   541,
+   328
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788657",
+  "name": "@ FUZZ FELLOW Parts pack",
+  "type": "fuzz",
+  "about": "시크릿 프리앰프로 유명한 체이서에서 퍼즈페이스를 현대적으로 재해석한 실리콘 퍼즈페달입니다. 레드와 틸, 블루 칼라 버전이 있으며 각각의 성향이 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 63,
+  "groundPads": 11,
+  "nets": 28,
+  "multiPadNets": 17,
+  "loneNonGroundPads": 11,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 27270,
+  "size": [
+   800,
+   531
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788116",
+  "name": "@ 2BAND BASS PRE Parts pack",
+  "type": "preamp",
+  "about": "빈티지 베이스 프리앰프 시리즈, 펜사 서 프리앰프입니다. LF442CN단종으로 TL072로 패킹됩니다. 가격은 반영되어 있습니다. Pensa-S",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 65,
+  "groundPads": 10,
+  "nets": 25,
+  "multiPadNets": 18,
+  "loneNonGroundPads": 7,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5890,
+  "topLayerPixels": 13940,
+  "size": [
+   600,
+   295
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788666",
+  "name": "@ RANDY PLUS Parts pack",
+  "type": "buffer-boost",
+  "about": "랜디로즈가 부스트로 사용했던 버전을 그대로 복각해서 나온 스페셜 에디션이 있었습니다. 특이한 점은 캐퍼시터가 오차가 큰 세라믹을 모두 사용했다는",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 67,
+  "groundPads": 17,
+  "nets": 20,
+  "multiPadNets": 17,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 46519,
+  "size": [
+   800,
+   750
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788064",
+  "name": "@ New Red Sniper Parts pack",
+  "type": "overdrive",
+  "about": "메나톤 레드스네퍼(빨간도미) 오버드라이브입니다. 앵글 팟을 이용해서 제작하기 쉽게 준비되었습니다. 바이트 노브의 활용이 아주 좋습니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 68,
+  "groundPads": 13,
+  "nets": 19,
+  "multiPadNets": 17,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2850,
+  "topLayerPixels": 21598,
+  "size": [
+   600,
+   436
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788346",
+  "name": "@ SPIT FUZZ 풀키트 (노브, 케이스 제외)",
+  "type": "fuzz",
+  "about": "풀키트로 구성되어 있습니다.케이스와노브는추가하셔야합니다. (풋스위치,풋스위치기판,풀림방지와셔,디씨잭,배터리스냅,박스잭,3파이LED,보호저항) 케",
+  "board": 0,
+  "image": "img_04.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_05.jpg"
+  ],
+  "pads": 68,
+  "groundPads": 18,
+  "nets": 18,
+  "multiPadNets": 17,
+  "loneNonGroundPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1567,
+  "topLayerPixels": 19625,
+  "size": [
+   700,
+   376
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788512",
+  "name": "@ SPIT FUZZ Parts Pack",
+  "type": "fuzz",
+  "about": "로저 스핏파이어 퍼즈입니다. 특이하게 LM301이 사용되며 엑시스 퍼즈와 함께 굉장히 좋은 퍼즈입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": "186788346",
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 68,
+  "groundPads": 18,
+  "nets": 18,
+  "multiPadNets": 17,
+  "loneNonGroundPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1567,
+  "topLayerPixels": 19625,
+  "size": [
+   700,
+   376
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788538",
+  "name": "@ BUZZRITE Si Parts pack",
+  "type": "fuzz",
+  "about": "너무 유명한 빈티지 버징 톤 퍼즈입니다. Ed Sanner가 개발하여 250유닛밖에 만들지 않은 게르마늄 버전 이후 출시한 실리콘 버전입니다. ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 68,
+  "groundPads": 12,
+  "nets": 22,
+  "multiPadNets": 17,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 35811,
+  "size": [
+   700,
+   516
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788539",
+  "name": "@ T&B FACE Parts pack",
+  "type": "fuzz",
+  "about": "아비터에서 소량만 제작되어 희귀한 모델입니다. 당시에는 보기 어려운 트레블과 베이스 콘트롤이 있는 특징이 있습니다. BC109를 사용하지만 빈티",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 68,
+  "groundPads": 15,
+  "nets": 18,
+  "multiPadNets": 18,
+  "loneNonGroundPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 22980,
+  "size": [
+   700,
+   427
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788638",
+  "name": "@ PAPADUMBEL 풀키트 (옵션)",
+  "type": "unknown",
+  "about": "본 페이지 아래 상세한 제작 사진이 있습니다. 초보이신 분들도 따라해 보세요. 인두, 납, 니뻐, 와이어 스트리퍼, 롱로우즈 그리고 핀셋 정도 ",
+  "board": 0,
+  "image": "img_04.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_05.jpg"
+  ],
+  "pads": 68,
+  "groundPads": 14,
+  "nets": 26,
+  "multiPadNets": 20,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 18103,
+  "topLayerPixels": 45053,
+  "size": [
+   1000,
+   809
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787650",
+  "name": "@ WT Fuzz Parts pack",
+  "type": "fuzz",
+  "about": "가벼운 오버드라이브 부터 광폭한 퍼즈까지를 커버하는 퍼즈 페달입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_01.png",
+   "img_03.jpg"
+  ],
+  "pads": 69,
+  "groundPads": 19,
+  "nets": 16,
+  "multiPadNets": 14,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1559,
+  "topLayerPixels": 16887,
+  "size": [
+   391,
+   436
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788047",
+  "name": "@ ALL New Kantata Parts pack",
+  "type": "overdrive",
+  "about": "존메이어 페달보드 제일 앞단에 있는 킬리 카타나 클린 부스터입니다. 원본과 같이 측면 푸쉬풀 스타일로 디자인 되었습니다. 카타나 초기 회로를 기",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 70,
+  "groundPads": 18,
+  "nets": 21,
+  "multiPadNets": 14,
+  "loneNonGroundPads": 7,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3143,
+  "topLayerPixels": 32742,
+  "size": [
+   700,
+   574
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788517",
+  "name": "@ 1969 GE FUZZ Parts pack",
+  "type": "fuzz",
+  "about": "아래 카테고리에서 원하는 HFE값으로 함께 구매하시기 바랍니다. 실리콘 트랜지스터를 꼽으면 동작하지 않습니다. NPN형 게르마늄 트랜지스터도 동",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 70,
+  "groundPads": 13,
+  "nets": 29,
+  "multiPadNets": 18,
+  "loneNonGroundPads": 11,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 607,
+  "topLayerPixels": 23186,
+  "size": [
+   700,
+   510
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788534",
+  "name": "1969퍼즈 풀키트",
+  "type": "fuzz",
+  "about": "구매하기 쉽도록 풀키트로 구성되어 있습니다. 케이스는 포함되어 있지 않습니다. 함께 주문하세요. 부품팩 + 풋스위치 + 풋스위치 기판 + 풋스위",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": "186788517",
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 70,
+  "groundPads": 13,
+  "nets": 29,
+  "multiPadNets": 18,
+  "loneNonGroundPads": 11,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 607,
+  "topLayerPixels": 23186,
+  "size": [
+   700,
+   510
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788306",
+  "name": "@ NEW Z-DRIVE Parts Pack",
+  "type": "overdrive",
+  "about": "덤블 사운드로 가장 유명한 Hermida Audio의 젠드라이브입니다. 앵글 팟으로 재 디자인되어 입고 되었습니다 opamp는 허미다 버전은 샌",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 71,
+  "groundPads": 1,
+  "nets": 31,
+  "multiPadNets": 19,
+  "loneNonGroundPads": 11,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2313,
+  "topLayerPixels": 24699,
+  "size": [
+   700,
+   465
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788334",
+  "name": "@ SEC RET PRE Parts pack",
+  "type": "preamp",
+  "about": "체이스 톤 시크릿 프리앰프입니다. 1970년대 마에스트로 에코플렉스(Maestro Echoplex) EP-3의 프리앰프 회로를 충실히 재현한 페",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 72,
+  "groundPads": 5,
+  "nets": 35,
+  "multiPadNets": 19,
+  "loneNonGroundPads": 16,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4497,
+  "topLayerPixels": 18258,
+  "size": [
+   700,
+   401
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788515",
+  "name": "@ FUZZ BUDDY Parts pack",
+  "type": "fuzz",
+  "about": "60년대 후반 일본의 신 에이 사에서 출시한 전설적인 버즈쏘 퍼즈입니다. Shin Ei - Companion Fuzz 모델명 FY-2 게르마늄 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 72,
+  "groundPads": 14,
+  "nets": 20,
+  "multiPadNets": 18,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2665,
+  "topLayerPixels": 20012,
+  "size": [
+   700,
+   376
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787633",
+  "name": "@ CALIBER Parts pack",
+  "type": "distortion",
+  "about": "켄타를 멋지게 복각해 낸 아처라는 페달을 출시한 곳에서 제작되는 페달입니다. 단순한 회로지만 단단하고 정제된 느낌이 특징이네요 62년 JTM45",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 73,
+  "groundPads": 15,
+  "nets": 21,
+  "multiPadNets": 17,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2841,
+  "topLayerPixels": 21072,
+  "size": [
+   496,
+   365
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787512",
+  "name": "@ Wide Range Parts pack",
+  "type": "preamp",
+  "about": "제작기 카탈린브레드의 바리오부스트 회로를 기준으로 합니다. 부스트, 프리앰프, 파라매트릭이큐 성격을 가집니다. 1.4kHz 에서 70Hz 범위의",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 75,
+  "groundPads": 11,
+  "nets": 28,
+  "multiPadNets": 19,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6346,
+  "topLayerPixels": 24879,
+  "size": [
+   511,
+   414
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788063",
+  "name": "@ New Blue Color Parts pack",
+  "type": "overdrive",
+  "about": "메나톤 블루콜라 오버드라이브입니다. 앵글 팟을 이용해서 제작하기 쉽게 준비되었습니다. 프리센스는 컷 개념으로 반대로 동작합니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 76,
+  "groundPads": 16,
+  "nets": 23,
+  "multiPadNets": 20,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3771,
+  "topLayerPixels": 23786,
+  "size": [
+   600,
+   436
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788540",
+  "name": "@ MID BLASTER 풀키트",
+  "type": "eq",
+  "about": "LF442CN단종으로 TL072로 패킹됩니다. 가격은 반영되어 있습니다. 디미터 미드 부스트(제임스 타일러 미드부스트와 동일)를 알렘빅 스트라토",
+  "board": 0,
+  "image": "img_04.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_05.jpg"
+  ],
+  "pads": 76,
+  "groundPads": 10,
+  "nets": 31,
+  "multiPadNets": 22,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 26633,
+  "topLayerPixels": 77194,
+  "size": [
+   769,
+   1030
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788014",
+  "name": "@ Mark 4 Parts pack",
+  "type": "overdrive",
+  "about": "마크 4.23 클린부스터 페달입니다. 꽤나 클린한 성향으로 알려져 있어서 볼륨부스터로 애용됩니다. 오리지날은 OPA2134이나 TL072로 대치",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 77,
+  "groundPads": 16,
+  "nets": 23,
+  "multiPadNets": 18,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 21103,
+  "size": [
+   436,
+   436
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788307",
+  "name": "@ NEW ZENFIRE Parts Pack",
+  "type": "overdrive",
+  "about": "덤블 사운드를 표방하는 Hermida Audio의 Mosferatu (흡혈귀) 입니다. 젠드라이브 회로에서 변형된 페달로 뱀파이어를 의미하는 M",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 77,
+  "groundPads": 4,
+  "nets": 31,
+  "multiPadNets": 21,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1912,
+  "topLayerPixels": 27540,
+  "size": [
+   700,
+   477
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787673",
+  "name": "@ NEW BBreaker Parts pack",
+  "type": "unknown",
+  "about": "검증 공개된 레이아웃을 기준으로 제작했으나 여러 회로를 고려했을때 100n 3곳이 10n으로 되는 것이 맞는 것 같다는 판단이 있어 변경해서 패",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 78,
+  "groundPads": 4,
+  "nets": 34,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2904,
+  "topLayerPixels": 25539,
+  "size": [
+   700,
+   395
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788357",
+  "name": "@ NEW ACC PREAMP Parts Pack",
+  "type": "preamp",
+  "about": "K&K트리니티 어쿠스틱 프리앰프를 페달형으로 준비된 페달입니다. 쓸만한 어쿠스틱 프리앰프를 찾으신다면 추천드릴 수 있습니다. 앵글팟 사용으로 제",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 78,
+  "groundPads": 10,
+  "nets": 32,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6867,
+  "topLayerPixels": 23008,
+  "size": [
+   700,
+   509
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787674",
+  "name": "@ Blues Pro Parts pack",
+  "type": "overdrive",
+  "about": "크런치 박스를 제작하는 호주 회사의 진한 파란색의 오버드라이브 페달입니다. 두가지 모디 포인트가 적용되어 있습니다. FUZZ 포인트는 연결되면 ",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 79,
+  "groundPads": 13,
+  "nets": 25,
+  "multiPadNets": 19,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 946,
+  "topLayerPixels": 21748,
+  "size": [
+   542,
+   350
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788129",
+  "name": "@ NEW SON OF BEN Parts pack",
+  "type": "preamp",
+  "about": "NEW SON OF BEN Parts pack 앵글팟을 이용하여 제작하기 쉽게 새로 준비되었습니다. SMD 소자를 기판에 바로 납떔하는 방식으로",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 79,
+  "groundPads": 18,
+  "nets": 31,
+  "multiPadNets": 22,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 21074,
+  "topLayerPixels": 8593,
+  "size": [
+   600,
+   437
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788029",
+  "name": "@ Green Land Parts pack",
+  "type": "overdrive",
+  "about": "@ Green Southland Parts pack 그리어 앰프 싸우드랜드 드라이브 페달입니다. 그리어 앰프 라이트스피드와 비교해 보세요. 아래",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 80,
+  "groundPads": 11,
+  "nets": 27,
+  "multiPadNets": 19,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3139,
+  "topLayerPixels": 22908,
+  "size": [
+   543,
+   383
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788030",
+  "name": "@ Green Light Parts pack",
+  "type": "overdrive",
+  "about": "그리어 앰프 라이드스피드 드라이브 페달입니다. 그리어 앰프 싸우스랜드와 비교해 보세요. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": "186788029",
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 80,
+  "groundPads": 11,
+  "nets": 27,
+  "multiPadNets": 19,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3139,
+  "topLayerPixels": 22908,
+  "size": [
+   543,
+   383
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788578",
+  "name": "@ BRUNCH BOX(ANDY) Parts Pack",
+  "type": "distortion",
+  "about": "호주 MI AUDIO에서 출시한 너무 너무 유명했던 마샬 스타일의 디스토션 페달 크런치 박스입니다. 이후 JHS에서 처음 내어 놓은 Angry ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 80,
+  "groundPads": 16,
+  "nets": 29,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7242,
+  "topLayerPixels": 33457,
+  "size": [
+   800,
+   640
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788520",
+  "name": "@ BUZZRITE GE Parts pack",
+  "type": "fuzz",
+  "about": "아래 카테고리에서 원하는 HFE값으로 함께 구매하시기 바랍니다. 실리콘 트랜지스터를 꼽으면 동작하지 않습니다. NPN형 게르마늄 트랜지스터도 동",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 82,
+  "groundPads": 14,
+  "nets": 30,
+  "multiPadNets": 20,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 472,
+  "topLayerPixels": 41276,
+  "size": [
+   700,
+   637
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788533",
+  "name": "퍼즈라이트 풀키트",
+  "type": "fuzz",
+  "about": "퍼즈라이트 게르마늄 풀키트 구매하기 쉽도록 풀키트로 구성되어 있습니다. 케이스는 포함되어 있지 않습니다. 함께 주문하세요. 부품팩 + 풋스위치 ",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": "186788520",
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 82,
+  "groundPads": 14,
+  "nets": 30,
+  "multiPadNets": 20,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 472,
+  "topLayerPixels": 41276,
+  "size": [
+   700,
+   637
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788571",
+  "name": "@ NEW BLUE OD Parts pack",
+  "type": "overdrive",
+  "about": "켄타를 멋지게 복각해 낸 아처라는 페달을 출시한 곳에서 제작되는 페달입니다. 우측 하단의 470n은 47n입니다. 기판 상단 가로로 놓인 470",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 82,
+  "groundPads": 17,
+  "nets": 25,
+  "multiPadNets": 22,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2714,
+  "topLayerPixels": 34228,
+  "size": [
+   800,
+   625
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787631",
+  "name": "@ ANIMA Parts pack",
+  "type": "overdrive",
+  "about": "켄타를 멋지게 복각해 낸 아처라는 페달을 출시한 곳에서 제작되는 페달입니다. 단순한 회로지만 단단하고 정제된 느낌이 특징이네요 68년 플렉시 사",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 83,
+  "groundPads": 18,
+  "nets": 22,
+  "multiPadNets": 21,
+  "loneNonGroundPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3217,
+  "topLayerPixels": 24937,
+  "size": [
+   496,
+   398
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788066",
+  "name": "@ OD ONE Parts pack",
+  "type": "overdrive",
+  "about": "세계 최초의 오버드라이브 페달 보스 OD-1 입니다. 오리지날에 사용된 도시바 1S1588 그리고 JRC3403AD로 패킹됩니다 (소량 긴급 공",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 83,
+  "groundPads": 10,
+  "nets": 26,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1889,
+  "topLayerPixels": 23901,
+  "size": [
+   600,
+   391
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788506",
+  "name": "@ HOT BENDER Parts pack",
+  "type": "fuzz",
+  "about": "게르마늄 퍼즈로 유명한 톤밴더를 실리콘 버전으로 컨버팅한 버전입니다. 기성 회로는 아니고 자작 커뮤니티에서 프로젝트로 정리되어 고전이 된 회로입",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 83,
+  "groundPads": 15,
+  "nets": 25,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7756,
+  "topLayerPixels": 22339,
+  "size": [
+   700,
+   472
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787541",
+  "name": "@ Robin Drive Parts pack",
+  "type": "overdrive",
+  "about": "기타리스트 로빈 트라워 시그니셔 오버드라이브 페달입니다. 808베이스의 회로로 풀드라이브와 유사한 클리핑을 가지고 있습니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 84,
+  "groundPads": 14,
+  "nets": 24,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4584,
+  "topLayerPixels": 22649,
+  "size": [
+   556,
+   391
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787680",
+  "name": "@ Feach Fuzz Parts pack",
+  "type": "fuzz",
+  "about": "TLC2272 대신에 TL072로 준비됩니다. 프랑톤 피치퍼즈입니다. 두개의 파워앰프소자를 이용한 독특한 회로로 광폭한 퍼즈 사운드를 내고 있습",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 86,
+  "groundPads": 20,
+  "nets": 33,
+  "multiPadNets": 20,
+  "loneNonGroundPads": 13,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5758,
+  "topLayerPixels": 19919,
+  "size": [
+   541,
+   409
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787681",
+  "name": "@ Fluffy Fuzz Parts pack",
+  "type": "fuzz",
+  "about": "기판에 VOLUME과 FLUFFY표기가 바뀌어 있습니다. 프랑톤 크림퍼프입니다. 오피앰프와 LED클리핑을 이용하는 독특한 회로로 광폭한 퍼즈 사",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 86,
+  "groundPads": 15,
+  "nets": 23,
+  "multiPadNets": 20,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3216,
+  "topLayerPixels": 20093,
+  "size": [
+   541,
+   409
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788108",
+  "name": "@ NEW VRAY Parts pack",
+  "type": "overdrive",
+  "about": "NEW VRAY Parts pack 공돌이파파님이 알려주신 X-Chip (RC4558P)로 패킹됩니다. 앵글 팟을 이용하여 제작하기 쉽게 새로준",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 86,
+  "groundPads": 7,
+  "nets": 29,
+  "multiPadNets": 21,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1258,
+  "topLayerPixels": 30420,
+  "size": [
+   600,
+   439
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788251",
+  "name": "@ VRAY X-CHIP 풀키트",
+  "type": "unknown",
+  "about": "@ NEW VRAY X-CHIP 버전 공돌이파파님이 알려주신 X-CHIP( 오피앰프 )로 패킹되는 버전입니다. 잔레이는 오리지날의 오피앰프 표면",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": "186788108",
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 86,
+  "groundPads": 7,
+  "nets": 29,
+  "multiPadNets": 21,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1258,
+  "topLayerPixels": 30420,
+  "size": [
+   600,
+   439
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788012",
+  "name": "@ Duel A Parts pack",
+  "type": "overdrive",
+  "about": "킹톤 듀엘리스트의 A사이드 페달입니다. 듀엘리스트로 제작하실분은 BB케이스에 Duel A 와 Duel B를 한케이스로 제작하시면 됩니다. 아래 ",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 87,
+  "groundPads": 11,
+  "nets": 28,
+  "multiPadNets": 22,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3953,
+  "topLayerPixels": 38123,
+  "size": [
+   466,
+   533
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788082",
+  "name": "@ CDOS Parts pack",
+  "type": "overdrive",
+  "about": "칼라사운드 오버드라이브 페달입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 87,
+  "groundPads": 15,
+  "nets": 25,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 23076,
+  "size": [
+   500,
+   399
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788310",
+  "name": "@ KO-N AZS 풀키트(케이스제외)",
+  "type": "overdrive",
+  "about": "유명한 일본 애니메이션의 캐릭터 시라즈 아즈사 시그니쳐 한정판 오버드라이브 페달입니다. 부품팩 + 풋스위치 + 풋스위치기판 + 풋스위치 와셔 +",
+  "board": 0,
+  "image": "img_04.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_05.jpg"
+  ],
+  "pads": 87,
+  "groundPads": 1,
+  "nets": 40,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 16,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2560,
+  "topLayerPixels": 26633,
+  "size": [
+   1000,
+   361
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788522",
+  "name": "@ BENDER III GE Parts pack",
+  "type": "fuzz",
+  "about": "@ FUZZ BENDER III GE Parts pack 아래 카테고리에서 원하는 HFE값으로 함께 구매하시기 바랍니다. 실리콘 트랜지스터를 꼽",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 87,
+  "groundPads": 17,
+  "nets": 26,
+  "multiPadNets": 22,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 37204,
+  "size": [
+   700,
+   637
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788593",
+  "name": "@ FUZZ FORGE 7K Parts Pack",
+  "type": "fuzz",
+  "about": "지벡스에서 나온 퍼즈팩토리 5노브 버전 이후 출시된 7노브 버전입니다. 초창기 AC128이라는 게르마늄 트랜지스터가 사용된 퍼즈로 뮤즈의 메튜벨",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 87,
+  "groundPads": 14,
+  "nets": 36,
+  "multiPadNets": 24,
+  "loneNonGroundPads": 12,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9538,
+  "topLayerPixels": 37725,
+  "size": [
+   800,
+   662
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787490",
+  "name": "@ Little Green Box Parts pack",
+  "type": "overdrive",
+  "about": "제작기 808 회로 기반의 오버드라이브 페달이나 BODY라는 특이한 콘트롤이 있습니다. 한쪽으로 돌리면 로게인의 투명하고 스파클한 느낌이고 반대",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 88,
+  "groundPads": 15,
+  "nets": 28,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3851,
+  "topLayerPixels": 21535,
+  "size": [
+   484,
+   471
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788149",
+  "name": "@ CAREN Parts pack",
+  "type": "unknown",
+  "about": "베뮤람 카렌입니다. 앵글 팟을 이용하여 제작하기 쉽게 준비되었습니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 89,
+  "groundPads": 12,
+  "nets": 28,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 205,
+  "topLayerPixels": 18024,
+  "size": [
+   600,
+   355
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788518",
+  "name": "@ FUZZ BENDER II GE Parts pack",
+  "type": "fuzz",
+  "about": "아래 카테고리에서 원하는 HFE값으로 함께 구매하시기 바랍니다. 실리콘 트랜지스터를 꼽으면 동작하지 않습니다. NPN형 게르마늄 트랜지스터도 동",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 89,
+  "groundPads": 15,
+  "nets": 35,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7299,
+  "topLayerPixels": 35637,
+  "size": [
+   700,
+   637
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787639",
+  "name": "@ Golden Drive Parts pack",
+  "type": "overdrive",
+  "about": "프리드먼 골드 펄 오버드라이브입니다. 앰프 게인을 부스팅 하기 위한 투명한 부스트, 로우 오버드라이브 페달입니다. 1N4148비대칭 클리핑과 Y",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 90,
+  "groundPads": 12,
+  "nets": 26,
+  "multiPadNets": 22,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4033,
+  "topLayerPixels": 23585,
+  "size": [
+   526,
+   383
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788106",
+  "name": "@ Timothy V3 Parts Pack",
+  "type": "overdrive",
+  "about": "Timothy V3 Parts Pack 앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 폴코트런 티미 페달입니다. 투명한 성향의 오버드라이",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 91,
+  "groundPads": 7,
+  "nets": 33,
+  "multiPadNets": 24,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4378,
+  "topLayerPixels": 26625,
+  "size": [
+   600,
+   437
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788569",
+  "name": "@ BASS CLEAN Parts pack",
+  "type": "buffer-boost",
+  "about": "Xotic에서 나온 유명한 클린부스터의 베이스 버전입니다. 앵글팟 사용하는 버전으로 새로 준비되었습니다 (제작이 용이) 하나의 기판으로 RC, ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 91,
+  "groundPads": 13,
+  "nets": 36,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6663,
+  "topLayerPixels": 37860,
+  "size": [
+   700,
+   560
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788105",
+  "name": "@ NEW Graff Mo-D Parts Pack",
+  "type": "fuzz",
+  "about": "NEW Graff Mo-D Parts Pack 앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 프로코 랫 기반의 부띠끄 페달입니다. 저음이",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 92,
+  "groundPads": 13,
+  "nets": 33,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1077,
+  "topLayerPixels": 21682,
+  "size": [
+   600,
+   404
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788145",
+  "name": "@ KONISH SS-2 Parts pack",
+  "type": "overdrive",
+  "about": "피트 코니쉬 오버드라이브입니다. 전체적으로 볼륨이 작으나 오리지날도 그렇습니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 92,
+  "groundPads": 20,
+  "nets": 33,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1802,
+  "topLayerPixels": 15967,
+  "size": [
+   600,
+   400
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788309",
+  "name": "@ KO-N UI 풀키트(케이스제외)",
+  "type": "overdrive",
+  "about": "유명한 일본 애니메이션의 캐릭터 히라사와 유이 시그니쳐 한정판 오버드라이브 페달입니다. 부품팩 + 풋스위치 + 풋스위치기판 + 풋스위치 와셔 +",
+  "board": 0,
+  "image": "img_04.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_05.jpg"
+  ],
+  "pads": 92,
+  "groundPads": 2,
+  "nets": 48,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 22,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5181,
+  "topLayerPixels": 23714,
+  "size": [
+   1000,
+   361
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787554",
+  "name": "@ Flame mini Booster Parts pack",
+  "type": "buffer-boost",
+  "about": "티씨 일렉트로닉에서 나온 스파크 미니 부스터입니다. 완전히 새로운 회로, 20dB까지 깨끗한 부스팅이 가능합니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 93,
+  "groundPads": 14,
+  "nets": 26,
+  "multiPadNets": 16,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4386,
+  "topLayerPixels": 20287,
+  "size": [
+   436,
+   406
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788110",
+  "name": "@ NEW Valve 808 Parts pack",
+  "type": "overdrive",
+  "about": "NEW Valve 808 Parts pack 앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 오버드라이브의 표준 튜브 스크리머 페달입니다.",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 94,
+  "groundPads": 15,
+  "nets": 28,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5013,
+  "topLayerPixels": 22800,
+  "size": [
+   600,
+   399
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788308",
+  "name": "@ NEW ZEN GU DONG Parts Pack",
+  "type": "overdrive",
+  "about": "일본의 Toshihiko Tanabe가 손수 제작하는 덤블 스타일 페달입니다. 기본적으로 젠드라이브 회로의 모디입니다. Zen(선) Kudo(구",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 94,
+  "groundPads": 2,
+  "nets": 45,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 20,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3483,
+  "topLayerPixels": 33626,
+  "size": [
+   700,
+   630
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787677",
+  "name": "@ Wild Jack Parts pack",
+  "type": "overdrive",
+  "about": "잭와일드 시그니쳐 오버드라이브 페달입니다. 토글 스위치로 연결하면 GT-OD로 바뀝니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 95,
+  "groundPads": 15,
+  "nets": 28,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4660,
+  "topLayerPixels": 21586,
+  "size": [
+   541,
+   410
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787678",
+  "name": "@ GTO-D Parts pack",
+  "type": "overdrive",
+  "about": "엠엑스알 클래식 오버드라이브 페달입니다 토글 스위치로 연결하지 않으면 WILD JACK으로 바뀝니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": "186787677",
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 95,
+  "groundPads": 15,
+  "nets": 28,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4660,
+  "topLayerPixels": 21586,
+  "size": [
+   541,
+   410
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788010",
+  "name": "@ Soulist Parts pack",
+  "type": "overdrive",
+  "about": "킹톤 솔로이스트 오버드라이브입니다. 듀엘리스트의 A사이드에 바디노브가 추가된 형태입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 95,
+  "groundPads": 12,
+  "nets": 43,
+  "multiPadNets": 19,
+  "loneNonGroundPads": 24,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4590,
+  "topLayerPixels": 34958,
+  "size": [
+   511,
+   533
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788511",
+  "name": "@ VOO-DOO BASS Parts pack",
+  "type": "distortion",
+  "about": "@ VOO-DOO-ONE BASS Parts pack 1990년대 로저메이어가 게인이 풍부하고 따뜻한 하모닉스를 목표로 개발된 디스토션 페달입니",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 96,
+  "groundPads": 20,
+  "nets": 31,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7758,
+  "topLayerPixels": 20025,
+  "size": [
+   700,
+   472
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788589",
+  "name": "@ TIME V2 Parts Pack(잔레이)",
+  "type": "overdrive",
+  "about": "Paul Cochrane 개발한 투명한 오버드라이브라는 최초의 페달로 아주 유명한 페달입니다. PTP로 제작된 버전1에 이후 PCB버전으로 나온",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 96,
+  "groundPads": 12,
+  "nets": 28,
+  "multiPadNets": 24,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4382,
+  "topLayerPixels": 49162,
+  "size": [
+   800,
+   640
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787948",
+  "name": "@ THIMBLE Parts pack",
+  "type": "overdrive",
+  "about": "매드프로페서에서 나온 덤블 성향의 오버드라이브 페달입니다. 시중의 TLC2272 를 구하셔서 적용하여 보세요. 기판에 가변저항 용량표기가 없습니",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 97,
+  "groundPads": 15,
+  "nets": 27,
+  "multiPadNets": 21,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3728,
+  "topLayerPixels": 26535,
+  "size": [
+   541,
+   421
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788044",
+  "name": "@ DOC Overdrive Parts Pack",
+  "type": "overdrive",
+  "about": "최근 공식적인 단종을 선언한 풀톤의 대표적인 오버드라이브입니다. 독창적인 회로와 버전4까지 거듭하면서 발전을 이루어온 페달입니다. JHS에 이 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 97,
+  "groundPads": 17,
+  "nets": 30,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4712,
+  "topLayerPixels": 31033,
+  "size": [
+   700,
+   547
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788159",
+  "name": "@ SONIX BABY Parts pack",
+  "type": "eq",
+  "about": "물을 사이다로 바꿔 준다는 인헨서입니다 저음과 고음이 전달되는 순서를 정리하여 소리가 또렷하게 들리게 하는 장비로 라이브 환경에서 오래동안 사랑",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 97,
+  "groundPads": 11,
+  "nets": 37,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 12,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8615,
+  "topLayerPixels": 25036,
+  "size": [
+   600,
+   426
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787532",
+  "name": "@ Brown Charlie Childs Parts pack",
+  "type": "distortion",
+  "about": "변경 내용 왼쪽하단 100n --> 10n 중앙상단 1n --> 100n 우측중앙 100n --> 22n Marshall JTM45 앰프 헤드를",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 98,
+  "groundPads": 23,
+  "nets": 27,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2462,
+  "topLayerPixels": 24605,
+  "size": [
+   571,
+   436
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788016",
+  "name": "@ Pluto Blue Parts pack",
+  "type": "overdrive",
+  "about": "브라운앰프 프로틴의 블루사이드 페달입니다 프로틴으로 제작하실분은 BB케이스에 IN-->Pluto Green --> Pluto Blue -->Ou",
+  "board": 1,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 98,
+  "groundPads": 12,
+  "nets": 37,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5623,
+  "topLayerPixels": 26948,
+  "size": [
+   511,
+   458
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788572",
+  "name": "@ NARROW 808 Parts pack",
+  "type": "overdrive",
+  "about": "@ NEW BLUE OD Parts pack 초창기 아이바네즈 808 소량 제작 모델입니다. 소량 제작 후 단종이라 매우 희귀한 페달입니다. 지",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 98,
+  "groundPads": 14,
+  "nets": 30,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7833,
+  "topLayerPixels": 42004,
+  "size": [
+   800,
+   538
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787473",
+  "name": "@ NEW MORNING Parts pack",
+  "type": "overdrive",
+  "about": "마샬블루스 브레이커 회로를 기준으로 모디된 페달입니다. 아주 투명한 스타일의 드라이브, 부스터 페달로 소개되고 있습니다. 버전3기준입니다. 버전",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 99,
+  "groundPads": 4,
+  "nets": 43,
+  "multiPadNets": 29,
+  "loneNonGroundPads": 14,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4909,
+  "topLayerPixels": 34434,
+  "size": [
+   700,
+   503
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787536",
+  "name": "@ Hush FREQ Parts pack",
+  "type": "overdrive",
+  "about": "풀톤에서 제작된 프리퀀시라는 미드레인지 콘트롤을 가진 독특한 오버드라이브 페달입니다. 1N916A라는 잘 사용되지 않는 다이오드 클리핑을 사용하",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 99,
+  "groundPads": 15,
+  "nets": 32,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5232,
+  "topLayerPixels": 25845,
+  "size": [
+   556,
+   443
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787642",
+  "name": "@ NEW Cat Parts pack",
+  "type": "fuzz",
+  "about": "앵글팟 사용으로 제작이 쉽게 새로 디자인 되었습니다. 470R저항이 LED보호저항입니다. 빅머프 시리즈와 함께 가장 많은 사랑을 받는 랫 퍼즈 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 99,
+  "groundPads": 24,
+  "nets": 31,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3502,
+  "topLayerPixels": 19638,
+  "size": [
+   600,
+   493
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787643",
+  "name": "@ NEW Cat II Parts pack",
+  "type": "fuzz",
+  "about": "앵글팟 사용으로 제작이 쉽게 새로 디자인 되었습니다. 470R저항이 LED보호저항입니다. 빅머프 시리즈와 함께 가장 많은 사랑을 받는 랫 퍼즈 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": "186787642",
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 99,
+  "groundPads": 24,
+  "nets": 31,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3502,
+  "topLayerPixels": 19638,
+  "size": [
+   600,
+   493
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787644",
+  "name": "@ NEW Turbo Cat Parts pack",
+  "type": "fuzz",
+  "about": "@ NEW Dirty Cat Parts pack 앵글팟 사용으로 제작이 쉽게 새로 디자인 되었습니다. 470R저항이 LED보호저항입니다. 빅머프",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": "186787642",
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 99,
+  "groundPads": 24,
+  "nets": 31,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3502,
+  "topLayerPixels": 19638,
+  "size": [
+   600,
+   493
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787645",
+  "name": "@ NEW Vintage Cat Parts pack",
+  "type": "fuzz",
+  "about": "앵글팟 사용으로 제작이 쉽게 새로 디자인 되었습니다. 470R저항이 LED보호저항입니다. 빅머프 시리즈와 함께 가장 많은 사랑을 받는 랫 퍼즈 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": "186787642",
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 99,
+  "groundPads": 24,
+  "nets": 31,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3502,
+  "topLayerPixels": 19638,
+  "size": [
+   600,
+   493
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787646",
+  "name": "@ NEW Dirty Cat Parts pack",
+  "type": "fuzz",
+  "about": "앵글팟 사용으로 제작이 쉽게 새로 디자인 되었습니다. 470R저항이 LED보호저항입니다. 빅머프 시리즈와 함께 가장 많은 사랑을 받는 랫 퍼즈 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 99,
+  "groundPads": 24,
+  "nets": 31,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3502,
+  "topLayerPixels": 19638,
+  "size": [
+   600,
+   493
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787534",
+  "name": "@ Claw Parts pack",
+  "type": "eq",
+  "about": "투명한 부스트에서 높은 게인까지 넓은 범위를 커버하는 오버 드라이브입니다. 특정 사운드나 시대를 모방하도록 설계되지 않았으나 다양한 컨투어를 제",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 100,
+  "groundPads": 12,
+  "nets": 37,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3824,
+  "topLayerPixels": 35464,
+  "size": [
+   542,
+   504
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788510",
+  "name": "@ VOO-DOO-ONE Parts pack",
+  "type": "distortion",
+  "about": "1990년대 로저메이어가 게인이 풍부하고 따뜻한 하모닉스를 목표로 개발된 디스토션 페달입니다. 특이한 다이오드 클리핑이 구성되어 있습니다. (미",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 100,
+  "groundPads": 21,
+  "nets": 31,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7758,
+  "topLayerPixels": 20691,
+  "size": [
+   700,
+   472
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787637",
+  "name": "@ Gray Stone Parts pack",
+  "type": "distortion",
+  "about": "미친교수의 굵은 성향의 디스토션 페달입니다 CD4069를 이용한 거칠고 굵은 앰프게인 사운드를 가지고 있습니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 101,
+  "groundPads": 15,
+  "nets": 28,
+  "multiPadNets": 19,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2325,
+  "topLayerPixels": 27030,
+  "size": [
+   526,
+   413
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788151",
+  "name": "@ THE BLOID Parts pack",
+  "type": "overdrive",
+  "about": "덤블 사운드를 표방하는 대표적인 일본의 부띠끄페달입니다. 앵글 팟을 이용하여 제작하기 쉽게 준비되었습니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 102,
+  "groundPads": 14,
+  "nets": 37,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2934,
+  "topLayerPixels": 27284,
+  "size": [
+   600,
+   448
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788316",
+  "name": "@ ﻿EZK25:17 FUZZ Parts Pack",
+  "type": "fuzz",
+  "about": "DAM Ezekiel 25-17 베이스퍼즈입니다. 펄프 픽션에서 사무엘 잭슨이 총들고 읇었던 구절이 에스겔 25장 17절이라는 군요. 4단 다이",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 102,
+  "groundPads": 2,
+  "nets": 47,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 19,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1278,
+  "topLayerPixels": 44971,
+  "size": [
+   700,
+   630
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788573",
+  "name": "@ PORTA 424 Parts pack",
+  "type": "distortion",
+  "about": "1980년대 후반부터 1990년대 초반까지 사용된 4트랙 테이프 레코더인 Tascam 424 Portastudio Mk.I의 한 채널의 회로를 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 102,
+  "groundPads": 15,
+  "nets": 29,
+  "multiPadNets": 29,
+  "loneNonGroundPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7691,
+  "topLayerPixels": 50847,
+  "size": [
+   800,
+   647
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788104",
+  "name": "＠ NEW Graff Dynamic Parts Pack",
+  "type": "overdrive",
+  "about": "NEW Graff Dynamic Parts Pack 앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 랜드그라프 오버드라이브 페달입니다. 밥",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 103,
+  "groundPads": 13,
+  "nets": 35,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 7,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4991,
+  "topLayerPixels": 26432,
+  "size": [
+   600,
+   469
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186786078",
+  "name": "@ RC BEAST Parts Pack (겸용)",
+  "type": "buffer-boost",
+  "about": "@ RC BEAST Parts Pack 엑소틱의 RC (리얼 클린) 부스트 페달입니다. 기타용과 베이스용을 선택하세요",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [],
+  "pads": 106,
+  "groundPads": 12,
+  "nets": 37,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3448,
+  "topLayerPixels": 27796,
+  "size": [
+   640,
+   397
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787949",
+  "name": "@ TEXPRESS Parts pack",
+  "type": "overdrive",
+  "about": "버텍스에서 나온 트레인랙 앰프 성향의 오버드라이브입니다. 하단 2.2M왼쪽 포인트에 서로 연결해서 사용하여주세요 아래 동영상을 참고하세요 J20",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 106,
+  "groundPads": 22,
+  "nets": 29,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1108,
+  "topLayerPixels": 27697,
+  "size": [
+   481,
+   451
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788665",
+  "name": "@ 29 YUNA Parts pack",
+  "type": "buffer-boost",
+  "about": "Elite UNity Amplifier 라는 이름의 일종의 버퍼 페달입니다. (버퍼 : 긴 케이블이나 여러 페달을 지나면서 생기는 고역의 손실 ",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 106,
+  "groundPads": 17,
+  "nets": 41,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 14,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3894,
+  "topLayerPixels": 42280,
+  "size": [
+   800,
+   634
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787553",
+  "name": "@ Haunting FreQ Parts pack",
+  "type": "eq",
+  "about": "Sweepable-Mids EQ 프리 앰프 미드레인지를 콘트롤해서 뒷단의 드라이브 페달의 성격을 바꿔버릴 수 있는 페달입니다. 와이드 레인지와 ",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 107,
+  "groundPads": 20,
+  "nets": 39,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 12,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9156,
+  "topLayerPixels": 40031,
+  "size": [
+   556,
+   534
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788013",
+  "name": "@ Duel B Parts pack",
+  "type": "overdrive",
+  "about": "킹톤 듀엘리스트의 B사이드 페달입니다. 듀엘리스트로 제작하실분은 BB케이스에 Duel A 와 Duel B를 한케이스로 제작하시면 됩니다. 아래 ",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 107,
+  "groundPads": 11,
+  "nets": 34,
+  "multiPadNets": 32,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4395,
+  "topLayerPixels": 38364,
+  "size": [
+   496,
+   533
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788032",
+  "name": "@ Time Peace Parts pack",
+  "type": "overdrive",
+  "about": "제이로켓오디오디자인의 팀피어스 드라이브 페달입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 107,
+  "groundPads": 23,
+  "nets": 32,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6114,
+  "topLayerPixels": 24114,
+  "size": [
+   511,
+   526
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788335",
+  "name": "@ 1484 TWELVE Parts pack",
+  "type": "unknown",
+  "about": "7660 왼쪽 전해는 100uF가 아니라 10uF입니다. 부품팩 내용은 변경됩니다. 100uF그대로 사용하셔도 문제는 없습니다 (전압 정상적이고",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 107,
+  "groundPads": 10,
+  "nets": 52,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 25,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 15039,
+  "topLayerPixels": 33158,
+  "size": [
+   700,
+   656
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787636",
+  "name": "@ Sweet OD Parts pack",
+  "type": "overdrive",
+  "about": "미친교수의 터치에 민감한 오버드라이브 페달입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 108,
+  "groundPads": 16,
+  "nets": 32,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4929,
+  "topLayerPixels": 24168,
+  "size": [
+   527,
+   413
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788015",
+  "name": "@ Tong Cap Parts pack",
+  "type": "preamp",
+  "about": "다크 글라스 톤 캡슐입니다. 베이스에 내장하는 프리앰프 형태입니다. 페달로 만드셔도 되고, 내장하셔도 됩니다. 기타 내장 와이어링은 아래 내용 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 108,
+  "groundPads": 12,
+  "nets": 32,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2566,
+  "topLayerPixels": 29025,
+  "size": [
+   533,
+   458
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788146",
+  "name": "@ KONISH SS-3 Parts pack",
+  "type": "overdrive",
+  "about": "피트 코니쉬 오버드라이브입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 108,
+  "groundPads": 23,
+  "nets": 38,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 13,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1595,
+  "topLayerPixels": 23228,
+  "size": [
+   600,
+   474
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788150",
+  "name": "@ TUBE SV808 Parts pack",
+  "type": "overdrive",
+  "about": "베뮤람에서 나온 TS808입니다 앵글 팟을 이용하여 제작하기 쉽게 준비되었습니다. 케이스 측면에 있던 트리머를 전면의 가변저항으로 구성되어 있습",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 108,
+  "groundPads": 8,
+  "nets": 44,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 16,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3561,
+  "topLayerPixels": 26611,
+  "size": [
+   600,
+   606
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788138",
+  "name": "@ NEW ANDY PLUS Parts pack",
+  "type": "eq",
+  "about": "앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 1590B케이스에 사용 가능하도록 디자인되어 있습니다. 앤디티몬스 시그니쳐 드라이브 페달입",
+  "board": 0,
+  "image": "img_00.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_01.jpg"
+  ],
+  "pads": 109,
+  "groundPads": 22,
+  "nets": 34,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4018,
+  "topLayerPixels": 28548,
+  "size": [
+   600,
+   525
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787535",
+  "name": "@ Dove Drive Parts pack",
+  "type": "overdrive",
+  "about": "유리관 패키지의 게르마늄 다이오드는 리드를 바짝 꺽으면 꺠질 수 있습니다. 한쪽만 여유있게 꺽어서 세우듯이 실장하세요. 1N34A의 녹색띠를 기",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 110,
+  "groundPads": 15,
+  "nets": 36,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8990,
+  "topLayerPixels": 23062,
+  "size": [
+   572,
+   444
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788033",
+  "name": "@ Green Soma Parts pack",
+  "type": "overdrive",
+  "about": "그리어앰프 소마63 드라이브 페달입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 110,
+  "groundPads": 22,
+  "nets": 35,
+  "multiPadNets": 30,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4743,
+  "topLayerPixels": 34023,
+  "size": [
+   646,
+   556
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788577",
+  "name": "@ NEW RED CHARLES Parts Pack",
+  "type": "distortion",
+  "about": "JHS에서 처음 내어 놓은 Angry Charles가 MI Audio사의 크런치박스를 모디한 것에 불과(내부 트리머를 프레즌스 노브로 노출한것)",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 110,
+  "groundPads": 14,
+  "nets": 43,
+  "multiPadNets": 35,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 14550,
+  "topLayerPixels": 55731,
+  "size": [
+   800,
+   641
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787546",
+  "name": "@ X-Touch Parts pack",
+  "type": "overdrive",
+  "about": "웸플러 엑스타시(유포리아) 드라이브 페달입니다 매우 덤블스러운 페달로 유명합니다. Dumble 앰프의 따뜻함과 그릿느낌의 다이내믹 페달입니다. ",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 111,
+  "groundPads": 19,
+  "nets": 36,
+  "multiPadNets": 24,
+  "loneNonGroundPads": 12,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4518,
+  "topLayerPixels": 26118,
+  "size": [
+   556,
+   451
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788551",
+  "name": "@ REAL CLEAN Parts pack",
+  "type": "buffer-boost",
+  "about": "Xotic에서 나온 유명한 클린부스터입니다. 앵글팟 사용하는 버전으로 새로 준비되었습니다 (제작이 용이) 하나의 기판으로 RC, AC, BASS",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 111,
+  "groundPads": 13,
+  "nets": 41,
+  "multiPadNets": 33,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6180,
+  "topLayerPixels": 42133,
+  "size": [
+   700,
+   560
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788552",
+  "name": "@ ALMOST CLEAN Parts pack",
+  "type": "buffer-boost",
+  "about": "Xotic에서 나온 유명한 클린부스터&오버드라이브 페달입니다. 앵글팟 사용하는 버전으로 새로 준비되었습니다 (제작이 용이) 하나의 기판으로 RC",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 111,
+  "groundPads": 13,
+  "nets": 41,
+  "multiPadNets": 34,
+  "loneNonGroundPads": 7,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6179,
+  "topLayerPixels": 41873,
+  "size": [
+   700,
+   560
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787543",
+  "name": "@ West Breeze Parts pack",
+  "type": "eq",
+  "about": "바람처럼 깨끗하고 순수한 터치 감각의 반투명 오버 드라이브입니다. 가변성 좋은 EQ를 가지고 있습니다",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 112,
+  "groundPads": 14,
+  "nets": 34,
+  "multiPadNets": 32,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6657,
+  "topLayerPixels": 32162,
+  "size": [
+   511,
+   503
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788161",
+  "name": "@ SONIX 482i Parts pack",
+  "type": "unknown",
+  "about": "@ SONIX BABY Parts pack 원래는 15V이상을 기대하여 78L15와 79L15를 통해 양전원 15를 기대하였으나 전압이 나오지 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 112,
+  "groundPads": 19,
+  "nets": 50,
+  "multiPadNets": 29,
+  "loneNonGroundPads": 21,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 18872,
+  "topLayerPixels": 23239,
+  "size": [
+   600,
+   622
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788570",
+  "name": "@ NEW PRINCE TONE Parts pack",
+  "type": "overdrive",
+  "about": "아날로그맨의 유명한 블루스브레이커 기반의 오버드라이브 페달입니다. 비샤이 BA282다이오드로 변경되었습니다. 필코 캐퍼시터로 패킹됩니다 오리지날",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 113,
+  "groundPads": 11,
+  "nets": 38,
+  "multiPadNets": 30,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4586,
+  "topLayerPixels": 56566,
+  "size": [
+   800,
+   625
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787488",
+  "name": "@ Parsley Drive Parts pack",
+  "type": "overdrive",
+  "about": "제작기 808회로 기반의 오버드라이브 페달이나 4580칩 사용으로 조금더 투명하고 크런치한 톤의 오버드라이브입니다. Brad Paisley 라는",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 114,
+  "groundPads": 16,
+  "nets": 35,
+  "multiPadNets": 32,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2747,
+  "topLayerPixels": 44143,
+  "size": [
+   605,
+   582
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787634",
+  "name": "@ TONE HAMMA Parts pack",
+  "type": "overdrive",
+  "about": "켄타를 멋지게 복각해 낸 아처라는 페달을 출시한 곳에서 제작되는 페달입니다. 단순한 회로지만 단단하고 정제된 느낌이 특징이네요 80년대 헤비메탈",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 114,
+  "groundPads": 20,
+  "nets": 35,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3617,
+  "topLayerPixels": 26298,
+  "size": [
+   541,
+   481
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788550",
+  "name": "@ TA7136 DS ONE Parts pack",
+  "type": "distortion",
+  "about": "예전에 일렉기타를 처음 친다면 가장 먼저 접했을수 있는 유명한 오렌지박스 보스의 DS-1 페달입니다. 여러 가지 버전이 있으며 요즘도 생산되고 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 114,
+  "groundPads": 15,
+  "nets": 38,
+  "multiPadNets": 30,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4617,
+  "topLayerPixels": 39370,
+  "size": [
+   700,
+   560
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787556",
+  "name": "@ Brown Sound II Parts pack",
+  "type": "distortion",
+  "about": "GGG 에서 공개된 유명하고 검증되고 애용되는 디스토션 페달입니다.(Brown sound in a box, BSIAB) 클래식한 마샬 사운드를 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 115,
+  "groundPads": 22,
+  "nets": 29,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5674,
+  "topLayerPixels": 24577,
+  "size": [
+   541,
+   474
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787649",
+  "name": "@ Kluster Fuzz Parts pack",
+  "type": "fuzz",
+  "about": "5단 클리핑 모드와 8비트모드, 필터 토글 스위치 등으로 섬세한 퍼즈 부터 광폭한 퍼즈까지 다양하게 콘트롤 할 수 있는 퍼즈 페달입니다. 아래 ",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 115,
+  "groundPads": 25,
+  "nets": 26,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2277,
+  "topLayerPixels": 23544,
+  "size": [
+   571,
+   421
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788011",
+  "name": "@ Heavy Fist Parts pack",
+  "type": "distortion",
+  "about": "킹톤 헤비 핸드 오버드라이브입니다. 듀엘리스트의 B사이드에 바디노브와 토글이 추가된 형태입니다. 기 주문하셨던 분은 신규 주문시 알려주시면 C5",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 115,
+  "groundPads": 11,
+  "nets": 41,
+  "multiPadNets": 32,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8041,
+  "topLayerPixels": 40542,
+  "size": [
+   511,
+   533
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788337",
+  "name": "@ SURGE V2 Parts pack",
+  "type": "overdrive",
+  "about": "Providence Effector SOV-2 페달입니다. 일본 부띡 공방에서 제작된 덤블 성향의 오버드라이브 페달입니다. Stampede OD",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 115,
+  "groundPads": 15,
+  "nets": 45,
+  "multiPadNets": 32,
+  "loneNonGroundPads": 13,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8729,
+  "topLayerPixels": 40832,
+  "size": [
+   700,
+   554
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788115",
+  "name": "@ NEW 1981 LEVEL Parts pack",
+  "type": "buffer-boost",
+  "about": "앵글 팟을 이용하여 제작하기 쉽게 준비되었습니다. 1981에서 나온 새로운 부스트 페달입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 116,
+  "groundPads": 18,
+  "nets": 40,
+  "multiPadNets": 29,
+  "loneNonGroundPads": 11,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4699,
+  "topLayerPixels": 26702,
+  "size": [
+   600,
+   420
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788144",
+  "name": "@ KONISH NG-2 Parts pack",
+  "type": "fuzz",
+  "about": "피트 코니쉬 퍼즈 페달입니다. 전체적으로 볼륨이 작으나 오리지날도 그렇습니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 117,
+  "groundPads": 20,
+  "nets": 45,
+  "multiPadNets": 29,
+  "loneNonGroundPads": 16,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3653,
+  "topLayerPixels": 22063,
+  "size": [
+   600,
+   474
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788336",
+  "name": "@ SIR RIOT Parts pack",
+  "type": "distortion",
+  "about": "써 라이옷 디스토션 페달입니다. 마샬 100와트 앰프의 특성과 터치를 목표로 하는 페달입니다. 크런치부터 하이게인까지 커버, 3단 이큐 모드가 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 118,
+  "groundPads": 20,
+  "nets": 48,
+  "multiPadNets": 32,
+  "loneNonGroundPads": 16,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3300,
+  "topLayerPixels": 39021,
+  "size": [
+   700,
+   630
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788339",
+  "name": "@ SLASHMASTER Parts pack",
+  "type": "distortion",
+  "about": "1991년에 마샬에서 앰프 인 어 박스 시리즈로 두번짹 출시한 디스토션 페달 입니다. 거브너가 크런치를 지향한다면 슈레드마스터는 더 강한 하이게",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 118,
+  "groundPads": 12,
+  "nets": 43,
+  "multiPadNets": 33,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 10453,
+  "topLayerPixels": 41081,
+  "size": [
+   700,
+   567
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787635",
+  "name": "@ FLEX OD Parts pack",
+  "type": "overdrive",
+  "about": "유리관 패키지의 게르마늄 다이오드는 리드를 바짝 꺽으면 꺠질 수 있습니다. 한쪽만 여유있게 꺽어서 세우듯이 실장하세요 켄타를 멋지게 복각해 낸 ",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 119,
+  "groundPads": 20,
+  "nets": 33,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3499,
+  "topLayerPixels": 30108,
+  "size": [
+   541,
+   488
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787483",
+  "name": "@ King Cat Parts pack",
+  "type": "fuzz",
+  "about": "제작기 랫과 톤밴더의 장점을 하나로 모은 퍼즈 디스토션 페달입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 120,
+  "groundPads": 23,
+  "nets": 25,
+  "multiPadNets": 19,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3494,
+  "topLayerPixels": 21915,
+  "size": [
+   541,
+   436
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788576",
+  "name": "@ MUFFLER II Parts pack",
+  "type": "distortion",
+  "about": "빅머프를 설계한 Bob Myer가 1970년대 후반 설계하였으나 상품화되지 않고 잊혀진 회로를 JHS Pedals의 Josh Scott과 Dan",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 120,
+  "groundPads": 21,
+  "nets": 33,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6388,
+  "topLayerPixels": 43570,
+  "size": [
+   800,
+   641
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787840",
+  "name": "@ MELTDOWN Parts pack",
+  "type": "distortion",
+  "about": "80년대 메탈 사운드를 위한 디스토션 페달입니다. 이름이 선정적이어서 판매가 중단되어 자작으로만 제작할 수 있는 페달입니다. 아래 동영상을 참고",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 121,
+  "groundPads": 22,
+  "nets": 36,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5193,
+  "topLayerPixels": 27949,
+  "size": [
+   541,
+   541
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788065",
+  "name": "@ Med Rox Parts pack",
+  "type": "distortion",
+  "about": "다우너프린스의 레드락스 디스토션 페달입니다. 클래식 마샬 사운드를 가장 충실하게 재현했다고 정평이 나 있습니다. 전용케이스 필요하신 분은 다른 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 121,
+  "groundPads": 20,
+  "nets": 35,
+  "multiPadNets": 32,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3255,
+  "topLayerPixels": 22733,
+  "size": [
+   600,
+   469
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788107",
+  "name": "@ NEW 1981 DRIV Parts pack",
+  "type": "distortion",
+  "about": "1981 DRIV Parts pack 앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 랫과 비교되는 디스토션 페달입니다. 아래 동영상을 참",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 121,
+  "groundPads": 17,
+  "nets": 48,
+  "multiPadNets": 34,
+  "loneNonGroundPads": 14,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6157,
+  "topLayerPixels": 24175,
+  "size": [
+   600,
+   447
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788658",
+  "name": "@ ICE MUFF Parts pack",
+  "type": "fuzz",
+  "about": "1977년에서 1980년 사이에 생산된 EHX Big Muff Pi (일명 'Op-Amp' 버전 혹은 IC 버전) 입니다. 기존 트랜지스터 게인",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 121,
+  "groundPads": 21,
+  "nets": 41,
+  "multiPadNets": 33,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7735,
+  "topLayerPixels": 60528,
+  "size": [
+   800,
+   750
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787548",
+  "name": "@ Tube Drive Parts pack",
+  "type": "overdrive",
+  "about": "BK 버틀러 튜브드라이버 회로의 진공관 부분을 BS170 MOSFET으로 대치하여 준비된 페달입니다 2개의 트리머는 게인이 잘걸리고 볼륨이 큰쪽",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 122,
+  "groundPads": 20,
+  "nets": 31,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 10402,
+  "topLayerPixels": 34466,
+  "size": [
+   541,
+   482
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787846",
+  "name": "@ BAD ASS Parts pack",
+  "type": "buffer-boost",
+  "about": "엠엑스알에서 나온 클래식 오버드라이브 페달입니다.100hz라는 독특한 콘트롤이 있습니다. 저음 부스트 MC33178 단종으로 TL072로 준비됩",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 122,
+  "groundPads": 14,
+  "nets": 39,
+  "multiPadNets": 29,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6307,
+  "topLayerPixels": 32486,
+  "size": [
+   542,
+   518
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788074",
+  "name": "@ New Big Muffler Parts Pack",
+  "type": "distortion",
+  "about": "빅머프 버전 9개를 제작하실 수 있는 기판으로 준비된 부품팩입니다 앵글타입 가변저항 사용으로 제작이 수월합니다. LED와 LED보호저항도 기판에",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [],
+  "pads": 123,
+  "groundPads": 17,
+  "nets": 38,
+  "multiPadNets": 30,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5655,
+  "topLayerPixels": 26366,
+  "size": [
+   600,
+   478
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787538",
+  "name": "@ RahRah Parts pack",
+  "type": "overdrive",
+  "about": "레드제플린 초기 사운드인 HiWatt 헤드 톤을 재현한 오버드라이브입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 126,
+  "groundPads": 21,
+  "nets": 35,
+  "multiPadNets": 30,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1865,
+  "topLayerPixels": 34277,
+  "size": [
+   556,
+   503
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788303",
+  "name": "@ J800CM Parts pack",
+  "type": "overdrive",
+  "about": "마샬에서 최근에 페달형으로 나온 JCM800오버드라이브 페달입니다. 오리지날에 사용된 저잡음 2SK209사용( SMD타입으로 굉장히 작은 소자입",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 127,
+  "groundPads": 6,
+  "nets": 51,
+  "multiPadNets": 32,
+  "loneNonGroundPads": 19,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 20089,
+  "topLayerPixels": 36459,
+  "size": [
+   700,
+   561
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788317",
+  "name": "@ TOMATOMA BASS Parts Pack",
+  "type": "preamp",
+  "about": "HBE사에서 나온 혈종? 이라는 이름의 베이스 프리앰프와 오버드라이브가 하나의 케이스에 들어 있는 베이스 페달입니다. 왼쪽 BO는 베이스 오버드",
+  "board": 0,
+  "image": "img_00.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_01.jpg"
+  ],
+  "pads": 128,
+  "groundPads": 6,
+  "nets": 62,
+  "multiPadNets": 33,
+  "loneNonGroundPads": 29,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8707,
+  "topLayerPixels": 40242,
+  "size": [
+   1000,
+   522
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787464",
+  "name": "@ Marvel Drive Parts pack",
+  "type": "overdrive",
+  "about": "제작기 플렉시 앰프의 패치 입력을 시뮬레이트한 플렉시 기반 드라이브 페달입니다. 18V승압회로가 포함되어 있습니다.",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 129,
+  "groundPads": 29,
+  "nets": 37,
+  "multiPadNets": 24,
+  "loneNonGroundPads": 13,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6827,
+  "topLayerPixels": 29285,
+  "size": [
+   488,
+   520
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788304",
+  "name": "@ Dr.DOOGIE Parts pack",
+  "type": "distortion",
+  "about": "메사부기 듀얼렉티파이어 레드 채널 사운드를 에뮬레이션! 자작용으로 공개된 유명한 회로입니다. 그렁그렁 즁즁즁 하이게인 페달로 추천합니다. J20",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 130,
+  "groundPads": 5,
+  "nets": 60,
+  "multiPadNets": 33,
+  "loneNonGroundPads": 27,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7706,
+  "topLayerPixels": 45763,
+  "size": [
+   700,
+   630
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788600",
+  "name": "@ BREADCAST 풀키트 (노브 제외)",
+  "type": "preamp",
+  "about": "허드슨 전자에서 나온 1960년대 방송용 콘솔 사운드에서 영감을 받은 트랜스포머 + 클라스A프리앰프 조합의 기타 / 베이스용 오버드라이브 페달입",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 130,
+  "groundPads": 22,
+  "nets": 55,
+  "multiPadNets": 31,
+  "loneNonGroundPads": 24,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9443,
+  "topLayerPixels": 29703,
+  "size": [
+   1000,
+   391
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788148",
+  "name": "@ BUTTER MARKET Parts pack",
+  "type": "unknown",
+  "about": "하단 LF353우측의 22n은 22pF로 확인되었습니다. 게인팟은 B250K로 확인되었습니다. 기존에 톤이 먹먹하셨던 분은 22n을 22p로 바",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 133,
+  "groundPads": 17,
+  "nets": 56,
+  "multiPadNets": 30,
+  "loneNonGroundPads": 26,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 11007,
+  "topLayerPixels": 22887,
+  "size": [
+   600,
+   523
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787552",
+  "name": "@ Honey Beast Parts pack",
+  "type": "distortion",
+  "about": "빈티지 앰프의 크랭크업 사운드를 표방하는 디스토션 페달입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 136,
+  "groundPads": 21,
+  "nets": 39,
+  "multiPadNets": 34,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5716,
+  "topLayerPixels": 30419,
+  "size": [
+   541,
+   511
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787638",
+  "name": "@ DIRTY BOM Parts pack",
+  "type": "distortion",
+  "about": "넓은 영역의 이큐와 모스펫펫클리핑을 이용한 하이게인 디스토션 페달입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 138,
+  "groundPads": 18,
+  "nets": 44,
+  "multiPadNets": 31,
+  "loneNonGroundPads": 13,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7136,
+  "topLayerPixels": 43433,
+  "size": [
+   601,
+   511
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788153",
+  "name": "@ KONISH P-1 Parts pack",
+  "type": "distortion",
+  "about": "피트 코니쉬 오버드라이브입니다. 빅머프 회로와 동일한 빅머프 모디 페달의 한종류입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 139,
+  "groundPads": 18,
+  "nets": 40,
+  "multiPadNets": 35,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 29668,
+  "size": [
+   600,
+   470
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788585",
+  "name": "@ PLEXI1959 Parts pack",
+  "type": "distortion",
+  "about": "최근 마샬에서 출시한 앰프인어박스 시리즈중에 JCM800, JCM900에 이은 PLEXI 1959 입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 140,
+  "groundPads": 18,
+  "nets": 49,
+  "multiPadNets": 33,
+  "loneNonGroundPads": 16,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 10029,
+  "topLayerPixels": 61381,
+  "size": [
+   800,
+   641
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788468",
+  "name": "@ SUPA FUZZ Parts pack",
+  "type": "fuzz",
+  "about": "Shin Ei에서 최초 개발한 전설적인 옥타 퍼즈 유니복스 슈퍼퍼즈입니다. 오리지날에 사용된 2SC828 Q 그레이드로 HFE 150~170사이",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 141,
+  "groundPads": 24,
+  "nets": 41,
+  "multiPadNets": 38,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1742,
+  "topLayerPixels": 51186,
+  "size": [
+   700,
+   636
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787489",
+  "name": "@ Bowling Point Parts pack",
+  "type": "buffer-boost",
+  "about": "제작기 808 회로 기반의 오버드라이브 페달로 입자감이 굵은 성향입니다. 클리핑 토글, 베이스부스트 토글이 있습니다. (살짝변화) 기판에 드라이",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 142,
+  "groundPads": 20,
+  "nets": 47,
+  "multiPadNets": 31,
+  "loneNonGroundPads": 16,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5404,
+  "topLayerPixels": 40876,
+  "size": [
+   601,
+   496
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787529",
+  "name": "@ Abracadabra Parts pack",
+  "type": "fuzz",
+  "about": "블랙사바스 기타리스트Tommi Iommi가 조합해서 사용하는 Laney Supergroup 앰프와 Rangemaster 고음 부스터 조합을 페달",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 143,
+  "groundPads": 23,
+  "nets": 45,
+  "multiPadNets": 34,
+  "loneNonGroundPads": 11,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9010,
+  "topLayerPixels": 44193,
+  "size": [
+   541,
+   631
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788143",
+  "name": "@ KONISH G-2 Parts pack",
+  "type": "overdrive",
+  "about": "피트 코니쉬 게르마늄 오버드라이브입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 143,
+  "groundPads": 24,
+  "nets": 56,
+  "multiPadNets": 35,
+  "loneNonGroundPads": 21,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 32030,
+  "size": [
+   600,
+   577
+  ],
+  "twoLayer": false,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787533",
+  "name": "@ Brown Charlie Parts pack",
+  "type": "distortion",
+  "about": "Marshall JTM45 앰프 헤드를 재현하는 페달중 초기 5노브 최근 모델입니다. 초기 버전에서 톤스택이 변경되어 있습니다. BS170 모스",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 144,
+  "groundPads": 22,
+  "nets": 39,
+  "multiPadNets": 35,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4969,
+  "topLayerPixels": 42429,
+  "size": [
+   572,
+   608
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787487",
+  "name": "@ Peanut Drive Parts pack",
+  "type": "overdrive",
+  "about": "제작기 드라이브의 최강 탑이라는 이름의 드라이브 페달입니다 J201 SMD 가 6개나 들어 갑니다. 방향 거꾸로 꼽으면 난감해지니 주의가 필요합",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 145,
+  "groundPads": 28,
+  "nets": 37,
+  "multiPadNets": 31,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9294,
+  "topLayerPixels": 35026,
+  "size": [
+   600,
+   621
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788180",
+  "name": "@ BIG SHERIFF PREAMP Parts pack",
+  "type": "preamp",
+  "about": "빅토리 앰프에서 나온 빅토리 세리프 앰프를 이식해 놓은 오버드라이브 겸 프리앰프입니다. 5개의 가변저항과 토글 스위치 모두 기판에 실장되는 타입",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 145,
+  "groundPads": 20,
+  "nets": 47,
+  "multiPadNets": 41,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3456,
+  "topLayerPixels": 31133,
+  "size": [
+   600,
+   588
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788181",
+  "name": "@ BIG JACK PREAMP Parts pack",
+  "type": "preamp",
+  "about": "빅토리 앰프에서 나온 빅토리 잭 앰프를 이식해 놓은 오버드라이브 겸 프리앰프입니다. 5개의 가변저항과 토글 스위치 모두 기판에 실장되는 타입으로",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 145,
+  "groundPads": 20,
+  "nets": 47,
+  "multiPadNets": 41,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3344,
+  "topLayerPixels": 31150,
+  "size": [
+   600,
+   588
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788182",
+  "name": "@ BIG KRAKEN PREAMP Parts pack",
+  "type": "preamp",
+  "about": "빅토리 앰프에서 나온 빅토리 크라켄 앰프를 이식해 놓은 오버드라이브 겸 프리앰프입니다. 5개의 가변저항과 토글 스위치 모두 기판에 실장되는 타입",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 145,
+  "groundPads": 20,
+  "nets": 46,
+  "multiPadNets": 40,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3450,
+  "topLayerPixels": 31155,
+  "size": [
+   600,
+   588
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788178",
+  "name": "@ BIG COPPER PREAMP Parts pack",
+  "type": "preamp",
+  "about": "빅토리 앰프에서 나온 빅토리 코퍼 앰프를 이식해 놓은 오버드라이브 겸 프리앰프입니다. 5개의 가변저항과 토글 스위치 모두 기판에 실장되는 타입으",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 147,
+  "groundPads": 21,
+  "nets": 51,
+  "multiPadNets": 42,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4499,
+  "topLayerPixels": 34576,
+  "size": [
+   600,
+   588
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788179",
+  "name": "@ BIG DUTCH PREAMP Parts pack",
+  "type": "preamp",
+  "about": "빅토리 앰프에서 나온 빅토리 더치스 앰프를 이식해 놓은 오버드라이브 겸 프리앰프입니다. 5개의 가변저항과 토글 스위치 모두 기판에 실장되는 타입",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 147,
+  "groundPads": 21,
+  "nets": 49,
+  "multiPadNets": 41,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 5823,
+  "topLayerPixels": 33357,
+  "size": [
+   600,
+   588
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788484",
+  "name": "@ BLUES BRKR BOX Parts pack",
+  "type": "overdrive",
+  "about": "블루스 브레이커 모디 페달로 유명 Snouse BlackBox 입니다. 버전 2 스테이지 프로 버전입니다. 스파클한 로우게인의 블루스 브레이커 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 147,
+  "groundPads": 22,
+  "nets": 57,
+  "multiPadNets": 43,
+  "loneNonGroundPads": 14,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8451,
+  "topLayerPixels": 39677,
+  "size": [
+   700,
+   809
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788549",
+  "name": "@ J900CM Parts pack",
+  "type": "overdrive",
+  "about": "마샬에서 최근에 페달형으로 나온 JCM900오버드라이브 페달입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 149,
+  "groundPads": 21,
+  "nets": 51,
+  "multiPadNets": 40,
+  "loneNonGroundPads": 11,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8414,
+  "topLayerPixels": 48355,
+  "size": [
+   700,
+   560
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788660",
+  "name": "@ MOONSHINE BOTTLE Parts pack",
+  "type": "overdrive",
+  "about": "튜브 스크리머 계열로 더 높은 게인과 두툼한 저역, 출력 증가 등의 컨셉으로 출시한 JHS 페달입니다. 토글 스위치와 원음과 섞어 주는 블랜드 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 150,
+  "groundPads": 18,
+  "nets": 63,
+  "multiPadNets": 39,
+  "loneNonGroundPads": 24,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 19020,
+  "topLayerPixels": 78431,
+  "size": [
+   800,
+   750
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788475",
+  "name": "@ PARTHENON Parts pack",
+  "type": "overdrive",
+  "about": "블루스 브레이커 모디 페달로 유명한 페달입니다. 기존 버전을 종료하고 앵글 타입 버전으로 제작하기 쉽게 준비하였습니다 1590B사용 배터리 불가",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 151,
+  "groundPads": 18,
+  "nets": 52,
+  "multiPadNets": 43,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3963,
+  "topLayerPixels": 40560,
+  "size": [
+   700,
+   802
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788661",
+  "name": "@ ODR ONE Parts pack",
+  "type": "overdrive",
+  "about": "웬만한 멀티이펙터, 캡쳐장비에 꼭 하나씩 있는 독일에서 1992년에 출시한 네츄럴 성향의 오버드라이브 페달입니다. 보통의 TONE노브 대신 독특",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 152,
+  "groundPads": 23,
+  "nets": 51,
+  "multiPadNets": 42,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 25212,
+  "topLayerPixels": 60186,
+  "size": [
+   800,
+   750
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787456",
+  "name": "@ BEE OD Parts pack",
+  "type": "overdrive",
+  "about": "아래 새로운 기판으로 준비되어 입고 되었습니다. @ FRIEDMAN MARY Parts Pack 29,000 원 프리드먼의 오버드라이브 페달입니",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 153,
+  "groundPads": 19,
+  "nets": 52,
+  "multiPadNets": 40,
+  "loneNonGroundPads": 12,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 13539,
+  "topLayerPixels": 44313,
+  "size": [
+   600,
+   500
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788052",
+  "name": "@ Cream Cake Overdrive Parts Pack",
+  "type": "overdrive",
+  "about": "호주지역에서 제작되는 오랜 부띠끄 페달입니다. 로우게인 성향의 부드럽고 미끄러운 독특한 톤입니다. 제작기",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 156,
+  "groundPads": 23,
+  "nets": 52,
+  "multiPadNets": 43,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 11440,
+  "topLayerPixels": 54082,
+  "size": [
+   1218,
+   451
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787640",
+  "name": "@ BXM Boost Parts pack",
+  "type": "buffer-boost",
+  "about": "프리드먼의 벅썸 부스트입니다. 투명하고 내추럴한 톤으로 게인부스팅에 최적화된 기능을 제공합니다. 3밴드 이큐와 타이트, 부스트 노브. 그리고 이",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 157,
+  "groundPads": 22,
+  "nets": 60,
+  "multiPadNets": 38,
+  "loneNonGroundPads": 22,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9763,
+  "topLayerPixels": 52621,
+  "size": [
+   586,
+   639
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788036",
+  "name": "@ All of BB Cream Parts Pack",
+  "type": "overdrive",
+  "about": "엑소틱의 투명한 부스트 부터 멜로우한 오버드라이브 까지 가능한 페달입니다. 버전 1.5회로를 기준으로 오리지널과 앤디티몬스버전을 스위칭하는 토글",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 159,
+  "groundPads": 8,
+  "nets": 62,
+  "multiPadNets": 43,
+  "loneNonGroundPads": 19,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 13680,
+  "topLayerPixels": 52135,
+  "size": [
+   663,
+   691
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788038",
+  "name": "@ Bass BB Cream Parts Pack",
+  "type": "overdrive",
+  "about": "엑소틱의 투명한 부스트 페달의 베이스 버전입니다. 기타 버전의 기판에서 몇가지 부분의 값을 변경, 점퍼, 또는 생략합니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 159,
+  "groundPads": 8,
+  "nets": 71,
+  "multiPadNets": 37,
+  "loneNonGroundPads": 34,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 13630,
+  "topLayerPixels": 53252,
+  "size": [
+   663,
+   691
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788017",
+  "name": "@ Pluto Green Parts pack",
+  "type": "overdrive",
+  "about": "브라운앰프 프로틴의 그린사이드 페달입니다 프로틴으로 제작하실분은 BB케이스에 IN-->Pluto Green --> Pluto Blue -->Ou",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 160,
+  "groundPads": 26,
+  "nets": 49,
+  "multiPadNets": 39,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 14605,
+  "topLayerPixels": 40739,
+  "size": [
+   594,
+   601
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788139",
+  "name": "@ NEW BLUE DRIVER Parts pack",
+  "type": "unknown",
+  "about": "앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 1590B케이스에 사용 가능하도록 디자인되어 있습니다. A250K듀얼 가변저항 뒷쪽에 포함",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 165,
+  "groundPads": 23,
+  "nets": 67,
+  "multiPadNets": 37,
+  "loneNonGroundPads": 30,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 11398,
+  "topLayerPixels": 35288,
+  "size": [
+   600,
+   562
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788173",
+  "name": "@ SLOW PREAMP Parts pack",
+  "type": "preamp",
+  "about": "솔다노앰프에서 나온 솔다노 SLO100을 이식해 놓은 오버드라이브 겸 프리앰프입니다. 개인적으로 최근에 만들어 본 페달 중에 굉장히 추천할만 합",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 167,
+  "groundPads": 22,
+  "nets": 63,
+  "multiPadNets": 44,
+  "loneNonGroundPads": 19,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7405,
+  "topLayerPixels": 41784,
+  "size": [
+   600,
+   633
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788586",
+  "name": "@ KENTAUR GOLD Parts pack",
+  "type": "overdrive",
+  "about": "너무나 유명한 클론 센타우르 오버드라이브 페달입니다. 1590B케이스에 배터리 사용 가능한 버전으로 새로 디자인 되었습니다. 앵글팟을 사용하고 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 168,
+  "groundPads": 18,
+  "nets": 53,
+  "multiPadNets": 39,
+  "loneNonGroundPads": 14,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6144,
+  "topLayerPixels": 70876,
+  "size": [
+   800,
+   749
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788587",
+  "name": "@ KENTAUR SILVER Parts pack",
+  "type": "overdrive",
+  "about": "너무나 유명한 클론 센타우르 오버드라이브 페달입니다. 1590B케이스에 배터리 사용 가능한 버전으로 새로 디자인 되었습니다. 앵글팟을 사용하고 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 168,
+  "groundPads": 18,
+  "nets": 54,
+  "multiPadNets": 36,
+  "loneNonGroundPads": 18,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 20494,
+  "topLayerPixels": 69972,
+  "size": [
+   800,
+   749
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787486",
+  "name": "@ Sovereign Parts pack",
+  "type": "overdrive",
+  "about": "제작기 드라이브의 최강 군주? 라는 이름의 드라이브 페달입니다 기본 성향은 플렉시 성향이고 브라이트 토글과 모던 빈티지 토글이 있습니다. J20",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 169,
+  "groundPads": 32,
+  "nets": 52,
+  "multiPadNets": 38,
+  "loneNonGroundPads": 14,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 10049,
+  "topLayerPixels": 37063,
+  "size": [
+   600,
+   621
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788053",
+  "name": "@ Custard Cake Overdrive Parts Pack",
+  "type": "overdrive",
+  "about": "호주지역에서 제작되는 오랜 부띠끄 페달입니다. 크림톤 보다 게인이 많은 성향의 오버드라이브입니다. 제작기",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 172,
+  "groundPads": 24,
+  "nets": 55,
+  "multiPadNets": 44,
+  "loneNonGroundPads": 11,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 11059,
+  "topLayerPixels": 58128,
+  "size": [
+   1218,
+   451
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788588",
+  "name": "@ DIAVOLO11K 풀키트 (노브 제외)",
+  "type": "distortion",
+  "about": "하이게인 디스토션 오꼬 디아블로 플러스 페달입니다. 원래는 6개의 노브, 2개의 풋스위치 모델이나 이 페달을 자작하는 자작인들의 염원에 따라서 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 173,
+  "groundPads": 38,
+  "nets": 72,
+  "multiPadNets": 43,
+  "loneNonGroundPads": 29,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 16567,
+  "topLayerPixels": 27988,
+  "size": [
+   1000,
+   536
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787555",
+  "name": "@ Flame Booster Parts pack",
+  "type": "buffer-boost",
+  "about": "티씨 일렉트로닉에서 나온 스파크 부스터입니다. 26dB까지 부스팅, 액티브 EQ가 장착되어 있습니다. FAT/CLN/ MID토글 스위치가 있습니",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 174,
+  "groundPads": 21,
+  "nets": 59,
+  "multiPadNets": 45,
+  "loneNonGroundPads": 14,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 12216,
+  "topLayerPixels": 55448,
+  "size": [
+   601,
+   624
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788141",
+  "name": "@ NEW REVVOLUTION G4 Parts pack",
+  "type": "unknown",
+  "about": "앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 1590B케이스에 사용 가능하도록 디자인되어 있습니다. 1. TL072 - 4번핀과 근처 ",
+  "board": 0,
+  "image": "img_00.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_01.jpg"
+  ],
+  "pads": 175,
+  "groundPads": 25,
+  "nets": 70,
+  "multiPadNets": 44,
+  "loneNonGroundPads": 26,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9968,
+  "topLayerPixels": 36069,
+  "size": [
+   600,
+   726
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788142",
+  "name": "@ NEW REVVOLUTION G2 Parts pack",
+  "type": "unknown",
+  "about": "앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 1590B케이스에 사용 가능하도록 디자인되어 있습니다. G4기판으로 제공됩니다. 아래 PC",
+  "board": 0,
+  "image": "img_00.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_01.jpg"
+  ],
+  "pads": 175,
+  "groundPads": 20,
+  "nets": 75,
+  "multiPadNets": 45,
+  "loneNonGroundPads": 30,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9887,
+  "topLayerPixels": 34058,
+  "size": [
+   600,
+   726
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787476",
+  "name": "@ Train Wreck Parts pack",
+  "type": "distortion",
+  "about": "제작기 에토스 드라이브로 유명한 브랜드에서 내놓은 트레인랙 앰프 성향의 드라이브 페달입니다.",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 186,
+  "groundPads": 14,
+  "nets": 64,
+  "multiPadNets": 47,
+  "loneNonGroundPads": 17,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 10894,
+  "topLayerPixels": 59618,
+  "size": [
+   640,
+   723
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788599",
+  "name": "@ FRIEDMAN MARY Parts Pack",
+  "type": "distortion",
+  "about": "프리드먼의 정통 브리티시 앰프 사운드 BE-OD입니다. 싱글 버전이 있고 듀얼 버전이 있는데, 듀얼 버전에서 끌어 올 수 있는 모든 콘트롤을 노",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 186,
+  "groundPads": 24,
+  "nets": 70,
+  "multiPadNets": 49,
+  "loneNonGroundPads": 21,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 23321,
+  "topLayerPixels": 88954,
+  "size": [
+   800,
+   996
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788025",
+  "name": "@ Duality Bass Fuzz Parts pack",
+  "type": "fuzz",
+  "about": "다크 글라스 듀엘리티 베이스 퍼즈 페달입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 189,
+  "groundPads": 21,
+  "nets": 70,
+  "multiPadNets": 41,
+  "loneNonGroundPads": 29,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 33877,
+  "topLayerPixels": 56514,
+  "size": [
+   685,
+   721
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787458",
+  "name": "@ BEE DS Parts pack",
+  "type": "overdrive",
+  "about": "프리드먼의 더티 셜리 오버드라이브 페달입니다. BEE-OD보다는 입자가 굵은 오버드라이브 페달입니다. 따로 토글 스위치를 달지 않아도 차이가 거",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 198,
+  "groundPads": 27,
+  "nets": 57,
+  "multiPadNets": 48,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7731,
+  "topLayerPixels": 68824,
+  "size": [
+   600,
+   693
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788140",
+  "name": "@ NEW REVVOLUTION G3 Parts pack",
+  "type": "buffer-boost",
+  "about": "앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 1590B케이스에 사용 가능하도록 디자인되어 있습니다. 해결 방법은 내부에 작은 버퍼를 심",
+  "board": 0,
+  "image": "img_00.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_01.jpg"
+  ],
+  "pads": 199,
+  "groundPads": 25,
+  "nets": 74,
+  "multiPadNets": 50,
+  "loneNonGroundPads": 24,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 12755,
+  "topLayerPixels": 40725,
+  "size": [
+   600,
+   726
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788601",
+  "name": "@ DIESEL V4 풀키트 (노브 제외)",
+  "type": "distortion",
+  "about": "디젤앰프에서 나온 디젤 프리앰프 페달입니다. 제작하기 쉬운 타입으로 리 디자인 되었습니다. 어마어마 한 게인과 땅꺼지는 저음을 내는 디스토션 페",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 200,
+  "groundPads": 28,
+  "nets": 84,
+  "multiPadNets": 49,
+  "loneNonGroundPads": 35,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 24273,
+  "topLayerPixels": 75618,
+  "size": [
+   1000,
+   703
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788662",
+  "name": "@ SEROTONE Parts pack",
+  "type": "eq",
+  "about": "튜브스크리머의 미드레인지 특성을 재해석한 일본의 부띠끄 페달입니다. 스크리머의 부드러운 피킹반응을 살리면서 미드가 더 도드라지게 EQ가 확장된 ",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 206,
+  "groundPads": 31,
+  "nets": 76,
+  "multiPadNets": 51,
+  "loneNonGroundPads": 25,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 22551,
+  "topLayerPixels": 90477,
+  "size": [
+   800,
+   1040
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788152",
+  "name": "@ TWIN BLOID Parts pack",
+  "type": "overdrive",
+  "about": "덤블 사운드를 표방하는 대표적인 일본의 부띠끄페달입니다. 두개의 회로가 하나의 케이스에 들어 있는 형태입니다. 오른쪽 풋스위치는 온,오프, 왼쪽",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 207,
+  "groundPads": 19,
+  "nets": 90,
+  "multiPadNets": 54,
+  "loneNonGroundPads": 36,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 15504,
+  "topLayerPixels": 41539,
+  "size": [
+   1000,
+   432
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788473",
+  "name": "@ VIG LEBOWSKI Parts pack",
+  "type": "overdrive",
+  "about": "제이 로켓 더 듀드라는 페달입니다. THE DUDE는 영화 위대한 라보스키에서 주인공 별명이라고 하네요. 덤블 사운드의 재현으로 유명한 페달입니",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 209,
+  "groundPads": 32,
+  "nets": 64,
+  "multiPadNets": 54,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7302,
+  "topLayerPixels": 43428,
+  "size": [
+   700,
+   809
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788598",
+  "name": "@ KOTT 풀키트 (노브 제외)",
+  "type": "overdrive",
+  "about": "아날로그맨의 킹오브 톤입니다. 블루스 브레이커류의 페달 중 가장 유명한 페달입니다. 몇가지 버전이 있었는데 기본 골격은 같습니다. 내부의 딥스위",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 214,
+  "groundPads": 22,
+  "nets": 89,
+  "multiPadNets": 57,
+  "loneNonGroundPads": 32,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8988,
+  "topLayerPixels": 42481,
+  "size": [
+   1000,
+   383
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787468",
+  "name": "@ Sam's Amp Classic Parts pack",
+  "type": "preamp",
+  "about": "산스앰프 클래식, 앰프 시뮬성향의 드라이브 페달입니다. 8 개의 Character Switch를 이용해서 미세한 뉘앙스를 조정할 수 있습니다. ",
+  "board": 0,
+  "image": "img_07.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_08.jpg"
+  ],
+  "pads": 251,
+  "groundPads": 19,
+  "nets": 46,
+  "multiPadNets": 30,
+  "loneNonGroundPads": 16,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8810,
+  "topLayerPixels": 27911,
+  "size": [
+   545,
+   708
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788553",
+  "name": "@ 브라우니 PLUTO 풀키트",
+  "type": "overdrive",
+  "about": "브라운앰프에서 나온 프로틴이라는 2채널 페달입니다. 풀키트로 이루어져 있습니다. 케이스만 추가하시면 됩니다. 블루(Blue) 채널 : 클래식 오",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 277,
+  "groundPads": 33,
+  "nets": 100,
+  "multiPadNets": 72,
+  "loneNonGroundPads": 28,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 14705,
+  "topLayerPixels": 56057,
+  "size": [
+   1000,
+   639
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788200",
+  "name": "@ SLOW 2CH PREAMP Parts pack",
+  "type": "preamp",
+  "about": "솔다노앰프에서 나온 솔다노 SLO100을 이식해 놓은 오버드라이브 겸 프리앰프입니다. 같은 회로 2개를 2채널로 구성하였습니다. 우측은 바이패스",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 318,
+  "groundPads": 36,
+  "nets": 118,
+  "multiPadNets": 88,
+  "loneNonGroundPads": 30,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 15761,
+  "topLayerPixels": 48924,
+  "size": [
+   1000,
+   589
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788441",
+  "name": "@ BASSLINE II 풀키트(노브, 케이스 제외)",
+  "type": "preamp",
+  "about": "일전에 판매중이던 Tech21 Sansamp Bass DI 간편 버전의 판매를 종료하고 Tech21 Sansamp Bass DI V2의 모든 기",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 343,
+  "groundPads": 5,
+  "nets": 166,
+  "multiPadNets": 89,
+  "loneNonGroundPads": 77,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 14806,
+  "topLayerPixels": 51195,
+  "size": [
+   1000,
+   767
+  ],
+  "twoLayer": true,
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787467",
+  "name": "@ CE-2 Chorus Parts pack",
+  "type": "modulation",
+  "about": "RATE 가변저항 자리 바로 아래에 있는 2N5088은 기판과 방향을 180도 돌려서 실장 부탁드립니다. 기판 하단의 1000n을 유지하시면 저",
+  "board": 2,
+  "image": "img_06.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_12.jpg"
+  ],
+  "pads": 15,
+  "groundPads": 1,
+  "nets": 11,
+  "multiPadNets": 4,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3946,
+  "topLayerPixels": 2878,
+  "size": [
+   250,
+   250
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787467",
+  "name": "@ CE-2 Chorus Parts pack",
+  "type": "modulation",
+  "about": "RATE 가변저항 자리 바로 아래에 있는 2N5088은 기판과 방향을 180도 돌려서 실장 부탁드립니다. 기판 하단의 1000n을 유지하시면 저",
+  "board": 1,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_12.jpg"
+  ],
+  "pads": 17,
+  "groundPads": 0,
+  "nets": 11,
+  "multiPadNets": 3,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1104,
+  "topLayerPixels": 4816,
+  "size": [
+   250,
+   250
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787467",
+  "name": "@ CE-2 Chorus Parts pack",
+  "type": "modulation",
+  "about": "RATE 가변저항 자리 바로 아래에 있는 2N5088은 기판과 방향을 180도 돌려서 실장 부탁드립니다. 기판 하단의 1000n을 유지하시면 저",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_12.jpg"
+  ],
+  "pads": 19,
+  "groundPads": 0,
+  "nets": 14,
+  "multiPadNets": 4,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1983,
+  "topLayerPixels": 4208,
+  "size": [
+   250,
+   250
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787467",
+  "name": "@ CE-2 Chorus Parts pack",
+  "type": "modulation",
+  "about": "RATE 가변저항 자리 바로 아래에 있는 2N5088은 기판과 방향을 180도 돌려서 실장 부탁드립니다. 기판 하단의 1000n을 유지하시면 저",
+  "board": 4,
+  "image": "img_08.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_12.jpg"
+  ],
+  "pads": 24,
+  "groundPads": 0,
+  "nets": 11,
+  "multiPadNets": 7,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2627,
+  "topLayerPixels": 7203,
+  "size": [
+   250,
+   250
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787467",
+  "name": "@ CE-2 Chorus Parts pack",
+  "type": "modulation",
+  "about": "RATE 가변저항 자리 바로 아래에 있는 2N5088은 기판과 방향을 180도 돌려서 실장 부탁드립니다. 기판 하단의 1000n을 유지하시면 저",
+  "board": 5,
+  "image": "img_09.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_12.jpg"
+  ],
+  "pads": 24,
+  "groundPads": 0,
+  "nets": 16,
+  "multiPadNets": 7,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3991,
+  "topLayerPixels": 6698,
+  "size": [
+   250,
+   250
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787467",
+  "name": "@ CE-2 Chorus Parts pack",
+  "type": "modulation",
+  "about": "RATE 가변저항 자리 바로 아래에 있는 2N5088은 기판과 방향을 180도 돌려서 실장 부탁드립니다. 기판 하단의 1000n을 유지하시면 저",
+  "board": 3,
+  "image": "img_07.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_12.jpg"
+  ],
+  "pads": 25,
+  "groundPads": 1,
+  "nets": 16,
+  "multiPadNets": 6,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3716,
+  "topLayerPixels": 5308,
+  "size": [
+   250,
+   250
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787693",
+  "name": "[1K] SHO Parts pack",
+  "type": "noise-gate",
+  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 너무나도 유명",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 37,
+  "groundPads": 11,
+  "nets": 7,
+  "multiPadNets": 7,
+  "loneNonGroundPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1776,
+  "topLayerPixels": 4836,
+  "size": [
+   286,
+   278
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186786839",
+  "name": "@ NEW FAT 부스터 Parts Pack",
+  "type": "compressor",
+  "about": "LF442CN단종으로 TL072로 패킹됩니다. 가격은 반영되어 있습니다. 1590A케이스에 페달로 만드실때는 3파이LED를 사용해야 합니다 보호",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 66,
+  "groundPads": 9,
+  "nets": 25,
+  "multiPadNets": 16,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8161,
+  "topLayerPixels": 35433,
+  "size": [
+   600,
+   553
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787647",
+  "name": "@ Maguna Vibe Parts pack",
+  "type": "modulation",
+  "about": "간단한 회로로 구현되는 옵티컬 바이브 페달입니다. 활용은 충분하나 아래 동영상 샘플 보다는 깊이가 덜걸리는 상태입니다. CDS를 더 테스트 할 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 67,
+  "groundPads": 14,
+  "nets": 19,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1262,
+  "topLayerPixels": 15202,
+  "size": [
+   481,
+   353
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787969",
+  "name": "@ Octavia Parts pack",
+  "type": "pitch",
+  "about": "Tychobrahe Octavia 옥타퍼즈입니다.. 1590B 케이스에 딱 맞게 크기를 줄여서 입고 되었습니다. 카본컴퍼지션 저항과 42TM02",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_00.jpg",
+   "img_04.jpg"
+  ],
+  "pads": 69,
+  "groundPads": 8,
+  "nets": 30,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 15,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1164,
+  "topLayerPixels": 12079,
+  "size": [
+   600,
+   263
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788279",
+  "name": "@ OCTA FUZZ 풀키트 (노브, 케이스 제외)",
+  "type": "pitch",
+  "about": "풀키트로 구성되어 있습니다.케이스와노브는추가하셔야합니다. (풋스위치,풋스위치기판,풀림방지와셔,디씨잭,배터리스냅,박스잭,3파이LED,보호저항) T",
+  "board": 0,
+  "image": "img_04.jpg",
+  "sameBoardAs": "186787969",
+  "bomImages": [],
+  "pads": 69,
+  "groundPads": 8,
+  "nets": 30,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 15,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1164,
+  "topLayerPixels": 12079,
+  "size": [
+   600,
+   263
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788508",
+  "name": "@ OCTA FUZZ Parts pack",
+  "type": "pitch",
+  "about": "로저메이어가 67년 최초 개발하고, 핸드릭스가 사용. 수제작 모델로 양산은 하지 않음. 로저메이어는 트랜스없는 옥타퍼즈를 새로 개발, 타코브레이",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": "186787969",
+  "bomImages": [
+   "img_00.jpg",
+   "img_04.jpg"
+  ],
+  "pads": 69,
+  "groundPads": 8,
+  "nets": 30,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 15,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1164,
+  "topLayerPixels": 12079,
+  "size": [
+   600,
+   263
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787561",
+  "name": "@ 03 Pancake Parts pack",
+  "type": "noise-gate",
+  "about": "77년에 출시된 핫케익 2Knob+1Toogle 버전 이후 2003년도에 3Knob버전으로 출시된 모델을 기준으로 합니다. 오리지날의 경우 릴레",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 73,
+  "groundPads": 12,
+  "nets": 22,
+  "multiPadNets": 18,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3455,
+  "topLayerPixels": 18022,
+  "size": [
+   541,
+   323
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787560",
+  "name": "@ 77 Pancake Parts pack",
+  "type": "noise-gate",
+  "about": "77년에 출시된 핫케익 2Knob+1Toogle 버전을 기준으로 합니다. 오리지날의 경우 릴레이를 이용한 독특한 방식의 바이패스를 사용하고 있으",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 78,
+  "groundPads": 12,
+  "nets": 23,
+  "multiPadNets": 18,
+  "loneNonGroundPads": 5,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3223,
+  "topLayerPixels": 22908,
+  "size": [
+   541,
+   353
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788655",
+  "name": "@ BIG KNOB VERB Parts Pack",
+  "type": "reverb",
+  "about": "J 로켓의 보잉 스프링 리버브입니다. 원노브로 심플하게 조작 가능하며 제작도 수월합니다. 기존 리버브가 제작 난이도가 높아서 심플한 리버브로 준",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 79,
+  "groundPads": 17,
+  "nets": 26,
+  "multiPadNets": 20,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9038,
+  "topLayerPixels": 23922,
+  "size": [
+   800,
+   437
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788338",
+  "name": "@ GOVERNOR Parts pack",
+  "type": "compressor",
+  "about": "1988년에 마샬에서 출시한 오버드라이브 페달로 앰프 인 어 박스 개념의 선구자격인 페달입니다. 마샬 스택 앰프의 크랭크업 사운드를 추구합니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 92,
+  "groundPads": 17,
+  "nets": 34,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7882,
+  "topLayerPixels": 28258,
+  "size": [
+   700,
+   490
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787954",
+  "name": "@ Fake Reverb Parts pack",
+  "type": "reverb",
+  "about": "Accutronics BTDR-2H 22,000원 어큐트로닉스 BTDR 리버브 브릭(디지털 모듈)을 이용한 고급스러운 리버브 페달입니다. 웜플러",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 98,
+  "groundPads": 17,
+  "nets": 35,
+  "multiPadNets": 24,
+  "loneNonGroundPads": 11,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3709,
+  "topLayerPixels": 29866,
+  "size": [
+   436,
+   481
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788596",
+  "name": "@ FAKE REVERB Parts Pack",
+  "type": "reverb",
+  "about": "웜플러 FAUX 리버브입니다. 앵글타입으로 제작하기 쉽게 리 디자인 되었습니다. 올드 펜더 앰프의 스프링 리버브의 재현을 모토로 하는 리버브입니",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 98,
+  "groundPads": 20,
+  "nets": 31,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7839,
+  "topLayerPixels": 59844,
+  "size": [
+   800,
+   996
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787465",
+  "name": "@ Gate Dog Parts pack",
+  "type": "noise-gate",
+  "about": "베이스용 브라운독 게이트 퍼즈입니다.",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 99,
+  "groundPads": 14,
+  "nets": 26,
+  "multiPadNets": 22,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6766,
+  "topLayerPixels": 25743,
+  "size": [
+   497,
+   412
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788446",
+  "name": "@ OCB Parts pack",
+  "type": "pitch",
+  "about": "CLEAN OCTAVE BLEND 라는 이름의 옥타 퍼즈페달입니다. 다양한 톤에 대응 하는 현재적으로 해석된 옥타 퍼즈라고합니다",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 100,
+  "groundPads": 19,
+  "nets": 29,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 721,
+  "topLayerPixels": 45798,
+  "size": [
+   700,
+   548
+  ],
+  "twoLayer": false,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788265",
+  "name": "@ GRAFF DYNAMIC 필코팩 풀키트",
+  "type": "utility",
+  "about": "새로 입고된 필코 캐퍼시터로 모두 구성할수 있는 부품팩이어서 필코팩으로 준비했습니다. 스월링 패턴의 메탈림 스티커를 경험해 보기에 좋은 페달이어",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": "186788104",
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 103,
+  "groundPads": 13,
+  "nets": 35,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 7,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4991,
+  "topLayerPixels": 26432,
+  "size": [
+   600,
+   469
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787463",
+  "name": "@ Active FX Loop Parts pack",
+  "type": "utility",
+  "about": "액티브 타입 샌드리턴(FX)가 아닌 앰프에 연결해서 사용할 수 있는 액티브 타입 FX Loop 입니다.",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 106,
+  "groundPads": 16,
+  "nets": 27,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 247,
+  "topLayerPixels": 16185,
+  "size": [
+   549,
+   248
+  ],
+  "twoLayer": false,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788024",
+  "name": "@ Blue Power Parts pack",
+  "type": "utility",
+  "about": "킹톤 블루스 파워 페달입니다 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 106,
+  "groundPads": 12,
+  "nets": 36,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 7024,
+  "topLayerPixels": 32496,
+  "size": [
+   511,
+   541
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787641",
+  "name": "@ NEW MULTI CAT Parts pack",
+  "type": "utility",
+  "about": "앵글팟 사용으로 제작이 쉽게 새로 디자인 되었습니다. 470R저항이 LED보호저항입니다. 로터리 스위치는 앵글타입 가변저항 보다 약간 높이가 낮",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 108,
+  "groundPads": 22,
+  "nets": 34,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 0,
+  "topLayerPixels": 38205,
+  "size": [
+   700,
+   572
+  ],
+  "twoLayer": false,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787679",
+  "name": "@ FX-25 Parts pack",
+  "type": "filter",
+  "about": "DOD 엔벨롭필터입니다. 피킹강약에 반응하는 오토 와우입니다. 아래 동영상을 참고하세요",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 113,
+  "groundPads": 19,
+  "nets": 40,
+  "multiPadNets": 31,
+  "loneNonGroundPads": 9,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6837,
+  "topLayerPixels": 28560,
+  "size": [
+   541,
+   500
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788509",
+  "name": "@ OCTA CLASSIC Parts pack",
+  "type": "pitch",
+  "about": "로저메이어가 최초 개발하고 양산하지 않았던 트랜스버전 이후 새로 설계해서 제작한 옥타퍼즈 페달입니다. 화이트 케이스의 비전 옥타비아도 있는데 외",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 115,
+  "groundPads": 23,
+  "nets": 31,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 12527,
+  "topLayerPixels": 28617,
+  "size": [
+   700,
+   630
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787558",
+  "name": "@ Black CAB Parts pack",
+  "type": "cabinet",
+  "about": "스피커 시스템의 주파수 응답을 에뮬레이트 하는 캐비넷 시뮬레이터 페달입니다. 원 페달에 있는 D.I + XLR 회로는 공개된것이 없어 캐비넷 시",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 118,
+  "groundPads": 16,
+  "nets": 46,
+  "multiPadNets": 31,
+  "loneNonGroundPads": 15,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8563,
+  "topLayerPixels": 43970,
+  "size": [
+   556,
+   534
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788575",
+  "name": "@ BLACK AMP 65 Parts pack",
+  "type": "reverb",
+  "about": "웜플러 블랙 65 페달입니다. 브라이언 웜플러가 실제 빈티지 모델과 비교하면서 제작한 것으로 유명합니다. 트윈리버브, 디럭스 리버브, 바이브로럭",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 118,
+  "groundPads": 23,
+  "nets": 44,
+  "multiPadNets": 34,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 34227,
+  "topLayerPixels": 44313,
+  "size": [
+   800,
+   772
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787956",
+  "name": "@ Reverberation Parts pack",
+  "type": "reverb",
+  "about": "Accutronics BTDR-2H 22,000원 어큐트로닉스 BTDR 리버브 브릭(디지털 모듈)을 이용한 고급스러운 리버브 페달입니다. 데쓰바",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 126,
+  "groundPads": 22,
+  "nets": 40,
+  "multiPadNets": 34,
+  "loneNonGroundPads": 6,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6813,
+  "topLayerPixels": 31570,
+  "size": [
+   526,
+   578
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788574",
+  "name": "@ TWEED AMP 57 Parts pack",
+  "type": "utility",
+  "about": "웜플러 트위드57 페달입니다. 브라이언 웜플러가 실제 빈티지 모델과 비교하면서 제작한 것으로 유명합니다. 펜터의 트위드 디럭스, 베이스맨, 챔프",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 126,
+  "groundPads": 22,
+  "nets": 50,
+  "multiPadNets": 34,
+  "loneNonGroundPads": 16,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 32724,
+  "topLayerPixels": 44498,
+  "size": [
+   800,
+   771
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788109",
+  "name": "@ NEW DELAY ATN Parts Pack",
+  "type": "delay",
+  "about": "NEW DELAY ATN Parts Pack 앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. PT2399를 이용한 매드 프로페서 딥블루딜레",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 131,
+  "groundPads": 21,
+  "nets": 47,
+  "multiPadNets": 39,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2159,
+  "topLayerPixels": 35778,
+  "size": [
+   600,
+   472
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788594",
+  "name": "@ REVERBNATION Parts Pack",
+  "type": "reverb",
+  "about": "데스바이오디오 리버레이션 머신 리버브입니다. 앵글타입으로 제작하기 쉽게 리 디자인 되었습니다. 단순한 리버브는 아니고 인터스텔라 톤, 성간 소음",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 132,
+  "groundPads": 24,
+  "nets": 51,
+  "multiPadNets": 36,
+  "loneNonGroundPads": 15,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 20520,
+  "topLayerPixels": 55815,
+  "size": [
+   800,
+   996
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788156",
+  "name": "@ NEW KOMPRE4 Parts pack",
+  "type": "compressor",
+  "about": "앵글 팟을 이용하여 제작하기 쉽게 준비되었습니다. LEVEL B50K SUSTAIN C500K CLIP B250K ATTACK C250K (기판",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 140,
+  "groundPads": 21,
+  "nets": 54,
+  "multiPadNets": 29,
+  "loneNonGroundPads": 25,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 6355,
+  "topLayerPixels": 28273,
+  "size": [
+   600,
+   508
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788595",
+  "name": "@ GHOST REVERB Parts Pack",
+  "type": "reverb",
+  "about": "EQD의 고스트 에코 리버브입니다. 앵글타입으로 제작하기 쉽게 리 디자인 되었습니다. 단순한 리버브는 아니고 리버브와 에코가 같이 걸리는 몽환적",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 144,
+  "groundPads": 27,
+  "nets": 52,
+  "multiPadNets": 38,
+  "loneNonGroundPads": 14,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 20896,
+  "topLayerPixels": 82022,
+  "size": [
+   800,
+   996
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788445",
+  "name": "@ OCTA KING Parts pack",
+  "type": "pitch",
+  "about": "킹톤 옥타랜드 미니 버전입니다. 높은 게인에서도 옥타브 특성이 유지되는 강렬하고 독창적인 회로의 옥타 퍼즈 페달입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 146,
+  "groundPads": 24,
+  "nets": 45,
+  "multiPadNets": 41,
+  "loneNonGroundPads": 4,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3394,
+  "topLayerPixels": 61847,
+  "size": [
+   700,
+   636
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788305",
+  "name": "@ NEW FG Komp Parts pack",
+  "type": "compressor",
+  "about": "매드 프로페서 포레스트 그린 옵티컬 컴프레서 페달입니다. 앵글 가변저항 사용으로 새로 디자인 되어 입고 되었습니다. CA3080과 같은 OTA컴",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 149,
+  "groundPads": 9,
+  "nets": 72,
+  "multiPadNets": 40,
+  "loneNonGroundPads": 32,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 17598,
+  "topLayerPixels": 44772,
+  "size": [
+   700,
+   631
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787955",
+  "name": "@ Ghost Reverb Parts pack",
+  "type": "reverb",
+  "about": "Accutronics BTDR-2H 22,000원 어큐트로닉스 BTDR 리버브 브릭(디지털 모듈)을 이용한 고급스러운 리버브 페달입니다. EQD",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 152,
+  "groundPads": 25,
+  "nets": 62,
+  "multiPadNets": 37,
+  "loneNonGroundPads": 25,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 14270,
+  "topLayerPixels": 54775,
+  "size": [
+   631,
+   586
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787484",
+  "name": "@ Opto Vibe Parts pack",
+  "type": "modulation",
+  "about": "어쓰 퀘이크 디바이스의 옵토커플러 기반의 아날로그 바이브입니다.",
+  "board": 0,
+  "image": "img_02.jpeg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 153,
+  "groundPads": 22,
+  "nets": 54,
+  "multiPadNets": 37,
+  "loneNonGroundPads": 17,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 18590,
+  "topLayerPixels": 53590,
+  "size": [
+   631,
+   662
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788477",
+  "name": "@ TAPE DELAY EMUL Parts Pack",
+  "type": "delay",
+  "about": "자작계에서 핫한 딜레이입니다. MK II 로 준비합니다. (MadBeanPedals 포럼의 Aleph Null이라는 디자이너가 회로를 개발하여 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 153,
+  "groundPads": 28,
+  "nets": 49,
+  "multiPadNets": 39,
+  "loneNonGroundPads": 10,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 11538,
+  "topLayerPixels": 32037,
+  "size": [
+   700,
+   732
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788111",
+  "name": "@ NEW FAKE DELAY Parts pack",
+  "type": "delay",
+  "about": "NEW FAKE DELAY Parts pack 앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 웸플러 Faux(모조, 가짜) Analog ",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 155,
+  "groundPads": 27,
+  "nets": 45,
+  "multiPadNets": 37,
+  "loneNonGroundPads": 8,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 4066,
+  "topLayerPixels": 37911,
+  "size": [
+   596,
+   564
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787491",
+  "name": "@ Mutron III Parts Pack",
+  "type": "filter",
+  "about": "앵글타입으로 새로 준비될 예정입니다. 최초의 엔벨롭 필터, 펑크 음악에 필수적인 페달입니다. 기타, 베이스, 키보드 등등에 사용될 수 있습니다.",
+  "board": 0,
+  "image": "img_04.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_05.jpg"
+  ],
+  "pads": 157,
+  "groundPads": 23,
+  "nets": 60,
+  "multiPadNets": 41,
+  "loneNonGroundPads": 19,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 13955,
+  "topLayerPixels": 46155,
+  "size": [
+   600,
+   587
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788054",
+  "name": "@ Orpheus Distortion Parts Pack",
+  "type": "noise-gate",
+  "about": "호주지역에서 제작되는 오랜 부띠끄 페달입니다. 하이게인 성향의 페달이며, 게이트 콘트롤이있습니다. 자연스러운 게이트 기능은 아니지만, 배킹톤에서",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 159,
+  "groundPads": 21,
+  "nets": 53,
+  "multiPadNets": 41,
+  "loneNonGroundPads": 12,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 10895,
+  "topLayerPixels": 49034,
+  "size": [
+   1218,
+   403
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788591",
+  "name": "@ DYNAMICA GTR Parts Pack",
+  "type": "compressor",
+  "about": "1986년 보스에서 나온 가장 유명한 컴프레서 CS-3를 거대한 자작 커뮤니티에서 음질 개선과 노이즈 감소를 목표로 모디된 회로입니다. 옵티컬 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 161,
+  "groundPads": 24,
+  "nets": 59,
+  "multiPadNets": 38,
+  "loneNonGroundPads": 21,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 22032,
+  "topLayerPixels": 89273,
+  "size": [
+   800,
+   750
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788592",
+  "name": "@ DYNAMICA BASS Parts Pack",
+  "type": "compressor",
+  "about": "1986년 보스에서 나온 가장 유명한 컴프레서 CS-3를 거대한 자작 커뮤니티에서 음질 개선과 노이즈 감소를 목표로 모디된 회로입니다. 옵티컬 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": "186788591",
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 161,
+  "groundPads": 24,
+  "nets": 59,
+  "multiPadNets": 38,
+  "loneNonGroundPads": 21,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 22032,
+  "topLayerPixels": 89273,
+  "size": [
+   800,
+   750
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788155",
+  "name": "@ ROSE Phaser Parts pack",
+  "type": "modulation",
+  "about": "빈티지 로스 페이저입니다. 페이저90와 같은 매칭이 필요 없어서 제작이 쉽고 페이저가 깊게 잘 걸립니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 169,
+  "groundPads": 18,
+  "nets": 65,
+  "multiPadNets": 37,
+  "loneNonGroundPads": 28,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 18853,
+  "topLayerPixels": 36311,
+  "size": [
+   600,
+   633
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788112",
+  "name": "@ NEW ECHO TAPE Parts pack",
+  "type": "delay",
+  "about": "NEW ECHO TAPE Parts pack 앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. 킬리 마그네틱 에코 딜레이 페달입니다. PT2",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 172,
+  "groundPads": 26,
+  "nets": 60,
+  "multiPadNets": 42,
+  "loneNonGroundPads": 18,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9500,
+  "topLayerPixels": 48809,
+  "size": [
+   600,
+   643
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788590",
+  "name": "@ NARCISSIST Parts Pack",
+  "type": "compressor",
+  "about": "웜플러에서 나온 전설적인 컴프레서,리미터 1176의 재현을 모티브로 제작된 컴프레서 페달입니다. 가장 투명하고 부드러운 컴프로 유명합니다. 베이",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 175,
+  "groundPads": 23,
+  "nets": 69,
+  "multiPadNets": 46,
+  "loneNonGroundPads": 23,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 37710,
+  "topLayerPixels": 91475,
+  "size": [
+   800,
+   931
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788158",
+  "name": "@ KOMP4 PLUS Parts pack",
+  "type": "compressor",
+  "about": "킬리 컴프레서 플러스입니다. 이전 버전의 입력게인(클리핑방지)콘트롤이 제거되고, 토글 스위치로 대치되어 있습니다(싱글 험버커) 오리지날은 2단이",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 195,
+  "groundPads": 29,
+  "nets": 81,
+  "multiPadNets": 51,
+  "loneNonGroundPads": 30,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 18364,
+  "topLayerPixels": 40259,
+  "size": [
+   600,
+   644
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788406",
+  "name": "@ NEW NOISE KILLER 풀키트(노브, 케이스 제외)",
+  "type": "noise-gate",
+  "about": "최근에 공개된 G-STRING II 회로를 기준으로 THAT2181복각칩을 통해서 구성된 부품팩입니다. 오리지날을 소유하신 회원님과 함께 검증하",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 217,
+  "groundPads": 33,
+  "nets": 75,
+  "multiPadNets": 61,
+  "loneNonGroundPads": 14,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9596,
+  "topLayerPixels": 47754,
+  "size": [
+   700,
+   808
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788597",
+  "name": "@ E.D.M 풀키트 (노브 제외)",
+  "type": "delay",
+  "about": "데쓰바이오디오의 에코 드림 버전 2입니다. 특이하게 실험용으로 많이 사용되던 (지금은 단종) XR2206 싸인파 생성기와 PT2399 에코칩을 ",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_00.jpg",
+   "img_02.jpg"
+  ],
+  "pads": 230,
+  "groundPads": 41,
+  "nets": 96,
+  "multiPadNets": 56,
+  "loneNonGroundPads": 40,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 25765,
+  "topLayerPixels": 87474,
+  "size": [
+   1000,
+   995
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788113",
+  "name": "@ JUILLIARD CHORUS Parts pack",
+  "type": "modulation",
+  "about": "앵글 팟을 이용하여 제작하기 쉽게 새로준비되었습니다. Boss CE-2 모디로 알려진 월러스오디오의 줄리아입니다. 이 회로에 대한 이하윤님의 분",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_04.jpg"
+  ],
+  "pads": 240,
+  "groundPads": 27,
+  "nets": 90,
+  "multiPadNets": 56,
+  "loneNonGroundPads": 34,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 19322,
+  "topLayerPixels": 56130,
+  "size": [
+   600,
+   726
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186788584",
+  "name": "@ D.R.P.O 풀키트 (노브 제외)",
+  "type": "cabinet",
+  "about": "MARSHALL DRP-1 DIRECT RECORDING PREAMP 마샬에서 1994년에 출시한 휴대하기 좋은 형태의 기타 프리앰프 겸 레코딩",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 258,
+  "groundPads": 32,
+  "nets": 101,
+  "multiPadNets": 73,
+  "loneNonGroundPads": 28,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 9853,
+  "topLayerPixels": 41982,
+  "size": [
+   1000,
+   538
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ },
+ {
+  "goodsNo": "186787478",
+  "name": "@ StoneHenge Phaser Parts pack",
+  "type": "modulation",
+  "about": "제작기 LM13600 OTA를 이용한 스몰스톤 페이저의 풀모디 형식의 페이저입니다.",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 275,
+  "groundPads": 48,
+  "nets": 90,
+  "multiPadNets": 60,
+  "loneNonGroundPads": 30,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 19339,
+  "topLayerPixels": 73628,
+  "size": [
+   626,
+   1100
+  ],
+  "twoLayer": true,
+  "tier": "C"
+ }
+]

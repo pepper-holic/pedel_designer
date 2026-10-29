@@ -1,0 +1,54 @@
+id pp-love-bias-2
+goods 186785995
+name Love Bias II
+motif Lovepedal COT50
+type overdrive
+desc 2N5089 한 석 COT50 - 2.2M 컬렉터 피드백, 10K 컬렉터, 이미터는 C10K BIAS 팟+22uF 바이패스, 100n 뒤 1N400X/1N4148 비대칭 접지 클리핑, A100K 레벨
+image img_00.jpg
+# No parts-list image on this page. Same circuit as the BIAS [1K] board (186787691), which this
+# map was checked against: same parts, same diode directions. The transistor has no pin labels:
+# its left pin feeds 2.2M/10K/100n (collector), the middle pin the 47n/2.2M node (base), the right
+# pin the BIAS pot (emitter). The Level pot's wiper (L2) goes straight to the OUT jack off the board.
+# The seller note "47n 왼쪽의 9V 포인트가 IN" refers to an older silk; electrically pad 20 is IN.
+io IN=20 V9=6 GND=24
+JUMP 1 14    # base: transistor middle pin to the 2.2M
+JUMP 14 22   # 2.2M to the 47n
+JUMP 6 19    # 9V to the 10K
+JUMP 7 15    # clipping node: 1N400X to the 1N4148
+JUMP 10 11   # 100n to Level lug 3
+JUMP 11 15
+
+STAGE input input 입력
+R 1M 26 27 R1
+C 47n 21 22 C1
+
+STAGE gain gain 공통 이미터 (COT50)
+Q 2N5089 c=0 b=1 e=2 Q1
+R 10K 18 19 R2
+R 2.2M 13 14 R3
+POT C10K BIAS 5 4 3
+C 22uF 16 17 C2
+
+STAGE clip clipping 비대칭 클리핑
+C 100n 9 10 C3
+D 1N400X a=7 k=8 D1
+D 1N4148 a=23 k=15 D2
+
+STAGE output output 출력 (레벨)
+POT A100K LEVEL 12 OUT 11
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT C3 380 400 h
+AT LEVEL 480 400 r180
+AT R1 120 470 v
+AT R2 290 190 v-
+AT R3 240 520 h-
+AT BIAS 350 460 r180
+AT C2 350 560 v
+AT D1 410 470 v
+AT D2 590 470 v-
+AT RLOAD 480 480 v

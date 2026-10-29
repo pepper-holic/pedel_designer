@@ -1,0 +1,223 @@
+{
+ "id": "pp-love-bias-2",
+ "goodsNo": "186785995",
+ "kitName": "Love Bias II",
+ "motif": "Lovepedal COT50",
+ "type": "overdrive",
+ "description": "2N5089 한 석 COT50 - 2.2M 컬렉터 피드백, 10K 컬렉터, 이미터는 C10K BIAS 팟+22uF 바이패스, 100n 뒤 1N400X/1N4148 비대칭 접지 클리핑, A100K 레벨",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N5089",
+   "nodes": {
+    "c": "n2",
+    "b": "n1",
+    "e": "n3"
+   }
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n2",
+    "vcc"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "n2",
+    "n1"
+   ]
+  },
+  {
+   "ref": "BIAS",
+   "kind": "POT",
+   "value": "C10K",
+   "nodes": [
+    "0",
+    "n4",
+    "n3"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n2",
+    "n5"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "n5",
+    "k": "0"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "0",
+    "k": "n5"
+   }
+  },
+  {
+   "ref": "LEVEL",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n5"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "공통 이미터 (COT50)",
+   "parts": [
+    "Q1",
+    "R2",
+    "R3",
+    "BIAS",
+    "C2"
+   ]
+  },
+  {
+   "id": "clip",
+   "category": "clipping",
+   "label": "비대칭 클리핑",
+   "parts": [
+    "C3",
+    "D1",
+    "D2"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (레벨)",
+   "parts": [
+    "LEVEL"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q1": {
+   "x": 270,
+   "y": 400
+  },
+  "C3": {
+   "x": 380,
+   "y": 400,
+   "rotation": 0
+  },
+  "LEVEL": {
+   "x": 480,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 290,
+   "y": 190,
+   "rotation": 270
+  },
+  "R3": {
+   "x": 240,
+   "y": 520,
+   "rotation": 180
+  },
+  "BIAS": {
+   "x": 350,
+   "y": 460,
+   "rotation": 180
+  },
+  "C2": {
+   "x": 350,
+   "y": 560,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 410,
+   "y": 470,
+   "rotation": 90
+  },
+  "D2": {
+   "x": 590,
+   "y": 470,
+   "rotation": 270
+  },
+  "RLOAD": {
+   "x": 480,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

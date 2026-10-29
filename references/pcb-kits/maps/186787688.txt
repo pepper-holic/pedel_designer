@@ -1,0 +1,48 @@
+id pp-klon-buffer
+goods 186787688
+name Klon Buffer
+motif Klon Centaur 버퍼
+type buffer-boost
+desc TL072 한쪽을 전압 팔로워로 쓴 Klon식 입력 버퍼 - 100K/100K 분압 4.5V 기준(47uF 필터), 1M 바이어스, 100n 입력, 1uF·560R 출력, 출력단 100K 풀다운, 1N400X 직렬 보호
+image img_01.jpg
+# TL072 notch at the top: pins 1-4 down the left column (pads 5, 9, 13, 17), 5-8 up the right
+# (18, 14, 10, 6). Only the A half is used; pins 5-7 are unconnected.
+BOM 1M 100Kx3 560R 100n 47uF 1uF 1N400X TL072
+io IN=24 OUT=28 V9=0 GND=29
+JUMP 0 1     # 9V pad to the diode anode: drawn, not picked up
+JUMP 24 15   # IN to the 100n input cap
+JUMP 22 28   # 560R to OUT
+
+STAGE power power 전원 (보호 다이오드 + 4.5V 기준)
+D 1N400X a=1 k=2 D1
+R 100K 4 3 R1
+R 100K 7 8 R2
+C 47uF 25 23 C1
+
+STAGE input input 입력
+C 100n 15 16 C2
+R 1M 11 12 R3
+
+STAGE buffer buffer 팔로워 (TL072 A)
+IC TL072 1=5 2=9 3=13 4=17 8=6 U1
+NC 10 14 18
+
+STAGE output output 출력
+C 1uF 27 26 C3
+R 100K 19 20 R4
+R 560R 21 22 R5
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C2 170 400 h
+AT U1A 560 420
+AT C3 370 400 h
+AT R5 470 400 h
+AT R3 200 470 v-
+AT R4 400 470 v-
+AT R1 260 500 h-
+AT R2 200 570 v
+AT C1 260 570 v
+AT D1 290 190 v
+AT RLOAD 500 480 v

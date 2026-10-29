@@ -1,0 +1,46 @@
+id pp-lpb1-1k
+goods 186787695
+name LPB1 [1K]
+motif LPB-1
+type buffer-boost
+desc 2N5089 공통 이미터 클린 부스트 - 1M/100K 베이스 분압, 10K 컬렉터, 390R 언바이패스 이미터, 100n 입출력 커플링, A100K 볼륨. 9V에 1N400X 역극성 보호 션트
+image img_01.jpg
+# Silk on the transistor says 2N5088; the parts list ships 2N5089. The seller notes the 1N400X
+# silk is reversed: mount it cathode to 9V (as here) - a reverse-biased shunt across the supply.
+BOM 1Mx2 100K 10K 390R 100nx2 47uF 1N400X 2N5089 A100K
+io IN=25 OUT=5 V9=14 GND=29
+
+STAGE input input 입력
+R 1M 13 22 R1
+C 100n 16 12 C1
+
+STAGE boost gain 공통 이미터 부스트
+R 1M 9 20 R2
+R 100K 19 8 R3
+Q 2N5089 e=26 b=27 c=28 Q1
+R 10K 10 21 R4
+R 390R 18 7 R5
+
+STAGE output output 출력 (볼륨)
+C 100n 15 11 C2
+POT A100K VOL 4 3 0
+
+STAGE power power 전원
+C 47uF 1 2 C3
+D 1N400X a=17 k=6 D1
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT C2 380 400 h
+AT VOL 480 400 r180
+AT R1 120 470 v-
+AT R2 200 190 v
+AT R3 200 470 v
+AT R4 290 190 v
+AT R5 290 500 v
+AT C3 510 190 v
+AT D1 550 190 v-
+AT RLOAD 480 480 v

@@ -31,6 +31,8 @@ def main() -> None:
         font = small = ImageFont.load_default()
 
     def at(pad: str) -> tuple[float, float]:
+        if not pad.lstrip("-").isdigit():  # off-board point (IN/OUT/V9/GND): draw it off the board's edge
+            return (im.width - 6 * scale, 6 * scale)
         p = pads[int(pad)]
         return p["x"] * scale, p["y"] * scale
 

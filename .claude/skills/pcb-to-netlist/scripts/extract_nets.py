@@ -30,11 +30,25 @@ MIN_PAD_PIXELS = 12
 NEAR = 3
 # Silkscreen (grey outlines, value text) is printed over the copper and cuts traces into pieces; a
 # run of silk pixels at most this long that has copper of one layer on both sides is copper too.
+# Silk gaps longer than this (thick board titles) are left open on purpose: every rule tried for
+# them also joined unrelated traces along component outlines on the reference boards, and a wrong
+# join hides in the netlist while a lone pad is flagged for a human to look at.
 SILK_BRIDGE = 4
+SHORT_SILK = 4
 PAD_MERGE = 0.8
+# A part body is a white area ringed by a silk outline, and on many boards it is painted over the
+# bottom-layer copper: a trace that turns a corner under a resistor vanishes there. When exactly two
+# traces of one layer poke into such a body (each by a short stub), they are one trace.
+BODY_TUNNELS = False
+BODY_MIN_AREA = 60
+BODY_MAX_AREA = 5000
+BODY_MIN_SILK_EDGE = 0.55
+STUB_MAX_CONTACT = 14
 
 
 def classify(r: int, g: int, b: int) -> str:
+    # Both pad shades are magenta; which of them means "ground pour" is decided per board later
+    # (split_ground_pads), because small renders draw every pad in the duller shade.
     if r > 170 and b > 170 and g < 96 and abs(r - b) < 50:
         return "pad"
     if r > 170 and b > 170 and 96 <= g < 160 and r - g > 50 and b - g > 50:
@@ -48,6 +62,10 @@ def classify(r: int, g: int, b: int) -> str:
     if hi < 200 and (hi - lo < 40 or (abs(r - g) < 20 and b < r)):
         return "silk"
     if g > 180 and r < 140 and b < 140:  # green footprint outlines (pots, switches, transistor bars)
+        return "silk"
+    # Silk seen through a semi-transparent trace (dark cyan or dark olive), and the muddy
+    # anti-aliased edge where a trace meets an outline: not board (white), so a trace may cross it.
+    if hi < 215 and lo < 180:
         return "silk"
     return ""
 
@@ -79,9 +97,9 @@ def bridge(mask: dict[tuple[int, int], str], layer: str, w: int, h: int) -> None
     fill = []
     for y in range(h):
         for x in range(w):
-            if mask.get((x, y)) != layer and not (mask.get((x, y)) in ("pad", "gpad") and touches(mask, x, y, layer)):
+            if mask.get((x, y)) not in (layer, "pad", "gpad"):
                 continue
-            for dx, dy in ((1, 0), (0, 1)):
+            for dx, dy in ((1, 0), (0, 1), (1, 1), (1, -1)):
                 run = []
                 for k in range(1, SILK_BRIDGE + 2):
                     q = (x + dx * k, y + dy * k)
@@ -89,11 +107,105 @@ def bridge(mask: dict[tuple[int, int], str], layer: str, w: int, h: int) -> None
                     if kind == "silk":
                         run.append(q)
                         continue
-                    if kind in (layer, "pad", "gpad") and run:
-                        fill.extend(run)
+                    if kind in (layer, "pad", "gpad") and run and (mask.get((x, y)) == layer or kind == layer):
+                        # Up to 4px: any thin outline or text stroke. Longer (thick title text): only
+                        # when the trace runs along this axis on both sides, so a gap along a
+                        # component outline next to two unrelated traces is never filled.
+                        straight = trace_end(mask, layer, (x, y), -dx, -dy) and trace_end(mask, layer, q, dx, dy)
+                        if len(run) <= SHORT_SILK or straight:
+                            fill.extend(run)
                     break
     for q in fill:
         mask[q] = layer
+
+
+def enclosed_regions(mask: dict[tuple[int, int], str], w: int, h: int) -> list[list[tuple[int, int]]]:
+    """White areas not connected to the board edge: part bodies, pad holes, letter counters."""
+    outside: set[tuple[int, int]] = set()
+    stack = [(x, y) for x in range(w) for y in (0, h - 1)] + [(x, y) for y in range(h) for x in (0, w - 1)]
+    stack = [q for q in stack if q not in mask]
+    outside.update(stack)
+    while stack:
+        x, y = stack.pop()
+        for q in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+            if 0 <= q[0] < w and 0 <= q[1] < h and q not in mask and q not in outside:
+                outside.add(q)
+                stack.append(q)
+    seen: set[tuple[int, int]] = set()
+    regions = []
+    for y in range(h):
+        for x in range(w):
+            if (x, y) in mask or (x, y) in outside or (x, y) in seen:
+                continue
+            comp, stack = [], [(x, y)]
+            seen.add((x, y))
+            while stack:
+                a, b = stack.pop()
+                comp.append((a, b))
+                for q in ((a + 1, b), (a - 1, b), (a, b + 1), (a, b - 1)):
+                    if 0 <= q[0] < w and 0 <= q[1] < h and q not in mask and q not in outside and q not in seen:
+                        seen.add(q)
+                        stack.append(q)
+            if BODY_MIN_AREA <= len(comp) <= BODY_MAX_AREA:
+                regions.append(comp)
+    return regions
+
+
+def body_tunnels(mask: dict[tuple[int, int], str], layer_comps: list[list[tuple[int, int]]], pad_zone: set[tuple[int, int]], pad_centres: list[tuple[float, float]], w: int, h: int) -> list[tuple[int, int]]:
+    """Pairs of same-layer trace pieces that meet only inside one silk-outlined body. Copper next to
+    a pad does not count: that is a part's own lead arriving at its pad beside its body, not a trace
+    passing underneath it."""
+    comp_of = {q: i for i, comp in enumerate(layer_comps) for q in comp}
+    pairs = []
+    for region in enclosed_regions(mask, w, h):
+        xs, ys = [q[0] for q in region], [q[1] for q in region]
+        # An outline with pads inside it (electrolytic cap circle, transistor, IC) is a part's own
+        # footprint: its leads meet copper inside it, which says nothing about traces passing under.
+        if any(min(xs) - 2 <= px <= max(xs) + 2 and min(ys) - 2 <= py <= max(ys) + 2 for px, py in pad_centres):
+            continue
+        rset = set(region)
+        edge = [(x + dx, y + dy) for x, y in region for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)) if (x + dx, y + dy) not in rset]
+        if not edge:
+            continue
+        silk = sum(1 for q in edge if mask.get(q) == "silk")
+        if silk / len(edge) < BODY_MIN_SILK_EDGE:
+            continue
+        contact: dict[int, int] = {}
+        for x, y in edge:
+            for dx in (-2, -1, 0, 1, 2):
+                for dy in (-2, -1, 0, 1, 2):
+                    q = (x + dx, y + dy)
+                    c = comp_of.get(q)
+                    if c is not None and q not in pad_zone:
+                        contact[c] = contact.get(c, 0) + 1
+                        break
+        stubs = [c for c, n in contact.items() if n <= STUB_MAX_CONTACT * 3]
+        if len(contact) == 2 and len(stubs) == 2:
+            pairs.append((stubs[0], stubs[1]))
+    return pairs
+
+
+def trace_end(mask: dict[tuple[int, int], str], layer: str, at: tuple[int, int], dx: int, dy: int) -> bool:
+    """Copper at `at` is the end of a trace that continues in direction (dx, dy): copper for the next
+    4 steps along it, and copper on both sides across it (a trace is several pixels wide), but NOT
+    copper far across (that would be a wide fill or a trace running the other way)."""
+    x, y = at
+    if not all(mask.get((x + dx * i, y + dy * i)) == layer for i in range(0, 4)):
+        return False
+    px, py = dy, dx
+    across = sum(1 for i in (-1, 1) if mask.get((x + px * i + dx * 2, y + py * i + dy * 2)) == layer)
+    far = sum(1 for i in (-7, 7) if mask.get((x + px * i + dx * 2, y + py * i + dy * 2)) == layer)
+    return across == 2 and far < 2
+
+
+def runs_along(mask: dict[tuple[int, int], str], layer: str, at: tuple[int, int], dx: int, dy: int) -> bool:
+    """Copper at `at` belongs to a trace running along (dx, dy): copper there and one step further,
+    and narrow across - a trace crossing at right angles is copper far to both sides."""
+    x, y = at
+    if mask.get(at) != layer or mask.get((x + dx, y + dy)) != layer and mask.get((x - dx, y - dy)) != layer:
+        return False
+    px, py = dy, dx
+    return not (mask.get((x + px * 6, y + py * 6)) == layer and mask.get((x - px * 6, y - py * 6)) == layer)
 
 
 def touches(mask: dict[tuple[int, int], str], x: int, y: int, layer: str) -> bool:
@@ -102,13 +214,38 @@ def touches(mask: dict[tuple[int, int], str], x: int, y: int, layer: str) -> boo
     return any(mask.get((x + dx, y + dy)) == layer for dx in (-3, 0, 3) for dy in (-3, 0, 3))
 
 
+def split_ground_pads(pads: list[dict], mask: dict[tuple[int, int], str]) -> None:
+    """Decide per board which pads sit on the ground pour. Those are drawn paler than the others and
+    carry a grey "+" (a thermal-relief cross) inside the ring. On a board where every pad is the same
+    shade there is no pour, and nothing is ground - the pad colour alone proves nothing."""
+    for p in pads:
+        xs, ys = [q[0] for q in p["pixels"]], [q[1] for q in p["pixels"]]
+        cx, cy, r = int(round(p["x"])), int(round(p["y"])), max(2, int(p["r"] * 0.45))
+        # A thermal-relief "+" is a horizontal AND a vertical silk stroke through the hole centre;
+        # a hole's dark outline ring, or a stray letter, never gives both.
+        row = sum(1 for x in range(cx - r, cx + r + 1) for dy in (-1, 0, 1) if mask.get((x, cy + dy)) == "silk")
+        col = sum(1 for y in range(cy - r, cy + r + 1) for dx in (-1, 0, 1) if mask.get((cx + dx, y)) == "silk")
+        p["paleFraction"] = sum(1 for q in p["pixels"] if mask[q] == "gpad") / len(p["pixels"])
+        p["cross"] = row >= r and col >= r and mask.get((cx, cy)) == "silk"
+    pale = [p for p in pads if p["paleFraction"] > 0.5]
+    two_shades = 0 < len(pale) < len(pads)
+    for p in pads:
+        # Two shades on the board: ground = the pale ones with a cross. One shade (small renders):
+        # the cross alone marks the pour.
+        p["ground"] = p["cross"] and (p["paleFraction"] > 0.5 if two_shades else True)
+
+
 def merge_pads(pads: list[dict], mask: dict[tuple[int, int], str]) -> list[dict]:
     """A ring broken by silkscreen ("+", a footprint bar) comes out as several arcs: join arcs whose
     centres are closer than their radii."""
     merged: list[dict] = []
     for p in sorted(pads, key=lambda q: -len(q["pixels"])):
         for m in merged:
-            if abs(m["x"] - p["x"]) + abs(m["y"] - p["y"]) < PAD_MERGE * (m["r"] + p["r"]) + 2:
+            # Arcs of one ring: centres close, or their bounding boxes overlap (a ring cut in two
+            # by a trace through its middle gives two half-rings whose centres sit a radius apart).
+            close = abs(m["x"] - p["x"]) + abs(m["y"] - p["y"]) < PAD_MERGE * (m["r"] + p["r"]) + 2
+            boxes_touch = abs(m["x"] - p["x"]) <= m["r"] + p["r"] - 2 and abs(m["y"] - p["y"]) <= m["r"] + p["r"] - 2 and max(m["r"], p["r"]) < 16
+            if close or boxes_touch:
                 m["pixels"] = m["pixels"] + p["pixels"]
                 xs, ys = [q[0] for q in m["pixels"]], [q[1] for q in m["pixels"]]
                 m["x"], m["y"] = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
@@ -120,9 +257,8 @@ def merge_pads(pads: list[dict], mask: dict[tuple[int, int], str]) -> list[dict]
     return merged
 
 
-def main() -> None:
-    src, prefix = Path(sys.argv[1]), sys.argv[2]
-    scale = int(sys.argv[3]) if len(sys.argv) > 3 else 3
+def run(src: Path, prefix: str, scale: int = 3) -> dict:
+    """Extract pads and nets from one render; write <prefix>.json/.png and return summary counts."""
     im = Image.open(src).convert("RGB")
     w, h = im.size
     px = im.load()
@@ -144,6 +280,7 @@ def main() -> None:
         ground = sum(1 for p in comp if mask[p] == "gpad") > len(comp) / 2
         pads.append({"x": (min(xs) + max(xs)) / 2, "y": (min(ys) + max(ys)) / 2, "r": max(max(xs) - min(xs), max(ys) - min(ys)) / 2, "ground": ground, "pixels": comp})
     pads = merge_pads(pads, mask)
+    split_ground_pads(pads, mask)
     pads.sort(key=lambda p: (round(p["y"] / 8), p["x"]))
     for i, p in enumerate(pads):
         p["id"] = i
@@ -161,13 +298,41 @@ def main() -> None:
 
     pad_at: dict[tuple[int, int], int] = {}
     for p in pads:
+        # Reach grows with the pad: on blurry large renders the ring fades into the trace over several
+        # pixels, on crisp small ones a short reach keeps neighbouring pads apart.
+        near = max(NEAR, int(p["r"] * 0.3))
         for (x, y) in p["pixels"]:
-            for dx in range(-NEAR, NEAR + 1):
-                for dy in range(-NEAR, NEAR + 1):
+            for dx in range(-near, near + 1):
+                for dy in range(-near, near + 1):
                     pad_at.setdefault((x + dx, y + dy), p["id"])
+        # Many renders draw the trace right through the hole: everything inside the ring is the pad's.
+        r = int(p["r"])
+        for dx in range(-r, r + 1):
+            for dy in range(-r, r + 1):
+                if dx * dx + dy * dy <= r * r:
+                    pad_at.setdefault((int(p["x"]) + dx, int(p["y"]) + dy), p["id"])
+    pad_zone = {(x + dx, y + dy) for p in pads for (x, y) in p["pixels"] for dx in range(-8, 9, 2) for dy in range(-8, 9, 2)}
+    tunnels = 0
     for layer in ("top", "bot"):
-        for comp in components(mask, {layer}):
-            touched = {pad_at[q] for q in comp if q in pad_at}
+        comps = components(mask, {layer})
+        joined = list(range(len(comps)))
+
+        def root(i: int) -> int:
+            while joined[i] != i:
+                i = joined[i]
+            return i
+
+        # body_tunnels() is kept for reference but not used: on Green Giant it joined a collector and
+        # a base trace that both run along the 2.2M body. A wrong join hides in the netlist; a lone
+        # pad is flagged for a reader - so traces vanishing under bodies are left to the reader (JUMP).
+        for a, b in ([] if not BODY_TUNNELS else body_tunnels(mask, comps, pad_zone, [(p["x"], p["y"]) for p in pads], w, h)):
+            if root(a) != root(b):
+                joined[root(a)] = root(b)
+                tunnels += 1
+        pads_of: dict[int, set[int]] = defaultdict(set)
+        for i, comp in enumerate(comps):
+            pads_of[root(i)].update(pad_at[q] for q in comp if q in pad_at)
+        for touched in pads_of.values():
             touched_list = sorted(touched)
             for other in touched_list[1:]:
                 union(touched_list[0], other)
@@ -203,8 +368,24 @@ def main() -> None:
         label = f"{p['id']}" + ("" if len(nets[p["net"]]) == 1 else f"/n{p['net']}")
         draw.text((cx + p["r"] * scale * 0.6, cy - 4 * scale), label, fill=color, font=font, stroke_width=2, stroke_fill=(255, 255, 255))
     big.save(f"{prefix}.png")
-    multi = sum(1 for v in nets.values() if len(v) > 1)
-    print(f"{len(pads)} pads ({len(grounds)} on the ground pour), {len(nets)} nets ({multi} with 2+ pads)")
+    return {
+        "pads": len(pads),
+        "groundPads": len(grounds),
+        "nets": len(nets),
+        "multiPadNets": sum(1 for v in nets.values() if len(v) > 1),
+        "loneNonGroundPads": sum(1 for v in nets.values() if len(v) == 1 and not pads[v[0]]["ground"]),
+        "bodyTunnels": tunnels,
+        "bottomLayerPixels": sum(1 for k in mask.values() if k == "bot"),
+        "topLayerPixels": sum(1 for k in mask.values() if k == "top"),
+        "size": [w, h],
+    }
+
+
+def main() -> None:
+    src, prefix = Path(sys.argv[1]), sys.argv[2]
+    scale = int(sys.argv[3]) if len(sys.argv) > 3 else 3
+    st = run(src, prefix, scale)
+    print(f"{st['pads']} pads ({st['groundPads']} on the ground pour), {st['nets']} nets ({st['multiPadNets']} with 2+ pads, {st['loneNonGroundPads']} lone)")
 
 
 if __name__ == "__main__":

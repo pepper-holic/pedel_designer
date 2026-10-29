@@ -1,0 +1,208 @@
+{
+ "id": "pp-klon-buffer",
+ "goodsNo": "186787688",
+ "kitName": "Klon Buffer",
+ "motif": "Klon Centaur 버퍼",
+ "type": "buffer-boost",
+ "description": "TL072 한쪽을 전압 팔로워로 쓴 Klon식 입력 버퍼 - 100K/100K 분압 4.5V 기준(47uF 필터), 1M 바이어스, 100n 입력, 1uF·560R 출력, 출력단 100K 풀다운, 1N400X 직렬 보호",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n1"
+   }
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n2",
+    "n3"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "TL072",
+   "nodes": {
+    "1": "n4",
+    "2": "n4",
+    "3": "n3",
+    "4": "0",
+    "8": "n1"
+   }
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "0",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "560R",
+   "nodes": [
+    "n5",
+    "out"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원 (보호 다이오드 + 4.5V 기준)",
+   "parts": [
+    "D1",
+    "R1",
+    "R2",
+    "C1"
+   ]
+  },
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "C2",
+    "R3"
+   ]
+  },
+  {
+   "id": "buffer",
+   "category": "buffer",
+   "label": "팔로워 (TL072 A)",
+   "parts": [
+    "U1"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "C3",
+    "R4",
+    "R5"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C2": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "U1A": {
+   "x": 560,
+   "y": 420
+  },
+  "C3": {
+   "x": 370,
+   "y": 400,
+   "rotation": 0
+  },
+  "R5": {
+   "x": 470,
+   "y": 400,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 200,
+   "y": 470,
+   "rotation": 270
+  },
+  "R4": {
+   "x": 400,
+   "y": 470,
+   "rotation": 270
+  },
+  "R1": {
+   "x": 260,
+   "y": 500,
+   "rotation": 180
+  },
+  "R2": {
+   "x": 200,
+   "y": 570,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 260,
+   "y": 570,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 290,
+   "y": 190,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 500,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

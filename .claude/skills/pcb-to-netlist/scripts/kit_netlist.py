@@ -54,6 +54,17 @@ META_KEYS = ("id", "goods", "name", "motif", "type", "desc", "image")
 IO_NET = {"IN": "in", "OUT": "out", "V9": "vcc", "GND": "0"}
 
 
+def used_offboard(raw_parts: list[dict], sentinel: int) -> set[str]:
+    """Names of off-board points some part line uses ("OUT" when a pot wiper is written as OUT)."""
+    names = {-1: "IN", -2: "OUT", -3: "V9", -4: "GND"}
+    hit = set()
+    for rp in raw_parts:
+        pads = rp["pads"].values() if isinstance(rp["pads"], dict) else rp["pads"]
+        if sentinel in pads:
+            hit.add(names[sentinel])
+    return hit
+
+
 def norm(value: str) -> str:
     """Compare parts-list and board values loosely: 4.7K = 4K7 = 4.7k, 22uF = 22u, 470R = 470."""
     v = value.strip().upper().replace("Ω", "").replace("OHM", "")
@@ -90,7 +101,15 @@ def main() -> None:
     layout: dict[str, dict] = {}
     bom: dict[str, int] = {}
 
+    # Off-board points: a pot or jack wired straight to a part leg without a board pad (e.g. a level
+    # pot whose wiper goes directly to the output jack). Written as IN/OUT/V9/GND in place of a pad.
+    offboard = {"IN": -1, "OUT": -2, "V9": -3, "GND": -4}
+    for k, v in offboard.items():
+        pad_net[v] = f"offboard-{k}"
+
     def pad(token: str) -> int:
+        if token in offboard:
+            return offboard[token]
         p = int(token)
         if p not in pad_net:
             sys.exit(f"pad {p} does not exist in {nets_path.name}")
@@ -167,6 +186,9 @@ def main() -> None:
 
     for k in ("IN", "OUT", "V9", "GND"):
         if k not in io:
+            if k in used_offboard(raw_parts, offboard[k]):
+                io[k] = offboard[k]
+                continue
             sys.exit(f"io {k}= missing")
 
     names: dict[int, str] = {}

@@ -29,6 +29,23 @@ description: DIY 이펙터 키트의 기판 레이아웃 이미지(페달파츠 
 | 시뮬레이션 | DC·신호·노브·배치 테스트, 오디오 렌더 | 이상 동작이 변환 오류인지 회로 특성인지 진단 |
 | 미지원 부품 | 자동 분리 (`unsupportedKits`) | 새 소자 모델 추가 여부 |
 
+## 빠른 흐름 (키트 하나)
+
+```bash
+S=.claude/skills/pcb-to-netlist/scripts
+python -E -P $S/batch_prepare.py references/pcb-kits          # 전 키트 패드·넷 추출 + triage.json (A/B/C 등급)
+python -E -P $S/pilot_bundle.py references/pcb-kits <goodsNo> <작업폴더>   # 오버레이·렌더·부품표·map.txt 뼈대
+#   (판단) board0_nets.png와 부품표를 보고 map.txt의 부품 줄·STAGE·BOM·io·JUMP를 쓴다
+bash $S/finish_kit.sh <작업폴더> <goodsNo> --layout           # 넷리스트 생성·검사, 배치 초안, 역투영, maps/ 복사, 테스트
+python -E -P $S/selftest.py                                   # extract_nets.py를 고쳤으면 반드시
+```
+
+`finish_kit.sh`의 `check:` 줄이 0개, 역투영(verify.png)의 라벨이 모두 같은 값의 실크 위, 키트 테스트 통과가 완료 조건.
+
+추출기 교훈(2026-10 파일럿): 실크 밑으로 사라진 트레이스를 이어 붙이는 규칙(몸통 터널, 긴 실크 다리, 실크 플러드)은
+모두 엉뚱한 넷을 합쳐서 뺐다. **잘못 합친 넷은 숨고, 끊긴 패드는 드러난다** - 끊긴 곳은 판독자가 렌더를 보고
+`JUMP a b`로 잇는다. 접지 패드는 "연보라 + 가운데 '+' 실크"인데, 작은 렌더는 모든 패드가 연보라라 '+' 십자만으로 판정한다.
+
 ## 0. 재료 찾기
 
 `references/pcb-kits/index.json`에서 키트를 고른다(`item: "kit"`, `type`, `about`에 원본 페달). 이미지 `kind`:
@@ -59,7 +76,13 @@ python -E -P scripts/extract_nets.py <board.jpg> <scratch>/<kit> 3
   피드백·바이어스(custom) → 컨트롤(custom) → 클리퍼/퍼즈 → 톤 → 복원단 → 출력, 전원(power). 앱이 이 순서대로
   블록을 좌→우로 배치하므로 바둑판이 아니라 사람이 읽는 회로도가 된다.
 
+기판 밖 연결: 팟 와이퍼가 패드 없이 바로 잭으로 가면 패드 번호 대신 `OUT`/`IN`/`V9`/`GND`를 쓴다
+(`POT A100K LEVEL 12 OUT 11` - io의 OUT은 생략 가능).
+
 판독 규칙:
+- 트랜지스터에 E/B/C 실크가 없으면 넷으로 정한다: 2.2M·컬렉터 저항·출력 캡이 모인 쪽이 C, 입력 캡이 오는 쪽이 B,
+  이미터 저항·바이어스 팟으로 가는 쪽이 E. 짐작으로 e-b-c 순서를 쓰지 않는다(Green Giant는 C-B-E였다).
+- 같은 모양 부품이 나란히 있으면(세로 캡 두 개) 패드 쌍을 위아래로 짝지었는지 역투영에서 꼭 본다.
 - 값은 몸통 실크 글자, 트랜지스터 핀은 실크 `C B E`, 전해 캐패시터는 사각 패드가 +, 다이오드는 띠 쪽이 캐소드,
   IC는 반달 홈 쪽이 1번 핀. 품번 등급까지 적는다(BC183 vs BC183C - hFE가 다르다). 키트 페이지 텍스트에
   트랜지스터 품번이 따로 적혀 있으면 그것을 따른다.

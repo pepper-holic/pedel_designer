@@ -7,6 +7,9 @@ import type { StampContext } from "./context";
  * than an arbitrary unit capacitance would give). */
 export const POLE_CAPACITANCE = 1e-9;
 
+/** Floor for the clamp slope in the Newton stamp of a rail-clipped amplifier (see stampClippedAmplifier). */
+const MIN_NEWTON_SLOPE = 1e-4;
+
 export function poleNodeId(elementId: string): string {
   return `${elementId}::pole`;
 }
@@ -41,6 +44,22 @@ function clampToRails(v: number, railPositive: number, railNegative: number): { 
   const x = (v - center) / halfRange;
   const t = Math.tanh(x);
   return { value: center + halfRange * t, slope: 1 - t * t };
+}
+
+/**
+ * Newton step limiting for the clamp's input, like junction limiting for a diode: between iterations
+ * of one solve the value the clamp is evaluated at may move by at most the rails' half-range. Without
+ * it a high-gain stage whose input error is a few millivolts jumps from one rail's flat region to the
+ * other's on every iteration and never settles (a TL072 follower biased at 4.5V on a 9V supply). At
+ * convergence the input stops moving, so the limited value equals the true one and the answer is
+ * unchanged.
+ */
+function limitClampInput(ctx: StampContext, key: string, x: number, el: OpAmpElement): number {
+  const step = (el.railPositive! - el.railNegative!) / 2;
+  const prev = ctx.limitState.get(key);
+  const limited = prev === undefined ? x : prev + Math.max(-step, Math.min(step, x - prev));
+  ctx.limitState.set(key, limited);
+  return limited;
 }
 
 /** Just the derivative of `clampToRails`, for AC small-signal analysis frozen at a DC bias point. */
@@ -112,8 +131,9 @@ function stampGbwpIntegrator(el: OpAmpElement, pole: number, inPlus: number, inM
 
 /** Nonlinear (Newton-linearized) output buffer implementing V(out) = clamp(V(pole), rails). */
 function stampClippedBuffer(el: OpAmpElement, branch: number, pole: number, out: number, ctx: StampContext): void {
-  const guess = pole >= 0 ? ctx.solutionGuess[pole] : 0;
-  const { value, slope } = clampToRails(guess, el.railPositive!, el.railNegative!);
+  const guess = limitClampInput(ctx, `${el.id}:pole`, pole >= 0 ? ctx.solutionGuess[pole] : 0, el);
+  const { value, slope: trueSlope } = clampToRails(guess, el.railPositive!, el.railNegative!);
+  const slope = Math.max(trueSlope, MIN_NEWTON_SLOPE);
 
   ctx.system.stampMatrixEntry(branch, out, 1);
   ctx.system.stampMatrixEntry(branch, pole, -slope);
@@ -127,8 +147,12 @@ function stampClippedBuffer(el: OpAmpElement, branch: number, pole: number, out:
 function stampClippedAmplifier(el: OpAmpElement, branch: number, inPlus: number, inMinus: number, out: number, ctx: StampContext): void {
   const vPlusGuess = inPlus >= 0 ? ctx.solutionGuess[inPlus] : 0;
   const vMinusGuess = inMinus >= 0 ? ctx.solutionGuess[inMinus] : 0;
-  const x = el.openLoopGain * (vPlusGuess - vMinusGuess);
-  const { value, slope } = clampToRails(x, el.railPositive!, el.railNegative!);
+  const x = limitClampInput(ctx, `${el.id}:x`, el.openLoopGain * (vPlusGuess - vMinusGuess), el);
+  const { value, slope: trueSlope } = clampToRails(x, el.railPositive!, el.railNegative!);
+  // Deep in a rail the tanh's slope underflows to ~0 and Newton can never pull the output back - a
+  // single-supply follower starting from 0V sits there forever. A small floor keeps a way out. The
+  // fixed point is unchanged: at convergence out = value whatever slope the linearization used.
+  const slope = Math.max(trueSlope, MIN_NEWTON_SLOPE);
   const gp = slope * el.openLoopGain;
 
   ctx.system.stampMatrixEntry(branch, out, 1);

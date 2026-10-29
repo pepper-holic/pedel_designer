@@ -1,0 +1,49 @@
+id pp-bias-1k
+goods 186787691
+name BIAS [1K]
+motif Lovepedal COT50
+type overdrive
+desc 2N5089 한 석 COT50 - 2.2M 컬렉터 피드백, 10K 컬렉터, 이미터는 C10K BIAS 팟+22uF 바이패스, 100n 뒤 1N4001/1N4148 비대칭 접지 클리핑. 레벨 없음
+image img_01.jpg
+BOM 2.2M 1M 10K 100n 47n 47uF 22uF 1N4001x2 1N4148 2N5089 C10K
+io IN=21 OUT=15 V9=8 GND=29
+JUMP 28 18   # Q1 collector to the 10K/100n node
+JUMP 26 4    # Q1 emitter to the BIAS pot
+JUMP 21 24   # IN to the 47n input cap
+
+STAGE input input 입력
+R 1M 13 20 R1
+C 47n 24 23 C1
+
+STAGE gain gain 공통 이미터 (COT50)
+Q 2N5089 e=26 b=27 c=28 Q1
+R 10K 10 18 R2
+R 2.2M 11 19 R3
+POT C10K BIAS 6 5 4
+C 22uF 3 2 C2
+
+STAGE clip clipping 비대칭 클리핑
+C 100n 16 12 C3
+D 1N4001 a=14 k=0 D1
+D 1N4148 a=1 k=7 D2
+
+STAGE power power 전원
+D 1N4001 a=17 k=9 D3
+C 47uF 22 25 C4
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT C3 380 400 h
+AT R1 120 470 v-
+AT R2 290 190 v
+AT R3 240 520 h-
+AT BIAS 350 460 r180
+AT C2 350 560 v
+AT D1 410 470 v
+AT D2 470 470 v-
+AT D3 380 190 v-
+AT C4 420 190 v
+AT RLOAD 510 480 v

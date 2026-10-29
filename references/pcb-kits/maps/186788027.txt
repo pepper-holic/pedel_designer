@@ -1,0 +1,55 @@
+id pp-green-giant
+goods 186788027
+name Green Giant
+motif Greer Green Giant
+type overdrive
+desc 2N3904 한 석 공통 이미터(2.2M 컬렉터 피드백 바이어스, 47K 컬렉터, 680R 이미터) 뒤 출력에 1N4148 대향 쌍을 B25K 가변저항으로 걸어 클리핑 양을 섞고 A100K 볼륨. 9V는 1N400X 직렬 보호 + 47uF
+image img_02.jpg
+# Transistor footprint is C-B-E left to right (2.2M from the left pin to the middle pin, 680R on the
+# right pin). BLEND uses lug1 and the wiper only - the third hole has no pad, so it is a variable
+# resistor in series with the clipping diodes. Diode bands: left one at the top, right one at the
+# bottom - an anti-parallel pair to ground.
+BOM 2.2M 1M 47K 680R 100nx2 47uF 1N400X 1N4148x2 2N3904 A100K B25K
+io IN=22 OUT=5 V9=32 GND=28
+JUMP 22 23   # 1M input pulldown: its trace to the IN pad is drawn but not picked up
+
+STAGE input input 입력
+R 1M 23 24 R1
+C 100n 16 8 C1
+
+STAGE gain gain 공통 이미터 드라이브
+Q 2N3904 c=12 b=13 e=14 Q1
+R 47K 21 6 R2
+R 2.2M 17 18 R3
+R 680R 9 25 R4
+
+STAGE clip clipping 다이오드 클리핑 (블렌드)
+C 100n 15 7 C2
+POT B25K BLEND 4 3 3
+D 1N4148 a=19 k=10 D1
+D 1N4148 a=11 k=20 D2
+
+STAGE output output 출력 (볼륨)
+POT A100K VOL 2 1 0
+
+STAGE power power 전원
+D 1N400X a=31 k=30 D3
+C 47uF 27 26 C3
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT C2 380 400 h
+AT VOL 480 400 r180
+AT R1 120 470 v
+AT R2 290 500 v-
+AT R3 240 520 h-
+AT R4 350 500 v
+AT BLEND 560 400 r180
+AT D1 650 470 v-
+AT D2 710 470 v
+AT D3 290 190 v
+AT C3 290 600 v
+AT RLOAD 480 480 v
