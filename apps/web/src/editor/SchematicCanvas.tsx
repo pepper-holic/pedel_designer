@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { snapToGrid, insertCorner, singleBendPoints, polylineThrough, renderWirePaths, distanceToSegment, GRID_SIZE, type Point } from "./geometry";
+import { snapToGrid, insertCorner, polylineThrough, renderWirePaths, distanceToSegment, GRID_SIZE, type Point } from "./geometry";
 import { wireRoutes } from "./routing/wirePolylines";
+import { partLabelPlacements } from "./layout/partLabels";
 import { useCanvasView } from "./useCanvasView";
 import { CanvasPart } from "./CanvasPart";
 import { CanvasBlockLayer } from "./CanvasBlockLayer";
@@ -123,7 +124,8 @@ export function SchematicCanvas({
   const netOf = useCallback((ref: TerminalRef) => terminalNet?.get(`${ref.partId}:${ref.terminalId}`), [terminalNet]);
   const endpoints = useMemo(() => buildCanvasEndpoints(parts, blocks, terminalNet ? netOf : undefined), [parts, blocks, terminalNet, netOf]);
   const visibleParts = useMemo(() => parts.filter((p) => !endpoints.hidden.has(p.id)), [parts, endpoints]);
-  const routes = useMemo(() => wireRoutes(wires, endpoints), [wires, endpoints]);
+  const routes = useMemo(() => wireRoutes(wires, endpoints, parts, netOf), [wires, endpoints, parts, netOf]);
+  const labelLayout = useMemo(() => partLabelPlacements(parts, routes, endpoints, blocks), [parts, routes, endpoints, blocks]);
 
   // What fit should frame: visible parts plus collapsed blocks' boxes (a collapsed block's hidden
   // parts can span far more than its box).
@@ -148,17 +150,13 @@ export function SchematicCanvas({
    * actually touching the part being moved stretches to follow it (see wirePolylines.ts's
    * polylineThrough), instead of the whole wire recomputing a fresh "optimal" bend every frame. A
    * wire that's still a plain straight line has no bend to preserve, so it's left alone - it picks
-   * up a bend the normal way (singleBendPoints) only once the move actually requires one. */
+   * up a bend the normal way (the router) only once the move actually requires one. */
   const freezeWiresTouching = (movingIds: ReadonlySet<string>) => {
     if (!onWireWaypoints) return;
-    for (const wire of wires) {
+    for (const { wire, points } of routes) {
       if (wire.waypoints?.length) continue;
       if (!movingIds.has(wire.a.partId) && !movingIds.has(wire.b.partId)) continue;
-      const a = endpoints.resolve(wire.a);
-      const b = endpoints.resolve(wire.b);
-      if (!a || !b) continue;
-      const route = singleBendPoints(a, b, endpoints.leadOutward(wire.a) ?? undefined, endpoints.leadOutward(wire.b) ?? undefined);
-      if (route.length > 2) onWireWaypoints(wire.id, route.slice(1, -1));
+      if (points.length > 2) onWireWaypoints(wire.id, points.slice(1, -1));
     }
   };
 
@@ -498,6 +496,7 @@ export function SchematicCanvas({
           <CanvasWireLayer
             endpoints={endpoints}
             wires={wires}
+            routes={routes}
             selectedWireId={selectedWireId}
             onWireClick={handleWireClick}
             onSegmentMouseDown={onWireWaypoints ? (wire, corners, segment) => setSegmentDrag({ wireId: wire.id, segment, corners }) : undefined}
@@ -541,7 +540,7 @@ export function SchematicCanvas({
             />
           ))}
 
-          <CanvasLabelLayer parts={parts} wires={wires} endpoints={endpoints} />
+          <CanvasLabelLayer layout={labelLayout} />
 
           {(probes.length > 0 || showDc) && terminalNet && (
             <CanvasProbeLayer
@@ -551,6 +550,8 @@ export function SchematicCanvas({
               operatingPoint={operatingPoint}
               showAllDc={showDc}
               endpoints={endpoints}
+              occupied={labelLayout.occupied}
+              wireRects={labelLayout.wires}
             />
           )}
 

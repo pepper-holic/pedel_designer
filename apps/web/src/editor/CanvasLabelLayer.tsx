@@ -1,12 +1,8 @@
-import { useMemo } from "react";
-import { partLabelPlacements } from "./layout/partLabels";
-import type { CanvasEndpoints } from "./canvasEndpoints";
-import type { PartInstance, Wire } from "./types";
+import type { PartLabelLayout } from "./layout/partLabels";
 
 interface CanvasLabelLayerProps {
-  parts: PartInstance[];
-  wires: Wire[];
-  endpoints: CanvasEndpoints;
+  /** Placement decided by the canvas (layout/partLabels.ts) and shared with the probe layer. */
+  layout: PartLabelLayout;
 }
 
 /**
@@ -16,8 +12,8 @@ interface CanvasLabelLayerProps {
  * (rather than inline per part) so a label is never hidden under a later part, and so placement has
  * every obstacle in view at once.
  */
-export function CanvasLabelLayer({ parts, wires, endpoints }: CanvasLabelLayerProps) {
-  const { requests, placed } = useMemo(() => partLabelPlacements(parts, wires, endpoints), [parts, wires, endpoints]);
+export function CanvasLabelLayer({ layout }: CanvasLabelLayerProps) {
+  const { requests, placed } = layout;
 
   return (
     <g pointerEvents="none" fontFamily="var(--font-mono)" fontSize={10}>

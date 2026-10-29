@@ -13,6 +13,18 @@ const PASSES = 3;
 /** Part types whose terminals are not symmetric about the horizontal axis, so a top-to-bottom flip
  * is a real alternative orientation rather than a no-op. */
 const MIRRORABLE: ReadonlySet<PartInstance["type"]> = new Set(["opamp", "bjt", "jfet", "potentiometer"]);
+/** Charged to a stack part (one hanging off the signal row) for lying horizontal: a shunt element is
+ * drawn running away from the row it hangs on unless horizontal is clearly better for its wiring. */
+const HORIZONTAL_STACK_PENALTY = 250;
+
+export interface OrientationConstraints {
+  /** Orientation already decided by a layout template - left exactly as is. */
+  fixed?: ReadonlySet<string>;
+  /** Series parts on a signal row (and feedback rungs): may flip end for end, never turn sideways. */
+  keepAxis?: ReadonlySet<string>;
+  /** Parts hanging off the signal row: drawn vertical unless horizontal is clearly better. */
+  preferVertical?: ReadonlySet<string>;
+}
 
 interface Orientation {
   rotation: Rotation;
@@ -33,16 +45,22 @@ function orientationOf(part: PartInstance): Orientation {
  * a mirror candidate, which keeps every pin's rotation-derived position but swaps which side
  * (top/bottom) each one draws on.
  */
-function candidateOrientations(part: PartInstance): Orientation[] {
+function candidateOrientations(part: PartInstance, keepAxis: boolean): Orientation[] {
   const current = orientationOf(part);
   if (MIRRORABLE.has(part.type)) return [current, { ...current, mirror: !current.mirror }];
   if (PART_DEFS[part.type].terminals.length === 2) {
     const r90 = rotateClockwise(current.rotation);
     const r180 = rotateClockwise(r90);
     const r270 = rotateClockwise(r180);
+    if (keepAxis) return [current, { rotation: r180, mirror: current.mirror }];
     return [current, { rotation: r90, mirror: current.mirror }, { rotation: r180, mirror: current.mirror }, { rotation: r270, mirror: current.mirror }];
   }
   return [current];
+}
+
+/** A two-terminal part lies along the x axis at 0/180 - its pins are at dx = +-30, dy = 0. */
+function isHorizontal(rotation: Rotation): boolean {
+  return rotation === 0 || rotation === 180;
 }
 
 function segmentsOf(points: Point[]): { a: Point; b: Point }[] {
@@ -77,10 +95,14 @@ function crossingCount(segsA: { a: Point; b: Point }[], segsB: { a: Point; b: Po
 /**
  * Picks, for each unpinned part with a real alternative orientation, whichever rotation/mirror
  * minimizes the Manhattan length and crossing count of the wires touching it - a greedy, deterministic
- * pass over a few rounds (see PASSES), run once at the end of auto-arrange. Pinned parts and parts with
- * only one sensible orientation are left untouched.
+ * pass over a few rounds (see PASSES), run once at the end of auto-arrange. Pinned parts, fixed parts
+ * (whose orientation a layout template already decided) and parts with only one sensible orientation
+ * are left untouched; see OrientationConstraints for the series/stack rules.
  */
-export function optimizePartOrientations(parts: PartInstance[], wires: Wire[]): PartInstance[] {
+export function optimizePartOrientations(parts: PartInstance[], wires: Wire[], constraints: OrientationConstraints = {}): PartInstance[] {
+  const fixed = constraints.fixed ?? new Set<string>();
+  const keepAxis = constraints.keepAxis ?? new Set<string>();
+  const preferVertical = constraints.preferVertical ?? new Set<string>();
   const byId = new Map(parts.map((p) => [p.id, p]));
   const wiresByPart = new Map<string, Wire[]>();
   for (const w of wires) {
@@ -90,7 +112,7 @@ export function optimizePartOrientations(parts: PartInstance[], wires: Wire[]): 
     }
   }
 
-  const candidates = parts.filter((p) => !p.pinned && candidateOrientations(p).length > 1);
+  const candidates = parts.filter((p) => !p.pinned && !fixed.has(p.id) && candidateOrientations(p, keepAxis.has(p.id)).length > 1);
   if (candidates.length === 0) return parts;
   const order = [...candidates].sort((a, b) => a.x - b.x || a.y - b.y || a.id.localeCompare(b.id));
 
@@ -104,7 +126,7 @@ export function optimizePartOrientations(parts: PartInstance[], wires: Wire[]): 
 
       let bestOrientation = orientationOf(current);
       let bestScore = Infinity;
-      for (const candidate of candidateOrientations(current)) {
+      for (const candidate of candidateOrientations(current, keepAxis.has(part.id))) {
         const trial: PartInstance = { ...current, rotation: candidate.rotation, mirror: candidate.mirror };
         const trialSegs = myWires.flatMap((w) => {
           const mine = w.a.partId === part.id ? w.a : w.b;
@@ -113,7 +135,8 @@ export function optimizePartOrientations(parts: PartInstance[], wires: Wire[]): 
           return segmentsOf(orthogonalPoints(terminalPosition(trial, mine.terminalId), otherPos));
         });
         const crossings = crossingCount(trialSegs, otherWireSegs) + crossingCount(trialSegs, trialSegs);
-        const score = manhattanLength(trialSegs) + crossings * CROSSING_PENALTY;
+        const stackPenalty = preferVertical.has(part.id) && isHorizontal(candidate.rotation) ? HORIZONTAL_STACK_PENALTY : 0;
+        const score = manhattanLength(trialSegs) + crossings * CROSSING_PENALTY + stackPenalty;
         if (score < bestScore - 1e-6) {
           bestScore = score;
           bestOrientation = candidate;

@@ -2,11 +2,15 @@ import type { SpinePlacement } from "./spine";
 import { PART_DEFS } from "../partDefs";
 import type { PartInstance } from "../types";
 
+export type OpAmpInput = "inMinus" | "inPlus";
+
 export interface OpAmpStage {
   opampId: string;
   /** Series element carrying the signal into one input, if the group has one - the other input may
    * instead be wired by a bare net straight from outside the group, with no local part. */
   inputId: string | null;
+  /** Which input the signal arrives at - decides which way the stage is drawn (see opAmpStageLayout). */
+  signalInput: OpAmpInput;
   /** Elements wired between the op-amp's output and its inverting input - negative feedback, present
    * in both inverting and non-inverting stages. */
   feedbackIds: string[];
@@ -78,13 +82,21 @@ export function detectOpAmpStage(input: DetectOpAmpStageInput): OpAmpStage | nul
   const isGroundish = (id: string) => touchesGround(id) || touchesSupply(id);
   let inputId: string | null = null;
   let groundLegId: string | null = null;
+  // The signal input is wherever the series element is; failing that, the input the ground leg is
+  // NOT on; failing that, "+" when the output is strapped straight to "-" (a follower), else "-".
+  let signalInput: OpAmpInput = outNet === inMinusNet ? "inPlus" : "inMinus";
 
   if (inMinusAdjacent.length === 1 && inPlusAdjacent.length === 0) {
-    if (isGroundish(inMinusAdjacent[0])) groundLegId = inMinusAdjacent[0];
-    else inputId = inMinusAdjacent[0];
+    if (isGroundish(inMinusAdjacent[0])) {
+      groundLegId = inMinusAdjacent[0];
+      signalInput = "inPlus";
+    } else inputId = inMinusAdjacent[0];
   } else if (inPlusAdjacent.length === 1 && inMinusAdjacent.length === 0) {
     if (isGroundish(inPlusAdjacent[0])) groundLegId = inPlusAdjacent[0];
-    else inputId = inPlusAdjacent[0];
+    else {
+      inputId = inPlusAdjacent[0];
+      signalInput = "inPlus";
+    }
   } else if (inMinusAdjacent.length === 1 && inPlusAdjacent.length === 1) {
     const [a, b] = [inMinusAdjacent[0], inPlusAdjacent[0]];
     const aGround = isGroundish(a);
@@ -92,6 +104,7 @@ export function detectOpAmpStage(input: DetectOpAmpStageInput): OpAmpStage | nul
     if (aGround === bGround) return null; // both a ground leg, or both a signal input - can't tell which is which
     inputId = aGround ? b : a;
     groundLegId = aGround ? a : b;
+    signalInput = aGround ? "inPlus" : "inMinus";
   } else if (inMinusAdjacent.length > 1 || inPlusAdjacent.length > 1) {
     return null;
   }
@@ -100,36 +113,61 @@ export function detectOpAmpStage(input: DetectOpAmpStageInput): OpAmpStage | nul
   const accounted = new Set([opampId, ...feedbackIds, ...(inputId ? [inputId] : []), ...(groundLegId ? [groundLegId] : []), ...(outAdjacentId ? [outAdjacentId] : [])]);
   if (accounted.size !== members.length) return null;
 
-  return { opampId, inputId, feedbackIds: feedbackIds.sort(order), outAdjacentId, groundLegId };
+  return { opampId, inputId, signalInput, feedbackIds: feedbackIds.sort(order), outAdjacentId, groundLegId };
 }
+
+export interface OpAmpStagePlacement {
+  placement: SpinePlacement;
+  /** Orientation the template decided for a member (the op-amp's mirror) - the generic orientation
+   * pass must not undo it. */
+  mirror: Map<string, boolean>;
+}
+
+/** The op-amp symbol's input pins sit 20px above and below its centre (partDefs); the centre is put
+ * 20px below the spine row so the signal input pin lands exactly ON the row, and the wire from the
+ * series input element runs straight in. */
+const OPAMP_INPUT_PIN_OFFSET = 20;
+/** The op-amp's input pins sit 30px left of its centre; the feedback rails hang on that line. */
+const OPAMP_PIN_INSET = 30;
+/** Distance from the spine row to the first feedback rung - clears the op-amp body and a pot's wiper
+ * indicator with room for the labels in between. */
+const FIRST_RUNG = 120;
+/** Pitch between feedback rungs: tight, the way a clipping pair is always drawn, but with room for
+ * each rung's id label between them. */
+const RUNG_PITCH = 70;
+/** How far past the last rung a ground leg on the ladder side hangs, so it reads as the rail
+ * continuing straight down to ground rather than as one more rung. */
+const GROUND_LEG_DROP = 70;
 
 /**
  * The textbook amplifier-stage placement for a recognized op-amp stage: the input element (if any)
- * and the op-amp on one row, left to right, with any output-side continuation after it; feedback
- * elements stacked above the op-amp as parallel horizontal rungs; the bias/ground leg (if any)
- * directly below.
+ * and the op-amp on one row, left to right, with any output-side continuation after it, and every
+ * feedback element as a horizontal rung of ONE ladder whose two rails are the inverting-input pin
+ * line and the output pin line - so each rung's own end pins already sit on the rails and the wires
+ * joining them are straight, with no second column of rungs for the rails to cross.
  *
- * A feedback network commonly mixes two different things: a single gain-setting element (a resistor
- * or pot) and a clipping pair (two diodes wired antiparallel between the same two nets, which reads
- * as one recognizable cluster when stacked tight). Piling all of them into one column regardless of
- * kind makes a 3-element feedback network a three-storey tower with barely any of the canvas's width
- * used - the taller a group gets, the more its own bus wires run the full height right past the
- * bodies of the rungs they don't connect to. Splitting the diode cluster into its own column keeps
- * the pair's convention (stacked tight) while spending height on width instead everywhere else.
+ * The ladder goes on the inverting input's side: ABOVE for an inverting stage (signal in at "-",
+ * drawn on top by mirroring the op-amp; the bias/ground leg of "+" hangs straight below), BELOW for
+ * a non-inverting one (signal in at "+", drawn on top; the "-" feedback and its ground leg both go
+ * underneath, the ground leg hanging off the bottom of the left rail). The op-amp is nudged down so
+ * its signal input pin lands exactly on the spine row.
  */
-export function opAmpStageLayout(stage: OpAmpStage, isDiode: (id: string) => boolean): SpinePlacement {
+export function opAmpStageLayout(stage: OpAmpStage): OpAmpStagePlacement {
   const placement: SpinePlacement = new Map();
+  const inverting = stage.signalInput === "inMinus";
+  const side = inverting ? -1 : 1; // which way the ladder grows from the spine row
   const opampCol = stage.inputId ? 1 : 0;
   if (stage.inputId) placement.set(stage.inputId, { col: 0, row: 0 });
-  placement.set(stage.opampId, { col: opampCol, row: 0 });
+  placement.set(stage.opampId, { col: opampCol, row: 0, dy: OPAMP_INPUT_PIN_OFFSET });
   if (stage.outAdjacentId) placement.set(stage.outAdjacentId, { col: opampCol + 1, row: 0 });
 
-  const diodeFeedback = stage.feedbackIds.filter(isDiode);
-  const otherFeedback = stage.feedbackIds.filter((id) => !isDiode(id));
-  otherFeedback.forEach((id, i) => placement.set(id, { col: opampCol, row: -(i + 1) }));
-  const diodeCol = otherFeedback.length > 0 ? opampCol + 1 : opampCol;
-  diodeFeedback.forEach((id, i) => placement.set(id, { col: diodeCol, row: -(i + 1) }));
+  const rungY = (i: number) => side * (FIRST_RUNG + i * RUNG_PITCH);
+  stage.feedbackIds.forEach((id, i) => placement.set(id, { col: opampCol, row: 0, dy: rungY(i) }));
 
-  if (stage.groundLegId) placement.set(stage.groundLegId, { col: opampCol, row: 1 });
-  return placement;
+  if (stage.groundLegId) {
+    if (inverting) placement.set(stage.groundLegId, { col: opampCol, row: 1, dx: -OPAMP_PIN_INSET });
+    else placement.set(stage.groundLegId, { col: opampCol, row: 0, dx: -OPAMP_PIN_INSET, dy: rungY(Math.max(0, stage.feedbackIds.length - 1)) + GROUND_LEG_DROP });
+  }
+  // Mirrored, the "-" pin draws on top: where an inverting stage's input and feedback both want it.
+  return { placement, mirror: new Map([[stage.opampId, inverting]]) };
 }

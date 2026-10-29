@@ -21,8 +21,6 @@ function stageInput(parts: PartInstance[], wires: Wire[], members: string[]) {
   };
 }
 
-const isDiodeOf = (parts: PartInstance[]) => (id: string) => parts.find((p) => p.id === id)?.type === "diode";
-
 const opamp = (id: string): PartInstance => ({ id, type: "opamp", x: 0, y: 0, rotation: 0, params: {} });
 const resistor = (id: string): PartInstance => ({ id, type: "resistor", x: 0, y: 0, rotation: 0, params: { resistance: 1000 } });
 const diode = (id: string): PartInstance => ({ id, type: "diode", x: 0, y: 0, rotation: 0, params: {} });
@@ -37,15 +35,19 @@ describe("detectOpAmpStage", () => {
       { id: "w3", a: { partId: "D1", terminalId: "cathode" }, b: { partId: "U1", terminalId: "out" } },
     ];
     const stage = detectOpAmpStage(stageInput(parts, wires, ["Rin", "D1", "U1"]));
-    expect(stage).toEqual({ opampId: "U1", inputId: "Rin", feedbackIds: ["D1"], outAdjacentId: null, groundLegId: null });
+    expect(stage).toEqual({ opampId: "U1", inputId: "Rin", signalInput: "inMinus", feedbackIds: ["D1"], outAdjacentId: null, groundLegId: null });
 
-    const placement = opAmpStageLayout(stage!, isDiodeOf(parts));
+    const { placement, mirror } = opAmpStageLayout(stage!);
     expect(placement.get("Rin")).toEqual({ col: 0, row: 0 });
-    expect(placement.get("U1")).toEqual({ col: 1, row: 0 });
-    expect(placement.get("D1")).toEqual({ col: 1, row: -1 });
+    // The op-amp sits 20px below the row so its (mirrored, now upper) "-" pin lands exactly on it.
+    expect(placement.get("U1")).toEqual({ col: 1, row: 0, dy: 20 });
+    expect(mirror.get("U1")).toBe(true);
+    // The feedback element is a rung above the op-amp, in its column.
+    expect(placement.get("D1")).toMatchObject({ col: 1, row: 0 });
+    expect(placement.get("D1")!.dy).toBeLessThan(0);
   });
 
-  it("keeps a diode clipping pair stacked together in their own column, apart from a non-diode feedback element", () => {
+  it("stacks every feedback element as a rung of one ladder in the op-amp's column, nearest first in the given order", () => {
     const parts = [resistor("Rin"), resistor("Rf"), diode("D1"), diode("D2"), opamp("U1")];
     const wires: Wire[] = [
       { id: "w1", a: { partId: "Rin", terminalId: "b" }, b: { partId: "U1", terminalId: "inMinus" } },
@@ -59,12 +61,14 @@ describe("detectOpAmpStage", () => {
     const stage = detectOpAmpStage(stageInput(parts, wires, ["Rin", "Rf", "D1", "D2", "U1"]));
     expect(stage!.feedbackIds).toEqual(["D1", "D2", "Rf"]); // alphabetical, via `order`
 
-    const placement = opAmpStageLayout(stage!, isDiodeOf(parts));
-    // Rf (the gain-setting element) stays in the op-amp's own column...
-    expect(placement.get("Rf")).toEqual({ col: 1, row: -1 });
-    // ...while D1/D2 (the antiparallel clipping pair) get a column of their own, stacked together.
-    expect(placement.get("D1")).toEqual({ col: 2, row: -1 });
-    expect(placement.get("D2")).toEqual({ col: 2, row: -2 });
+    const { placement } = opAmpStageLayout(stage!);
+    const rungs = ["D1", "D2", "Rf"].map((id) => placement.get(id)!);
+    for (const r of rungs) expect(r).toMatchObject({ col: 1, row: 0 });
+    // Rungs climb away from the op-amp at a fixed pitch, one above the other, never side by side.
+    expect(rungs[0].dy!).toBeLessThan(0);
+    expect(rungs[1].dy!).toBeLessThan(rungs[0].dy!);
+    expect(rungs[2].dy!).toBeLessThan(rungs[1].dy!);
+    expect(new Set(rungs.map((r) => r.dy)).size).toBe(3);
   });
 
   it("recognizes a non-inverting stage: bias resistor to ground on one input, the other input bare (fed from outside the group)", () => {
@@ -76,12 +80,16 @@ describe("detectOpAmpStage", () => {
       { id: "w4", a: { partId: "Rf", terminalId: "b" }, b: { partId: "U1", terminalId: "out" } },
     ];
     const stage = detectOpAmpStage(stageInput(parts, wires, ["Rg", "Rf", "U1"]));
-    expect(stage).toEqual({ opampId: "U1", inputId: null, feedbackIds: ["Rf"], outAdjacentId: null, groundLegId: "Rg" });
+    expect(stage).toEqual({ opampId: "U1", inputId: null, signalInput: "inPlus", feedbackIds: ["Rf"], outAdjacentId: null, groundLegId: "Rg" });
 
-    const placement = opAmpStageLayout(stage!, isDiodeOf(parts));
-    expect(placement.get("U1")).toEqual({ col: 0, row: 0 });
-    expect(placement.get("Rg")).toEqual({ col: 0, row: 1 });
-    expect(placement.get("Rf")).toEqual({ col: 0, row: -1 });
+    // Non-inverting: "+" stays on top (no mirror) with the signal row through it; the feedback rung
+    // and its ground leg both go underneath, the leg hanging off the bottom of the left rail.
+    const { placement, mirror } = opAmpStageLayout(stage!);
+    expect(mirror.get("U1")).toBe(false);
+    expect(placement.get("U1")).toEqual({ col: 0, row: 0, dy: 20 });
+    expect(placement.get("Rf")!.dy).toBeGreaterThan(0);
+    expect(placement.get("Rg")!.dy).toBeGreaterThan(placement.get("Rf")!.dy!);
+    expect(placement.get("Rg")!.dx).toBeLessThan(0);
   });
 
   it("tells an input element on one side from a ground leg on the other, whichever input each is wired to", () => {
@@ -94,7 +102,9 @@ describe("detectOpAmpStage", () => {
       { id: "w5", a: { partId: "Rg", terminalId: "b" }, b: { partId: "GND", terminalId: "gnd" } },
     ];
     const stage = detectOpAmpStage(stageInput(parts, wires, ["Rin", "Rg", "D1", "U1"]));
-    expect(stage).toEqual({ opampId: "U1", inputId: "Rin", feedbackIds: ["D1"], outAdjacentId: null, groundLegId: "Rg" });
+    expect(stage).toEqual({ opampId: "U1", inputId: "Rin", signalInput: "inMinus", feedbackIds: ["D1"], outAdjacentId: null, groundLegId: "Rg" });
+    // Inverting with a ground leg on "+": the leg hangs straight under the "+" pin line, below the op-amp.
+    expect(opAmpStageLayout(stage!).placement.get("Rg")).toEqual({ col: 1, row: 1, dx: -30 });
   });
 
   it("places a series element after the output one column past the op-amp", () => {
@@ -107,7 +117,7 @@ describe("detectOpAmpStage", () => {
     ];
     const stage = detectOpAmpStage(stageInput(parts, wires, ["Rin", "D1", "U1", "Cout"]));
     expect(stage!.outAdjacentId).toBe("Cout");
-    expect(opAmpStageLayout(stage!, isDiodeOf(parts)).get("Cout")).toEqual({ col: 2, row: 0 });
+    expect(opAmpStageLayout(stage!).placement.get("Cout")).toEqual({ col: 2, row: 0 });
   });
 
   it("bails (returns null) when a group member can't be given a role", () => {

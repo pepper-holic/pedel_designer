@@ -22,6 +22,44 @@ export interface LayoutMetrics {
  * rather than two unrelated same-net connections that happen to share an x/y range. */
 const NEAR_DUPLICATE_DISTANCE = 60;
 
+/** Half-extents of each symbol's drawn body in its own (unrotated) frame - see symbols.tsx. */
+const SYMBOL_HALF: Record<PartInstance["type"], { w: number; h: number }> = {
+  resistor: { w: 22, h: 12 },
+  capacitor: { w: 10, h: 14 },
+  inductor: { w: 20, h: 10 },
+  diode: { w: 10, h: 12 },
+  bjt: { w: 24, h: 24 },
+  jfet: { w: 24, h: 24 },
+  opamp: { w: 20, h: 24 },
+  vsource: { w: 26, h: 26 },
+  ground: { w: 14, h: 12 },
+  potentiometer: { w: 22, h: 14 },
+  pickup: { w: 22, h: 14 },
+  spst: { w: 16, h: 10 },
+  spdt: { w: 16, h: 14 },
+  dpdt: { w: 16, h: 34 },
+  blade3: { w: 16, h: 16 },
+  blade5: { w: 16, h: 16 },
+  rotary6: { w: 16, h: 34 },
+  coupledInductors: { w: 22, h: 24 },
+};
+
+/** The area a wire of another net must keep out of: the symbol's drawn body together with its own
+ * lead stubs out to each pin, so a foreign wire never crosses a lead (which would read as a join).
+ * The pins themselves sit on this rectangle's edge, not inside it, so a wire ending at one is clear. */
+export function symbolRect(part: PartInstance): { x1: number; y1: number; x2: number; y2: number } {
+  const half = SYMBOL_HALF[part.type];
+  const sideways = part.rotation === 90 || part.rotation === 270;
+  let hw = sideways ? half.h : half.w;
+  let hh = sideways ? half.w : half.h;
+  for (const t of PART_DEFS[part.type].terminals) {
+    const at = terminalPosition(part, t.id);
+    hw = Math.max(hw, Math.abs(at.x - part.x));
+    hh = Math.max(hh, Math.abs(at.y - part.y));
+  }
+  return { x1: part.x - hw, y1: part.y - hh, x2: part.x + hw, y2: part.y + hh };
+}
+
 /** A part's body without its terminal stubs: the area a wire should not run through. */
 export function bodyRect(part: PartInstance): { x1: number; y1: number; x2: number; y2: number } {
   const ts = PART_DEFS[part.type].terminals.map((t) => terminalPosition(part, t.id));

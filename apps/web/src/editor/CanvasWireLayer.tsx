@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { draggableCorners, renderWirePaths, type Point } from "./geometry";
-import { wireRoutes } from "./routing/wirePolylines";
+import type { WireRoute } from "./routing/wirePolylines";
 import type { CanvasEndpoints } from "./canvasEndpoints";
 import type { TerminalRef, Wire } from "./types";
 
@@ -16,6 +16,9 @@ function terminalKey(ref: TerminalRef): string {
 interface CanvasWireLayerProps {
   endpoints: CanvasEndpoints;
   wires: Wire[];
+  /** Every visible wire's decided path (see routing/wirePolylines.ts), computed once by the canvas
+   * and shared with the label layers so they dodge exactly what is drawn. */
+  routes: WireRoute[];
   selectedWireId: string | null;
   onWireClick: (wire: Wire, e: React.MouseEvent) => void;
   /** Mouse down on a selected wire's segment handle - starts a segment drag. */
@@ -27,7 +30,7 @@ interface CanvasWireLayerProps {
 /** Every wire's visible stroke, its fat transparent hit-target, the junction dots where 3+ wire
  * ends meet, and - on the selected wire - handles to drag its segments. Drawn after block regions
  * and before parts, so terminals (wiring) still win over wire selection where they overlap. */
-export function CanvasWireLayer({ endpoints, wires, selectedWireId, onWireClick, onSegmentMouseDown, onWireDoubleClick }: CanvasWireLayerProps) {
+export function CanvasWireLayer({ endpoints, wires, routes, selectedWireId, onWireClick, onSegmentMouseDown, onWireDoubleClick }: CanvasWireLayerProps) {
   // A junction dot is drawn wherever 3+ wire ends meet at the same terminal - a real electrical
   // junction, as opposed to a plain 2-wire pass-through or two wires merely crossing visually.
   const junctionPoints = useMemo(() => {
@@ -49,7 +52,6 @@ export function CanvasWireLayer({ endpoints, wires, selectedWireId, onWireClick,
     return points;
   }, [wires, endpoints]);
 
-  const routes = useMemo(() => wireRoutes(wires, endpoints), [wires, endpoints]);
   const paths = useMemo(() => renderWirePaths(routes.map((r) => r.points)), [routes]);
   const selected = routes.find((r) => r.wire.id === selectedWireId);
 

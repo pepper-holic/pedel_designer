@@ -32,7 +32,7 @@ describe("waypoints", () => {
     const wires = loaded.snapshot.wires.map((w) => (w.id === wire.id ? { ...w, waypoints: [{ x: 500, y: 500 }] } : w));
     const g = netlistFromGraph(loaded.snapshot.parts, wires);
     const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
-    const route = wireRoutes(wires, buildCanvasEndpoints(loaded.snapshot.parts, [], netOf)).find((r) => r.wire.id === wire.id)!;
+    const route = wireRoutes(wires, buildCanvasEndpoints(loaded.snapshot.parts, [], netOf), loaded.snapshot.parts, netOf).find((r) => r.wire.id === wire.id)!;
     // The corner itself may be simplified away when it is collinear, but the path must pass through it.
     expect(route.points.some((p) => p.x === 500)).toBe(true);
   });
@@ -102,24 +102,37 @@ describe("arrange", () => {
 });
 
 describe("op-amp stage template (L2)", () => {
-  it("draws the TS9 drive stage with the gain pot over the op-amp and the diode pair in a column of their own", () => {
+  it("draws the TS9 drive stage as one feedback ladder over a mirrored op-amp whose '-' pin sits on the signal row", () => {
     const preset = presets.find((p) => p.id === "ts9-overdrive")!;
     const { snapshot } = loadPedalPreset(preset);
     const byId = new Map(snapshot.parts.map((p) => [p.id, p]));
     const [rin, u1, drive, d1, d2] = ["Rin", "U1", "DRIVE", "D1", "D2"].map((id) => byId.get(id)!);
 
-    // Input and op-amp sit on the same signal row.
-    expect(rin.y).toBe(u1.y);
-    // The gain pot (not a diode) stays directly over the op-amp...
-    expect(drive.x).toBe(u1.x);
-    expect(drive.y).toBeLessThan(u1.y);
-    // ...while the antiparallel clipping pair gets its own column, so the block spends width instead
-    // of piling every feedback element into one ever-taller tower.
-    expect(d1.x).toBe(d2.x);
-    expect(d1.x).not.toBe(u1.x);
-    expect(d1.y).not.toBe(d2.y);
-    expect(d1.y).toBeLessThan(u1.y);
-    expect(d2.y).toBeLessThan(u1.y);
+    // The series input runs straight into the inverting input: Rin's pin and U1's "-" pin level.
+    expect(u1.mirror).toBe(true);
+    expect(terminalPosition(rin, "b").y).toBe(terminalPosition(u1, "inMinus").y);
+    // Every feedback element is a rung of ONE ladder in the op-amp's own column, above it - the pot
+    // nearest, the diode pair stacked tight above it - so the two rails never have to cross.
+    for (const rung of [drive, d1, d2]) {
+      expect(rung.x).toBe(u1.x);
+      expect(rung.y).toBeLessThan(u1.y);
+      expect([0, 180]).toContain(rung.rotation);
+    }
+    expect(drive.y).toBeGreaterThan(Math.max(d1.y, d2.y));
+    expect(Math.abs(d1.y - d2.y)).toBeLessThan(100);
+  });
+
+  it("hangs the '+' input's ground straight under that pin", () => {
+    const preset = presets.find((p) => p.id === "ts9-overdrive")!;
+    const { snapshot } = loadPedalPreset(preset);
+    const u1 = snapshot.parts.find((p) => p.id === "U1")!;
+    const groundWire = snapshot.wires.find((w) => [w.a, w.b].some((t) => t.partId === "U1" && t.terminalId === "inPlus"))!;
+    const groundId = groundWire.a.partId === "U1" ? groundWire.b.partId : groundWire.a.partId;
+    const ground = snapshot.parts.find((p) => p.id === groundId)!;
+    expect(ground.type).toBe("ground");
+    const pin = terminalPosition(u1, "inPlus");
+    expect(ground.x).toBe(pin.x);
+    expect(ground.y).toBeGreaterThan(pin.y);
   });
 });
 
@@ -183,7 +196,8 @@ describe("label placement (L4)", () => {
       const g = netlistFromGraph(snapshot.parts, snapshot.wires);
       const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
       const endpoints = buildCanvasEndpoints(snapshot.parts, snapshot.blocks, netOf);
-      const { requests, placed } = partLabelPlacements(snapshot.parts, snapshot.wires, endpoints);
+      const routes = wireRoutes(snapshot.wires, endpoints, snapshot.parts, netOf);
+      const { requests, placed } = partLabelPlacements(snapshot.parts, routes, endpoints, snapshot.blocks);
       const rects = requests.map((r) => placed.get(r.id)!);
 
       for (let i = 0; i < rects.length; i++) {
@@ -202,7 +216,7 @@ describe("label placement (L4)", () => {
     const g = netlistFromGraph(snapshot.parts, snapshot.wires);
     const netOf = (r: { partId: string; terminalId: string }) => g.terminalNet.get(`${r.partId}:${r.terminalId}`);
     const endpoints = buildCanvasEndpoints(snapshot.parts, snapshot.blocks, netOf);
-    const { placed } = partLabelPlacements(snapshot.parts, snapshot.wires, endpoints);
+    const { placed } = partLabelPlacements(snapshot.parts, wireRoutes(snapshot.wires, endpoints, snapshot.parts, netOf), endpoints, snapshot.blocks);
     const idRect = placed.get(`id-${pot!.id}`)!;
     // "up" would put the box entirely above the anchor (y2 <= anchor.y); anything else keeps some
     // part of the box at or below it.

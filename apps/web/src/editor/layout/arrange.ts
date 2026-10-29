@@ -3,10 +3,11 @@ import { PART_DEFS } from "../partDefs";
 import { snapToGrid, terminalPosition } from "../geometry";
 import { barycenterRows, layerDepths, type Adjacency } from "./layered";
 import { spineLayout } from "./spine";
+import { rewireNets } from "./rewire";
 import { optimizePartOrientations } from "./orientation";
 import { detectOpAmpStage, opAmpStageLayout } from "./opampStage";
 import type { CircuitSnapshot } from "../historyStack";
-import type { PartInstance } from "../types";
+import type { PartInstance, Rotation, TerminalRef } from "../types";
 
 const COLUMN_SPACING = 160;
 const ROW_SPACING = 130;
@@ -14,9 +15,15 @@ const ROW_SPACING = 130;
 const GROUP_GAP_X = 120;
 const GROUP_GAP_Y = 130;
 const ORIGIN = { x: 100, y: 100 };
+/** Where a ground symbol first goes relative to its owner's centre, before orientations are known. */
 const GROUND_OFFSET_Y = 70;
+/** A ground symbol's centre sits this far below the terminal it serves (its pin is 20px above its
+ * centre, so the wire down to it is a short straight stub). */
+const GROUND_DROP = 40;
 /** See spineLayout: the signal path prefers amplifiers, avoids diodes. */
 const SPINE_WEIGHT: Partial<Record<PartInstance["type"], number>> = { opamp: 1, bjt: 1, jfet: 1, coupledInductors: 2, diode: 6 };
+/** Devices the signal path must run through (see SpineInput.amplifiers). */
+const AMPLIFIERS: ReadonlySet<PartInstance["type"]> = new Set(["opamp", "bjt", "jfet"]);
 
 /** How far a signal source's pin ends up on the FAR side of its row from its own body, instead of
  * flush with it. A real schematic always shows a short straight run off a pin before a wire bends onto
@@ -114,6 +121,11 @@ export function arrangeParts(snapshot: CircuitSnapshot, inputPartId: string | nu
     (blocks.find((b) => b.id === blockId)?.ports ?? []).filter((p) => p.kind === kind).map((p) => p.terminal.partId);
   const local = new Map<string, { x: number; y: number }>();
   const size = new Map<string, { w: number; h: number }>();
+  /** Orientation a stage template settled (an op-amp's mirror) - kept out of the generic pass. */
+  const decidedMirror = new Map<string, boolean>();
+  /** Two-terminal parts lying along a signal row (keep their axis) vs. hanging off one (stand up). */
+  const seriesIds = new Set<string>();
+  const stackIds = new Set<string>();
   /** Distance from a group's top to its spine row - used to put every spine on one baseline. */
   const spineY = new Map<string, number>();
   for (const g of groups.values()) {
@@ -129,24 +141,45 @@ export function arrangeParts(snapshot: CircuitSnapshot, inputPartId: string | nu
     const touchesSupply = (id: string) => netsOf(id).some((n) => supplyOnly.has(n));
     const order = (a: string, b: string) => byId.get(a)!.x - byId.get(b)!.x || byId.get(a)!.y - byId.get(b)!.y;
     const opAmpStage = detectOpAmpStage({ members, byId, terminalNet, touchesGround, touchesSupply, order });
-    const placement = opAmpStage
-      ? opAmpStageLayout(opAmpStage, (id) => byId.get(id)!.type === "diode")
-      : spineLayout({
-          members,
-          adjacency: innerAdj,
-          entries: [...new Set(entries)].filter((m) => memberSet.has(m)),
-          exits: [...new Set(exits)].filter((m) => memberSet.has(m)),
-          touchesGround,
-          touchesSupply,
-          order,
-          weight: (id) => SPINE_WEIGHT[byId.get(id)!.type] ?? 3,
-        });
-    const minRow = Math.min(...[...placement.values()].map((p) => p.row));
-    const maxRow = Math.max(...[...placement.values()].map((p) => p.row));
-    const maxCol = Math.max(...[...placement.values()].map((p) => p.col));
-    for (const [m, p] of placement) local.set(m, { x: p.col * COLUMN_SPACING, y: (p.row - minRow) * ROW_SPACING + rowAnchorOffset(byId.get(m)!) });
-    size.set(g.id, { w: maxCol * COLUMN_SPACING, h: (maxRow - minRow) * ROW_SPACING });
-    spineY.set(g.id, -minRow * ROW_SPACING);
+    const { placement, mirror } = opAmpStage
+      ? opAmpStageLayout(opAmpStage)
+      : {
+          placement: spineLayout({
+            members,
+            adjacency: innerAdj,
+            entries: [...new Set(entries)].filter((m) => memberSet.has(m)),
+            exits: [...new Set(exits)].filter((m) => memberSet.has(m)),
+            touchesGround,
+            touchesSupply,
+            order,
+            weight: (id) => SPINE_WEIGHT[byId.get(id)!.type] ?? 3,
+            sideOf: (id, neighbour) => Math.sign(attachmentX(id, neighbour, byId, terminalNet, supplyNets)) as -1 | 0 | 1,
+            attachX: (id, neighbour) => attachmentX(id, neighbour, byId, terminalNet, supplyNets),
+            amplifiers: members.filter((m) => AMPLIFIERS.has(byId.get(m)!.type)),
+          }),
+          mirror: new Map<string, boolean>(),
+        };
+    for (const [m, flip] of mirror) decidedMirror.set(m, flip);
+    for (const [m, p] of placement) {
+      const twoTerminal = PART_DEFS[byId.get(m)!.type].terminals.length === 2;
+      if (!twoTerminal) continue;
+      // Row 0 is the signal row (and, in the op-amp template, its horizontal feedback rungs); anything
+      // off it hangs off the row - a shunt, a bias leg - and reads best standing upright.
+      if (p.row === 0 && (!p.dx || opAmpStage)) seriesIds.add(m);
+      else stackIds.add(m);
+    }
+    if (opAmpStage?.groundLegId) {
+      seriesIds.delete(opAmpStage.groundLegId);
+      stackIds.add(opAmpStage.groundLegId);
+    }
+    const minCol = Math.min(...[...placement.values()].map((p) => p.col));
+    const raw = new Map([...placement].map(([m, p]) => [m, { x: (p.col - minCol) * COLUMN_SPACING + (p.dx ?? 0), y: p.row * ROW_SPACING + (p.dy ?? 0) + rowAnchorOffset(byId.get(m)!) }]));
+    const minY = Math.min(...[...raw.values()].map((l) => l.y));
+    const maxY = Math.max(...[...raw.values()].map((l) => l.y));
+    const maxX = Math.max(...[...raw.values()].map((l) => l.x));
+    for (const [m, l] of raw) local.set(m, { x: l.x, y: l.y - minY });
+    size.set(g.id, { w: maxX, h: maxY - minY });
+    spineY.set(g.id, -minY);
   }
 
   // --- place groups: columns by depth, stacked by row; power on a row of its own above ------------
@@ -182,6 +215,19 @@ export function arrangeParts(snapshot: CircuitSnapshot, inputPartId: string | nu
   }
 
   // --- apply, keeping pinned parts, then hang ground symbols under their owners --------------------
+  const groundOwner = new Map<string, TerminalRef>();
+  for (const w of snapshot.wires) {
+    const a = byId.get(w.a.partId);
+    const b = byId.get(w.b.partId);
+    if (a?.type === "ground" && b && b.type !== "ground" && !groundOwner.has(a.id)) groundOwner.set(a.id, w.b);
+    if (b?.type === "ground" && a && a.type !== "ground" && !groundOwner.has(b.id)) groundOwner.set(b.id, w.a);
+  }
+  const groundedTerminals = new Set([...groundOwner.values()].map((t) => `${t.partId}:${t.terminalId}`));
+  /** A source stands upright with its grounded pin at the bottom: + up for a positive supply or a
+   * signal source, - up (turned 180) for a negative supply - so its ground symbol hangs straight
+   * under it and its other pin feeds the circuit from the top. Never sideways. */
+  const sourceRotation = (p: PartInstance): Rotation => (groundedTerminals.has(`${p.id}:positive`) ? 180 : groundedTerminals.has(`${p.id}:negative`) ? 0 : p.rotation);
+
   const moved = new Map<string, PartInstance>();
   for (const p of signalParts) {
     if (p.pinned) {
@@ -190,21 +236,57 @@ export function arrangeParts(snapshot: CircuitSnapshot, inputPartId: string | nu
     }
     const o = origin.get(groupOf.get(p.id)!)!;
     const l = local.get(p.id)!;
-    moved.set(p.id, { ...p, x: snapToGrid(o.x + l.x), y: snapToGrid(o.y + l.y) });
+    const mirror = decidedMirror.has(p.id) ? decidedMirror.get(p.id) || undefined : p.mirror;
+    const rotation = p.type === "vsource" ? sourceRotation(p) : p.rotation;
+    moved.set(p.id, { ...p, x: snapToGrid(o.x + l.x), y: snapToGrid(o.y + l.y), mirror, rotation });
   }
-  const groundOwner = new Map<string, string>();
-  for (const w of snapshot.wires) {
-    const a = byId.get(w.a.partId);
-    const b = byId.get(w.b.partId);
-    if (a?.type === "ground" && b && b.type !== "ground" && !groundOwner.has(a.id)) groundOwner.set(a.id, b.id);
-    if (b?.type === "ground" && a && a.type !== "ground" && !groundOwner.has(b.id)) groundOwner.set(b.id, a.id);
-  }
-  const nextParts = parts.map((p) => {
-    if (p.type !== "ground") return moved.get(p.id)!;
-    const owner = groundOwner.get(p.id);
-    if (p.pinned || !owner) return p;
-    const o = moved.get(owner)!;
-    return { ...p, x: o.x, y: o.y + GROUND_OFFSET_Y };
+  // Grounds first go roughly under their owner so the orientation pass can score their wires, then
+  // hang exactly under the terminal they serve once that terminal's final position is known.
+  const hangGround = (ground: PartInstance, at: (owner: PartInstance, terminalId: string) => { x: number; y: number }) => {
+    const owner = groundOwner.get(ground.id);
+    if (ground.pinned || !owner) return ground;
+    const pos = at(moved.get(owner.partId)!, owner.terminalId);
+    return { ...ground, x: pos.x, y: pos.y };
+  };
+  const roughParts = parts.map((p) => (p.type === "ground" ? hangGround(p, (o) => ({ x: o.x, y: o.y + GROUND_OFFSET_Y })) : moved.get(p.id)!));
+  // Sources keep the upright orientation chosen above (see sourceRotation): flipped to shave a wire,
+  // the ground would hang off the wrong end and the wire run through it.
+  const fixed = new Set([...decidedMirror.keys(), ...parts.filter((p) => p.type === "vsource").map((p) => p.id)]);
+  // Score orientations against the wires the new positions will actually get (each net's
+  // nearest-neighbour tree), not the wires the circuit arrived with: those may join a pin to some
+  // far-off terminal of its net, and a long guessed route like that crosses things the real short
+  // local wire never would, tipping the choice the wrong way.
+  const scoringWires = rewireNets({ ...snapshot, parts: roughParts }).wires;
+  const oriented = optimizePartOrientations(roughParts, scoringWires, { fixed, keepAxis: seriesIds, preferVertical: stackIds }).map((p) => {
+    // The pass scored every orientation against a ground still sitting under the part's centre, so
+    // it could not tell which end should face it: turn a two-terminal part end for end if its
+    // grounded pin came out on top, so the ground hangs straight off that pin instead of the wire
+    // running back down through the body (and the ground symbol) to reach it.
+    if (p.type === "ground" || p.pinned || fixed.has(p.id) || PART_DEFS[p.type].terminals.length !== 2) return p;
+    const grounded = PART_DEFS[p.type].terminals.find((t) => groundedTerminals.has(`${p.id}:${t.id}`));
+    if (!grounded || terminalPosition(p, grounded.id).y >= p.y) return p;
+    return { ...p, rotation: ((p.rotation + 180) % 360) as Rotation };
   });
-  return { ...snapshot, parts: optimizePartOrientations(nextParts, snapshot.wires) };
+  for (const p of oriented) if (p.type !== "ground") moved.set(p.id, p);
+  const nextParts = oriented.map((p) => {
+    if (p.type !== "ground") return p;
+    return hangGround(p, (o, terminalId) => {
+      const t = terminalPosition(o, terminalId);
+      return { x: t.x, y: Math.max(t.y, o.y) + GROUND_DROP };
+    });
+  });
+  return { ...snapshot, parts: nextParts };
+}
+
+/** Where on `neighbour` the part `id` is wired: the mean x offset (symbol's unrotated frame) of the
+ * neighbour's own pins on their shared non-supply nets - negative on its left (input) side, positive
+ * on its right, 0 when they share nothing. */
+function attachmentX(id: string, neighbour: string, byId: Map<string, PartInstance>, terminalNet: Map<string, string>, supplyNets: Set<string>): number {
+  const mine = new Set(PART_DEFS[byId.get(id)!.type].terminals.map((t) => terminalNet.get(`${id}:${t.id}`)).filter((n): n is string => !!n && !supplyNets.has(n)));
+  const xs: number[] = [];
+  for (const t of PART_DEFS[byId.get(neighbour)!.type].terminals) {
+    const net = terminalNet.get(`${neighbour}:${t.id}`);
+    if (net && mine.has(net)) xs.push(t.dx);
+  }
+  return xs.length === 0 ? 0 : xs.reduce((a, b) => a + b, 0) / xs.length;
 }
