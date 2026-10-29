@@ -7,7 +7,7 @@ import { holeLabel, rowLabel, type Hole, type StripboardLayout, type StripPlacem
  */
 export type Shape =
   | { kind: "rect"; x: number; y: number; w: number; h: number; fill: string; stroke?: string; sw?: number; rx?: number; opacity?: number; part?: string }
-  | { kind: "circle"; cx: number; cy: number; r: number; fill: string; stroke?: string; sw?: number; part?: string; hole?: Hole }
+  | { kind: "circle"; cx: number; cy: number; r: number; fill: string; stroke?: string; sw?: number; opacity?: number; part?: string; hole?: Hole }
   | { kind: "line"; x1: number; y1: number; x2: number; y2: number; stroke: string; sw: number; part?: string; dash?: number }
   | { kind: "text"; x: number; y: number; text: string; size: number; fill: string; anchor?: "start" | "middle" | "end"; bold?: boolean; fontFamily?: string };
 

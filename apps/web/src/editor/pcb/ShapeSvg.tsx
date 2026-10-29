@@ -57,7 +57,7 @@ export function ShapeSvg({ shapes, width, height, scale, label, onHoleClick, onD
           case "rect":
             return <rect key={i} x={s.x} y={s.y} width={s.w} height={s.h} fill={s.fill} stroke={s.stroke} strokeWidth={s.sw} rx={s.rx} opacity={s.opacity} {...partProps} />;
           case "circle": {
-            const circle = <circle cx={s.cx} cy={s.cy} r={s.r} fill={s.fill} stroke={s.stroke} strokeWidth={s.sw} {...partProps} />;
+            const circle = <circle cx={s.cx} cy={s.cy} r={s.r} fill={s.fill} stroke={s.stroke} strokeWidth={s.sw} opacity={s.opacity} {...partProps} />;
             if (!s.hole || !onHoleClick) return <g key={i}>{circle}</g>;
             // Holes are tiny; a transparent disc on top gives them a usable click target.
             return (
