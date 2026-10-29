@@ -124,6 +124,7 @@ export function kitToPreset(kit: KitCircuit): PedalPreset {
     defaultParams: {},
     knobs,
     blocks: stageBlocks(kit.stages ?? [], byRef, elements),
+    ...(kit.layout ? { layout: Object.fromEntries(Object.entries(kit.layout).map(([ref, spot]) => [ref === "VCC" ? "Vcc" : ref, spot])) } : {}),
     kit: meta,
     archive: {
       sourceRefs: [{ label: `페달파츠 ${kit.kitName} 키트 기판 레이아웃 (넷리스트 역설계)`, url: `https://www.pedalparts.co.kr/goods/goods_view.php?goodsNo=${kit.goodsNo}` }],

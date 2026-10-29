@@ -47,7 +47,16 @@ export function loadPedalPreset(preset: PedalPreset, variant?: PresetVariant): L
   // A hand-tuned layout wins; otherwise blocks are laid out in signal order and each net is rewired
   // as its shortest tree (fewer crossings on 22 of the 23 presets than the flat layout - see
   // docs/plan-core-fundamentals.md, Stage C).
-  if (!preset.layout) {
+  // A kit circuit's layout is a whole hand-drawn schematic: every part goes to its spot (pinned, with
+  // its rotation), then the arrange pass only hangs the ground symbols and each net is rewired.
+  const kitLayout = preset.kit ? preset.layout : undefined;
+  if (kitLayout) {
+    built.parts = built.parts.map((p) => {
+      const spot = kitLayout[p.id];
+      return spot ? { ...p, x: spot.x, y: spot.y, rotation: spot.rotation ?? p.rotation, mirror: spot.mirror || undefined, pinned: true } : p;
+    });
+  }
+  if (!preset.layout || kitLayout) {
     const arranged = rewireNets(arrangeParts({ parts: built.parts, wires: built.wires, blocks: built.blocks }, preset.inputSourceId));
     built.parts = arranged.parts;
     built.wires = arranged.wires;

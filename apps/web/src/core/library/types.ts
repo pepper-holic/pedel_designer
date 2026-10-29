@@ -77,6 +77,15 @@ export interface BlockAnnotation {
   collapsed?: boolean;
 }
 
+/** A hand-picked spot for one part. Rotation/mirror are honoured for kit circuits, whose layout is
+ * a complete hand-drawn schematic (every part pinned there, then grounds hung and nets rewired). */
+export interface LayoutSpot {
+  x: number;
+  y: number;
+  rotation?: 0 | 90 | 180 | 270;
+  mirror?: boolean;
+}
+
 export interface PedalPreset {
   id: string;
   name: string;
@@ -99,7 +108,7 @@ export interface PedalPreset {
    * where the automatic grid layout produces excessive wire crossing. Elements not listed here
    * (or every element, if the field is omitted) fall back to the automatic layout.
    */
-  layout?: Record<string, { x: number; y: number }>;
+  layout?: Record<string, LayoutSpot>;
   /**
    * The preset decomposed into functional blocks (input, gain, clipping, tone, output, power...),
    * so it loads as labelled stages that can be collapsed into black boxes. Every element except the

@@ -32,6 +32,14 @@ output instead of as a grid. Every part should sit in a stage once any STAGE is 
 BOM lists the kit's parts list for an automatic count check, values or part numbers with an
 optional xN count: "BOM 1M 150Kx2 220nx2 2N5088x3 B100Kx2".
 
+AT places a part on the schematic by hand: "AT <ref> <x> <y> [h|v|h-|v-|r0|r90|r180|r270] [m]",
+x/y in canvas pixels (grid 10; 2-terminal parts are 60 long, a BJT's pins sit 30 off its centre).
+h keeps the first-listed lead left, v puts it on top, h-/v- the other way; m mirrors (a pot's wiper
+down instead of up). V1 (audio input), VCC (9V source) and RLOAD (amp input) can be placed too.
+Once any AT is given every part should have one: the app then pins each part where it is put and
+only hangs ground symbols and reroutes the wires - use it when the automatic layout comes out
+tangled (multi-transistor stages, Baxandall tone stacks).
+
 Lines starting with "#" are comments. The script names nets (in, out, vcc, 0, then n1, n2 ... in
 order of first use), checks every multi-pad net and every non-ground pad is used, and prints what
 it could not reconcile so the reader can look again at the board.
@@ -79,6 +87,7 @@ def main() -> None:
     used_pads: set[int] = set()
     counters: dict[str, int] = {}
     stages: list[dict] = []
+    layout: dict[str, dict] = {}
     bom: dict[str, int] = {}
 
     def pad(token: str) -> int:
@@ -133,6 +142,18 @@ def main() -> None:
             for tok in rest:
                 m = re.fullmatch(r"(.+?)(?:x(\d+))?", tok)
                 bom[norm(m.group(1))] = bom.get(norm(m.group(1)), 0) + int(m.group(2) or 1)
+        elif head == "AT":
+            ref, x, y, *opts = rest
+            rot = {"h": 0, "v": 90, "h-": 180, "v-": 270, "r0": 0, "r90": 90, "r180": 180, "r270": 270}
+            spot = {"x": int(x), "y": int(y)}
+            for o in opts:
+                if o in rot:
+                    spot["rotation"] = rot[o]
+                elif o == "m":
+                    spot["mirror"] = True
+                else:
+                    sys.exit(f"{map_path.name}:{line_no}: unknown AT option '{o}'")
+            layout[ref] = spot
         elif head == "JUMP":
             a, b = pad(rest[0]), pad(rest[1])
             parent[find(pad_net[a])] = find(pad_net[b])
@@ -192,6 +213,14 @@ def main() -> None:
         for p in parts:
             if p["ref"] not in staged:
                 problems.append(f"{p['ref']} is in no STAGE")
+    if layout:
+        refs = {p["ref"] for p in parts} | {"V1", "VCC", "RLOAD"}
+        for ref in sorted(refs - set(layout)):
+            if not any(p["ref"] == ref and p["kind"] == "IC" for p in parts):
+                problems.append(f"{ref} has no AT")
+        for ref in sorted(set(layout) - refs):
+            if not re.fullmatch(r"(U\d+)[AB]", ref):
+                problems.append(f"AT {ref}: no such part")
     if bom:
         have: dict[str, int] = {}
         for p in parts:
@@ -214,6 +243,7 @@ def main() -> None:
         "supply": 9,
         "parts": parts,
         **({"stages": stages} if stages else {}),
+        **({"layout": layout} if layout else {}),
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(circuit, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

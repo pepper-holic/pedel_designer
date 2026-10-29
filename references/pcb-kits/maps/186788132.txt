@@ -34,3 +34,20 @@ C 22uF 7 14
 STAGE output output 출력 (볼륨)
 C 10n 22 23
 POT A500K VOLUME 5 4 3
+
+# --- schematic placement: draft from suggest_layout.py, kept as is ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h-
+AT Q1 270 400
+AT Q2 380 400
+AT R4 490 400 h
+AT C3 590 400 h-
+AT VOLUME 690 400 r180
+AT R1 120 470 v
+AT R2 290 190 v-
+AT R3 520 190 v
+AT R5 300 520 h-
+AT FUZZ 460 460 r180
+AT C2 460 560 v
+AT RLOAD 690 480 v

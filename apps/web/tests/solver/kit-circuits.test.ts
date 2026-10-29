@@ -51,6 +51,16 @@ describe("kit circuits", () => {
       expect(Math.max(...out.subarray(480).map(Math.abs))).toBeGreaterThan(1e-4);
     });
 
+    it("keeps every hand-placed part where its layout puts it", () => {
+      if (!preset.layout) return;
+      const { snapshot } = loadPedalPreset(preset);
+      for (const [id, spot] of Object.entries(preset.layout)) {
+        const part = snapshot.parts.find((p) => p.id === id);
+        expect(part, id).toBeDefined();
+        expect([part!.x, part!.y, part!.rotation, part!.pinned], id).toEqual([spot.x, spot.y, spot.rotation ?? part!.rotation, true]);
+      }
+    });
+
     it("loads into the editor with its pots as knobs", () => {
       const { snapshot } = loadPedalPreset(preset);
       const pots = snapshot.parts.filter((p) => p.type === "potentiometer").map((p) => p.id);
