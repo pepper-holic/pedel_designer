@@ -1,3 +1,9 @@
 .DS_Store
 Thumbs.db
 *.log
+
+# Third-party kit pages and photos collected for reference (pcb-to-netlist skill); only the index is committed
+references/pcb-kits/*/
+references/parts/*/
+__pycache__/
+*.pyc
