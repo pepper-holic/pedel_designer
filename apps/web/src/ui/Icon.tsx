@@ -20,6 +20,14 @@ const PATHS = {
   help: "M8 1.75a6.25 6.25 0 1 0 0 12.5A6.25 6.25 0 1 0 8 1.75zM6.25 6.25a1.75 1.75 0 1 1 2.5 1.6c-.5.25-.75.6-.75 1.15v.5M8 11v.5",
   expand: "M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9",
   collapse: "M13.5 6.5h-4v-4M9.5 6.5 14 2M2.5 9.5h4v4M6.5 9.5 2 14",
+  "chevron-left": "M10 4 6 8l4 4",
+  /* two opposed arrows: send a panel to the other side of the workspace */
+  swap: "M2.5 5.5h9l-2.5-2.5M13.5 10.5h-9l2.5 2.5",
+  /* a panel outline with its side rail: fold a side panel down to its rail */
+  "panel-left": "M2.5 3h11v10h-11zM6 3v10",
+  "panel-right": "M2.5 3h11v10h-11zM10 3v10",
+  search: "M7 2.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zM10.3 10.3 13.5 13.5",
+  trash: "M3 4.5h10M6.5 4.5v-2h3v2M4.5 4.5l.5 9h6l.5-9M6.5 7v4M9.5 7v4",
 } as const;
 
 export type IconName = keyof typeof PATHS;

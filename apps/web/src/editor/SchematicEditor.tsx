@@ -18,7 +18,10 @@ import { AppBar } from "./shell/AppBar";
 import { TransportBar } from "./shell/TransportBar";
 import { ShortcutHelp } from "./shell/ShortcutHelp";
 import { StartCards } from "./shell/StartCards";
-import { LibraryPanel, type LibraryTab } from "./shell/LibraryPanel";
+import { LibraryPanel, LibraryRailTabs, LibraryTabs, type LibraryTab } from "./shell/LibraryPanel";
+import { SideColumn } from "./shell/SideColumn";
+import { LIMITS, useWorkspaceLayout } from "./shell/useWorkspaceLayout";
+import "./shell/workspace.css";
 import { AnalyzeWorkspace } from "./shell/AnalyzeWorkspace";
 import { BuildWorkspace } from "./shell/BuildWorkspace";
 import { EmptyStep } from "./shell/EmptyStep";
@@ -86,6 +89,8 @@ function loadInitialState(): { snapshot: CircuitSnapshot; outputNode: string; in
 export function SchematicEditor() {
   const initial = useMemo(() => loadInitialState(), []);
   const [libraryTab, setLibraryTab] = useState<LibraryTab>("presets");
+  const workspaceLayout = useWorkspaceLayout();
+  const { layout } = workspaceLayout;
   const [mode, setModeState] = useState<WorkMode>(readMode);
   const setMode = (next: WorkMode) => {
     setModeState(next);
@@ -414,8 +419,31 @@ export function SchematicEditor() {
         />
       );
     if (mode === "build") return <BuildWorkspace parts={parts} blocks={blocks} graph={graph} outputNode={outputNode} appearance={appearance} title={title} />;
-    return (
-      <div className="design-workspace">
+    const libraryColumn = (
+      <SideColumn
+        key="library"
+        title="라이브러리"
+        className="library-panel"
+        side={layout.librarySide}
+        width={layout.libraryWidth}
+        min={LIMITS.library.min}
+        max={LIMITS.library.max}
+        collapsed={layout.libraryCollapsed}
+        onWidthChange={workspaceLayout.setLibraryWidth}
+        onResetWidth={workspaceLayout.resetWidths}
+        onCollapsedChange={workspaceLayout.setLibraryCollapsed}
+        onSwapSide={workspaceLayout.swapSides}
+        header={<LibraryTabs tab={libraryTab} onTabChange={setLibraryTab} />}
+        rail={
+          <LibraryRailTabs
+            tab={libraryTab}
+            onPick={(tab) => {
+              setLibraryTab(tab);
+              workspaceLayout.setLibraryCollapsed(false);
+            }}
+          />
+        }
+      >
         <LibraryPanel
           tab={libraryTab}
           onTabChange={setLibraryTab}
@@ -428,21 +456,23 @@ export function SchematicEditor() {
           onLoadTemplate={handleLoadTemplate}
           onLoadWiring={handleLoadWiring}
         />
-        <div className="design-center">
-          {canvas(
-            !hasCircuit && (
-              <StartCards
-                onPresets={() => setLibraryTab("presets")}
-                onBlocks={() => setLibraryTab("blocks")}
-                onParts={() => setLibraryTab("parts")}
-                onOpenFile={() => circuitFileInput.current?.click()}
-              />
-            ),
-          )}
-          {hasCircuit && (
-            <BottomDock key={circuitVersion} tabs={analysisTabs.filter((t) => QUICK_TABS.includes(t.key))} storageKey="pedal-designer:quick-dock" collapsible />
-          )}
-        </div>
+      </SideColumn>
+    );
+    const inspectorColumn = (
+      <SideColumn
+        key="inspector"
+        title="속성"
+        side={layout.librarySide === "left" ? "right" : "left"}
+        width={layout.inspectorWidth}
+        min={LIMITS.inspector.min}
+        max={LIMITS.inspector.max}
+        collapsed={layout.inspectorCollapsed}
+        onWidthChange={workspaceLayout.setInspectorWidth}
+        onResetWidth={workspaceLayout.resetWidths}
+        onCollapsedChange={workspaceLayout.setInspectorCollapsed}
+        onSwapSide={workspaceLayout.swapSides}
+        header={<span className="side-column-title">속성</span>}
+      >
         <EditorSidebarRight
           parts={parts}
           wires={wires}
@@ -478,6 +508,27 @@ export function SchematicEditor() {
           }
           probePanel={probePanelProps}
         />
+      </SideColumn>
+    );
+    return (
+      <div className="design-workspace">
+        {layout.librarySide === "left" ? libraryColumn : inspectorColumn}
+        <div className="design-center">
+          {canvas(
+            !hasCircuit && (
+              <StartCards
+                onPresets={() => setLibraryTab("presets")}
+                onBlocks={() => setLibraryTab("blocks")}
+                onParts={() => setLibraryTab("parts")}
+                onOpenFile={() => circuitFileInput.current?.click()}
+              />
+            ),
+          )}
+          {hasCircuit && (
+            <BottomDock key={circuitVersion} tabs={analysisTabs.filter((t) => QUICK_TABS.includes(t.key))} storageKey="pedal-designer:quick-dock" collapsible />
+          )}
+        </div>
+        {layout.librarySide === "left" ? inspectorColumn : libraryColumn}
       </div>
     );
   };

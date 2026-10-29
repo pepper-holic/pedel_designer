@@ -1,0 +1,162 @@
+/* ---------- parts: a grid of symbol tiles ---------- */
+
+.part-palette {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+  gap: 6px;
+  padding: 2px 0 6px;
+}
+
+.part-palette-menu-wrap {
+  position: relative;
+  min-width: 0;
+}
+
+.part-palette-item {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 2px;
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  white-space: normal;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 150ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 150ms cubic-bezier(0.16, 1, 0.3, 1), transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.part-palette-item:hover:not(:disabled) {
+  border-color: var(--accent-dim);
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(24, 24, 27, 0.08);
+  transform: translateY(-1px);
+}
+
+.part-palette-item[aria-expanded="true"] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  color: var(--text);
+}
+
+.part-palette-icon {
+  display: block;
+  width: 100%;
+  height: 44px;
+  padding: 6px 10px;
+  background: var(--bg-inset) radial-gradient(circle, var(--grid-dot) 0.6px, transparent 0.7px) 0 0 / 8px 8px;
+  border-bottom: 1px solid var(--border-soft);
+  overflow: visible;
+}
+
+.part-palette-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 7px 6px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.3;
+  min-height: 2.6em;
+}
+
+.part-palette-name .library-card-label {
+  flex: 1;
+}
+
+.part-palette-name .template-category-chevron {
+  flex: none;
+}
+
+/* Model choices drop over the grid, escaping the tile, so the grid never jumps. */
+.part-palette-submenu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(24, 24, 27, 0.14);
+}
+
+.part-palette-submenu-item {
+  justify-content: flex-start;
+  text-align: left;
+  min-height: 0;
+  padding: 5px 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+}
+
+.part-palette-submenu-item:hover:not(:disabled) {
+  background: var(--accent-soft);
+  border-color: transparent;
+  color: var(--text);
+}
+
+.part-palette-heading {
+  margin: 8px 0 4px;
+  padding: 0 4px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.quick-add-palette {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 2px 0 8px;
+}
+
+.quick-add-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quick-add-heading {
+  padding: 0 4px;
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  font-weight: 600;
+}
+
+.quick-add-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.quick-add-chip {
+  min-height: 0;
+  padding: 3px 7px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.quick-add-chip:hover:not(:disabled) {
+  border-color: var(--accent-dim);
+  color: var(--text);
+}

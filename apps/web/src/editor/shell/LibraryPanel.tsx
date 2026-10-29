@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import type { PartType } from "../partDefs";
 import type { PedalPreset, PresetVariant } from "../../core/library/presets";
 import type { WiringPreset } from "../wiring";
@@ -9,13 +9,9 @@ import { LibraryExplorer } from "../LibraryExplorer";
 import { QuickAddPalette } from "../QuickAddPalette";
 import { Icon } from "../../ui/Icon";
 
-export type LibraryTab = "presets" | "blocks" | "parts";
+import { LIBRARY_TABS, type LibraryTab } from "./libraryTabs";
 
-const TABS: { id: LibraryTab; label: string; hint: string }[] = [
-  { id: "presets", label: "프리셋", hint: "완성된 페달 회로와 기타 배선 - 불러오면 지금 회로를 바꿉니다" },
-  { id: "blocks", label: "블록", hint: "미리 배선된 기능 단위 - 지금 회로에 더합니다" },
-  { id: "parts", label: "부품", hint: "저항·커패시터·트랜지스터 같은 낱개 소자" },
-];
+export type { LibraryTab } from "./libraryTabs";
 
 interface LibraryPanelProps {
   tab: LibraryTab;
@@ -30,72 +26,72 @@ interface LibraryPanelProps {
   userBlocks: { items: UserBlock[]; onAdd: (ub: UserBlock) => void; onDelete: (id: string) => void };
 }
 
-/**
- * The design step's left panel: everything you can put into a circuit, split by what it does to
- * the circuit - a preset replaces it, a block or a part adds to it.
- */
-export function LibraryPanel(props: LibraryPanelProps) {
-  const [quickAddExpanded, setQuickAddExpanded] = useState(false);
+/** The library's tab strip - also the header the side column shows beside its dock controls. */
+export function LibraryTabs({ tab, onTabChange }: Pick<LibraryPanelProps, "tab" | "onTabChange">) {
   return (
-    <aside className="panel library-panel" aria-label="라이브러리">
-      <div className="segmented library-tabs" role="tablist" aria-label="라이브러리 종류">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            role="tab"
-            aria-selected={props.tab === t.id}
-            className={props.tab === t.id ? "active" : ""}
-            onClick={() => props.onTabChange(t.id)}
-            title={t.hint}
-          >
-            {t.label}
+    <div className="library-tabs" role="tablist" aria-label="라이브러리 종류">
+      {LIBRARY_TABS.map((t) => (
+        <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} className={tab === t.id ? "active" : ""} onClick={() => onTabChange(t.id)} title={t.hint}>
+          {t.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** The tabs again, as the folded column's rail: picking one reopens the column on that tab. */
+export function LibraryRailTabs({ tab, onPick }: { tab: LibraryTab; onPick: (tab: LibraryTab) => void }) {
+  return (
+    <div className="side-rail-tabs">
+      {LIBRARY_TABS.map((t) => (
+        <button key={t.id} type="button" className={tab === t.id ? "side-rail-tab active" : "side-rail-tab"} onClick={() => onPick(t.id)} title={`${t.label} 펼치기`}>
+          {t.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * The design step's left (or right) panel: everything you can put into a circuit, split by what it
+ * does to the circuit - a preset replaces it, a block or a part adds to it. One search box serves
+ * whichever tab is open.
+ */
+export function LibraryPanel(props: LibraryPanelProps): ReactNode {
+  const [quickAddExpanded, setQuickAddExpanded] = useState(false);
+  const [query, setQuery] = useState("");
+  const current = LIBRARY_TABS.find((t) => t.id === props.tab)!;
+  const explorerProps = {
+    presets: props.presets,
+    wiringPresets: props.wiringPresets,
+    loadedPresetId: props.loadedPresetId,
+    onLoadTemplate: props.onLoadTemplate,
+    onLoadWiring: props.onLoadWiring,
+    onAddBlock: props.onAddBlock,
+    userBlocks: props.userBlocks,
+    query,
+  };
+
+  return (
+    <div className="library-panel-body">
+      <div className="library-search">
+        <Icon name="search" size={14} />
+        <input type="search" placeholder={current.placeholder} value={query} onChange={(e) => setQuery(e.target.value)} aria-label="템플릿 검색" />
+      </div>
+      {props.tab === "presets" && <LibraryExplorer key="presets" sections={["presets", "wiring"]} {...explorerProps} />}
+      {props.tab === "blocks" && <LibraryExplorer key="blocks" sections={["blocks"]} {...explorerProps} />}
+      {props.tab === "parts" && (
+        <div className="library-scroll">
+          <PartPalette onAdd={props.onAddPart} query={query} />
+          <button type="button" className="template-category-header quick-add-toggle" aria-expanded={quickAddExpanded} onClick={() => setQuickAddExpanded((v) => !v)}>
+            <span className={quickAddExpanded ? "template-category-chevron expanded" : "template-category-chevron"}>
+              <Icon name="chevron-right" size={12} />
+            </span>
+            자주 쓰는 소자 값
           </button>
-        ))}
-      </div>
-      <div className="library-body">
-        {props.tab === "presets" && (
-          <LibraryExplorer
-            sections={["presets", "wiring"]}
-            presets={props.presets}
-            wiringPresets={props.wiringPresets}
-            loadedPresetId={props.loadedPresetId}
-            onLoadTemplate={props.onLoadTemplate}
-            onLoadWiring={props.onLoadWiring}
-            onAddBlock={props.onAddBlock}
-            userBlocks={props.userBlocks}
-          />
-        )}
-        {props.tab === "blocks" && (
-          <LibraryExplorer
-            sections={["blocks"]}
-            presets={props.presets}
-            wiringPresets={props.wiringPresets}
-            loadedPresetId={props.loadedPresetId}
-            onLoadTemplate={props.onLoadTemplate}
-            onLoadWiring={props.onLoadWiring}
-            onAddBlock={props.onAddBlock}
-            userBlocks={props.userBlocks}
-          />
-        )}
-        {props.tab === "parts" && (
-          <>
-            <PartPalette onAdd={props.onAddPart} />
-            <button
-              type="button"
-              className="template-category-header quick-add-toggle"
-              aria-expanded={quickAddExpanded}
-              onClick={() => setQuickAddExpanded((v) => !v)}
-            >
-              <span className={quickAddExpanded ? "template-category-chevron expanded" : "template-category-chevron"}>
-                <Icon name="chevron-right" size={12} />
-              </span>
-              자주 쓰는 소자 값
-            </button>
-            {quickAddExpanded && <QuickAddPalette onAdd={props.onAddPart} />}
-          </>
-        )}
-      </div>
-    </aside>
+          {quickAddExpanded && <QuickAddPalette onAdd={props.onAddPart} />}
+        </div>
+      )}
+    </div>
   );
 }
