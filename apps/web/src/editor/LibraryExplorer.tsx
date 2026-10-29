@@ -4,9 +4,9 @@ import { BLOCK_DEFS, BLOCK_CATEGORY_LABELS, BLOCK_CATEGORY_ORDER, type BlockDef 
 import type { UserBlock } from "./userBlocks";
 import { WIRING_CATEGORY_ORDER, type WiringPreset } from "./wiring";
 import { Icon } from "../ui/Icon";
-import { LibraryCard } from "./library/LibraryCard";
+import { LibraryRow } from "./library/LibraryRow";
 import { LibraryGroup } from "./library/LibraryGroup";
-import { blockScene, presetScene, userBlockScene, wiringScene } from "./library/thumbnails";
+import { presetMotif } from "../core/library/presetMotifs";
 import "./library/library.css";
 
 interface LibraryExplorerProps {
@@ -37,11 +37,12 @@ function matchesQuery(haystack: string, query: string): boolean {
 }
 
 /**
- * Everything you can start a circuit from, drawn as cards: a complete pedal preset or a guitar
- * wiring (loading replaces the circuit) and the library's functional blocks (adding stamps one
- * onto it). Each card shows the item's own circuit small, so a Big Muff and a buffer are told
- * apart at a glance; the full description shows in the detail pane under the list for whatever
- * was clicked last. Groups collapse by category, and a search cuts across every group.
+ * Everything you can start a circuit from, as rows: a complete pedal preset or a guitar wiring
+ * (loading replaces the circuit) and the library's functional blocks (adding stamps one onto it).
+ * A preset modelled on a real pedal shows that pedal's name and enclosure colour ("TS9 스타일",
+ * green) instead of its long technical name, so the list reads like a pedalboard; the full
+ * description shows in the detail pane under the list for whatever was clicked last. Groups
+ * collapse by category, and a search cuts across every group.
  */
 export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoadTemplate, onLoadWiring, onAddBlock, userBlocks, sections = ALL_SECTIONS, query: outerQuery }: LibraryExplorerProps) {
   const [ownQuery, setOwnQuery] = useState("");
@@ -136,34 +137,39 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
               const key = `preset:${category}`;
               return (
                 <LibraryGroup key={key} label={category} count={items.length} expanded={categoryOpen(key)} onToggle={() => toggleIn(setCollapsedCategory, key)}>
-                  <div className="library-grid">
-                    {items.map((preset) => (
-                      <LibraryCard
-                        key={preset.id}
-                        label={preset.name}
-                        scene={() => presetScene(preset)}
-                        active={preset.id === loadedPresetId}
-                        badge={preset.archive ? "아카이브" : undefined}
-                        verb="불러오기"
-                        onClick={() => selectPreset(preset)}
-                        footer={
-                          // Topology branches are always listed rather than revealed on selection -
-                          // they are the only way to reach the non-default branch.
-                          preset.variants &&
-                          preset.variants.map((variant) => (
-                            <button
-                              key={variant.id}
-                              type="button"
-                              className={preset.id === loadedPresetId && variant.id === loadedVariantId ? "library-variant-chip active" : "library-variant-chip"}
-                              onClick={() => selectPreset(preset, variant)}
-                              title={`${preset.name} - ${variant.label}`}
-                            >
-                              {variant.label}
-                            </button>
-                          ))
-                        }
-                      />
-                    ))}
+                  <div className="library-list">
+                    {items.map((preset) => {
+                      const motif = presetMotif(preset.id);
+                      return (
+                        <LibraryRow
+                          key={preset.id}
+                          name={preset.name}
+                          primary={motif ? `${motif.name} 스타일` : preset.name}
+                          secondary={motif ? preset.category : undefined}
+                          color={motif?.color}
+                          active={preset.id === loadedPresetId}
+                          badge={preset.archive ? "아카이브" : undefined}
+                          verb="불러오기"
+                          onClick={() => selectPreset(preset)}
+                          footer={
+                            // Topology branches are always listed rather than revealed on selection -
+                            // they are the only way to reach the non-default branch.
+                            preset.variants &&
+                            preset.variants.map((variant) => (
+                              <button
+                                key={variant.id}
+                                type="button"
+                                className={preset.id === loadedPresetId && variant.id === loadedVariantId ? "library-variant-chip active" : "library-variant-chip"}
+                                onClick={() => selectPreset(preset, variant)}
+                                title={`${preset.name} - ${variant.label}`}
+                              >
+                                {variant.label}
+                              </button>
+                            ))
+                          }
+                        />
+                      );
+                    })}
                   </div>
                 </LibraryGroup>
               );
@@ -179,9 +185,9 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
               const key = `wiring:${category}`;
               return (
                 <LibraryGroup key={key} label={category} count={items.length} expanded={categoryOpen(key)} onToggle={() => toggleIn(setCollapsedCategory, key)}>
-                  <div className="library-grid">
+                  <div className="library-list">
                     {items.map((preset) => (
-                      <LibraryCard key={preset.id} label={preset.name} scene={() => wiringScene(preset)} active={preset.id === loadedPresetId} badge={preset.archive ? "아카이브" : undefined} verb="불러오기" onClick={() => selectWiring(preset)} />
+                      <LibraryRow key={preset.id} name={preset.name} primary={preset.name} active={preset.id === loadedPresetId} badge={preset.archive ? "아카이브" : undefined} verb="불러오기" onClick={() => selectWiring(preset)} />
                     ))}
                   </div>
                 </LibraryGroup>
@@ -199,22 +205,22 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
               const key = `block:${category}`;
               return (
                 <LibraryGroup key={key} label={category === "custom" ? "내 블록" : BLOCK_CATEGORY_LABELS[category]} count={items.length + mine.length} expanded={categoryOpen(key)} onToggle={() => toggleIn(setCollapsedCategory, key)}>
-                  <div className="library-grid">
+                  <div className="library-list">
                     {items.map((def) => (
-                      <LibraryCard key={def.id} label={def.label} scene={() => blockScene(def)} verb="더하기" onClick={() => selectBlock(def)} />
+                      <LibraryRow key={def.id} name={def.label} primary={def.label} verb="더하기" onClick={() => selectBlock(def)} />
                     ))}
                     {mine.map((ub) => (
-                      <LibraryCard
+                      <LibraryRow
                         key={ub.id}
-                        label={ub.label}
-                        scene={() => userBlockScene(ub)}
+                        name={ub.label}
+                        primary={ub.label}
                         badge="내 블록"
                         verb="더하기"
                         onClick={() => selectUserBlock(ub)}
                         aside={
                           <button
                             type="button"
-                            className="library-card-delete"
+                            className="library-row-delete"
                             aria-label={`${ub.label} 내 블록에서 삭제`}
                             title="내 블록에서 삭제"
                             onClick={() => window.confirm(`"${ub.label}"을(를) 내 블록에서 지울까요?`) && userBlocks?.onDelete(ub.id)}
@@ -238,7 +244,7 @@ export function LibraryExplorer({ presets, wiringPresets, loadedPresetId, onLoad
         <div className="library-preview-box" aria-live="polite">
           <div className="library-preview-title">
             {preview.label}
-            {preview.archive && <span className="library-card-badge">아카이브</span>}
+            {preview.archive && <span className="library-row-badge">아카이브</span>}
           </div>
           <div className="library-preview-desc">{preview.description}</div>
         </div>

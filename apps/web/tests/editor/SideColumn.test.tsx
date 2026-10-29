@@ -4,8 +4,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SideColumn } from "../../src/editor/shell/SideColumn";
-import { LibraryCard } from "../../src/editor/library/LibraryCard";
-import { presetScene } from "../../src/editor/library/thumbnails";
+import { LibraryRow } from "../../src/editor/library/LibraryRow";
+import { presetMotif, PRESET_MOTIFS } from "../../src/core/library/presetMotifs";
 import { presets } from "../../src/core/library/presets";
 
 afterEach(() => cleanup());
@@ -63,16 +63,34 @@ describe("SideColumn", () => {
   });
 });
 
-describe("LibraryCard", () => {
-  it("draws the item's real circuit as its thumbnail and loads on click", async () => {
+describe("LibraryRow", () => {
+  it("shows the pedal it is styled after with its colour, but is still found by the preset's full name", async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
     const preset = presets.find((p) => p.id === "ts9-overdrive")!;
-    const { container } = render(<LibraryCard label={preset.name} scene={() => presetScene(preset)} verb="불러오기" onClick={onClick} badge="아카이브" />);
-    // One wire per routed wire, one symbol group per part.
-    expect(container.querySelectorAll("svg.schematic-thumb polyline").length).toBeGreaterThan(3);
-    expect(container.querySelectorAll("svg.schematic-thumb > g").length).toBe(presetScene(preset).parts.length);
-    await user.click(screen.getByRole("button", { name: /TS9 스타일 오버드라이브/ }));
+    const motif = presetMotif(preset.id)!;
+    const { container } = render(<LibraryRow name={preset.name} primary={`${motif.name} 스타일`} secondary={preset.category} color={motif.color} verb="불러오기" onClick={onClick} />);
+    expect(screen.getByText("TS9 스타일")).toBeInTheDocument();
+    expect(screen.getByText("오버드라이브")).toBeInTheDocument();
+    expect(container.querySelector<HTMLElement>(".library-chip")!.style.background).not.toBe("");
+    await user.click(screen.getByRole("button", { name: preset.name }));
     expect(onClick).toHaveBeenCalled();
+  });
+
+  it("gives a generic circuit a blank chip and its own name", () => {
+    render(<LibraryRow name="다이오드 클리퍼 (대칭)" primary="다이오드 클리퍼 (대칭)" verb="불러오기" onClick={vi.fn()} />);
+    expect(document.querySelector(".library-chip-generic")).not.toBeNull();
+    expect(screen.getByRole("button", { name: "다이오드 클리퍼 (대칭)" })).toBeInTheDocument();
+  });
+});
+
+describe("preset motifs", () => {
+  it("every motif names a real preset and carries a colour", () => {
+    const ids = new Set(presets.map((p) => p.id));
+    for (const [id, motif] of Object.entries(PRESET_MOTIFS)) {
+      expect(ids.has(id), id).toBe(true);
+      expect(motif.color).toMatch(/^#[0-9a-f]{6}$/i);
+      expect(motif.name.length).toBeGreaterThan(0);
+    }
   });
 });

@@ -83,7 +83,7 @@ export function PartPalette({ onAdd, query = "" }: PartPaletteProps) {
                     <PartSymbol part={{ id: "", type, x: 0, y: 0, rotation: 0, params: def.defaultParams }} />
                   </svg>
                   <span className="part-palette-name">
-                    <span className="library-card-label">{def.label}</span>
+                    <span className="part-palette-label">{def.label}</span>
                     {menu && (
                       <span className={isOpen ? "template-category-chevron expanded" : "template-category-chevron"}>
                         <Icon name="chevron-right" size={12} />
