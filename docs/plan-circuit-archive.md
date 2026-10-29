@@ -108,3 +108,35 @@ export interface PedalPreset {
 ### 남은 후보 (추가 세션에서)
 
 `coda-effects.com` Theory 섹션에서 추가로 확인한, 아직 미구현인 대표 토폴로지 후보: Fuzz Face류(트랜지스터 2개 피드백 바이어스 퍼즈 - 기존 `fuzz-germanium`과는 바이어스 방식이 다름), LPB1류(단일 트랜지스터 부스트), Tonebender MkIII류(3-트랜지스터 퍼즈). 필요 시 동일 원칙으로 후속 구현 가능.
+
+## 8. 3차 확장: 공개 회로 4종 추가 완료 (2026-10-29)
+
+이전 세션에서 조사만 해 둔 후보(DS-1, Bazz Fuss, Harmonic Percolator, Electra, Micro Amp, Colorsound Overdriver,
+Tone Bender MkII, Zendrive, Cry Baby, AMZ Mini Booster) 가운데 **부품값과 노드 연결을 텍스트로 확인할 수 있었던 4종**만
+같은 원칙(토폴로지·값만 참고해 직접 넷리스트 작성, 상표명 대신 스타일 표기, `archive.sourceRefs`/`disclaimer`)으로 구현했다.
+
+- **`ds1-style-distortion.ts`** — 라이브러리에서 유일하게 op-amp 앞에 **이산 트랜지스터 부스터**(470k 컬렉터 피드백 바이어스,
+  10k/22Ω)를 두는 구성. 논인버팅 op-amp(1 + DIST/4.7k, 접지 다리에 0.47µ로 DC 게인 1배) → 2.2k 직렬 + 실리콘 션트 쌍 →
+  Big Muff식 저역(6.8k/0.1µ)·고역(0.022µ/6.8k) 두 갈래를 20k 팟 와이퍼로 섞는 톤. 노브: DIST(레오스탯), TONE(팟).
+- **`micro-amp-style-boost.ts`** — 논인버팅 op-amp 한 단. 게인 팟(500k, C 테이퍼)이 **고정 56k와 병렬**이라 1배~약 20배(26dB)로
+  제한되고, 2.7k/4.7µ 접지 다리로 DC 게인은 1배. 입력 바이어스 10M.
+- **`electra-style-distortion.ts`** — NPN 한 단(2.2M 레일 바이어스, 4.7k/470Ω, 약 9배) + AC 커플 출력에 **직렬 저항 없이** 바로
+  매단 저마늄 션트 쌍. 컬렉터 저항이 전류 제한을 겸한다. 원형은 노브가 없다.
+- **`bazz-fuss-style-fuzz.ts`** — 달링턴(β≈2000으로 근사) 1석, 컬렉터→베이스 다이오드 하나가 유일한 바이어스. 컬렉터가 약 0.9V에
+  앉아 양의 반주기는 포화, 음의 반주기는 같은 다이오드가 베이스 위 한 다이오드 전압으로 묶어 10mV 입력에도 이미 게이트형 구형파가
+  된다(440Hz 사인 실측: 0.08~1.1V).
+- `presetMotifs.ts`에 DS-1(주황)·Micro Amp(크림)·Electra·Bazz Fuss 칩 추가. `transient-reference.json`에 4종 × 3 적분 설정의
+  기준 샘플 추가(기존 항목은 손대지 않음). `tests/solver/public-circuits-round3.test.ts`: 바이어스 점, 소신호 이득 vs 클리핑,
+  톤 갈래, 게인 팟 양 끝, 비대칭 클리핑. 테스트 1011 → 1020개, 회로도 품질 테스트(몸통 관통·겹침 0, 교차 ≤ 24) 그대로 통과.
+
+### 소스 접근성 메모 (다음 라운드용)
+- `electrosmash.com`은 이 환경에서 DNS 실패, 미러 `electrosmash.mas-effects.com`은 열린다(DS-1·Micro Amp 값은 여기서 확인).
+- `cedist.com`/`ftp.amplifiedparts.com`/`diystompboxes.com` 포럼은 403, `geofex.com`은 연결 리셋 — Harmonic Percolator와
+  Cry Baby 와(wah)는 노드별 배선을 확정하지 못해 보류.
+- 사용자 제안: PedalPCB·Madbean·Aion 같은 **파츠 사이트의 빌드 문서(PDF)** 에 회로도가 그대로 공개돼 있어 다음 소스로 가장 좋다.
+  단 PDF 본문이 압축 스트림이라 WebFetch로는 텍스트가 안 나온다 — pdftotext/pypdf로 추출하거나 회로도 이미지를 직접 읽어야 한다.
+
+### 남은 후보
+Harmonic Percolator(PNP Ge + NPN Si 상보 쌍), Cry Baby 와(500mH 인덕터 공진 + 피드백 — 솔버에 인덕터는 이미 있음),
+Colorsound Overdriver(3-TR + Baxandall 톤), Tone Bender MkII, Zendrive. AMZ Mini Booster(mu-amp)는 두 JFET이 같은 전류로
+자기 바이어스되는 구조라 채널 길이 변조가 없는 현재 JFET 모델에서는 중간 노드 전압이 정해지지 않아 모델 보강이 먼저 필요하다.

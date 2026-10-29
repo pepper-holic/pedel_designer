@@ -12,6 +12,10 @@ import { rangemasterStyleTrebleBoostPreset } from "./rangemaster-style-treble-bo
 import { distortionPlusStylePreset } from "./distortion-plus-style";
 import { octaveFuzzStylePreset } from "./octave-fuzz-style";
 import { tonebenderMk3StyleFuzzPreset } from "./tonebender-mk3-style-fuzz";
+import { ds1StyleDistortionPreset } from "./ds1-style-distortion";
+import { microAmpStyleBoostPreset } from "./micro-amp-style-boost";
+import { electraStyleDistortionPreset } from "./electra-style-distortion";
+import { bazzFussStyleFuzzPreset } from "./bazz-fuss-style-fuzz";
 
 /** Presets re-derived from publicly documented DIY circuit topologies - see docs/plan-circuit-archive.md. */
 export const archivePresets: PedalPreset[] = [
@@ -28,6 +32,10 @@ export const archivePresets: PedalPreset[] = [
   distortionPlusStylePreset,
   octaveFuzzStylePreset,
   tonebenderMk3StyleFuzzPreset,
+  ds1StyleDistortionPreset,
+  microAmpStyleBoostPreset,
+  electraStyleDistortionPreset,
+  bazzFussStyleFuzzPreset,
 ];
 
 export {
@@ -44,4 +52,8 @@ export {
   distortionPlusStylePreset,
   octaveFuzzStylePreset,
   tonebenderMk3StyleFuzzPreset,
+  ds1StyleDistortionPreset,
+  microAmpStyleBoostPreset,
+  electraStyleDistortionPreset,
+  bazzFussStyleFuzzPreset,
 };

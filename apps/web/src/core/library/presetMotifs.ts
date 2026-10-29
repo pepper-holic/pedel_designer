@@ -28,6 +28,10 @@ export const PRESET_MOTIFS: Record<string, PresetMotif> = {
   "octave-fuzz-style": { name: "Octavia", color: "#3b7a3a" },
   "tonebender-mk3-style-fuzz": { name: "Tone Bender MkIII", color: "#c08a2e" },
   "fuzz-germanium": { name: "Fuzz Face", color: "#c9302c" },
+  "ds1-style-distortion": { name: "DS-1", color: "#f26a1b" },
+  "micro-amp-style-boost": { name: "Micro Amp", color: "#ece2c4" },
+  "electra-style-distortion": { name: "Electra", color: "#6f7a86" },
+  "bazz-fuss-style-fuzz": { name: "Bazz Fuss", color: "#8a5a2b" },
 };
 
 export function presetMotif(presetId: string): PresetMotif | undefined {
