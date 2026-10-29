@@ -12,6 +12,23 @@ description: DIY 이펙터 키트의 기판 레이아웃 이미지(페달파츠 
 모든 Python 스크립트는 `python -E -P`로 돌린다(Pillow가 사용자 site-packages에 있어 `-I`면 import 실패,
 `-P`가 데이터 폴더를 import 경로에서 뺀다). 스크립트 위치: `.claude/skills/pcb-to-netlist/scripts/`.
 
+## 도구와 판단(LLM)의 분담
+
+| 단계 | 도구만으로 | 판단이 필요한 부분 |
+|---|---|---|
+| 수집·분류·부품 카탈로그 | 전부 (`fetch_kit`, `build_index`, `build_parts`) | 분류 규칙이 틀린 몇 건 손보기 |
+| 패드·넷 추출 | 전부 (`extract_nets`) | 한 패드뿐인 넷이 남으면 그 자리 확대해 끊김인지 판단 |
+| 부품 대응(패드쌍 → 부품·값·핀) | - | **실크 글자 읽기**(값, C/B/E, 팟 "1", 극성, IC 홈) |
+| 부품표(BOM) | 개수·값 대조 (`kit_netlist` BOM) | **부품표 이미지 전사**, 키트 페이지의 품번·등급 |
+| 팟 방향 | - | 실크 "1" + 회로 논리(볼륨·게인 방향) |
+| 넷리스트 생성·검사 | 전부 (`kit_netlist`: 미사용 패드, 단독 넷, BOM) | `check:` 줄의 원인 판단 |
+| 역투영 | 이미지 생성 (`verify_overlay`) | 라벨이 실크와 맞는지 눈검사 |
+| 원본 대조 | PDF 텍스트·이미지 추출 (`pymupdf`) | **원본 페달 식별, 공개 회로 찾기, 연결 비교** |
+| 단계(STAGE) | - | **기능 단계 나누기**(입력/버퍼/게인/피드백/톤/클리퍼/출력) |
+| 배치 | 초안 (`suggest_layout`), 캡처 (`capture_schematic`) | 초안 보고 엉킨 곳 손 배치 |
+| 시뮬레이션 | DC·신호·노브·배치 테스트, 오디오 렌더 | 이상 동작이 변환 오류인지 회로 특성인지 진단 |
+| 미지원 부품 | 자동 분리 (`unsupportedKits`) | 새 소자 모델 추가 여부 |
+
 ## 0. 재료 찾기
 
 `references/pcb-kits/index.json`에서 키트를 고른다(`item: "kit"`, `type`, `about`에 원본 페달). 이미지 `kind`:
