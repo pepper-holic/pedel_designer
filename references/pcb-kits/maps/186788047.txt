@@ -1,4 +1,72 @@
-# ALL New Kantata (186788047): Keeley Katana clean boost. Two 2N5484 JFET stages run on an 18V rail
-# made by an ICL7660 voltage doubler (3x 1N400X, 100uF x2, 10uF x2); the push-pull A250K volume pot
-# switches the high-gain mode. The app has no charge-pump model; recorded only. Board: 1M x3,
-# 4.7K x2, 680R x2, 220n x2, 15n, 1n, 220pF.
+id pp-kantata
+goods 186788047
+name ALL New Kantata
+motif Keeley Katana
+type buffer-boost
+desc 2N5484 JFET 2단 클린 부스트, ICL7660 더블러의 18V 레일 - 220p/1M 입력→220n→Q2 공통 소스(4.7K 드레인, 680R 소스)→220n→Q1 공통 소스(4.7K, 680R∥10uF∥15n)→220n→A250K 볼륨(1n 션트)
+image img_02.jpg
+# ICL7660 notch right: 26=1 25=2 24=3 23=4 / 10=5 11=6 12=7 13=8(V+). The doubler (10uF 3-4 from the switching pin, 1N400X
+# 14-22 from +9V, 15-27 to the 18V node, 16-28 spare) is not simulated: RAIL 27 18 with the 100uF 5-6 on it (6 -> 27 under
+# the cyan trace). The push-pull switch on the volume pot (rows 19-20-21 / 37-38-39, Katana's high-gain mode) is drawn
+# released: its pads are left out. Three 220n on the board for 220n x2 on the parts list; the pump 10uF and the three
+# 1N400X are left out of the BOM line (parts list: 10uF x2, 1N400X x3).
+BOM 1Mx3 4.7Kx2 680Rx2 220nx3 15n 1n 220pF 100uFx2 10uF ICL7660 2N5484x2 A250K
+io IN=64 OUT=61 V9=0 GND=2
+JUMP 6 27
+RAIL 27 18
+NC 3 4 12 14 15 16 22 28 19 20 21 37 38 39 10 23 24 25 26
+
+STAGE input input 입력
+C 220p 63 62 C1
+R 1M 47 32 R1
+C 220n 65 66 C2
+
+STAGE q2 gain Q2 (2N5484)
+R 1M 51 36 R2
+Q 2N5484 g=67 d=55 s=59 Q2
+R 4.7K 34 49 R3
+R 680R 50 35 R4
+
+STAGE q1 gain Q1 (2N5484)
+C 220n 58 57 C3
+R 1M 46 31 R5
+Q 2N5484 g=54 d=43 s=44 Q1
+R 4.7K 33 48 R6
+R 680R 45 30 R7
+C 10uF 17 7 C4
+C 15n 8 9 C5
+
+STAGE output output 출력 (볼륨)
+C 220n 42 53 C6
+C 1n 41 52 C7
+POT A250K VOLUME 18 29 40
+
+STAGE power power 전원 (ICL7660 18V)
+C 100uF 1 2 C8
+IC ICL7660 8=13 6=11 U1
+C 100uF 6 5 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C2 170 400 h
+AT Q2 270 400
+AT C3 380 400 h
+AT Q1 480 400
+AT C6 590 400 h
+AT VOLUME 690 400 r0
+AT C1 120 470 v
+AT R1 180 470 v
+AT R2 380 470 v
+AT R3 290 500 v-
+AT R4 470 500 v
+AT R5 590 470 v
+AT R6 400 520 h
+AT R7 680 500 v
+AT C4 740 500 v
+AT C5 800 500 v
+AT C7 860 470 v
+AT C8 720 190 v
+AT C9 290 600 v
+AT U1A 820 600
+AT RLOAD 940 480 v

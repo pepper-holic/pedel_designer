@@ -36,7 +36,7 @@ export interface KitCircuit {
   description: string;
   /** Supply voltage on the "vcc" net (negative for a positive-ground board). */
   supply: number;
-  /** Ideal rails besides vcc: a charge pump's -9V ("vneg") or a voltage doubler's 18V ("v18"). */
+  /** Ideal rails besides vcc: a charge pump's -9V ("vm9") or a voltage doubler's 18V ("v18"). */
   rails?: KitRail[];
   parts: KitPart[];
   /** Functional stages in signal order (input, preamp, controls, clipper, output...), each listing

@@ -26,7 +26,7 @@ The map names each part and the pads (ids from the extract_nets overlay) its lea
     io IN=8 OUT=82 V9=5 GND=4,13,22     # a comma list joins extra pads to that role's net
     supply -9                           # battery wired positive-ground: the V9 pad sits at -9V (default 9)
     IC ICL7660 8=3 3=4 2=10 4=11 5=12   # charge pump: pin 5 becomes an ideal -9V rail, the pump cap on 2/4 is dropped
-    RAIL 40 18                          # the net of pad 40 is an ideal 18V rail (voltage-doubler output)
+    RAIL 40 18                          # the net of pad 40 is an ideal 18V rail (voltage-doubler output); nets vm9/v18/vm18
 
 STAGE lines group the parts after them into the schematic's functional blocks, in signal order:
 "STAGE <id> <category> <label>", category one of input buffer gain clipping fuzz tone output power
@@ -227,7 +227,9 @@ def main() -> None:
         names.setdefault(find(pad_net[g]), "0")
     rail_nets: list[dict] = []
     for p, volts in rails:
-        name = "vneg" if volts < 0 else f"v{int(volts)}"
+        name = f"v{int(volts)}".replace("-", "m")  # vm9, v18, vm18
+        if any(r["net"] == name for r in rail_nets):
+            sys.exit(f"RAIL pad {p}: a {volts}V rail is already declared")
         names.setdefault(find(pad_net[p]), name)
         if names[find(pad_net[p])] != name:
             sys.exit(f"RAIL pad {p}: its net is already {names[find(pad_net[p])]}")
@@ -261,9 +263,9 @@ def main() -> None:
         parts.append({**rp, "nodes": nodes})
 
     problems = []
-    pump_nets = {net_of(q) for grp in pump_pads for q in grp}
+    quiet_nets = {net_of(q) for grp in pump_pads for q in grp} | {r["net"] for r in rail_nets}
     for net, terms in sorted(terminals.items()):
-        if len(terms) == 1 and net not in ("in", "out", "vcc", "0") and net not in pump_nets:
+        if len(terms) == 1 and net not in ("in", "out", "vcc", "0") and net not in quiet_nets:
             problems.append(f"net {net} has one lead only: {terms[0]}")
     for p in extraction["pads"]:
         if p["id"] in used_pads or p["ground"]:

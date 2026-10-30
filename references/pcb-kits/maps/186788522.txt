@@ -1,4 +1,101 @@
-# FUZZ BENDER III GE (186788522): germanium PNP three-transistor Tone Bender MkIII on a negative rail from an
-# ICL7660 inverter (positive ground). The app has no charge-pump model and no PNP-germanium-on-negative-rail
-# convention; recorded only. Board: 2.2M, 220K x2, 47K, 18K, 10K x3, 3.3K, 1K x2, 220n, 100n x4, 2.2n, 220pF,
-# 100uF, 47uF, 10uF, 1N400X, 1N34A, 50K trimmers x2, angle A250K / B100K x2.
+id pp-bender-iii-ge
+goods 186788522
+name BENDER III GE
+motif Sola Sound Tone Bender MkIII (germanium)
+type fuzz
+desc 게르마늄 PNP 3석 톤벤더 MkIII, ICL7660의 -9V 레일에 양접지 - Q1(220K/47K 바이어스, 220p)→Q2 직결 쌍(공통 컬렉터 부하 1K+50K BIAS, 3.3K∥10uF 이미터)→220n→A250K ATTACK 가변저항→Q3(1N34A 베이스 클램프, 18K+1K+50K BIAS 부하)→2.2n/10K·100n/18K 두 갈래 MkIII 톤(B100K)→220K→B100K 볼륨
+image img_01.jpg
+# Positive ground: transistor emitters and the electrolytic '+' pads sit on 0V; n0 (pin 5 of the ICL7660, pads 0/2/3/6/10/50/58/70)
+# is the -9V rail. ICL7660 notch left: 78=1 79=2 80=3 81=4 / 70=5 69=6 68=7 67=8; 10uF 75-82 is the flying cap. Off-board
+# pots on big pads: ATTACK 25-26-27 (26 tied to 25 on Q3's base), TONE 43-44-45 (wiper 44 to the 220K), VOLUME 46-47-48
+# (48 ground, 47 = OUT). Trimmer wipers are tied to the -9V lug (3 to 0, 6 to 2). Two 10uF on the board (Q2 emitter, pump)
+# for 10uF x1 on the parts list.
+BOM 2.2M 220Kx2 47K 18K 10Kx3 3.3K 1Kx2 220n 100nx4 2.2n 220pF 100uF 47uF 10uFx2 1N400X 1N34A 50Kx2 ICL7660 GE-PNPx3 A250K B100Kx2
+io IN=53 OUT=56 V9=76 GND=1,36,57
+NC 68 69
+
+STAGE input input 입력
+C 100n 54 55 C1
+R 2.2M 63 64 R1
+
+STAGE q1 gain Q1 (입력 증폭)
+Q GE-PNP b=28 c=20 e=33 Q1
+R 220K 10 22 R2
+R 47K 40 41 R3
+C 220p 29 38 C2
+
+STAGE q2 gain Q2 (직결·공통 부하)
+Q GE-PNP b=42 c=39 e=49 Q2
+R 10K 72 73 R4
+R 3.3K 61 62 R5
+C 10uF 37 36 C3
+R 1K 9 21 R6
+POT 50K BIAS2 7 6 2
+
+STAGE attack custom ATTACK
+C 220n 5 12 C4
+POT A250K ATTACK 27 26 25
+D 1N34A a=1 k=19 D1
+
+STAGE q3 fuzz Q3 (퍼즈)
+Q GE-PNP b=11 c=15 e=8 Q3
+R 18K 23 24 R7
+R 1K 13 14 R8
+POT 50K BIAS1 4 3 0
+R 10K 16 17 R9
+
+STAGE tone tone MkIII 톤
+C 2.2n 18 32 C5
+R 10K 30 31 R10
+C 100n 34 35 C6
+POT B100K TONE 45 44 43
+R 220K 51 52 R11
+
+STAGE output output 출력 (볼륨)
+POT B100K VOLUME 46 47 48
+
+STAGE power power 전원 (ICL7660 -9V)
+D 1N400X a=77 k=66 D2
+C 100uF 65 74 C7
+C 100n 59 60 C8
+IC ICL7660 1=78 2=79 3=80 4=81 5=70 8=67 U1
+C 10uF 75 82 C9
+C 47uF 58 57 C10
+C 100n 50 71 C11
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT C4 380 400 h-
+AT ATTACK 480 400 r0
+AT Q3 580 400
+AT C5 690 400 h
+AT TONE 790 400 r0
+AT R11 890 400 h
+AT VOLUME 990 400 r0
+AT R1 120 470 v
+AT R2 200 470 v-
+AT R3 380 470 v-
+AT C2 240 520 h-
+AT R4 470 500 v
+AT R6 290 320 v-
+AT BIAS2 320 500 r180
+AT D1 660 470 v-
+AT R7 600 500 v-
+AT R8 660 530 h
+AT BIAS1 260 590 r180
+AT R9 600 600 v
+AT R10 720 470 v-
+AT C6 710 520 h-
+AT C10 380 570 v
+AT C11 440 570 v
+AT Q2 1100 430
+AT U1A 810 500
+AT R5 140 880 h
+AT C3 240 880 h
+AT D2 340 880 h
+AT C7 440 880 h
+AT C8 540 880 h
+AT RLOAD 990 480 v

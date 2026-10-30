@@ -1,4 +1,74 @@
-# Mark 4 (186788014): Mark 4.23 clean boost. One TL072 (OPA2134 in the original) stage with an A50K
-# BOOST pot, run on a bipolar supply made by an ICL7660 inverter (1N400X x5, 10uF x6, 220uF, 47uF).
-# The app has no charge-pump model and no negative-rail convention; recorded only. Board: 2.2M x2,
-# 680R x2, 3.3K, 51R x2, 120K, 1000n input, 100n x2, 33pF, 1N400X polarity diode.
+id pp-mark-4
+goods 186788014
+name Mark 4
+motif Mark 4.23 clean boost
+type buffer-boost
+desc TL072(OPA2134 실크) 클린 부스트 - 1000n/2.2M/680R·680R/33p 입력→A단 비반전(BOOST A50K 가변저항 피드백, 3.3K 접지 다리, 최대 +24dB)→B단 유니티 폴로어, 두 출력을 51R씩 합쳐 47uF→OUT(120K 바이어스, 100n). ICL7660 더블러로 ±18V 레일
+image img_01.jpg
+# TL072 notch up: 15=1 20=2 23=3 31=4(V-) / 32=5 24=6 21=7 16=8(V+). ICL7660 notch up: 52=1 58=2 63=3 69=4 / 70=5 64=6 59=7 53=8.
+# Supply: 9V ring 61 -> diode 62 (hidden under the ring) -> +9V n15. The pump makes two extra rails: pin 2 drives 10uF 42-43
+# into node 38/43/49 with 1N400X 49<-50 (from +9V) and 38->39 (to the op-amp V+ 16/25/39/41) = +18V, and 10uF 66-73 into
+# node 71/72/73 with 1N400X 54/55 (pin 5 -9V and the op-amp V- 31/40/45/55) = -18V. Those four diodes and three caps are
+# not simulated and left out of the BOM line (RAIL 16 18, RAIL 31 -18); the 10uF 60-65 is the inverter's flying cap.
+# Parts list: 1N400X x5, 10uF x6.
+BOM 2.2Mx2 680Rx2 3.3K 120K 51Rx2 1000n 100nx2 33pF 220uF 47uF 10uFx3 1N400X TL072 ICL7660 A50K
+io IN=0 OUT=5 V9=61 GND=26
+JUMP 0 1
+JUMP 61 62
+RAIL 16 18
+RAIL 31 -18
+NC 38 39 49 50 54 55 71 72 42 43 66 73 40 45 59 64
+
+STAGE input input 입력
+C 1000n 1 2 C1
+R 2.2M 10 26 R1
+R 680R 11 27 R2
+R 680R 12 28 R3
+C 33p 36 37 C2
+R 2.2M 13 29 R4
+
+STAGE boost gain 부스트 (IC A)
+IC TL072 1=15 2=20 3=23 4=31 5=32 6=24 7=21 8=16 U1
+R 3.3K 14 30 R5
+POT A50K BOOST 6 7 8
+
+STAGE output output 출력 (IC B 폴로어·합산)
+R 51R 17 33 R6
+R 51R 18 34 R7
+C 47uF 3 4 C3
+R 120K 19 34 R8
+C 100n 9 22 C4
+
+STAGE power power 전원 (ICL7660 ±18V)
+D 1N400X a=62 k=47 D1
+C 220uF 48 51 C5
+IC ICL7660 1=52 2=58 3=63 4=69 5=70 8=53 U2
+C 10uF 60 65 C6
+C 10uF 57 56 C7
+C 10uF 41 44 C8
+C 100n 25 35 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R2 270 400 h
+AT R3 370 400 h-
+AT U1A 660 620
+AT R8 570 400 h-
+AT R1 120 470 v
+AT C2 300 470 v
+AT R4 400 470 v
+AT R7 500 490 v-
+AT C3 550 520 h
+AT C4 660 470 v
+AT R6 500 590 v
+AT BOOST 560 620 r0
+AT R5 650 690 v
+AT U2A 750 600
+AT D1 140 880 h
+AT C5 240 880 h
+AT C7 340 880 h
+AT C8 440 880 h
+AT C9 540 880 h
+AT RLOAD 700 480 v
