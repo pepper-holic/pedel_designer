@@ -1,0 +1,311 @@
+{
+ "id": "pp-pete-buffer",
+ "goodsNo": "186787513",
+ "kitName": "Pete Buffer",
+ "motif": "Pete Cornish 입력 버퍼",
+ "type": "buffer-boost",
+ "description": "BC549 부트스트랩 이미터 팔로워 - 120K/120K/200K 바이어스 노드를 4.7uF로 이미터에 부트스트랩해 입력 임피던스를 높임, 1K 베이스 직렬 + 1n B-E, 7.5K 이미터, 22uF 출력 뒤 20K/150R/50K, 9V는 100R+220uF",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "10M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "BC549",
+   "nodes": {
+    "c": "n3",
+    "b": "n2",
+    "e": "n4"
+   }
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "n2",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "120K",
+   "nodes": [
+    "n3",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "120K",
+   "nodes": [
+    "n2",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "200K",
+   "nodes": [
+    "0",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "4.7uF",
+   "nodes": [
+    "n5",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "7.5K",
+   "nodes": [
+    "0",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n4",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "20K",
+   "nodes": [
+    "0",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "150R",
+   "nodes": [
+    "out",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "50K",
+   "nodes": [
+    "0",
+    "out"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "0",
+    "k": "vcc"
+   }
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "vcc",
+    "n3"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "220uF",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "R2"
+   ]
+  },
+  {
+   "id": "buffer",
+   "category": "buffer",
+   "label": "부트스트랩 팔로워",
+   "parts": [
+    "Q1",
+    "C2",
+    "R3",
+    "R4",
+    "R5",
+    "C3",
+    "R6"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "C4",
+    "R7",
+    "R8",
+    "R9"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원 (100R + 220uF)",
+   "parts": [
+    "D1",
+    "R10",
+    "C5"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 270,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q1": {
+   "x": 370,
+   "y": 400
+  },
+  "C4": {
+   "x": 480,
+   "y": 400,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 580,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 340,
+   "y": 520,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 450,
+   "y": 500,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 380,
+   "y": 580,
+   "rotation": 0
+  },
+  "R5": {
+   "x": 450,
+   "y": 600,
+   "rotation": 270
+  },
+  "C3": {
+   "x": 420,
+   "y": 640,
+   "rotation": 180
+  },
+  "R6": {
+   "x": 510,
+   "y": 500,
+   "rotation": 270
+  },
+  "R7": {
+   "x": 570,
+   "y": 470,
+   "rotation": 270
+  },
+  "R9": {
+   "x": 610,
+   "y": 470,
+   "rotation": 270
+  },
+  "R10": {
+   "x": 390,
+   "y": 190,
+   "rotation": 90
+  },
+  "C5": {
+   "x": 690,
+   "y": 470,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 140,
+   "y": 880,
+   "rotation": 0
+  },
+  "RLOAD": {
+   "x": 760,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

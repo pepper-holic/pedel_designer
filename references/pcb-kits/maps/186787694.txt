@@ -1,0 +1,51 @@
+id pp-andy-1k
+goods 186787694
+name ANDY [1K]
+motif Zvex Super Hard On (Andy Plus 부스트단)
+type buffer-boost
+desc BS170 MOSFET 공통 소스 부스트 - 1M 드레인-게이트 피드백 바이어스, 1K 드레인, 12V 제너로 게이트 보호, 입력 100n 뒤 B1M 가변저항으로 입력 레벨 조절, 10uF 출력 + 100K 풀다운
+image img_01.jpg
+# BS170 footprint: S (11, ground pour), G (15), D (16 - its ring split into 16/17/19/20).
+# BOOST uses lug1 and the wiper tied together: a variable resistor in series with the input.
+# The 12V zener's lower pad (18) meets the gate trace under the body: cathode on the gate.
+BOM 1Mx4 100K 1K 100n 47uF 10uF 12V BS170 B1M
+io IN=7 OUT=35 V9=26 GND=30
+JUMP 18 15
+NC 17 19 20   # split pieces of the drain ring
+
+STAGE input input 입력 (레벨)
+R 1M 13 24 R1
+C 100n 6 0 C1
+R 1M 12 23 R2
+POT B1M BOOST 5 4 3
+R 1M 8 21 R3
+
+STAGE boost gain BS170 공통 소스
+Q BS170 g=15 d=16 s=11 Q1
+R 1M 9 22 R4
+R 1K 27 28 R5
+D 12V a=10 k=18 D1
+
+STAGE output output 출력
+C 10uF 29 34 C2
+R 100K 14 25 R6
+
+STAGE power power 전원
+C 47uF 1 2 C3
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT C1 60 530 v
+AT R2 60 630 v
+AT BOOST 120 560 r0
+AT R3 210 630 v
+AT R4 210 560 h
+AT R5 240 190 v
+AT D1 270 630 v-
+AT C2 300 560 h
+AT R6 330 630 v-
+AT Q1 410 560
+AT C3 140 880 h
+AT RLOAD 330 480 v

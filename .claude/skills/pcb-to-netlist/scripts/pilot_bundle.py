@@ -11,6 +11,7 @@ parts list and writing the part lines is the part that needs a human (or an LLM)
 
 import json
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -53,6 +54,13 @@ def main() -> None:
         "",
         "STAGE input input 입력",
     ]
+    subprocess.run(
+        [sys.executable, "-E", "-P", str(Path(__file__).resolve().parent / "suggest_parts.py"), str(out / boards[0]), str(out / "board0_nets.json"), str(out / "suggest"), "4"],
+        check=True,
+        capture_output=True,
+    )
+    lines += ["", "# --- part candidates from suggest_parts.py (fill kind/value; check every line against suggest.png) ---"]
+    lines += ["# " + ln for ln in (out / "suggest.txt").read_text(encoding="utf-8").splitlines()]
     (out / "map.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"{out}: {len(boards)} board(s), {len(boms)} parts-list/diagram image(s), {len(nets['pads'])} pads")
 

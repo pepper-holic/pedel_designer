@@ -1,0 +1,40 @@
+id pp-bomb-1k
+goods 186787697
+name BOMB [1K]
+motif JHS Mini Bomb
+type buffer-boost
+desc J201 공통 소스 부스트 - 입력이 커플링 캡 없이 B1M BOOST 팟(입력 감쇠)을 거쳐 게이트로, 5.1K 드레인 저항, 소스 접지, 100n 출력 + 100K 풀다운
+image img_01.jpg
+# J201 footprint top to bottom: gate (pot wiper), source (ground pour), drain (5.1K, 100n).
+# The gate ring was split in two by the extractor (pads 6 and 11).
+BOM 100K 5.1K 100n 22uF 1N400X J201 B1M
+io IN=1 OUT=15 V9=10 GND=20
+JUMP 6 11
+JUMP 15 16   # OUT to the 100K/100n node
+
+STAGE input input 입력 (BOOST 팟)
+POT B1M BOOST 5 2 4
+
+STAGE boost gain J201 공통 소스
+Q J201 g=6 d=14 s=12 Q1
+R 5.1K 9 18 R1
+
+STAGE output output 출력
+C 100n 13 19 C1
+R 100K 7 16 R2
+
+STAGE power power 전원
+C 22uF 3 0 C2
+D 1N400X a=17 k=8 D1
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT BOOST 170 400 r180
+AT Q1 270 400
+AT C1 380 400 h
+AT R1 290 190 v
+AT R2 410 470 v-
+AT C2 200 190 v
+AT D1 240 190 v-
+AT RLOAD 460 480 v

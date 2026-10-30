@@ -1,0 +1,49 @@
+id pp-arrow-booster
+goods 186787844
+name Arrow Booster
+motif Arrow 트레블 부스터
+type buffer-boost
+desc 2N5089 공통 이미터 부스터 - 4.7n 소용량 입력 캡으로 저역을 덜어 밝게, 10M 컬렉터 피드백, 1.3K 이미터, 컬렉터 부하가 곧 B10K LEVEL 팟(와이퍼에서 10n 출력), 9V는 100R+100uF 필터
+image img_02.jpg
+# Collector ring split by the extractor into 8/9/13/14. LEVEL: lug1 (pad 2) on the supply, lug3
+# (pad 0) on the collector, wiper (pad 1) to the 10n output cap.
+BOM 10M 1M 100K 1.3K 100R 10n 4.7n 100p 100uF 1N400X 2N5089 B10K
+io IN=30 OUT=36 V9=18 GND=31
+NC 9 13 14
+
+STAGE input input 입력
+C 100p 7 19 C1
+R 1M 3 20 R1
+C 4.7n 26 27 C2
+
+STAGE boost gain 공통 이미터 부스트
+Q 2N5089 c=8 b=15 e=22 Q1
+R 10M 4 21 R2
+R 1.3K 10 28 R3
+POT B10K LEVEL 2 1 0
+
+STAGE output output 출력
+C 10n 12 23 C3
+R 100K 11 29 R4
+
+STAGE power power 전원 (100R + 100uF)
+R 100R 25 6 R5
+C 100uF 17 16 C4
+D 1N400X a=24 k=5 D1
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C2 170 400 h
+AT Q1 270 400
+AT LEVEL 380 400 r180
+AT C3 480 400 h
+AT C1 120 470 v-
+AT R1 180 470 v-
+AT R2 240 520 h-
+AT R3 350 500 v
+AT R4 510 470 v
+AT R5 410 190 v
+AT D1 470 470 v-
+AT C4 140 880 h
+AT RLOAD 560 480 v

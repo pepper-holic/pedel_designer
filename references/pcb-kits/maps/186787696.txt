@@ -1,0 +1,54 @@
+id pp-jtm-1k
+goods 186787696
+name JTM [1K]
+motif Lovepedal JTM
+type overdrive
+desc 2N5089 공통 이미터 - 2.2M 컬렉터 피드백, 3.3K 컬렉터, 이미터는 330R(47uF 병렬) 뒤 3.3K와 B5K BIAS 가변저항으로 접지, 100n 출력에 BAT46 대향 쌍 클리핑
+image img_01.jpg
+# Collector pad 32 joins the 100n's lower pad (17) under the transistor outline. The emitter path
+# reads as drawn: E -> 330R (with the top 47uF across it, + on the emitter) -> node -> 3.3K and the
+# BIAS pot (wiper and lug1 grounded) to ground.
+BOM 2.2M 1M 3.3Kx2 330R 100n 47n 47uFx2 1N400X BAT46x2 2N5089 B5K
+io IN=18 OUT=16 V9=19 GND=33
+JUMP 32 17
+
+STAGE input input 입력
+R 1M 15 25 R1
+C 47n 28 27 C1
+
+STAGE gain gain 공통 이미터
+Q 2N5089 e=30 b=31 c=32 Q1
+R 2.2M 14 24 R2
+R 3.3K 10 21 R3
+R 330R 11 22 R4
+C 47uF 3 4 C2
+R 3.3K 12 23 R5
+POT B5K BIAS 6 5 2
+
+STAGE clip clipping 출력 + BAT46 클리핑
+C 100n 17 13 C3
+D BAT46 a=0 k=7 D1
+D BAT46 a=8 k=1 D2
+
+STAGE power power 전원
+C 47uF 26 29 C4
+D 1N400X a=9 k=20 D3
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT C3 380 400 h
+AT R1 120 470 v-
+AT R2 240 520 h-
+AT R3 290 190 v-
+AT R4 320 500 v-
+AT C2 300 580 h
+AT R5 380 600 v
+AT BIAS 470 620 r270
+AT D1 410 470 v-
+AT D2 470 470 v
+AT C4 470 190 v
+AT D3 510 190 v-
+AT RLOAD 510 480 v

@@ -1,0 +1,61 @@
+id pp-pete-buffer
+goods 186787513
+name Pete Buffer
+motif Pete Cornish 입력 버퍼
+type buffer-boost
+desc BC549 부트스트랩 이미터 팔로워 - 120K/120K/200K 바이어스 노드를 4.7uF로 이미터에 부트스트랩해 입력 임피던스를 높임, 1K 베이스 직렬 + 1n B-E, 7.5K 이미터, 22uF 출력 뒤 20K/150R/50K, 9V는 100R+220uF
+image img_01.jpg
+# Transistor top to bottom: C (14, on the filtered supply), B (20), E (23; ring split into 23/24/28).
+# The parts list has two 4.7uF; the board has one footprint (bootstrap cap, + on the bias node).
+BOM 10M 200K 120Kx2 50K 20K 7.5K 1K 150R 100R 100n 1n 220uF 22uF 4.7uF 1N400X BC549
+io IN=0 OUT=27 V9=4 GND=3
+JUMP 0 7     # IN to the 10M pulldown
+JUMP 36 30   # bootstrap cap + to the bias node
+NC 24 28
+
+STAGE input input 입력
+R 10M 7 8 R1
+C 100n 1 2 C1
+R 1K 12 13 R2
+
+STAGE buffer buffer 부트스트랩 팔로워
+Q BC549 c=14 b=20 e=23 Q1
+C 1n 9 19 C2
+R 120K 15 16 R3
+R 120K 21 22 R4
+R 200K 29 30 R5
+C 4.7uF 36 35 C3
+R 7.5K 17 18 R6
+
+STAGE output output 출력
+C 22uF 34 33 C4
+R 20K 39 40 R7
+R 150R 31 32 R8
+R 50K 25 26 R9
+
+STAGE power power 전원 (100R + 220uF)
+D 1N400X a=6 k=5 D1
+R 100R 10 11 R10
+C 220uF 38 37 C5
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R2 270 400 h
+AT Q1 370 400
+AT C4 480 400 h
+AT R8 580 400 h-
+AT R1 120 470 v
+AT C2 340 520 h
+AT R3 450 500 v
+AT R4 380 580 h
+AT R5 450 600 v-
+AT C3 420 640 h-
+AT R6 510 500 v-
+AT R7 570 470 v-
+AT R9 610 470 v-
+AT R10 390 190 v
+AT C5 690 470 v
+AT D1 140 880 h
+AT RLOAD 760 480 v

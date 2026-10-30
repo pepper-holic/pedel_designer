@@ -1,0 +1,275 @@
+{
+ "id": "pp-wreck-1k",
+ "goodsNo": "186787692",
+ "kitName": "WRECK [1K]",
+ "motif": "Wampler Triple Wreck 부스트단",
+ "type": "distortion",
+ "description": "2N5089 공통 이미터 게인 부스터 - 100R+100p 입력 필터, 1uF 커플링, 1M/100K 베이스 분압, 47K 컬렉터, 1K 이미터, 2.2uF 뒤 저역 갈래(47K/10n)와 고역 갈래(10n/10K)를 A100K CREAM 팟으로 섞음",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "0",
+    "in"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n2",
+    "n1"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N5089",
+   "nodes": {
+    "c": "n3",
+    "b": "n2",
+    "e": "n4"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n2",
+    "vcc"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "vcc",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "2.2uF",
+   "nodes": [
+    "n3",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n5",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n5",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "CREAM",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n7",
+    "out",
+    "n6"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력 필터",
+   "parts": [
+    "R1",
+    "R2",
+    "C1",
+    "C2"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "공통 이미터",
+   "parts": [
+    "Q1",
+    "R3",
+    "R4",
+    "R5",
+    "R6"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "CREAM 블렌드",
+   "parts": [
+    "C3",
+    "R7",
+    "C4",
+    "C5",
+    "R8",
+    "CREAM"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "R2": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "C2": {
+   "x": 270,
+   "y": 400,
+   "rotation": 180
+  },
+  "Q1": {
+   "x": 370,
+   "y": 400
+  },
+  "C3": {
+   "x": 480,
+   "y": 400,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 580,
+   "y": 400,
+   "rotation": 0
+  },
+  "CREAM": {
+   "x": 680,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 270
+  },
+  "C1": {
+   "x": 200,
+   "y": 470,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 300,
+   "y": 190,
+   "rotation": 270
+  },
+  "R4": {
+   "x": 300,
+   "y": 470,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 390,
+   "y": 190,
+   "rotation": 90
+  },
+  "R6": {
+   "x": 390,
+   "y": 500,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 610,
+   "y": 470,
+   "rotation": 90
+  },
+  "C5": {
+   "x": 610,
+   "y": 520,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 770,
+   "y": 470,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 680,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

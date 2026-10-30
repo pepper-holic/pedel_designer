@@ -1,0 +1,237 @@
+{
+ "id": "pp-andy-1k",
+ "goodsNo": "186787694",
+ "kitName": "ANDY [1K]",
+ "motif": "Zvex Super Hard On (Andy Plus 부스트단)",
+ "type": "buffer-boost",
+ "description": "BS170 MOSFET 공통 소스 부스트 - 1M 드레인-게이트 피드백 바이어스, 1K 드레인, 12V 제너로 게이트 보호, 입력 100n 뒤 B1M 가변저항으로 입력 레벨 조절, 10uF 출력 + 100K 풀다운",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "BOOST",
+   "kind": "POT",
+   "value": "B1M",
+   "nodes": [
+    "n1",
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "BS170",
+   "nodes": {
+    "g": "n2",
+    "d": "n3",
+    "s": "0"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n2",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "vcc",
+    "n3"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "12V",
+   "nodes": {
+    "a": "0",
+    "k": "n2"
+   }
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n3",
+    "out"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "0",
+    "out"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "vcc",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력 (레벨)",
+   "parts": [
+    "R1",
+    "C1",
+    "R2",
+    "BOOST",
+    "R3"
+   ]
+  },
+  {
+   "id": "boost",
+   "category": "gain",
+   "label": "BS170 공통 소스",
+   "parts": [
+    "Q1",
+    "R4",
+    "R5",
+    "D1"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "C2",
+    "R6"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "C3"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 60,
+   "y": 530,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 60,
+   "y": 630,
+   "rotation": 90
+  },
+  "BOOST": {
+   "x": 120,
+   "y": 560,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 210,
+   "y": 630,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 210,
+   "y": 560,
+   "rotation": 0
+  },
+  "R5": {
+   "x": 240,
+   "y": 190,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 270,
+   "y": 630,
+   "rotation": 270
+  },
+  "C2": {
+   "x": 300,
+   "y": 560,
+   "rotation": 0
+  },
+  "R6": {
+   "x": 330,
+   "y": 630,
+   "rotation": 270
+  },
+  "Q1": {
+   "x": 410,
+   "y": 560
+  },
+  "C3": {
+   "x": 140,
+   "y": 880,
+   "rotation": 0
+  },
+  "RLOAD": {
+   "x": 330,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

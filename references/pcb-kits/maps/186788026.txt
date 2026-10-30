@@ -1,0 +1,54 @@
+id pp-green-ghetto
+goods 186788026
+name Green Ghetto
+motif Greer Ghetto Drive
+type overdrive
+desc 2N3904 공통 이미터 - 입력이 B100K GAIN 팟(입력 감쇠) 와이퍼에서 100n으로 베이스, 2.2M 컬렉터 피드백, 47K 컬렉터, 680R 이미터, 47n 출력에 1N914 대향 쌍 클리핑, VOL 뒤 TONE(10n 하이컷)
+image img_02.jpg
+# Transistor pins top to bottom: C (19), B (23), E (33). All three pots have "1" on the right.
+BOM 2.2M 47K 680R 100n 47n 10n 47uF 1N400X 1N914x2 2N3904 B100Kx3
+io IN=16 OUT=34 V9=20 GND=31
+JUMP 6 16    # IN to the GAIN pot
+
+STAGE input input 입력 (GAIN)
+POT B100K GAIN 8 7 6
+C 100n 15 30 C1
+
+STAGE gain gain 공통 이미터
+Q 2N3904 c=19 b=23 e=33 Q1
+R 2.2M 13 35 R1
+R 47K 28 29 R2
+R 680R 14 36 R3
+
+STAGE clip clipping 다이오드 클리핑
+C 47n 22 21 C2
+D 1N914 a=24 k=9 D1
+D 1N914 a=10 k=25 D2
+
+STAGE output output 출력 (볼륨·톤)
+POT B100K VOL 2 1 0
+POT B100K TONE 5 4 3
+C 10n 12 11 C3
+
+STAGE power power 전원
+C 47uF 18 17 C4
+D 1N400X a=26 k=27 D3
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT GAIN 170 400 r180
+AT C1 270 400 h
+AT Q1 370 400
+AT C2 480 400 h
+AT VOL 580 400 r180
+AT TONE 680 400 r180
+AT R1 340 520 h-
+AT R2 390 190 v
+AT R3 450 500 v-
+AT D1 510 470 v-
+AT D2 750 470 v
+AT C3 830 470 v
+AT C4 200 190 v
+AT D3 240 190 v-
+AT RLOAD 680 480 v

@@ -1,0 +1,54 @@
+id pp-wreck-1k
+goods 186787692
+name WRECK [1K]
+motif Wampler Triple Wreck 부스트단
+type distortion
+desc 2N5089 공통 이미터 게인 부스터 - 100R+100p 입력 필터, 1uF 커플링, 1M/100K 베이스 분압, 47K 컬렉터, 1K 이미터, 2.2uF 뒤 저역 갈래(47K/10n)와 고역 갈래(10n/10K)를 A100K CREAM 팟으로 섞음
+image img_01.jpg
+# Transistor C (16), B (17), E (19); 18 and 14/15/22 are pieces of the B and E rings.
+# CREAM: lug3 on the low-pass node (47K/10n), lug1 on the high-pass node (10n/10K), wiper to OUT.
+BOM 1Mx2 100K 47Kx2 10K 1K 100R 10nx2 100p 2.2uF 1uF 2N5089 A100K
+io IN=42 OUT=4 V9=35 GND=31
+JUMP 35 36   # 9V to the 1M bias resistor
+NC 18 14 15 22
+
+STAGE input input 입력 필터
+R 1M 27 37 R1
+R 100R 34 24 R2
+C 100p 25 33 C1
+C 1uF 12 23 C2
+
+STAGE gain gain 공통 이미터
+Q 2N5089 c=16 b=17 e=19 Q1
+R 1M 26 36 R3
+R 100K 28 40 R4
+R 47K 30 20 R5
+R 1K 29 41 R6
+
+STAGE tone tone CREAM 블렌드
+C 2.2uF 21 11 C3
+R 47K 10 0 R7
+C 10n 1 8 C4
+C 10n 9 2 C5
+R 10K 3 13 R8
+POT A100K CREAM 7 6 5
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT R2 170 400 h
+AT C2 270 400 h-
+AT Q1 370 400
+AT C3 480 400 h
+AT R7 580 400 h
+AT CREAM 680 400 r180
+AT R1 120 470 v-
+AT C1 200 470 v
+AT R3 300 190 v-
+AT R4 300 470 v
+AT R5 390 190 v
+AT R6 390 500 v
+AT C4 610 470 v
+AT C5 610 520 h
+AT R8 770 470 v
+AT RLOAD 680 480 v
