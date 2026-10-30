@@ -6,14 +6,14 @@ type overdrive
 desc 2N5457 소스 폴로어 입력(5.6K/47n/1M)→1uF/5.6K→LF353 A단 비반전(B500K 드라이브+5.6K∥100p, 초록 LED 역병렬 피드백 클리퍼; 접지 다리 1K+1uF+BODY 1갱, 2K+220n)와 +in의 470R+47n+BODY 2갱 션트→2K/100n LPF→B단 버퍼→2K→1uF→5.6K→B50K 볼륨
 image img_01.jpg
 # LF353 notch up: pins 1-4 down the left (27,33,40,51), 8-5 down the right (28,34,41,52). Hidden traces: 470R (22)
-# to +in A (40); out B (34) to -in B (41) as a follower; the 27K/27K bias midpoint (60/68) is the Vref node (43).
+# to +in A (40); out B (34) runs under the 28-24 cyan trace to the 2K (23) and the 1uF (17), so the 2K is the B feedback (-in B 41 = 2K bottom 42) and
+# the 1uF hangs on out B (re-read 2026-10-31 with the crossing-tint extractor; the earlier follower JUMP 34 41 was wrong); the 27K/27K bias midpoint (60/68) is the Vref node (43).
 # BODY is a dual B20K: gang A 0-1-(nc) sits in the gain leg (lug 1 on ground), gang B 7-8-9 (7/9 tied, 8 ground)
 # shunts the 470R+47n at +in A; DRIVE is wired as a variable resistor (lugs 2/3, no wiper pad). Indicator LED pads
 # 25/26 and 30/31 are the clipping LEDs; the off-board status LED is not on this board.
 BOM 1Mx2 27Kx4 5.6Kx4 10K 2Kx3 1K 470R 47R 220n 100n 47nx2 100pF 100uFx2 1uFx3 1N400X LED-GREENx2 LF353P 2N5457 B500K B20Kx2 B50K
 io IN=73 OUT=13 V9=35 GND=6
 JUMP 22 40
-JUMP 34 41
 JUMP 60 43
 
 STAGE input buffer 입력 버퍼 (JFET)
@@ -69,11 +69,10 @@ AT R2 170 400 h
 AT C1 270 400 h-
 AT R3 370 400 h
 AT R12 470 400 h
-AT U1A 910 590
-AT R13 670 400 h-
-AT C8 770 400 h
-AT R14 870 400 h
-AT VOLUME 970 400 r180
+AT U1A 710 590
+AT C8 670 400 h
+AT R14 770 400 h
+AT VOLUME 870 400 r180
 AT R1 120 470 v-
 AT R6 400 470 v-
 AT R10 460 500 h-
@@ -81,24 +80,25 @@ AT C6 550 500 h
 AT BODY2 640 500 r0
 AT R11 500 560 v-
 AT C7 740 470 v
+AT R13 600 580 v
 AT R16 340 470 v-
 AT R17 700 470 v
-AT C10 820 470 v
+AT C10 940 470 v
 AT R5 400 570 v
-AT DRIVE 560 590 r180
-AT R7 650 590 h
+AT DRIVE 560 680 r180
+AT R7 650 680 h
 AT C3 590 520 h
 AT D1 590 580 h
 AT D2 590 640 h-
-AT R8 740 590 h-
-AT C4 830 590 h
-AT BODY 860 680 r90
-AT R9 680 660 v
-AT C5 680 760 v-
+AT R8 740 680 h-
+AT C4 830 680 h
+AT BODY 860 770 r90
+AT R9 680 750 v
+AT C5 680 850 v-
 AT R15 340 570 v-
 AT C9 460 570 v
 AT C2 400 670 v-
 AT D3 340 190 v
 AT R4 400 770 v
-AT Q1 1060 400
-AT RLOAD 970 480 v
+AT Q1 1010 400
+AT RLOAD 870 480 v

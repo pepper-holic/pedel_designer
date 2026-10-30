@@ -5,7 +5,8 @@ motif Friedman Golden Pearl
 type overdrive
 desc LM833 2단 - 1M/22n/1K/47p 입력→A단 비반전(10K+(10K∥B500K 드라이브) 피드백, 100p, VOICE 토글로 1N4148 1:2 비대칭 또는 노란 LED 클리퍼; 접지 다리 2.2K+47n이 B25K 톤 팟을 거쳐 GND/출력)→10K→B단 반전(22K 피드백, HICUT 토글 2.2K+2.2n/3.9n)→10uF→A100K 볼륨
 image img_02.jpg
-# Hidden traces: 10K (13) -> drive pad 5 (n4); V+ pin 30 -> 10K/47uF node 60 (cyan under the IC). The extractor
+# Hidden traces: 10K (13) runs under the LM833's cyan trace to -in B (44) - the inverting second stage's input resistor (re-read 2026-10-31,
+# the earlier JUMP 13 5 to the DRIVE node was wrong); V+ pin 30 -> 10K/47uF node 60 (cyan under the IC). The extractor
 # chained 30 with the VOICE pad 47 - SPLIT. VOICE on-off-on (23-40-47) drawn on the diode side; the LED pair
 # (48/49, 66/67, on pad 47) is left out of the netlist and BOM (kit list: 5mm YEL LED x2). HICUT (35-41-56) drawn on
 # the 2.2n side; the 3.9n (45-46) is left out (kit list: 3.9n x1). Pots: TONE 2-1-0 (wiper 1 tied to lug 2 under the silk,
@@ -13,7 +14,6 @@ image img_02.jpg
 BOM 1Mx2 22K 10Kx4 2.2Kx2 1K 47n 22n 2.2n 100pF 47pF 47uF 22uF 10uF 1N400X 1N4148x3 LM833N A100K B500K B25K
 io IN=75 OUT=15 V9=82 GND=0
 SPLIT 47
-JUMP 13 5
 JUMP 30 60
 JUMP 40 23
 JUMP 41 35
@@ -61,7 +61,7 @@ AT V1 60 430
 AT VCC 60 190
 AT C1 170 400 h
 AT R3 270 400 h
-AT U1A 560 500
+AT U1A 560 620
 AT C6 470 400 h
 AT VOL 570 400 r180
 AT R1 120 470 v
@@ -73,16 +73,16 @@ AT C5 440 520 h
 AT R9 300 470 v-
 AT R10 660 470 v-
 AT C8 720 470 v
+AT R6 400 590 v-
 AT D4 300 190 v
 AT C7 300 570 v
-AT R4 140 880 h
-AT DRIVE 240 880 h
-AT C3 340 880 h
-AT D1 440 880 h
-AT D2 540 880 h
-AT D3 640 880 h
-AT R5 740 880 h
-AT C4 840 880 h
-AT TONE 940 880 h
-AT R6 1040 880 h
-AT RLOAD 620 480 v
+AT DRIVE 460 620 r0
+AT C3 400 690 v-
+AT D1 400 580 h
+AT D2 460 720 h
+AT D3 440 640 h-
+AT R5 400 790 v
+AT C4 460 820 h
+AT TONE 550 820 r0
+AT R4 440 700 h
+AT RLOAD 570 480 v

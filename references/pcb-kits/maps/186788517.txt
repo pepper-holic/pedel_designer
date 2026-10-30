@@ -1,5 +1,76 @@
-# 1969 GE FUZZ (186788517): Fulltone '69 style germanium PNP fuzz face on the ICL7660's -9V rail (positive ground).
-# The charge-pump convention now exists; what blocks it is the off-board wiring - the CONTOUR (B50K mini, ring pads
-# 58/59), INPUT (B1K mini, 64/65) and FUZZ pot (35/36/37) lugs and the DIP pads 47/52 are lone pads with no board
-# trace, so the pot wiring has to come from the seller's wiring diagram or the '69 schematic. See docs/kit-deferred.md.
-# Board: 100K / 33K / 220R / 1K, 1M x2, 100n x2, 100pF, 10K BIAS trimmer, 47uF / 22uF / 10uF / 100uF / 2.2uF, A500K VOLUME.
+id pp-1969-ge-fuzz
+goods 186788517
+name 1969 GE FUZZ
+motif Fulltone '69 (germanium)
+type fuzz
+desc 게르마늄 PNP 2석 퍼즈페이스('69), ICL7660의 -9V 레일에 양접지 - 2.2uF/1M/100p 입력→Q1(33K 부하)→Q2 직결, 100K 피드백, Q2 이미터 B1K FUZZ+22uF, Q2 컬렉터→10K BIAS 트리머→1K→220R→-9V, 100n 출력→A500K 볼륨
+image img_01.jpg
+# ICL7660 notch right: top 3=pin1 2=pin2 1=pin3(GND) 0=pin4, bottom 13=pin5(-9V) 14/15 unused 16=pin8; 10uF 6-7 flying cap.
+# CONTOUR (58/59) and INPUT (64/65) ring pads carry the labels only - no copper reaches them on this board and the
+# kit is built without those mini pots (dummy footprints, reviewed on the seller page and a build photo): NC.
+# DIP toggles drawn closed: 54-53 (IN -> 2.2uF) and 48-47-46 (220R -> -9V rail, the tint hint joins 47 to 44/48).
+# FUZZ angle pot 35-36-37: lug 35 to Q2's emitter under the pot silk (JUMP 35 61), wiper 36 to the 22uF, 37 ground.
+# BIAS trimmer: wiper 67 tied to lug 60 on Q2's collector, lug 57 to the 1K (rheostat).
+# Positive ground: electrolytic '+' pads 24/26 sit on 0V. Kit list has B50K / B1K mini pots that are not fitted.
+BOM 1Mx2 100K 33K 1K 220R 100nx2 100pF 100uF 47uF 22uF 10uF 2.2uF 1N400X 10K ICL7660 GE-PNPx2 A500K B1K
+io IN=55 OUT=32 V9=5 GND=1,24,26
+JUMP 54 53
+JUMP 48 46
+JUMP 35 61
+NC 14 15 47 52 58 59 64 65
+
+STAGE input input 입력
+C 2.2uF 9 8 C1
+C 100p 18 19 C2
+R 1M 22 29 R1
+
+STAGE core fuzz 퍼즈 코어 (Q1·Q2)
+Q GE-PNP b=11 c=10 e=12 Q1
+R 33K 38 39 R2
+Q GE-PNP b=62 c=63 e=61 Q2
+R 100K 33 34 R3
+POT B1K FUZZ 35 36 37
+C 22uF 25 26 C3
+
+STAGE bias custom Q2 컬렉터 부하 (BIAS)
+POT 10K BIAS 57 67 60
+R 1K 49 50 R4
+R 220R 44 45 R5
+
+STAGE output output 출력 (볼륨)
+C 100n 40 51 C4
+POT A500K VOLUME 41 42 43
+R 1M 30 31 R6
+
+STAGE power power 전원 (ICL7660 -9V)
+D 1N400X a=4 k=17 D1
+C 100uF 21 20 C5
+C 100n 28 27 C6
+IC ICL7660 1=3 2=2 3=1 4=0 5=13 8=16 U1
+C 10uF 7 6 C7
+C 47uF 23 24 C8
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT R2 380 400 h-
+AT R5 480 400 h
+AT C4 580 400 h-
+AT VOLUME 680 400 r0
+AT C2 120 470 v
+AT R1 180 470 v
+AT R3 230 500 v-
+AT FUZZ 290 530 r0
+AT C3 350 570 v
+AT R4 510 470 v-
+AT R6 740 470 v-
+AT C8 410 470 v
+AT BIAS 570 500 r0
+AT Q2 800 370
+AT U1A 920 400
+AT D1 140 880 h
+AT C5 240 880 h
+AT C6 340 880 h
+AT RLOAD 680 480 v
