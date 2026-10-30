@@ -85,6 +85,8 @@ const JFETS: [string, Jfet][] = [
   ["MPF102", JFET_MPF102],
   ["2N5484", { idss: 2.5e-3, pinchOffVoltage: -1.5 }],
   ["2N5952", { idss: 1.6e-3, pinchOffVoltage: -1.3 }],
+  ["J309", { idss: 20e-3, pinchOffVoltage: -2.5 }],
+  ["J310", { idss: 40e-3, pinchOffVoltage: -4.0 }],
   ["2SK30", { idss: 2.0e-3, pinchOffVoltage: -1.0 }],
   ["KSK30", { idss: 2.0e-3, pinchOffVoltage: -1.0 }],
 ];

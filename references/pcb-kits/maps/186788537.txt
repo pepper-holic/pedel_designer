@@ -1,0 +1,59 @@
+id pp-db-box-1
+goods 186788537
+name DB BOX-1
+motif Dumble 부스트 (John Mayer)
+type buffer-boost
+desc J309 JFET 공통 소스 부스트 - 100n 입력 뒤 100p와 B2M 팟+1M 병렬 경로로 게이트(팟 다른 쪽은 1.5M 접지), 20K 트리머로 드레인 부하 조절(6.99V), 소스 5.6K + 100R/10uF 바이패스, 4.7uF 출력 B10K 볼륨
+image img_01.jpg
+# Off-board pots: 38-39-40 (B2M: lug on the input node, wiper to the 1M, lug to the 1.5M) and
+# 41-42-43 (B10K volume, wiper to OUT). The 20K trimmer is wired as a variable resistor (14 and 20
+# tied). The LED and its resistor are off the audio path.
+BOM 2.2M 1.5M 1M 5.6K 100R 100nx2 100p 100uF 10uF 4.7uF 1N400X 20K J309 B2M B10K
+io IN=11 OUT=35 V9=10 GND=44
+JUMP 21 8    # 100uF + to the protected supply
+NC 0 1 2 5 6
+
+STAGE input input 입력
+R 2.2M 17 18 R1
+C 100n 12 13 C1
+C 100p 23 24 C2
+POT B2M GAIN 40 39 38
+R 1M 28 29 R2
+R 1.5M 33 34 R3
+
+STAGE boost gain J309 공통 소스
+Q J309 g=30 d=19 s=25 Q1
+POT 20K BIAS 7 14 20
+R 5.6K 26 27 R4
+R 100R 31 32 R5
+C 10uF 36 37 C3
+
+STAGE output output 출력 (볼륨)
+C 4.7uF 15 16 C4
+POT B10K VOL 43 42 41
+
+STAGE power power 전원
+D 1N400X a=9 k=8 D1
+C 100n 4 3 C5
+C 100uF 21 22 C6
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT C2 270 400 h
+AT Q1 370 400
+AT C4 480 400 h
+AT VOL 580 400 r180
+AT R1 120 470 v
+AT GAIN 260 460 r180
+AT R2 280 520 h
+AT R3 350 530 v-
+AT BIAS 450 340 r180
+AT R4 390 500 v
+AT R5 450 500 v-
+AT C3 450 600 v
+AT D1 480 190 v
+AT C5 660 470 v
+AT C6 720 470 v
+AT RLOAD 580 480 v

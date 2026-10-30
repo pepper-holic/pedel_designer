@@ -1,0 +1,64 @@
+id pp-muff-killer
+goods 186788504
+name MUFF KILLER
+motif Devi Ever Hyperion (Muff Killer)
+type fuzz
+desc MPSA18 2단 직결 퍼즈 - 각 단 10K 컬렉터·2.2M 컬렉터 피드백, Q1 컬렉터→100n 두 갈래(Q2 베이스, 공통 이미터 노드), 세 이미터를 묶고 PNP 2N2907A를 Q2와 역병렬로 걸어 발진, OSC 가변저항이 이미터 노드를 접지, 입력은 팟 와이퍼에서 1K를 거쳐 이미터 노드와 100n으로 Q1 베이스에 나뉨
+image img_01.jpg
+# The three angle pots have no names on the silk. By their nets: top row (0,1,2) runs from the
+# common emitter node to ground with lug 2 unconnected - the oscillation control; the left row
+# (6,7,8) takes IN on its wiper; the right row (11,12,13) is the output volume.
+# The big loop from pad 1 around the left edge ends at the 1K/emitter node (pad 40).
+BOM 2.2Mx2 10Kx2 1K 100nx4 100uF 1N400X MPSA18x2 2N2907A B100Kx3
+io IN=16 OUT=17 V9=5 GND=43
+JUMP 1 40
+NC 2
+
+STAGE input input 입력 (게인 블렌드)
+POT B100K GAIN 8 7 6
+C 100n 22 34 C1
+R 1K 23 40 R1
+
+STAGE core fuzz 퍼즈 코어
+Q MPSA18 c=24 b=31 e=35 Q1
+R 10K 18 19 R2
+R 2.2M 25 41 R3
+C 100n 27 37 C2
+C 100n 26 36 C3
+Q MPSA18 c=29 b=32 e=38 Q2
+R 10K 20 21 R4
+R 2.2M 28 42 R5
+Q 2N2907A c=30 b=33 e=39 Q3
+
+STAGE osc custom 발진 (이미터 노드 접지)
+POT B100K OSC 0 1 1
+
+STAGE output output 출력 (볼륨)
+C 100n 14 15 C4
+POT B100K VOL 13 12 11
+
+STAGE power power 전원
+D 1N400X a=4 k=3 D1
+C 100uF 10 9 C5
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT GAIN 150 400 r180
+AT C1 120 500 v
+AT R1 240 400 h
+AT R3 180 530 h-
+AT C2 270 530 h
+AT C3 240 520 h
+AT R5 360 530 h-
+AT OSC 330 400 r180
+AT C4 450 530 h
+AT VOL 540 530 r180
+AT R2 210 600 v
+AT R4 300 580 h
+AT D1 210 190 v
+AT C5 210 700 v
+AT Q1 620 530
+AT Q2 700 530
+AT Q3 800 530
+AT RLOAD 890 480 v

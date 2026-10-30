@@ -1,0 +1,357 @@
+{
+ "id": "pp-soda-master",
+ "goodsNo": "186788500",
+ "kitName": "SODA Master",
+ "motif": "Devi Ever Soda Meiser",
+ "type": "fuzz",
+ "description": "MPSA18 3단 퍼즈 - Q1·Q2 각 10K 컬렉터와 2.2M/3.3M 컬렉터 피드백(Q1은 100n B-C), 100n 단간 결합, Q3 컬렉터에 PNP 2N2907A를 역방향으로 걸어 Q3 베이스를 바이어스, 입력은 팟 와이퍼에서 100n과 1K 접지로 나뉨, 출력 100n 볼륨",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n1",
+    "in",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n2",
+    "n3"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "MPSA18",
+   "nodes": {
+    "c": "n4",
+    "b": "n3",
+    "e": "0"
+   }
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n5",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "n4",
+    "n3"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n4",
+    "n6"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "MPSA18",
+   "nodes": {
+    "c": "n7",
+    "b": "n6",
+    "e": "0"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n5",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "3.3M",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n7",
+    "n8"
+   ]
+  },
+  {
+   "ref": "Q3",
+   "kind": "Q",
+   "part": "MPSA18",
+   "nodes": {
+    "c": "n9",
+    "b": "n8",
+    "e": "0"
+   }
+  },
+  {
+   "ref": "Q4",
+   "kind": "Q",
+   "part": "2N2907A",
+   "nodes": {
+    "c": "n9",
+    "b": "n8",
+    "e": "0"
+   }
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n5",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n9",
+    "n10"
+   ]
+  },
+  {
+   "ref": "VOL",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n10"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n5"
+   }
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력 (게인 블렌드)",
+   "parts": [
+    "GAIN",
+    "R1",
+    "C1"
+   ]
+  },
+  {
+   "id": "stage1",
+   "category": "gain",
+   "label": "1단 (Q1)",
+   "parts": [
+    "Q1",
+    "R2",
+    "R3",
+    "C2",
+    "C3"
+   ]
+  },
+  {
+   "id": "stage2",
+   "category": "gain",
+   "label": "2단 (Q2)",
+   "parts": [
+    "Q2",
+    "R4",
+    "R5",
+    "C4"
+   ]
+  },
+  {
+   "id": "stage3",
+   "category": "fuzz",
+   "label": "3단 (Q3 + 2N2907A)",
+   "parts": [
+    "Q3",
+    "Q4",
+    "R6"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "C5",
+    "VOL"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D1",
+    "C6"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "GAIN": {
+   "x": 150,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 240,
+   "y": 470,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 120,
+   "y": 500,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 180,
+   "y": 530,
+   "rotation": 180
+  },
+  "C2": {
+   "x": 160,
+   "y": 520,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 270,
+   "y": 530,
+   "rotation": 0
+  },
+  "R5": {
+   "x": 360,
+   "y": 530,
+   "rotation": 180
+  },
+  "C4": {
+   "x": 450,
+   "y": 530,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 210,
+   "y": 600,
+   "rotation": 270
+  },
+  "R4": {
+   "x": 300,
+   "y": 520,
+   "rotation": 0
+  },
+  "R6": {
+   "x": 270,
+   "y": 630,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 360,
+   "y": 630,
+   "rotation": 0
+  },
+  "VOL": {
+   "x": 450,
+   "y": 630,
+   "rotation": 180
+  },
+  "D1": {
+   "x": 210,
+   "y": 190,
+   "rotation": 90
+  },
+  "C6": {
+   "x": 210,
+   "y": 700,
+   "rotation": 90
+  },
+  "Q1": {
+   "x": 570,
+   "y": 530
+  },
+  "Q2": {
+   "x": 650,
+   "y": 530
+  },
+  "Q3": {
+   "x": 560,
+   "y": 630
+  },
+  "Q4": {
+   "x": 660,
+   "y": 630
+  },
+  "RLOAD": {
+   "x": 750,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

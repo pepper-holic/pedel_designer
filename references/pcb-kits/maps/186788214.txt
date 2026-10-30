@@ -1,0 +1,3 @@
+# KLOUD LIFT (186788214): XLR inline microphone booster - LSK389C dual JFET in SOIC-8 with
+# phantom power, 3K/39R/22R/33K/1.8n. Not a guitar pedal, SMD pads the extractor cannot read, and no
+# phantom-powered source model in the app. Recorded only; no circuit.
