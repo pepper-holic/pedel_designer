@@ -4,14 +4,14 @@
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 81 |
+| 변환 완료 | 87 |
 | 기록만 | 5 |
-| 보류 | 43 |
+| 보류 | 37 |
 | 미착수 | 92 |
 | 중복 기판 | 18 |
 | C등급(범위 밖) | 40 |
 
-## 변환 완료 (81)
+## 변환 완료 (87)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -97,6 +97,12 @@
 | B | 186787680 | Feach Fuzz | fuzz | Frantone Peachfuzz |
 | B | 186788517 | 1969 GE FUZZ | fuzz | Fulltone '69 (ICL7660 -9V) |
 
+| B | 186787512 | Wide Range | preamp | 빈 브리지 파라메트릭 부스트 |
+| B | 186788308 | NEW ZEN GU DONG | overdrive | Tanabe Zenkudo |
+| B | 186787948 | THIMBLE | overdrive | Mad Professor Simble |
+| B | 186787642 | NEW Cat | fuzz | ProCo RAT |
+| B | 186787646 | NEW Dirty Cat | fuzz | ProCo RAT (Dirty) |
+| B | 186788316 | EZK25:17 FUZZ | fuzz | 4단 클리퍼 op-amp 퍼즈 |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -107,13 +113,12 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (43)
+## 보류 (37)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
 | B | 186788016 | Pluto Blue | overdrive |  |
 | B | 186788334 | SEC RET PRE | preamp | ICL7660 전하펌프 |
-| B | 186787512 | Wide Range | preamp |  |
 | B | 186788540 | MID BLASTER | eq |  |
 | B | 186788357 | NEW ACC PREAMP | preamp |  |
 | B | 186788129 | NEW SON OF BEN | preamp |  |
@@ -126,20 +131,15 @@
 | B | 186788145 | KONISH SS-2 | overdrive |  |
 | B | 186788309 | KO-N UI (케이스제외) | overdrive |  |
 | B | 186787554 | Flame mini Booster | buffer-boost |  |
-| B | 186788308 | NEW ZEN GU DONG | overdrive | MOSFET |
 | B | 186787677 | Wild Jack | overdrive |  |
 | B | 186788010 | Soulist | overdrive |  |
 | B | 186788589 | TIME V2 (잔레이) | overdrive |  |
-| B | 186787948 | THIMBLE | overdrive | MOSFET |
 | B | 186788159 | SONIX BABY | eq |  |
 | B | 186788016 | Pluto Blue | overdrive |  |
 | B | 186787473 | NEW MORNING | overdrive |  |
 | B | 186787536 | Hush FREQ | overdrive |  |
-| B | 186787642 | NEW Cat | fuzz |  |
-| B | 186787646 | NEW Dirty Cat | fuzz | 같은 기판 |
 | B | 186787534 | Claw | eq |  |
 | B | 186788151 | THE BLOID | overdrive |  |
-| B | 186788316 | EZK25:17 FUZZ | fuzz |  |
 | B | 186788104 | NEW Graff Dynamic | overdrive |  |
 | B | 186786078 | RC BEAST  (겸용) | buffer-boost |  |
 | B | 186788665 | 29 YUNA | buffer-boost | ICL7660 전하펌프 |
