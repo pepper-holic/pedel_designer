@@ -13,16 +13,17 @@
   "nets": 2,
   "multiPadNets": 1,
   "loneNonGroundPads": 1,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 12088,
-  "topLayerPixels": 9511,
+  "bottomLayerPixels": 12063,
+  "topLayerPixels": 9512,
   "size": [
    700,
    417
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 0
+  "tier": "A"
  },
  {
   "goodsNo": "186787697",
@@ -35,9 +36,11 @@
   "bomImages": [],
   "pads": 24,
   "groundPads": 9,
-  "nets": 8,
+  "nets": 7,
   "multiPadNets": 6,
-  "loneNonGroundPads": 2,
+  "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 807,
   "topLayerPixels": 3954,
@@ -46,8 +49,7 @@
    271
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 1
+  "tier": "A"
  },
  {
   "goodsNo": "186787695",
@@ -65,6 +67,8 @@
   "nets": 8,
   "multiPadNets": 8,
   "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 1911,
   "topLayerPixels": 5760,
@@ -73,8 +77,35 @@
    278
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 0
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787691",
+  "name": "[1K] BIAS Parts pack",
+  "type": "overdrive",
+  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 러브페달 CO",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 33,
+  "groundPads": 11,
+  "nets": 9,
+  "multiPadNets": 8,
+  "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 2530,
+  "topLayerPixels": 6181,
+  "size": [
+   286,
+   279
+  ],
+  "twoLayer": true,
+  "tier": "A"
  },
  {
   "goodsNo": "186788132",
@@ -90,6 +121,8 @@
   "nets": 11,
   "multiPadNets": 11,
   "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 10975,
@@ -98,8 +131,7 @@
    257
   ],
   "twoLayer": false,
-  "tier": "A",
-  "hintedPads": 0
+  "tier": "A"
  },
  {
   "goodsNo": "186787689",
@@ -115,6 +147,8 @@
   "nets": 9,
   "multiPadNets": 8,
   "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 1404,
   "topLayerPixels": 3818,
@@ -123,8 +157,7 @@
    279
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 1
+  "tier": "A"
  },
  {
   "goodsNo": "186788027",
@@ -142,6 +175,8 @@
   "nets": 11,
   "multiPadNets": 10,
   "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 539,
   "topLayerPixels": 6843,
@@ -150,8 +185,7 @@
    263
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 1
+  "tier": "A"
  },
  {
   "goodsNo": "186788277",
@@ -167,6 +201,8 @@
   "nets": 11,
   "multiPadNets": 11,
   "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 14427,
@@ -175,8 +211,7 @@
    251
   ],
   "twoLayer": false,
-  "tier": "A",
-  "hintedPads": 0
+  "tier": "A"
  },
  {
   "goodsNo": "186787694",
@@ -194,6 +229,8 @@
   "nets": 8,
   "multiPadNets": 7,
   "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 1456,
   "topLayerPixels": 5574,
@@ -202,8 +239,35 @@
    279
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 1
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787693",
+  "name": "[1K] SHO Parts pack",
+  "type": "buffer-boost",
+  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 너무나도 유명",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 37,
+  "groundPads": 11,
+  "nets": 7,
+  "multiPadNets": 7,
+  "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1776,
+  "topLayerPixels": 4836,
+  "size": [
+   286,
+   278
+  ],
+  "twoLayer": true,
+  "tier": "A"
  },
  {
   "goodsNo": "186787696",
@@ -218,19 +282,20 @@
   ],
   "pads": 37,
   "groundPads": 12,
-  "nets": 9,
+  "nets": 8,
   "multiPadNets": 8,
-  "loneNonGroundPads": 1,
+  "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1653,
+  "bottomLayerPixels": 1614,
   "topLayerPixels": 6840,
   "size": [
    286,
    279
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 0
+  "tier": "A"
  },
  {
   "goodsNo": "186787844",
@@ -248,6 +313,8 @@
   "nets": 9,
   "multiPadNets": 9,
   "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 1599,
   "topLayerPixels": 5262,
@@ -256,8 +323,7 @@
    226
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 0
+  "tier": "A"
  },
  {
   "goodsNo": "186788026",
@@ -275,6 +341,8 @@
   "nets": 12,
   "multiPadNets": 10,
   "loneNonGroundPads": 2,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 1290,
   "topLayerPixels": 8478,
@@ -283,8 +351,7 @@
    211
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 0
+  "tier": "A"
  },
  {
   "goodsNo": "186787513",
@@ -299,19 +366,20 @@
   ],
   "pads": 41,
   "groundPads": 8,
-  "nets": 12,
+  "nets": 11,
   "multiPadNets": 10,
-  "loneNonGroundPads": 2,
+  "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2025,
-  "topLayerPixels": 6894,
+  "bottomLayerPixels": 1998,
+  "topLayerPixels": 6895,
   "size": [
    341,
    244
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 1
+  "tier": "A"
  },
  {
   "goodsNo": "186788663",
@@ -329,16 +397,17 @@
   "nets": 12,
   "multiPadNets": 10,
   "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1941,
-  "topLayerPixels": 22007,
+  "bottomLayerPixels": 1910,
+  "topLayerPixels": 22016,
   "size": [
    800,
    422
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 0
+  "tier": "A"
  },
  {
   "goodsNo": "186787690",
@@ -356,6 +425,8 @@
   "nets": 11,
   "multiPadNets": 11,
   "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 1918,
   "topLayerPixels": 9368,
@@ -364,8 +435,7 @@
    286
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 0
+  "tier": "A"
  },
  {
   "goodsNo": "186787692",
@@ -383,6 +453,8 @@
   "nets": 12,
   "multiPadNets": 11,
   "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 585,
   "topLayerPixels": 10747,
@@ -391,8 +463,7 @@
    279
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 1
+  "tier": "A"
  },
  {
   "goodsNo": "186788504",
@@ -408,6 +479,8 @@
   "nets": 15,
   "multiPadNets": 13,
   "loneNonGroundPads": 2,
+  "hintedPads": 1,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
   "bottomLayerPixels": 1035,
   "topLayerPixels": 19270,
@@ -416,8 +489,7 @@
    382
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 1
+  "tier": "A"
  },
  {
   "goodsNo": "186788537",
@@ -435,6 +507,8 @@
   "nets": 16,
   "multiPadNets": 15,
   "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 14341,
@@ -443,8 +517,7 @@
    338
   ],
   "twoLayer": false,
-  "tier": "A",
-  "hintedPads": 1
+  "tier": "A"
  },
  {
   "goodsNo": "186788500",
@@ -462,16 +535,17 @@
   "nets": 15,
   "multiPadNets": 13,
   "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 948,
+  "bottomLayerPixels": 946,
   "topLayerPixels": 13077,
   "size": [
    700,
    300
   ],
   "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 2
+  "tier": "A"
  },
  {
   "goodsNo": "186788501",
@@ -489,12 +563,42 @@
   "nets": 15,
   "multiPadNets": 13,
   "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 948,
+  "bottomLayerPixels": 946,
   "topLayerPixels": 13077,
   "size": [
    700,
    300
+  ],
+  "twoLayer": true,
+  "tier": "A"
+ },
+ {
+  "goodsNo": "186787537",
+  "name": "@ Jubelee Parts pack",
+  "type": "distortion",
+  "about": "마샬 실버쥬빌레 앰프톤을 재현하는 드라이브 페달입니다. JRC386D와 같은 게인의 LM386-N3이 포함됩니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 52,
+  "groundPads": 14,
+  "nets": 17,
+  "multiPadNets": 16,
+  "loneNonGroundPads": 1,
+  "hintedPads": 0,
+  "unconnectedPads": 1,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1959,
+  "topLayerPixels": 10806,
+  "size": [
+   511,
+   256
   ],
   "twoLayer": true,
   "tier": "A"
@@ -515,6 +619,8 @@
   "nets": 20,
   "multiPadNets": 5,
   "loneNonGroundPads": 15,
+  "hintedPads": 5,
+  "unconnectedPads": 9,
   "bodyTunnels": 0,
   "bottomLayerPixels": 5842,
   "topLayerPixels": 16977,
@@ -523,8 +629,7 @@
    426
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186785995",
@@ -540,16 +645,17 @@
   "nets": 13,
   "multiPadNets": 6,
   "loneNonGroundPads": 7,
+  "hintedPads": 3,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9865,
-  "topLayerPixels": 20569,
+  "bottomLayerPixels": 9856,
+  "topLayerPixels": 20587,
   "size": [
    540,
    585
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787688",
@@ -567,43 +673,17 @@
   "nets": 15,
   "multiPadNets": 6,
   "loneNonGroundPads": 9,
+  "hintedPads": 6,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3836,
+  "bottomLayerPixels": 3831,
   "topLayerPixels": 16421,
   "size": [
    571,
    556
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 6
- },
- {
-  "goodsNo": "186787691",
-  "name": "[1K] BIAS Parts pack",
-  "type": "overdrive",
-  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 러브페달 CO",
-  "board": 0,
-  "image": "img_01.jpg",
-  "sameBoardAs": null,
-  "bomImages": [
-   "img_02.jpg"
-  ],
-  "pads": 33,
-  "groundPads": 11,
-  "nets": 11,
-  "multiPadNets": 7,
-  "loneNonGroundPads": 4,
-  "bodyTunnels": 0,
-  "bottomLayerPixels": 2605,
-  "topLayerPixels": 6181,
-  "size": [
-   286,
-   279
-  ],
-  "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788496",
@@ -621,16 +701,17 @@
   "nets": 19,
   "multiPadNets": 15,
   "loneNonGroundPads": 4,
+  "hintedPads": 1,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3698,
-  "topLayerPixels": 14393,
+  "bottomLayerPixels": 3692,
+  "topLayerPixels": 14394,
   "size": [
    700,
    389
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788497",
@@ -648,9 +729,11 @@
   "nets": 19,
   "multiPadNets": 15,
   "loneNonGroundPads": 4,
+  "hintedPads": 1,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3698,
-  "topLayerPixels": 14393,
+  "bottomLayerPixels": 3692,
+  "topLayerPixels": 14394,
   "size": [
    700,
    389
@@ -671,19 +754,20 @@
   ],
   "pads": 47,
   "groundPads": 10,
-  "nets": 19,
-  "multiPadNets": 14,
-  "loneNonGroundPads": 5,
+  "nets": 18,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 3,
+  "hintedPads": 1,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2573,
-  "topLayerPixels": 7435,
+  "bottomLayerPixels": 2529,
+  "topLayerPixels": 7436,
   "size": [
    421,
    286
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788664",
@@ -701,6 +785,8 @@
   "nets": 17,
   "multiPadNets": 11,
   "loneNonGroundPads": 6,
+  "hintedPads": 0,
+  "unconnectedPads": 6,
   "bodyTunnels": 0,
   "bottomLayerPixels": 3579,
   "topLayerPixels": 19553,
@@ -709,8 +795,7 @@
    422
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788463",
@@ -725,9 +810,11 @@
   ],
   "pads": 51,
   "groundPads": 15,
-  "nets": 15,
-  "multiPadNets": 10,
-  "loneNonGroundPads": 5,
+  "nets": 14,
+  "multiPadNets": 11,
+  "loneNonGroundPads": 3,
+  "hintedPads": 1,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 16583,
@@ -736,8 +823,7 @@
    388
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788465",
@@ -752,9 +838,11 @@
   ],
   "pads": 51,
   "groundPads": 15,
-  "nets": 15,
-  "multiPadNets": 10,
-  "loneNonGroundPads": 5,
+  "nets": 14,
+  "multiPadNets": 11,
+  "loneNonGroundPads": 3,
+  "hintedPads": 1,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 16553,
@@ -763,35 +851,7 @@
    388
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 1
- },
- {
-  "goodsNo": "186787537",
-  "name": "@ Jubelee Parts pack",
-  "type": "distortion",
-  "about": "마샬 실버쥬빌레 앰프톤을 재현하는 드라이브 페달입니다. JRC386D와 같은 게인의 LM386-N3이 포함됩니다.",
-  "board": 0,
-  "image": "img_01.jpg",
-  "sameBoardAs": null,
-  "bomImages": [
-   "img_02.jpg"
-  ],
-  "pads": 52,
-  "groundPads": 14,
-  "nets": 18,
-  "multiPadNets": 15,
-  "loneNonGroundPads": 3,
-  "bodyTunnels": 0,
-  "bottomLayerPixels": 1992,
-  "topLayerPixels": 10798,
-  "size": [
-   511,
-   256
-  ],
-  "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788031",
@@ -809,6 +869,8 @@
   "nets": 17,
   "multiPadNets": 14,
   "loneNonGroundPads": 3,
+  "hintedPads": 2,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
   "bottomLayerPixels": 3035,
   "topLayerPixels": 10556,
@@ -817,8 +879,7 @@
    271
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186786574",
@@ -836,6 +897,8 @@
   "nets": 27,
   "multiPadNets": 13,
   "loneNonGroundPads": 14,
+  "hintedPads": 2,
+  "unconnectedPads": 11,
   "bodyTunnels": 0,
   "bottomLayerPixels": 988,
   "topLayerPixels": 16391,
@@ -844,8 +907,7 @@
    294
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788471",
@@ -863,16 +925,17 @@
   "nets": 17,
   "multiPadNets": 13,
   "loneNonGroundPads": 4,
+  "hintedPads": 2,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2236,
-  "topLayerPixels": 14774,
+  "bottomLayerPixels": 2219,
+  "topLayerPixels": 14775,
   "size": [
    700,
    369
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788542",
@@ -890,16 +953,17 @@
   "nets": 17,
   "multiPadNets": 13,
   "loneNonGroundPads": 4,
+  "hintedPads": 1,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2357,
-  "topLayerPixels": 15148,
+  "bottomLayerPixels": 2321,
+  "topLayerPixels": 15151,
   "size": [
    700,
    370
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186786840",
@@ -917,16 +981,17 @@
   "nets": 24,
   "multiPadNets": 15,
   "loneNonGroundPads": 9,
+  "hintedPads": 2,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 8741,
-  "topLayerPixels": 22803,
+  "bottomLayerPixels": 8708,
+  "topLayerPixels": 22841,
   "size": [
    600,
    554
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788016",
@@ -944,16 +1009,17 @@
   "nets": 26,
   "multiPadNets": 18,
   "loneNonGroundPads": 8,
+  "hintedPads": 3,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 496,
+  "bottomLayerPixels": 495,
   "topLayerPixels": 4494,
   "size": [
    350,
    283
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787676",
@@ -971,6 +1037,8 @@
   "nets": 17,
   "multiPadNets": 14,
   "loneNonGroundPads": 3,
+  "hintedPads": 3,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 2038,
   "topLayerPixels": 12678,
@@ -979,8 +1047,7 @@
    328
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186788345",
@@ -998,16 +1065,17 @@
   "nets": 33,
   "multiPadNets": 16,
   "loneNonGroundPads": 16,
+  "hintedPads": 0,
+  "unconnectedPads": 16,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2592,
+  "bottomLayerPixels": 2589,
   "topLayerPixels": 16082,
   "size": [
    700,
    376
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788513",
@@ -1025,8 +1093,10 @@
   "nets": 33,
   "multiPadNets": 16,
   "loneNonGroundPads": 16,
+  "hintedPads": 0,
+  "unconnectedPads": 16,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2592,
+  "bottomLayerPixels": 2589,
   "topLayerPixels": 16082,
   "size": [
    700,
@@ -1051,6 +1121,8 @@
   "nets": 20,
   "multiPadNets": 15,
   "loneNonGroundPads": 5,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 3930,
   "topLayerPixels": 13151,
@@ -1059,8 +1131,7 @@
    301
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788519",
@@ -1078,6 +1149,8 @@
   "nets": 22,
   "multiPadNets": 17,
   "loneNonGroundPads": 5,
+  "hintedPads": 1,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 24667,
@@ -1086,8 +1159,7 @@
    497
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788521",
@@ -1105,6 +1177,8 @@
   "nets": 24,
   "multiPadNets": 17,
   "loneNonGroundPads": 7,
+  "hintedPads": 2,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 22569,
@@ -1113,8 +1187,7 @@
    510
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788529",
@@ -1132,6 +1205,8 @@
   "nets": 22,
   "multiPadNets": 17,
   "loneNonGroundPads": 5,
+  "hintedPads": 1,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 24667,
@@ -1158,6 +1233,8 @@
   "nets": 24,
   "multiPadNets": 17,
   "loneNonGroundPads": 7,
+  "hintedPads": 2,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 22569,
@@ -1184,16 +1261,17 @@
   "nets": 17,
   "multiPadNets": 15,
   "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2590,
+  "bottomLayerPixels": 2564,
   "topLayerPixels": 15134,
   "size": [
    541,
    328
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788657",
@@ -1211,6 +1289,8 @@
   "nets": 28,
   "multiPadNets": 17,
   "loneNonGroundPads": 11,
+  "hintedPads": 2,
+  "unconnectedPads": 9,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 27270,
@@ -1219,8 +1299,7 @@
    531
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788116",
@@ -1238,16 +1317,45 @@
   "nets": 25,
   "multiPadNets": 18,
   "loneNonGroundPads": 7,
+  "hintedPads": 2,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 5890,
-  "topLayerPixels": 13940,
+  "bottomLayerPixels": 5864,
+  "topLayerPixels": 13948,
   "size": [
    600,
    295
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186786839",
+  "name": "@ NEW FAT 부스터 Parts Pack",
+  "type": "buffer-boost",
+  "about": "LF442CN단종으로 TL072로 패킹됩니다. 가격은 반영되어 있습니다. 1590A케이스에 페달로 만드실때는 3파이LED를 사용해야 합니다 보호",
+  "board": 0,
+  "image": "img_02.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_03.jpg"
+  ],
+  "pads": 66,
+  "groundPads": 9,
+  "nets": 25,
+  "multiPadNets": 16,
+  "loneNonGroundPads": 9,
+  "hintedPads": 3,
+  "unconnectedPads": 3,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8056,
+  "topLayerPixels": 35530,
+  "size": [
+   600,
+   553
+  ],
+  "twoLayer": true,
+  "tier": "B"
  },
  {
   "goodsNo": "186788666",
@@ -1265,6 +1373,8 @@
   "nets": 20,
   "multiPadNets": 17,
   "loneNonGroundPads": 3,
+  "hintedPads": 0,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 46519,
@@ -1273,8 +1383,7 @@
    750
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788064",
@@ -1292,16 +1401,17 @@
   "nets": 19,
   "multiPadNets": 17,
   "loneNonGroundPads": 2,
+  "hintedPads": 1,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2850,
-  "topLayerPixels": 21598,
+  "bottomLayerPixels": 2822,
+  "topLayerPixels": 21602,
   "size": [
    600,
    436
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788346",
@@ -1319,16 +1429,17 @@
   "nets": 18,
   "multiPadNets": 17,
   "loneNonGroundPads": 1,
+  "hintedPads": 0,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1567,
-  "topLayerPixels": 19625,
+  "bottomLayerPixels": 1556,
+  "topLayerPixels": 19627,
   "size": [
    700,
    376
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788512",
@@ -1346,9 +1457,11 @@
   "nets": 18,
   "multiPadNets": 17,
   "loneNonGroundPads": 1,
+  "hintedPads": 0,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1567,
-  "topLayerPixels": 19625,
+  "bottomLayerPixels": 1556,
+  "topLayerPixels": 19627,
   "size": [
    700,
    376
@@ -1372,6 +1485,8 @@
   "nets": 22,
   "multiPadNets": 17,
   "loneNonGroundPads": 5,
+  "hintedPads": 1,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 35811,
@@ -1380,8 +1495,7 @@
    516
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788539",
@@ -1399,6 +1513,8 @@
   "nets": 18,
   "multiPadNets": 18,
   "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 22980,
@@ -1407,8 +1523,7 @@
    427
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788638",
@@ -1426,16 +1541,17 @@
   "nets": 26,
   "multiPadNets": 20,
   "loneNonGroundPads": 6,
+  "hintedPads": 0,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 18103,
-  "topLayerPixels": 45053,
+  "bottomLayerPixels": 18078,
+  "topLayerPixels": 45060,
   "size": [
    1000,
    809
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787650",
@@ -1454,6 +1570,8 @@
   "nets": 16,
   "multiPadNets": 14,
   "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 1559,
   "topLayerPixels": 16887,
@@ -1462,8 +1580,36 @@
    436
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787969",
+  "name": "@ Octavia Parts pack",
+  "type": "fuzz",
+  "about": "Tychobrahe Octavia 옥타퍼즈입니다.. 1590B 케이스에 딱 맞게 크기를 줄여서 입고 되었습니다. 카본컴퍼지션 저항과 42TM02",
+  "board": 0,
+  "image": "img_03.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_00.jpg",
+   "img_04.jpg"
+  ],
+  "pads": 69,
+  "groundPads": 8,
+  "nets": 30,
+  "multiPadNets": 15,
+  "loneNonGroundPads": 15,
+  "hintedPads": 2,
+  "unconnectedPads": 11,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 1101,
+  "topLayerPixels": 12095,
+  "size": [
+   600,
+   263
+  ],
+  "twoLayer": true,
+  "tier": "B"
  },
  {
   "goodsNo": "186788047",
@@ -1481,16 +1627,17 @@
   "nets": 21,
   "multiPadNets": 14,
   "loneNonGroundPads": 7,
+  "hintedPads": 2,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3143,
-  "topLayerPixels": 32742,
+  "bottomLayerPixels": 3140,
+  "topLayerPixels": 32744,
   "size": [
    700,
    574
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788517",
@@ -1508,6 +1655,8 @@
   "nets": 29,
   "multiPadNets": 18,
   "loneNonGroundPads": 11,
+  "hintedPads": 1,
+  "unconnectedPads": 9,
   "bodyTunnels": 0,
   "bottomLayerPixels": 607,
   "topLayerPixels": 23186,
@@ -1516,8 +1665,7 @@
    510
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788534",
@@ -1535,6 +1683,8 @@
   "nets": 29,
   "multiPadNets": 18,
   "loneNonGroundPads": 11,
+  "hintedPads": 1,
+  "unconnectedPads": 9,
   "bodyTunnels": 0,
   "bottomLayerPixels": 607,
   "topLayerPixels": 23186,
@@ -1561,6 +1711,8 @@
   "nets": 31,
   "multiPadNets": 19,
   "loneNonGroundPads": 11,
+  "hintedPads": 1,
+  "unconnectedPads": 10,
   "bodyTunnels": 0,
   "bottomLayerPixels": 2313,
   "topLayerPixels": 24699,
@@ -1569,8 +1721,7 @@
    465
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788334",
@@ -1588,16 +1739,17 @@
   "nets": 35,
   "multiPadNets": 19,
   "loneNonGroundPads": 16,
+  "hintedPads": 2,
+  "unconnectedPads": 14,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4497,
+  "bottomLayerPixels": 4499,
   "topLayerPixels": 18258,
   "size": [
    700,
    401
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788515",
@@ -1615,16 +1767,17 @@
   "nets": 20,
   "multiPadNets": 18,
   "loneNonGroundPads": 2,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2665,
-  "topLayerPixels": 20012,
+  "bottomLayerPixels": 2645,
+  "topLayerPixels": 20013,
   "size": [
    700,
    376
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787633",
@@ -1639,19 +1792,20 @@
   ],
   "pads": 73,
   "groundPads": 15,
-  "nets": 21,
+  "nets": 20,
   "multiPadNets": 17,
-  "loneNonGroundPads": 4,
+  "loneNonGroundPads": 3,
+  "hintedPads": 3,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2841,
+  "bottomLayerPixels": 2786,
   "topLayerPixels": 21072,
   "size": [
    496,
    365
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186787512",
@@ -1666,19 +1820,20 @@
   ],
   "pads": 75,
   "groundPads": 11,
-  "nets": 28,
-  "multiPadNets": 19,
-  "loneNonGroundPads": 9,
+  "nets": 22,
+  "multiPadNets": 21,
+  "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6346,
-  "topLayerPixels": 24879,
+  "bottomLayerPixels": 6144,
+  "topLayerPixels": 24921,
   "size": [
    511,
    414
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788063",
@@ -1696,16 +1851,17 @@
   "nets": 23,
   "multiPadNets": 20,
   "loneNonGroundPads": 3,
+  "hintedPads": 0,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3771,
-  "topLayerPixels": 23786,
+  "bottomLayerPixels": 3748,
+  "topLayerPixels": 23790,
   "size": [
    600,
    436
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788540",
@@ -1723,6 +1879,8 @@
   "nets": 31,
   "multiPadNets": 22,
   "loneNonGroundPads": 9,
+  "hintedPads": 7,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
   "bottomLayerPixels": 26633,
   "topLayerPixels": 77194,
@@ -1731,8 +1889,7 @@
    1030
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788014",
@@ -1750,6 +1907,8 @@
   "nets": 23,
   "multiPadNets": 18,
   "loneNonGroundPads": 5,
+  "hintedPads": 3,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 21103,
@@ -1758,8 +1917,7 @@
    436
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186788307",
@@ -1777,16 +1935,17 @@
   "nets": 31,
   "multiPadNets": 21,
   "loneNonGroundPads": 10,
+  "hintedPads": 1,
+  "unconnectedPads": 9,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1912,
-  "topLayerPixels": 27540,
+  "bottomLayerPixels": 1909,
+  "topLayerPixels": 27542,
   "size": [
    700,
    477
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787673",
@@ -1804,16 +1963,17 @@
   "nets": 34,
   "multiPadNets": 25,
   "loneNonGroundPads": 9,
+  "hintedPads": 2,
+  "unconnectedPads": 6,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2904,
+  "bottomLayerPixels": 2899,
   "topLayerPixels": 25539,
   "size": [
    700,
    395
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788357",
@@ -1831,16 +1991,17 @@
   "nets": 32,
   "multiPadNets": 26,
   "loneNonGroundPads": 6,
+  "hintedPads": 4,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6867,
-  "topLayerPixels": 23008,
+  "bottomLayerPixels": 6764,
+  "topLayerPixels": 23016,
   "size": [
    700,
    509
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787674",
@@ -1858,6 +2019,8 @@
   "nets": 25,
   "multiPadNets": 19,
   "loneNonGroundPads": 6,
+  "hintedPads": 6,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 946,
   "topLayerPixels": 21748,
@@ -1866,8 +2029,7 @@
    350
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 6
+  "tier": "B"
  },
  {
   "goodsNo": "186788129",
@@ -1885,16 +2047,17 @@
   "nets": 31,
   "multiPadNets": 22,
   "loneNonGroundPads": 9,
+  "hintedPads": 2,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 21074,
-  "topLayerPixels": 8593,
+  "bottomLayerPixels": 20754,
+  "topLayerPixels": 8605,
   "size": [
    600,
    437
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788029",
@@ -1912,6 +2075,8 @@
   "nets": 27,
   "multiPadNets": 19,
   "loneNonGroundPads": 8,
+  "hintedPads": 6,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 3139,
   "topLayerPixels": 22908,
@@ -1920,8 +2085,7 @@
    383
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788030",
@@ -1939,6 +2103,8 @@
   "nets": 27,
   "multiPadNets": 19,
   "loneNonGroundPads": 8,
+  "hintedPads": 6,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 3139,
   "topLayerPixels": 22908,
@@ -1965,16 +2131,17 @@
   "nets": 29,
   "multiPadNets": 23,
   "loneNonGroundPads": 6,
+  "hintedPads": 4,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7242,
-  "topLayerPixels": 33457,
+  "bottomLayerPixels": 7214,
+  "topLayerPixels": 33460,
   "size": [
    800,
    640
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788520",
@@ -1992,16 +2159,17 @@
   "nets": 30,
   "multiPadNets": 20,
   "loneNonGroundPads": 10,
+  "hintedPads": 3,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 472,
+  "bottomLayerPixels": 464,
   "topLayerPixels": 41276,
   "size": [
    700,
    637
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788533",
@@ -2019,8 +2187,10 @@
   "nets": 30,
   "multiPadNets": 20,
   "loneNonGroundPads": 10,
+  "hintedPads": 3,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 472,
+  "bottomLayerPixels": 464,
   "topLayerPixels": 41276,
   "size": [
    700,
@@ -2045,16 +2215,17 @@
   "nets": 25,
   "multiPadNets": 22,
   "loneNonGroundPads": 3,
+  "hintedPads": 2,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2714,
+  "bottomLayerPixels": 2712,
   "topLayerPixels": 34228,
   "size": [
    800,
    625
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186787631",
@@ -2069,19 +2240,20 @@
   ],
   "pads": 83,
   "groundPads": 18,
-  "nets": 22,
+  "nets": 21,
   "multiPadNets": 21,
-  "loneNonGroundPads": 1,
+  "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3217,
+  "bottomLayerPixels": 3164,
   "topLayerPixels": 24937,
   "size": [
    496,
    398
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788066",
@@ -2096,19 +2268,20 @@
   ],
   "pads": 83,
   "groundPads": 10,
-  "nets": 26,
-  "multiPadNets": 26,
+  "nets": 25,
+  "multiPadNets": 25,
   "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1889,
+  "bottomLayerPixels": 1875,
   "topLayerPixels": 23901,
   "size": [
    600,
    391
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788506",
@@ -2126,6 +2299,8 @@
   "nets": 25,
   "multiPadNets": 23,
   "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 7756,
   "topLayerPixels": 22339,
@@ -2134,8 +2309,7 @@
    472
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186787541",
@@ -2153,16 +2327,17 @@
   "nets": 24,
   "multiPadNets": 23,
   "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4584,
+  "bottomLayerPixels": 4554,
   "topLayerPixels": 22649,
   "size": [
    556,
    391
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787680",
@@ -2177,19 +2352,20 @@
   ],
   "pads": 86,
   "groundPads": 20,
-  "nets": 33,
-  "multiPadNets": 20,
-  "loneNonGroundPads": 13,
+  "nets": 31,
+  "multiPadNets": 22,
+  "loneNonGroundPads": 9,
+  "hintedPads": 3,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 5758,
-  "topLayerPixels": 19919,
+  "bottomLayerPixels": 5690,
+  "topLayerPixels": 19925,
   "size": [
    541,
    409
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186787681",
@@ -2204,19 +2380,20 @@
   ],
   "pads": 86,
   "groundPads": 15,
-  "nets": 23,
+  "nets": 22,
   "multiPadNets": 20,
-  "loneNonGroundPads": 3,
+  "loneNonGroundPads": 2,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3216,
-  "topLayerPixels": 20093,
+  "bottomLayerPixels": 3114,
+  "topLayerPixels": 20096,
   "size": [
    541,
    409
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788108",
@@ -2234,16 +2411,17 @@
   "nets": 29,
   "multiPadNets": 21,
   "loneNonGroundPads": 8,
+  "hintedPads": 1,
+  "unconnectedPads": 7,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1258,
-  "topLayerPixels": 30420,
+  "bottomLayerPixels": 1250,
+  "topLayerPixels": 30421,
   "size": [
    600,
    439
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788251",
@@ -2261,9 +2439,11 @@
   "nets": 29,
   "multiPadNets": 21,
   "loneNonGroundPads": 8,
+  "hintedPads": 1,
+  "unconnectedPads": 7,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1258,
-  "topLayerPixels": 30420,
+  "bottomLayerPixels": 1250,
+  "topLayerPixels": 30421,
   "size": [
    600,
    439
@@ -2287,6 +2467,8 @@
   "nets": 28,
   "multiPadNets": 22,
   "loneNonGroundPads": 6,
+  "hintedPads": 6,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 3953,
   "topLayerPixels": 38123,
@@ -2295,8 +2477,7 @@
    533
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186788082",
@@ -2314,6 +2495,8 @@
   "nets": 25,
   "multiPadNets": 25,
   "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 23076,
@@ -2322,8 +2505,7 @@
    399
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788310",
@@ -2341,16 +2523,17 @@
   "nets": 40,
   "multiPadNets": 23,
   "loneNonGroundPads": 16,
+  "hintedPads": 4,
+  "unconnectedPads": 12,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2560,
-  "topLayerPixels": 26633,
+  "bottomLayerPixels": 2512,
+  "topLayerPixels": 26641,
   "size": [
    1000,
    361
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788522",
@@ -2368,6 +2551,8 @@
   "nets": 26,
   "multiPadNets": 22,
   "loneNonGroundPads": 4,
+  "hintedPads": 0,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 37204,
@@ -2376,8 +2561,7 @@
    637
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788593",
@@ -2395,16 +2579,17 @@
   "nets": 36,
   "multiPadNets": 24,
   "loneNonGroundPads": 12,
+  "hintedPads": 6,
+  "unconnectedPads": 6,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9538,
-  "topLayerPixels": 37725,
+  "bottomLayerPixels": 9455,
+  "topLayerPixels": 37731,
   "size": [
    800,
    662
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186787490",
@@ -2419,19 +2604,20 @@
   ],
   "pads": 88,
   "groundPads": 15,
-  "nets": 28,
-  "multiPadNets": 26,
-  "loneNonGroundPads": 2,
+  "nets": 26,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3851,
-  "topLayerPixels": 21535,
+  "bottomLayerPixels": 3759,
+  "topLayerPixels": 21554,
   "size": [
    484,
    471
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788149",
@@ -2449,16 +2635,17 @@
   "nets": 28,
   "multiPadNets": 23,
   "loneNonGroundPads": 5,
+  "hintedPads": 0,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 205,
-  "topLayerPixels": 18024,
+  "bottomLayerPixels": 193,
+  "topLayerPixels": 18036,
   "size": [
    600,
    355
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788518",
@@ -2476,16 +2663,17 @@
   "nets": 35,
   "multiPadNets": 27,
   "loneNonGroundPads": 8,
+  "hintedPads": 2,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7299,
+  "bottomLayerPixels": 7243,
   "topLayerPixels": 35637,
   "size": [
    700,
    637
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787639",
@@ -2500,19 +2688,20 @@
   ],
   "pads": 90,
   "groundPads": 12,
-  "nets": 26,
+  "nets": 24,
   "multiPadNets": 22,
-  "loneNonGroundPads": 4,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4033,
+  "bottomLayerPixels": 3976,
   "topLayerPixels": 23585,
   "size": [
    526,
    383
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788106",
@@ -2530,16 +2719,17 @@
   "nets": 33,
   "multiPadNets": 24,
   "loneNonGroundPads": 9,
+  "hintedPads": 2,
+  "unconnectedPads": 7,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4378,
-  "topLayerPixels": 26625,
+  "bottomLayerPixels": 4364,
+  "topLayerPixels": 26626,
   "size": [
    600,
    437
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788569",
@@ -2557,16 +2747,17 @@
   "nets": 36,
   "multiPadNets": 26,
   "loneNonGroundPads": 10,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6663,
-  "topLayerPixels": 37860,
+  "bottomLayerPixels": 6525,
+  "topLayerPixels": 37864,
   "size": [
    700,
    560
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788105",
@@ -2584,16 +2775,17 @@
   "nets": 33,
   "multiPadNets": 25,
   "loneNonGroundPads": 8,
+  "hintedPads": 2,
+  "unconnectedPads": 6,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1077,
+  "bottomLayerPixels": 1076,
   "topLayerPixels": 21682,
   "size": [
    600,
    404
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788145",
@@ -2611,16 +2803,17 @@
   "nets": 33,
   "multiPadNets": 25,
   "loneNonGroundPads": 8,
+  "hintedPads": 7,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1802,
-  "topLayerPixels": 15967,
+  "bottomLayerPixels": 1742,
+  "topLayerPixels": 15981,
   "size": [
    600,
    400
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186788309",
@@ -2638,16 +2831,17 @@
   "nets": 48,
   "multiPadNets": 26,
   "loneNonGroundPads": 22,
+  "hintedPads": 4,
+  "unconnectedPads": 16,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 5181,
+  "bottomLayerPixels": 5158,
   "topLayerPixels": 23714,
   "size": [
    1000,
    361
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787554",
@@ -2662,19 +2856,20 @@
   ],
   "pads": 93,
   "groundPads": 14,
-  "nets": 26,
-  "multiPadNets": 16,
-  "loneNonGroundPads": 10,
+  "nets": 18,
+  "multiPadNets": 18,
+  "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4386,
-  "topLayerPixels": 20287,
+  "bottomLayerPixels": 4044,
+  "topLayerPixels": 20308,
   "size": [
    436,
    406
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788110",
@@ -2692,16 +2887,17 @@
   "nets": 28,
   "multiPadNets": 23,
   "loneNonGroundPads": 5,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 5013,
-  "topLayerPixels": 22800,
+  "bottomLayerPixels": 5008,
+  "topLayerPixels": 22801,
   "size": [
    600,
    399
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788308",
@@ -2719,6 +2915,8 @@
   "nets": 45,
   "multiPadNets": 25,
   "loneNonGroundPads": 20,
+  "hintedPads": 1,
+  "unconnectedPads": 19,
   "bodyTunnels": 0,
   "bottomLayerPixels": 3483,
   "topLayerPixels": 33626,
@@ -2727,8 +2925,7 @@
    630
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787677",
@@ -2743,19 +2940,20 @@
   ],
   "pads": 95,
   "groundPads": 15,
-  "nets": 28,
-  "multiPadNets": 25,
-  "loneNonGroundPads": 3,
+  "nets": 25,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4660,
-  "topLayerPixels": 21586,
+  "bottomLayerPixels": 4078,
+  "topLayerPixels": 21615,
   "size": [
    541,
    410
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787678",
@@ -2770,12 +2968,14 @@
   ],
   "pads": 95,
   "groundPads": 15,
-  "nets": 28,
-  "multiPadNets": 25,
-  "loneNonGroundPads": 3,
+  "nets": 25,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4660,
-  "topLayerPixels": 21586,
+  "bottomLayerPixels": 4078,
+  "topLayerPixels": 21615,
   "size": [
    541,
    410
@@ -2799,16 +2999,17 @@
   "nets": 43,
   "multiPadNets": 19,
   "loneNonGroundPads": 24,
+  "hintedPads": 22,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4590,
-  "topLayerPixels": 34958,
+  "bottomLayerPixels": 4560,
+  "topLayerPixels": 34984,
   "size": [
    511,
    533
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 19
+  "tier": "B"
  },
  {
   "goodsNo": "186788511",
@@ -2826,16 +3027,17 @@
   "nets": 31,
   "multiPadNets": 27,
   "loneNonGroundPads": 4,
+  "hintedPads": 0,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7758,
-  "topLayerPixels": 20025,
+  "bottomLayerPixels": 7700,
+  "topLayerPixels": 20034,
   "size": [
    700,
    472
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788589",
@@ -2853,16 +3055,17 @@
   "nets": 28,
   "multiPadNets": 24,
   "loneNonGroundPads": 4,
+  "hintedPads": 2,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4382,
-  "topLayerPixels": 49162,
+  "bottomLayerPixels": 4351,
+  "topLayerPixels": 49168,
   "size": [
    800,
    640
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186787948",
@@ -2877,19 +3080,20 @@
   ],
   "pads": 97,
   "groundPads": 15,
-  "nets": 27,
-  "multiPadNets": 21,
-  "loneNonGroundPads": 6,
+  "nets": 23,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3728,
-  "topLayerPixels": 26535,
+  "bottomLayerPixels": 3102,
+  "topLayerPixels": 26539,
   "size": [
    541,
    421
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788044",
@@ -2907,16 +3111,17 @@
   "nets": 30,
   "multiPadNets": 28,
   "loneNonGroundPads": 2,
+  "hintedPads": 0,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4712,
-  "topLayerPixels": 31033,
+  "bottomLayerPixels": 4693,
+  "topLayerPixels": 31037,
   "size": [
    700,
    547
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788159",
@@ -2934,16 +3139,17 @@
   "nets": 37,
   "multiPadNets": 25,
   "loneNonGroundPads": 12,
+  "hintedPads": 6,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 8615,
-  "topLayerPixels": 25036,
+  "bottomLayerPixels": 8503,
+  "topLayerPixels": 25145,
   "size": [
    600,
    426
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787532",
@@ -2961,6 +3167,8 @@
   "nets": 27,
   "multiPadNets": 23,
   "loneNonGroundPads": 4,
+  "hintedPads": 4,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 2462,
   "topLayerPixels": 24605,
@@ -2969,8 +3177,7 @@
    436
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186788016",
@@ -2988,6 +3195,8 @@
   "nets": 37,
   "multiPadNets": 27,
   "loneNonGroundPads": 10,
+  "hintedPads": 7,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
   "bottomLayerPixels": 5623,
   "topLayerPixels": 26948,
@@ -2996,8 +3205,7 @@
    458
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788572",
@@ -3015,16 +3223,17 @@
   "nets": 30,
   "multiPadNets": 25,
   "loneNonGroundPads": 5,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7833,
-  "topLayerPixels": 42004,
+  "bottomLayerPixels": 7696,
+  "topLayerPixels": 42016,
   "size": [
    800,
    538
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186787473",
@@ -3042,16 +3251,17 @@
   "nets": 43,
   "multiPadNets": 29,
   "loneNonGroundPads": 14,
+  "hintedPads": 1,
+  "unconnectedPads": 11,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4909,
-  "topLayerPixels": 34434,
+  "bottomLayerPixels": 4803,
+  "topLayerPixels": 34448,
   "size": [
    700,
    503
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787536",
@@ -3069,6 +3279,8 @@
   "nets": 32,
   "multiPadNets": 28,
   "loneNonGroundPads": 4,
+  "hintedPads": 4,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 5232,
   "topLayerPixels": 25845,
@@ -3077,8 +3289,7 @@
    443
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186787642",
@@ -3093,19 +3304,20 @@
   ],
   "pads": 99,
   "groundPads": 24,
-  "nets": 31,
-  "multiPadNets": 26,
-  "loneNonGroundPads": 5,
+  "nets": 29,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3502,
-  "topLayerPixels": 19638,
+  "bottomLayerPixels": 3405,
+  "topLayerPixels": 19664,
   "size": [
    600,
    493
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787643",
@@ -3120,12 +3332,14 @@
   ],
   "pads": 99,
   "groundPads": 24,
-  "nets": 31,
-  "multiPadNets": 26,
-  "loneNonGroundPads": 5,
+  "nets": 29,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3502,
-  "topLayerPixels": 19638,
+  "bottomLayerPixels": 3405,
+  "topLayerPixels": 19664,
   "size": [
    600,
    493
@@ -3146,12 +3360,14 @@
   ],
   "pads": 99,
   "groundPads": 24,
-  "nets": 31,
-  "multiPadNets": 26,
-  "loneNonGroundPads": 5,
+  "nets": 29,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3502,
-  "topLayerPixels": 19638,
+  "bottomLayerPixels": 3405,
+  "topLayerPixels": 19664,
   "size": [
    600,
    493
@@ -3172,12 +3388,14 @@
   ],
   "pads": 99,
   "groundPads": 24,
-  "nets": 31,
-  "multiPadNets": 26,
-  "loneNonGroundPads": 5,
+  "nets": 29,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3502,
-  "topLayerPixels": 19638,
+  "bottomLayerPixels": 3405,
+  "topLayerPixels": 19664,
   "size": [
    600,
    493
@@ -3198,19 +3416,20 @@
   ],
   "pads": 99,
   "groundPads": 24,
-  "nets": 31,
-  "multiPadNets": 26,
-  "loneNonGroundPads": 5,
+  "nets": 29,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3502,
-  "topLayerPixels": 19638,
+  "bottomLayerPixels": 3405,
+  "topLayerPixels": 19664,
   "size": [
    600,
    493
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787534",
@@ -3225,19 +3444,48 @@
   ],
   "pads": 100,
   "groundPads": 12,
-  "nets": 37,
+  "nets": 34,
   "multiPadNets": 27,
-  "loneNonGroundPads": 10,
+  "loneNonGroundPads": 7,
+  "hintedPads": 7,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3824,
-  "topLayerPixels": 35464,
+  "bottomLayerPixels": 3708,
+  "topLayerPixels": 35474,
   "size": [
    542,
    504
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 7
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788446",
+  "name": "@ OCB Parts pack",
+  "type": "fuzz",
+  "about": "CLEAN OCTAVE BLEND 라는 이름의 옥타 퍼즈페달입니다. 다양한 톤에 대응 하는 현재적으로 해석된 옥타 퍼즈라고합니다",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 100,
+  "groundPads": 19,
+  "nets": 29,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 715,
+  "topLayerPixels": 45798,
+  "size": [
+   700,
+   548
+  ],
+  "twoLayer": false,
+  "tier": "B"
  },
  {
   "goodsNo": "186788510",
@@ -3255,16 +3503,17 @@
   "nets": 31,
   "multiPadNets": 27,
   "loneNonGroundPads": 4,
+  "hintedPads": 0,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7758,
-  "topLayerPixels": 20691,
+  "bottomLayerPixels": 7700,
+  "topLayerPixels": 20700,
   "size": [
    700,
    472
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787637",
@@ -3279,19 +3528,20 @@
   ],
   "pads": 101,
   "groundPads": 15,
-  "nets": 28,
+  "nets": 26,
   "multiPadNets": 19,
-  "loneNonGroundPads": 9,
+  "loneNonGroundPads": 7,
+  "hintedPads": 0,
+  "unconnectedPads": 7,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2325,
-  "topLayerPixels": 27030,
+  "bottomLayerPixels": 2230,
+  "topLayerPixels": 27022,
   "size": [
    526,
    413
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788151",
@@ -3309,16 +3559,17 @@
   "nets": 37,
   "multiPadNets": 27,
   "loneNonGroundPads": 10,
+  "hintedPads": 4,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2934,
-  "topLayerPixels": 27284,
+  "bottomLayerPixels": 2916,
+  "topLayerPixels": 27305,
   "size": [
    600,
    448
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788316",
@@ -3336,16 +3587,17 @@
   "nets": 47,
   "multiPadNets": 28,
   "loneNonGroundPads": 19,
+  "hintedPads": 1,
+  "unconnectedPads": 18,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1278,
-  "topLayerPixels": 44971,
+  "bottomLayerPixels": 1249,
+  "topLayerPixels": 44975,
   "size": [
    700,
    630
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788573",
@@ -3363,16 +3615,17 @@
   "nets": 29,
   "multiPadNets": 29,
   "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7691,
+  "bottomLayerPixels": 7684,
   "topLayerPixels": 50847,
   "size": [
    800,
    647
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788104",
@@ -3390,16 +3643,17 @@
   "nets": 35,
   "multiPadNets": 28,
   "loneNonGroundPads": 7,
+  "hintedPads": 2,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4991,
-  "topLayerPixels": 26432,
+  "bottomLayerPixels": 4970,
+  "topLayerPixels": 26434,
   "size": [
    600,
    469
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186786078",
@@ -3412,19 +3666,20 @@
   "bomImages": [],
   "pads": 106,
   "groundPads": 12,
-  "nets": 37,
+  "nets": 32,
   "multiPadNets": 28,
-  "loneNonGroundPads": 9,
+  "loneNonGroundPads": 4,
+  "hintedPads": 1,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3448,
-  "topLayerPixels": 27796,
+  "bottomLayerPixels": 3280,
+  "topLayerPixels": 27817,
   "size": [
    640,
    397
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787949",
@@ -3439,19 +3694,20 @@
   ],
   "pads": 106,
   "groundPads": 22,
-  "nets": 29,
-  "multiPadNets": 26,
-  "loneNonGroundPads": 3,
+  "nets": 27,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1108,
-  "topLayerPixels": 27697,
+  "bottomLayerPixels": 1009,
+  "topLayerPixels": 27704,
   "size": [
    481,
    451
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788665",
@@ -3469,16 +3725,17 @@
   "nets": 41,
   "multiPadNets": 27,
   "loneNonGroundPads": 14,
+  "hintedPads": 2,
+  "unconnectedPads": 9,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3894,
-  "topLayerPixels": 42280,
+  "bottomLayerPixels": 3843,
+  "topLayerPixels": 42288,
   "size": [
    800,
    634
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787553",
@@ -3493,19 +3750,20 @@
   ],
   "pads": 107,
   "groundPads": 20,
-  "nets": 39,
-  "multiPadNets": 27,
-  "loneNonGroundPads": 12,
+  "nets": 30,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 5,
+  "hintedPads": 3,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9156,
-  "topLayerPixels": 40031,
+  "bottomLayerPixels": 8674,
+  "topLayerPixels": 40067,
   "size": [
    556,
    534
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186788013",
@@ -3523,6 +3781,8 @@
   "nets": 34,
   "multiPadNets": 32,
   "loneNonGroundPads": 2,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 4395,
   "topLayerPixels": 38364,
@@ -3531,8 +3791,7 @@
    533
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788032",
@@ -3550,6 +3809,8 @@
   "nets": 32,
   "multiPadNets": 27,
   "loneNonGroundPads": 5,
+  "hintedPads": 4,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 6114,
   "topLayerPixels": 24114,
@@ -3558,8 +3819,7 @@
    526
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788335",
@@ -3577,16 +3837,17 @@
   "nets": 52,
   "multiPadNets": 27,
   "loneNonGroundPads": 25,
+  "hintedPads": 4,
+  "unconnectedPads": 16,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 15039,
+  "bottomLayerPixels": 14978,
   "topLayerPixels": 33158,
   "size": [
    700,
    656
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787636",
@@ -3601,19 +3862,20 @@
   ],
   "pads": 108,
   "groundPads": 16,
-  "nets": 32,
-  "multiPadNets": 27,
-  "loneNonGroundPads": 5,
+  "nets": 28,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4929,
-  "topLayerPixels": 24168,
+  "bottomLayerPixels": 4838,
+  "topLayerPixels": 24178,
   "size": [
    527,
    413
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788015",
@@ -3631,6 +3893,8 @@
   "nets": 32,
   "multiPadNets": 28,
   "loneNonGroundPads": 4,
+  "hintedPads": 4,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 2566,
   "topLayerPixels": 29025,
@@ -3639,8 +3903,7 @@
    458
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788146",
@@ -3658,16 +3921,17 @@
   "nets": 38,
   "multiPadNets": 25,
   "loneNonGroundPads": 13,
+  "hintedPads": 10,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1595,
-  "topLayerPixels": 23228,
+  "bottomLayerPixels": 1591,
+  "topLayerPixels": 23236,
   "size": [
    600,
    474
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 9
+  "tier": "B"
  },
  {
   "goodsNo": "186788150",
@@ -3685,16 +3949,17 @@
   "nets": 44,
   "multiPadNets": 28,
   "loneNonGroundPads": 16,
+  "hintedPads": 6,
+  "unconnectedPads": 8,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3561,
-  "topLayerPixels": 26611,
+  "bottomLayerPixels": 3543,
+  "topLayerPixels": 26627,
   "size": [
    600,
    606
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186788138",
@@ -3712,16 +3977,17 @@
   "nets": 34,
   "multiPadNets": 28,
   "loneNonGroundPads": 6,
+  "hintedPads": 4,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4018,
-  "topLayerPixels": 28548,
+  "bottomLayerPixels": 3980,
+  "topLayerPixels": 28576,
   "size": [
    600,
    525
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186787535",
@@ -3736,19 +4002,20 @@
   ],
   "pads": 110,
   "groundPads": 15,
-  "nets": 36,
-  "multiPadNets": 28,
-  "loneNonGroundPads": 8,
+  "nets": 31,
+  "multiPadNets": 29,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 8990,
-  "topLayerPixels": 23062,
+  "bottomLayerPixels": 8846,
+  "topLayerPixels": 23081,
   "size": [
    572,
    444
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186788033",
@@ -3766,6 +4033,8 @@
   "nets": 35,
   "multiPadNets": 30,
   "loneNonGroundPads": 5,
+  "hintedPads": 3,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
   "bottomLayerPixels": 4743,
   "topLayerPixels": 34023,
@@ -3774,8 +4043,7 @@
    556
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186788577",
@@ -3793,16 +4061,17 @@
   "nets": 43,
   "multiPadNets": 35,
   "loneNonGroundPads": 8,
+  "hintedPads": 6,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 14550,
-  "topLayerPixels": 55731,
+  "bottomLayerPixels": 14414,
+  "topLayerPixels": 55740,
   "size": [
    800,
    641
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787546",
@@ -3817,19 +4086,20 @@
   ],
   "pads": 111,
   "groundPads": 19,
-  "nets": 36,
-  "multiPadNets": 24,
-  "loneNonGroundPads": 12,
+  "nets": 30,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 7,
+  "hintedPads": 7,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4518,
-  "topLayerPixels": 26118,
+  "bottomLayerPixels": 4316,
+  "topLayerPixels": 26152,
   "size": [
    556,
    451
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 7
+  "tier": "B"
  },
  {
   "goodsNo": "186788551",
@@ -3847,16 +4117,17 @@
   "nets": 41,
   "multiPadNets": 33,
   "loneNonGroundPads": 8,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6180,
-  "topLayerPixels": 42133,
+  "bottomLayerPixels": 6042,
+  "topLayerPixels": 42137,
   "size": [
    700,
    560
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788552",
@@ -3874,16 +4145,17 @@
   "nets": 41,
   "multiPadNets": 34,
   "loneNonGroundPads": 7,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6179,
-  "topLayerPixels": 41873,
+  "bottomLayerPixels": 6041,
+  "topLayerPixels": 41877,
   "size": [
    700,
    560
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787543",
@@ -3898,19 +4170,20 @@
   ],
   "pads": 112,
   "groundPads": 14,
-  "nets": 34,
-  "multiPadNets": 32,
-  "loneNonGroundPads": 2,
+  "nets": 30,
+  "multiPadNets": 30,
+  "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6657,
-  "topLayerPixels": 32162,
+  "bottomLayerPixels": 6494,
+  "topLayerPixels": 32173,
   "size": [
    511,
    503
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788161",
@@ -3928,16 +4201,17 @@
   "nets": 50,
   "multiPadNets": 29,
   "loneNonGroundPads": 21,
+  "hintedPads": 7,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 18872,
-  "topLayerPixels": 23239,
+  "bottomLayerPixels": 18861,
+  "topLayerPixels": 23246,
   "size": [
    600,
    622
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186788570",
@@ -3955,6 +4229,8 @@
   "nets": 38,
   "multiPadNets": 30,
   "loneNonGroundPads": 8,
+  "hintedPads": 2,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
   "bottomLayerPixels": 4586,
   "topLayerPixels": 56566,
@@ -3963,8 +4239,7 @@
    625
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186787488",
@@ -3979,19 +4254,20 @@
   ],
   "pads": 114,
   "groundPads": 16,
-  "nets": 35,
-  "multiPadNets": 32,
-  "loneNonGroundPads": 3,
+  "nets": 32,
+  "multiPadNets": 31,
+  "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2747,
-  "topLayerPixels": 44143,
+  "bottomLayerPixels": 2658,
+  "topLayerPixels": 44162,
   "size": [
    605,
    582
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787634",
@@ -4006,19 +4282,20 @@
   ],
   "pads": 114,
   "groundPads": 20,
-  "nets": 35,
+  "nets": 30,
   "multiPadNets": 25,
-  "loneNonGroundPads": 10,
+  "loneNonGroundPads": 5,
+  "hintedPads": 5,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3617,
-  "topLayerPixels": 26298,
+  "bottomLayerPixels": 3410,
+  "topLayerPixels": 26330,
   "size": [
    541,
    481
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 6
+  "tier": "B"
  },
  {
   "goodsNo": "186788550",
@@ -4036,16 +4313,17 @@
   "nets": 38,
   "multiPadNets": 30,
   "loneNonGroundPads": 8,
+  "hintedPads": 4,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4617,
-  "topLayerPixels": 39370,
+  "bottomLayerPixels": 4556,
+  "topLayerPixels": 39381,
   "size": [
    700,
    560
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787556",
@@ -4060,19 +4338,20 @@
   ],
   "pads": 115,
   "groundPads": 22,
-  "nets": 29,
-  "multiPadNets": 26,
-  "loneNonGroundPads": 3,
+  "nets": 23,
+  "multiPadNets": 23,
+  "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 5674,
-  "topLayerPixels": 24577,
+  "bottomLayerPixels": 5448,
+  "topLayerPixels": 24625,
   "size": [
    541,
    474
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787649",
@@ -4087,19 +4366,20 @@
   ],
   "pads": 115,
   "groundPads": 25,
-  "nets": 26,
-  "multiPadNets": 23,
+  "nets": 25,
+  "multiPadNets": 22,
   "loneNonGroundPads": 3,
+  "hintedPads": 3,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2277,
+  "bottomLayerPixels": 2236,
   "topLayerPixels": 23544,
   "size": [
    571,
    421
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186788011",
@@ -4117,6 +4397,8 @@
   "nets": 41,
   "multiPadNets": 32,
   "loneNonGroundPads": 9,
+  "hintedPads": 8,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 8041,
   "topLayerPixels": 40542,
@@ -4125,8 +4407,7 @@
    533
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788337",
@@ -4144,16 +4425,45 @@
   "nets": 45,
   "multiPadNets": 32,
   "loneNonGroundPads": 13,
+  "hintedPads": 3,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 8729,
-  "topLayerPixels": 40832,
+  "bottomLayerPixels": 8683,
+  "topLayerPixels": 40840,
   "size": [
    700,
    554
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788509",
+  "name": "@ OCTA CLASSIC Parts pack",
+  "type": "fuzz",
+  "about": "로저메이어가 최초 개발하고 양산하지 않았던 트랜스버전 이후 새로 설계해서 제작한 옥타퍼즈 페달입니다. 화이트 케이스의 비전 옥타비아도 있는데 외",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 115,
+  "groundPads": 23,
+  "nets": 31,
+  "multiPadNets": 28,
+  "loneNonGroundPads": 3,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 12521,
+  "topLayerPixels": 28617,
+  "size": [
+   700,
+   630
+  ],
+  "twoLayer": true,
+  "tier": "B"
  },
  {
   "goodsNo": "186788115",
@@ -4171,16 +4481,17 @@
   "nets": 40,
   "multiPadNets": 29,
   "loneNonGroundPads": 11,
+  "hintedPads": 4,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4699,
-  "topLayerPixels": 26702,
+  "bottomLayerPixels": 4667,
+  "topLayerPixels": 26707,
   "size": [
    600,
    420
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788144",
@@ -4195,19 +4506,48 @@
   ],
   "pads": 117,
   "groundPads": 20,
-  "nets": 45,
+  "nets": 44,
   "multiPadNets": 29,
-  "loneNonGroundPads": 16,
+  "loneNonGroundPads": 15,
+  "hintedPads": 12,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3653,
-  "topLayerPixels": 22063,
+  "bottomLayerPixels": 3647,
+  "topLayerPixels": 22072,
   "size": [
    600,
    474
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 13
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186787558",
+  "name": "@ Black CAB Parts pack",
+  "type": "eq",
+  "about": "스피커 시스템의 주파수 응답을 에뮬레이트 하는 캐비넷 시뮬레이터 페달입니다. 원 페달에 있는 D.I + XLR 회로는 공개된것이 없어 캐비넷 시",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 118,
+  "groundPads": 16,
+  "nets": 33,
+  "multiPadNets": 32,
+  "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 8179,
+  "topLayerPixels": 43987,
+  "size": [
+   556,
+   534
+  ],
+  "twoLayer": true,
+  "tier": "B"
  },
  {
   "goodsNo": "186788336",
@@ -4225,16 +4565,17 @@
   "nets": 48,
   "multiPadNets": 32,
   "loneNonGroundPads": 16,
+  "hintedPads": 5,
+  "unconnectedPads": 7,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3300,
-  "topLayerPixels": 39021,
+  "bottomLayerPixels": 3290,
+  "topLayerPixels": 39025,
   "size": [
    700,
    630
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186788339",
@@ -4249,19 +4590,48 @@
   ],
   "pads": 118,
   "groundPads": 12,
-  "nets": 43,
-  "multiPadNets": 33,
-  "loneNonGroundPads": 10,
+  "nets": 42,
+  "multiPadNets": 34,
+  "loneNonGroundPads": 8,
+  "hintedPads": 7,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 10453,
-  "topLayerPixels": 41081,
+  "bottomLayerPixels": 10291,
+  "topLayerPixels": 41088,
   "size": [
    700,
    567
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788575",
+  "name": "@ BLACK AMP 65 Parts pack",
+  "type": "overdrive",
+  "about": "웜플러 블랙 65 페달입니다. 브라이언 웜플러가 실제 빈티지 모델과 비교하면서 제작한 것으로 유명합니다. 트윈리버브, 디럭스 리버브, 바이브로럭",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 118,
+  "groundPads": 23,
+  "nets": 44,
+  "multiPadNets": 34,
+  "loneNonGroundPads": 10,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 34188,
+  "topLayerPixels": 44327,
+  "size": [
+   800,
+   772
+  ],
+  "twoLayer": true,
+  "tier": "B"
  },
  {
   "goodsNo": "186787635",
@@ -4276,19 +4646,20 @@
   ],
   "pads": 119,
   "groundPads": 20,
-  "nets": 33,
-  "multiPadNets": 28,
-  "loneNonGroundPads": 5,
+  "nets": 28,
+  "multiPadNets": 26,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3499,
-  "topLayerPixels": 30108,
+  "bottomLayerPixels": 3295,
+  "topLayerPixels": 30111,
   "size": [
    541,
    488
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186787483",
@@ -4303,19 +4674,20 @@
   ],
   "pads": 120,
   "groundPads": 23,
-  "nets": 25,
-  "multiPadNets": 19,
-  "loneNonGroundPads": 6,
+  "nets": 24,
+  "multiPadNets": 20,
+  "loneNonGroundPads": 4,
+  "hintedPads": 4,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3494,
+  "bottomLayerPixels": 3441,
   "topLayerPixels": 21915,
   "size": [
    541,
    436
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186788576",
@@ -4333,16 +4705,17 @@
   "nets": 33,
   "multiPadNets": 27,
   "loneNonGroundPads": 6,
+  "hintedPads": 4,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6388,
-  "topLayerPixels": 43570,
+  "bottomLayerPixels": 6344,
+  "topLayerPixels": 43573,
   "size": [
    800,
    641
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186787840",
@@ -4357,19 +4730,20 @@
   ],
   "pads": 121,
   "groundPads": 22,
-  "nets": 36,
-  "multiPadNets": 28,
-  "loneNonGroundPads": 8,
+  "nets": 33,
+  "multiPadNets": 27,
+  "loneNonGroundPads": 6,
+  "hintedPads": 4,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 5193,
-  "topLayerPixels": 27949,
+  "bottomLayerPixels": 5092,
+  "topLayerPixels": 27957,
   "size": [
    541,
    541
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186788065",
@@ -4387,16 +4761,17 @@
   "nets": 35,
   "multiPadNets": 32,
   "loneNonGroundPads": 3,
+  "hintedPads": 2,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3255,
-  "topLayerPixels": 22733,
+  "bottomLayerPixels": 3242,
+  "topLayerPixels": 22737,
   "size": [
    600,
    469
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788107",
@@ -4414,16 +4789,17 @@
   "nets": 48,
   "multiPadNets": 34,
   "loneNonGroundPads": 14,
+  "hintedPads": 1,
+  "unconnectedPads": 7,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6157,
-  "topLayerPixels": 24175,
+  "bottomLayerPixels": 6085,
+  "topLayerPixels": 24179,
   "size": [
    600,
    447
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788658",
@@ -4441,16 +4817,17 @@
   "nets": 41,
   "multiPadNets": 33,
   "loneNonGroundPads": 8,
+  "hintedPads": 2,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7735,
-  "topLayerPixels": 60528,
+  "bottomLayerPixels": 7727,
+  "topLayerPixels": 60529,
   "size": [
    800,
    750
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787548",
@@ -4465,19 +4842,20 @@
   ],
   "pads": 122,
   "groundPads": 20,
-  "nets": 31,
-  "multiPadNets": 23,
-  "loneNonGroundPads": 8,
+  "nets": 22,
+  "multiPadNets": 22,
+  "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 10402,
-  "topLayerPixels": 34466,
+  "bottomLayerPixels": 9932,
+  "topLayerPixels": 34472,
   "size": [
    541,
    482
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787846",
@@ -4492,19 +4870,20 @@
   ],
   "pads": 122,
   "groundPads": 14,
-  "nets": 39,
-  "multiPadNets": 29,
-  "loneNonGroundPads": 10,
+  "nets": 36,
+  "multiPadNets": 30,
+  "loneNonGroundPads": 6,
+  "hintedPads": 6,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6307,
-  "topLayerPixels": 32486,
+  "bottomLayerPixels": 6200,
+  "topLayerPixels": 32503,
   "size": [
    542,
    518
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 6
+  "tier": "B"
  },
  {
   "goodsNo": "186788074",
@@ -4517,19 +4896,20 @@
   "bomImages": [],
   "pads": 123,
   "groundPads": 17,
-  "nets": 38,
+  "nets": 37,
   "multiPadNets": 30,
-  "loneNonGroundPads": 8,
+  "loneNonGroundPads": 7,
+  "hintedPads": 5,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 5655,
-  "topLayerPixels": 26366,
+  "bottomLayerPixels": 5621,
+  "topLayerPixels": 26371,
   "size": [
    600,
    478
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787538",
@@ -4547,6 +4927,8 @@
   "nets": 35,
   "multiPadNets": 30,
   "loneNonGroundPads": 5,
+  "hintedPads": 5,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 1865,
   "topLayerPixels": 34277,
@@ -4555,8 +4937,35 @@
    503
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 5
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788574",
+  "name": "@ TWEED AMP 57 Parts pack",
+  "type": "overdrive",
+  "about": "웜플러 트위드57 페달입니다. 브라이언 웜플러가 실제 빈티지 모델과 비교하면서 제작한 것으로 유명합니다. 펜터의 트위드 디럭스, 베이스맨, 챔프",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 126,
+  "groundPads": 22,
+  "nets": 50,
+  "multiPadNets": 34,
+  "loneNonGroundPads": 16,
+  "hintedPads": 6,
+  "unconnectedPads": 2,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 32536,
+  "topLayerPixels": 44542,
+  "size": [
+   800,
+   771
+  ],
+  "twoLayer": true,
+  "tier": "B"
  },
  {
   "goodsNo": "186788303",
@@ -4574,16 +4983,17 @@
   "nets": 51,
   "multiPadNets": 32,
   "loneNonGroundPads": 19,
+  "hintedPads": 3,
+  "unconnectedPads": 13,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 20089,
-  "topLayerPixels": 36459,
+  "bottomLayerPixels": 20068,
+  "topLayerPixels": 36461,
   "size": [
    700,
    561
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788317",
@@ -4598,19 +5008,20 @@
   ],
   "pads": 128,
   "groundPads": 6,
-  "nets": 62,
+  "nets": 61,
   "multiPadNets": 33,
-  "loneNonGroundPads": 29,
+  "loneNonGroundPads": 28,
+  "hintedPads": 4,
+  "unconnectedPads": 23,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 8707,
-  "topLayerPixels": 40242,
+  "bottomLayerPixels": 8617,
+  "topLayerPixels": 40246,
   "size": [
    1000,
    522
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787464",
@@ -4625,19 +5036,20 @@
   ],
   "pads": 129,
   "groundPads": 29,
-  "nets": 37,
+  "nets": 36,
   "multiPadNets": 24,
-  "loneNonGroundPads": 13,
+  "loneNonGroundPads": 12,
+  "hintedPads": 2,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6827,
-  "topLayerPixels": 29285,
+  "bottomLayerPixels": 6782,
+  "topLayerPixels": 29301,
   "size": [
    488,
    520
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186788304",
@@ -4655,16 +5067,17 @@
   "nets": 60,
   "multiPadNets": 33,
   "loneNonGroundPads": 27,
+  "hintedPads": 3,
+  "unconnectedPads": 21,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7706,
-  "topLayerPixels": 45763,
+  "bottomLayerPixels": 7610,
+  "topLayerPixels": 45804,
   "size": [
    700,
    630
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788600",
@@ -4682,16 +5095,17 @@
   "nets": 55,
   "multiPadNets": 31,
   "loneNonGroundPads": 24,
+  "hintedPads": 9,
+  "unconnectedPads": 8,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9443,
-  "topLayerPixels": 29703,
+  "bottomLayerPixels": 9270,
+  "topLayerPixels": 29735,
   "size": [
    1000,
    391
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186788148",
@@ -4709,16 +5123,17 @@
   "nets": 56,
   "multiPadNets": 30,
   "loneNonGroundPads": 26,
+  "hintedPads": 9,
+  "unconnectedPads": 10,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 11007,
-  "topLayerPixels": 22887,
+  "bottomLayerPixels": 10944,
+  "topLayerPixels": 22952,
   "size": [
    600,
    523
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 6
+  "tier": "B"
  },
  {
   "goodsNo": "186787552",
@@ -4733,19 +5148,20 @@
   ],
   "pads": 136,
   "groundPads": 21,
-  "nets": 39,
-  "multiPadNets": 34,
-  "loneNonGroundPads": 5,
+  "nets": 34,
+  "multiPadNets": 31,
+  "loneNonGroundPads": 3,
+  "hintedPads": 2,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 5716,
-  "topLayerPixels": 30419,
+  "bottomLayerPixels": 5254,
+  "topLayerPixels": 30422,
   "size": [
    541,
    511
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186787638",
@@ -4760,19 +5176,20 @@
   ],
   "pads": 138,
   "groundPads": 18,
-  "nets": 44,
+  "nets": 37,
   "multiPadNets": 31,
-  "loneNonGroundPads": 13,
+  "loneNonGroundPads": 6,
+  "hintedPads": 6,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7136,
-  "topLayerPixels": 43433,
+  "bottomLayerPixels": 6863,
+  "topLayerPixels": 43440,
   "size": [
    601,
    511
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 6
+  "tier": "B"
  },
  {
   "goodsNo": "186788153",
@@ -4790,6 +5207,8 @@
   "nets": 40,
   "multiPadNets": 35,
   "loneNonGroundPads": 5,
+  "hintedPads": 1,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 29668,
@@ -4798,8 +5217,7 @@
    470
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788585",
@@ -4817,16 +5235,17 @@
   "nets": 49,
   "multiPadNets": 33,
   "loneNonGroundPads": 16,
+  "hintedPads": 15,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 10029,
-  "topLayerPixels": 61381,
+  "bottomLayerPixels": 9757,
+  "topLayerPixels": 61462,
   "size": [
    800,
    641
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788468",
@@ -4844,16 +5263,17 @@
   "nets": 41,
   "multiPadNets": 38,
   "loneNonGroundPads": 3,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1742,
-  "topLayerPixels": 51186,
+  "bottomLayerPixels": 1721,
+  "topLayerPixels": 51192,
   "size": [
    700,
    636
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787489",
@@ -4868,19 +5288,20 @@
   ],
   "pads": 142,
   "groundPads": 20,
-  "nets": 47,
-  "multiPadNets": 31,
-  "loneNonGroundPads": 16,
+  "nets": 39,
+  "multiPadNets": 33,
+  "loneNonGroundPads": 6,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 5404,
-  "topLayerPixels": 40876,
+  "bottomLayerPixels": 4966,
+  "topLayerPixels": 40877,
   "size": [
    601,
    496
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186787529",
@@ -4895,19 +5316,20 @@
   ],
   "pads": 143,
   "groundPads": 23,
-  "nets": 45,
-  "multiPadNets": 34,
-  "loneNonGroundPads": 11,
+  "nets": 35,
+  "multiPadNets": 35,
+  "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9010,
-  "topLayerPixels": 44193,
+  "bottomLayerPixels": 8579,
+  "topLayerPixels": 44247,
   "size": [
    541,
    631
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788143",
@@ -4925,6 +5347,8 @@
   "nets": 56,
   "multiPadNets": 35,
   "loneNonGroundPads": 21,
+  "hintedPads": 20,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 32030,
@@ -4933,8 +5357,7 @@
    577
   ],
   "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 20
+  "tier": "B"
  },
  {
   "goodsNo": "186787533",
@@ -4949,19 +5372,20 @@
   ],
   "pads": 144,
   "groundPads": 22,
-  "nets": 39,
-  "multiPadNets": 35,
-  "loneNonGroundPads": 4,
+  "nets": 34,
+  "multiPadNets": 34,
+  "loneNonGroundPads": 0,
+  "hintedPads": 0,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4969,
-  "topLayerPixels": 42429,
+  "bottomLayerPixels": 4822,
+  "topLayerPixels": 42440,
   "size": [
    572,
    608
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186787487",
@@ -4976,19 +5400,20 @@
   ],
   "pads": 145,
   "groundPads": 28,
-  "nets": 37,
+  "nets": 35,
   "multiPadNets": 31,
-  "loneNonGroundPads": 6,
+  "loneNonGroundPads": 4,
+  "hintedPads": 4,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9294,
-  "topLayerPixels": 35026,
+  "bottomLayerPixels": 9174,
+  "topLayerPixels": 35039,
   "size": [
    600,
    621
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186788180",
@@ -5006,16 +5431,17 @@
   "nets": 47,
   "multiPadNets": 41,
   "loneNonGroundPads": 6,
+  "hintedPads": 2,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3456,
+  "bottomLayerPixels": 3450,
   "topLayerPixels": 31133,
   "size": [
    600,
    588
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788181",
@@ -5033,16 +5459,17 @@
   "nets": 47,
   "multiPadNets": 41,
   "loneNonGroundPads": 6,
+  "hintedPads": 2,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3344,
+  "bottomLayerPixels": 3341,
   "topLayerPixels": 31150,
   "size": [
    600,
    588
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788182",
@@ -5060,16 +5487,45 @@
   "nets": 46,
   "multiPadNets": 40,
   "loneNonGroundPads": 6,
+  "hintedPads": 2,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3450,
+  "bottomLayerPixels": 3444,
   "topLayerPixels": 31155,
   "size": [
    600,
    588
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
+ },
+ {
+  "goodsNo": "186788445",
+  "name": "@ OCTA KING Parts pack",
+  "type": "fuzz",
+  "about": "킹톤 옥타랜드 미니 버전입니다. 높은 게인에서도 옥타브 특성이 유지되는 강렬하고 독창적인 회로의 옥타 퍼즈 페달입니다.",
+  "board": 0,
+  "image": "img_01.jpg",
+  "sameBoardAs": null,
+  "bomImages": [
+   "img_02.jpg"
+  ],
+  "pads": 146,
+  "groundPads": 24,
+  "nets": 45,
+  "multiPadNets": 41,
+  "loneNonGroundPads": 4,
+  "hintedPads": 3,
+  "unconnectedPads": 0,
+  "bodyTunnels": 0,
+  "bottomLayerPixels": 3370,
+  "topLayerPixels": 61848,
+  "size": [
+   700,
+   636
+  ],
+  "twoLayer": true,
+  "tier": "B"
  },
  {
   "goodsNo": "186788178",
@@ -5087,16 +5543,17 @@
   "nets": 51,
   "multiPadNets": 42,
   "loneNonGroundPads": 9,
+  "hintedPads": 4,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4499,
-  "topLayerPixels": 34576,
+  "bottomLayerPixels": 4486,
+  "topLayerPixels": 34579,
   "size": [
    600,
    588
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788179",
@@ -5114,16 +5571,17 @@
   "nets": 49,
   "multiPadNets": 41,
   "loneNonGroundPads": 8,
+  "hintedPads": 2,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 5823,
-  "topLayerPixels": 33357,
+  "bottomLayerPixels": 5815,
+  "topLayerPixels": 33358,
   "size": [
    600,
    588
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788484",
@@ -5141,16 +5599,17 @@
   "nets": 57,
   "multiPadNets": 43,
   "loneNonGroundPads": 14,
+  "hintedPads": 5,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 8451,
-  "topLayerPixels": 39677,
+  "bottomLayerPixels": 8399,
+  "topLayerPixels": 39687,
   "size": [
    700,
    809
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788549",
@@ -5168,16 +5627,17 @@
   "nets": 51,
   "multiPadNets": 40,
   "loneNonGroundPads": 11,
+  "hintedPads": 6,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 8414,
-  "topLayerPixels": 48355,
+  "bottomLayerPixels": 8306,
+  "topLayerPixels": 48388,
   "size": [
    700,
    560
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788660",
@@ -5195,16 +5655,17 @@
   "nets": 63,
   "multiPadNets": 39,
   "loneNonGroundPads": 24,
+  "hintedPads": 12,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 19020,
-  "topLayerPixels": 78431,
+  "bottomLayerPixels": 18829,
+  "topLayerPixels": 78459,
   "size": [
    800,
    750
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788475",
@@ -5222,16 +5683,17 @@
   "nets": 52,
   "multiPadNets": 43,
   "loneNonGroundPads": 9,
+  "hintedPads": 3,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3963,
-  "topLayerPixels": 40560,
+  "bottomLayerPixels": 3926,
+  "topLayerPixels": 40561,
   "size": [
    700,
    802
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788661",
@@ -5249,16 +5711,17 @@
   "nets": 51,
   "multiPadNets": 42,
   "loneNonGroundPads": 9,
+  "hintedPads": 6,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 25212,
-  "topLayerPixels": 60186,
+  "bottomLayerPixels": 25046,
+  "topLayerPixels": 60199,
   "size": [
    800,
    750
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787456",
@@ -5276,16 +5739,17 @@
   "nets": 52,
   "multiPadNets": 40,
   "loneNonGroundPads": 12,
+  "hintedPads": 7,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 13539,
-  "topLayerPixels": 44313,
+  "bottomLayerPixels": 13390,
+  "topLayerPixels": 44469,
   "size": [
    600,
    500
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788052",
@@ -5300,19 +5764,20 @@
   ],
   "pads": 156,
   "groundPads": 23,
-  "nets": 52,
-  "multiPadNets": 43,
+  "nets": 51,
+  "multiPadNets": 42,
   "loneNonGroundPads": 9,
+  "hintedPads": 6,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 11440,
-  "topLayerPixels": 54082,
+  "bottomLayerPixels": 11374,
+  "topLayerPixels": 54154,
   "size": [
    1218,
    451
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787640",
@@ -5327,19 +5792,20 @@
   ],
   "pads": 157,
   "groundPads": 22,
-  "nets": 60,
-  "multiPadNets": 38,
-  "loneNonGroundPads": 22,
+  "nets": 48,
+  "multiPadNets": 44,
+  "loneNonGroundPads": 4,
+  "hintedPads": 1,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9763,
-  "topLayerPixels": 52621,
+  "bottomLayerPixels": 9178,
+  "topLayerPixels": 52654,
   "size": [
    586,
    639
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788036",
@@ -5357,6 +5823,8 @@
   "nets": 62,
   "multiPadNets": 43,
   "loneNonGroundPads": 19,
+  "hintedPads": 7,
+  "unconnectedPads": 11,
   "bodyTunnels": 0,
   "bottomLayerPixels": 13680,
   "topLayerPixels": 52135,
@@ -5365,8 +5833,7 @@
    691
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788038",
@@ -5384,16 +5851,17 @@
   "nets": 71,
   "multiPadNets": 37,
   "loneNonGroundPads": 34,
+  "hintedPads": 7,
+  "unconnectedPads": 10,
   "bodyTunnels": 0,
   "bottomLayerPixels": 13630,
-  "topLayerPixels": 53252,
+  "topLayerPixels": 53250,
   "size": [
    663,
    691
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788017",
@@ -5411,6 +5879,8 @@
   "nets": 49,
   "multiPadNets": 39,
   "loneNonGroundPads": 10,
+  "hintedPads": 10,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 14605,
   "topLayerPixels": 40739,
@@ -5419,8 +5889,7 @@
    601
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788139",
@@ -5435,19 +5904,20 @@
   ],
   "pads": 165,
   "groundPads": 23,
-  "nets": 67,
-  "multiPadNets": 37,
+  "nets": 66,
+  "multiPadNets": 36,
   "loneNonGroundPads": 30,
+  "hintedPads": 17,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 11398,
-  "topLayerPixels": 35288,
+  "bottomLayerPixels": 11269,
+  "topLayerPixels": 35448,
   "size": [
    600,
    562
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 7
+  "tier": "B"
  },
  {
   "goodsNo": "186788173",
@@ -5465,16 +5935,17 @@
   "nets": 63,
   "multiPadNets": 44,
   "loneNonGroundPads": 19,
+  "hintedPads": 9,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7405,
-  "topLayerPixels": 41784,
+  "bottomLayerPixels": 7382,
+  "topLayerPixels": 41788,
   "size": [
    600,
    633
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788586",
@@ -5492,16 +5963,17 @@
   "nets": 53,
   "multiPadNets": 39,
   "loneNonGroundPads": 14,
+  "hintedPads": 10,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6144,
-  "topLayerPixels": 70876,
+  "bottomLayerPixels": 6021,
+  "topLayerPixels": 70917,
   "size": [
    800,
    749
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186788587",
@@ -5516,19 +5988,20 @@
   ],
   "pads": 168,
   "groundPads": 18,
-  "nets": 54,
-  "multiPadNets": 36,
-  "loneNonGroundPads": 18,
+  "nets": 53,
+  "multiPadNets": 37,
+  "loneNonGroundPads": 16,
+  "hintedPads": 12,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 20494,
-  "topLayerPixels": 69972,
+  "bottomLayerPixels": 20300,
+  "topLayerPixels": 70052,
   "size": [
    800,
    749
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186787486",
@@ -5543,19 +6016,20 @@
   ],
   "pads": 169,
   "groundPads": 32,
-  "nets": 52,
+  "nets": 45,
   "multiPadNets": 38,
-  "loneNonGroundPads": 14,
+  "loneNonGroundPads": 7,
+  "hintedPads": 6,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 10049,
-  "topLayerPixels": 37063,
+  "bottomLayerPixels": 9721,
+  "topLayerPixels": 37146,
   "size": [
    600,
    621
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 6
+  "tier": "B"
  },
  {
   "goodsNo": "186788053",
@@ -5570,19 +6044,20 @@
   ],
   "pads": 172,
   "groundPads": 24,
-  "nets": 55,
-  "multiPadNets": 44,
+  "nets": 54,
+  "multiPadNets": 43,
   "loneNonGroundPads": 11,
+  "hintedPads": 10,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 11059,
-  "topLayerPixels": 58128,
+  "bottomLayerPixels": 10995,
+  "topLayerPixels": 58186,
   "size": [
    1218,
    451
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186788588",
@@ -5600,16 +6075,17 @@
   "nets": 72,
   "multiPadNets": 43,
   "loneNonGroundPads": 29,
+  "hintedPads": 10,
+  "unconnectedPads": 7,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 16567,
-  "topLayerPixels": 27988,
+  "bottomLayerPixels": 16456,
+  "topLayerPixels": 28008,
   "size": [
    1000,
    536
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 5
+  "tier": "B"
  },
  {
   "goodsNo": "186787555",
@@ -5624,19 +6100,20 @@
   ],
   "pads": 174,
   "groundPads": 21,
-  "nets": 59,
-  "multiPadNets": 45,
-  "loneNonGroundPads": 14,
+  "nets": 43,
+  "multiPadNets": 42,
+  "loneNonGroundPads": 1,
+  "hintedPads": 1,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 12216,
-  "topLayerPixels": 55448,
+  "bottomLayerPixels": 11394,
+  "topLayerPixels": 55502,
   "size": [
    601,
    624
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186788141",
@@ -5654,16 +6131,17 @@
   "nets": 70,
   "multiPadNets": 44,
   "loneNonGroundPads": 26,
+  "hintedPads": 14,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9968,
-  "topLayerPixels": 36069,
+  "bottomLayerPixels": 9811,
+  "topLayerPixels": 36167,
   "size": [
    600,
    726
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 7
+  "tier": "B"
  },
  {
   "goodsNo": "186788142",
@@ -5678,19 +6156,20 @@
   ],
   "pads": 175,
   "groundPads": 20,
-  "nets": 75,
+  "nets": 74,
   "multiPadNets": 45,
-  "loneNonGroundPads": 30,
+  "loneNonGroundPads": 29,
+  "hintedPads": 9,
+  "unconnectedPads": 7,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9887,
-  "topLayerPixels": 34058,
+  "bottomLayerPixels": 9785,
+  "topLayerPixels": 34156,
   "size": [
    600,
    726
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186787476",
@@ -5708,16 +6187,17 @@
   "nets": 64,
   "multiPadNets": 47,
   "loneNonGroundPads": 17,
+  "hintedPads": 16,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 10894,
-  "topLayerPixels": 59618,
+  "bottomLayerPixels": 10639,
+  "topLayerPixels": 59683,
   "size": [
    640,
    723
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186788599",
@@ -5735,16 +6215,17 @@
   "nets": 70,
   "multiPadNets": 49,
   "loneNonGroundPads": 21,
+  "hintedPads": 14,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 23321,
-  "topLayerPixels": 88954,
+  "bottomLayerPixels": 22811,
+  "topLayerPixels": 89019,
   "size": [
    800,
    996
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788025",
@@ -5762,6 +6243,8 @@
   "nets": 70,
   "multiPadNets": 41,
   "loneNonGroundPads": 29,
+  "hintedPads": 19,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
   "bottomLayerPixels": 33877,
   "topLayerPixels": 56514,
@@ -5770,8 +6253,7 @@
    721
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 5
+  "tier": "B"
  },
  {
   "goodsNo": "186787458",
@@ -5786,19 +6268,20 @@
   ],
   "pads": 198,
   "groundPads": 27,
-  "nets": 57,
-  "multiPadNets": 48,
-  "loneNonGroundPads": 9,
+  "nets": 52,
+  "multiPadNets": 45,
+  "loneNonGroundPads": 7,
+  "hintedPads": 5,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7731,
-  "topLayerPixels": 68824,
+  "bottomLayerPixels": 7023,
+  "topLayerPixels": 68986,
   "size": [
    600,
    693
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 3
+  "tier": "B"
  },
  {
   "goodsNo": "186788140",
@@ -5813,19 +6296,20 @@
   ],
   "pads": 199,
   "groundPads": 25,
-  "nets": 74,
+  "nets": 73,
   "multiPadNets": 50,
-  "loneNonGroundPads": 24,
+  "loneNonGroundPads": 23,
+  "hintedPads": 19,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 12755,
-  "topLayerPixels": 40725,
+  "bottomLayerPixels": 12636,
+  "topLayerPixels": 40879,
   "size": [
    600,
    726
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 5
+  "tier": "B"
  },
  {
   "goodsNo": "186788601",
@@ -5843,16 +6327,17 @@
   "nets": 84,
   "multiPadNets": 49,
   "loneNonGroundPads": 35,
+  "hintedPads": 18,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 24273,
-  "topLayerPixels": 75618,
+  "bottomLayerPixels": 23848,
+  "topLayerPixels": 75697,
   "size": [
    1000,
    703
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788662",
@@ -5870,16 +6355,17 @@
   "nets": 76,
   "multiPadNets": 51,
   "loneNonGroundPads": 25,
+  "hintedPads": 11,
+  "unconnectedPads": 9,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 22551,
-  "topLayerPixels": 90477,
+  "bottomLayerPixels": 22449,
+  "topLayerPixels": 90493,
   "size": [
    800,
    1040
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186788152",
@@ -5894,19 +6380,20 @@
   ],
   "pads": 207,
   "groundPads": 19,
-  "nets": 90,
+  "nets": 86,
   "multiPadNets": 54,
-  "loneNonGroundPads": 36,
+  "loneNonGroundPads": 32,
+  "hintedPads": 9,
+  "unconnectedPads": 14,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 15504,
-  "topLayerPixels": 41539,
+  "bottomLayerPixels": 15314,
+  "topLayerPixels": 41691,
   "size": [
    1000,
    432
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788473",
@@ -5924,16 +6411,17 @@
   "nets": 64,
   "multiPadNets": 54,
   "loneNonGroundPads": 10,
+  "hintedPads": 7,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7302,
-  "topLayerPixels": 43428,
+  "bottomLayerPixels": 7273,
+  "topLayerPixels": 43434,
   "size": [
    700,
    809
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "B"
  },
  {
   "goodsNo": "186788598",
@@ -5948,19 +6436,20 @@
   ],
   "pads": 214,
   "groundPads": 22,
-  "nets": 89,
-  "multiPadNets": 57,
-  "loneNonGroundPads": 32,
+  "nets": 85,
+  "multiPadNets": 61,
+  "loneNonGroundPads": 24,
+  "hintedPads": 13,
+  "unconnectedPads": 8,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 8988,
-  "topLayerPixels": 42481,
+  "bottomLayerPixels": 8796,
+  "topLayerPixels": 42530,
   "size": [
    1000,
    383
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "B"
  },
  {
   "goodsNo": "186787468",
@@ -5975,19 +6464,20 @@
   ],
   "pads": 251,
   "groundPads": 19,
-  "nets": 46,
+  "nets": 45,
   "multiPadNets": 30,
-  "loneNonGroundPads": 16,
+  "loneNonGroundPads": 15,
+  "hintedPads": 11,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 8810,
-  "topLayerPixels": 27911,
+  "bottomLayerPixels": 8703,
+  "topLayerPixels": 27949,
   "size": [
    545,
    708
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 7
+  "tier": "B"
  },
  {
   "goodsNo": "186788553",
@@ -6002,19 +6492,20 @@
   ],
   "pads": 277,
   "groundPads": 33,
-  "nets": 100,
+  "nets": 99,
   "multiPadNets": 72,
-  "loneNonGroundPads": 28,
+  "loneNonGroundPads": 27,
+  "hintedPads": 14,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 14705,
-  "topLayerPixels": 56057,
+  "bottomLayerPixels": 14412,
+  "topLayerPixels": 56090,
   "size": [
    1000,
    639
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788200",
@@ -6029,19 +6520,20 @@
   ],
   "pads": 318,
   "groundPads": 36,
-  "nets": 118,
-  "multiPadNets": 88,
-  "loneNonGroundPads": 30,
+  "nets": 115,
+  "multiPadNets": 87,
+  "loneNonGroundPads": 28,
+  "hintedPads": 14,
+  "unconnectedPads": 8,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 15761,
-  "topLayerPixels": 48924,
+  "bottomLayerPixels": 15579,
+  "topLayerPixels": 48956,
   "size": [
    1000,
    589
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "B"
  },
  {
   "goodsNo": "186788441",
@@ -6056,19 +6548,20 @@
   ],
   "pads": 343,
   "groundPads": 5,
-  "nets": 166,
-  "multiPadNets": 89,
-  "loneNonGroundPads": 77,
+  "nets": 163,
+  "multiPadNets": 90,
+  "loneNonGroundPads": 73,
+  "hintedPads": 25,
+  "unconnectedPads": 30,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 14806,
-  "topLayerPixels": 51195,
+  "bottomLayerPixels": 14580,
+  "topLayerPixels": 51270,
   "size": [
    1000,
    767
   ],
   "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 4
+  "tier": "B"
  },
  {
   "goodsNo": "186787467",
@@ -6086,16 +6579,17 @@
   "nets": 11,
   "multiPadNets": 4,
   "loneNonGroundPads": 6,
+  "hintedPads": 2,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3946,
-  "topLayerPixels": 2878,
+  "bottomLayerPixels": 3943,
+  "topLayerPixels": 2880,
   "size": [
    250,
    250
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186787467",
@@ -6113,6 +6607,8 @@
   "nets": 11,
   "multiPadNets": 3,
   "loneNonGroundPads": 8,
+  "hintedPads": 1,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
   "bottomLayerPixels": 1104,
   "topLayerPixels": 4816,
@@ -6121,8 +6617,7 @@
    250
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186787467",
@@ -6140,16 +6635,17 @@
   "nets": 14,
   "multiPadNets": 4,
   "loneNonGroundPads": 10,
+  "hintedPads": 1,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1983,
-  "topLayerPixels": 4208,
+  "bottomLayerPixels": 1981,
+  "topLayerPixels": 4209,
   "size": [
    250,
    250
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186787467",
@@ -6167,16 +6663,17 @@
   "nets": 11,
   "multiPadNets": 7,
   "loneNonGroundPads": 4,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2627,
-  "topLayerPixels": 7203,
+  "bottomLayerPixels": 2626,
+  "topLayerPixels": 7204,
   "size": [
    250,
    250
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186787467",
@@ -6194,16 +6691,17 @@
   "nets": 16,
   "multiPadNets": 7,
   "loneNonGroundPads": 9,
+  "hintedPads": 5,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3991,
-  "topLayerPixels": 6698,
+  "bottomLayerPixels": 3988,
+  "topLayerPixels": 6699,
   "size": [
    250,
    250
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 3
+  "tier": "C"
  },
  {
   "goodsNo": "186787467",
@@ -6221,70 +6719,17 @@
   "nets": 16,
   "multiPadNets": 6,
   "loneNonGroundPads": 9,
+  "hintedPads": 4,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3716,
-  "topLayerPixels": 5308,
+  "bottomLayerPixels": 3717,
+  "topLayerPixels": 5309,
   "size": [
    250,
    250
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
- },
- {
-  "goodsNo": "186787693",
-  "name": "[1K] SHO Parts pack",
-  "type": "buffer-boost",
-  "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 너무나도 유명",
-  "board": 0,
-  "image": "img_01.jpg",
-  "sameBoardAs": null,
-  "bomImages": [
-   "img_02.jpg"
-  ],
-  "pads": 37,
-  "groundPads": 11,
-  "nets": 7,
-  "multiPadNets": 7,
-  "loneNonGroundPads": 0,
-  "bodyTunnels": 0,
-  "bottomLayerPixels": 1776,
-  "topLayerPixels": 4836,
-  "size": [
-   286,
-   278
-  ],
-  "twoLayer": true,
-  "tier": "A",
-  "hintedPads": 0
- },
- {
-  "goodsNo": "186786839",
-  "name": "@ NEW FAT 부스터 Parts Pack",
-  "type": "buffer-boost",
-  "about": "LF442CN단종으로 TL072로 패킹됩니다. 가격은 반영되어 있습니다. 1590A케이스에 페달로 만드실때는 3파이LED를 사용해야 합니다 보호",
-  "board": 0,
-  "image": "img_02.jpg",
-  "sameBoardAs": null,
-  "bomImages": [
-   "img_03.jpg"
-  ],
-  "pads": 66,
-  "groundPads": 9,
-  "nets": 25,
-  "multiPadNets": 16,
-  "loneNonGroundPads": 9,
-  "bodyTunnels": 0,
-  "bottomLayerPixels": 8161,
-  "topLayerPixels": 35433,
-  "size": [
-   600,
-   553
-  ],
-  "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186787647",
@@ -6299,47 +6744,20 @@
   ],
   "pads": 67,
   "groundPads": 14,
-  "nets": 19,
-  "multiPadNets": 15,
-  "loneNonGroundPads": 4,
+  "nets": 18,
+  "multiPadNets": 16,
+  "loneNonGroundPads": 2,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1262,
+  "bottomLayerPixels": 1217,
   "topLayerPixels": 15202,
   "size": [
    481,
    353
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 3
- },
- {
-  "goodsNo": "186787969",
-  "name": "@ Octavia Parts pack",
-  "type": "fuzz",
-  "about": "Tychobrahe Octavia 옥타퍼즈입니다.. 1590B 케이스에 딱 맞게 크기를 줄여서 입고 되었습니다. 카본컴퍼지션 저항과 42TM02",
-  "board": 0,
-  "image": "img_03.jpg",
-  "sameBoardAs": null,
-  "bomImages": [
-   "img_00.jpg",
-   "img_04.jpg"
-  ],
-  "pads": 69,
-  "groundPads": 8,
-  "nets": 30,
-  "multiPadNets": 15,
-  "loneNonGroundPads": 15,
-  "bodyTunnels": 0,
-  "bottomLayerPixels": 1164,
-  "topLayerPixels": 12079,
-  "size": [
-   600,
-   263
-  ],
-  "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "C"
  },
  {
   "goodsNo": "186788279",
@@ -6355,9 +6773,11 @@
   "nets": 30,
   "multiPadNets": 15,
   "loneNonGroundPads": 15,
+  "hintedPads": 2,
+  "unconnectedPads": 11,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1164,
-  "topLayerPixels": 12079,
+  "bottomLayerPixels": 1101,
+  "topLayerPixels": 12095,
   "size": [
    600,
    263
@@ -6382,9 +6802,11 @@
   "nets": 30,
   "multiPadNets": 15,
   "loneNonGroundPads": 15,
+  "hintedPads": 2,
+  "unconnectedPads": 11,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 1164,
-  "topLayerPixels": 12079,
+  "bottomLayerPixels": 1101,
+  "topLayerPixels": 12095,
   "size": [
    600,
    263
@@ -6405,19 +6827,20 @@
   ],
   "pads": 73,
   "groundPads": 12,
-  "nets": 22,
-  "multiPadNets": 18,
+  "nets": 21,
+  "multiPadNets": 17,
   "loneNonGroundPads": 4,
+  "hintedPads": 1,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3455,
-  "topLayerPixels": 18022,
+  "bottomLayerPixels": 3427,
+  "topLayerPixels": 18023,
   "size": [
    541,
    323
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186787560",
@@ -6432,19 +6855,20 @@
   ],
   "pads": 78,
   "groundPads": 12,
-  "nets": 23,
-  "multiPadNets": 18,
+  "nets": 22,
+  "multiPadNets": 17,
   "loneNonGroundPads": 5,
+  "hintedPads": 2,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3223,
+  "bottomLayerPixels": 3177,
   "topLayerPixels": 22908,
   "size": [
    541,
    353
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 2
+  "tier": "C"
  },
  {
   "goodsNo": "186788655",
@@ -6462,16 +6886,17 @@
   "nets": 26,
   "multiPadNets": 20,
   "loneNonGroundPads": 6,
+  "hintedPads": 3,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9038,
-  "topLayerPixels": 23922,
+  "bottomLayerPixels": 8890,
+  "topLayerPixels": 23927,
   "size": [
    800,
    437
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186788338",
@@ -6489,16 +6914,17 @@
   "nets": 34,
   "multiPadNets": 26,
   "loneNonGroundPads": 8,
+  "hintedPads": 4,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7882,
-  "topLayerPixels": 28258,
+  "bottomLayerPixels": 7801,
+  "topLayerPixels": 28274,
   "size": [
    700,
    490
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186787954",
@@ -6513,19 +6939,20 @@
   ],
   "pads": 98,
   "groundPads": 17,
-  "nets": 35,
-  "multiPadNets": 24,
-  "loneNonGroundPads": 11,
+  "nets": 30,
+  "multiPadNets": 25,
+  "loneNonGroundPads": 5,
+  "hintedPads": 1,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 3709,
-  "topLayerPixels": 29866,
+  "bottomLayerPixels": 3275,
+  "topLayerPixels": 29886,
   "size": [
    436,
    481
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186788596",
@@ -6543,16 +6970,17 @@
   "nets": 31,
   "multiPadNets": 25,
   "loneNonGroundPads": 6,
+  "hintedPads": 2,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 7839,
-  "topLayerPixels": 59844,
+  "bottomLayerPixels": 7760,
+  "topLayerPixels": 59858,
   "size": [
    800,
    996
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186787465",
@@ -6570,43 +6998,17 @@
   "nets": 26,
   "multiPadNets": 22,
   "loneNonGroundPads": 4,
+  "hintedPads": 3,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6766,
-  "topLayerPixels": 25743,
+  "bottomLayerPixels": 6682,
+  "topLayerPixels": 25772,
   "size": [
    497,
    412
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 3
- },
- {
-  "goodsNo": "186788446",
-  "name": "@ OCB Parts pack",
-  "type": "fuzz",
-  "about": "CLEAN OCTAVE BLEND 라는 이름의 옥타 퍼즈페달입니다. 다양한 톤에 대응 하는 현재적으로 해석된 옥타 퍼즈라고합니다",
-  "board": 0,
-  "image": "img_01.jpg",
-  "sameBoardAs": null,
-  "bomImages": [
-   "img_02.jpg"
-  ],
-  "pads": 100,
-  "groundPads": 19,
-  "nets": 29,
-  "multiPadNets": 27,
-  "loneNonGroundPads": 2,
-  "bodyTunnels": 0,
-  "bottomLayerPixels": 721,
-  "topLayerPixels": 45798,
-  "size": [
-   700,
-   548
-  ],
-  "twoLayer": false,
-  "tier": "B",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186788265",
@@ -6624,9 +7026,11 @@
   "nets": 35,
   "multiPadNets": 28,
   "loneNonGroundPads": 7,
+  "hintedPads": 2,
+  "unconnectedPads": 3,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4991,
-  "topLayerPixels": 26432,
+  "bottomLayerPixels": 4970,
+  "topLayerPixels": 26434,
   "size": [
    600,
    469
@@ -6650,16 +7054,17 @@
   "nets": 27,
   "multiPadNets": 23,
   "loneNonGroundPads": 4,
+  "hintedPads": 0,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 247,
-  "topLayerPixels": 16185,
+  "bottomLayerPixels": 251,
+  "topLayerPixels": 16186,
   "size": [
    549,
    248
   ],
   "twoLayer": false,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788024",
@@ -6677,6 +7082,8 @@
   "nets": 36,
   "multiPadNets": 27,
   "loneNonGroundPads": 9,
+  "hintedPads": 6,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
   "bottomLayerPixels": 7024,
   "topLayerPixels": 32496,
@@ -6685,8 +7092,7 @@
    541
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186787641",
@@ -6704,6 +7110,8 @@
   "nets": 34,
   "multiPadNets": 26,
   "loneNonGroundPads": 8,
+  "hintedPads": 1,
+  "unconnectedPads": 7,
   "bodyTunnels": 0,
   "bottomLayerPixels": 0,
   "topLayerPixels": 38205,
@@ -6712,8 +7120,7 @@
    572
   ],
   "twoLayer": false,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186787679",
@@ -6728,100 +7135,20 @@
   ],
   "pads": 113,
   "groundPads": 19,
-  "nets": 40,
-  "multiPadNets": 31,
-  "loneNonGroundPads": 9,
+  "nets": 32,
+  "multiPadNets": 29,
+  "loneNonGroundPads": 3,
+  "hintedPads": 1,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6837,
-  "topLayerPixels": 28560,
+  "bottomLayerPixels": 6069,
+  "topLayerPixels": 28587,
   "size": [
    541,
    500
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
- },
- {
-  "goodsNo": "186788509",
-  "name": "@ OCTA CLASSIC Parts pack",
-  "type": "fuzz",
-  "about": "로저메이어가 최초 개발하고 양산하지 않았던 트랜스버전 이후 새로 설계해서 제작한 옥타퍼즈 페달입니다. 화이트 케이스의 비전 옥타비아도 있는데 외",
-  "board": 0,
-  "image": "img_01.jpg",
-  "sameBoardAs": null,
-  "bomImages": [
-   "img_02.jpg"
-  ],
-  "pads": 115,
-  "groundPads": 23,
-  "nets": 31,
-  "multiPadNets": 28,
-  "loneNonGroundPads": 3,
-  "bodyTunnels": 0,
-  "bottomLayerPixels": 12527,
-  "topLayerPixels": 28617,
-  "size": [
-   700,
-   630
-  ],
-  "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
- },
- {
-  "goodsNo": "186787558",
-  "name": "@ Black CAB Parts pack",
-  "type": "eq",
-  "about": "스피커 시스템의 주파수 응답을 에뮬레이트 하는 캐비넷 시뮬레이터 페달입니다. 원 페달에 있는 D.I + XLR 회로는 공개된것이 없어 캐비넷 시",
-  "board": 0,
-  "image": "img_01.jpg",
-  "sameBoardAs": null,
-  "bomImages": [
-   "img_02.jpg"
-  ],
-  "pads": 118,
-  "groundPads": 16,
-  "nets": 46,
-  "multiPadNets": 31,
-  "loneNonGroundPads": 15,
-  "bodyTunnels": 0,
-  "bottomLayerPixels": 8563,
-  "topLayerPixels": 43970,
-  "size": [
-   556,
-   534
-  ],
-  "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 1
- },
- {
-  "goodsNo": "186788575",
-  "name": "@ BLACK AMP 65 Parts pack",
-  "type": "overdrive",
-  "about": "웜플러 블랙 65 페달입니다. 브라이언 웜플러가 실제 빈티지 모델과 비교하면서 제작한 것으로 유명합니다. 트윈리버브, 디럭스 리버브, 바이브로럭",
-  "board": 0,
-  "image": "img_01.jpg",
-  "sameBoardAs": null,
-  "bomImages": [
-   "img_02.jpg"
-  ],
-  "pads": 118,
-  "groundPads": 23,
-  "nets": 44,
-  "multiPadNets": 34,
-  "loneNonGroundPads": 10,
-  "bodyTunnels": 0,
-  "bottomLayerPixels": 34227,
-  "topLayerPixels": 44313,
-  "size": [
-   800,
-   772
-  ],
-  "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186787956",
@@ -6836,46 +7163,20 @@
   ],
   "pads": 126,
   "groundPads": 22,
-  "nets": 40,
-  "multiPadNets": 34,
-  "loneNonGroundPads": 6,
+  "nets": 36,
+  "multiPadNets": 35,
+  "loneNonGroundPads": 1,
+  "hintedPads": 0,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6813,
+  "bottomLayerPixels": 6695,
   "topLayerPixels": 31570,
   "size": [
    526,
    578
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
- },
- {
-  "goodsNo": "186788574",
-  "name": "@ TWEED AMP 57 Parts pack",
-  "type": "overdrive",
-  "about": "웜플러 트위드57 페달입니다. 브라이언 웜플러가 실제 빈티지 모델과 비교하면서 제작한 것으로 유명합니다. 펜터의 트위드 디럭스, 베이스맨, 챔프",
-  "board": 0,
-  "image": "img_01.jpg",
-  "sameBoardAs": null,
-  "bomImages": [
-   "img_02.jpg"
-  ],
-  "pads": 126,
-  "groundPads": 22,
-  "nets": 50,
-  "multiPadNets": 34,
-  "loneNonGroundPads": 16,
-  "bodyTunnels": 0,
-  "bottomLayerPixels": 32724,
-  "topLayerPixels": 44498,
-  "size": [
-   800,
-   771
-  ],
-  "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788109",
@@ -6893,16 +7194,17 @@
   "nets": 47,
   "multiPadNets": 39,
   "loneNonGroundPads": 8,
+  "hintedPads": 1,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 2159,
-  "topLayerPixels": 35778,
+  "bottomLayerPixels": 2115,
+  "topLayerPixels": 35790,
   "size": [
    600,
    472
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788594",
@@ -6920,16 +7222,17 @@
   "nets": 51,
   "multiPadNets": 36,
   "loneNonGroundPads": 15,
+  "hintedPads": 6,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 20520,
-  "topLayerPixels": 55815,
+  "bottomLayerPixels": 20260,
+  "topLayerPixels": 55855,
   "size": [
    800,
    996
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788156",
@@ -6947,16 +7250,17 @@
   "nets": 54,
   "multiPadNets": 29,
   "loneNonGroundPads": 25,
+  "hintedPads": 4,
+  "unconnectedPads": 18,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 6355,
-  "topLayerPixels": 28273,
+  "bottomLayerPixels": 6276,
+  "topLayerPixels": 28343,
   "size": [
    600,
    508
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186788595",
@@ -6974,43 +7278,17 @@
   "nets": 52,
   "multiPadNets": 38,
   "loneNonGroundPads": 14,
+  "hintedPads": 9,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 20896,
-  "topLayerPixels": 82022,
+  "bottomLayerPixels": 20546,
+  "topLayerPixels": 82080,
   "size": [
    800,
    996
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
- },
- {
-  "goodsNo": "186788445",
-  "name": "@ OCTA KING Parts pack",
-  "type": "fuzz",
-  "about": "킹톤 옥타랜드 미니 버전입니다. 높은 게인에서도 옥타브 특성이 유지되는 강렬하고 독창적인 회로의 옥타 퍼즈 페달입니다.",
-  "board": 0,
-  "image": "img_01.jpg",
-  "sameBoardAs": null,
-  "bomImages": [
-   "img_02.jpg"
-  ],
-  "pads": 146,
-  "groundPads": 24,
-  "nets": 45,
-  "multiPadNets": 41,
-  "loneNonGroundPads": 4,
-  "bodyTunnels": 0,
-  "bottomLayerPixels": 3394,
-  "topLayerPixels": 61847,
-  "size": [
-   700,
-   636
-  ],
-  "twoLayer": true,
-  "tier": "B",
-  "hintedPads": 2
+  "tier": "C"
  },
  {
   "goodsNo": "186788305",
@@ -7028,16 +7306,17 @@
   "nets": 72,
   "multiPadNets": 40,
   "loneNonGroundPads": 32,
+  "hintedPads": 4,
+  "unconnectedPads": 23,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 17598,
-  "topLayerPixels": 44772,
+  "bottomLayerPixels": 17429,
+  "topLayerPixels": 44779,
   "size": [
    700,
    631
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186787955",
@@ -7052,19 +7331,20 @@
   ],
   "pads": 152,
   "groundPads": 25,
-  "nets": 62,
+  "nets": 43,
   "multiPadNets": 37,
-  "loneNonGroundPads": 25,
+  "loneNonGroundPads": 6,
+  "hintedPads": 4,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 14270,
-  "topLayerPixels": 54775,
+  "bottomLayerPixels": 12896,
+  "topLayerPixels": 54831,
   "size": [
    631,
    586
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 3
+  "tier": "C"
  },
  {
   "goodsNo": "186787484",
@@ -7079,19 +7359,20 @@
   ],
   "pads": 153,
   "groundPads": 22,
-  "nets": 54,
-  "multiPadNets": 37,
-  "loneNonGroundPads": 17,
+  "nets": 42,
+  "multiPadNets": 38,
+  "loneNonGroundPads": 4,
+  "hintedPads": 2,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 18590,
-  "topLayerPixels": 53590,
+  "bottomLayerPixels": 17469,
+  "topLayerPixels": 53699,
   "size": [
    631,
    662
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788477",
@@ -7109,16 +7390,17 @@
   "nets": 49,
   "multiPadNets": 39,
   "loneNonGroundPads": 10,
+  "hintedPads": 3,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 11538,
-  "topLayerPixels": 32037,
+  "bottomLayerPixels": 11525,
+  "topLayerPixels": 32042,
   "size": [
    700,
    732
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788111",
@@ -7136,16 +7418,17 @@
   "nets": 45,
   "multiPadNets": 37,
   "loneNonGroundPads": 8,
+  "hintedPads": 2,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 4066,
-  "topLayerPixels": 37911,
+  "bottomLayerPixels": 4033,
+  "topLayerPixels": 37915,
   "size": [
    596,
    564
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186787491",
@@ -7159,20 +7442,21 @@
    "img_05.jpg"
   ],
   "pads": 157,
-  "groundPads": 23,
-  "nets": 60,
-  "multiPadNets": 41,
-  "loneNonGroundPads": 19,
+  "groundPads": 22,
+  "nets": 47,
+  "multiPadNets": 38,
+  "loneNonGroundPads": 9,
+  "hintedPads": 6,
+  "unconnectedPads": 2,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 13955,
-  "topLayerPixels": 46155,
+  "bottomLayerPixels": 12474,
+  "topLayerPixels": 46397,
   "size": [
    600,
    587
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 2
+  "tier": "C"
  },
  {
   "goodsNo": "186788054",
@@ -7187,19 +7471,20 @@
   ],
   "pads": 159,
   "groundPads": 21,
-  "nets": 53,
-  "multiPadNets": 41,
+  "nets": 52,
+  "multiPadNets": 40,
   "loneNonGroundPads": 12,
+  "hintedPads": 9,
+  "unconnectedPads": 1,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 10895,
-  "topLayerPixels": 49034,
+  "bottomLayerPixels": 10849,
+  "topLayerPixels": 49084,
   "size": [
    1218,
    403
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 4
+  "tier": "C"
  },
  {
   "goodsNo": "186788591",
@@ -7217,16 +7502,17 @@
   "nets": 59,
   "multiPadNets": 38,
   "loneNonGroundPads": 21,
+  "hintedPads": 14,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 22032,
-  "topLayerPixels": 89273,
+  "bottomLayerPixels": 21527,
+  "topLayerPixels": 89376,
   "size": [
    800,
    750
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788592",
@@ -7244,9 +7530,11 @@
   "nets": 59,
   "multiPadNets": 38,
   "loneNonGroundPads": 21,
+  "hintedPads": 14,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 22032,
-  "topLayerPixels": 89273,
+  "bottomLayerPixels": 21527,
+  "topLayerPixels": 89376,
   "size": [
    800,
    750
@@ -7267,19 +7555,20 @@
   ],
   "pads": 169,
   "groundPads": 18,
-  "nets": 65,
+  "nets": 64,
   "multiPadNets": 37,
-  "loneNonGroundPads": 28,
+  "loneNonGroundPads": 27,
+  "hintedPads": 9,
+  "unconnectedPads": 12,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 18853,
-  "topLayerPixels": 36311,
+  "bottomLayerPixels": 18738,
+  "topLayerPixels": 36475,
   "size": [
    600,
    633
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788112",
@@ -7297,16 +7586,17 @@
   "nets": 60,
   "multiPadNets": 42,
   "loneNonGroundPads": 18,
+  "hintedPads": 9,
+  "unconnectedPads": 5,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9500,
-  "topLayerPixels": 48809,
+  "bottomLayerPixels": 9473,
+  "topLayerPixels": 48810,
   "size": [
    600,
    643
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186788590",
@@ -7324,16 +7614,17 @@
   "nets": 69,
   "multiPadNets": 46,
   "loneNonGroundPads": 23,
+  "hintedPads": 13,
+  "unconnectedPads": 6,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 37710,
-  "topLayerPixels": 91475,
+  "bottomLayerPixels": 37257,
+  "topLayerPixels": 91579,
   "size": [
    800,
    931
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788158",
@@ -7348,19 +7639,20 @@
   ],
   "pads": 195,
   "groundPads": 29,
-  "nets": 81,
+  "nets": 80,
   "multiPadNets": 51,
-  "loneNonGroundPads": 30,
+  "loneNonGroundPads": 29,
+  "hintedPads": 10,
+  "unconnectedPads": 7,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 18364,
-  "topLayerPixels": 40259,
+  "bottomLayerPixels": 18101,
+  "topLayerPixels": 40482,
   "size": [
    600,
    644
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788406",
@@ -7378,16 +7670,17 @@
   "nets": 75,
   "multiPadNets": 61,
   "loneNonGroundPads": 14,
+  "hintedPads": 8,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9596,
-  "topLayerPixels": 47754,
+  "bottomLayerPixels": 9371,
+  "topLayerPixels": 47783,
   "size": [
    700,
    808
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 1
+  "tier": "C"
  },
  {
   "goodsNo": "186788597",
@@ -7406,16 +7699,17 @@
   "nets": 96,
   "multiPadNets": 56,
   "loneNonGroundPads": 40,
+  "hintedPads": 16,
+  "unconnectedPads": 10,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 25765,
-  "topLayerPixels": 87474,
+  "bottomLayerPixels": 25329,
+  "topLayerPixels": 87578,
   "size": [
    1000,
    995
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788113",
@@ -7430,19 +7724,20 @@
   ],
   "pads": 240,
   "groundPads": 27,
-  "nets": 90,
-  "multiPadNets": 56,
-  "loneNonGroundPads": 34,
+  "nets": 87,
+  "multiPadNets": 55,
+  "loneNonGroundPads": 32,
+  "hintedPads": 15,
+  "unconnectedPads": 4,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 19322,
-  "topLayerPixels": 56130,
+  "bottomLayerPixels": 18999,
+  "topLayerPixels": 56225,
   "size": [
    600,
    726
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186788584",
@@ -7460,16 +7755,17 @@
   "nets": 101,
   "multiPadNets": 73,
   "loneNonGroundPads": 28,
+  "hintedPads": 11,
+  "unconnectedPads": 9,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 9853,
-  "topLayerPixels": 41982,
+  "bottomLayerPixels": 9718,
+  "topLayerPixels": 42011,
   "size": [
    1000,
    538
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 0
+  "tier": "C"
  },
  {
   "goodsNo": "186787478",
@@ -7483,19 +7779,20 @@
    "img_03.jpg"
   ],
   "pads": 275,
-  "groundPads": 48,
-  "nets": 90,
-  "multiPadNets": 60,
-  "loneNonGroundPads": 30,
+  "groundPads": 46,
+  "nets": 65,
+  "multiPadNets": 57,
+  "loneNonGroundPads": 8,
+  "hintedPads": 8,
+  "unconnectedPads": 0,
   "bodyTunnels": 0,
-  "bottomLayerPixels": 19339,
-  "topLayerPixels": 73628,
+  "bottomLayerPixels": 18403,
+  "topLayerPixels": 73799,
   "size": [
    626,
    1100
   ],
   "twoLayer": true,
-  "tier": "C",
-  "hintedPads": 6
+  "tier": "C"
  }
 ]
