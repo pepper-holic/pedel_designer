@@ -1,6 +1,6 @@
 import type { Element } from "../../solver/types";
 import type { KnobSpec, LayoutSpot, PedalPreset, PresetCategory } from "../types";
-import type { KitCircuit, KitMeta, KitPart } from "./types";
+import type { KitCircuit, KitMeta, KitPart, KitRail } from "./types";
 import { stageBlocks } from "./stageBlocks";
 import { parsePot, parseValue } from "./values";
 import { bjtModel, diodeModel, jfetModel, opAmpModel, OPAMP_PINOUT } from "./partModels";
@@ -20,6 +20,10 @@ const CATEGORY: Record<string, PresetCategory> = {
 };
 
 export class UnsupportedKitError extends Error {}
+
+/** Charge-pump ICs: the map turns their output pin into an ideal rail, so the package itself stamps nothing. */
+const CHARGE_PUMPS = ["ICL7660", "7660", "TC1044", "MAX1044", "LT1054"];
+const isChargePump = (part: string): boolean => CHARGE_PUMPS.some((p) => part.toUpperCase().replace(/\s+/g, "").startsWith(p));
 
 /** Map placement refs onto element ids: VCC -> Vcc; an op-amp's "U1A" is the element itself for a
  * single package (its id is the bare ref), and for a dual whose B half has no spot of its own the B
@@ -47,13 +51,15 @@ const pins = (part: KitPart): Record<string, string> => {
   return part.nodes;
 };
 
-function railVoltage(net: string, supply: number): number | undefined {
-  if (net === "vcc") return supply;
+type Rails = { supply: number; extra: KitRail[] };
+
+function railVoltage(net: string, rails: Rails): number | undefined {
+  if (net === "vcc") return rails.supply;
   if (net === "0") return 0;
-  return undefined;
+  return rails.extra.find((r) => r.net === net)?.voltage;
 }
 
-function partElements(part: KitPart, supply: number, knobs: KnobSpec[]): Element[] {
+function partElements(part: KitPart, rails: Rails, knobs: KnobSpec[]): Element[] {
   switch (part.kind) {
     case "R":
       return [{ id: part.ref, type: "resistor", nodes: pair(part), resistance: parseValue(part.value!) }];
@@ -98,12 +104,13 @@ function partElements(part: KitPart, supply: number, knobs: KnobSpec[]): Element
       ];
     }
     case "IC": {
+      if (isChargePump(part.part ?? "")) return [];
       const found = opAmpModel(part.part ?? "");
       if (!found) throw new UnsupportedKitError(`${part.ref}: no model for IC ${part.part}`);
       const p = pins(part);
       const pinout = OPAMP_PINOUT[found.channels];
-      const top = railVoltage(p[pinout.vPlus] ?? "", supply) ?? supply;
-      const bottom = railVoltage(p[pinout.vMinus] ?? "", supply) ?? 0;
+      const top = railVoltage(p[pinout.vPlus] ?? "", rails) ?? Math.max(rails.supply, 0);
+      const bottom = railVoltage(p[pinout.vMinus] ?? "", rails) ?? Math.min(rails.supply, 0);
       const { railPositive: _rp, railNegative: _rn, ...dynamics } = found.model;
       return pinout.channels.flatMap((ch, i): Element[] =>
         p[ch.out] && p[ch.inMinus] && p[ch.inPlus]
@@ -121,12 +128,14 @@ function partElements(part: KitPart, supply: number, knobs: KnobSpec[]): Element
  */
 export function kitToPreset(kit: KitCircuit): PedalPreset {
   const knobs: KnobSpec[] = [];
-  const byRef = new Map(kit.parts.map((part) => [part.ref, partElements(part, kit.supply, knobs)]));
+  const rails: Rails = { supply: kit.supply, extra: kit.rails ?? [] };
+  const byRef = new Map(kit.parts.map((part) => [part.ref, partElements(part, rails, knobs)]));
   const parts = [...byRef.values()].flat();
   const meta: KitMeta = { goodsNo: kit.goodsNo, kitName: kit.kitName, motif: kit.motif, family: kit.type };
   const elements: Element[] = [
     { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },
     { id: "Vcc", type: "vsource", nodes: ["vcc", "0"], voltage: kit.supply, role: "supply" },
+    ...rails.extra.map((r, i): Element => ({ id: `Vrail${i + 1}`, type: "vsource", nodes: [r.net, "0"], voltage: r.voltage, role: "supply" })),
     ...parts,
     { id: "RLOAD", type: "resistor", nodes: ["out", "0"], resistance: LOAD_RESISTANCE },
   ];

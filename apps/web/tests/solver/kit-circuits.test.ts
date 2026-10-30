@@ -23,6 +23,24 @@ describe("kit circuit values", () => {
   });
 });
 
+describe("charge-pump kits", () => {
+  it("runs a positive-ground germanium board on the ICL7660's ideal -9V rail", () => {
+    const preset = kitPresets.find((p) => p.id === "pp-ranger-ge")!;
+    const netlist = preset.build(preset.defaultParams);
+    const rail = netlist.elements.find((e) => e.id === "Vrail1");
+    expect(rail?.type === "vsource" && rail.voltage).toBe(-9);
+    expect(netlist.elements.some((e) => e.id === "U1")).toBe(false);
+    expect(netlist.elements.some((e) => e.id === "C6")).toBe(false);
+    const topology = buildTopology(netlist);
+    const { solution, converged } = solveNewton(netlist, topology, new Map(), 0);
+    expect(converged).toBe(true);
+    const q1 = netlist.elements.find((e) => e.id === "Q1")!;
+    const vc = voltageAt(topology, solution, q1.nodes[1]);
+    expect(vc).toBeLessThan(-1);
+    expect(vc).toBeGreaterThan(-8.5);
+  });
+});
+
 describe("kit circuits", () => {
   it("converts every recorded kit or says which part stops it", () => {
     expect(kitCircuits.length).toBeGreaterThan(0);
@@ -35,11 +53,13 @@ describe("kit circuits", () => {
       const topology = buildTopology(netlist);
       const { solution, converged } = solveNewton(netlist, topology, new Map(), 0);
       expect(converged).toBe(true);
+      const railVolts = netlist.elements.flatMap((el) => (el.type === "vsource" && el.role === "supply" ? [el.voltage] : []));
+      const [lo, hi] = [Math.min(0, ...railVolts), Math.max(0, ...railVolts)];
       for (const el of netlist.elements) {
         if (el.type !== "bjt") continue;
         const vc = voltageAt(topology, solution, el.nodes[1]);
-        expect(vc, `${el.id} collector`).toBeGreaterThan(-0.01);
-        expect(vc, `${el.id} collector`).toBeLessThan(9.01);
+        expect(vc, `${el.id} collector`).toBeGreaterThan(lo - 0.01);
+        expect(vc, `${el.id} collector`).toBeLessThan(hi + 0.01);
       }
     });
 

@@ -1,4 +1,64 @@
-# RANGER GE (186788519): germanium PNP Rangemaster run on a negative rail from an ICL7660 charge
-# pump (positive ground). The app has no charge-pump model and no PNP-germanium-on-negative-rail
-# supply convention yet; recorded only. Board: 470K/68K/1K bias, 5K BIAS trimmer, 47uF, 4.7n/22n/6.8n
-# input caps on a toggle, 10n/100n output, A10K volume off board, 2.2M pulldown.
+id pp-ranger-ge
+goods 186788519
+name RANGER GE
+motif Dallas Rangemaster (germanium)
+type buffer-boost
+desc 게르마늄 PNP 1석 레인지마스터 - ICL7660이 만든 -9V 레일에 양접지로 동작. 4.7n 입력(토글로 22n/6.8n 추가), 470K/68K 베이스 분압, 이미터 5K BIAS 트리머+1K∥47uF, A10K 볼륨이 컬렉터 부하, 10n 출력
+image img_01.jpg
+# ICL7660 notch up: 20=1 28=2 31=3(GND) 37=4 / 38=5(VOUT = -9V rail n8) 32=6 29=7 21=8(V+). The 10uF 48-49 is the
+# flying cap (dropped by the converter). Positive ground: the 47uF/100uF/100n '+' pads sit on the 0V (ground) side.
+# Hidden trace: Ge emitter 10 -> BIAS trimmer / 47uF node 7 under the TO-5 outline. Trimmer lugs 3 and 6 are tied
+# (variable resistor from the emitter node to the 1K). Big ring pads 40-41-42 are the off-board A10K volume (lug 40 on
+# the collector, wiper 41 to the 10n, lug 42 on the -9V rail). The DIP on-off-on (24/30/35) adds the 22n (44-45) or
+# 6.8n (50-51) to the 4.7n; drawn in the centre-off position, so the two caps are left out of the netlist and BOM
+# (kit list: 22n x1, 6.8n x1). Status LED pads 53-57 are not in the audio path.
+BOM 2.2M 470K 68K 1K 100nx2 10n 4.7n 100uF 47uFx2 10uF 1N400X 5K ICL7660 GE-PNP A10K
+io IN=43 OUT=9 V9=8 GND=4,27,33
+JUMP 10 7
+NC 24 30 35 44 45 50 51 53 54 55 56 57 29 32
+
+STAGE input input 입력
+C 4.7n 34 23 C1
+R 2.2M 52 36 R1
+
+STAGE boost gain 부스트 (Ge PNP)
+Q GE-PNP b=15 c=22 e=10 Q1
+R 470K 0 16 R2
+R 68K 1 17 R3
+POT 5K BIAS 3 6 7
+R 1K 2 18 R4
+C 47uF 19 27 C2
+
+STAGE output output 출력 (볼륨)
+POT A10K VOLUME 40 41 42
+C 10n 26 14 C3
+
+STAGE power power 전원 (ICL7660 -9V)
+D 1N400X a=11 k=12 D1
+C 100uF 5 4 C4
+C 100n 13 25 C5
+IC ICL7660 1=20 2=28 3=31 4=37 5=38 8=21 U1
+C 10uF 49 48 C6
+C 47uF 39 33 C7
+C 100n 47 46 C8
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT VOLUME 380 400 r0
+AT C3 480 400 h
+AT R1 120 470 v
+AT R2 300 520 h
+AT R3 200 470 v
+AT BIAS 410 490 r180
+AT R4 500 560 v
+AT C2 590 500 v
+AT C7 470 470 v
+AT C8 530 470 v
+AT U1A 570 400
+AT D1 140 880 h
+AT C4 240 880 h
+AT C5 340 880 h
+AT RLOAD 660 480 v

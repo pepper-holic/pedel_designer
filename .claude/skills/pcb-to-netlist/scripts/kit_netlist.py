@@ -24,6 +24,9 @@ The map names each part and the pads (ids from the extract_nets overlay) its lea
     NC 61                               # pad deliberately unused (silences the check)
     SPLIT 46 47 55 56                   # pull pads out of a net the extractor merged wrongly
     io IN=8 OUT=82 V9=5 GND=4,13,22     # a comma list joins extra pads to that role's net
+    supply -9                           # battery wired positive-ground: the V9 pad sits at -9V (default 9)
+    IC ICL7660 8=3 3=4 2=10 4=11 5=12   # charge pump: pin 5 becomes an ideal -9V rail, the pump cap on 2/4 is dropped
+    RAIL 40 18                          # the net of pad 40 is an ideal 18V rail (voltage-doubler output)
 
 STAGE lines group the parts after them into the schematic's functional blocks, in signal order:
 "STAGE <id> <category> <label>", category one of input buffer gain clipping fuzz tone output power
@@ -52,7 +55,8 @@ import re
 import sys
 from pathlib import Path
 
-META_KEYS = ("id", "goods", "name", "motif", "type", "desc", "image")
+META_KEYS = ("id", "goods", "name", "motif", "type", "desc", "image", "supply")
+CHARGE_PUMPS = ("ICL7660", "7660", "TC1044", "MAX1044", "LT1054")
 IO_NET = {"IN": "in", "OUT": "out", "V9": "vcc", "GND": "0"}
 
 
@@ -102,6 +106,8 @@ def main() -> None:
     stages: list[dict] = []
     layout: dict[str, dict] = {}
     bom: dict[str, int] = {}
+    rails: list[tuple[int, float]] = []  # (pad, volts): ideal supply rails besides V9
+    pump_pads: list[set[int]] = []  # pads of a charge pump's flying-capacitor pins
 
     # Off-board points: a pot or jack wired straight to a part leg without a board pad (e.g. a level
     # pot whose wiper goes directly to the output jack). Written as IN/OUT/V9/GND in place of a pad.
@@ -168,6 +174,13 @@ def main() -> None:
             kv = dict(t.split("=") for t in pins if "=" in t)
             ref = next((t for t in pins if "=" not in t), None)
             raw_parts.append({"ref": auto_ref("U", ref), "kind": "IC", "part": part, "pads": {k: pad(v) for k, v in kv.items()}})
+            if part.upper().startswith(CHARGE_PUMPS):
+                # Inverter: VOUT (pin 5) is an ideal -V9 rail. The flying cap on pins 2/4 is bookkeeping only.
+                if "5" in kv:
+                    rails.append((pad(kv["5"]), -9.0))
+                pump_pads.append({pad(kv[k]) for k in ("2", "4") if k in kv})
+        elif head == "RAIL":
+            rails.append((pad(rest[0]), float(rest[1])))
         elif head == "STAGE":
             sid, category, *label = rest
             stages.append({"id": sid, "category": category, "label": " ".join(label), "parts": []})
@@ -212,6 +225,13 @@ def main() -> None:
         names[find(pad_net[p])] = IO_NET[k]
     for g in ground_pads:
         names.setdefault(find(pad_net[g]), "0")
+    rail_nets: list[dict] = []
+    for p, volts in rails:
+        name = "vneg" if volts < 0 else f"v{int(volts)}"
+        names.setdefault(find(pad_net[p]), name)
+        if names[find(pad_net[p])] != name:
+            sys.exit(f"RAIL pad {p}: its net is already {names[find(pad_net[p])]}")
+        rail_nets.append({"net": name, "voltage": volts})
     counter = 0
 
     def net_of(p: int) -> str:
@@ -223,9 +243,13 @@ def main() -> None:
         return names[root]
 
     parts = []
+    dropped: list[dict] = []  # charge-pump flying caps: counted for the BOM, not simulated
     terminals: dict[str, list[str]] = {}
     for rp in raw_parts:
         pads = rp.pop("pads")
+        if isinstance(pads, list) and any({find(pad_net[q]) for q in pads} <= {find(pad_net[q]) for q in grp} for grp in pump_pads):
+            dropped.append(rp)
+            continue
         if isinstance(pads, dict):
             nodes = {k: net_of(v) for k, v in pads.items()}
             for k, n in nodes.items():
@@ -237,8 +261,9 @@ def main() -> None:
         parts.append({**rp, "nodes": nodes})
 
     problems = []
+    pump_nets = {net_of(q) for grp in pump_pads for q in grp}
     for net, terms in sorted(terminals.items()):
-        if len(terms) == 1 and net not in ("in", "out", "vcc", "0"):
+        if len(terms) == 1 and net not in ("in", "out", "vcc", "0") and net not in pump_nets:
             problems.append(f"net {net} has one lead only: {terms[0]}")
     for p in extraction["pads"]:
         if p["id"] in used_pads or p["ground"]:
@@ -261,7 +286,7 @@ def main() -> None:
                 problems.append(f"AT {ref}: no such part")
     if bom:
         have: dict[str, int] = {}
-        for p in parts:
+        for p in parts + dropped:
             key = norm(p.get("value") or p.get("part") or "")
             have[key] = have.get(key, 0) + 1
         for key in sorted(set(bom) | set(have)):
@@ -278,8 +303,9 @@ def main() -> None:
         "motif": meta.get("motif", ""),
         "type": meta.get("type", "unknown"),
         "description": meta.get("desc", ""),
-        "supply": 9,
+        "supply": float(meta.get("supply", "9")),
         "parts": parts,
+        **({"rails": rail_nets} if rail_nets else {}),
         **({"stages": stages} if stages else {}),
         **({"layout": layout} if layout else {}),
     }

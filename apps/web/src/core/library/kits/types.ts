@@ -34,14 +34,21 @@ export interface KitCircuit {
   /** Effect family, as in references/pcb-kits/index.json ("overdrive", "fuzz", ...). */
   type: string;
   description: string;
-  /** Supply voltage on the "vcc" net. */
+  /** Supply voltage on the "vcc" net (negative for a positive-ground board). */
   supply: number;
+  /** Ideal rails besides vcc: a charge pump's -9V ("vneg") or a voltage doubler's 18V ("v18"). */
+  rails?: KitRail[];
   parts: KitPart[];
   /** Functional stages in signal order (input, preamp, controls, clipper, output...), each listing
    * part refs - loaded as blocks so the schematic reads left to right by stage. */
   stages?: KitStage[];
   /** Hand-drawn schematic placement by part ref (plus V1, VCC, RLOAD; op-amp channels as U1A/U1B). */
   layout?: Record<string, LayoutSpot>;
+}
+
+export interface KitRail {
+  net: string;
+  voltage: number;
 }
 
 export interface KitStage {
