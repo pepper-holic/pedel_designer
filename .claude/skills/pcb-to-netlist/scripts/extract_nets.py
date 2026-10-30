@@ -148,8 +148,11 @@ def bridge(mask: dict[tuple[int, int], str], layer: str, w: int, h: int) -> None
     for q in fill:
         # Inside the other layer's trace (where this trace passes under it and the overlap goes dark)
         # the filled pixel is both layers' copper; written as this layer alone it would cut the other.
+        # The other layer must lie on both sides across one axis: a silk outline crossing a cyan trace
+        # that merely runs beside a yellow one touches yellow on one side only, and calling it "both"
+        # there joined that yellow trace to another under the cyan (Duel A shorted its 1K R10).
         x, y = q
-        inside = any(mask.get((x + dx, y + dy)) in (other, "both") for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+        inside = any(all(any(mask.get((x + s * dx * k, y + s * dy * k)) in (other, "both") for k in range(1, 4)) for s in (1, -1)) for dx, dy in ((1, 0), (0, 1)))
         mask[q] = "both" if inside else layer
 
 
