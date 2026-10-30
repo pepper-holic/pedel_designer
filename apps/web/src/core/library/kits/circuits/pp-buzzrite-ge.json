@@ -1,0 +1,427 @@
+{
+ "id": "pp-buzzrite-ge",
+ "goodsNo": "186788520",
+ "kitName": "BUZZRITE GE",
+ "motif": "Mosrite Fuzzrite (germanium)",
+ "type": "fuzz",
+ "description": "게르마늄 PNP 2석 퍼즈라이트, ICL7660의 -9V 레일에 양접지 - 47n/2.2M 입력→Q1(10M 바이어스, 22K 부하)→47n→Q2(1M 바이어스, 47K+68K 부하)→DEPTH B500K가 Q1 컬렉터(2.2n)와 Q2 컬렉터(2.2n) 신호를 섞고(1M 브리지, 22K 션트)→100K 부하→C500K 볼륨. 빈티지 모드(DIP 열림)",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "GE-PNP",
+   "nodes": {
+    "b": "n1",
+    "c": "n2",
+    "e": "0"
+   }
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "10M",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n2",
+    "vm9"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n2",
+    "n3"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "GE-PNP",
+   "nodes": {
+    "b": "n3",
+    "c": "n4",
+    "e": "0"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "68K",
+   "nodes": [
+    "n5",
+    "vm9"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "2.2n",
+   "nodes": [
+    "n2",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "2.2n",
+   "nodes": [
+    "n4",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n6",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "DEPTH",
+   "kind": "POT",
+   "value": "B500K",
+   "nodes": [
+    "n6",
+    "n8",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "C500K",
+   "nodes": [
+    "0",
+    "out",
+    "n8"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n9"
+   }
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n9",
+    "0"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n9",
+    "0"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "ICL7660",
+   "nodes": {
+    "1": "n9",
+    "2": "n10",
+    "3": "0",
+    "4": "n11",
+    "5": "vm9",
+    "8": "n9"
+   }
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "vm9",
+    "0"
+   ]
+  }
+ ],
+ "rails": [
+  {
+   "net": "vm9",
+   "voltage": -9.0
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "C1",
+    "R1"
+   ]
+  },
+  {
+   "id": "q1",
+   "category": "fuzz",
+   "label": "Q1",
+   "parts": [
+    "Q1",
+    "R2",
+    "R3"
+   ]
+  },
+  {
+   "id": "q2",
+   "category": "fuzz",
+   "label": "Q2",
+   "parts": [
+    "C2",
+    "Q2",
+    "R4",
+    "R5",
+    "R6",
+    "C3"
+   ]
+  },
+  {
+   "id": "depth",
+   "category": "tone",
+   "label": "DEPTH 믹스",
+   "parts": [
+    "C4",
+    "C5",
+    "R7",
+    "R8",
+    "DEPTH"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "R9",
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원 (ICL7660 -9V)",
+   "parts": [
+    "D1",
+    "C6",
+    "C7",
+    "U1",
+    "C8",
+    "C9"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q1": {
+   "x": 270,
+   "y": 400
+  },
+  "C4": {
+   "x": 380,
+   "y": 400,
+   "rotation": 0
+  },
+  "DEPTH": {
+   "x": 480,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 580,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 240,
+   "y": 520,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 350,
+   "y": 500,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 290,
+   "y": 320,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 350,
+   "y": 350,
+   "rotation": 0
+  },
+  "R5": {
+   "x": 440,
+   "y": 480,
+   "rotation": 90
+  },
+  "R6": {
+   "x": 400,
+   "y": 520,
+   "rotation": 180
+  },
+  "C3": {
+   "x": 440,
+   "y": 580,
+   "rotation": 90
+  },
+  "C5": {
+   "x": 440,
+   "y": 580,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 460,
+   "y": 640,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 690,
+   "y": 470,
+   "rotation": 90
+  },
+  "R9": {
+   "x": 780,
+   "y": 470,
+   "rotation": 90
+  },
+  "C9": {
+   "x": 350,
+   "y": 600,
+   "rotation": 90
+  },
+  "Q2": {
+   "x": 700,
+   "y": 350
+  },
+  "U1A": {
+   "x": 560,
+   "y": 530
+  },
+  "D1": {
+   "x": 140,
+   "y": 880,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 240,
+   "y": 880,
+   "rotation": 0
+  },
+  "C7": {
+   "x": 340,
+   "y": 880,
+   "rotation": 0
+  },
+  "RLOAD": {
+   "x": 630,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

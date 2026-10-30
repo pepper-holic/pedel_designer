@@ -1,5 +1,5 @@
-# 1969 GE FUZZ (186788517): Fulltone '69 style germanium PNP fuzz face on a negative rail from an
-# ICL7660 inverter (positive ground). The app has no charge-pump model and no PNP-germanium-on-
-# negative-rail supply convention; recorded only. Board: 100K / 33K / 220R / 1K, 1M x2, 100n x2,
-# 100pF, 10K BIAS trimmer, 47uF / 22uF / 10uF / 100uF / 2.2uF, A500K VOLUME, B1K FUZZ, B50K CONTOUR
-# and B1K INPUT mini pots, 2 DIP toggles.
+# 1969 GE FUZZ (186788517): Fulltone '69 style germanium PNP fuzz face on the ICL7660's -9V rail (positive ground).
+# The charge-pump convention now exists; what blocks it is the off-board wiring - the CONTOUR (B50K mini, ring pads
+# 58/59), INPUT (B1K mini, 64/65) and FUZZ pot (35/36/37) lugs and the DIP pads 47/52 are lone pads with no board
+# trace, so the pot wiring has to come from the seller's wiring diagram or the '69 schematic. See docs/kit-deferred.md.
+# Board: 100K / 33K / 220R / 1K, 1M x2, 100n x2, 100pF, 10K BIAS trimmer, 47uF / 22uF / 10uF / 100uF / 2.2uF, A500K VOLUME.

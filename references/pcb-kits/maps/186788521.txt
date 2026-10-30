@@ -1,3 +1,71 @@
-# SOLA FACE GE (186788521): germanium PNP Sun Face on a negative rail from an ICL7660 charge pump;
-# same board family as SoLa Face BC108c (186788496) with the pump added. No charge-pump model in the
-# app yet; recorded only.
+id pp-sola-face-ge
+goods 186788521
+name SOLA GE FACE
+motif Sola Sound / Fuzz Face (germanium)
+type fuzz
+desc 게르마늄 PNP 2석 퍼즈페이스, ICL7660의 -9V 레일에 양접지 - INPUT CLEAN 50K 가변저항→1uF→Q1(33K 부하)→Q2 직결, 100K 피드백, Q2 이미터 B1K FUZZ+22uF, Q2 컬렉터 부하 1K→10K BIAS 트리머→B5K→470R, 470R 앞에서 10n 출력→A250K 볼륨
+image img_01.jpg
+# ICL7660 notch right: top 4=pin1 3=pin2 2=pin3(GND) 1=pin4, bottom 11=pin5(-9V) 12 13 14=pin8; 10uF 0-7 flying cap.
+# Positive ground: Q1 emitter 41 and the electrolytic '+' pads (16, 19, 22) sit on 0V. Hidden trace: Q2 collector 51 ->
+# 1K (54) under the TO-5 outline. Silk BIAS "5K" / INPUT CLEAN "50K": the kit ships 10K and 50K trimmers, written as
+# shipped. INPUT trimmer lug 46 is unused (rheostat 45 -> 49); BIAS lugs 24/27 are tied, B5K lugs 9/10 tied.
+BOM 1M 100K 33K 1K 470R 100n 10n 100uF 22uF 10uFx2 1uF 1N400X 50K 10K ICL7660 GE-PNPx2 A250K B5K B1K
+io IN=38 OUT=37 V9=6 GND=2,16,19,22
+JUMP 51 54
+NC 12 13 46
+
+STAGE input input 입력
+R 1M 39 52 R1
+POT 50K INPUT 45 49 49
+C 1uF 56 57 C1
+
+STAGE core fuzz 퍼즈 코어 (Q1·Q2)
+Q GE-PNP b=47 c=50 e=41 Q1
+R 33K 43 55 R2
+Q GE-PNP b=48 c=51 e=44 Q2
+R 100K 40 53 R3
+POT B1K FUZZ 31 30 29
+C 22uF 17 16 C2
+
+STAGE bias custom Q2 컬렉터 부하 (BIAS)
+R 1K 42 54 R4
+POT 10K BIAS 28 27 24
+POT B5K BIAS2 8 9 10
+R 470R 25 36 R5
+
+STAGE output output 출력 (볼륨)
+C 10n 26 35 C3
+POT A250K VOLUME 34 33 32
+
+STAGE power power 전원 (ICL7660 -9V)
+D 1N400X a=5 k=15 D1
+C 100uF 23 22 C4
+C 100n 21 20 C5
+IC ICL7660 1=4 2=3 3=2 4=1 5=11 8=14 U1
+C 10uF 0 7 C6
+C 10uF 18 19 C7
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT INPUT 170 400 r0
+AT C1 270 400 h
+AT Q1 370 400
+AT R2 480 400 h-
+AT R5 580 400 h-
+AT C3 680 400 h
+AT VOLUME 780 400 r180
+AT R1 240 470 v
+AT R3 300 470 v-
+AT FUZZ 360 500 r180
+AT C2 360 600 v
+AT BIAS2 670 460 r180
+AT C7 510 470 v
+AT BIAS 760 490 r180
+AT R4 850 490 h
+AT Q2 900 370
+AT U1A 1020 400
+AT D1 140 880 h
+AT C4 240 880 h
+AT C5 340 880 h
+AT RLOAD 930 480 v

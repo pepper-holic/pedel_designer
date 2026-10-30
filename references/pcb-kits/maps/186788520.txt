@@ -1,4 +1,81 @@
-# BUZZRITE GE (186788520): FUZZ Lite GE - germanium PNP two-transistor fuzz (Q1 hFE ~182, Q2 ~53) run on a
-# negative rail from an ICL7660 inverter (positive ground, 10uF/47uF pump caps). The app has no charge-pump
-# model and no PNP-germanium-on-negative-rail convention; recorded only. Board: 10M, 2.2M, 1M x2, 100K, 68K,
-# 47K, 22K, 100n, 47n x3, 8.2n x2, 2.2n x2, 100uF, 1N400X, DIP dual on-on cap selector, angle B500K / C500K.
+id pp-buzzrite-ge
+goods 186788520
+name BUZZRITE GE
+motif Mosrite Fuzzrite (germanium)
+type fuzz
+desc 게르마늄 PNP 2석 퍼즈라이트, ICL7660의 -9V 레일에 양접지 - 47n/2.2M 입력→Q1(10M 바이어스, 22K 부하)→47n→Q2(1M 바이어스, 47K+68K 부하)→DEPTH B500K가 Q1 컬렉터(2.2n)와 Q2 컬렉터(2.2n) 신호를 섞고(1M 브리지, 22K 션트)→100K 부하→C500K 볼륨. 빈티지 모드(DIP 열림)
+image img_01.jpg
+# ICL7660 notch right: top 3=pin1 2=pin2 1=pin3(GND) 0=pin4, bottom 16=pin5(-9V) 17 18 19=pin8; 10uF 9-10 flying cap.
+# Hidden traces (under the "FUZZrite GE" silk): 68K top pad 28 -> the -9V rail (22K pad 61); 2.2n right pad 27 -> Q2
+# collector (72), as in the silicon board where DEPTH mixes both collectors through 2.2n. Modern mode (DIP A/B) adds the
+# two 8.2n (42-55, 45-57) - left out with the DIP pads (kit list: 8.2n x2). Status LED (12-14) and LED_R (4-5) are not
+# in the audio path. The board carries two 22K (Q1 load 61-75, DEPTH shunt 30-31) against 22K x1 on the parts list.
+BOM 10M 2.2M 1Mx2 100K 68K 47K 22Kx2 100n 47nx3 2.2nx2 100uF 47uF 10uF 1N400X ICL7660 GE-PNPx2 B500K C500K
+io IN=73 OUT=58 V9=8 GND=1,21
+JUMP 28 61
+JUMP 27 72
+NC 17 18 4 5 12 13 14 34 39 40 42 43 44 45 52 53 55 56 57
+
+STAGE input input 입력
+C 47n 69 59 C1
+R 2.2M 74 60 R1
+
+STAGE q1 fuzz Q1
+Q GE-PNP b=67 c=70 e=62 Q1
+R 10M 63 76 R2
+R 22K 75 61 R3
+
+STAGE q2 fuzz Q2
+C 47n 64 71 C2
+Q GE-PNP b=68 c=72 e=66 Q2
+R 1M 65 77 R4
+R 47K 32 33 R5
+R 68K 29 28 R6
+C 47n 25 24 C3
+
+STAGE depth tone DEPTH 믹스
+C 2.2n 54 41 C4
+C 2.2n 27 26 C5
+R 1M 36 35 R7
+R 22K 30 31 R8
+POT B500K DEPTH 48 47 46
+
+STAGE output output 출력 (볼륨)
+R 100K 37 38 R9
+POT C500K VOLUME 51 50 49
+
+STAGE power power 전원 (ICL7660 -9V)
+D 1N400X a=7 k=6 D1
+C 100uF 11 15 C6
+C 100n 23 22 C7
+IC ICL7660 1=3 2=2 3=1 4=0 5=16 8=19 U1
+C 10uF 9 10 C8
+C 47uF 20 21 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT C4 380 400 h
+AT DEPTH 480 400 r0
+AT VOLUME 580 400 r180
+AT R1 120 470 v
+AT R2 240 520 h
+AT R3 350 500 v
+AT C2 290 320 v
+AT R4 350 350 h
+AT R5 440 480 v
+AT R6 400 520 h-
+AT C3 440 580 v
+AT C5 440 580 h
+AT R7 460 640 h
+AT R8 690 470 v
+AT R9 780 470 v
+AT C9 350 600 v
+AT Q2 700 350
+AT U1A 560 530
+AT D1 140 880 h
+AT C6 240 880 h
+AT C7 340 880 h
+AT RLOAD 630 480 v
