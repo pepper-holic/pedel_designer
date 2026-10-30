@@ -1,6 +1,97 @@
-# NEW ZEN GU DONG (186788308): Tanabe Zenkudo (Zendrive mod, 4 knobs, 3-way clipping rotary). JRC4558D with a
-# 2N7000 MOSFET + 1N34A / red 3mm LED clipper set on a 3-position rotary; the app has no MOSFET model, so recorded
-# only. Board: 2.2M x2, 470K, 10K x4, 1K, 470n x2, 100n, 10n, 3.3n, 100pF, 100uF, 47uF, 1N400X, angle B500K /
-# B100K / B50K / B10K.
-# Update 2026-10-30: 2N7000/BS170 now have a model (square-law + body diode); this board stays recorded only because of
-# its hidden traces / off-board pads, see docs/kit-deferred.md.
+id pp-new-zen-gu-dong
+goods 186788308
+name NEW ZEN GU DONG
+motif Tanabe Zenkudo
+type overdrive
+desc JRC4558D 젠드라이브 계열 - 10n/2.2M/470n/470K 입력→A단 비반전(B500K GAIN 와이퍼 10K로 출력, 100p), 1K→B50K VOICE 가변저항→100n→Vref 다리, 로터리 ZEN 위치의 2N7000+1N34A 역병렬 클리퍼 → 10K+B10K TONE 가변저항+3.3n → B단 폴로어 → 470n→1K→B100K 볼륨
+image img_01.jpg
+# JRC4558D notch up: 16 22 31 36 / 37 32 23 17. The ground pour is not drawn on this render: the pale pads
+# (6 24 36 40 47 56 and the 47uF / 3.3n feet 5, 18) are ground.
+# Clip rotary (common 78 on - in A): MRSL 75 = three red LEDs (out A -> LED -> LED -> MRSL, MRSL -> LED -> out A),
+# ZEN 84 = 2N7000 (diode-connected, D/G on out A) -> 1N34A, and back ZEN -> 2N7000 -> 1N34A -> out A, DUM 93 = no
+# clipper. Fixed on ZEN (JUMP 78 84); the MRSL LEDs and the open DUM lug are left out (as on Duel A) - the LEDs and
+# the indicator LED/470R are not in the BOM line below.
+# Vertical angle pots, no "1" marks: GAIN 48 (out A) / 49 wiper (10K to out A) / 50 (- in), turned so clockwise adds
+# resistance to - in; VOICE 51 (from the 1K) / 52 wiper (100n to Vref) / 53 empty; TONE is the ring column 65 (from
+# the 10K) / 79 wiper (+ in B, 3.3n) / 87 empty - clockwise brighter; VOLUME 54 / 55 wiper OUT / 56 ground.
+# The 100uF's + (20) is reached by a cyan diagonal that leaves the 1N400X body: on the protected rail (JUMP 20 12).
+# Rotary dummy lugs 63 64 74 77 83 92 have no copper.
+BOM 2.2Mx2 470K 10Kx4 1Kx2 470nx2 100n 10n 3.3n 100pF 100uF 47uF 1N400X 1N34Ax2 JRC4558D 2N7000x2 B500K B100K B50K B10K
+io IN=21 OUT=35 V9=14 GND=6,5,18,24,40,47,56,36
+JUMP 78 84
+JUMP 20 12
+NC 0 1 2 3 4 88 89 90 91 53 87 63 64 74 77 83 92 93 75 76 66 67 82 85 86
+
+STAGE input input 입력
+C 10n 25 26 C1
+R 2.2M 41 40 R1
+C 470n 27 28 C2
+R 470K 29 9 R2
+
+STAGE gain gain A단 (GAIN·VOICE)
+IC JRC4558D 1=16 2=22 3=31 4=36 5=37 6=32 7=23 8=17 U1
+C 100pF 15 30 C3
+POT B500K GAIN 50 49 48
+R 10K 42 43 R3
+R 1K 57 58 R4
+POT B50K VOICE 51 52 52
+C 100n 59 60 C4
+
+STAGE clip clipping 클리퍼 (ZEN: 2N7000 + 1N34A)
+Q 2N7000 g=69 d=68 s=70 Q1
+D 1N34A a=61 k=62 D1
+Q 2N7000 g=72 d=71 s=73 Q2
+D 1N34A a=81 k=80 D2
+
+STAGE tone tone TONE + B단 폴로어
+R 10K 44 45 R5
+POT B10K TONE 79 79 65
+C 3.3n 33 18 C5
+
+STAGE output output 출력 (볼륨)
+C 470n 19 34 C6
+R 1K 38 39 R6
+POT B100K VOLUME 56 55 54
+R 2.2M 46 47 R7
+
+STAGE power power 전원
+D 1N400X a=13 k=12 D3
+C 100uF 20 24 C7
+R 10K 11 10 R8
+R 10K 7 6 R9
+C 47uF 8 5 C8
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 150 400 h
+AT R1 180 460 v
+AT C2 240 400 h
+AT R2 270 340 v-
+AT U1A 330 420
+AT C3 330 480 h-
+AT GAIN 330 540
+AT R3 390 560 h-
+AT R4 270 520 v
+AT VOICE 270 600 r90
+AT C4 270 690 v
+AT Q1 420 640
+AT Q1_D 360 640 v
+AT D1 480 640 h
+AT Q2 420 740
+AT Q2_D 360 740 v
+AT D2 480 740 h-
+AT R5 420 420 h
+AT TONE 480 420 r180
+AT C5 510 480 v
+AT U1B 600 440
+AT C6 690 440 h
+AT R6 780 440 h
+AT VOLUME 840 440 r180
+AT R7 840 530 v
+AT RLOAD 900 530 v
+AT D3 150 160 h
+AT C7 210 190 v
+AT R8 270 190 v
+AT R9 270 250 v
+AT C8 330 250 v
