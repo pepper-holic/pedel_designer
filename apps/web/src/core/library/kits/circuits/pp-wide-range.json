@@ -1,0 +1,502 @@
+{
+ "id": "pp-wide-range",
+ "goodsNo": "186787512",
+ "kitName": "Wide Range",
+ "motif": "빈 브리지 파라메트릭 부스트",
+ "type": "preamp",
+ "description": "TL072 x2 - 56n/200K 입력 버퍼(U1A) → U1B(10K/47K, 이득 1.2)가 B10K \"12dB\" 블렌드를 받아 빈 브리지(4.7K+FREQ 갱+22n 직렬, 22n∥4.7K+FREQ 갱 병렬)를 구동 → U2B(6.8K/6.8K, 2·V빈−V입력) → U2A 반전 증폭(10K, A100K GAIN 가변저항 피드백) → 1uF → 1M",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "56n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "200K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "TL072",
+   "nodes": {
+    "1": "n3",
+    "2": "n3",
+    "3": "n1",
+    "4": "0",
+    "5": "n4",
+    "6": "n5",
+    "7": "n6",
+    "8": "n7"
+   }
+  },
+  {
+   "ref": "12DB",
+   "kind": "POT",
+   "value": "B10K",
+   "nodes": [
+    "n3",
+    "n4",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n4",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n6",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n5",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n6",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n9",
+    "n10"
+   ]
+  },
+  {
+   "ref": "FREQB",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n10",
+    "n11",
+    "n11"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n11",
+    "n2"
+   ]
+  },
+  {
+   "ref": "FREQA",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n11",
+    "n12",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n12",
+    "n2"
+   ]
+  },
+  {
+   "ref": "U2",
+   "kind": "IC",
+   "part": "TL072",
+   "nodes": {
+    "1": "n13",
+    "2": "n14",
+    "3": "n2",
+    "4": "0",
+    "5": "n11",
+    "6": "n15",
+    "7": "n8",
+    "8": "n7"
+   }
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "6.8K",
+   "nodes": [
+    "n3",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "6.8K",
+   "nodes": [
+    "n15",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n8",
+    "n14"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n16",
+    "n14"
+   ]
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n13",
+    "n16",
+    "n16"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n13",
+    "out"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "out",
+    "0"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n7"
+   }
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n7",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "buffer",
+   "label": "입력 버퍼 (U1A)",
+   "parts": [
+    "R1",
+    "C1",
+    "R2",
+    "U1"
+   ]
+  },
+  {
+   "id": "blend",
+   "category": "custom",
+   "label": "12dB 블렌드 (U1B)",
+   "parts": [
+    "12DB",
+    "R3",
+    "R4",
+    "R5"
+   ]
+  },
+  {
+   "id": "wien",
+   "category": "tone",
+   "label": "빈 브리지 (FREQ)",
+   "parts": [
+    "R6",
+    "C2",
+    "FREQB",
+    "C3",
+    "FREQA",
+    "R7"
+   ]
+  },
+  {
+   "id": "sum",
+   "category": "gain",
+   "label": "합성 (U2B)",
+   "parts": [
+    "U2",
+    "R8",
+    "R9"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "반전 증폭 (U2A, GAIN)",
+   "parts": [
+    "R10",
+    "R11",
+    "GAIN"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "C4",
+    "R12"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D1",
+    "C5",
+    "R13",
+    "R14",
+    "C6"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 180,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 210,
+   "y": 460,
+   "rotation": 90
+  },
+  "U1A": {
+   "x": 300,
+   "y": 420
+  },
+  "12DB": {
+   "x": 390,
+   "y": 480
+  },
+  "U1B": {
+   "x": 480,
+   "y": 440
+  },
+  "R3": {
+   "x": 420,
+   "y": 360,
+   "rotation": 270
+  },
+  "R4": {
+   "x": 480,
+   "y": 520,
+   "rotation": 180
+  },
+  "R5": {
+   "x": 420,
+   "y": 560,
+   "rotation": 90
+  },
+  "R6": {
+   "x": 570,
+   "y": 440,
+   "rotation": 0
+  },
+  "C2": {
+   "x": 660,
+   "y": 440,
+   "rotation": 0
+  },
+  "FREQB": {
+   "x": 750,
+   "y": 440
+  },
+  "C3": {
+   "x": 810,
+   "y": 500,
+   "rotation": 90
+  },
+  "FREQA": {
+   "x": 870,
+   "y": 500,
+   "rotation": 90
+  },
+  "R7": {
+   "x": 870,
+   "y": 590,
+   "rotation": 90
+  },
+  "U2B": {
+   "x": 960,
+   "y": 460
+  },
+  "R8": {
+   "x": 900,
+   "y": 620,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 960,
+   "y": 540,
+   "rotation": 0
+  },
+  "U2A": {
+   "x": 1110,
+   "y": 440
+  },
+  "R10": {
+   "x": 1050,
+   "y": 480,
+   "rotation": 0
+  },
+  "R11": {
+   "x": 1080,
+   "y": 510,
+   "rotation": 270
+  },
+  "GAIN": {
+   "x": 1110,
+   "y": 540,
+   "rotation": 180
+  },
+  "C4": {
+   "x": 1200,
+   "y": 440,
+   "rotation": 0
+  },
+  "R12": {
+   "x": 1260,
+   "y": 500,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 1320,
+   "y": 500,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 150,
+   "y": 160,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 210,
+   "y": 190,
+   "rotation": 90
+  },
+  "R13": {
+   "x": 270,
+   "y": 190,
+   "rotation": 90
+  },
+  "R14": {
+   "x": 270,
+   "y": 250,
+   "rotation": 90
+  },
+  "C6": {
+   "x": 330,
+   "y": 250,
+   "rotation": 90
+  }
+ }
+}

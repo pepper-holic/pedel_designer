@@ -1,0 +1,91 @@
+id pp-wide-range
+goods 186787512
+name Wide Range
+motif 빈 브리지 파라메트릭 부스트
+type preamp
+desc TL072 x2 - 56n/200K 입력 버퍼(U1A) → U1B(10K/47K, 이득 1.2)가 B10K "12dB" 블렌드를 받아 빈 브리지(4.7K+FREQ 갱+22n 직렬, 22n∥4.7K+FREQ 갱 병렬)를 구동 → U2B(6.8K/6.8K, 2·V빈−V입력) → U2A 반전 증폭(10K, A100K GAIN 가변저항 피드백) → 1uF → 1M
+image img_01.jpg
+# Left TL072 notch up: 12 23 27 32 / 33 28 24 13. Right TL072 notch down: pin 1 bottom-right, 51 40 31 26 / 25 30 39 50.
+# FREQ is a dual A100K, each gang wired "1" + "2=3" (a rheostat): gang A 0 -> 1 (to 4.7K -> Vref), gang B 6 -> 7. The
+# cyan from 0 runs through 7 and on to the 22n (10) and U2 pin 5 (25) - JUMP 7 10. The two gangs are two knobs here.
+# GAIN "1" by pad 2 (U2A out), pads 8-9 tied: a 0-100K rheostat in U2A's feedback, clockwise = more gain.
+# 12dB: "1" by pad 5 (the input buffer), lug3 (3) on U2B out, wiper into U1B + in.
+BOM 1Mx2 200K 47Kx2 10Kx5 6.8Kx2 4.7Kx2 56n 22nx2 100uF 47uF 1uF 1N400X TL072x2 A100Kx3 B10K
+io IN=60 OUT=70 V9=66 GND=42
+JUMP 7 10
+JUMP 8 9
+
+STAGE input buffer 입력 버퍼 (U1A)
+R 1M 59 42 R1
+C 56n 56 43 C1
+R 200K 44 61 R2
+IC TL072 1=12 2=23 3=27 4=32 5=33 6=28 7=24 8=13 U1
+
+STAGE blend custom 12dB 블렌드 (U1B)
+POT B10K 12DB 5 4 3
+R 47K 45 62 R3
+R 10K 15 35 R4
+R 47K 47 64 R5
+
+STAGE wien tone 빈 브리지 (FREQ)
+R 4.7K 36 16 R6
+C 22n 29 17 C2
+POT A100K FREQB 6 7 7
+C 22n 10 11 C3
+POT A100K FREQA 0 1 1
+R 4.7K 20 21 R7
+
+STAGE sum gain 합성 (U2B)
+IC TL072 1=51 2=40 3=31 4=26 5=25 6=30 7=39 8=50 U2
+R 6.8K 18 37 R8
+R 6.8K 19 38 R9
+
+STAGE gain gain 반전 증폭 (U2A, GAIN)
+R 10K 54 55 R10
+R 10K 22 41 R11
+POT A100K GAIN 2 9 8
+
+STAGE output output 출력
+C 1uF 58 68 C4
+R 1M 69 52 R12
+
+STAGE power power 전원
+D 1N400X a=65 k=48 D1
+C 100uF 49 53 C5
+R 10K 14 34 R13
+R 10K 46 63 R14
+C 47uF 57 67 C6
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT C1 180 400 h
+AT R2 210 460 v
+AT U1A 300 420
+AT 12DB 390 480
+AT U1B 480 440
+AT R3 420 360 v-
+AT R4 480 520 h-
+AT R5 420 560 v
+AT R6 570 440 h
+AT C2 660 440 h
+AT FREQB 750 440
+AT C3 810 500 v
+AT FREQA 870 500 r90
+AT R7 870 590 v
+AT U2B 960 460
+AT R8 900 620 h
+AT R9 960 540 h
+AT U2A 1110 440
+AT R10 1050 480 h
+AT R11 1080 510 v-
+AT GAIN 1110 540 r180
+AT C4 1200 440 h
+AT R12 1260 500 v
+AT RLOAD 1320 500 v
+AT D1 150 160 h
+AT C5 210 190 v
+AT R13 270 190 v
+AT R14 270 250 v
+AT C6 330 250 v
