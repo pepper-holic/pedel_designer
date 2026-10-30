@@ -1,0 +1,4 @@
+# Time Peace (186788032): J. Rockett Tim Pierce signature - 4558D with a BS170 MOSFET stage and 9.1V zener bias;
+# GAIN A500K, TONE B10K, POWER C50K, BASS C25K, LEVEL A100K. The app has no MOSFET model; recorded only. Board: 10M x2,
+# 1M, 470K x3, 15K, 5.1K x2, 4.7K, 3.3K, 1K, 820R, 470R, 330R, 10R, 470n, 220n, 150n, 100n x2, 47n, 220p, 47p, 100uF,
+# 47uF x2, 10uF, 4.7uF, 1.5uF, 1N4007 x5.

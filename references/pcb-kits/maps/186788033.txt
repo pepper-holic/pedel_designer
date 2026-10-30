@@ -1,0 +1,4 @@
+# Green Soma (186788033): Greer Soma 63 - four SMD J201 stages (pads hidden under the silk, not detected) with a TY-141P
+# output transformer and four 100K trimmers; A500K x2, A100K, B250K, B50K. The app has no transformer model; recorded only.
+# Board: 2.2M, 1M x2, 220K, 56K, 47K, 22K x2, 10K, 5.6K x2, 1.5K x2, 1K, 680R, 47R, 100n, 47n x4, 33n, 22n x2, 2.2n, 220p,
+# 100uF, 22uF, 1N400X.
