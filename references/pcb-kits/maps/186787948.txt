@@ -1,6 +1,121 @@
-# THIMBLE (186787948): Mad Professor Simble - TL072 (TLC2272 silk) two stages with a 2N7000 MOSFET pair and
-# BAT41 x5 Schottky clippers; Sensitivity A1M, Accent B10K, Contour B50K, Level A100K. The app has no MOSFET model;
-# recorded only. Board: 2.2M, 470K, 56K, 33K, 22K, 18K, 10K x3, 8.2K, 1K, 820R x2, 220n, 100n x2, 47n, 8.2n, 2.2n, 1n,
-# 47pF x2, 220uF x2, 1N400X.
-# Update 2026-10-30: 2N7000/BS170 now have a model (square-law + body diode); this board stays recorded only because of
-# its hidden traces / off-board pads, see docs/kit-deferred.md.
+id pp-thimble
+goods 186787948
+name THIMBLE
+motif Mad Professor Simble
+type overdrive
+desc TL072 2단 - 33K/2.2M/47p 입력→8.2n→A단 비반전(470K Vref 바이어스, BAT41 입력 클램프), 피드백 820R+A1M SENSITIVITY∥47p와 BAT41·2N7000 바디 다이오드 비대칭 클리퍼(3:2), -in 다리 820R+(220n∥47n)+B10K ACCENT → 8.2K/22K → B50K CONTOUR(와이퍼 2.2n) → B단(10K∥100n / 18K, 저역 부스트) → 1K(56K+1n) → 100n → A100K LEVEL
+image img_02.jpg
+# TL072 (silk TLC2272) notch up: 48 56 62 71 / 72 63 57 49.
+# The extractor read the left 2N7000's outline lines as a thermal "+" and called its centre a ground pad, which merged
+# the A stage's - input (2, 9, 14, 53, 55, 56) with ground - SPLIT. The centre pad came out as four fragments
+# (17 18 22 23): 22 stands for it. The 22K's bottom pad split the same way (26 27 34 35): 26 stands for it.
+# 2N7000s (TO-92 S-G-D facing the flat side): left one flat side right, so bottom 28 = S, centre = G, top 9 = D;
+# top one flat side down, so 14 = S, 15 = G, 16 = D. Each is diode-connected (G tied to D) on the side its BAT41s
+# block, so only the body diodes conduct: out A -> BAT41 -> BAT41 -> body diode -> - in (3 junctions), and back
+# - in -> body diode -> BAT41 -> out A (2 junctions).
+# Pots: Sensitivity "1" by pad 2 (the - input), its third lug ring has no copper - a 0-1M rheostat with the 820R in
+# the feedback, clockwise = more gain. Accent's "1" lug ring has no copper: wiper 74 to the grounded lug 73 is a
+# 0-10K rheostat, clockwise = less resistance in the - leg (more boost). Contour "1" by 79 (to + in B). Level "1"
+# by the ground pad 5, wiper to OUT through the cyan.
+# The 220n and 47n both sit between the 820R end (16) and the Accent wiper (17) - read as drawn (parallel).
+BOM 2.2M 470K 56K 33K 22K 18K 10Kx3 8.2K 1K 820Rx2 220n 100nx2 47n 8.2n 2.2n 1n 47pFx2 220uFx2 1N400X BAT41x5 2N7000x2 TL072 A1M B10K B50K A100K
+io IN=96 OUT=36 V9=0 GND=10
+SPLIT 2 9 14 17 18 22 53 55 56
+NC 17 18 23 27 34 35
+
+STAGE input input 입력
+R 33K 95 94 R1
+R 2.2M 93 92 R2
+C 47pF 86 87 C1
+C 8.2n 85 84 C2
+D BAT41 a=82 k=83 D1
+D BAT41 a=75 k=76 D2
+R 470K 32 33 R3
+
+STAGE gain gain A단 (SENSITIVITY·ACCENT)
+IC TL072 1=48 2=56 3=62 4=71 5=72 6=63 7=57 8=49 U1
+C 47pF 37 53 C3
+R 820R 44 19 R4
+POT A1M SENSITIVITY 2 1 1
+R 820R 55 54 R5
+C 220n 59 58 C4
+C 47n 60 61 C5
+POT B10K ACCENT 74 74 73
+
+STAGE clip clipping 비대칭 클리퍼 (BAT41 + 2N7000 바디 다이오드)
+D BAT41 a=46 k=30 D3
+D BAT41 a=29 k=45 D4
+Q 2N7000 g=22 d=9 s=28 Q1
+Q 2N7000 g=15 d=16 s=14 Q2
+D BAT41 a=31 k=47 D5
+
+STAGE contour tone CONTOUR
+R 8.2K 38 39 R6
+R 22K 8 26 R7
+POT B50K CONTOUR 79 78 77
+C 2.2n 88 89 C6
+
+STAGE bstage gain B단 (저역 부스트)
+R 18K 64 40 R8
+R 10K 41 66 R9
+C 100n 50 65 C7
+
+STAGE output output 출력 (LEVEL)
+R 1K 67 42 R10
+R 56K 68 43 R11
+C 1n 51 69 C8
+C 100n 70 52 C9
+POT A100K LEVEL 5 4 3
+
+STAGE power power 전원
+D 1N400X a=6 k=7 D6
+C 220uF 12 24 C10
+R 10K 20 21 R12
+R 10K 11 10 R13
+C 220uF 25 13 C11
+
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 150 400 h
+AT R2 180 460 v
+AT C1 240 460 v
+AT C2 270 400 h
+AT D1 300 460 v-
+AT D2 330 340 v-
+AT R3 360 340 v-
+AT U1A 420 420
+AT C3 420 480 h-
+AT SENSITIVITY 420 540
+AT R4 480 540 h-
+AT D3 480 600 h-
+AT D4 420 600 h-
+AT Q1 360 640
+AT Q1_D 300 640 v
+AT Q2 420 700
+AT Q2_D 480 700 v
+AT D5 480 760 h
+AT R5 240 560 v
+AT C4 240 650 v
+AT C5 180 650 v
+AT ACCENT 240 740 r90
+AT R6 540 420 h
+AT R7 570 340 v-
+AT CONTOUR 630 420 r180
+AT C6 630 500 v
+AT U1B 720 440
+AT R9 720 510 h-
+AT C7 720 560 h-
+AT R8 660 560 v
+AT R10 810 440 h
+AT R11 810 500 h
+AT C8 860 470 v-
+AT C9 900 440 h
+AT LEVEL 960 440 r180
+AT RLOAD 960 530 v
+AT D6 150 160 h
+AT C10 210 190 v
+AT R12 270 190 v
+AT R13 270 250 v
+AT C11 330 250 v

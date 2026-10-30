@@ -1,2 +1,109 @@
-# NEW Dirty Cat (186787646): same board render as NEW Cat (186787642, "ALL RAT" board, LM308 + 2N5459); only the
-# variant resistors R4 / R10 / R15 / R16 differ. See the NEW Cat entry in docs/kit-deferred.md.
+id pp-new-dirty-cat
+goods 186787646
+name NEW Dirty Cat
+motif ProCo RAT (Dirty 변형)
+type distortion
+desc LM308 비반전 게인(100K DISTORTION+100p 피드백, 47R/560R 다리) → 1K/4.7uF → 1N34A 게르마늄 클리퍼 → 1.5K+FILTER+3.3n 저역 → 2N5952 소스 폴로어 → C13 10uF → A100K 볼륨
+image img_01.jpg
+# "ALL RAT" board shared by NEW Cat and NEW Dirty Cat; the variant parts (C13, R4, R10, R15, R16, D1/D2) come from the
+# seller's variant table (img_03), not the parts list. R15 and R16 are empty in this variant; the D1/D2 selector
+# (56-57-72) is bridged 1-2 for the axial diodes (2-3 is the Turbo LEDs).
+# LM308 (notch up): 54=1 61=2 65=3 77=4 / 55=8 62=7 66=6 78=5. The 30p compensation cap on pins 1-8 (45-46) is left out:
+# the LM308 model carries its slew/bandwidth itself, and the two comp pins have nothing else on them.
+# Pots have no "1" marks: the middle pad is the wiper; DISTORTION and FILTER are rheostats turned so clockwise adds
+# resistance (more gain / darker), VOLUME lug1 on the ground pad 43.
+# Hidden traces (confirmed on the render): FILTER lug 14 runs down-left to the clipping node (50, the hint shows it
+# through the cyan crossing); the JFET source (24) runs under its label to the 10K/C13 node (33); the gate (35) runs
+# right to R10 (31); the 1N400X cathode (94) runs up to the filtered 9V (80), which also feeds the 100K Vref divider.
+# Checked against the ProCo RAT (ElectroSmash): 2.2M where the original has 1M on the input, the rest connection for
+# connection - 22n/1K/1n into + in, 1M bias, 100K+100p feedback, 47R+2.2uF and 560R+4.7uF legs, 1K/4.7uF to the
+# clippers, 1.5K + FILTER + 3.3n, 22n into the 2N5459 follower (1M gate, 10K source), C13 to the 100K volume.
+BOM 2.2M 100Kx2 10K 1.5K 1Kx2 560R 47Rx2 22nx2 10n 3.3n 1n 100p 100uF 4.7uFx2 2.2uF 1uF 1N400X LM308 2N5952 A100Kx3 1Mx2 10uF 1N34Ax2
+io IN=88 OUT=47 V9=11 GND=75
+JUMP 56 57
+JUMP 14 50
+JUMP 24 33
+JUMP 35 31
+JUMP 94 80
+NC 0 1 2 3 4 45 46 54 55 72 73 85 15 18 34
+
+STAGE input input 입력
+R 2.2M 90 67 R1
+C 22n 89 79 C1
+R 1M 91 68 R4
+R 1K 83 82 R2
+C 1n 76 87 C2
+
+STAGE gain gain LM308 게인단 (DISTORTION)
+IC LM308 2=61 3=65 4=77 6=66 7=62 U1
+POT A100K DISTORTION 38 37 36
+C 100p 60 44 C3
+R 560R 27 7 R3
+C 4.7uF 6 5 C4
+R 47R 28 8 R5
+C 2.2uF 23 22 C5
+
+STAGE clip clipping 클리퍼
+R 1K 63 64 R6
+C 4.7uF 51 50 C6
+D 1N34A a=96 k=58 D1
+D 1N34A a=59 k=97 D2
+
+STAGE tone tone FILTER
+POT A100K FILTER 14 13 12
+R 1.5K 9 29 R7
+C 3.3n 39 40 C7
+
+STAGE output output JFET 버퍼 + 볼륨
+C 22n 25 26 C8
+R 1M 32 16 R10
+Q 2N5952 g=35 d=21 s=24 Q1
+R 10K 33 17 R8
+C 10uF 19 20 C13
+POT A100K VOLUME 43 42 41
+
+STAGE power power 전원
+R 47R 10 30 R9
+C 100uF 53 52 C9
+C 10n 80 95 C10
+D 1N400X a=71 k=94 D3
+R 100K 93 70 R11
+R 100K 69 92 R12
+C 1uF 49 48 C11
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT C1 180 400 h
+AT R4 210 340 v-
+AT R2 270 400 h
+AT C2 300 460 v
+AT U1 360 420
+AT DISTORTION 360 500
+AT C3 360 550 h
+AT R3 270 520 v
+AT C4 270 600 v
+AT R5 210 520 v
+AT C5 210 600 v
+AT R6 450 420 h
+AT C6 540 420 h
+AT D1 600 480 v-
+AT D2 660 480 v
+AT FILTER 630 420
+AT R7 720 420 h
+AT C7 780 480 v
+AT C8 810 420 h
+AT R10 870 480 v
+AT Q1 900 420
+AT R8 920 520 v
+AT C13 980 450 h
+AT VOLUME 1040 480 r270
+AT RLOAD 1100 540 v
+AT R9 150 160 h
+AT C9 210 190 v
+AT C10 270 190 v
+AT D3 330 190 v-
+AT R11 390 190 v
+AT R12 390 280 v
+AT C11 450 280 v
