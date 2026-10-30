@@ -1,0 +1,65 @@
+# 키트 기판 작업 전략 (2026-10-30)
+
+현황표는 `docs/kit-progress.md`, 보류 메모는 `docs/kit-deferred.md`, 절차는 `.claude/skills/pcb-to-netlist/SKILL.md`.
+
+## 현황 (묶음 9까지)
+
+| 상태 | 수 | 뜻 |
+|---|---|---|
+| 변환 완료 | 64 | 앱 "키트 기판 회로"에 올라감 |
+| 기록만 | 32 | 회로는 읽었지만 앱에 소자 모델이 없음 (ICL7660 13, MOSFET 9, LM386 5, CD4069 1, 기타 4) |
+| 보류 | 33 | 기판 사진만으로는 넷을 확정 못 함 (실크 밑 트레이스·앵글 팟 러그·SMD 패드·변형 공용 기판) |
+| 미착수 | 83 | 전부 100패드 이상, 사진 판독 성공률 묶음당 1~3개 |
+| C등급 | 49 | 모델 없는 계열 (BBD·PT2399·OTA·광소자·전원 유틸) |
+
+판매 회로라 회로 자체는 전부 정상이다. 막히는 원인은 두 가지뿐이다: (a) 사진에서 선을 못 읽음, (b) 앱에 소자 모델이 없음.
+
+## 비용 원칙
+
+- 기판 사진 판독은 이미지 토큰이 비싸고, 결과가 보류여도 비용은 든다. 가장 비싼 일이므로 맨 뒤로 미룬다.
+- 판단이 필요한 일(회로 대조, 넷 확정)만 높은 추론 모델로, 코딩·스크립트·재분류는 낮은 비용 세션으로 돌린다.
+- 사진을 볼 때는 `pads.py` 좌표 덤프로 넷을 먼저 세우고, 애매한 곳만 1~2장 확대한다. 사분면 4장을 습관적으로 보지 않는다.
+- 묶음은 6개로 줄이고 묶음마다 커밋한다.
+
+## 순서
+
+### ① 소자 모델 추가 (코딩, 중간 추론) - 기록 32개를 한 번에 회로로
+
+1. **전하펌프 전원 규약**: 대응표의 `IC ICL7660 ...` 줄을 변환기가 "이상 전압원"으로 바꾼다. 핀 5(VOUT)는 -V9, 펌프 캡(2-4)은 무시.
+   18V 더블러 배선(Kantata)은 `supply 18` 같은 머리 줄로 레일 전압을 바꾼다. 양접지 Ge 퍼즈는 V9 패드가 -9V 넷이 되도록
+   `io V9=...` 대신 `io VNEG=...`를 허용한다. 대상: RANGER GE, SOLA FACE GE, 1969 GE, BUZZRITE GE, BENDER II/III GE, Mark 4,
+   Kantata, Secret Pre, 29 YUNA, Haunting FreQ, 1484 TWELVE(SMD라 보류), FUZZ FORGE 7K(양접지).
+2. **MOSFET**: 솔버에 `mosfet` 소자(레벨 1 제곱법칙 + 서브스레숄드 지수, 바디 다이오드) 추가, `partModels.ts`에 2N7000(Vth 2.1V,
+   K 0.1A/V²)·BS170(Vth 2.0V) 등록, 대응표 `Q 2N7000 g= d= s=`. 대상: Z-Drive, ZENFIRE, ZEN GU DONG, THIMBLE, DOC, Brown Charlie,
+   Time Peace, ANDY PLUS, Dove Drive.
+3. **LM386**: 고정 이득 20(1-8번 핀 캡이면 200)의 op-amp로 근사, 출력 레일 제한. 대상: RAM Fuzz, Jubilee, Green Punch, Papadumble,
+   Feach Fuzz.
+4. 각 단계마다 해당 기록용 맵을 정식 대응표로 바꾸고 키트 테스트 통과까지. 소자 하나 추가할 때 `tests/solver`에 단위 테스트 1개씩.
+
+### ② C등급 재분류 (스크립트, 낮은 추론)
+
+`batch_prepare.py`의 계열 분류가 틀린 것을 손으로 고친다: [1K] SHO(부스터, noise-gate로 분류), NEW FAT 부스터(compressor),
+Octavia·OCB·OCTA CLASSIC·OCTA KING(옥타브 퍼즈는 트랜지스터·다이오드만이라 시뮬 가능), Black CAB·TWEED AMP 57·BLACK AMP 65
+(앰프 시뮬 - 확인 필요). 나머지 C(BBD 코러스·PT2399 딜레이·OTA 컴프·광 트레몰로·전원 유틸)는 모델이 생길 때까지 범위 밖.
+
+### ③ 보류 33개를 원본 회로도 대조로 (높은 추론, 기판당 중간 비용)
+
+1. 원본 페달 공개 회로도를 찾는다(대부분 유명 클론: Timmy, KoT, RAT, Xotic RC, Cornish SS-2, Bloid, Euphoria, Simble...).
+2. 회로도에서 넷리스트를 먼저 세우고, 부품값으로 기판 패드를 대응시킨다. 사진은 패드 좌표 덤프와 확대 1~2장만.
+3. 같은 계열은 묶어서: KO-N AZS/UI(JRC4580 계열), RC BEAST/REAL CLEAN/BASS CLEAN(Xotic RC), NEW Cat/Dirty Cat(RAT), Duel B/Soulist(Duel A 기반).
+4. SMD J201 기판(SON OF BEN, NEW MORNING, Green Soma)은 추출기에 "실크 밑 SMD 패드" 처리를 넣거나 G/S/D 넷을 손으로 적는다.
+
+### ④ 미착수 83개 (가장 비쌈, 맨 뒤)
+
+패드 수·고립 패드가 적은 순으로 6개씩. 고립 패드 10개 이상인 기판은 ③ 방식(회로도 먼저)으로 돌린다.
+
+## 세션 배치
+
+- ①②: 코딩·스크립트. 별도 세션(중간 비용 모델)에서 해도 된다. 변경 파일: `apps/web/src/core/solver/*`, `kits/partModels.ts`,
+  `kits/kitToPreset.ts`, `.claude/skills/pcb-to-netlist/scripts/kit_netlist.py`, 해당 `references/pcb-kits/maps/*.txt`.
+- ③④: 회로 판단. 높은 추론 세션. 묶음 6개, 커밋 단위 유지.
+
+## 첫 번째 할 일
+
+①-1 전하펌프 전원 규약 → ①-2 MOSFET → ①-3 LM386 순으로, 한 단계마다 기록용 맵을 되살려 커밋한다.
+①-1만 끝나도 Ge 퍼즈 7개 + op-amp 바이폴라 4개가 회로가 된다.
