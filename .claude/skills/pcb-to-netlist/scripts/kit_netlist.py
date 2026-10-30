@@ -22,6 +22,8 @@ The map names each part and the pads (ids from the extract_nets overlay) its lea
     STAGE pre gain 프리앰프 (Q1·Q2)       # following parts belong to this functional stage
     JUMP 12 30                          # wire link on the board (merges the two nets)
     NC 61                               # pad deliberately unused (silences the check)
+    SPLIT 46 47 55 56                   # pull pads out of a net the extractor merged wrongly
+    io IN=8 OUT=82 V9=5 GND=4,13,22     # a comma list joins extra pads to that role's net
 
 STAGE lines group the parts after them into the schematic's functional blocks, in signal order:
 "STAGE <id> <category> <label>", category one of input buffer gain clipping fuzz tone output power

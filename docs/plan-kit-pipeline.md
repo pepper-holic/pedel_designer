@@ -42,3 +42,12 @@
 4. 부품표 OCR은 후순위 - 판독이 쉽고 BOM 검사가 실수를 잡는다.
 
 다음 대량 처리는 A등급부터, 1번 도구를 만든 뒤 B등급 중 단층·소형 기판 순으로.
+
+## 4. 일괄 처리 진행 (2026-10-30 기준)
+
+- A등급 전부, B등급 묶음 1~3 완료: 대응표 55개, 앱 회로 43개 (커밋 d302da7, f30fbf0, 9df4c33).
+- 기록만 한 계열: LM386(RAM Fuzz, Jubilee, Green Punch, Papadumble), ICL7660 전하펌프(Kantata, 1969 GE, Secret Pre,
+  RANGER GE, SOLA FACE GE), MOSFET(Z-Drive). 모델을 추가하면 대응표만으로 바로 회로가 된다.
+- 보류: `docs/kit-deferred.md` (Pluto Blue, Wide Range).
+- 묶음당 비용: 12개 기판 중 6~8개 변환, 판독에 기판당 사분면 확대 2~4장. 다음 세션은 `triage.json`에서 B등급 미작성
+  기판을 패드 수 순으로 12개씩 `pilot_bundle.py`로 묶어 같은 방식으로 진행한다.
