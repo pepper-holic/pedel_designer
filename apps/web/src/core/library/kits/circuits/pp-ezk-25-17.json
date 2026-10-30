@@ -1,0 +1,502 @@
+{
+ "id": "pp-ezk-25-17",
+ "goodsNo": "186788316",
+ "kitName": "EZK25:17 FUZZ",
+ "motif": "4단 클리퍼 선택 op-amp 퍼즈",
+ "type": "fuzz",
+ "description": "JRC4558D - 100n/220K 입력→2.2K→B단 폴로어→220n→1K/2.2n/1M→A단 비반전(B100K GAIN 가변저항∥470p 피드백, 470R+10uF 다리, 로터리 SILICON 위치의 1N4148 역병렬 피드백 클리퍼)→1K→10uF→1K+B100K TONE+10n 저역→A100K 볼륨",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "220K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "2.2K",
+   "nodes": [
+    "n1",
+    "n3"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "JRC4558D",
+   "nodes": {
+    "1": "n4",
+    "2": "n5",
+    "3": "n6",
+    "4": "0",
+    "5": "n3",
+    "6": "n7",
+    "7": "n7",
+    "8": "n8"
+   }
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n7",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n9",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "2.2n",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n6",
+    "n2"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "470pF",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n5",
+    "n4",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "470R",
+   "nodes": [
+    "n5",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n10",
+    "0"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n4",
+    "k": "n5"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n5",
+    "k": "n4"
+   }
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n4",
+    "n11"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n11",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n12",
+    "n13"
+   ]
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n14",
+    "n14",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n14",
+    "0"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n7",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n15",
+    "0"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n8"
+   }
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n8",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "buffer",
+   "label": "입력 버퍼 (B단)",
+   "parts": [
+    "R1",
+    "C1",
+    "R2",
+    "R3",
+    "U1"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "A단 (GAIN)",
+   "parts": [
+    "C2",
+    "R4",
+    "C3",
+    "R5",
+    "C4",
+    "GAIN",
+    "R6",
+    "C5"
+   ]
+  },
+  {
+   "id": "clip",
+   "category": "clipping",
+   "label": "클리퍼 (SILICON)",
+   "parts": [
+    "D1",
+    "D2"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "TONE",
+   "parts": [
+    "R7",
+    "C6",
+    "R8",
+    "TONE",
+    "C7"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "VOLUME",
+    "C8",
+    "R9"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D3",
+    "C9",
+    "R10",
+    "R11",
+    "C10"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 150,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 180,
+   "y": 340,
+   "rotation": 270
+  },
+  "R3": {
+   "x": 240,
+   "y": 400,
+   "rotation": 0
+  },
+  "U1B": {
+   "x": 330,
+   "y": 420
+  },
+  "C2": {
+   "x": 420,
+   "y": 420,
+   "rotation": 0
+  },
+  "R4": {
+   "x": 510,
+   "y": 420,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 540,
+   "y": 480,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 570,
+   "y": 340,
+   "rotation": 270
+  },
+  "U1A": {
+   "x": 630,
+   "y": 440
+  },
+  "C4": {
+   "x": 630,
+   "y": 500,
+   "rotation": 180
+  },
+  "GAIN": {
+   "x": 630,
+   "y": 550,
+   "rotation": 180
+  },
+  "R6": {
+   "x": 570,
+   "y": 560,
+   "rotation": 90
+  },
+  "C5": {
+   "x": 570,
+   "y": 650,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 630,
+   "y": 620,
+   "rotation": 180
+  },
+  "D2": {
+   "x": 630,
+   "y": 670,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 720,
+   "y": 440,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 810,
+   "y": 440,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 900,
+   "y": 440,
+   "rotation": 0
+  },
+  "TONE": {
+   "x": 960,
+   "y": 440,
+   "rotation": 180
+  },
+  "C7": {
+   "x": 990,
+   "y": 500,
+   "rotation": 90
+  },
+  "VOLUME": {
+   "x": 1050,
+   "y": 440,
+   "rotation": 180
+  },
+  "C8": {
+   "x": 420,
+   "y": 520,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 450,
+   "y": 580,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 1110,
+   "y": 520,
+   "rotation": 90
+  },
+  "D3": {
+   "x": 150,
+   "y": 160,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 210,
+   "y": 190,
+   "rotation": 90
+  },
+  "R10": {
+   "x": 270,
+   "y": 190,
+   "rotation": 90
+  },
+  "R11": {
+   "x": 270,
+   "y": 250,
+   "rotation": 90
+  },
+  "C10": {
+   "x": 330,
+   "y": 250,
+   "rotation": 90
+  }
+ }
+}

@@ -1,0 +1,96 @@
+id pp-ezk-25-17
+goods 186788316
+name EZK25:17 FUZZ
+motif 4단 클리퍼 선택 op-amp 퍼즈
+type fuzz
+desc JRC4558D - 100n/220K 입력→2.2K→B단 폴로어→220n→1K/2.2n/1M→A단 비반전(B100K GAIN 가변저항∥470p 피드백, 470R+10uF 다리, 로터리 SILICON 위치의 1N4148 역병렬 피드백 클리퍼)→1K→10uF→1K+B100K TONE+10n 저역→A100K 볼륨
+image img_01.jpg
+# JRC4558D notch up: 13 18 26 32 / 33 27 19 14. The ground pour is not drawn: the pale pads (22 32 43 45 50 54 55 56 65
+# 74 and the GND header 98-101) are ground.
+# Clip rotary (common 83 on - in A): BYPASS 71 = 470p to out A, LIGHT 77 = two red LEDs anti-parallel, SILICON 87 =
+# 1N4148 pair, GERMANIUM 97 = 1N34A x3 (2:1 - its out-A end, 92/93, runs left along the bottom). Fixed on SILICON
+# (JUMP 83 87); the other branches end on an open lug and are left out with their parts (470p, 2 LEDs, 3 1N34A).
+# Output DIP toggle 75/84/90 (common 84 = OUT): 90 = the volume wiper, 75 = out B through 10uF/100K (clean) - fixed on
+# the effect side (JUMP 84 90); the clean branch stays (it hangs off the buffer with its own 100K to ground).
+# Pots have no "1" marks: GAIN 58 wiper (out A) / 59 (- in) / 57 empty, clockwise more gain; TONE 60 (from the 1K) /
+# 61-62 tied (10n), clockwise brighter; VOLUME 63 / 64 wiper / 65 ground. The kit lists four 100K pots; the fourth
+# has no footprint here.
+BOM 1Mx2 220K 100Kx3 2.2K 1Kx3 470R 220n 100n 10n 2.2n 470pF 47uF 10uFx4 1N400X 1N4148x2 JRC4558D A100K B100Kx2
+io IN=37 OUT=85 V9=7 GND=22,32,43,45,50,54,55,56,65,74
+JUMP 83 87
+JUMP 84 90
+NC 0 1 2 3 4 62 75 57 70 76 82 86 96 98 99 100 101 71 72 73 77 78 79 80 81 97 91 92 93 67 68 69
+
+STAGE input buffer 입력 버퍼 (B단)
+R 1M 38 55 R1
+C 100n 36 35 C1
+R 220K 48 47 R2
+R 2.2K 49 28 R3
+IC JRC4558D 1=13 2=18 3=26 4=32 5=33 6=27 7=19 8=14 U1
+
+STAGE gain gain A단 (GAIN)
+C 220n 20 12 C2
+R 1K 11 10 R4
+C 2.2n 31 45 C3
+R 1M 25 46 R5
+C 470pF 9 17 C4
+POT B100K GAIN 59 58 58
+R 470R 16 34 R6
+C 10uF 42 50 C5
+
+STAGE clip clipping 클리퍼 (SILICON)
+D 1N4148 a=89 k=88 D1
+D 1N4148 a=94 k=95 D2
+
+STAGE tone tone TONE
+R 1K 8 24 R7
+C 10uF 23 30 C6
+R 1K 51 52 R8
+POT B100K TONE 61 61 60
+C 10n 44 43 C7
+
+STAGE output output 출력 (볼륨)
+POT A100K VOLUME 65 64 63
+C 10uF 21 29 C8
+R 100K 39 56 R9
+
+STAGE power power 전원
+D 1N400X a=6 k=5 D3
+C 47uF 15 22 C9
+R 100K 41 40 R10
+R 100K 53 54 R11
+C 10uF 66 74 C10
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT C1 150 400 h
+AT R2 180 340 v-
+AT R3 240 400 h
+AT U1B 330 420
+AT C2 420 420 h
+AT R4 510 420 h
+AT C3 540 480 v
+AT R5 570 340 v-
+AT U1A 630 440
+AT C4 630 500 h-
+AT GAIN 630 550 r180
+AT R6 570 560 v
+AT C5 570 650 v
+AT D1 630 620 h-
+AT D2 630 670 h
+AT R7 720 440 h
+AT C6 810 440 h
+AT R8 900 440 h
+AT TONE 960 440 r180
+AT C7 990 500 v
+AT VOLUME 1050 440 r180
+AT C8 420 520 h
+AT R9 450 580 v
+AT RLOAD 1110 520 v
+AT D3 150 160 h
+AT C9 210 190 v
+AT R10 270 190 v
+AT R11 270 250 v
+AT C10 330 250 v
