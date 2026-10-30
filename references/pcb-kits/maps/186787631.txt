@@ -1,0 +1,92 @@
+id pp-anima
+goods 186787631
+name ANIMA
+motif J. Rockett Animal OD
+type overdrive
+desc JRC4558 단일 단 비반전 오버드라이브 - 피드백에 A500K 게인+4.7K∥22p와 1N4001+1N4148 2+2 직렬 역병렬 클리퍼, 접지 다리는 820R→100n∥(C50K BASS+47K, 470n)와 HOT 토글(1K+100n ∥ 470R+220n), 4.7uF 출력에 B10K 트레블(47n)과 B100K 볼륨
+image img_02.jpg
+# Op-amp B is tied off (out->-in, +in to ground) and left out of the netlist; pads 11/23 double the divider pads 22/21. Silk offers 470R/1.2K and 47R/10R - the parts list ships 470R and 47R.
+# Hidden traces: 4.7uF + (49) to IC out A; SNARL/HOT toggle 70-71 drawn closed (HOT). Both TREBLE lugs sit on the
+# volume input node (variable resistor to the 47n); BASS lugs are bridged by the 47K.
+BOM 1M 470K 47Kx3 4.7K 1K 820R 470R 47R 470n 220n 150n 100nx2 47n 220pF 22pF 47uFx2 4.7uF 1N4001x2 1N4148x3 JRC4558D A500K B100K B10K C50K
+io IN=46 OUT=24 V9=0 GND=2
+JUMP 49 42
+JUMP 70 71
+NC 11 23 17 18 78
+
+STAGE input input 입력
+R 1M 54 53 R1
+C 220p 55 56 C1
+C 150n 47 48 C2
+R 470K 38 20 R2
+
+STAGE gain gain 게인단 (IC A)
+IC JRC4558D 1=42 2=35 3=36 4=37 8=16
+POT A500K GAIN 5 4 3
+R 4.7K 15 34 R3
+C 22p 14 31 C3
+D 1N4001 k=12 a=13 D1
+D 1N4148 a=32 k=33 D2
+D 1N4001 k=25 a=26 D3
+D 1N4148 a=29 k=30 D4
+
+STAGE leg custom 접지 다리 (BASS·HOT)
+R 820R 45 44 R4
+C 100n 66 52 C4
+POT C50K BASS 73 74 75
+R 47K 69 67 R5
+C 470n 43 28 C5
+R 1K 62 63 R6
+C 100n 64 65 C6
+R 470R 61 60 R7
+C 220n 59 58 C7
+
+STAGE output output 출력 (트레블·볼륨)
+C 4.7uF 49 57 C8
+POT B10K TREBLE 76 77 77
+C 47n 68 72 C9
+POT B100K VOLUME 7 6 8
+
+STAGE power power 전원
+D 1N4148 k=1 a=2 D5
+R 47R 10 9 R8
+C 47uF 50 51 C10
+R 47K 22 39 R9
+R 47K 21 40 R10
+C 47uF 27 41 C11
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C2 170 400 h
+AT U1A 760 420
+AT C8 370 400 h
+AT VOLUME 470 400 r180
+AT R1 120 470 v
+AT C1 180 470 v
+AT R2 230 500 v
+AT GAIN 360 480 r180
+AT R3 450 480 h
+AT C3 390 520 h
+AT D1 300 490 v
+AT D2 390 580 h
+AT D3 540 480 h
+AT D4 440 640 h-
+AT R4 480 550 v
+AT C4 540 650 v
+AT BASS 540 550 r180
+AT R5 540 520 h-
+AT C5 630 620 v
+AT R6 600 550 v
+AT C6 720 650 v
+AT R7 600 430 v
+AT C7 660 530 v
+AT TREBLE 460 310 r0
+AT C9 700 470 v
+AT D5 500 190 v-
+AT R9 230 600 v
+AT R10 290 600 v
+AT C11 770 600 v
+AT R8 230 190 v
+AT C10 230 700 v
+AT RLOAD 820 480 v

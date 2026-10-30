@@ -1,0 +1,95 @@
+id pp-blues-pro
+goods 186787674
+name Blues Pro
+motif MI Audio Blues Pro
+type overdrive
+desc JRC4558 2단 - A단 비반전 게인(A250K 가변저항+30p, 1N4148 비대칭 클리퍼에 FUZZ 토글로 1N4007 병렬, 1K+220n(FAT 토글로 22uF 병렬) 접지 다리), 2.2uF+470R+B10K 가변저항 톤 → B단 반전(100K/22n, 330K+330K 피드백에 10p·1.5n), 1K+A100K 볼륨
+image img_02.jpg
+# Toggles drawn in their connected position: FUZZ 26-38 (seller: connected = blues mode) and FAT 46-53 (22uF).
+# Pad 19 is the 9V point (cyan link to the diode anode 20); the gain wiper 1 is tied to lug 0 under the pot box;
+# tone wiper 4 runs to the 100K (12) under the pot box; the tone pot's lug "1" hole has no pad (variable resistor).
+BOM 1Mx2 330Kx2 100K 22Kx2 1Kx3 470R 1000n 220n 22nx2 1.5n 1n 10pF 30pF 100uFx2 22uF 2.2uF 1N4007x2 1N4148 JRC4558D A250K A100K B10K
+io IN=71 OUT=14 V9=19 GND=7,70
+JUMP 19 20
+JUMP 1 0
+JUMP 26 38
+JUMP 46 53
+JUMP 53 62
+JUMP 4 12
+
+STAGE input input 입력
+R 1M 64 63 R1
+C 22n 56 55 C1
+R 1K 47 48 R2
+C 1n 72 73 C2
+R 1M 57 58 R3
+
+STAGE gain gain 게인단 (IC A)
+IC JRC4558D 1=29 2=34 3=42 4=49 5=50 6=43 7=35 8=30
+POT A250K GAIN 2 1 0
+C 30p 17 18 C3
+D 1N4148 a=28 k=27 D1
+D 1N4007 a=32 k=33 D2
+R 1K 41 40 R4
+C 220n 39 54 C4
+C 22uF 62 70 C5
+
+STAGE tone tone 톤
+C 2.2uF 15 16 C6
+R 470R 8 9 R5
+POT B10K TONE 4 4 3
+C 22n 11 10 C7
+
+STAGE drive2 gain 2단 (IC B)
+R 100K 12 13 R6
+R 330K 36 60 R7
+R 330K 45 69 R8
+C 10p 51 68 C8
+C 1.5n 52 61 C9
+
+STAGE output output 출력 (볼륨)
+C 1000n 44 31 C10
+R 1K 23 22 R9
+POT A100K VOLUME 7 6 5
+
+STAGE power power 전원
+D 1N4007 a=20 k=21 D3
+C 100uF 24 25 C11
+R 22K 37 59 R10
+R 22K 66 65 R11
+C 100uF 67 74 C12
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R2 270 400 h
+AT U1A 680 730
+AT C10 570 400 h
+AT R9 670 400 h
+AT VOLUME 770 400 r180
+AT R1 120 470 v
+AT C2 300 470 v
+AT R3 240 470 v
+AT C7 240 570 v-
+AT R6 320 520 h
+AT R7 500 490 v
+AT R8 450 520 h
+AT C8 500 580 h
+AT C9 450 640 h
+AT R10 180 570 v-
+AT R11 600 570 v
+AT C12 660 570 v
+AT TONE 300 600 r0
+AT D3 180 190 v
+AT C11 180 670 v
+AT R5 390 600 h-
+AT C6 420 700 v-
+AT GAIN 480 730 r180
+AT C3 460 700 h
+AT D1 460 760 h
+AT D2 460 820 h
+AT R4 570 730 h
+AT C4 600 800 v
+AT C5 140 880 h
+AT RLOAD 770 480 v

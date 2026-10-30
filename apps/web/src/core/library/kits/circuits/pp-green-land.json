@@ -1,0 +1,558 @@
+{
+ "id": "pp-green-land",
+ "goodsNo": "186788029",
+ "kitName": "Green Land",
+ "motif": "Greer Southland / Lightspeed",
+ "type": "overdrive",
+ "description": "TL072 2단 - A단 비반전(A1M 드라이브+5.6K, 100p, 1N4148 3:2 직렬 역병렬 피드백 클리퍼, 3.3K→47n∥12K+470n 접지 다리), 5.6K/10n→BAT41 클램프→B단 비반전(22K/3.9K), 3.3K와 1000n으로 A10K FREQ 틸트(220n), A250K 볼륨",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n1",
+    "in"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "430K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "TL072",
+   "nodes": {
+    "1": "n3",
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "5": "n5",
+    "6": "n6",
+    "7": "n7",
+    "8": "n8"
+   }
+  },
+  {
+   "ref": "DRIVE",
+   "kind": "POT",
+   "value": "A1M",
+   "nodes": [
+    "n3",
+    "n9",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "5.6K",
+   "nodes": [
+    "n9",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n10",
+    "k": "n3"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n11",
+    "k": "n10"
+   }
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n4",
+    "k": "n11"
+   }
+  },
+  {
+   "ref": "D4",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n3",
+    "k": "n12"
+   }
+  },
+  {
+   "ref": "D5",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n12",
+    "k": "n4"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "3.3K",
+   "nodes": [
+    "n4",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n13",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "12K",
+   "nodes": [
+    "n13",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "470n",
+   "nodes": [
+    "n14",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "5.6K",
+   "nodes": [
+    "n3",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "D6",
+   "kind": "D",
+   "part": "BAT41",
+   "nodes": {
+    "a": "n2",
+    "k": "n5"
+   }
+  },
+  {
+   "ref": "D7",
+   "kind": "D",
+   "part": "BAT41",
+   "nodes": {
+    "a": "n2",
+    "k": "n5"
+   }
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "3.9K",
+   "nodes": [
+    "n6",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "3.3K",
+   "nodes": [
+    "n7",
+    "n15"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n7",
+    "n16"
+   ]
+  },
+  {
+   "ref": "FREQ",
+   "kind": "POT",
+   "value": "A10K",
+   "nodes": [
+    "n17",
+    "n15",
+    "n16"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n17",
+    "n2"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A250K",
+   "nodes": [
+    "0",
+    "out",
+    "n15"
+   ]
+  },
+  {
+   "ref": "D8",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n8"
+   }
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n2",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "5.6K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "R2"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "게인단 (IC A)",
+   "parts": [
+    "U1",
+    "DRIVE",
+    "R3",
+    "C2",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "R4",
+    "C3",
+    "R5",
+    "C4"
+   ]
+  },
+  {
+   "id": "stage2",
+   "category": "gain",
+   "label": "2단 (클램프·IC B)",
+   "parts": [
+    "R6",
+    "C5",
+    "D6",
+    "D7",
+    "R7",
+    "R8"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "FREQ",
+   "parts": [
+    "R9",
+    "C6",
+    "FREQ",
+    "C7"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D8",
+    "C8",
+    "R10",
+    "R11",
+    "C9"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 180
+  },
+  "U1A": {
+   "x": 460,
+   "y": 700
+  },
+  "R9": {
+   "x": 470,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 570,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 200,
+   "y": 470,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 260,
+   "y": 500,
+   "rotation": 180
+  },
+  "R5": {
+   "x": 350,
+   "y": 500,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 290,
+   "y": 520,
+   "rotation": 180
+  },
+  "D6": {
+   "x": 200,
+   "y": 570,
+   "rotation": 90
+  },
+  "D7": {
+   "x": 200,
+   "y": 520,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 300,
+   "y": 580,
+   "rotation": 270
+  },
+  "R8": {
+   "x": 250,
+   "y": 580,
+   "rotation": 180
+  },
+  "C6": {
+   "x": 430,
+   "y": 490,
+   "rotation": 90
+  },
+  "FREQ": {
+   "x": 490,
+   "y": 520,
+   "rotation": 180
+  },
+  "C7": {
+   "x": 360,
+   "y": 580,
+   "rotation": 180
+  },
+  "R10": {
+   "x": 140,
+   "y": 570,
+   "rotation": 90
+  },
+  "R11": {
+   "x": 560,
+   "y": 570,
+   "rotation": 90
+  },
+  "C9": {
+   "x": 620,
+   "y": 570,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 290,
+   "y": 660,
+   "rotation": 270
+  },
+  "R6": {
+   "x": 200,
+   "y": 670,
+   "rotation": 270
+  },
+  "C5": {
+   "x": 380,
+   "y": 670,
+   "rotation": 90
+  },
+  "D8": {
+   "x": 140,
+   "y": 190,
+   "rotation": 90
+  },
+  "C8": {
+   "x": 140,
+   "y": 670,
+   "rotation": 90
+  },
+  "DRIVE": {
+   "x": 260,
+   "y": 760,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 280,
+   "y": 640,
+   "rotation": 0
+  },
+  "C2": {
+   "x": 240,
+   "y": 700,
+   "rotation": 0
+  },
+  "D1": {
+   "x": 200,
+   "y": 770,
+   "rotation": 270
+  },
+  "D2": {
+   "x": 200,
+   "y": 870,
+   "rotation": 270
+  },
+  "D3": {
+   "x": 240,
+   "y": 760,
+   "rotation": 180
+  },
+  "D4": {
+   "x": 140,
+   "y": 770,
+   "rotation": 90
+  },
+  "D5": {
+   "x": 220,
+   "y": 820,
+   "rotation": 0
+  },
+  "RLOAD": {
+   "x": 570,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

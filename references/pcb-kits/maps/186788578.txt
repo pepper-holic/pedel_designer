@@ -1,0 +1,98 @@
+id pp-brunch-box
+goods 186788578
+name BRUNCH BOX (ANDY)
+motif MI Audio Crunch Box / JHS Angry Charles
+type distortion
+desc LM833 2단 - A단 비반전(B100K 게인 팟 와이퍼가 출력, 100p, 1K+220n 접지 다리), 팟 반대 러그→100n+10K→B단 반전(1M∥100p 피드백, 게인 100), 2.2uF+470R→빨간 LED 2개 접지 역병렬 클리퍼, C10K 톤 가변저항+22n, B25K 프레즌스(22n 션트), B100K 볼륨
+image img_01.jpg
+# Hidden traces: 2.2uF + (11) and the 1M/100p feedback (19) to IC out B, 10K (26) to -in B, 22K (25) to Vref,
+# tone lug 39 to the LED node (14), LED2 anode 22 to ground, 100uF + (40) to the 9V pad.
+# Parts list: 100n x1 and three pots (B100K, B25K, C10K); the board has two 100n (49-60 and the 23-24 rail bypass)
+# and four pots (4-5-6 volume, 37-38-39 tone, 70-74-76 presence, 71-72-73 gain) - written as on the board.
+# Indicator LED pads 0-1-2 and its LED_R (3-18) are not in the audio path.
+BOM 1Mx3 22Kx2 10K 1Kx2 470R 220n 100nx2 22nx3 1n 100px2 100uFx2 2.2uF 1N400X LED-REDx2 LM833 B100Kx2 B25K C10K
+io IN=69 OUT=17 V9=36 GND=4,22
+JUMP 11 28
+JUMP 28 19
+JUMP 26 29
+JUMP 25 30
+JUMP 39 14
+JUMP 40 36
+NC 0 1 2 3 18
+
+STAGE input input 입력
+R 1M 68 54 R1
+C 22n 62 55 C1
+R 1K 67 53 R2
+C 1n 52 61 C2
+R 1M 48 31 R3
+
+STAGE gain gain 게인단 (IC A)
+IC LM833 1=44 2=45 3=46 4=47 5=30 6=29 7=28 8=27
+POT B100K GAIN 73 72 71
+C 100p 50 51 C3
+R 1K 59 58 R4
+C 220n 65 66 C4
+
+STAGE stage2 gain 2단 (IC B)
+C 100n 60 49 C5
+R 10K 43 26 R5
+R 1M 19 20 R6
+C 100p 7 8 C6
+
+STAGE clip clipping LED 클리퍼
+C 2.2uF 11 12 C7
+R 470R 13 14 R7
+D LED-RED a=15 k=21 D1
+D LED-RED a=22 k=16 D2
+
+STAGE tone tone 톤·프레즌스
+POT C10K TONE 39 38 37
+C 22n 56 63 C8
+POT B25K PRESENCE 70 74 76
+C 22n 64 57 C9
+
+STAGE output output 출력 (볼륨)
+POT B100K VOLUME 4 5 6
+
+STAGE power power 전원
+D 1N400X a=35 k=34 D3
+C 100uF 40 41 C10
+C 100n 24 23 C11
+R 22K 33 32 R8
+R 22K 25 42 R9
+C 100uF 9 10 C12
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT C1 60 530 v
+AT R2 120 560 h
+AT C2 150 630 v
+AT R3 210 560 h
+AT R8 300 560 h-
+AT R9 240 630 v
+AT C12 300 630 v
+AT D3 330 190 v
+AT C11 390 630 v
+AT U1A 410 560
+AT GAIN 140 880 h
+AT C3 240 880 h
+AT R4 340 880 h
+AT C4 440 880 h
+AT C5 540 880 h
+AT R5 640 880 h
+AT R6 740 880 h
+AT C6 840 880 h
+AT C7 940 880 h
+AT R7 1040 880 h
+AT D1 1140 880 h
+AT D2 1240 880 h
+AT TONE 1340 880 h
+AT C8 1440 880 h
+AT PRESENCE 1540 880 h
+AT C9 1640 880 h
+AT VOLUME 1740 880 h
+AT C10 1840 880 h
+AT RLOAD 190 480 v

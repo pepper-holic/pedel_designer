@@ -1,0 +1,534 @@
+{
+ "id": "pp-new-blue-od",
+ "goodsNo": "186788571",
+ "kitName": "NEW BLUE OD",
+ "motif": "J. Rockett Blue Note / Animal OD",
+ "type": "overdrive",
+ "description": "JRC4558 단일 단 비반전 오버드라이브 - 피드백에 A50K 게인+4.7K∥22p와 1N914+1N400X 2+2 직렬 역병렬 클리퍼, 접지 다리는 820R→100n∥(C50K BASS+47K, 470n)와 HOT 토글(1K+100n ∥ 1.2K+220n), 4.7uF 출력→B10K 트레블(47n 션트)→B100K 볼륨",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "220p",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "150n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "JRC4558D",
+   "nodes": {
+    "1": "n3",
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "8": "n5"
+   }
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "A50K",
+   "nodes": [
+    "n6",
+    "n3",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n6",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "22p",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n3",
+    "k": "n7"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "n7",
+    "k": "n4"
+   }
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "n4",
+    "k": "n8"
+   }
+  },
+  {
+   "ref": "D4",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n8",
+    "k": "n3"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "820R",
+   "nodes": [
+    "n4",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n9",
+    "0"
+   ]
+  },
+  {
+   "ref": "BASS",
+   "kind": "POT",
+   "value": "C50K",
+   "nodes": [
+    "n10",
+    "n9",
+    "n11"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n11",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "470n",
+   "nodes": [
+    "n10",
+    "0"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n4",
+    "n12"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n12",
+    "0"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "1.2K",
+   "nodes": [
+    "n4",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n13",
+    "0"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "4.7uF",
+   "nodes": [
+    "n3",
+    "n14"
+   ]
+  },
+  {
+   "ref": "TREBLE",
+   "kind": "POT",
+   "value": "B10K",
+   "nodes": [
+    "n14",
+    "n15",
+    "n16"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n15",
+    "0"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "0",
+    "out",
+    "n16"
+   ]
+  },
+  {
+   "ref": "D5",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n17"
+   }
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n17",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n2",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "C2",
+    "R2"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "게인단 (IC A)",
+   "parts": [
+    "U1",
+    "GAIN",
+    "R3",
+    "C3",
+    "D1",
+    "D2",
+    "D3",
+    "D4"
+   ]
+  },
+  {
+   "id": "leg",
+   "category": "custom",
+   "label": "접지 다리 (BASS·HOT)",
+   "parts": [
+    "R4",
+    "C4",
+    "BASS",
+    "R5",
+    "C5",
+    "R6",
+    "C6",
+    "R7",
+    "C7"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (트레블·볼륨)",
+   "parts": [
+    "C8",
+    "TREBLE",
+    "C9",
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D5",
+    "R8",
+    "C10",
+    "R9",
+    "R10",
+    "C11"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 180,
+   "y": 470,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 60,
+   "y": 530,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 120,
+   "y": 560,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 210,
+   "y": 560,
+   "rotation": 0
+  },
+  "R10": {
+   "x": 150,
+   "y": 630,
+   "rotation": 90
+  },
+  "C11": {
+   "x": 210,
+   "y": 630,
+   "rotation": 90
+  },
+  "R8": {
+   "x": 300,
+   "y": 560,
+   "rotation": 180
+  },
+  "C10": {
+   "x": 300,
+   "y": 630,
+   "rotation": 90
+  },
+  "D5": {
+   "x": 330,
+   "y": 190,
+   "rotation": 90
+  },
+  "U1A": {
+   "x": 420,
+   "y": 560
+  },
+  "GAIN": {
+   "x": 140,
+   "y": 880,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 240,
+   "y": 880,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 340,
+   "y": 880,
+   "rotation": 0
+  },
+  "D1": {
+   "x": 440,
+   "y": 880,
+   "rotation": 0
+  },
+  "D2": {
+   "x": 540,
+   "y": 880,
+   "rotation": 0
+  },
+  "D3": {
+   "x": 640,
+   "y": 880,
+   "rotation": 0
+  },
+  "D4": {
+   "x": 740,
+   "y": 880,
+   "rotation": 0
+  },
+  "R4": {
+   "x": 840,
+   "y": 880,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 940,
+   "y": 880,
+   "rotation": 0
+  },
+  "BASS": {
+   "x": 1040,
+   "y": 880,
+   "rotation": 0
+  },
+  "R5": {
+   "x": 1140,
+   "y": 880,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 1240,
+   "y": 880,
+   "rotation": 0
+  },
+  "R6": {
+   "x": 1340,
+   "y": 880,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 1440,
+   "y": 880,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 1540,
+   "y": 880,
+   "rotation": 0
+  },
+  "C7": {
+   "x": 1640,
+   "y": 880,
+   "rotation": 0
+  },
+  "C8": {
+   "x": 1740,
+   "y": 880,
+   "rotation": 0
+  },
+  "TREBLE": {
+   "x": 1840,
+   "y": 880,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 1940,
+   "y": 880,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 2040,
+   "y": 880,
+   "rotation": 0
+  },
+  "RLOAD": {
+   "x": 240,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

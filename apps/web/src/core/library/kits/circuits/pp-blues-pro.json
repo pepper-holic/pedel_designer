@@ -1,0 +1,528 @@
+{
+ "id": "pp-blues-pro",
+ "goodsNo": "186787674",
+ "kitName": "Blues Pro",
+ "motif": "MI Audio Blues Pro",
+ "type": "overdrive",
+ "description": "JRC4558 2단 - A단 비반전 게인(A250K 가변저항+30p, 1N4148 비대칭 클리퍼에 FUZZ 토글로 1N4007 병렬, 1K+220n(FAT 토글로 22uF 병렬) 접지 다리), 2.2uF+470R+B10K 가변저항 톤 → B단 반전(100K/22n, 330K+330K 피드백에 10p·1.5n), 1K+A100K 볼륨",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n2",
+    "n3"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "JRC4558D",
+   "nodes": {
+    "1": "n4",
+    "2": "n5",
+    "3": "n2",
+    "4": "0",
+    "5": "n3",
+    "6": "n6",
+    "7": "n7",
+    "8": "n8"
+   }
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "A250K",
+   "nodes": [
+    "n5",
+    "n4",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "30p",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n4",
+    "k": "n5"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N4007",
+   "nodes": {
+    "a": "n4",
+    "k": "n5"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n5",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n9",
+    "0"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n9",
+    "0"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "2.2uF",
+   "nodes": [
+    "n4",
+    "n10"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "470R",
+   "nodes": [
+    "n10",
+    "n11"
+   ]
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B10K",
+   "nodes": [
+    "n12",
+    "n12",
+    "n11"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n12",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n12",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "330K",
+   "nodes": [
+    "n7",
+    "n13"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "330K",
+   "nodes": [
+    "n6",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "10p",
+   "nodes": [
+    "n7",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "1.5n",
+   "nodes": [
+    "n6",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n7",
+    "n14"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n14",
+    "n15"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n15"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N4007",
+   "nodes": {
+    "a": "vcc",
+    "k": "n8"
+   }
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n8",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "R2",
+    "C2",
+    "R3"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "게인단 (IC A)",
+   "parts": [
+    "U1",
+    "GAIN",
+    "C3",
+    "D1",
+    "D2",
+    "R4",
+    "C4",
+    "C5"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "톤",
+   "parts": [
+    "C6",
+    "R5",
+    "TONE",
+    "C7"
+   ]
+  },
+  {
+   "id": "drive2",
+   "category": "gain",
+   "label": "2단 (IC B)",
+   "parts": [
+    "R6",
+    "R7",
+    "R8",
+    "C8",
+    "C9"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "C10",
+    "R9",
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D3",
+    "C11",
+    "R10",
+    "R11",
+    "C12"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 270,
+   "y": 400,
+   "rotation": 0
+  },
+  "U1A": {
+   "x": 680,
+   "y": 730
+  },
+  "C10": {
+   "x": 570,
+   "y": 400,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 670,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 770,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 300,
+   "y": 470,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 240,
+   "y": 470,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 240,
+   "y": 570,
+   "rotation": 270
+  },
+  "R6": {
+   "x": 320,
+   "y": 520,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 500,
+   "y": 490,
+   "rotation": 90
+  },
+  "R8": {
+   "x": 450,
+   "y": 520,
+   "rotation": 0
+  },
+  "C8": {
+   "x": 500,
+   "y": 580,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 450,
+   "y": 640,
+   "rotation": 0
+  },
+  "R10": {
+   "x": 180,
+   "y": 570,
+   "rotation": 270
+  },
+  "R11": {
+   "x": 600,
+   "y": 570,
+   "rotation": 90
+  },
+  "C12": {
+   "x": 660,
+   "y": 570,
+   "rotation": 90
+  },
+  "TONE": {
+   "x": 300,
+   "y": 600,
+   "rotation": 0
+  },
+  "D3": {
+   "x": 180,
+   "y": 190,
+   "rotation": 90
+  },
+  "C11": {
+   "x": 180,
+   "y": 670,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 390,
+   "y": 600,
+   "rotation": 180
+  },
+  "C6": {
+   "x": 420,
+   "y": 700,
+   "rotation": 270
+  },
+  "GAIN": {
+   "x": 480,
+   "y": 730,
+   "rotation": 180
+  },
+  "C3": {
+   "x": 460,
+   "y": 700,
+   "rotation": 0
+  },
+  "D1": {
+   "x": 460,
+   "y": 760,
+   "rotation": 0
+  },
+  "D2": {
+   "x": 460,
+   "y": 820,
+   "rotation": 0
+  },
+  "R4": {
+   "x": 570,
+   "y": 730,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 600,
+   "y": 800,
+   "rotation": 90
+  },
+  "C5": {
+   "x": 140,
+   "y": 880,
+   "rotation": 0
+  },
+  "RLOAD": {
+   "x": 770,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

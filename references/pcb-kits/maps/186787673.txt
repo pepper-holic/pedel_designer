@@ -1,0 +1,99 @@
+id pp-new-bbreaker
+goods 186787673
+name NEW BBreaker
+motif Marshall Bluesbreaker
+type overdrive
+desc TL072 2단 - A단 비반전 게인(B100K 게인 팟+47p, 4.7K∥(3.3K+10n)+10n 접지 다리), B단 반전(100n+10K 입력, 220K∥(6.8K+1N4148 2+2 직렬 역병렬) 피드백), 1K+B25K 가변 LPF 톤(6.8K/10n), A100K 볼륨
+image img_01.jpg
+# Parts list ships 100n x5 / 10n x2; the seller says the three 100n at the bottom-left (input cap and the two
+# in the gain leg) are to be fitted as 10n, matching the original Bluesbreaker - installed values written here.
+# Hidden traces: 47K top lead -> diode cathode (under the 1N400X), 1K and the outer diode pair -> IC out B
+# (under the 1K / diode silk), volume lug 30 -> 6.8K/10n junction, Vref (47K/47K, 47uF) -> +in B / 1M bias.
+# Angle pots: 27-28-29 GAIN (28 wiper on out A, 29 on -in A, 27 feeds stage B), 4-5-6 TONE (B25K, 5 wiper),
+# 30-31-32 VOLUME (31 wiper to the 100n output cap, 32 at Vref).
+BOM 2.2M 1Mx2 220K 47Kx2 10K 6.8Kx2 4.7K 3.3K 1K 100nx2 10nx5 47pF 100uF 47uF 1N400X 1N4148x4 TL072 A100K B100K B25K
+io IN=50 OUT=69 V9=10 GND=0,26,70,71,72,73
+JUMP 1 23
+JUMP 17 42
+JUMP 46 42
+JUMP 30 19
+JUMP 7 65
+
+STAGE input input 입력
+R 2.2M 36 61 R1
+C 10n 37 53 C1
+R 1M 64 65 R2
+
+STAGE gain gain 게인단 (IC A)
+IC TL072 1=33 2=40 3=51 4=54 5=55 6=52 7=41 8=34
+POT B100K GAIN 29 28 27
+C 47p 24 25 C2
+R 4.7K 39 63 R3
+R 3.3K 38 62 R4
+C 10n 74 75 C3
+C 10n 76 77 C4
+
+STAGE clip clipping 클리핑단 (IC B)
+C 100n 2 3 C5
+R 10K 11 12 R5
+R 220K 42 66 R6
+R 6.8K 43 67 R7
+D 1N4148 k=44 a=56 D1
+D 1N4148 k=59 a=47 D2
+D 1N4148 a=45 k=57 D3
+D 1N4148 a=58 k=46 D4
+
+STAGE tone tone 톤
+R 1K 17 18 R8
+POT B25K TONE 4 5 6
+R 6.8K 13 14 R9
+C 10n 19 20 C6
+C 10n 15 16 C7
+
+STAGE output output 출력 (볼륨)
+POT A100K VOLUME 32 31 30
+C 100n 49 60 C8
+R 1M 48 68 R10
+
+STAGE power power 전원
+D 1N400X a=9 k=23 D5
+C 100uF 35 26 C9
+R 47K 1 22 R11
+R 47K 8 21 R12
+C 47uF 7 0 C10
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R2 270 400 h
+AT VOLUME 370 400 r0
+AT C8 470 400 h
+AT R1 120 470 v
+AT C4 300 470 v-
+AT R9 430 470 v-
+AT C6 350 520 h-
+AT C7 240 470 v-
+AT R10 500 470 v
+AT R11 300 590 v-
+AT R12 540 470 v-
+AT C10 600 470 v
+AT R3 240 570 v-
+AT R4 240 670 v
+AT C3 270 520 h
+AT TONE 390 590 r0
+AT D5 300 190 v
+AT C9 300 690 v
+AT GAIN 390 690 r0
+AT C2 320 580 h-
+AT C5 480 690 h
+AT R5 570 690 h
+AT R6 660 690 h-
+AT R7 600 760 v-
+AT D1 660 790 h-
+AT D2 690 520 h
+AT D3 600 860 v
+AT D4 640 580 h
+AT R8 560 520 h-
+AT U1A 750 660
+AT RLOAD 750 480 v

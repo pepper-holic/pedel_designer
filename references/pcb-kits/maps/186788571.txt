@@ -1,0 +1,93 @@
+id pp-new-blue-od
+goods 186788571
+name NEW BLUE OD
+motif J. Rockett Blue Note / Animal OD
+type overdrive
+desc JRC4558 단일 단 비반전 오버드라이브 - 피드백에 A50K 게인+4.7K∥22p와 1N914+1N400X 2+2 직렬 역병렬 클리퍼, 접지 다리는 820R→100n∥(C50K BASS+47K, 470n)와 HOT 토글(1K+100n ∥ 1.2K+220n), 4.7uF 출력→B10K 트레블(47n 션트)→B100K 볼륨
+image img_01.jpg
+# Seller: the 470n at the bottom right (75-73) is fitted as 47n and the two horizontal 470K at the top (0-1, 3-4) as 47K
+# (Vref divider) - written as installed. Op-amp B is tied off. The 1N400X 15-16 is a series polarity diode: its
+# cathode 15 runs to the 100R (10) on a cyan trace. The DIP toggle 44-47-54 is drawn closed on 44 (HOT); 54 unused.
+# Angle pots: 48-49-50 GAIN (49 wiper tied to 48), 51-52-53 VOLUME (53 ground), 64-70-76 BASS (70 wiper), 65-71-77 TREBLE (71 wiper).
+BOM 1M 470K 47Kx3 4.7K 1.2K 1K 820R 100R 470n 220n 150n 100nx2 47n 220p 22p 100uF 47uF 4.7uF 1N400Xx3 1N914x2 JRC4558D B100K A50K B10K C50K
+io IN=17 OUT=59 V9=25 GND=0
+JUMP 15 10
+JUMP 47 44
+NC 54 14 24
+
+STAGE input input 입력
+R 1M 27 26 R1
+C 220p 21 20 C1
+C 150n 18 19 C2
+R 470K 22 2 R2
+
+STAGE gain gain 게인단 (IC A)
+IC JRC4558D 1=7 2=13 3=23 4=30 8=8
+POT A50K GAIN 50 49 48
+R 4.7K 28 29 R3
+C 22p 39 38 C3
+D 1N914 a=34 k=35 D1
+D 1N400X a=36 k=37 D2
+D 1N400X a=43 k=42 D3
+D 1N914 a=41 k=40 D4
+
+STAGE leg custom 접지 다리 (BASS·HOT)
+R 820R 56 55 R4
+C 100n 67 66 C4
+POT C50K BASS 76 70 64
+R 47K 63 62 R5
+C 470n 74 72 C5
+R 1K 45 57 R6
+C 100n 68 69 C6
+R 1.2K 46 58 R7
+C 220n 60 61 C7
+
+STAGE output output 출력 (트레블·볼륨)
+C 4.7uF 32 33 C8
+POT B10K TREBLE 65 71 77
+C 47n 75 73 C9
+POT B100K VOLUME 53 52 51
+
+STAGE power power 전원
+D 1N400X a=16 k=15 D5
+R 100R 10 9 R8
+C 100uF 11 12 C10
+R 47K 3 4 R9
+R 47K 1 0 R10
+C 47uF 6 5 C11
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT C1 180 470 v
+AT C2 60 530 v
+AT R2 120 560 h
+AT R9 210 560 h
+AT R10 150 630 v
+AT C11 210 630 v
+AT R8 300 560 h-
+AT C10 300 630 v
+AT D5 330 190 v
+AT U1A 420 560
+AT GAIN 140 880 h
+AT R3 240 880 h
+AT C3 340 880 h
+AT D1 440 880 h
+AT D2 540 880 h
+AT D3 640 880 h
+AT D4 740 880 h
+AT R4 840 880 h
+AT C4 940 880 h
+AT BASS 1040 880 h
+AT R5 1140 880 h
+AT C5 1240 880 h
+AT R6 1340 880 h
+AT C6 1440 880 h
+AT R7 1540 880 h
+AT C7 1640 880 h
+AT C8 1740 880 h
+AT TREBLE 1840 880 h
+AT C9 1940 880 h
+AT VOLUME 2040 880 h
+AT RLOAD 240 480 v

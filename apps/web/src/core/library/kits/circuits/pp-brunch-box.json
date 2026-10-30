@@ -1,0 +1,521 @@
+{
+ "id": "pp-brunch-box",
+ "goodsNo": "186788578",
+ "kitName": "BRUNCH BOX (ANDY)",
+ "motif": "MI Audio Crunch Box / JHS Angry Charles",
+ "type": "distortion",
+ "description": "LM833 2단 - A단 비반전(B100K 게인 팟 와이퍼가 출력, 100p, 1K+220n 접지 다리), 팟 반대 러그→100n+10K→B단 반전(1M∥100p 피드백, 게인 100), 2.2uF+470R→빨간 LED 2개 접지 역병렬 클리퍼, C10K 톤 가변저항+22n, B25K 프레즌스(22n 션트), B100K 볼륨",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n2",
+    "n3"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "LM833",
+   "nodes": {
+    "1": "n4",
+    "2": "n5",
+    "3": "n2",
+    "4": "0",
+    "5": "n3",
+    "6": "n6",
+    "7": "n7",
+    "8": "n8"
+   }
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n5",
+    "n4",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n5",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n10",
+    "0"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n9",
+    "n11"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n11",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "2.2uF",
+   "nodes": [
+    "n7",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "470R",
+   "nodes": [
+    "n12",
+    "n13"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "LED-RED",
+   "nodes": {
+    "a": "n13",
+    "k": "0"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "LED-RED",
+   "nodes": {
+    "a": "0",
+    "k": "n13"
+   }
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "C10K",
+   "nodes": [
+    "n13",
+    "n13",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n14",
+    "0"
+   ]
+  },
+  {
+   "ref": "PRESENCE",
+   "kind": "POT",
+   "value": "B25K",
+   "nodes": [
+    "n15",
+    "n16",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n15",
+    "0"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "0",
+    "out",
+    "n16"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n8"
+   }
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "vcc",
+    "0"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n8",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "R2",
+    "C2",
+    "R3"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "게인단 (IC A)",
+   "parts": [
+    "U1",
+    "GAIN",
+    "C3",
+    "R4",
+    "C4"
+   ]
+  },
+  {
+   "id": "stage2",
+   "category": "gain",
+   "label": "2단 (IC B)",
+   "parts": [
+    "C5",
+    "R5",
+    "R6",
+    "C6"
+   ]
+  },
+  {
+   "id": "clip",
+   "category": "clipping",
+   "label": "LED 클리퍼",
+   "parts": [
+    "C7",
+    "R7",
+    "D1",
+    "D2"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "톤·프레즌스",
+   "parts": [
+    "TONE",
+    "C8",
+    "PRESENCE",
+    "C9"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D3",
+    "C10",
+    "C11",
+    "R8",
+    "R9",
+    "C12"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 60,
+   "y": 530,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 120,
+   "y": 560,
+   "rotation": 0
+  },
+  "C2": {
+   "x": 150,
+   "y": 630,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 210,
+   "y": 560,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 300,
+   "y": 560,
+   "rotation": 180
+  },
+  "R9": {
+   "x": 240,
+   "y": 630,
+   "rotation": 90
+  },
+  "C12": {
+   "x": 300,
+   "y": 630,
+   "rotation": 90
+  },
+  "D3": {
+   "x": 330,
+   "y": 190,
+   "rotation": 90
+  },
+  "C11": {
+   "x": 390,
+   "y": 630,
+   "rotation": 90
+  },
+  "U1A": {
+   "x": 410,
+   "y": 560
+  },
+  "GAIN": {
+   "x": 140,
+   "y": 880,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 240,
+   "y": 880,
+   "rotation": 0
+  },
+  "R4": {
+   "x": 340,
+   "y": 880,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 440,
+   "y": 880,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 540,
+   "y": 880,
+   "rotation": 0
+  },
+  "R5": {
+   "x": 640,
+   "y": 880,
+   "rotation": 0
+  },
+  "R6": {
+   "x": 740,
+   "y": 880,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 840,
+   "y": 880,
+   "rotation": 0
+  },
+  "C7": {
+   "x": 940,
+   "y": 880,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 1040,
+   "y": 880,
+   "rotation": 0
+  },
+  "D1": {
+   "x": 1140,
+   "y": 880,
+   "rotation": 0
+  },
+  "D2": {
+   "x": 1240,
+   "y": 880,
+   "rotation": 0
+  },
+  "TONE": {
+   "x": 1340,
+   "y": 880,
+   "rotation": 0
+  },
+  "C8": {
+   "x": 1440,
+   "y": 880,
+   "rotation": 0
+  },
+  "PRESENCE": {
+   "x": 1540,
+   "y": 880,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 1640,
+   "y": 880,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 1740,
+   "y": 880,
+   "rotation": 0
+  },
+  "C10": {
+   "x": 1840,
+   "y": 880,
+   "rotation": 0
+  },
+  "RLOAD": {
+   "x": 190,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

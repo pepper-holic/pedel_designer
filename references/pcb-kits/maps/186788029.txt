@@ -1,0 +1,99 @@
+id pp-green-land
+goods 186788029
+name Green Land
+motif Greer Southland / Lightspeed
+type overdrive
+desc TL072 2단 - A단 비반전(A1M 드라이브+5.6K, 100p, 1N4148 3:2 직렬 역병렬 피드백 클리퍼, 3.3K→47n∥12K+470n 접지 다리), 5.6K/10n→BAT41 클램프→B단 비반전(22K/3.9K), 3.3K와 1000n으로 A10K FREQ 틸트(220n), A250K 볼륨
+image img_02.jpg
+# Hidden traces: IC out B (40) -> 1000n (41) and 3.3K (50); input 47n (70) -> IN; 1000n (26) -> FREQ lug 3.
+# Silk offers DRIVE A500K/A1M, FREQ/RANGE A10K, LOUD A100K/VOLUME A250K and 4.7K/22K for the B feedback -
+# the parts list ships A1M, A10K, A250K and 22K. Both BAT41 cathodes sit on +in B as drawn. Drive lug 0 is unused.
+BOM 1M 430K 22K 12K 5.6Kx3 4.7K 3.9K 3.3Kx2 1000n 470n 220n 47nx2 10n 100p 22uFx2 1N400X 1N4148x5 BAT41x2 TL072 A1M A250K A10K
+io IN=57 OUT=18 V9=59 GND=8
+JUMP 70 57
+JUMP 40 41
+JUMP 40 50
+JUMP 26 3
+JUMP 40 24
+NC 0
+
+STAGE input input 입력
+R 1M 64 65 R1
+C 47n 54 70 C1
+R 430K 45 69 R2
+
+STAGE gain gain 게인단 (IC A)
+IC TL072 1=32 2=39 3=47 4=55 5=56 6=48 7=40 8=33
+POT A1M DRIVE 2 1 1
+R 5.6K 13 36 R3
+C 100p 19 37 C2
+D 1N4148 k=10 a=29 D1
+D 1N4148 k=9 a=28 D2
+D 1N4148 k=34 a=35 D3
+D 1N4148 a=31 k=12 D4
+D 1N4148 a=11 k=30 D5
+R 3.3K 43 42 R4
+C 47n 53 66 C3
+R 12K 44 68 R5
+C 470n 61 60 C4
+
+STAGE stage2 gain 2단 (클램프·IC B)
+R 5.6K 14 15 R6
+C 10n 16 17 C5
+D BAT41 a=72 k=73 D6
+D BAT41 a=74 k=75 D7
+R 22K 24 49 R7
+R 3.9K 63 62 R8
+
+STAGE tone tone FREQ
+R 3.3K 50 25 R9
+C 1000n 41 26 C6
+POT A10K FREQ 5 4 3
+C 220n 20 38 C7
+
+STAGE output output 출력 (볼륨)
+POT A250K VOLUME 8 7 6
+
+STAGE power power 전원
+D 1N400X a=52 k=27 D8
+C 22uF 51 58 C8
+R 4.7K 22 23 R10
+R 5.6K 21 46 R11
+C 22uF 67 71 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h-
+AT U1A 460 700
+AT R9 470 400 h
+AT VOLUME 570 400 r180
+AT R1 120 470 v
+AT R2 200 470 v
+AT C3 260 500 h-
+AT R5 350 500 h
+AT C4 290 520 h-
+AT D6 200 570 v
+AT D7 200 520 h
+AT R7 300 580 v-
+AT R8 250 580 h-
+AT C6 430 490 v
+AT FREQ 490 520 r180
+AT C7 360 580 h-
+AT R10 140 570 v
+AT R11 560 570 v
+AT C9 620 570 v
+AT R4 290 660 v-
+AT R6 200 670 v-
+AT C5 380 670 v
+AT D8 140 190 v
+AT C8 140 670 v
+AT DRIVE 260 760 r0
+AT R3 280 640 h
+AT C2 240 700 h
+AT D1 200 770 v-
+AT D2 200 870 v-
+AT D3 240 760 h-
+AT D4 140 770 v
+AT D5 220 820 h
+AT RLOAD 570 480 v

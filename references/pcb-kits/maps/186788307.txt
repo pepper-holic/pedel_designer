@@ -1,0 +1,4 @@
+# NEW ZENFIRE (186788307): Hermida Mosferatu (Zendrive variant with the TS-808 tone block). NE5532
+# (AD712 silk) with a 2N7000 MOSFET + 1N34A asymmetric clipper pair in the feedback; the app has no
+# MOSFET model yet, so recorded only. Board: 1M x2, 470K, 10K x2, 1K x5, 220R, 470n, 270n x3, 100pF,
+# 100uF, 47uF, 1N400X, 1N34A x2, 2N7000 x2, angle pots B500K / B100K / B25K / B10K.

@@ -1,0 +1,4 @@
+# Mark 4 (186788014): Mark 4.23 clean boost. One TL072 (OPA2134 in the original) stage with an A50K
+# BOOST pot, run on a bipolar supply made by an ICL7660 inverter (1N400X x5, 10uF x6, 220uF, 47uF).
+# The app has no charge-pump model and no negative-rail convention; recorded only. Board: 2.2M x2,
+# 680R x2, 3.3K, 51R x2, 120K, 1000n input, 100n x2, 33pF, 1N400X polarity diode.
