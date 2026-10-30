@@ -1,0 +1,5 @@
+# Brown Charlie Childs (186787532): Marshall JTM45-style 4-knob overdrive built on three BS170 MOSFET gain stages
+# (9.1V zener bias); VOLUME B100K, TONE B100K, PRESS. B25K, GAIN B5K. The app has no MOSFET model; recorded only.
+# Seller value changes: bottom-left 100n -> 10n, top-centre 1n -> 100n, right-centre 100n -> 22n. Board: 10M, 1M x5,
+# 470K, 100K, 82K, 62K, 47K, 10K x2, 5.1K x2, 2.7K x2, 330R, 180R, 82R, 100n x2, 22n, 2.2n x2, 1n, 470pF, 47pF, 100uF,
+# 47uF, 10uF, 1uF, 1N400X.

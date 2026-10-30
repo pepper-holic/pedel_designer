@@ -1,0 +1,110 @@
+id pp-voo-doo-bass
+goods 186788511
+name VOO-DOO BASS
+motif Roger Mayer Voodoo-1 (bass)
+type distortion
+desc BC549C 공통 이미터 입력단(47K/22K, 2.2M·680K 바이어스)→OP07 비반전(150K 피드백, 접지 다리 2.2uF+39R+C50K 가변저항, 게인 최대 약 3800)→2.2uF→10K→1N4148 2직렬 2조 같은 방향 반파 클리퍼→1.5K→39K→B100K 톤(4.7n·39K)→A100K 볼륨→100n→BC549C 이미터 폴로어(1M/820K 바이어스)→100n 출력
+image img_01.jpg
+# OP07 notch on the left: pins 57(1) 58(2 -in) 59(3 +in) 60(4) along the bottom, 39(5) 38(6 out) 37(7 V+) 36(8) on top.
+# The 22p between pins 1 and 8 (45-56) is offset-trim compensation and is left out of the netlist and BOM (kit list:
+# 22p x1). Hidden traces: Q1 base 75 <- 1M/820K node 88; tone wiper 6 -> volume lug 30; gain wiper 34 tied to lug 35.
+# The 47n / 10n / jumper marked in red on the kit list are not fitted (the 0R jumper 20-21 is drawn as a wire).
+# Both diode chains have their cathodes toward ground as drawn on the silk (same polarity - half-wave clipping).
+BOM 2.2Mx3 1M 820K 680K 150K 47Kx2 39Kx2 22K 10Kx2 1.5K 150R 39R 100nx3 4.7n 220uFx2 22uF 2.2uFx2 1N400X 1N4148x4 OP07 BC549Cx2 A100K B100K C50K
+io IN=48 OUT=87 V9=4 GND=0
+JUMP 20 21
+JUMP 88 75
+JUMP 6 30
+JUMP 35 34
+NC 36 45 56 57 39
+
+STAGE input gain 입력단 (Q2)
+R 2.2M 72 93 R1
+C 100n 54 53 C1
+R 680K 71 92 R2
+R 2.2M 78 77 R3
+Q BC549C b=76 c=84 e=68 Q2
+R 47K 86 85 R4
+R 22K 69 70 R5
+
+STAGE opamp gain OP07 게인단
+IC OP07 2=58 3=59 4=60 6=38 7=37
+R 150K 40 61 R6
+C 2.2uF 51 52 C2
+R 39R 46 47 R7
+POT C50K GAIN 35 34 33
+
+STAGE clip clipping 클리퍼
+C 2.2uF 41 42 C3
+R 10K 29 28 R8
+D 1N4148 a=14 k=15 D1
+D 1N4148 a=16 k=17 D2
+D 1N4148 a=24 k=25 D3
+D 1N4148 a=26 k=27 D4
+R 1.5K 23 22 R9
+
+STAGE tone tone 톤·볼륨
+R 39K 13 12 R10
+C 4.7n 10 11 C4
+POT B100K TONE 7 6 5
+R 39K 1 0 R11
+POT A100K VOLUME 32 31 30
+
+STAGE output buffer 출력 버퍼 (Q1)
+C 100n 43 55 C5
+R 820K 65 89 R12
+R 1M 88 64 R13
+Q BC549C b=75 c=83 e=66 Q1
+R 10K 67 44 R14
+C 100n 73 74 C6
+R 2.2M 80 79 R15
+
+STAGE power power 전원
+D 1N400X a=8 k=9 D5
+C 220uF 3 2 C7
+R 150R 19 18 R16
+C 220uF 50 49 C8
+R 47K 90 91 R17
+C 22uF 63 62 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R3 270 400 h-
+AT R17 370 400 h-
+AT R12 470 400 h
+AT Q1 570 400
+AT C6 680 400 h
+AT R1 120 470 v
+AT R2 200 470 v
+AT R4 300 470 v
+AT C5 500 470 v-
+AT R13 680 470 v
+AT R14 590 500 v
+AT R15 770 470 v
+AT R16 400 470 v-
+AT C8 460 470 v
+AT C9 360 470 v
+AT VOLUME 560 590 r180
+AT D5 400 190 v
+AT C7 400 570 v
+AT TONE 650 590 r180
+AT R11 740 660 v
+AT R10 620 690 v-
+AT C4 800 660 v
+AT R9 680 720 h-
+AT R8 770 720 h-
+AT D1 710 790 v
+AT D2 710 890 v
+AT D3 710 520 h
+AT D4 770 890 v
+AT Q2 860 400
+AT U1A 860 500
+AT R5 140 880 h
+AT R6 240 880 h
+AT C2 340 880 h
+AT R7 440 880 h
+AT GAIN 540 880 h
+AT C3 640 880 h
+AT RLOAD 960 480 v

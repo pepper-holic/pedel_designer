@@ -1,0 +1,2 @@
+# NEW Dirty Cat (186787646): same board render as NEW Cat (186787642, "ALL RAT" board, LM308 + 2N5459); only the
+# variant resistors R4 / R10 / R15 / R16 differ. See the NEW Cat entry in docs/kit-deferred.md.

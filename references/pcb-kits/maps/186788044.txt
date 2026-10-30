@@ -1,0 +1,4 @@
+# DOC Overdrive (186788044): Fulltone OCD V4 - TL082 input/output stages with a 2N7000 MOSFET pair + 1N34A
+# hard clipper to ground, HP/LP toggle; DRIVE A1M, TONE B10K, VOLUME B500K. The app has no MOSFET model; recorded
+# only. Board: 1M, 470K, 220K, 150K, 39K, 33K, 22K, 18K, 10K x5, 4.7K, 2.2K, 100R, 100n x3, 68n, 47n, 22n, 1n,
+# 220p x2, 10uF x3, 1N400X, DIP on-on x2.

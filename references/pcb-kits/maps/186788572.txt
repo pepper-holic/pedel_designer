@@ -1,0 +1,110 @@
+id pp-narrow-808
+goods 186788572
+name NARROW 808
+motif Ibanez TS-808 (op-amp buffers)
+type overdrive
+desc LM1458 x2 TS-808 - IC2 A 팔로어 입력 버퍼(1K/2.2M, 510K 바이어스)→1000n→IC2 B 비반전 드라이브(51K+A500K 가변저항∥51p, MA150 역병렬, 4.7K+47n→Vref 다리)→1K→톤단 IC1 A(+in=X에 220n·10K Vref, W20K 양 러그가 X와 -in, 와이퍼→220n+220R→GND, 1K 피드백)→1000n→1K→B100K 볼륨(냉단 Vref)→1000n→IC1 B 팔로어→220R→1000n∥4.7uF 출력(10K 부하)
+image img_01.jpg
+# IC1 (notch right): 55=8 54=7 53=6 52=5 bottom row right-to-left, 32=4 33=3 34=2 35=1 top row left-to-right.
+# IC2 (notch left): 84=1 85=2 86=3 87=4 bottom, 65=5 64=6 63=7 62=8 top.
+# Hidden traces: diode cathode 2 -> 100R (8) under the diode silk; 1000n (24) -> out A (56) and volume lug 41 -> Vref (31)
+# under the 100K silk. The silk marks the IC1-side vertical pair "1K / 220R" but the kit list has 1K x4 and 220R x1 with
+# 220R printed at 60-61 as well - the 36-56 feedback is written as 1K and both 37-57 and 60-61 as 220R (kit list: 220R x1).
+# Pots (angle): TONE 5-6-7 (6 wiper, 5 at node X, 7 at -in A), VOLUME 39-40-41 (41 cold end at Vref), DRIVE 42-43-44.
+BOM 2.2M 510K 100K 51K 10Kx5 4.7K 1Kx4 220Rx2 100R 1000nx5 220nx2 100n 47n 51p 100uF 47uF 4.7uF 1N400X MA150x2 LM1458x2 A500K W20K B100K
+io IN=76 OUT=73 V9=0 GND=3
+JUMP 2 8
+JUMP 24 56
+JUMP 41 31
+JUMP 28 29
+
+STAGE input buffer 입력 버퍼 (IC2 A)
+R 1K 71 72 R1
+R 2.2M 77 78 R2
+C 1000n 92 93 C1
+R 510K 90 91 R3
+IC LM1458 1=84 2=85 3=86 4=87 5=65 6=64 7=63 8=62 U2
+
+STAGE drive gain 드라이브단 (IC2 B)
+C 1000n 79 80 C2
+R 10K 66 88 R4
+R 4.7K 67 89 R5
+C 47n 68 81 C3
+R 51K 45 46 R6
+POT A500K DRIVE 44 43 42
+C 51p 58 59 C4
+D MA150 a=21 k=22 D1
+D MA150 a=30 k=29 D2
+
+STAGE tone tone 톤단 (IC1 A)
+R 1K 27 28 R7
+C 220n 17 18 C5
+R 10K 25 26 R8
+IC LM1458 1=35 2=34 3=33 4=32 5=52 6=53 7=54 8=55 U1
+POT W20K TONE 5 6 7
+C 220n 19 20 C6
+R 220R 37 57 R9
+R 1K 36 56 R10
+
+STAGE output output 볼륨·출력 버퍼 (IC1 B)
+C 1000n 23 24 C7
+R 1K 16 38 R11
+POT B100K VOLUME 39 40 41
+C 1000n 49 50 C8
+R 100K 31 51 R12
+R 220R 61 60 R13
+C 1000n 47 48 C9
+C 4.7uF 75 74 C10
+R 10K 82 83 R14
+
+STAGE power power 전원
+D 1N400X a=1 k=2 D3
+R 100R 8 9 R15
+C 100uF 13 12 C11
+R 10K 14 15 R16
+R 10K 4 3 R17
+C 47uF 11 10 C12
+C 100n 70 69 C13
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 170 400 h
+AT C1 270 400 h
+AT U2A 670 720
+AT R7 570 400 h-
+AT U1A 1050 530
+AT R13 770 400 h
+AT C9 870 400 h-
+AT R2 120 470 v
+AT R3 300 470 v
+AT R4 360 500 h-
+AT R5 430 490 v
+AT C3 360 520 h
+AT R6 500 490 v-
+AT DRIVE 560 520 r180
+AT C4 450 520 h-
+AT D1 450 580 h-
+AT D2 450 640 h
+AT C5 780 470 v-
+AT R8 450 700 h
+AT TONE 660 340 r0
+AT C6 720 320 v
+AT R9 840 470 v
+AT R10 690 500 v
+AT C7 750 530 h-
+AT R11 840 530 h
+AT VOLUME 360 590 r180
+AT C8 360 690 v
+AT R12 330 580 h
+AT C10 850 520 h
+AT R14 960 470 v
+AT R16 270 570 v-
+AT R17 660 570 v
+AT C12 960 570 v
+AT C13 270 670 v
+AT C2 510 690 v-
+AT R15 210 670 v-
+AT C11 570 670 v
+AT D3 210 190 v
+AT RLOAD 1150 480 v
