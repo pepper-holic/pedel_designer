@@ -1,0 +1,660 @@
+{
+ "id": "pp-porta-424",
+ "goodsNo": "186788573",
+ "kitName": "PORTA 424",
+ "motif": "Tascam 424 Portastudio channel",
+ "type": "distortion",
+ "description": "듀얼 op-amp 2개 - IC1 A 비반전 입력단(10uF/2.2M, 100K→Vref 바이어스, 470K∥100p 피드백, 접지 다리 10uF→C10K TRIM 와이퍼→100R, 러그 끝은 10uF로 출력에 되돌아감)→10K/22K로 IC2 A 박산달형 EQ(B100K x2, 1.8n+10K·15n·15n·18K·5.6K+10uF, 470K∥47p 피드백)→10uF→A10K LEVEL→10uF+47K→IC2 B 반전(110K∥10p)→10uF→A100K VOLUME",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n1",
+    "in"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "uPC4570C",
+   "nodes": {
+    "1": "n3",
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "8": "n5"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n4",
+    "n6"
+   ]
+  },
+  {
+   "ref": "TRIM",
+   "kind": "POT",
+   "value": "C10K",
+   "nodes": [
+    "n7",
+    "n6",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n3",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n8",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "18K",
+   "nodes": [
+    "n10",
+    "n11"
+   ]
+  },
+  {
+   "ref": "BASS",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n8",
+    "n12",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "1.8n",
+   "nodes": [
+    "n12",
+    "n13"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n13",
+    "n14"
+   ]
+  },
+  {
+   "ref": "TREBLE",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n9",
+    "n15",
+    "n11"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "15n",
+   "nodes": [
+    "n9",
+    "n15"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "15n",
+   "nodes": [
+    "n11",
+    "n15"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n16",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "5.6K",
+   "nodes": [
+    "n16",
+    "n14"
+   ]
+  },
+  {
+   "ref": "U2",
+   "kind": "IC",
+   "part": "NJM4565D",
+   "nodes": {
+    "1": "n17",
+    "2": "n14",
+    "3": "n2",
+    "4": "0",
+    "5": "n2",
+    "6": "n18",
+    "7": "n19",
+    "8": "n5"
+   }
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n17",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "47p",
+   "nodes": [
+    "n17",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n17",
+    "n10"
+   ]
+  },
+  {
+   "ref": "LEVEL",
+   "kind": "POT",
+   "value": "A10K",
+   "nodes": [
+    "n10",
+    "n20",
+    "0"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n21",
+    "n20"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n21",
+    "n18"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "110K",
+   "nodes": [
+    "n19",
+    "n18"
+   ]
+  },
+  {
+   "ref": "C13",
+   "kind": "C",
+   "value": "10p",
+   "nodes": [
+    "n19",
+    "n18"
+   ]
+  },
+  {
+   "ref": "C14",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n19",
+    "n22"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n22",
+    "out",
+    "0"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n23"
+   }
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "47R",
+   "nodes": [
+    "n23",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C15",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "C16",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n2",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "gain",
+   "label": "입력단 (IC1 A)",
+   "parts": [
+    "R1",
+    "C1",
+    "R2",
+    "U1",
+    "R3",
+    "C2",
+    "C3",
+    "TRIM",
+    "R4",
+    "C4",
+    "R5"
+   ]
+  },
+  {
+   "id": "eq",
+   "category": "tone",
+   "label": "EQ (IC2 A)",
+   "parts": [
+    "R6",
+    "R7",
+    "BASS",
+    "C5",
+    "R8",
+    "TREBLE",
+    "C6",
+    "C7",
+    "C8",
+    "R9",
+    "U2",
+    "R10",
+    "C9",
+    "C10"
+   ]
+  },
+  {
+   "id": "level",
+   "category": "custom",
+   "label": "레벨 (IC2 B)",
+   "parts": [
+    "C11",
+    "LEVEL",
+    "C12",
+    "R11",
+    "R12",
+    "C13"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "C14",
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D1",
+    "R13",
+    "C15",
+    "C16",
+    "R14",
+    "R15"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 180
+  },
+  "R2": {
+   "x": 270,
+   "y": 400,
+   "rotation": 0
+  },
+  "U2A": {
+   "x": 1040,
+   "y": 910
+  },
+  "C14": {
+   "x": 470,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 570,
+   "y": 400,
+   "rotation": 0
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "C10": {
+   "x": 300,
+   "y": 470,
+   "rotation": 90
+  },
+  "R12": {
+   "x": 400,
+   "y": 490,
+   "rotation": 90
+  },
+  "C13": {
+   "x": 400,
+   "y": 520,
+   "rotation": 0
+  },
+  "R14": {
+   "x": 240,
+   "y": 470,
+   "rotation": 90
+  },
+  "R15": {
+   "x": 480,
+   "y": 470,
+   "rotation": 90
+  },
+  "R11": {
+   "x": 400,
+   "y": 590,
+   "rotation": 270
+  },
+  "R13": {
+   "x": 240,
+   "y": 570,
+   "rotation": 270
+  },
+  "C15": {
+   "x": 300,
+   "y": 570,
+   "rotation": 90
+  },
+  "C16": {
+   "x": 480,
+   "y": 570,
+   "rotation": 90
+  },
+  "C12": {
+   "x": 400,
+   "y": 690,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 240,
+   "y": 190,
+   "rotation": 90
+  },
+  "LEVEL": {
+   "x": 460,
+   "y": 720,
+   "rotation": 180
+  },
+  "R7": {
+   "x": 550,
+   "y": 720,
+   "rotation": 0
+  },
+  "BASS": {
+   "x": 550,
+   "y": 780,
+   "rotation": 180
+  },
+  "C5": {
+   "x": 550,
+   "y": 880,
+   "rotation": 90
+  },
+  "R8": {
+   "x": 610,
+   "y": 910,
+   "rotation": 0
+  },
+  "TREBLE": {
+   "x": 640,
+   "y": 720,
+   "rotation": 180
+  },
+  "C6": {
+   "x": 660,
+   "y": 520,
+   "rotation": 180
+  },
+  "C7": {
+   "x": 610,
+   "y": 580,
+   "rotation": 0
+  },
+  "C8": {
+   "x": 640,
+   "y": 820,
+   "rotation": 270
+  },
+  "R9": {
+   "x": 640,
+   "y": 640,
+   "rotation": 0
+  },
+  "R10": {
+   "x": 700,
+   "y": 910,
+   "rotation": 180
+  },
+  "C9": {
+   "x": 680,
+   "y": 700,
+   "rotation": 180
+  },
+  "C11": {
+   "x": 610,
+   "y": 760,
+   "rotation": 180
+  },
+  "TRIM": {
+   "x": 700,
+   "y": 840,
+   "rotation": 180
+  },
+  "R4": {
+   "x": 790,
+   "y": 910,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 490,
+   "y": 850,
+   "rotation": 270
+  },
+  "R5": {
+   "x": 880,
+   "y": 850,
+   "rotation": 90
+  },
+  "R6": {
+   "x": 620,
+   "y": 820,
+   "rotation": 0
+  },
+  "U1A": {
+   "x": 950,
+   "y": 880
+  },
+  "R3": {
+   "x": 140,
+   "y": 880,
+   "rotation": 0
+  },
+  "C2": {
+   "x": 240,
+   "y": 880,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 340,
+   "y": 880,
+   "rotation": 0
+  },
+  "RLOAD": {
+   "x": 570,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

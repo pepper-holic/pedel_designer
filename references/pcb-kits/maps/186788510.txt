@@ -1,0 +1,116 @@
+id pp-voo-doo-one
+goods 186788510
+name VOO-DOO-ONE
+motif Roger Mayer Voodoo-1
+type distortion
+desc BC549C 공통 이미터 입력단(47K/22K, 2.2M·680K 바이어스)→OP07 비반전(150K 피드백, 접지 다리 2.2uF+39R+C50K 가변저항, 게인 최대 약 3800)→2.2uF→10K→1N4148 2직렬 2조 같은 방향 반파 클리퍼→12K→1.5K→39K→B100K 톤(4.7n·39K, 2.2n 브리지·3.3n 션트)→A100K 볼륨→100n→BC549C 이미터 폴로어(1M/820K 바이어스)→100n 출력
+image img_01.jpg
+# OP07 notch on the left: pins 57(1) 58(2 -in) 59(3 +in) 60(4) along the bottom, 39(5) 38(6 out) 37(7 V+) 36(8) on top.
+# The 22p between pins 1 and 8 (45-56) is offset-trim compensation and is left out of the netlist and BOM (kit list:
+# 22p x1). Hidden traces: Q1 base 75 <- 1M/820K node 88; tone wiper 6 -> volume lug 30; gain wiper 34 tied to lug 35.
+# Same board as VOO-DOO BASS (186788511) with pad ids shifted by the 2.2n / 3.3n pads: the bass version leaves the 2.2n,
+# 3.3n and 12K (0R jumper) unfitted. Pad ids here = bass id + 2 (ids 2-7) or + 4 (ids 8 and up).
+# Both diode chains have their cathodes toward ground as drawn on the silk (same polarity - half-wave clipping).
+BOM 2.2Mx3 1M 820K 680K 150K 47Kx2 39Kx2 22K 12K 10Kx2 1.5K 150R 39R 100nx3 4.7n 2.2n 3.3n 220uFx2 22uF 2.2uFx2 1N400X 1N4148x4 OP07 BC549Cx2 A100K B100K C50K
+io IN=52 OUT=91 V9=6 GND=0
+JUMP 92 79
+JUMP 8 34
+JUMP 39 38
+NC 40 49 60 61 43
+
+STAGE input gain 입력단 (Q2)
+R 2.2M 76 97 R1
+C 100n 58 57 C1
+R 680K 75 96 R2
+R 2.2M 82 81 R3
+Q BC549C b=80 c=88 e=72 Q2
+R 47K 90 89 R4
+R 22K 73 74 R5
+
+STAGE opamp gain OP07 게인단
+IC OP07 2=62 3=63 4=64 6=42 7=41
+R 150K 44 65 R6
+C 2.2uF 55 56 C2
+R 39R 50 51 R7
+POT C50K GAIN 39 38 37
+
+STAGE clip clipping 클리퍼
+C 2.2uF 45 46 C3
+R 10K 33 32 R8
+D 1N4148 a=18 k=19 D1
+D 1N4148 a=20 k=21 D2
+D 1N4148 a=28 k=29 D3
+D 1N4148 a=30 k=31 D4
+R 12K 25 24 R18
+R 1.5K 27 26 R9
+
+STAGE tone tone 톤·볼륨
+R 39K 17 16 R10
+C 4.7n 14 15 C4
+C 2.2n 2 10 C12
+C 3.3n 3 11 C13
+POT B100K TONE 9 8 7
+R 39K 1 0 R11
+POT A100K VOLUME 36 35 34
+
+STAGE output buffer 출력 버퍼 (Q1)
+C 100n 47 59 C5
+R 820K 69 93 R12
+R 1M 92 68 R13
+Q BC549C b=79 c=87 e=70 Q1
+R 10K 71 48 R14
+C 100n 77 78 C6
+R 2.2M 84 83 R15
+
+STAGE power power 전원
+D 1N400X a=12 k=13 D5
+C 220uF 5 4 C7
+R 150R 23 22 R16
+C 220uF 54 53 C8
+R 47K 94 95 R17
+C 22uF 67 66 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R3 270 400 h-
+AT R17 370 400 h-
+AT R12 470 400 h
+AT Q1 570 400
+AT C6 680 400 h
+AT R1 120 470 v
+AT R2 200 470 v
+AT R4 300 470 v
+AT C5 500 470 v-
+AT R13 680 470 v
+AT R14 590 500 v
+AT R15 770 470 v
+AT R16 400 470 v-
+AT C8 460 470 v
+AT C9 360 470 v
+AT VOLUME 560 590 r180
+AT D5 400 190 v
+AT C7 400 570 v
+AT TONE 650 590 r180
+AT R11 740 660 v
+AT R18 620 690 v
+AT R10 680 720 v-
+AT C4 620 790 v
+AT C12 680 520 h
+AT C13 680 820 v-
+AT R9 740 750 h-
+AT R8 830 750 h-
+AT D1 770 820 v
+AT D2 770 920 v
+AT D3 770 520 h
+AT D4 830 920 v
+AT Q2 860 400
+AT U1A 860 500
+AT R5 140 880 h
+AT R6 240 880 h
+AT C2 340 880 h
+AT R7 440 880 h
+AT GAIN 540 880 h
+AT C3 640 880 h
+AT RLOAD 960 480 v

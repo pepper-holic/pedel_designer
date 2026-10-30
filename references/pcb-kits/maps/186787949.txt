@@ -1,0 +1,124 @@
+id pp-texpress
+goods 186787949
+name TEXPRESS
+motif Vertex Steel String / Trainwreck-style overdrive
+type overdrive
+desc 2N5088 이미터 폴로어 입력(1K/47n, 510K 바이어스, 10K)→47n→4558 A단 비반전(B250K 게인 가변저항+3.3K∥220p, 470R+220n 접지 다리)→100n→2.2K→1N4148 역병렬 접지 클리퍼(10n)→6.8K/150n/27K와 2.2K/27n/6.8K/27K 두 갈래 톤 망→B50K 볼륨(1K+47n 션트)→68K→J201 공통 소스(12K+470R/10uF, 22K 부하)→100n 출력
+image img_02.jpg
+# JRC4558D notch up: 51=1 62=2 67=3 75=4 / 76=5 68=6 63=7 52=8; op-amp B is a Vref follower (buffered Vref = 510K / 470R /
+# 100K bias node). SMD J201 pads 59 (G) 60 (S) 61 (D): the gate pad and the 68K end (38) and the source pad and the 470R
+# end (39) are joined under the silk - JUMP. Board carries 47uF x2 (rail 28/40, Vref 88/89) and 10uF (source bypass 10/21)
+# against 47uF x1 / 10uF x1 on the parts list; written as on the board. Pots: GAIN 2-3-4 (wiper 3 tied to 2 on out A, "1" = 4),
+# VOLUME 5-6-7 (7 ground, wiper 6 -> 68K).
+BOM 2.2Mx2 510K 100K 68K 27Kx2 22K 12K 10Kx3 6.8Kx2 3.3K 2.2Kx2 1Kx2 470Rx2 220n 150n 100nx2 47nx3 27n 10n 220pF 0.1uFx2 47uFx2 10uF 1N400X 1N4148x2 J201 JRC4558D 2N5088 B250K B50K
+io IN=90 OUT=104 V9=50 GND=1
+JUMP 38 59
+JUMP 39 60
+NC 74
+
+STAGE input buffer 입력 버퍼 (Q1)
+R 2.2M 93 94 R1
+R 1K 70 71 R2
+C 47n 66 65 C1
+R 510K 53 77 R3
+Q 2N5088 c=56 b=64 e=69 Q1
+R 10K 81 80 R4
+C 47n 97 96 C2
+R 100K 91 92 R5
+
+STAGE gain gain 게인단 (IC A)
+IC JRC4558D 1=51 2=62 3=67 4=75 5=76 6=68 7=63 8=52
+POT B250K GAIN 2 3 4
+R 3.3K 13 30 R6
+C 220p 22 41 C3
+R 470R 82 83 R7
+C 220n 43 42 C4
+
+STAGE clip clipping 클리퍼
+C 100n 27 11 C5
+R 2.2K 12 29 R8
+D 1N4148 a=23 k=31 D1
+D 1N4148 a=32 k=24 D2
+C 10n 25 33 C6
+
+STAGE tone tone 톤 망
+R 6.8K 14 15 R9
+C 150n 26 34 C7
+R 27K 37 18 R10
+R 2.2K 44 45 R11
+C 27n 46 47 C8
+R 6.8K 35 16 R12
+R 27K 36 17 R13
+
+STAGE volume custom 볼륨
+POT B50K VOLUME 5 6 7
+R 1K 9 8 R14
+C 47n 0 1 C9
+
+STAGE jfet gain JFET 출력단
+R 68K 19 38 R15
+Q J201 g=59 s=60 d=61 Q2
+R 12K 72 95 R16
+R 470R 20 39 R17
+C 10uF 10 21 C10
+R 22K 86 85 R18
+C 100n 73 87 C11
+R 2.2M 103 102 R19
+
+STAGE power power 전원
+D 1N400X a=49 k=48 D3
+C 47uF 28 40 C12
+C 0.1uF 57 58 C13
+R 10K 54 78 R20
+R 10K 79 55 R21
+C 47uF 88 89 C14
+C 0.1uF 84 105 C15
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT R2 170 400 h
+AT C1 270 400 h
+AT Q1 370 400
+AT R18 480 400 h-
+AT C11 580 400 h
+AT R1 120 470 v
+AT R3 300 470 v
+AT R4 390 500 v
+AT C2 450 500 v
+AT R5 380 520 h-
+AT R7 300 570 v-
+AT C4 360 600 h-
+AT R19 610 470 v
+AT D3 390 190 v
+AT C12 510 470 v
+AT C13 570 470 v
+AT R20 390 320 v
+AT R21 690 470 v
+AT C14 750 470 v
+AT C15 810 470 v
+AT R6 450 600 h-
+AT C3 390 670 v-
+AT C5 450 700 h
+AT R8 540 700 h
+AT D1 570 770 v-
+AT D2 630 770 v
+AT C6 690 770 v
+AT R9 630 700 h
+AT C7 780 770 v
+AT R10 720 700 h
+AT R11 510 770 v
+AT C8 510 870 v
+AT R12 510 970 v
+AT R13 630 520 h
+AT VOLUME 840 700 r0
+AT R14 750 860 v
+AT C9 750 960 v
+AT R15 900 740 v
+AT GAIN 540 600 r180
+AT U1A 1000 700
+AT Q2 1110 770
+AT R16 140 880 h
+AT R17 240 880 h
+AT C10 340 880 h
+AT RLOAD 860 480 v

@@ -1,0 +1,3 @@
+# Gray Stone (186787637): Mad Professor Stone Grey Distortion - CD4069UBE hex-inverter gain stages with a TL061 and two
+# 2N3819 JFETs; A1M / A50K x2. The app has no CMOS inverter model; recorded only. Board: 1M x4, 470K x2, 200K, 15K, 10K,
+# 4.7K, 100R, 100n, 47n x2, 22n, 10n, 2.2n, 15pF, 100pF x3, 100uF, 4.7uF, 1N400X.

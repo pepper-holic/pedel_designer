@@ -1,0 +1,3 @@
+# Haunting FreQ (186787553): sweepable-mid EQ preamp (Wide Range family) - two TL072 on a bipolar rail from an ICL7660
+# (silk 7660, 47uF/10uF pump caps), MID A10K, SWEEP B10K, RESONANCE 1M trimmer, VOLUME A100K. The app has no charge-pump
+# model; recorded only. Board: 1M, 100K x3, 33K, 12K, 10K x4, 5K x3, 1K x2, 33R x2, 220n, 10n x2, 68pF, 47uF, 10uF, 1N400X.

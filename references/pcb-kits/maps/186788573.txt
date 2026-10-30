@@ -1,0 +1,112 @@
+id pp-porta-424
+goods 186788573
+name PORTA 424
+motif Tascam 424 Portastudio channel
+type distortion
+desc 듀얼 op-amp 2개 - IC1 A 비반전 입력단(10uF/2.2M, 100K→Vref 바이어스, 470K∥100p 피드백, 접지 다리 10uF→C10K TRIM 와이퍼→100R, 러그 끝은 10uF로 출력에 되돌아감)→10K/22K로 IC2 A 박산달형 EQ(B100K x2, 1.8n+10K·15n·15n·18K·5.6K+10uF, 470K∥47p 피드백)→10uF→A10K LEVEL→10uF+47K→IC2 B 반전(110K∥10p)→10uF→A100K VOLUME
+image img_01.jpg
+# Silk shows two LM833 footprints; the kit ships uPC4570C (IC1, input) and NJM4565D (IC2, EQ). IC1 notch left:
+# bottom row 19..22 = pins 1..4, top row 0..3 = pins 8..5. IC2 notch up: left 11,17,28,34 = 1..4, right 35,29,18,12 = 5..8.
+# IC1 B is a Vref follower (1 out -> 2 -in, 3 +in on the 10K/10K divider); IC2's +in pads 28/35 share a net with only the
+# 47uF (50/52) - the extractor finds no trace to any bias point, so they are taken as fed from the Vref divider (JUMP 28 3); the IC1 B follower
+# (1 out -> 2 -in) is left tied off and out of the netlist.
+# Pots (no silk labels, 3-lug rows): 53-54-55, 56-57-58, 59-60-61 (horizontal), 72-86-96 and 73-87-97 (vertical). The
+# feedback-leg pot is written as the C10K TRIM, the two EQ pots as the B100Ks (BASS on the 1.8n leg, TREBLE on the 15n pair),
+# the IC2-A-to-IC2-B attenuator as A10K LEVEL and the output pot as A100K VOLUME - the parts list only gives the five values.
+BOM 2.2M 470Kx2 110K 100K 47K 22K 18K 10Kx4 5.6K 100R 47R 100n 15nx2 1.8n 100p 47p 10p 100uF 47uF 10uFx7 1N400X uPC4570C NJM4565D A100K A10K C10K B100Kx2
+io IN=93 OUT=67 V9=68 GND=15
+JUMP 28 3
+NC 1 2
+
+STAGE input gain 입력단 (IC1 A)
+R 2.2M 94 78 R1
+C 10uF 76 83 C1
+R 100K 23 4 R2
+IC uPC4570C 1=19 2=20 3=21 4=22 8=0 U1
+R 470K 31 32 R3
+C 100p 38 39 C2
+C 10uF 40 47 C3
+POT C10K TRIM 53 54 55
+R 100R 63 64 R4
+C 10uF 77 84 C4
+R 10K 69 70 R5
+
+STAGE eq tone EQ (IC2 A)
+R 22K 95 79 R6
+R 18K 74 89 R7
+POT B100K BASS 96 86 72
+C 1.8n 85 71 C5
+R 10K 65 66 R8
+POT B100K TREBLE 73 87 97
+C 15n 81 91 C6
+C 15n 90 80 C7
+C 10uF 82 88 C8
+R 5.6K 92 75 R9
+IC NJM4565D 1=11 2=17 3=28 4=34 5=35 6=29 7=18 8=12 U2
+R 470K 10 33 R10
+C 47p 9 27 C9
+C 47uF 50 52 C10
+
+STAGE level custom 레벨 (IC2 B)
+C 10uF 41 48 C11
+POT A10K LEVEL 56 57 58
+C 10uF 42 49 C12
+R 47K 43 44 R11
+R 110K 13 36 R12
+C 10p 14 30 C13
+
+STAGE output output 출력 (볼륨)
+C 10uF 45 51 C14
+POT A100K VOLUME 59 60 61
+
+STAGE power power 전원
+D 1N400X a=62 k=46 D1
+R 47R 37 16 R13
+C 100uF 7 15 C15
+C 100n 8 25 C16
+R 10K 5 24 R14
+R 10K 6 26 R15
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h-
+AT R2 270 400 h
+AT U2A 1040 910
+AT C14 470 400 h
+AT VOLUME 570 400 r0
+AT R1 120 470 v
+AT C10 300 470 v
+AT R12 400 490 v
+AT C13 400 520 h
+AT R14 240 470 v
+AT R15 480 470 v
+AT R11 400 590 v-
+AT R13 240 570 v-
+AT C15 300 570 v
+AT C16 480 570 v
+AT C12 400 690 v
+AT D1 240 190 v
+AT LEVEL 460 720 r180
+AT R7 550 720 h
+AT BASS 550 780 r180
+AT C5 550 880 v
+AT R8 610 910 h
+AT TREBLE 640 720 r180
+AT C6 660 520 h-
+AT C7 610 580 h
+AT C8 640 820 v-
+AT R9 640 640 h
+AT R10 700 910 h-
+AT C9 680 700 h-
+AT C11 610 760 h-
+AT TRIM 700 840 r180
+AT R4 790 910 v
+AT C4 490 850 v-
+AT R5 880 850 v
+AT R6 620 820 h
+AT U1A 950 880
+AT R3 140 880 h
+AT C2 240 880 h
+AT C3 340 880 h
+AT RLOAD 570 480 v
