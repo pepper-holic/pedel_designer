@@ -1,4 +1,71 @@
-# Green Punch (186788031): Greer Sucker Punch style drive: J201 (SMD) input stage with a 50K bias
-# trimmer feeding an LM386N-1 power-amp stage. The app has no LM386 model; recorded only. Board:
-# 2.2M / 10K / 1.5K, 100n + 10n x2, 22pF, 47uF + 22uF x2, 1N400X supply diode, GAIN A1M, TONE B100K,
-# VOLUME A250K.
+id pp-green-punch
+goods 186788031
+name Green Punch
+motif Greer Sucker Punch
+type overdrive
+desc J201 공통 소스(2.2M 게이트, 1.5K+22uF 소스, 50K 트리머 드레인) → 10n → A1M GAIN 입력 감쇠 → 10K/22p → LM386N-1(1·8번 핀 22uF, 이득 200) → 100n → A250K 볼륨 → B100K TONE(10n 접지 쪽으로 가는 하이컷)
+image img_02.jpg
+# The J201 is a SMD part on a TO-92 footprint (18 drain, 19 source, 20 gate - read from the nets: gate to IN
+# and the 2.2M, source to 1.5K + 22uF, drain to the trimmer and the 10n). The --smd re-extraction turned pot
+# outlines into virtual pads here, so the plain extraction (52 pads) is used.
+# LM386 notch at the bottom: pin 1 bottom-right (38), pins 1-4 up the right (38 28 23 12), 5-8 down the left
+# (11 22 27 37). Pin 7 (27) has no copper. The 22uF across pins 1-8: its + pad (45) runs under the cyan 9V
+# trace into pin 1 (38) - the crossing is not tinted, so JUMP (the extractor's hint to the 9V net is the cyan).
+# BIAS trimmer: pads 39 and 43 sit on the 9V net, 30 on the drain - a 0-50K drain resistor.
+# GAIN: "1" by the ground pad 8, lug3 (6) from the J201 via 10n, wiper through 10K to pin 3.
+# VOLUME: "1" by the ground pad 2. TONE: lug3 (3) from the volume wiper, lug1 (5) to 10n to ground, wiper = OUT.
+BOM 2.2M 10K 1.5K 100n 10nx2 22p 47uF 22uFx2 1N400X B50K LM386N-1 J201 A1M A250K B100K
+io IN=49 OUT=26 V9=48 GND=2
+JUMP 38 45
+NC 27
+
+STAGE input input 입력
+R 2.2M 32 51 R1
+
+STAGE jfet gain J201 공통 소스
+Q J201 g=20 d=18 s=19 Q1
+POT B50K BIAS 30 39 43
+R 1.5K 31 50 R2
+C 22uF 36 35 C1
+
+STAGE gain custom GAIN (입력 감쇠)
+C 10n 17 16 C2
+POT A1M GAIN 8 7 6
+R 10K 25 24 R3
+C 22p 13 29 C3
+
+STAGE amp gain LM386 (이득 200)
+IC LM386N-1 1=38 2=28 3=23 4=12 5=11 6=22 8=37 U1
+C 22uF 45 44 C4
+
+STAGE output output 출력 (볼륨·톤)
+C 100n 10 9 C5
+POT A250K VOLUME 2 1 0
+POT B100K TONE 5 4 3
+C 10n 15 14 C6
+
+STAGE power power 전원
+D 1N400X a=42 k=21 D1
+C 47uF 34 33 C7
+
+# --- schematic placement (hand): LM386 internals are clustered under U1 by the app ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT Q1 180 400
+AT BIAS 200 300 r270
+AT R2 200 490 v
+AT C1 260 490 v
+AT C2 290 370 h
+AT GAIN 360 430 r270
+AT R3 440 380 h
+AT C3 500 410 v
+AT U1 580 400
+AT C4 670 500 v
+AT C5 670 400 h
+AT VOLUME 760 400 r180
+AT TONE 790 490 r180
+AT C6 850 520 v
+AT RLOAD 790 580 v
+AT D1 150 220 v-
+AT C7 210 220 v

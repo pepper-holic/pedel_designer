@@ -1,4 +1,82 @@
-# PAPADUMBLE (186788638): 1 W "overdrive special" practice amp - TL072 preamp into an LM386N-4 power
-# stage driving a speaker. The app has no LM386 (bridge power amp) model; recorded only. Board:
-# 100K x3 / 1M / 12K x2 / 560R / 10R, 100n x2 / 47n / 22n, 220uF x2 / 47uF x2 / 1uF, 1N400X, B1K
-# angle pot (volume), DC+ / SW1 / SW2 pads for a rocker power switch, SPK OUT.
+id pp-papadumble
+goods 186788638
+name PAPADUMBLE
+motif 1W "Overdrive Special" 연습용 앰프
+type overdrive
+desc 1W 연습용 앰프 - 100n 입력→TL072 버퍼(1M 바이어스, 100K/100K+47uF 기준), 1uF→100K/560R→22n와 12K-47n-12K 브리지 T로 LM386N-4 2번 핀, 1·8번 핀 사이 B1K 가변저항(볼륨=이득), 출력 220uF→스피커, 10Ω+100n 조벨, 7번 핀 47uF
+image img_04.jpg
+# Both ICs lie on their side with the notch on the left: pins 1-4 along the bottom left to right, 5-8 along the
+# top right to left. TL072: 31 32 33 34 / 20 19 18 17 (the B half, 18-20, has no copper - left out).
+# LM386N-4: 35 36 37 38 / 24 23 22 21. The silk prints generic op-amp symbols on the LM386 footprint; the
+# standard LM386 pinout fits the nets (pin 3 and 4 grounded, 6 on V+, 7 to a 47uF, 5 to the 220uF/speaker).
+# TL072 A is a follower (pins 1-2 tied).
+# Hidden traces: the V+ cyan from TL072 pin 8 (17) runs down past the ⊕ silk into the 100K divider's top (29);
+# the LM386 output (24) runs right and down into the 10R Zobel (45). The 220uF supply cap's minus (4) has no
+# drawn copper: it sits on the ground pour (the other big pads read the same way), joined to GND.
+# VOLUME (angle B1K, the amp's one knob): 25-26-27 in the middle, 27 has no copper - a 0-1K rheostat between
+# LM386 pins 1 and 8 (gain ~41 at 1K to ~200 at 0). Turned so clockwise lowers the resistance (louder).
+# SW1/SW2 are the rocker power switch, fixed on (JUMP). LED_R (3.3K, not in the kit list) and the LED pad are
+# the indicator - left out. Real load is an 8 ohm speaker; the app drives its usual 1M amp input.
+BOM 1M 100Kx3 12Kx2 560R 10R 100nx2 47n 22n 220uFx2 47uFx2 1uF 1N400X LM386N-4 TL072 B1K
+io IN=62 OUT=66 V9=0 GND=3,4
+JUMP 1 2
+JUMP 17 29
+JUMP 24 45
+NC 18 19 20 27 53 54 64
+
+STAGE input buffer 입력 버퍼 (TL072)
+C 100n 58 59 C1
+R 100K 29 15 R1
+R 100K 14 28 R2
+C 47uF 12 10 C2
+R 1M 16 30 R3
+IC TL072 1=31 2=32 3=33 4=34 8=17 U1
+
+STAGE tone tone 브리지 T (22n·12K·47n)
+C 1uF 41 46 C3
+R 100K 47 48 R4
+R 560R 42 43 R5
+C 22n 49 50 C4
+R 12K 55 56 R6
+R 12K 51 52 R7
+C 47n 61 60 C5
+
+STAGE amp gain LM386 파워 앰프
+IC LM386N-4 1=35 2=36 3=37 4=38 5=24 6=23 7=22 8=21 U2
+POT B1K VOLUME 26 26 25
+C 47uF 13 11 C6
+
+STAGE output output 출력 (스피커)
+C 220uF 9 5 C7
+R 10R 45 44 R8
+C 100n 40 39 C8
+
+STAGE power power 전원
+D 1N400X a=7 k=6 D1
+C 220uF 8 4 C9
+
+# --- schematic placement (hand): LM386 internals are clustered under U2 by the app ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 150 400 h
+AT R1 210 250 v
+AT R2 270 340 v
+AT C2 150 340 v
+AT R3 210 340 v
+AT U1A 300 420
+AT C3 390 420 h
+AT R4 450 480 v
+AT R5 480 420 h
+AT C4 570 420 h
+AT R6 540 500 h
+AT R7 600 500 h-
+AT C5 570 560 v
+AT U2 720 440
+AT VOLUME 840 580 r90
+AT C6 510 800 v
+AT C7 810 440 h
+AT R8 930 560 v
+AT C8 930 650 v
+AT RLOAD 870 500 v
+AT D1 150 160 h
+AT C9 210 190 v

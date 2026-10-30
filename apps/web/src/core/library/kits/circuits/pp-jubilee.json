@@ -1,0 +1,341 @@
+{
+ "id": "pp-jubilee",
+ "goodsNo": "186787537",
+ "kitName": "Jubilee",
+ "motif": "Marshall Silver Jubilee (LM386 드라이브)",
+ "type": "distortion",
+ "description": "LM386N-3 드라이브 - IN이 A20K DRIVE 팟(아래 다리 4.7K 접지, 와이퍼 390p 접지) 와이퍼에서 47n→3번 핀, 1·8번 핀 묶어 47Ω+47uF 접지(최대 이득), 출력 47uF→4.7K→22n 션트→4.7K→1.8K+100n의 2단 RC, B50K TONE이 두 노드 사이를 고르고 330Ω→A100K 볼륨",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "DRIVE",
+   "kind": "POT",
+   "value": "A20K",
+   "nodes": [
+    "n1",
+    "n2",
+    "in"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "390p",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n2",
+    "n3"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "LM386N-3",
+   "nodes": {
+    "1": "n4",
+    "2": "0",
+    "3": "n3",
+    "4": "0",
+    "5": "n5",
+    "6": "vcc",
+    "8": "n4"
+   }
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "47R",
+   "nodes": [
+    "n4",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n5",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n7",
+    "n8"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n8",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "1.8K",
+   "nodes": [
+    "n9",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n10",
+    "0"
+   ]
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "n9",
+    "n11",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "330R",
+   "nodes": [
+    "n11",
+    "n12"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n12"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "0",
+    "k": "vcc"
+   }
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "vcc",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력 (DRIVE)",
+   "parts": [
+    "DRIVE",
+    "R1",
+    "C1",
+    "C2"
+   ]
+  },
+  {
+   "id": "amp",
+   "category": "gain",
+   "label": "LM386 (1·8번 핀 접지)",
+   "parts": [
+    "U1",
+    "R2",
+    "C3"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "톤 (2단 RC + TONE)",
+   "parts": [
+    "C4",
+    "R3",
+    "C5",
+    "R4",
+    "R5",
+    "C6",
+    "TONE"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "R6",
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D1",
+    "C7"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "DRIVE": {
+   "x": 150,
+   "y": 460,
+   "rotation": 270
+  },
+  "R1": {
+   "x": 150,
+   "y": 550,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 210,
+   "y": 520,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 240,
+   "y": 380,
+   "rotation": 0
+  },
+  "U1": {
+   "x": 330,
+   "y": 400
+  },
+  "R2": {
+   "x": 420,
+   "y": 500,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 420,
+   "y": 590,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 420,
+   "y": 400,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 510,
+   "y": 400,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 550,
+   "y": 460,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 600,
+   "y": 400,
+   "rotation": 0
+  },
+  "R5": {
+   "x": 690,
+   "y": 400,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 750,
+   "y": 460,
+   "rotation": 90
+  },
+  "TONE": {
+   "x": 585,
+   "y": 320,
+   "rotation": 180,
+   "mirror": true
+  },
+  "R6": {
+   "x": 650,
+   "y": 290,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 740,
+   "y": 290,
+   "rotation": 180
+  },
+  "RLOAD": {
+   "x": 830,
+   "y": 360,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 150,
+   "y": 220,
+   "rotation": 270
+  },
+  "C7": {
+   "x": 210,
+   "y": 220,
+   "rotation": 90
+  }
+ }
+}

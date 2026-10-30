@@ -1,4 +1,98 @@
-# Feach Fuzz (186787680): Frantone Peach Fuzz - TL072 (TLC2272 silk) input/tone stages driving two LM386N-1
-# power-amp chips as the fuzz element. The app has no LM386 model; recorded only. Board: 1M, 560K, 120K, 100K,
-# 41K, 33K x3, 10K, 9.1K, 100R, 10R, 470n, 100n x2, 10n, 100p, 20p, 100uF, 10uF, 1uF x2, 1N400X,
-# pots A10K FUZZ, B10K TONE, B100K VOL.
+id pp-feach-fuzz
+goods 186787680
+name Feach Fuzz
+motif Frantone Peachfuzz
+type fuzz
+desc TL072 반전 증폭(33K/100K 입력 분압→100n, 560K∥100p 피드백, 33K/33K+10uF 4.5V 기준) → 1uF→9.1K→A10K FUZZ(아래 다리 100Ω 접지) → LM386 #1(이득 20) → 100n→120K/20p → LM386 #2(이득 20) → 1uF → 10K/470n 저역 + 41K/10n 고역을 B10K TONE이 섞음 → B100K 볼륨
+image img_01.jpg
+# All three ICs have the notch at the top: pins 1-4 down the left, 5-8 up the right.
+# U1 (silk TLC2272, kit ships TL072): 37 40 48 56 / 57 49 41 32. The B half is unused (pin 5 grounded, 6-7 tied) and left out.
+# U2 LM386: 33 42 50 58 / 59 51 43 34. U3 LM386: 35 44 52 60 / 61 53 45 36. Pins 1, 7, 8 of both have no
+# copper (33 shows a lone ring, no trace), so both chips run at their internal gain of 20.
+# Hidden traces (copper tint under the silk, confirmed on the render): TONE lug 3 (pad 3) runs diagonally to the
+# 10K/470n node (17); TONE pad 5 runs down past the 10K/41K bodies into the 10n (27).
+# FUZZ: "1" by pad 2 (to ground through 100R), lug3 (0) from 9.1K, wiper to U2 pin 3.
+# TONE: "1" by pad 3 (the low-passed node). VOL: "1" by the ground pad 8.
+# Supply: 9V pad -> 10R -> rail with 100uF and a reverse-protection 1N400X (anode on ground).
+BOM 1M 560K 120K 100K 41K 33Kx3 10K 9.1K 100R 10R 470n 100nx2 10n 100p 20p 100uF 10uF 1uFx2 1N400X TL072 LM386-1x2 A10K B100K B10K
+io IN=74 OUT=13 V9=80 GND=8
+JUMP 3 17
+JUMP 5 27
+NC 33 34 43 35 36 45 41 49
+
+STAGE input gain 입력 반전 증폭 (TL072)
+R 1M 64 65 R1
+R 33K 54 55 R2
+R 100K 47 46 R3
+C 100n 38 39 C1
+IC TL072 1=37 2=40 3=48 4=56 8=32 U1
+R 560K 30 31 R4
+C 100p 25 24 C2
+R 33K 67 66 R5
+R 33K 71 72 R6
+C 10uF 70 75 C3
+
+STAGE fuzz custom FUZZ
+C 1uF 15 14 C4
+R 9.1K 23 22 R7
+POT A10K FUZZ 2 1 0
+R 100R 9 10 R8
+
+STAGE amp1 fuzz LM386 #1
+IC LM386-1 2=42 3=50 4=58 5=59 6=51 U2
+C 100n 62 63 C5
+R 120K 68 69 R9
+C 20p 28 29 C6
+
+STAGE amp2 fuzz LM386 #2
+IC LM386-1 2=44 3=52 4=60 5=61 6=53 U3
+C 1uF 21 20 C7
+
+STAGE tone tone 톤 (저역/고역 블렌드)
+R 10K 12 11 R10
+C 470n 17 16 C8
+R 41K 19 18 R11
+C 10n 26 27 C9
+POT B10K TONE 3 4 5
+
+STAGE output output 출력
+POT B100K VOL 8 7 6
+
+STAGE power power 전원
+R 10R 79 78 R12
+D 1N400X a=76 k=77 D1
+C 100uF 73 81 C10
+
+# --- schematic placement (hand): LM386 internals are clustered under each chip by the app ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT R2 180 400 h
+AT R3 240 460 v
+AT C1 270 400 h
+AT U1A 370 380
+AT R4 370 460 h
+AT C2 370 510 h
+AT R5 300 250 v
+AT R6 300 310 v
+AT C3 250 310 v
+AT C4 460 380 h
+AT R7 550 380 h
+AT FUZZ 610 440 r270
+AT R8 610 530 v
+AT U2 720 400
+AT C5 810 400 h
+AT R9 900 400 h
+AT C6 960 430 v
+AT U3 1050 420
+AT C7 1140 420 h
+AT R10 1230 360 h
+AT C8 1290 390 v
+AT R11 1230 480 h
+AT C9 1320 480 h
+AT TONE 1380 420 r90
+AT VOL 1470 450 r270
+AT RLOAD 1530 510 v
+AT R12 150 160 h
+AT D1 210 190 v-
+AT C10 270 190 v

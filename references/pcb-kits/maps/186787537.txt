@@ -1,3 +1,69 @@
-# Jubilee (186787537): Marshall Silver Jubilee style drive built around a JRC386D (LM386) gain
-# stage. The app has no LM386 model; recorded only. Board: 4.7K x3 / 1.8K / 330Ω / 47Ω, 100n-47n-22n
-# box caps, 390pF, 47uF x3, 1N400X supply diode, DRIVE A250K, TONE B50K, VOLUME A100K.
+id pp-jubilee
+goods 186787537
+name Jubilee
+motif Marshall Silver Jubilee (LM386 드라이브)
+type distortion
+desc LM386N-3 드라이브 - IN이 A20K DRIVE 팟(아래 다리 4.7K 접지, 와이퍼 390p 접지) 와이퍼에서 47n→3번 핀, 1·8번 핀 묶어 47Ω+47uF 접지(최대 이득), 출력 47uF→4.7K→22n 션트→4.7K→1.8K+100n의 2단 RC, B50K TONE이 두 노드 사이를 고르고 330Ω→A100K 볼륨
+image img_01.jpg
+# JRC386D notch at the top: pins 1-4 down the left (24 30 38 40), 5-8 up the right (41 39 31 25).
+# Pins 1 and 8 are tied by a top trace under the notch and go to ground through 47R + 47uF: no gain cap,
+# the chip runs flat out. Pin 7 (31) has no copper.
+# DRIVE: the silk says A250K but the kit's parts list ships A20K - the parts list is followed here.
+# "1" by pad 34: lug1 goes to ground through 4.7K, lug3 (32) takes the input jack straight (no input cap).
+# TONE: "1" by pad 4 (the darker node after 1.8K/100n), lug3 on the node after the first 4.7K/22n.
+# VOLUME: "1" by the ground lug 37.
+# 1N400X across the supply (anode on ground) as reverse protection, 47uF on 9V.
+BOM 4.7Kx3 1.8K 330R 47R 100n 47n 22n 390p 47uFx3 1N400X LM386N-3 A20K A100K B50K
+io IN=46 OUT=51 V9=50 GND=0
+NC 31
+
+STAGE input input 입력 (DRIVE)
+POT A20K DRIVE 34 33 32
+R 4.7K 22 23 R1
+C 390p 12 11 C1
+C 47n 21 20 C2
+
+STAGE amp gain LM386 (1·8번 핀 접지)
+IC LM386N-3 1=24 2=30 3=38 4=40 5=41 6=39 8=25 U1
+R 47R 29 47 R2
+C 47uF 43 42 C3
+
+STAGE tone tone 톤 (2단 RC + TONE)
+C 47uF 28 19 C4
+R 4.7K 18 17 R3
+C 22n 26 27 C5
+R 4.7K 16 15 R4
+R 1.8K 14 13 R5
+C 100n 8 7 C6
+POT B50K TONE 4 5 6
+
+STAGE output output 출력
+R 330R 9 10 R6
+POT A100K VOLUME 37 36 35
+
+STAGE power power 전원
+D 1N400X a=48 k=49 D1
+C 47uF 44 45 C7
+
+# --- schematic placement (hand): LM386 internals are clustered around U1 by the app ---
+AT V1 60 430
+AT VCC 60 190
+AT DRIVE 150 460 r270
+AT R1 150 550 v
+AT C1 210 520 v
+AT C2 240 380 h
+AT U1 330 400
+AT R2 420 500 v
+AT C3 420 590 v
+AT C4 420 400 h
+AT R3 510 400 h
+AT C5 550 460 v
+AT R4 600 400 h
+AT R5 690 400 h
+AT C6 750 460 v
+AT TONE 585 320 r180 m
+AT R6 650 290 h
+AT VOLUME 740 290 r180
+AT RLOAD 830 360 v
+AT D1 150 220 v-
+AT C7 210 220 v

@@ -1,4 +1,65 @@
-# RAM Fuzz (186787843): LM386N-3 power-amp fuzz (SAG A10K on the supply, VOLUME A100K). The app has
-# no LM386 model (internal gain-set pins 1/8, bootstrap, bridge output stage); recorded only.
-# Board: 2.2M input pulldown, 10Ω + 47uF supply filter with 1N400X reverse protection, 390pF input
-# cap, 1K + 22uF on the SAG pot, 100n pin1-8 gain cap, 10Ω/47uF output, 1uF coupling, on-on toggle.
+id pp-ram-fuzz
+goods 186787843
+name RAM Fuzz
+motif LM386 파워앰프 퍼즈
+type fuzz
+desc LM386N-3 파워앰프 퍼즈 - 100n 입력→3번 핀, 1-8번 핀 1uF 이득 토글(닫힘=이득 200), 1번 핀 10Ω+22uF+1K 접지, 전원 1N400X 직렬 + A10K SAG 가변저항 + 10Ω/47uF, 출력 47uF→47Ω→A100K 볼륨
+image img_01.jpg
+# LM386 notch at the top: pin 1 top-left (19), pins 1-4 down the left (19 23 28 35), 5-8 up the right (36 29 24 20).
+# Pin 2 and pin 4 sit on the ground pour; pin 7 (bypass, 24) has no copper.
+# The extractor tied OUT (14) into ground: the trace from the VOLUME wiper (5) bends within reach of the grounded
+# lug 6 and misses pad 5's ring - split it out and join it to the wiper. Pad 46 (390pF foot) carries the ground
+# "+" the small render hides from the extractor.
+# SW1/SW2 (41/42) are the on-on gain toggle's two wired lugs: closed puts 1uF across pins 1-8 (gain ~200),
+# fixed closed here (the fuzz setting); open leaves the chip at its internal gain of 20.
+# SAG: the "1" is printed by pad 3, and the wiper is tied to that lug, so the pot is a 0-10K rheostat in the
+# supply after the 9V pad.
+BOM 2.2M 1K 47R 10Rx2 100n 390p 47uFx2 22uF 1uF 1N400X LM386N-3 A100K A10K
+io IN=26 OUT=14 V9=8 GND=0,46
+SPLIT 14
+JUMP 5 14
+JUMP 41 42
+NC 24
+
+STAGE input input 입력
+R 2.2M 17 16 R1
+C 390p 33 46 C1
+C 100n 18 27 C2
+
+STAGE amp fuzz LM386 (이득 토글)
+IC LM386N-3 1=19 2=23 3=28 4=35 5=36 6=29 8=20 U1
+C 1uF 34 40 C3
+R 10R 22 21 R2
+C 22uF 37 43 C4
+R 1K 32 15 R3
+
+STAGE output output 출력
+C 47uF 31 25 C5
+R 47R 30 13 R4
+POT A100K VOLUME 6 5 4
+
+STAGE power power 전원 (SAG)
+POT A10K SAG 3 2 1
+D 1N400X a=9 k=10 D1
+R 10R 11 12 R5
+C 47uF 7 0 C6
+
+# --- schematic placement (hand): LM386 internals are clustered around U1 by the app ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT C1 180 470 v
+AT C2 230 400 h
+AT U1 330 400
+AT C3 420 500 v-
+AT R2 450 560 h
+AT C4 540 560 h
+AT R3 600 590 v
+AT C5 420 400 h
+AT R4 510 400 h
+AT VOLUME 600 400 r180
+AT RLOAD 660 460 v
+AT SAG 150 160 r180
+AT D1 240 160 h
+AT R5 330 160 h
+AT C6 390 190 v

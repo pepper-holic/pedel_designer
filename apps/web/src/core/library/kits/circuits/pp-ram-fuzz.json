@@ -1,0 +1,287 @@
+{
+ "id": "pp-ram-fuzz",
+ "goodsNo": "186787843",
+ "kitName": "RAM Fuzz",
+ "motif": "LM386 파워앰프 퍼즈",
+ "type": "fuzz",
+ "description": "LM386N-3 파워앰프 퍼즈 - 100n 입력→3번 핀, 1-8번 핀 1uF 이득 토글(닫힘=이득 200), 1번 핀 10Ω+22uF+1K 접지, 전원 1N400X 직렬 + A10K SAG 가변저항 + 10Ω/47uF, 출력 47uF→47Ω→A100K 볼륨",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "390p",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "LM386N-3",
+   "nodes": {
+    "1": "n2",
+    "2": "0",
+    "3": "n1",
+    "4": "0",
+    "5": "n3",
+    "6": "n4",
+    "8": "n5"
+   }
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n2",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "10R",
+   "nodes": [
+    "n2",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n6",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n3",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "47R",
+   "nodes": [
+    "n8",
+    "n9"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n9"
+   ]
+  },
+  {
+   "ref": "SAG",
+   "kind": "POT",
+   "value": "A10K",
+   "nodes": [
+    "n10",
+    "n10",
+    "vcc"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "n10",
+    "k": "n11"
+   }
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "10R",
+   "nodes": [
+    "n11",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "C2"
+   ]
+  },
+  {
+   "id": "amp",
+   "category": "fuzz",
+   "label": "LM386 (이득 토글)",
+   "parts": [
+    "U1",
+    "C3",
+    "R2",
+    "C4",
+    "R3"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "C5",
+    "R4",
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원 (SAG)",
+   "parts": [
+    "SAG",
+    "D1",
+    "R5",
+    "C6"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 180,
+   "y": 470,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 230,
+   "y": 400,
+   "rotation": 0
+  },
+  "U1": {
+   "x": 330,
+   "y": 400
+  },
+  "C3": {
+   "x": 420,
+   "y": 500,
+   "rotation": 270
+  },
+  "R2": {
+   "x": 450,
+   "y": 560,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 540,
+   "y": 560,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 600,
+   "y": 590,
+   "rotation": 90
+  },
+  "C5": {
+   "x": 420,
+   "y": 400,
+   "rotation": 0
+  },
+  "R4": {
+   "x": 510,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 600,
+   "y": 400,
+   "rotation": 180
+  },
+  "RLOAD": {
+   "x": 660,
+   "y": 460,
+   "rotation": 90
+  },
+  "SAG": {
+   "x": 150,
+   "y": 160,
+   "rotation": 180
+  },
+  "D1": {
+   "x": 240,
+   "y": 160,
+   "rotation": 0
+  },
+  "R5": {
+   "x": 330,
+   "y": 160,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 390,
+   "y": 190,
+   "rotation": 90
+  }
+ }
+}

@@ -1,0 +1,386 @@
+{
+ "id": "pp-papadumble",
+ "goodsNo": "186788638",
+ "kitName": "PAPADUMBLE",
+ "motif": "1W \"Overdrive Special\" 연습용 앰프",
+ "type": "overdrive",
+ "description": "1W 연습용 앰프 - 100n 입력→TL072 버퍼(1M 바이어스, 100K/100K+47uF 기준), 1uF→100K/560R→22n와 12K-47n-12K 브리지 T로 LM386N-4 2번 핀, 1·8번 핀 사이 B1K 가변저항(볼륨=이득), 출력 220uF→스피커, 10Ω+100n 조벨, 7번 핀 47uF",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n2",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n3",
+    "n1"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "TL072",
+   "nodes": {
+    "1": "n4",
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "8": "n2"
+   }
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "560R",
+   "nodes": [
+    "n5",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n6",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "12K",
+   "nodes": [
+    "n6",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "12K",
+   "nodes": [
+    "n7",
+    "n8"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "U2",
+   "kind": "IC",
+   "part": "LM386N-4",
+   "nodes": {
+    "1": "n9",
+    "2": "n7",
+    "3": "0",
+    "4": "0",
+    "5": "n10",
+    "6": "n2",
+    "7": "n11",
+    "8": "n12"
+   }
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "B1K",
+   "nodes": [
+    "n12",
+    "n12",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n11",
+    "0"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "220uF",
+   "nodes": [
+    "n10",
+    "out"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "10R",
+   "nodes": [
+    "n10",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n13",
+    "0"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n2"
+   }
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "220uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "buffer",
+   "label": "입력 버퍼 (TL072)",
+   "parts": [
+    "C1",
+    "R1",
+    "R2",
+    "C2",
+    "R3",
+    "U1"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "브리지 T (22n·12K·47n)",
+   "parts": [
+    "C3",
+    "R4",
+    "R5",
+    "C4",
+    "R6",
+    "R7",
+    "C5"
+   ]
+  },
+  {
+   "id": "amp",
+   "category": "gain",
+   "label": "LM386 파워 앰프",
+   "parts": [
+    "U2",
+    "VOLUME",
+    "C6"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (스피커)",
+   "parts": [
+    "C7",
+    "R8",
+    "C8"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D1",
+    "C9"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 150,
+   "y": 400,
+   "rotation": 0
+  },
+  "R1": {
+   "x": 210,
+   "y": 250,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 270,
+   "y": 340,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 150,
+   "y": 340,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 210,
+   "y": 340,
+   "rotation": 90
+  },
+  "U1A": {
+   "x": 300,
+   "y": 420
+  },
+  "C3": {
+   "x": 390,
+   "y": 420,
+   "rotation": 0
+  },
+  "R4": {
+   "x": 450,
+   "y": 480,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 480,
+   "y": 420,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 570,
+   "y": 420,
+   "rotation": 0
+  },
+  "R6": {
+   "x": 540,
+   "y": 500,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 600,
+   "y": 500,
+   "rotation": 180
+  },
+  "C5": {
+   "x": 570,
+   "y": 560,
+   "rotation": 90
+  },
+  "U2": {
+   "x": 720,
+   "y": 440
+  },
+  "VOLUME": {
+   "x": 840,
+   "y": 580,
+   "rotation": 90
+  },
+  "C6": {
+   "x": 510,
+   "y": 800,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 810,
+   "y": 440,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 930,
+   "y": 560,
+   "rotation": 90
+  },
+  "C8": {
+   "x": 930,
+   "y": 650,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 870,
+   "y": 500,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 150,
+   "y": 160,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 210,
+   "y": 190,
+   "rotation": 90
+  }
+ }
+}

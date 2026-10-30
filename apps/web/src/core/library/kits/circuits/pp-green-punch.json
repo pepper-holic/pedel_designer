@@ -1,0 +1,333 @@
+{
+ "id": "pp-green-punch",
+ "goodsNo": "186788031",
+ "kitName": "Green Punch",
+ "motif": "Greer Sucker Punch",
+ "type": "overdrive",
+ "description": "J201 공통 소스(2.2M 게이트, 1.5K+22uF 소스, 50K 트리머 드레인) → 10n → A1M GAIN 입력 감쇠 → 10K/22p → LM386N-1(1·8번 핀 22uF, 이득 200) → 100n → A250K 볼륨 → B100K TONE(10n 접지 쪽으로 가는 하이컷)",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "J201",
+   "nodes": {
+    "g": "in",
+    "d": "n1",
+    "s": "n2"
+   }
+  },
+  {
+   "ref": "BIAS",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "n1",
+    "vcc",
+    "vcc"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1.5K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n1",
+    "n3"
+   ]
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "A1M",
+   "nodes": [
+    "0",
+    "n4",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "22p",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "LM386N-1",
+   "nodes": {
+    "1": "n6",
+    "2": "0",
+    "3": "n5",
+    "4": "0",
+    "5": "n7",
+    "6": "vcc",
+    "8": "n8"
+   }
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n6",
+    "n8"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n7",
+    "n9"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A250K",
+   "nodes": [
+    "0",
+    "n10",
+    "n9"
+   ]
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n11",
+    "out",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n11",
+    "0"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "0",
+    "k": "vcc"
+   }
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "vcc",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1"
+   ]
+  },
+  {
+   "id": "jfet",
+   "category": "gain",
+   "label": "J201 공통 소스",
+   "parts": [
+    "Q1",
+    "BIAS",
+    "R2",
+    "C1"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "custom",
+   "label": "GAIN (입력 감쇠)",
+   "parts": [
+    "C2",
+    "GAIN",
+    "R3",
+    "C3"
+   ]
+  },
+  {
+   "id": "amp",
+   "category": "gain",
+   "label": "LM386 (이득 200)",
+   "parts": [
+    "U1",
+    "C4"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨·톤)",
+   "parts": [
+    "C5",
+    "VOLUME",
+    "TONE",
+    "C6"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D1",
+    "C7"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "Q1": {
+   "x": 180,
+   "y": 400
+  },
+  "BIAS": {
+   "x": 200,
+   "y": 300,
+   "rotation": 270
+  },
+  "R2": {
+   "x": 200,
+   "y": 490,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 260,
+   "y": 490,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 290,
+   "y": 370,
+   "rotation": 0
+  },
+  "GAIN": {
+   "x": 360,
+   "y": 430,
+   "rotation": 270
+  },
+  "R3": {
+   "x": 440,
+   "y": 380,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 500,
+   "y": 410,
+   "rotation": 90
+  },
+  "U1": {
+   "x": 580,
+   "y": 400
+  },
+  "C4": {
+   "x": 670,
+   "y": 500,
+   "rotation": 90
+  },
+  "C5": {
+   "x": 670,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 760,
+   "y": 400,
+   "rotation": 180
+  },
+  "TONE": {
+   "x": 790,
+   "y": 490,
+   "rotation": 180
+  },
+  "C6": {
+   "x": 850,
+   "y": 520,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 790,
+   "y": 580,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 150,
+   "y": 220,
+   "rotation": 270
+  },
+  "C7": {
+   "x": 210,
+   "y": 220,
+   "rotation": 90
+  }
+ }
+}
