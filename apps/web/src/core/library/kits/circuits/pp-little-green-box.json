@@ -1,0 +1,612 @@
+{
+ "id": "pp-little-green-box",
+ "goodsNo": "186787490",
+ "kitName": "Little Green Box",
+ "motif": "808-style overdrive with BODY control",
+ "type": "overdrive",
+ "description": "2N5457 소스 폴로어 입력(5.6K/47n/1M)→1uF/5.6K→LF353 A단 비반전(B500K 드라이브+5.6K∥100p, 초록 LED 역병렬 피드백 클리퍼; 접지 다리 1K+1uF+BODY 1갱, 2K+220n)와 +in의 470R+47n+BODY 2갱 션트→2K/100n LPF→B단 버퍼→2K→1uF→5.6K→B50K 볼륨",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "0",
+    "in"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "5.6K",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n2",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n2",
+    "n3"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N5457",
+   "nodes": {
+    "g": "n2",
+    "s": "n4",
+    "d": "n5"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n4",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "5.6K",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "27K",
+   "nodes": [
+    "n7",
+    "n3"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "LF353P",
+   "nodes": {
+    "1": "n8",
+    "2": "n9",
+    "3": "n7",
+    "4": "0",
+    "5": "n10",
+    "6": "n11",
+    "7": "n11",
+    "8": "n5"
+   }
+  },
+  {
+   "ref": "DRIVE",
+   "kind": "POT",
+   "value": "B500K",
+   "nodes": [
+    "n12",
+    "n12",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "5.6K",
+   "nodes": [
+    "n12",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n8",
+    "n9"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "LED-GREEN",
+   "nodes": {
+    "a": "n8",
+    "k": "n9"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "LED-GREEN",
+   "nodes": {
+    "a": "n9",
+    "k": "n8"
+   }
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n13",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n13",
+    "n14"
+   ]
+  },
+  {
+   "ref": "BODY",
+   "kind": "POT",
+   "value": "B20K",
+   "nodes": [
+    "n14",
+    "0",
+    "0"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "2K",
+   "nodes": [
+    "n9",
+    "n15"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "0",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "470R",
+   "nodes": [
+    "n16",
+    "n7"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n16",
+    "n17"
+   ]
+  },
+  {
+   "ref": "BODY2",
+   "kind": "POT",
+   "value": "B20K",
+   "nodes": [
+    "n17",
+    "n17",
+    "0"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "2K",
+   "nodes": [
+    "n8",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n10",
+    "0"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "27K",
+   "nodes": [
+    "n3",
+    "n10"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "2K",
+   "nodes": [
+    "n18",
+    "n11"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n18",
+    "n19"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "5.6K",
+   "nodes": [
+    "n19",
+    "n20"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "0",
+    "out",
+    "n20"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n21"
+   }
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "47R",
+   "nodes": [
+    "n21",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "27K",
+   "nodes": [
+    "n5",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R17",
+   "kind": "R",
+   "value": "27K",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "buffer",
+   "label": "입력 버퍼 (JFET)",
+   "parts": [
+    "R1",
+    "R2",
+    "C1",
+    "R3",
+    "Q1",
+    "R4",
+    "C2",
+    "R5",
+    "R6"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "게인단 (IC A)",
+   "parts": [
+    "U1",
+    "DRIVE",
+    "R7",
+    "C3",
+    "D1",
+    "D2",
+    "R8",
+    "C4",
+    "BODY",
+    "R9",
+    "C5",
+    "R10",
+    "C6",
+    "BODY2"
+   ]
+  },
+  {
+   "id": "lpf",
+   "category": "tone",
+   "label": "LPF·버퍼 (IC B)",
+   "parts": [
+    "R11",
+    "C7",
+    "R12",
+    "R13"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "C8",
+    "R14",
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D3",
+    "R15",
+    "C9",
+    "R16",
+    "R17",
+    "C10"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "R2": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "C1": {
+   "x": 270,
+   "y": 400,
+   "rotation": 180
+  },
+  "R3": {
+   "x": 370,
+   "y": 400,
+   "rotation": 0
+  },
+  "R12": {
+   "x": 470,
+   "y": 400,
+   "rotation": 0
+  },
+  "U1A": {
+   "x": 910,
+   "y": 590
+  },
+  "R13": {
+   "x": 670,
+   "y": 400,
+   "rotation": 180
+  },
+  "C8": {
+   "x": 770,
+   "y": 400,
+   "rotation": 0
+  },
+  "R14": {
+   "x": 870,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 970,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 270
+  },
+  "R6": {
+   "x": 400,
+   "y": 470,
+   "rotation": 270
+  },
+  "R10": {
+   "x": 460,
+   "y": 500,
+   "rotation": 180
+  },
+  "C6": {
+   "x": 550,
+   "y": 500,
+   "rotation": 0
+  },
+  "BODY2": {
+   "x": 640,
+   "y": 500,
+   "rotation": 0
+  },
+  "R11": {
+   "x": 500,
+   "y": 560,
+   "rotation": 270
+  },
+  "C7": {
+   "x": 740,
+   "y": 470,
+   "rotation": 90
+  },
+  "R16": {
+   "x": 340,
+   "y": 470,
+   "rotation": 270
+  },
+  "R17": {
+   "x": 700,
+   "y": 470,
+   "rotation": 90
+  },
+  "C10": {
+   "x": 820,
+   "y": 470,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 400,
+   "y": 570,
+   "rotation": 90
+  },
+  "DRIVE": {
+   "x": 560,
+   "y": 590,
+   "rotation": 180
+  },
+  "R7": {
+   "x": 650,
+   "y": 590,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 590,
+   "y": 520,
+   "rotation": 0
+  },
+  "D1": {
+   "x": 590,
+   "y": 580,
+   "rotation": 0
+  },
+  "D2": {
+   "x": 590,
+   "y": 640,
+   "rotation": 180
+  },
+  "R8": {
+   "x": 740,
+   "y": 590,
+   "rotation": 180
+  },
+  "C4": {
+   "x": 830,
+   "y": 590,
+   "rotation": 0
+  },
+  "BODY": {
+   "x": 860,
+   "y": 680,
+   "rotation": 90
+  },
+  "R9": {
+   "x": 680,
+   "y": 660,
+   "rotation": 90
+  },
+  "C5": {
+   "x": 680,
+   "y": 760,
+   "rotation": 270
+  },
+  "R15": {
+   "x": 340,
+   "y": 570,
+   "rotation": 270
+  },
+  "C9": {
+   "x": 460,
+   "y": 570,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 400,
+   "y": 670,
+   "rotation": 270
+  },
+  "D3": {
+   "x": 340,
+   "y": 190,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 400,
+   "y": 770,
+   "rotation": 90
+  },
+  "Q1": {
+   "x": 1060,
+   "y": 400
+  },
+  "RLOAD": {
+   "x": 970,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

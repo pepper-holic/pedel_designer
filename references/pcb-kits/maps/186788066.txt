@@ -1,0 +1,91 @@
+id pp-od-one
+goods 186788066
+name OD ONE
+motif BOSS OD-1
+type overdrive
+desc 쿼드 op-amp(3403/TL074) OD-1 - 1K+100n 입력 버퍼(B, 220K 바이어스)→47n→A단 비반전(10K 바이어스, 4.7K+47n 접지 다리, A1M 드라이브+33K 피드백에 1S1588 2+1 비대칭 클리퍼)→10K→D단 반전 LPF(10K∥18n)→1uF→4.7K→B10K 레벨→100n→C단 버퍼→470R→10uF 출력
+image img_01.jpg
+# Silk RC3403ADB, seller packs JRC3403AD (quad, 14-pin, notch up: pins 1-7 down the left 18..59, 14-8 down the right
+# 19..60). Hidden traces: 9V rail 74 -> 68 (pin 4 V+ via the cyan link) and the bias node 22/23/24 -> Vref (49).
+# Clipper: 11(k)-10(a) + 16(a)-17(k) in series one way, 12(k)-25(a) the other.
+BOM 1M 470K 220K 100K 33Kx3 10Kx4 4.7Kx2 1K 470R 100nx2 47nx2 18n 100uF 47uF 10uF 1uF 1N400X 1S1588x3 JRC3403 A1M B10K
+io IN=61 OUT=67 V9=72 GND=50
+JUMP 74 68
+JUMP 22 49
+
+STAGE input buffer 입력 버퍼 (IC B)
+R 1M 70 71 R1
+R 1K 62 63 R2
+C 100n 54 55 C1
+R 220K 23 43 R3
+IC JRC3403 1=18 2=26 3=32 4=37 5=45 6=52 7=59 8=60 9=53 10=46 11=38 12=33 13=27 14=19
+
+STAGE gain gain 게인단 (IC A)
+C 47n 36 51 C2
+R 10K 24 44 R4
+R 4.7K 22 41 R5
+C 47n 31 42 C3
+POT A1M DRIVE 2 1 0
+R 33K 7 8 R6
+D 1S1588 a=10 k=11 D1
+D 1S1588 a=16 k=17 D2
+D 1S1588 a=25 k=12 D3
+
+STAGE lpf tone 반전 LPF (IC D)
+R 10K 13 14 R7
+R 10K 29 30 R8
+C 18n 28 15 C4
+R 10K 34 35 R9
+
+STAGE output output 출력 (레벨·버퍼 IC C)
+C 1uF 3 9 C5
+R 4.7K 20 21 R10
+POT B10K LEVEL 6 5 4
+C 100n 40 39 C6
+R 470K 47 48 R11
+R 470R 56 57 R12
+C 10uF 58 66 C7
+R 100K 65 64 R13
+
+STAGE power power 전원
+D 1N400X a=73 k=74 D4
+C 100uF 75 76 C8
+R 33K 68 69 R14
+R 33K 49 50 R15
+C 47uF 77 78 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT R2 60 530 v-
+AT C1 120 560 h
+AT R3 210 560 h-
+AT R4 300 560 h
+AT R5 240 630 v
+AT C3 300 660 h-
+AT R6 390 660 h-
+AT D2 330 730 v-
+AT D3 390 730 v
+AT R7 450 760 h
+AT R8 540 760 h
+AT C4 520 520 h
+AT R9 180 630 v-
+AT C5 630 760 h
+AT R10 720 760 h
+AT LEVEL 810 760 r180
+AT C6 810 860 v
+AT R11 520 580 h-
+AT R14 240 720 v-
+AT R15 600 630 v
+AT C9 660 630 v
+AT C2 390 560 h
+AT DRIVE 450 820 r180
+AT D1 360 520 h
+AT D4 240 190 v
+AT C8 240 820 v
+AT U1A 900 760
+AT R12 140 880 h
+AT C7 240 880 h
+AT R13 340 880 h
+AT RLOAD 190 480 v

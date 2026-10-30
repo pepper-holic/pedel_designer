@@ -1,0 +1,99 @@
+id pp-new-vray
+goods 186788108
+name NEW VRAY
+motif Paul Cochrane Timmy
+type overdrive
+desc 4558 티미 계열 - 47n/22p/1M 입력→B단 비반전(3.3K+B500K 게인 피드백∥47p, 1N4148 2+2 대칭 클리퍼; 접지 다리 9.1K→39n∥(B10K BASS+1000n)→Vref, 10K 트리머+680R 병렬 경로)→B10K TREBLE+1.2K/47n LPF→A단 비반전 2배(3.3K/3.3K, 150p)→1000n→B50K 볼륨
+image img_03.jpg
+# Hidden trace: +in B (11) to the 47n/22p/1M input node (43). The 1M pulldown's pad 51 and the 100n bypass pad 42
+# are ground-plane pads without the '+' mark. Angle pots on pad groups: 47-48-49 GAIN (47/48 tied on out B),
+# 52-53-54 VOLUME (54 ground), 63-70-80 BASS (63/70 tied), 64-71-81 TREBLE (71/81 tied on out B).
+# Vref divider is 9.1K (rail) / 7.5K (ground), so Vref sits at ~4.1V.
+BOM 1Mx2 9.1Kx2 7.5K 3.3Kx3 1.2K 680R 100R 1000nx2 100nx2 47nx2 39n 150p 47p 22p 47uFx2 1N400X 1N4148x4 10K JRC4558D B500K B50K B10Kx2
+io IN=59 OUT=62 V9=8 GND=12,42,51,54,75,82,83,84
+JUMP 11 43
+
+STAGE input input 입력
+R 1M 50 51 R1
+C 47n 43 55 C1
+C 22p 20 34 C2
+R 1M 44 45 R2
+
+STAGE gain gain 게인단 (IC B)
+IC JRC4558D 1=37 2=27 3=23 4=12 5=11 6=22 7=26 8=36
+R 3.3K 10 33 R3
+POT B500K GAIN 47 48 49
+C 47p 21 35 C3
+D 1N4148 a=17 k=29 D1
+D 1N4148 a=16 k=28 D2
+D 1N4148 a=30 k=18 D3
+D 1N4148 a=31 k=19 D4
+R 9.1K 9 32 R4
+C 39n 66 73 C4
+POT B10K BASS 63 70 80
+C 1000n 65 72 C5
+POT 10K TRIM 67 69 77
+R 680R 78 79 R5
+
+STAGE tone tone 트레블
+POT B10K TREBLE 81 71 64
+R 1.2K 56 57 R6
+C 47n 46 58 C6
+
+STAGE stage2 gain 2단 (IC A)
+R 3.3K 13 38 R7
+R 3.3K 14 39 R8
+C 150p 24 40 C7
+
+STAGE output output 출력 (볼륨)
+C 1000n 15 41 C8
+POT B50K VOLUME 54 53 52
+
+STAGE power power 전원
+D 1N400X a=7 k=6 D5
+R 100R 4 5 R9
+C 47uF 3 2 C9
+C 100n 1 0 C10
+C 100n 25 42 C11
+R 9.1K 60 76 R10
+R 7.5K 61 74 R11
+C 47uF 68 75 C12
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h-
+AT R2 270 400 h
+AT R7 370 400 h-
+AT U1A 760 420
+AT C8 570 400 h
+AT VOLUME 670 400 r180
+AT R1 120 470 v
+AT C2 200 470 v-
+AT C4 300 470 v
+AT BASS 360 500 r180
+AT C5 340 520 h
+AT R5 300 600 v-
+AT R8 450 520 h
+AT C7 450 580 h
+AT R10 240 470 v-
+AT R11 540 470 v
+AT C12 600 470 v
+AT R4 240 570 v-
+AT TRIM 360 630 r180
+AT R9 180 570 v
+AT C9 540 570 v
+AT C10 600 570 v
+AT C11 660 570 v
+AT R3 240 670 v
+AT GAIN 300 730 r180
+AT C3 280 580 h
+AT D1 180 670 v
+AT D2 260 520 h
+AT D3 240 760 v-
+AT D4 280 640 h-
+AT TREBLE 390 730 r0
+AT R6 480 730 h
+AT C6 510 800 v-
+AT D5 180 190 v
+AT RLOAD 670 480 v

@@ -1,0 +1,96 @@
+id pp-robin-drive
+goods 186787541
+name Robin Drive
+motif Fulltone Fulldrive (Robin Trower)
+type overdrive
+desc JRC4558 TS계 - 1M/22n/1K 입력→B단 비반전(470K 바이어스, 47n+4.7K 접지 다리, 18K+B1M 게인 가변저항∥51p, 1N914+1N4005 같은 방향 피드백 클리퍼)→1K→TS 톤(B25K, 220n·220R)→A단→1000n→1K→B100K 볼륨→100n→2SC1815 이미터 폴로어→100R→10uF 출력
+image img_01.jpg
+# The 10K at 63-64 (Vref side at 63) ends in a lone pad; written as the +in B bias in parallel with the 470K (64->65).
+# Both feedback diodes point out->-in (anodes 30/36 on the output node). Gain pot: lug 7 (-in B), wiper 6 on the 18K,
+# lug 3 unpopulated.
+BOM 1M 510K 470K 100K 18K 10Kx4 4.7K 1Kx4 220R 100R 1000n 220nx2 100n 47n 22n 51pF 100uF 10uFx2 1N400X 1N4005 1N914 JRC4558D 2SC1815 B1M B100K B25K
+io IN=76 OUT=40 V9=77 GND=80
+JUMP 64 65
+
+STAGE input input 입력
+R 1M 60 59 R1
+C 22n 75 74 C1
+R 1K 66 65 R2
+R 470K 58 57 R3
+R 10K 63 64 R4
+
+STAGE drive gain 드라이브단 (IC B)
+IC JRC4558D 1=27 2=34 3=42 4=50 5=51 6=43 7=35 8=28
+C 47n 45 46 C2
+R 4.7K 52 53 R5
+R 18K 22 21 R6
+POT B1M GAIN 7 6 6
+C 51p 29 44 C3
+D 1N914 a=30 k=31 D1
+D 1N4005 a=36 k=37 D2
+
+STAGE tone tone 톤 (IC A)
+R 1K 20 19 R7
+C 220n 9 8 C4
+POT B25K TONE 5 4 3
+C 220n 10 11 C5
+R 220R 14 15 R8
+R 1K 18 41 R9
+
+STAGE output output 출력 (볼륨·버퍼)
+C 1000n 24 23 C6
+R 1K 13 12 R10
+POT B100K VOLUME 2 1 0
+C 100n 17 16 C7
+R 510K 26 25 R11
+Q 2SC1815 c=68 b=69 e=67 Q1
+R 10K 47 48 R12
+R 100R 54 55 R13
+C 10uF 56 49 C8
+R 100K 39 38 R14
+
+STAGE power power 전원
+D 1N400X a=78 k=79 D3
+C 100uF 70 61 C9
+R 10K 73 72 R15
+R 10K 33 32 R16
+C 10uF 71 62 C10
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R2 270 400 h
+AT R3 370 400 h
+AT R11 470 400 h
+AT Q1 570 400
+AT R13 680 400 h
+AT C8 780 400 h
+AT R1 120 470 v
+AT R4 350 520 h-
+AT VOLUME 460 460 r0
+AT C7 480 520 h
+AT R12 590 500 v
+AT R14 810 470 v
+AT D3 590 190 v
+AT C9 650 470 v
+AT R15 500 580 h-
+AT R16 700 470 v
+AT C10 760 470 v
+AT R10 580 620 v-
+AT C6 640 650 h-
+AT R9 730 650 h
+AT TONE 820 650 r180
+AT C5 820 750 v
+AT R8 820 850 v
+AT R7 910 650 h-
+AT C4 910 720 v
+AT U1A 1030 650
+AT C2 140 880 h
+AT R5 240 880 h
+AT R6 340 880 h
+AT GAIN 440 880 h
+AT C3 540 880 h
+AT D1 640 880 h
+AT D2 740 880 h
+AT RLOAD 860 480 v

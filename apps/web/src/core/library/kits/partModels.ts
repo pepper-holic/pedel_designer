@@ -117,8 +117,15 @@ const DIODES: [string, Diode][] = [
 ];
 
 type OpAmp = typeof TL072_APPROX;
-/** [prefix, model, channels in the 8-pin package] */
-const OPAMPS: [string, OpAmp, 1 | 2][] = [
+/** [prefix, model, channels in the package: 1 or 2 for 8-pin, 4 for 14-pin quads] */
+const OPAMPS: [string, OpAmp, 1 | 2 | 4][] = [
+  ["TL074", TL072_APPROX, 4],
+  ["TL084", TL072_APPROX, 4],
+  ["TL064", TL072_APPROX, 4],
+  ["LM324", JRC4558_APPROX, 4],
+  ["JRC3403", JRC4558_APPROX, 4],
+  ["RC3403", JRC4558_APPROX, 4],
+  ["LM3403", JRC4558_APPROX, 4],
   ["TL072", TL072_APPROX, 2],
   ["TL082", TL072_APPROX, 2],
   ["TL062", TL072_APPROX, 2],
@@ -136,7 +143,6 @@ const OPAMPS: [string, OpAmp, 1 | 2][] = [
   ["JRC4559", JRC4558_APPROX, 2],
   ["JRC4580", JRC4558_APPROX, 2],
   ["NJM4580", JRC4558_APPROX, 2],
-  ["JRC3403", JRC4558_APPROX, 2],
   ["MC1458", JRC4558_APPROX, 2],
   ["LM1458", JRC4558_APPROX, 2],
   ["LM358", JRC4558_APPROX, 2],
@@ -160,13 +166,13 @@ export const bjtModel = (part: string): Bjt | undefined => lookup(BJTS, part);
 export const jfetModel = (part: string): Jfet | undefined => lookup(JFETS, part);
 export const diodeModel = (part: string): Diode | undefined => lookup(DIODES, part);
 
-export function opAmpModel(part: string): { model: OpAmp; channels: 1 | 2 } | undefined {
+export function opAmpModel(part: string): { model: OpAmp; channels: 1 | 2 | 4 } | undefined {
   const key = part.toUpperCase().replace(/\s+/g, "");
   const hit = OPAMPS.find(([prefix]) => key.startsWith(prefix));
   return hit ? { model: hit[1], channels: hit[2] } : undefined;
 }
 
-/** Standard 8-pin op-amp pinouts: which package pin is which input/output of each channel. */
+/** Standard op-amp pinouts (8-pin single/dual, 14-pin quad): which package pin is which input/output of each channel. */
 export const OPAMP_PINOUT = {
   1: { channels: [{ out: "6", inMinus: "2", inPlus: "3" }], vPlus: "7", vMinus: "4" },
   2: {
@@ -176,5 +182,15 @@ export const OPAMP_PINOUT = {
     ],
     vPlus: "8",
     vMinus: "4",
+  },
+  4: {
+    channels: [
+      { out: "1", inMinus: "2", inPlus: "3" },
+      { out: "7", inMinus: "6", inPlus: "5" },
+      { out: "8", inMinus: "9", inPlus: "10" },
+      { out: "14", inMinus: "13", inPlus: "12" },
+    ],
+    vPlus: "4",
+    vMinus: "11",
   },
 } as const;

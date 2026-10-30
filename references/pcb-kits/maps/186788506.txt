@@ -1,0 +1,99 @@
+id pp-hot-bender
+goods 186788506
+name HOT BENDER
+motif Silicon Tone Bender MkII (DIY)
+type fuzz
+desc BC109C 4석 실리콘 톤벤더 - IN→B50K FAT 가변저항+10uF(10n 병렬)→Q1 증폭(1K 이미터, 150K 바이어스)→100n→Q2·Q3 직결 쌍(47K 피드백, 100R 이미터)→Q4 이미터 폴로어, Q3 이미터 B1K ATTACK(4.7uF)+5K BIAS 트리머, 출력 100n→10K/8.2n·10K/2.2K+100n 톤(A100K)→A100K 볼륨
+image img_01.jpg
+# Hidden trace: diode cathode 1 to the 100R (20) under the diode/resistor silk. Trimmer pad 63 reads as a ground
+# pad (BIAS trimmer = variable resistor from ATTACK lug 36 to ground). Off-board pots on pad groups: 29-30-31 FAT
+# (wiper tied to 29), 34-35-36 ATTACK, 49/78 + 77 TONE, 66-65 VOLUME (65 = OUT 64, ground lug on pad 48).
+BOM 2.2M 150K 47K 22K 10Kx6 2.2K 1K 100Rx2 100nx4 10n 8.2n 100uF 10uF 4.7uF 5K 1N400X BC109Cx4 A100Kx2 B50K B1K
+io IN=47 OUT=64 V9=26 GND=19,63
+JUMP 1 20
+NC 60 69
+
+STAGE input input 입력
+R 2.2M 61 62 R1
+POT B50K FAT 29 30 31
+C 10uF 43 44 C1
+C 10n 57 74 C2
+R 150K 55 56 R2
+R 22K 72 73 R3
+
+STAGE q1 gain Q1 증폭
+Q BC109C c=11 b=15 e=22 Q1
+R 10K 2 3 R4
+R 1K 0 19 R5
+C 100n 4 5 C3
+
+STAGE core fuzz Q2·Q3 퍼즈 코어
+Q BC109C c=12 b=16 e=23 Q2
+R 10K 6 7 R6
+R 100R 27 28 R7
+Q BC109C c=13 b=17 e=24 Q3
+R 10K 8 9 R8
+R 47K 32 33 R9
+POT B1K ATTACK 34 35 36
+C 4.7uF 38 37 C4
+POT 5K BIAS 70 63 63
+
+STAGE follower buffer Q4 이미터 폴로어
+Q BC109C c=14 b=18 e=25 Q4
+R 10K 46 45 R10
+C 100n 53 52 C5
+
+STAGE tone tone 톤
+R 10K 59 58 R11
+C 8.2n 40 39 C6
+R 10K 76 75 R12
+R 2.2K 67 68 R13
+C 100n 51 50 C7
+POT A100K TONE 49 77 78
+
+STAGE output output 출력 (볼륨)
+POT A100K VOLUME 48 65 66
+
+STAGE power power 전원
+D 1N400X a=21 k=1 D1
+R 100R 20 10 R14
+C 100uF 41 42 C8
+C 100n 54 71 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C2 170 400 h
+AT Q1 270 400
+AT C3 380 400 h
+AT Q2 480 400
+AT Q3 590 400
+AT Q4 700 400
+AT C5 810 400 h
+AT R11 910 400 h
+AT TONE 1010 400 r0
+AT VOLUME 1110 400 r180
+AT R1 120 470 v-
+AT FAT 120 340 r180
+AT C1 180 520 h
+AT R2 460 520 h-
+AT R3 380 470 v-
+AT R4 500 580 h-
+AT R5 290 500 v
+AT R6 610 520 h
+AT R7 680 500 v
+AT R8 660 580 h
+AT R9 510 640 h
+AT ATTACK 760 520 r0
+AT C4 820 560 v
+AT BIAS 890 610 r90
+AT R10 900 500 v
+AT C6 940 470 v
+AT R12 940 520 h
+AT R13 1040 500 v
+AT C7 1040 600 v
+AT R14 720 320 v-
+AT C8 840 470 v
+AT C9 1200 470 v
+AT D1 720 190 v
+AT RLOAD 1110 480 v

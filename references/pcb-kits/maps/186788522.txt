@@ -1,0 +1,4 @@
+# FUZZ BENDER III GE (186788522): germanium PNP three-transistor Tone Bender MkIII on a negative rail from an
+# ICL7660 inverter (positive ground). The app has no charge-pump model and no PNP-germanium-on-negative-rail
+# convention; recorded only. Board: 2.2M, 220K x2, 47K, 18K, 10K x3, 3.3K, 1K x2, 220n, 100n x4, 2.2n, 220pF,
+# 100uF, 47uF, 10uF, 1N400X, 1N34A, 50K trimmers x2, angle A250K / B100K x2.

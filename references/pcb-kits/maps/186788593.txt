@@ -1,0 +1,5 @@
+# FUZZ FORGE 7K (186788593): Z.Vex Fuzz Factory 7-knob - 2N404 germanium PNP pair plus 2N3904 on a positive-
+# ground 9V supply, built to self-oscillate. The app has no PNP-germanium positive-ground supply convention yet
+# and the circuit's feedback oscillation would not settle in the DC tests; recorded only. Board: 2.2M, 220K, 120K,
+# 47K, 10K, 5.1K, 470R, 100R, 100n, 18n, 10n, 100uF, 10uF x4, 1N400X, 100K trimmer, B100K, B10K x5, B5K,
+# DIP dual on-on.

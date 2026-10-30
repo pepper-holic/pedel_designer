@@ -107,7 +107,7 @@ function partElements(part: KitPart, supply: number, knobs: KnobSpec[]): Element
       const { railPositive: _rp, railNegative: _rn, ...dynamics } = found.model;
       return pinout.channels.flatMap((ch, i): Element[] =>
         p[ch.out] && p[ch.inMinus] && p[ch.inPlus]
-          ? [{ id: found.channels === 2 ? `${part.ref}${"AB"[i]}` : part.ref, type: "opamp", nodes: [p[ch.inPlus], p[ch.inMinus], p[ch.out]], openLoopGain: 1e5, ...dynamics, railPositive: top - RAIL_HEADROOM, railNegative: bottom + RAIL_HEADROOM }]
+          ? [{ id: found.channels > 1 ? `${part.ref}${"ABCD"[i]}` : part.ref, type: "opamp", nodes: [p[ch.inPlus], p[ch.inMinus], p[ch.out]], openLoopGain: 1e5, ...dynamics, railPositive: top - RAIL_HEADROOM, railNegative: bottom + RAIL_HEADROOM }]
           : [],
       );
     }

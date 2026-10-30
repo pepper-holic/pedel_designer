@@ -25,9 +25,10 @@ export function parseValue(text: string): number {
   throw new Error(`unreadable component value "${text}"`);
 }
 
-/** "B100K" -> taper B, 100kΩ. A bare value is taken as linear (B). */
+/** "B100K" -> taper B, 100kΩ. A bare value is taken as linear (B); a W (S-curve) taper is treated as linear. */
 export function parsePot(text: string): { taper: "A" | "B" | "C"; resistance: number } {
-  const m = /^([ABC])?(.+)$/.exec(text.trim());
+  const m = /^([ABCW])?(.+)$/.exec(text.trim());
   if (!m) throw new Error(`unreadable pot value "${text}"`);
-  return { taper: (m[1] as "A" | "B" | "C" | undefined) ?? "B", resistance: parseValue(m[2]) };
+  const taper = m[1] === "W" || m[1] === undefined ? "B" : (m[1] as "A" | "B" | "C");
+  return { taper, resistance: parseValue(m[2]) };
 }

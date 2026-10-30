@@ -1,0 +1,104 @@
+id pp-little-green-box
+goods 186787490
+name Little Green Box
+motif 808-style overdrive with BODY control
+type overdrive
+desc 2N5457 소스 폴로어 입력(5.6K/47n/1M)→1uF/5.6K→LF353 A단 비반전(B500K 드라이브+5.6K∥100p, 초록 LED 역병렬 피드백 클리퍼; 접지 다리 1K+1uF+BODY 1갱, 2K+220n)와 +in의 470R+47n+BODY 2갱 션트→2K/100n LPF→B단 버퍼→2K→1uF→5.6K→B50K 볼륨
+image img_01.jpg
+# LF353 notch up: pins 1-4 down the left (27,33,40,51), 8-5 down the right (28,34,41,52). Hidden traces: 470R (22)
+# to +in A (40); out B (34) to -in B (41) as a follower; the 27K/27K bias midpoint (60/68) is the Vref node (43).
+# BODY is a dual B20K: gang A 0-1-(nc) sits in the gain leg (lug 1 on ground), gang B 7-8-9 (7/9 tied, 8 ground)
+# shunts the 470R+47n at +in A; DRIVE is wired as a variable resistor (lugs 2/3, no wiper pad). Indicator LED pads
+# 25/26 and 30/31 are the clipping LEDs; the off-board status LED is not on this board.
+BOM 1Mx2 27Kx4 5.6Kx4 10K 2Kx3 1K 470R 47R 220n 100n 47nx2 100pF 100uFx2 1uFx3 1N400X LED-GREENx2 LF353P 2N5457 B500K B20Kx2 B50K
+io IN=73 OUT=13 V9=35 GND=6
+JUMP 22 40
+JUMP 34 41
+JUMP 60 43
+
+STAGE input buffer 입력 버퍼 (JFET)
+R 1M 46 64 R1
+R 5.6K 65 86 R2
+C 47n 75 87 C1
+R 1M 69 70 R3
+Q 2N5457 g=78 s=79 d=80 Q1
+R 10K 76 77 R4
+C 1uF 81 74 C2
+R 5.6K 49 67 R5
+R 27K 50 68 R6
+
+STAGE gain gain 게인단 (IC A)
+IC LF353P 1=27 2=33 3=40 4=51 5=52 6=41 7=34 8=28
+POT B500K DRIVE 3 3 2
+R 5.6K 18 38 R7
+C 100p 20 32 C3
+D LED-GREEN a=26 k=25 D1
+D LED-GREEN a=30 k=31 D2
+R 1K 19 39 R8
+C 1uF 14 10 C4
+POT B20K BODY 0 1 1
+R 2K 48 66 R9
+C 220n 47 59 C5
+R 470R 21 22 R10
+C 47n 15 16 C6
+POT B20K BODY2 7 9 8
+
+STAGE lpf tone LPF·버퍼 (IC B)
+R 2K 54 55 R11
+C 100n 56 71 C7
+R 27K 60 61 R12
+R 2K 23 42 R13
+
+STAGE output output 출력 (볼륨)
+C 1uF 17 11 C8
+R 5.6K 29 12 R14
+POT B50K VOLUME 6 5 4
+
+STAGE power power 전원
+D 1N400X a=45 k=63 D3
+R 47R 62 44 R15
+C 100uF 36 37 C9
+R 27K 24 43 R16
+R 27K 53 72 R17
+C 100uF 57 58 C10
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT R2 170 400 h
+AT C1 270 400 h-
+AT R3 370 400 h
+AT R12 470 400 h
+AT U1A 910 590
+AT R13 670 400 h-
+AT C8 770 400 h
+AT R14 870 400 h
+AT VOLUME 970 400 r180
+AT R1 120 470 v-
+AT R6 400 470 v-
+AT R10 460 500 h-
+AT C6 550 500 h
+AT BODY2 640 500 r0
+AT R11 500 560 v-
+AT C7 740 470 v
+AT R16 340 470 v-
+AT R17 700 470 v
+AT C10 820 470 v
+AT R5 400 570 v
+AT DRIVE 560 590 r180
+AT R7 650 590 h
+AT C3 590 520 h
+AT D1 590 580 h
+AT D2 590 640 h-
+AT R8 740 590 h-
+AT C4 830 590 h
+AT BODY 860 680 r90
+AT R9 680 660 v
+AT C5 680 760 v-
+AT R15 340 570 v-
+AT C9 460 570 v
+AT C2 400 670 v-
+AT D3 340 190 v
+AT R4 400 770 v
+AT Q1 1060 400
+AT RLOAD 970 480 v

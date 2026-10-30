@@ -1,0 +1,104 @@
+id pp-caren
+goods 186788149
+name CAREN
+motif Vemuram Jan Ray / Karen
+type overdrive
+desc 4558 티미 계열 - 1M/33n/470K/10K/330p 입력→A단 비반전(B1M 게인+150K 피드백에 130K+2M 트리머 병렬, 220p; 100n+2K 접지 다리)→6.8K→BAT85 역병렬 Vref 클램프+10n→12K→B단 비반전(130K∥150p, 100n+33K 다리)→2.2uF→15K∥2.2n→2K→47n+B10K 톤 션트→B250K 볼륨
+image img_01.jpg
+# Hidden trace: op-amp V+ (67) to the 47uF/rail node (58). Ground-plane pads without '+': 8, 48, 75, 87.
+# Angle pots: 31-32-33 GAIN (31/32 tied on -in A), 0-1-2 TONE (1/2 on ground: variable resistor shunting the 47n),
+# 28-29-30 VOLUME (30 ground, 29 wiper to OUT). Vref is 10K (rail) / 9.1K (ground) with 47uF.
+BOM 1M 470K 150K 130Kx2 33K 15K 12K 10Kx2 9.1K 6.8K 2Kx2 100R 100nx3 47n 33n 10n 2.2n 330p 220p 150p 47uFx2 2.2uF 1N400X BAT85Sx2 2M JRC4558D B1M B10K B250K
+io IN=86 OUT=20 V9=11 GND=1,8,48,75,87
+JUMP 67 58
+
+STAGE input input 입력
+R 1M 48 72 R1
+C 33n 84 85 C1
+R 470K 47 71 R2
+R 10K 80 81 R3
+C 330p 78 79 C2
+
+STAGE gain gain 게인단 (IC A)
+IC JRC4558D 1=68 2=60 3=55 4=45 5=44 6=54 7=59 8=67
+POT B1M GAIN 33 32 31
+R 150K 73 74 R4
+R 130K 82 83 R5
+POT 2M TRIM 49 57 61
+C 220p 56 69 C3
+C 100n 50 62 C4
+R 2K 21 22 R6
+
+STAGE clip clipping 클램프
+R 6.8K 46 70 R7
+D BAT85S a=25 k=38 D1
+D BAT85S a=39 k=26 D2
+C 10n 27 40 C5
+R 12K 36 37 R8
+
+STAGE stage2 gain 2단 (IC B)
+R 130K 43 66 R9
+C 150p 53 65 C6
+C 100n 52 64 C7
+R 33K 51 77 R10
+
+STAGE tone tone 톤
+C 2.2uF 15 14 C8
+R 15K 9 10 R11
+C 2.2n 6 13 C9
+R 2K 4 5 R12
+C 47n 3 12 C10
+POT B10K TONE 0 1 2
+
+STAGE output output 출력 (볼륨)
+POT B250K VOLUME 30 29 28
+
+STAGE power power 전원
+D 1N400X a=17 k=16 D3
+R 100R 24 23 R13
+C 100n 42 41 C11
+C 47uF 58 63 C12
+R 10K 34 35 R14
+R 9.1K 18 19 R15
+C 47uF 7 8 C13
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h-
+AT R3 270 400 h-
+AT U1A 620 700
+AT C8 570 400 h
+AT R11 670 400 h-
+AT R12 770 400 h-
+AT VOLUME 870 400 r180
+AT R1 120 470 v-
+AT R2 200 470 v-
+AT C2 300 470 v-
+AT D1 200 570 v
+AT D2 200 520 h
+AT C5 200 580 h
+AT R8 200 670 v-
+AT R9 450 520 h
+AT C6 450 580 h
+AT C7 370 490 v
+AT R10 370 590 v-
+AT C9 650 520 h-
+AT C10 800 470 v-
+AT TONE 800 590 r90
+AT R14 260 570 v-
+AT R15 320 570 v
+AT C13 560 570 v
+AT R7 260 670 v
+AT R13 320 670 v-
+AT C11 380 670 v
+AT C12 440 670 v
+AT R4 260 770 v
+AT R5 320 800 h-
+AT TRIM 410 800 r180
+AT C3 350 520 h-
+AT C4 500 800 h-
+AT R6 530 870 v-
+AT D3 320 190 v
+AT GAIN 500 740 r180
+AT RLOAD 870 480 v
