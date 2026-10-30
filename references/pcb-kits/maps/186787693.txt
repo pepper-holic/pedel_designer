@@ -1,0 +1,52 @@
+id pp-sho-1k
+goods 186787693
+name [1K] SHO
+motif Zvex Super Hard On
+type buffer-boost
+desc BS170 공통 소스 부스트 - 100n 입력(1M 풀다운)→게이트(드레인-게이트 1M + 게이트-접지 1M 바이어스, 1N4148 2개 게이트 클램프), 5.1K 드레인, 소스→C5K BOOST 가변저항→접지, 10uF→100K 출력
+image img_01.jpg
+# BS170 (S-G-D from the top as printed): S 9 -> BOOST lug "3" (0), G 14, D at the bottom ring - the extractor split
+# it into 15 16 19 20 (19 stands for it). BOOST C5K mini pot: lugs "2" (3, wiper) and "1" (4) on the ground pour,
+# so it is a 0-5K source rheostat, clockwise = less resistance = more gain.
+# 1N4148s clamp the gate: 7 (ground) -> 17 (gate) and 8 (gate) -> 18 (9V).
+BOM 1Mx3 100K 5.1K 100n 47uF 10uF 1N4148x2 BS170 C5K
+io IN=5 OUT=36 V9=27 GND=2
+NC 6 15 16 20
+
+STAGE input input 입력
+R 1M 13 26 R1
+C 100n 12 21 C1
+D 1N4148 a=7 k=17 D1
+D 1N4148 a=8 k=18 D2
+
+STAGE boost gain BS170 공통 소스
+Q BS170 g=14 d=19 s=9 Q1
+R 1M 10 24 R2
+R 1M 25 11 R3
+R 5.1K 22 23 R4
+POT C5K BOOST 4 3 0
+
+STAGE output output 출력
+C 10uF 30 35 C2
+R 100K 29 28 R5
+
+STAGE power power 전원
+C 47uF 1 2 C3
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT C1 170 400 h
+AT D1 180 470 v-
+AT R3 230 470 v
+AT D2 200 190 v-
+AT Q1 270 400
+AT R2 260 320 h
+AT R4 330 250 v
+AT Q1_D 350 400 v-
+AT BOOST 290 500 r270
+AT C2 420 370 h
+AT R5 480 430 v
+AT RLOAD 540 430 v
+AT C3 440 190 v
