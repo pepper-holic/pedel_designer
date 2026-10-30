@@ -36,8 +36,9 @@
    K 0.12)을 `partModels.ts`에 등록하고, 변환기가 소스→드레인 바디 다이오드를 따로 붙인다(OCD 클리퍼가 바디 다이오드를 쓴다). 제너는
    `ZENER` 품번(순방향 다이오드)으로. 회로가 된 것: DOC Overdrive, Brown Charlie Childs, Time Peace, NEW ZENFIRE, NEW Z-DRIVE(5개).
    남은 4개(THIMBLE, ANDY PLUS, Dove Drive, ZEN GU DONG)는 오프보드 팟·숨은 트레이스 문제라 ③으로.
-3. **LM386**: 고정 이득 20(1-8번 핀 캡이면 200)의 op-amp로 근사, 출력 레일 제한. 대상: RAM Fuzz, Jubilee, Green Punch, Papadumble,
-   Feach Fuzz.
+3. **LM386** - 완료(2026-10-31): `kits/lm386.ts`가 op-amp 둘과 내부 저항으로 근사(이득 20/200, 출력 바이어스는 6번 핀의 절반,
+   1·8번 핀 회로와 무관). 회로가 된 것: RAM Fuzz, Jubilee, Green Punch, Papadumble, Feach Fuzz(5개). 같이 고친 것: 3단자 팟의 `AT`
+   위치가 변환기에서 버려지던 버그(이제 모든 키트의 팟이 대응표 자리에 놓인다).
 4. 각 단계마다 해당 기록용 맵을 정식 대응표로 바꾸고 키트 테스트 통과까지. 소자 하나 추가할 때 `tests/solver`에 단위 테스트 1개씩.
 
 ### ② C등급 재분류 (스크립트, 낮은 추론)
@@ -65,7 +66,7 @@ Octavia·OCB·OCTA CLASSIC·OCTA KING(옥타브 퍼즈는 트랜지스터·다�
 
 ## 다음 할 일
 
-①-1·①-2·② 완료. 다음은 ①-3 LM386(기록 5개: RAM Fuzz, Jubilee, Green Punch, Papadumble, Feach Fuzz) → ③ 보류 회로도 대조.
+①·② 완료. 다음은 ③ 보류 회로도 대조 → ④ 미착수.
 
 ### ② 재분류 결과 (2026-10-30)
 

@@ -1,17 +1,17 @@
-# 키트 기판 진행 현황 (2026-10-30 MOSFET 모델·재분류까지)
+# 키트 기판 진행 현황 (2026-10-31 LM386 모델까지)
 
 수집: pedalparts.co.kr 키트 기판 렌더 279건(triage). A등급=60패드 이하·고립 2개 이하, B등급=그 외 시뮬 가능 계열, C등급=모델 없는 계열(딜레이·모듈레이션 등).
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 75 |
-| 기록만 | 10 |
-| 보류 | 44 |
+| 변환 완료 | 81 |
+| 기록만 | 5 |
+| 보류 | 43 |
 | 미착수 | 92 |
 | 중복 기판 | 18 |
 | C등급(범위 밖) | 40 |
 
-## 변환 완료 (75)
+## 변환 완료 (81)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -90,28 +90,28 @@
 | B | 186787949 | TEXPRESS | overdrive | Vertex Steel String / Trainwreck-style overdrive |
 | B | 186788032 | Time Peace | overdrive | J. Rockett Tim Pierce signature |
 | B | 186787636 | Sweet OD | overdrive | Mad Professor Sweet Honey Overdrive |
+| B | 186787843 | RAM Fuzz | fuzz | LM386N-3 파워앰프 퍼즈 |
+| B | 186787537 | Jubelee | distortion | Marshall Silver Jubilee (LM386) |
+| B | 186788031 | Green Punch | overdrive | Greer Sucker Punch |
+| B | 186788638 | PAPADUMBEL  (옵션) | unknown | 1W Overdrive Special 연습용 앰프 |
+| B | 186787680 | Feach Fuzz | fuzz | Frantone Peachfuzz |
+| B | 186788517 | 1969 GE FUZZ | fuzz | Fulltone '69 (ICL7660 -9V) |
 
-## 기록만 (10)
+## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
 | A | 186788214 | KLOUD LIFT | buffer-boost | 기타 |
-| B | 186787843 | RAM Fuzz | fuzz | LM386 |
 | B | 186788465 | KONISH 83TB | buffer-boost | 같은 기판 |
-| B | 186787537 | Jubelee | distortion | LM386 |
-| B | 186788031 | Green Punch | overdrive | LM386 |
-| B | 186788638 | PAPADUMBEL  (옵션) | unknown | LM386 |
-| B | 186787680 | Feach Fuzz | fuzz | LM386 |
 | B | 186788593 | FUZZ FORGE 7K | fuzz | Ge PNP 양접지 |
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (44)
+## 보류 (43)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
 | B | 186788016 | Pluto Blue | overdrive |  |
-| B | 186788517 | 1969 GE FUZZ | fuzz | ICL7660 전하펌프 |
 | B | 186788334 | SEC RET PRE | preamp | ICL7660 전하펌프 |
 | B | 186787512 | Wide Range | preamp |  |
 | B | 186788540 | MID BLASTER | eq |  |
