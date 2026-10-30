@@ -5,6 +5,7 @@ import { stageBlocks } from "./stageBlocks";
 import { parsePot, parseValue } from "./values";
 import { bjtModel, diodeModel, jfetModel, opAmpModel, OPAMP_PINOUT } from "./partModels";
 import { SILICON_DIODE_1N4148 } from "../deviceModels";
+import { isLm386, lm386Elements, lm386Spots } from "./lm386";
 
 /** Op-amp outputs stop this far short of the supply rails (a TL072/4558 on 9V swings ~1-8V). */
 const RAIL_HEADROOM = 1.2;
@@ -26,7 +27,7 @@ export class UnsupportedKitError extends Error {}
 const CHARGE_PUMPS = ["ICL7660", "7660", "TC1044", "MAX1044", "LT1054"];
 const isChargePump = (part: string): boolean => CHARGE_PUMPS.some((p) => part.toUpperCase().replace(/\s+/g, "").startsWith(p));
 
-/** Map placement refs onto element ids: VCC -> Vcc; an op-amp's "U1A" is the element itself for a
+/** Map placement refs onto element ids (or a pot's merged part): VCC -> Vcc; an op-amp's "U1A" is the element itself for a
  * single package (its id is the bare ref), and for a dual whose B half has no spot of its own the B
  * half goes one row under the A half. Refs that match no element are dropped. */
 function resolveLayout(layout: Record<string, LayoutSpot>, elements: Element[]): Record<string, LayoutSpot> {
@@ -35,12 +36,23 @@ function resolveLayout(layout: Record<string, LayoutSpot>, elements: Element[]):
   for (const [ref, spot] of Object.entries(layout)) {
     const id = ref === "VCC" ? "Vcc" : ref;
     if (ids.has(id)) out[id] = spot;
+    // A three-lug pot is two elements (<ref>_1, <ref>_3) that the editor merges back into one part named <ref>.
+    else if (ids.has(`${id}_1`) && ids.has(`${id}_3`)) out[id] = spot;
     else if (/A$/.test(id) && ids.has(id.slice(0, -1))) out[id.slice(0, -1)] = spot;
   }
   for (const id of ids) {
     if (/B$/.test(id) && !out[id] && out[`${id.slice(0, -1)}A`]) out[id] = { ...out[`${id.slice(0, -1)}A`], y: out[`${id.slice(0, -1)}A`].y + 120 };
   }
   return out;
+}
+
+/** LM386 internals have no AT line of their own: cluster them around the chip so they don't land on the auto grid. */
+function withChipInternals(layout: Record<string, LayoutSpot>, parts: KitPart[], elements: Element[]): Record<string, LayoutSpot> {
+  const ids = new Set(elements.map((e) => e.id));
+  const extra = parts
+    .filter((p) => p.kind === "IC" && isLm386(p.part ?? "") && layout[p.ref])
+    .flatMap((p) => Object.entries(lm386Spots(p.ref, layout[p.ref])).filter(([id]) => ids.has(id) && !layout[id]));
+  return { ...layout, ...Object.fromEntries(extra) };
 }
 
 const pair = (part: KitPart): [string, string] => {
@@ -110,6 +122,10 @@ function partElements(part: KitPart, rails: Rails, knobs: KnobSpec[]): Element[]
     }
     case "IC": {
       if (isChargePump(part.part ?? "")) return [];
+      if (isLm386(part.part ?? "")) {
+        const p = pins(part);
+        return lm386Elements(part.ref, p, { top: railVoltage(p["6"] ?? "", rails) ?? Math.max(rails.supply, 0), bottom: railVoltage(p["4"] ?? "", rails) ?? 0 });
+      }
       const found = opAmpModel(part.part ?? "");
       if (!found) throw new UnsupportedKitError(`${part.ref}: no model for IC ${part.part}`);
       const p = pins(part);
@@ -155,7 +171,7 @@ export function kitToPreset(kit: KitCircuit): PedalPreset {
     defaultParams: {},
     knobs,
     blocks: stageBlocks(kit.stages ?? [], byRef, elements),
-    ...(kit.layout ? { layout: resolveLayout(kit.layout, elements) } : {}),
+    ...(kit.layout ? { layout: withChipInternals(resolveLayout(kit.layout, elements), kit.parts, elements) } : {}),
     kit: meta,
     archive: {
       sourceRefs: [{ label: `페달파츠 ${kit.kitName} 키트 기판 레이아웃 (넷리스트 역설계)`, url: `https://www.pedalparts.co.kr/goods/goods_view.php?goodsNo=${kit.goodsNo}` }],
