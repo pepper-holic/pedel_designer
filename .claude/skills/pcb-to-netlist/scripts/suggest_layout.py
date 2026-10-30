@@ -79,7 +79,9 @@ def spine_edges(part: dict) -> list[tuple[str, str, float]]:
         return [(n["b"], n["c"], 0.1), (n["b"], n["e"], 0.3)]
     if k == "IC":
         out = []
-        for o, minus, plus in (("1", "2", "3"), ("7", "6", "5"), ("6", "2", "3")):
+        # LM386: input 3 (or 2), output 5; its pins 1/8 are the gain set, not an op-amp output.
+        pinout = (("5", "2", "3"),) if "386" in part.get("part", "") else (("1", "2", "3"), ("7", "6", "5"), ("6", "2", "3"))
+        for o, minus, plus in pinout:
             if o in n and plus in n:
                 out += [(n[plus], n[o], 0.1), (n[minus], n[o], 0.3)]
         return out
