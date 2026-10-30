@@ -25,7 +25,10 @@
 
 ### ① 소자 모델 추가 (코딩, 중간 추론) - 기록 32개를 한 번에 회로로
 
-1. **전하펌프 전원 규약**: 대응표의 `IC ICL7660 ...` 줄을 변환기가 "이상 전압원"으로 바꾼다. 핀 5(VOUT)는 -V9, 펌프 캡(2-4)은 무시.
+1. **전하펌프 전원 규약** - 완료(2026-10-30, 커밋 69a0c6d~410349c): `IC ICL7660 ...` 줄의 핀 5가 이상 -9V 레일(net vm9), `RAIL <pad> <V>`로
+   18V/-18V 더블러 레일, `supply` 머리줄. 회로가 된 것: RANGER GE, BENDER III GE, Mark 4, Kantata, SOLA FACE GE, BUZZRITE GE(6개).
+   남은 ICL7660 기판 6개(1969 GE, BENDER II GE, Secret Pre, 29 YUNA, Haunting FreQ, 1484 TWELVE)는 오프보드 배선·SMD 패드·고립 패드 문제라 ③으로.
+   원래 계획: 대응표의 `IC ICL7660 ...` 줄을 변환기가 "이상 전압원"으로 바꾼다. 핀 5(VOUT)는 -V9, 펌프 캡(2-4)은 무시.
    18V 더블러 배선(Kantata)은 `supply 18` 같은 머리 줄로 레일 전압을 바꾼다. 양접지 Ge 퍼즈는 V9 패드가 -9V 넷이 되도록
    `io V9=...` 대신 `io VNEG=...`를 허용한다. 대상: RANGER GE, SOLA FACE GE, 1969 GE, BUZZRITE GE, BENDER II/III GE, Mark 4,
    Kantata, Secret Pre, 29 YUNA, Haunting FreQ, 1484 TWELVE(SMD라 보류), FUZZ FORGE 7K(양접지).
@@ -59,7 +62,6 @@ Octavia·OCB·OCTA CLASSIC·OCTA KING(옥타브 퍼즈는 트랜지스터·다�
   `kits/kitToPreset.ts`, `.claude/skills/pcb-to-netlist/scripts/kit_netlist.py`, 해당 `references/pcb-kits/maps/*.txt`.
 - ③④: 회로 판단. 높은 추론 세션. 묶음 6개, 커밋 단위 유지.
 
-## 첫 번째 할 일
+## 다음 할 일
 
-①-1 전하펌프 전원 규약 → ①-2 MOSFET → ①-3 LM386 순으로, 한 단계마다 기록용 맵을 되살려 커밋한다.
-①-1만 끝나도 Ge 퍼즈 7개 + op-amp 바이폴라 4개가 회로가 된다.
+①-1 완료. 다음은 ①-2 MOSFET(솔버 소자 + 2N7000/BS170 모델, 기록 9개) → ①-3 LM386(기록 5개) 순. 한 단계마다 기록용 맵을 되살려 커밋한다.

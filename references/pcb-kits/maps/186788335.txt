@@ -2,3 +2,5 @@
 # (the SMD pads are hidden under the silk and the app has no charge-pump model); recorded only. Board: 1M x2, 180K,
 # 100K x3, 68K, 27K, 12K, 4.7K, 1.5K, 47R, 100n, 22n x2, 10n x3, 2.2n x3, 1n, 680p, 100uF x3, 10uF, 1N400X x3,
 # 100K trimmers x4, angle B1M / A1M / A100K.
+# Update 2026-10-30: the charge-pump supply convention now exists (IC ICL7660 pin 5 -> -9V rail, RAIL <pad> <V>);
+# this board stays recorded only because of its hidden traces / SMD pads, see docs/kit-deferred.md.

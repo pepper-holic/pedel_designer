@@ -1,17 +1,17 @@
-# 키트 기판 진행 현황 (2026-10-30 묶음 8까지)
+# 키트 기판 진행 현황 (2026-10-30 전하펌프 규약까지)
 
 수집: pedalparts.co.kr 키트 기판 렌더 279건(triage). A등급=60패드 이하·고립 2개 이하, B등급=그 외 시뮬 가능 계열, C등급=모델 없는 계열(딜레이·모듈레이션 등).
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 63 |
-| 기록만 | 27 |
-| 보류 | 27 |
-| 미착수 | 95 |
+| 변환 완료 | 70 |
+| 기록만 | 19 |
+| 보류 | 40 |
+| 미착수 | 83 |
 | 중복 기판 | 18 |
 | C등급(범위 밖) | 49 |
 
-## 변환 완료 (63)
+## 변환 완료 (70)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -45,6 +45,8 @@
 | B | 186787676 | How Solo | overdrive | Tweed Bassman 스타일 오버드라이브 (How Solo) |
 | B | 186788345 | AXIS FUZZ  (노브, 케이스 제외) | fuzz | Roger Mayer Axis Fuzz |
 | B | 186788028 | Green Hawk | overdrive | Greer Tomahawk |
+| B | 186788519 | RANGER GE | fuzz | Dallas Rangemaster (germanium) |
+| B | 186788521 | SOLA FACE GE | fuzz | Sola Sound / Fuzz Face (germanium) |
 | B | 186787675 | How Lost | overdrive | Marshall Plexi 스타일 오버드라이브 (How Lost) |
 | B | 186788657 | FUZZ FELLOW | fuzz | Chase Tone Fuzz Fellow (Blue) |
 | B | 186788116 | 2BAND BASS PRE | preamp | Pensa-Suhr 2-band bass preamp |
@@ -54,13 +56,16 @@
 | B | 186788538 | BUZZRITE Si | fuzz | Mosrite Fuzzrite (silicon) |
 | B | 186788539 | T&B FACE | fuzz | Arbiter Treble & Bass Face |
 | B | 186787650 | WT Fuzz | fuzz | WT Fuzz (NPN/PNP 복합 쌍) |
+| B | 186788047 | ALL New Kantata | overdrive | Keeley Katana |
 | B | 186788515 | FUZZ BUDDY | fuzz | Shin-ei Companion FY-2 |
 | B | 186787633 | CALIBER | distortion | J. Rockett .45 Caliber |
 | B | 186788063 | New Blue Color | overdrive | Menatone Blue Collar |
+| B | 186788014 | Mark 4 | overdrive | Mark 4.23 clean boost |
 | B | 186787673 | NEW BBreaker | unknown | Marshall Bluesbreaker |
 | B | 186787674 | Blues Pro | overdrive | MI Audio Blues Pro |
 | B | 186788029 | Green Land | overdrive | Greer Southland / Lightspeed |
 | B | 186788578 | BRUNCH BOX(ANDY) | distortion | MI Audio Crunch Box / JHS Angry Charles |
+| B | 186788520 | BUZZRITE GE | fuzz | Mosrite Fuzzrite (germanium) |
 | B | 186788571 | NEW BLUE OD | overdrive | J. Rockett Blue Note / Animal OD |
 | B | 186787631 | ANIMA | overdrive | J. Rockett Animal OD |
 | B | 186788066 | OD ONE | overdrive | BOSS OD-1 |
@@ -69,6 +74,7 @@
 | B | 186788108 | NEW VRAY | overdrive | Paul Cochrane Timmy |
 | B | 186788012 | Duel A | overdrive | King Tone Duellist (A side) |
 | B | 186788082 | CDOS | overdrive | Colorsound Overdriver |
+| B | 186788522 | BENDER III GE | fuzz | Sola Sound Tone Bender MkIII (germanium) |
 | B | 186787490 | Little Green Box | overdrive | 808-style overdrive with BODY control |
 | B | 186788149 | CAREN | unknown | Vemuram Jan Ray / Karen |
 | B | 186787639 | Golden Drive | overdrive | Friedman Golden Pearl |
@@ -78,8 +84,9 @@
 | B | 186788510 | VOO-DOO-ONE | distortion | Roger Mayer Voodoo-1 |
 | B | 186788573 | PORTA 424 | distortion | Tascam 424 Portastudio channel |
 | B | 186787949 | TEXPRESS | overdrive | Vertex Steel String / Trainwreck-style overdrive |
+| B | 186787636 | Sweet OD | overdrive | Mad Professor Sweet Honey Overdrive |
 
-## 기록만 (27)
+## 기록만 (19)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -88,78 +95,71 @@
 | B | 186788465 | KONISH 83TB | buffer-boost | 같은 기판 |
 | B | 186787537 | Jubelee | distortion | LM386 |
 | B | 186788031 | Green Punch | overdrive | LM386 |
-| B | 186788519 | RANGER GE | fuzz | ICL7660 전하펌프 |
-| B | 186788521 | SOLA FACE GE | fuzz | ICL7660 전하펌프 |
 | B | 186788638 | PAPADUMBEL  (옵션) | unknown | LM386 |
-| B | 186788047 | ALL New Kantata | overdrive | ICL7660 전하펌프 |
-| B | 186788517 | 1969 GE FUZZ | fuzz | ICL7660 전하펌프 |
 | B | 186788306 | NEW Z-DRIVE | overdrive | MOSFET |
-| B | 186788334 | SEC RET PRE | preamp | ICL7660 전하펌프 |
-| B | 186788014 | Mark 4 | overdrive | ICL7660 전하펌프 |
 | B | 186788307 | NEW ZENFIRE | overdrive | MOSFET |
-| B | 186788520 | BUZZRITE GE | fuzz | ICL7660 전하펌프 |
 | B | 186787680 | Feach Fuzz | fuzz | LM386 |
-| B | 186788522 | BENDER III GE | fuzz | ICL7660 전하펌프 |
 | B | 186788593 | FUZZ FORGE 7K | fuzz | Ge PNP 양접지 |
-| B | 186788518 | FUZZ BENDER II GE | fuzz | ICL7660 전하펌프 |
 | B | 186788308 | NEW ZEN GU DONG | overdrive | MOSFET |
 | B | 186787948 | THIMBLE | overdrive | MOSFET |
 | B | 186788044 | DOC Overdrive | overdrive | MOSFET |
 | B | 186787532 | Brown Charlie Childs | distortion | MOSFET |
-| B | 186787646 | NEW Dirty Cat | fuzz | 같은 기판 |
 | B | 186787637 | Gray Stone | distortion | CD4069 |
-| B | 186788665 | 29 YUNA | buffer-boost | ICL7660 전하펌프 |
-| B | 186787553 | Haunting FreQ | eq | ICL7660 전하펌프 |
+| B | 186788032 | Time Peace | overdrive | MOSFET |
+| B | 186788138 | NEW ANDY PLUS | eq | MOSFET |
+| B | 186787535 | Dove Drive | overdrive | MOSFET |
+| B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (27)
+## 보류 (40)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
-| B | 186788016 | Pluto Blue | overdrive | TL072+TL071, 98패드 |
-| B | 186787512 | Wide Range | preamp | TL072 x2, A100K 듀얼 팟, 75패드 |
-| B | 186788540 | MID BLASTER | eq | LF442→TL072, 팟 보드+메인 보드 76패드 |
-| B | 186788357 | NEW ACC PREAMP | preamp | TL082, 78패드 |
-| B | 186788129 | NEW SON OF BEN | preamp | J201 SMD x3, 79패드 |
-| B | 186787681 | Fluffy Fuzz | fuzz | RC4558P + 빨간 LED 4개, 86패드 |
-| B | 186788310 | KO-N AZS (케이스제외) | overdrive | JRC4580D + 2SC1815, 87패드, 가로 1000px |
-| B | 186788106 | Timothy V3 | overdrive | LM1458, 앵글 팟 4개, 91패드 |
-| B | 186788569 | BASS CLEAN | buffer-boost | 4558D + 2SC1815 x2, 91패드 |
-| B | 186788105 | NEW Graff Mo-D | fuzz | LM308 + 2N5458, 92패드 |
-| B | 186788145 | KONISH SS-2 | overdrive | LM1458, GE 다이오드 2, 92패드 |
-| B | 186788309 | KO-N UI (케이스제외) | overdrive | JRC4580D, 92패드, 가로 1000px) / 186788010 Soulist  |
-| B | 186787554 | Flame mini Booster | buffer-boost | 2N3904 x4 + 2N3906, 93패드 |
-| B | 186787677 | Wild Jack | overdrive | TL072 + MPSA18, 95패드 |
-| B | 186788010 | Soulist | overdrive | JRC4580D, 92패드, 가로 1000px) / 186788010 Soulist  |
-| B | 186788589 | TIME V2 (잔레이) | overdrive | LM1458, 96패드 |
-| B | 186788159 | SONIX BABY | eq | TL074 + TL072, EQ, 97패드, 37넷 12고립 |
-| B | 186788016 | Pluto Blue | overdrive | TL072+TL071, 98패드 |
-| B | 186787473 | NEW MORNING | overdrive | LM833 + 2N5457 SMD, 99패드 |
-| B | 186787536 | Hush FREQ | overdrive | TL082 + 2SC1815, 99패드 |
-| B | 186787642 | NEW Cat | fuzz | "ALL RAT" 공용 기판, LM308 + 2N5459, 99패드 |
-| B | 186787534 | Claw | eq | TL072, 액티브 3밴드 EQ, 100패드, 고립 10) / 186788151 THE BLOID  |
-| B | 186788151 | THE BLOID | overdrive | TL072, 액티브 3밴드 EQ, 100패드, 고립 10) / 186788151 THE BLOID  |
-| B | 186788316 | EZK25:17 FUZZ | fuzz | JRC4558D, 로터리 4단 다이오드 셀렉터, 고립 19) / 186788104 NEW Graff Dynamic  |
-| B | 186788104 | NEW Graff Dynamic | overdrive | JRC4558D, 로터리 4단 다이오드 셀렉터, 고립 19) / 186788104 NEW Graff Dynamic  |
-| B | 186786078 | RC BEAST  (겸용) | buffer-boost | 기타/베이스 겸용 RC 부스트, 106패드, 고립 9 |
-| B | 186788013 | Duel B | overdrive | RC4558P, 107패드) - King Tone Duellist B |
+| B | 186788016 | Pluto Blue | overdrive |  |
+| B | 186788517 | 1969 GE FUZZ | fuzz | ICL7660 전하펌프 |
+| B | 186788334 | SEC RET PRE | preamp | ICL7660 전하펌프 |
+| B | 186787512 | Wide Range | preamp |  |
+| B | 186788540 | MID BLASTER | eq |  |
+| B | 186788357 | NEW ACC PREAMP | preamp |  |
+| B | 186788129 | NEW SON OF BEN | preamp |  |
+| B | 186787681 | Fluffy Fuzz | fuzz |  |
+| B | 186788310 | KO-N AZS (케이스제외) | overdrive |  |
+| B | 186788518 | FUZZ BENDER II GE | fuzz | ICL7660 전하펌프 |
+| B | 186788106 | Timothy V3 | overdrive |  |
+| B | 186788569 | BASS CLEAN | buffer-boost |  |
+| B | 186788105 | NEW Graff Mo-D | fuzz |  |
+| B | 186788145 | KONISH SS-2 | overdrive |  |
+| B | 186788309 | KO-N UI (케이스제외) | overdrive |  |
+| B | 186787554 | Flame mini Booster | buffer-boost |  |
+| B | 186787677 | Wild Jack | overdrive |  |
+| B | 186788010 | Soulist | overdrive |  |
+| B | 186788589 | TIME V2 (잔레이) | overdrive |  |
+| B | 186788159 | SONIX BABY | eq |  |
+| B | 186788016 | Pluto Blue | overdrive |  |
+| B | 186787473 | NEW MORNING | overdrive |  |
+| B | 186787536 | Hush FREQ | overdrive |  |
+| B | 186787642 | NEW Cat | fuzz |  |
+| B | 186787646 | NEW Dirty Cat | fuzz | 같은 기판 |
+| B | 186787534 | Claw | eq |  |
+| B | 186788151 | THE BLOID | overdrive |  |
+| B | 186788316 | EZK25:17 FUZZ | fuzz |  |
+| B | 186788104 | NEW Graff Dynamic | overdrive |  |
+| B | 186786078 | RC BEAST  (겸용) | buffer-boost |  |
+| B | 186788665 | 29 YUNA | buffer-boost | ICL7660 전하펌프 |
+| B | 186787553 | Haunting FreQ | eq | ICL7660 전하펌프 |
+| B | 186788013 | Duel B | overdrive |  |
+| B | 186788335 | 1484 TWELVE | unknown | ICL7660 전하펌프 |
+| B | 186788015 | Tong Cap | preamp |  |
+| B | 186788146 | KONISH SS-3 | overdrive |  |
+| B | 186788150 | TUBE SV808 | overdrive |  |
+| B | 186788577 | NEW RED CHARLES | distortion |  |
+| B | 186787546 | X-Touch | overdrive |  |
+| B | 186788551 | REAL CLEAN | buffer-boost |  |
 
-## 미착수 (95)
+## 미착수 (83)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
 | A | 186788277 | FUZZY FACE  (노브, 케이스 제외) | fuzz | 35패드, 고립 0 |
-| B | 186788032 | Time Peace | overdrive | 107패드, 고립 5 |
-| B | 186788335 | 1484 TWELVE | unknown | 107패드, 고립 25 |
-| B | 186787636 | Sweet OD | overdrive | 108패드, 고립 5 |
-| B | 186788015 | Tong Cap | preamp | 108패드, 고립 4 |
-| B | 186788146 | KONISH SS-3 | overdrive | 108패드, 고립 13 |
-| B | 186788150 | TUBE SV808 | overdrive | 108패드, 고립 16 |
-| B | 186788138 | NEW ANDY PLUS | eq | 109패드, 고립 6 |
-| B | 186787535 | Dove Drive | overdrive | 110패드, 고립 8 |
-| B | 186788033 | Green Soma | overdrive | 110패드, 고립 5 |
-| B | 186788577 | NEW RED CHARLES | distortion | 110패드, 고립 8 |
-| B | 186787546 | X-Touch | overdrive | 111패드, 고립 12 |
-| B | 186788551 | REAL CLEAN | buffer-boost | 111패드, 고립 8 |
 | B | 186788552 | ALMOST CLEAN | buffer-boost | 111패드, 고립 7 |
 | B | 186787543 | West Breeze | eq | 112패드, 고립 2 |
 | B | 186788161 | SONIX 482i | unknown | 112패드, 고립 21 |
