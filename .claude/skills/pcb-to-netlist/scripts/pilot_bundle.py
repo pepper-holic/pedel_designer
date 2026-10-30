@@ -32,6 +32,12 @@ def main() -> None:
     for n in range(len(boards)):
         for ext in ("json", "png"):
             shutil.copy(src / f"board{n}_nets.{ext}", out / f"board{n}_nets.{ext}")
+    # SMD kits: re-extract with virtual pads for the SMD legs (the stock extraction leaves them unmapped).
+    info = (src / "info.txt").read_text(encoding="utf-8", errors="ignore")
+    if "SMD" in info.upper():
+        from extract_nets import run as extract  # noqa: E402
+        for n, f in enumerate(boards):
+            extract(src / f, str(out / f"board{n}_nets"), 3, smd=True)
 
     slug = NOISE_WORDS.sub(" ", kit["name"]).strip().lower().replace(" ", "-")
     nets = json.loads((src / "board0_nets.json").read_text(encoding="utf-8"))
@@ -49,7 +55,8 @@ def main() -> None:
         "io IN= OUT= V9= GND=",
         "",
         f"# {len(nets['pads'])} pads; multi-pad nets: " + " ".join(f"n{k}={v}" for k, v in multi),
-        f"# lone non-ground pads (off-board points or broken traces): {lone}",
+        f"# lone non-ground pads (off-board points or broken traces): {[p for p in lone if p not in nets.get('unconnected', [])]}",
+        f"# no copper at all (unused pins, empty lugs, off-board rings - NC unless the render hides a trace): {nets.get('unconnected', [])}",
         *[f"# hint: pad {k} likely joins {v} (copper tint under the silk - confirm on the render, then JUMP)" for k, v in nets.get("hints", {}).items()],
         f"# seller: {kit['about']}",
         "",

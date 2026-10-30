@@ -28,6 +28,8 @@ MIN_PAD_PIXELS = 12
 # A pad "owns" pixels this far out from its ring: the ring's antialiased edge plus a 1px pot or
 # footprint outline usually sit between a pad and the trace that enters it.
 NEAR = 3
+# A filled silk blob this size (px) that copper touches in 2+ places is an SMD body; its touch points become pads.
+SMD_MIN, SMD_MAX, SMD_MIN_AREA, SMD_FILL = 8, 60, 60, 0.3
 # Silkscreen (grey outlines, value text) is printed over the copper and cuts traces into pieces; a
 # run of silk pixels at most this long that has copper of one layer on both sides is copper too.
 # Silk gaps longer than this (thick board titles) are left open on purpose: every rule tried for
@@ -62,6 +64,13 @@ def classify(r: int, g: int, b: int, tinted: bool = False) -> str:
         return "top"
     if b > 170 and g > 150 and r < 140:
         return "bot"
+    # The bottom layer is painted over the top one semi-transparently: where a top trace runs under a
+    # cyan trace the cyan leans green (b well below g). That pixel is both layers' copper - "both"
+    # is treated as top and bottom when components are built - so a top trace crossing under a
+    # bottom one is not cut there, while a cyan trace with nothing under it stays plain cyan.
+    # (b well above r keeps the anti-aliased edge of a green footprint outline, where r ~ b, out.)
+    if g > 170 and r < 140 and g - b >= 20 and b >= 150 and b - r >= 40:
+        return "both"
     hi, lo = max(r, g, b), min(r, g, b)
     # The silkscreen is printed semi-transparent: a grey letter over top copper comes out dark olive
     # (r ~ g, b lower by 20+), over bottom copper dark cyan (b above r by 20+), over bare board plain
@@ -84,6 +93,8 @@ def classify(r: int, g: int, b: int, tinted: bool = False) -> str:
 
 
 def components(mask: dict[tuple[int, int], str], kinds: set[str]) -> list[list[tuple[int, int]]]:
+    if kinds & {"top", "bot"}:
+        kinds = kinds | {"both"}
     seen: set[tuple[int, int]] = set()
     out = []
     for start, kind in mask.items():
@@ -107,29 +118,39 @@ def components(mask: dict[tuple[int, int], str], kinds: set[str]) -> list[list[t
 def bridge(mask: dict[tuple[int, int], str], layer: str, w: int, h: int) -> None:
     """Turn short horizontal/vertical runs of silk that sit between two copper pixels of one layer into
     copper, so a resistor outline or a value printed across a trace no longer splits it."""
-    fill = []
+    fill: list[tuple[int, int]] = []
     for y in range(h):
         for x in range(w):
-            if mask.get((x, y)) not in (layer, "pad", "gpad"):
+            if mask.get((x, y)) not in (layer, "both", "pad", "gpad"):
                 continue
             for dx, dy in ((1, 0), (0, 1), (1, 1), (1, -1)):
-                run = []
+                run: list[tuple[int, int]] = []
                 for k in range(1, SILK_BRIDGE + 2):
                     q = (x + dx * k, y + dy * k)
                     kind = mask.get(q)
                     if kind == "silk":
                         run.append(q)
                         continue
-                    if kind in (layer, "pad", "gpad") and run and (mask.get((x, y)) == layer or kind == layer):
+                    if kind in (layer, "both", "pad", "gpad") and run and (mask.get((x, y)) in (layer, "both") or kind in (layer, "both")):
                         # Up to 4px: any thin outline or text stroke. Longer (thick title text): only
                         # when the trace runs along this axis on both sides, so a gap along a
                         # component outline next to two unrelated traces is never filled.
+                        # A trace of the other layer is never bridged across here: where this layer
+                        # really passes under it the render tints the pixels ("both" in classify),
+                        # and where it merely ends there (an undrawn via) the two sides are often
+                        # different nets that happen to line up - bridging them shorted resistors on
+                        # seven reference circuits.
                         straight = trace_end(mask, layer, (x, y), -dx, -dy) and trace_end(mask, layer, q, dx, dy)
                         if len(run) <= SHORT_SILK or straight:
                             fill.extend(run)
                     break
+    other = "bot" if layer == "top" else "top"
     for q in fill:
-        mask[q] = layer
+        # Inside the other layer's trace (where this trace passes under it and the overlap goes dark)
+        # the filled pixel is both layers' copper; written as this layer alone it would cut the other.
+        x, y = q
+        inside = any(mask.get((x + dx, y + dy)) in (other, "both") for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+        mask[q] = "both" if inside else layer
 
 
 def enclosed_regions(mask: dict[tuple[int, int], str], w: int, h: int) -> list[list[tuple[int, int]]]:
@@ -203,11 +224,12 @@ def trace_end(mask: dict[tuple[int, int], str], layer: str, at: tuple[int, int],
     4 steps along it, and copper on both sides across it (a trace is several pixels wide), but NOT
     copper far across (that would be a wide fill or a trace running the other way)."""
     x, y = at
-    if not all(mask.get((x + dx * i, y + dy * i)) == layer for i in range(0, 4)):
+    ok = (layer, "both")
+    if not all(mask.get((x + dx * i, y + dy * i)) in ok for i in range(0, 4)):
         return False
     px, py = dy, dx
-    across = sum(1 for i in (-1, 1) if mask.get((x + px * i + dx * 2, y + py * i + dy * 2)) == layer)
-    far = sum(1 for i in (-7, 7) if mask.get((x + px * i + dx * 2, y + py * i + dy * 2)) == layer)
+    across = sum(1 for i in (-1, 1) if mask.get((x + px * i + dx * 2, y + py * i + dy * 2)) in ok)
+    far = sum(1 for i in (-7, 7) if mask.get((x + px * i + dx * 2, y + py * i + dy * 2)) in ok)
     return across == 2 and far < 2
 
 
@@ -270,7 +292,7 @@ def merge_pads(pads: list[dict], mask: dict[tuple[int, int], str]) -> list[dict]
     return merged
 
 
-def run(src: Path, prefix: str, scale: int = 3) -> dict:
+def run(src: Path, prefix: str, scale: int = 3, smd: bool = False) -> dict:
     """Extract pads and nets from one render; write <prefix>.json/.png and return summary counts."""
     im = Image.open(src).convert("RGB")
     w, h = im.size
@@ -301,11 +323,45 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
     pads.sort(key=lambda p: (round(p["y"] / 8), p["x"]))
     for i, p in enumerate(pads):
         p["id"] = i
+    # SMD parts (a J201 drawn as a filled dark body with three short legs) have no pad rings: the
+    # traces just end at the legs. Each spot where copper meets such a filled silk blob becomes a
+    # virtual pad, numbered after the real pads so existing ids stay put. Opt-in (--smd): on
+    # through-hole boards the same rule hits transistor outlines and pot boxes.
+    copper_id: dict[tuple[int, int], int] = {}
+    n_copper = 0
+    for layer in (("top", "bot") if smd else ()):
+        for comp in components(mask, {layer}):
+            n_copper += 1
+            for q in comp:
+                copper_id.setdefault(q, n_copper)
+    for comp in (components(mask, {"silk"}) if smd else []):
+        xs, ys = [q[0] for q in comp], [q[1] for q in comp]
+        bw, bh = max(xs) - min(xs) + 1, max(ys) - min(ys) + 1
+        if not (SMD_MIN <= bw <= SMD_MAX and SMD_MIN <= bh <= SMD_MAX) or len(comp) < SMD_MIN_AREA or len(comp) / (bw * bh) < SMD_FILL:
+            continue
+        body = set(comp)
+        touch = {(x + dx, y + dy) for (x, y) in comp for dx in (-1, 0, 1) for dy in (-1, 0, 1) if mask.get((x + dx, y + dy)) in ("top", "bot", "both") and (x + dx, y + dy) not in body}
+        # One cluster per trace: touch pixels are grouped by the copper component they belong to, so
+        # two traces passing the body 1px apart never share a virtual pad.
+        by_trace: dict[int, list[tuple[int, int]]] = {}
+        for q in touch:
+            by_trace.setdefault(copper_id.get(q, -1), []).append(q)
+        clusters = [cl for cid, cl in by_trace.items() if cid != -1]
+        # Two or more legs on different traces: a toggle's switch bar or a letter beside one trace is not.
+        if len({copper_id.get(q) for cl in clusters for q in cl[:1]}) < 2:
+            continue
+        for cl in clusters:
+            cx, cy = sum(q[0] for q in cl) / len(cl), sum(q[1] for q in cl) / len(cl)
+            pads.append({"x": cx, "y": cy, "r": 3.0, "ground": False, "pixels": cl, "id": len(pads), "smd": True})
 
-    def connect(cmask: dict[tuple[int, int], str]) -> tuple[list[int], int]:
-        """Union pads that one layer's copper joins; returns the union-find parent list and tunnel count."""
+    def connect(cmask: dict[tuple[int, int], str], vias: bool = False) -> tuple[list[int], int]:
+        """Union pads that one layer's copper joins; returns the union-find parent list and tunnel count.
+        With `vias`, a trace of one layer that dead-ends into a trace of the other layer (a via the render
+        does not draw) joins the two as well - hint pass only."""
         mask = cmask
         parent = list(range(len(pads)))
+        comp_pads: dict[tuple[str, int], set[int]] = {}
+        pixel_comp: dict[tuple[int, int], tuple[str, int]] = {}
 
         def find(a: int) -> int:
             while parent[a] != a:
@@ -316,7 +372,9 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
         def union(a: int, b: int) -> None:
             parent[find(a)] = find(b)
 
-        pad_at: dict[tuple[int, int], int] = {}
+        # A pixel can belong to several pads' reach: a copper stub between two pads 3px apart used to be
+        # claimed by whichever pad came first, so the stub joined only that pad and the other stayed lone.
+        pad_at: dict[tuple[int, int], set[int]] = {}
         for p in pads:
             # Reach grows with the pad: on blurry large renders the ring fades into the trace over several
             # pixels, on crisp small ones a short reach keeps neighbouring pads apart.
@@ -324,13 +382,13 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
             for (x, y) in p["pixels"]:
                 for dx in range(-near, near + 1):
                     for dy in range(-near, near + 1):
-                        pad_at.setdefault((x + dx, y + dy), p["id"])
+                        pad_at.setdefault((x + dx, y + dy), set()).add(p["id"])
             # Many renders draw the trace right through the hole: everything inside the ring is the pad's.
             r = int(p["r"])
             for dx in range(-r, r + 1):
                 for dy in range(-r, r + 1):
                     if dx * dx + dy * dy <= r * r:
-                        pad_at.setdefault((int(p["x"]) + dx, int(p["y"]) + dy), p["id"])
+                        pad_at.setdefault((int(p["x"]) + dx, int(p["y"]) + dy), set()).add(p["id"])
         pad_zone = {(x + dx, y + dy) for p in pads for (x, y) in p["pixels"] for dx in range(-8, 9, 2) for dy in range(-8, 9, 2)}
         tunnels = 0
         for layer in ("top", "bot"):
@@ -351,11 +409,34 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
                     tunnels += 1
             pads_of: dict[int, set[int]] = defaultdict(set)
             for i, comp in enumerate(comps):
-                pads_of[root(i)].update(pad_at[q] for q in comp if q in pad_at)
+                for q in comp:
+                    if q in pad_at:
+                        pads_of[root(i)].update(pad_at[q])
+                    if vias:
+                        pixel_comp[q] = (layer, root(i))
             for touched in pads_of.values():
                 touched_list = sorted(touched)
                 for other in touched_list[1:]:
                     union(touched_list[0], other)
+            if vias:
+                for i in pads_of:
+                    comp_pads[(layer, i)] = pads_of[i]
+        if vias:
+            for (x, y), (layer, ci) in pixel_comp.items():
+                if layer != "top":
+                    continue
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    q = (x + dx, y + dy)
+                    if pixel_comp.get(q, ("", 0))[0] != "bot":
+                        continue
+                    # Dead end: no more top copper beyond the bottom trace along this direction.
+                    if any(mask.get((x + dx * k, y + dy * k)) == "top" for k in range(2, 15)):
+                        continue
+                    a, b = comp_pads.get(("top", ci), set()), comp_pads.get(("bot", pixel_comp[q][1]), set())
+                    if a and b:
+                        for pa in a:
+                            for pb in b:
+                                union(pa, pb)
         grounds = [p["id"] for p in pads if p["ground"]]
         for g in grounds[1:]:
             union(grounds[0], g)
@@ -377,9 +458,20 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
         p["net"] = net
         nets[net].append(p["id"])
 
+    # Lone pads that no copper of either layer touches at all: an unused IC pin, a footprint lug the
+    # kit leaves empty, or (big rings) an off-board wiring point. They are "NC" for the map, not
+    # broken traces - listed apart so the reader looks only at pads where copper stops short.
+    copper = {"top", "bot", "both"}
+    unconnected: list[int] = []
+    for p in pads:
+        if p["ground"] or len(nets[p["net"]]) > 1:
+            continue
+        reach = max(NEAR, int(p["r"] * 0.3)) + 2
+        if not any(mask.get((x + dx, y + dy)) in copper for (x, y) in p["pixels"] for dx in range(-reach, reach + 1, 2) for dy in range(-reach, reach + 1, 2)):
+            unconnected.append(p["id"])
     hints: dict[str, list[int]] = {}
     if HINTS:
-        tparent, _ = connect(build_mask(True))
+        tparent, _ = connect(build_mask(True), vias=True)
 
         def tfind(a: int) -> int:
             while tparent[a] != a:
@@ -395,9 +487,10 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
     out = {
         "image": str(src),
         "size": [w, h],
-        "pads": [{k: p[k] for k in ("id", "x", "y", "r", "ground", "net")} for p in pads],
+        "pads": [{k: p[k] for k in ("id", "x", "y", "r", "ground", "net", "smd") if k in p} for p in pads],
         "nets": {str(k): v for k, v in sorted(nets.items())},
         **({"hints": hints} if hints else {}),
+        **({"unconnected": unconnected} if unconnected else {}),
     }
     Path(f"{prefix}.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
 
@@ -421,6 +514,7 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
         "multiPadNets": sum(1 for v in nets.values() if len(v) > 1),
         "loneNonGroundPads": sum(1 for v in nets.values() if len(v) == 1 and not pads[v[0]]["ground"]),
         "hintedPads": len(hints),
+        "unconnectedPads": len(unconnected),
         "bodyTunnels": tunnels,
         "bottomLayerPixels": sum(1 for k in mask.values() if k == "bot"),
         "topLayerPixels": sum(1 for k in mask.values() if k == "top"),
@@ -429,9 +523,10 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
 
 
 def main() -> None:
-    src, prefix = Path(sys.argv[1]), sys.argv[2]
-    scale = int(sys.argv[3]) if len(sys.argv) > 3 else 3
-    st = run(src, prefix, scale)
+    args = [a for a in sys.argv[1:] if a != "--smd"]
+    src, prefix = Path(args[0]), args[1]
+    scale = int(args[2]) if len(args) > 2 else 3
+    st = run(src, prefix, scale, smd="--smd" in sys.argv)
     print(f"{st['pads']} pads ({st['groundPads']} on the ground pour), {st['nets']} nets ({st['multiPadNets']} with 2+ pads, {st['loneNonGroundPads']} lone)")
 
 
