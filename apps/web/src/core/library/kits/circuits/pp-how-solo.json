@@ -1,0 +1,362 @@
+{
+ "id": "pp-how-solo",
+ "goodsNo": "186787676",
+ "kitName": "How Solo",
+ "motif": "Tweed Bassman 스타일 오버드라이브 (How Solo)",
+ "type": "overdrive",
+ "description": "TL072 논인버팅 게인단(1M∥68p 피드백, 접지 다리 470n + 4.7K + C500K DRIVE) → 10uF → 100K → 적색 LED 대향 쌍 션트 클리핑 → B100K VOLUME. B채널은 22K/22K+47uF 4.5V 기준 버퍼(47K로 in+ 바이어스). 토글: Warm은 100K 앞에 1n, Bright는 LED 노드에 2.2n 접지",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "TL072",
+   "nodes": {
+    "1": "n3",
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "5": "n5",
+    "6": "n2",
+    "7": "n2",
+    "8": "vcc"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "68p",
+   "nodes": [
+    "n4",
+    "n3"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "470n",
+   "nodes": [
+    "n4",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n6",
+    "n7"
+   ]
+  },
+  {
+   "ref": "DRIVE",
+   "kind": "POT",
+   "value": "C500K",
+   "nodes": [
+    "n7",
+    "0",
+    "0"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "vcc",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n3",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n8",
+    "n9"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "LED-RED",
+   "nodes": {
+    "a": "0",
+    "k": "n9"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "LED-RED",
+   "nodes": {
+    "a": "n9",
+    "k": "0"
+   }
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "0",
+    "out",
+    "n9"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "0",
+    "k": "vcc"
+   }
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "vcc",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "R2"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "논인버팅 게인단 (TL072 A)",
+   "parts": [
+    "U1",
+    "R3",
+    "C2",
+    "C3",
+    "R4",
+    "DRIVE"
+   ]
+  },
+  {
+   "id": "vref",
+   "category": "custom",
+   "label": "4.5V 기준 (B채널 버퍼)",
+   "parts": [
+    "R5",
+    "R6",
+    "C4"
+   ]
+  },
+  {
+   "id": "clip",
+   "category": "clipping",
+   "label": "LED 클리핑",
+   "parts": [
+    "C5",
+    "R7",
+    "D1",
+    "D2"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D3",
+    "C8"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "U1A": {
+   "x": 760,
+   "y": 420
+  },
+  "C5": {
+   "x": 370,
+   "y": 400,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 470,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 570,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 200,
+   "y": 470,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 300,
+   "y": 490,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 300,
+   "y": 520,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 300,
+   "y": 590,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 360,
+   "y": 620,
+   "rotation": 0
+  },
+  "DRIVE": {
+   "x": 390,
+   "y": 710,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 500,
+   "y": 470,
+   "rotation": 270
+  },
+  "D2": {
+   "x": 680,
+   "y": 470,
+   "rotation": 90
+  },
+  "D3": {
+   "x": 600,
+   "y": 190,
+   "rotation": 270
+  },
+  "C8": {
+   "x": 640,
+   "y": 190,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 140,
+   "y": 880,
+   "rotation": 0
+  },
+  "R6": {
+   "x": 240,
+   "y": 880,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 340,
+   "y": 880,
+   "rotation": 0
+  },
+  "RLOAD": {
+   "x": 570,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

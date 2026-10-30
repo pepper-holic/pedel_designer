@@ -1,0 +1,72 @@
+id pp-how-solo
+goods 186787676
+name How Solo
+motif Tweed Bassman 스타일 오버드라이브 (How Solo)
+type overdrive
+desc TL072 논인버팅 게인단(1M∥68p 피드백, 접지 다리 470n + 4.7K + C500K DRIVE) → 10uF → 100K → 적색 LED 대향 쌍 션트 클리핑 → B100K VOLUME. B채널은 22K/22K+47uF 4.5V 기준 버퍼(47K로 in+ 바이어스). 토글: Warm은 100K 앞에 1n, Bright는 LED 노드에 2.2n 접지
+image img_02.jpg
+# TL072 notch up: pins 1-4 = 24, 28, 36, 41; pins 5-8 = 42, 37, 29, 25. Toggle 3-4-5 (4 = ground
+# common): position 3 puts the 1n to ground, position 5 the 2.2n. Normal (centre) = neither; the
+# circuit here is the Normal position (both caps left floating via NC).
+BOM 1Mx2 100K 47K 22Kx2 4.7K 470n 100n 68p 47uFx2 10uF 1N400X LED-REDx2 TL072 C500K B100K
+# (parts list also has the 1n and 2.2n toggle caps)
+io IN=38 OUT=17 V9=44 GND=52
+JUMP 38 39
+NC 3 5 14 11 12 13
+# 1n (11-12) and 2.2n (13-14) are the toggle's Warm/Bright caps, out of the circuit in Normal.
+
+STAGE input input 입력
+R 1M 46 45 R1
+C 100n 39 40 C1
+R 47K 56 57 R2
+
+STAGE gain gain 논인버팅 게인단 (TL072 A)
+IC TL072 1=24 2=28 3=36 4=41 5=42 6=37 7=29 8=25 U1
+R 1M 34 35 R3
+C 68p 31 27 C2
+C 470n 23 22 C3
+R 4.7K 10 9 R4
+POT C500K DRIVE 0 1 1
+
+STAGE vref custom 4.5V 기준 (B채널 버퍼)
+R 22K 26 43 R5
+R 22K 48 47 R6
+C 47uF 49 58 C4
+
+STAGE clip clipping LED 클리핑
+C 10uF 15 16 C5
+R 100K 18 19 R7
+D LED-RED a=21 k=20 D1
+D LED-RED a=32 k=33 D2
+
+STAGE output output 출력 (볼륨)
+POT B100K VOLUME 8 7 6
+
+STAGE power power 전원
+D 1N400X a=30 k=51 D3
+C 47uF 50 59 C8
+
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT U1A 760 420
+AT C5 370 400 h
+AT R7 470 400 h
+AT VOLUME 570 400 r180
+AT R1 120 470 v
+AT R2 200 470 v
+AT R3 300 490 v
+AT C2 300 520 h
+AT C3 300 590 v
+AT R4 360 620 h
+AT DRIVE 390 710 r90
+AT D1 500 470 v-
+AT D2 680 470 v
+AT D3 600 190 v-
+AT C8 640 190 v
+AT R5 140 880 h
+AT R6 240 880 h
+AT C4 340 880 h
+AT RLOAD 570 480 v

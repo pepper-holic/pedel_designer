@@ -1,5 +1,5 @@
 import type { Element } from "../../solver/types";
-import type { KnobSpec, PedalPreset, PresetCategory } from "../types";
+import type { KnobSpec, LayoutSpot, PedalPreset, PresetCategory } from "../types";
 import type { KitCircuit, KitMeta, KitPart } from "./types";
 import { stageBlocks } from "./stageBlocks";
 import { parsePot, parseValue } from "./values";
@@ -20,6 +20,23 @@ const CATEGORY: Record<string, PresetCategory> = {
 };
 
 export class UnsupportedKitError extends Error {}
+
+/** Map placement refs onto element ids: VCC -> Vcc; an op-amp's "U1A" is the element itself for a
+ * single package (its id is the bare ref), and for a dual whose B half has no spot of its own the B
+ * half goes one row under the A half. Refs that match no element are dropped. */
+function resolveLayout(layout: Record<string, LayoutSpot>, elements: Element[]): Record<string, LayoutSpot> {
+  const ids = new Set(elements.map((e) => e.id));
+  const out: Record<string, LayoutSpot> = {};
+  for (const [ref, spot] of Object.entries(layout)) {
+    const id = ref === "VCC" ? "Vcc" : ref;
+    if (ids.has(id)) out[id] = spot;
+    else if (/A$/.test(id) && ids.has(id.slice(0, -1))) out[id.slice(0, -1)] = spot;
+  }
+  for (const id of ids) {
+    if (/B$/.test(id) && !out[id] && out[`${id.slice(0, -1)}A`]) out[id] = { ...out[`${id.slice(0, -1)}A`], y: out[`${id.slice(0, -1)}A`].y + 120 };
+  }
+  return out;
+}
 
 const pair = (part: KitPart): [string, string] => {
   if (!Array.isArray(part.nodes) || part.nodes.length !== 2) throw new Error(`${part.ref}: expected two nodes`);
@@ -124,7 +141,7 @@ export function kitToPreset(kit: KitCircuit): PedalPreset {
     defaultParams: {},
     knobs,
     blocks: stageBlocks(kit.stages ?? [], byRef, elements),
-    ...(kit.layout ? { layout: Object.fromEntries(Object.entries(kit.layout).map(([ref, spot]) => [ref === "VCC" ? "Vcc" : ref, spot])) } : {}),
+    ...(kit.layout ? { layout: resolveLayout(kit.layout, elements) } : {}),
     kit: meta,
     archive: {
       sourceRefs: [{ label: `페달파츠 ${kit.kitName} 키트 기판 레이아웃 (넷리스트 역설계)`, url: `https://www.pedalparts.co.kr/goods/goods_view.php?goodsNo=${kit.goodsNo}` }],

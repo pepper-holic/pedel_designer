@@ -49,6 +49,7 @@ const BJTS: [string, Bjt][] = [
   ["BC184", si("npn", 500)],
   ["BC108", si("npn", 450)],
   ["BC109", si("npn", 500)],
+  ["BC239", si("npn", 400)],
   ["BC549", si("npn", 600)],
   ["BC550", si("npn", 600)],
   ["BC547", si("npn", 300)],

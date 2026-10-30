@@ -1,0 +1,3 @@
+# SOLA FACE GE (186788521): germanium PNP Sun Face on a negative rail from an ICL7660 charge pump;
+# same board family as SoLa Face BC108c (186788496) with the pump added. No charge-pump model in the
+# app yet; recorded only.

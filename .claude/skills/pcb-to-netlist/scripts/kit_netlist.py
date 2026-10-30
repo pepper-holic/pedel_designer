@@ -190,6 +190,8 @@ def main() -> None:
                 io[k] = offboard[k]
                 continue
             sys.exit(f"io {k}= missing")
+        # An off-board point used on a part line is the same net as the board pad of that role.
+        parent[find(pad_net[offboard[k]])] = find(pad_net[io[k]])
 
     names: dict[int, str] = {}
     for k, p in io.items():

@@ -1,0 +1,420 @@
+{
+ "id": "pp-green-hawk",
+ "goodsNo": "186788028",
+ "kitName": "Green Hawk",
+ "motif": "Greer Tomahawk",
+ "type": "overdrive",
+ "description": "TL071 논인버팅 게인단 - in+에 100n 입력과 330K→4.5V 기준(10K/10K+22uF), 피드백 47K+A1M DRIVE(100p 병렬), 접지 다리 6.8K+47n(기준으로), 출력 10uF→8.2K→적색 LED 대향 쌍 션트 클리핑, A50K TREBLE(와이퍼→47n 접지 가변 로우패스), A250K VOLUME. 9V는 47R 필터",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "330K",
+   "nodes": [
+    "n2",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n3",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "TL071",
+   "nodes": {
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "6": "n5",
+    "7": "n3"
+   }
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "6.8K",
+   "nodes": [
+    "n6",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n6",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n7",
+    "n4"
+   ]
+  },
+  {
+   "ref": "DRIVE",
+   "kind": "POT",
+   "value": "A1M",
+   "nodes": [
+    "n7",
+    "n7",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n5",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n5",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "8.2K",
+   "nodes": [
+    "n8",
+    "n9"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "LED-RED",
+   "nodes": {
+    "a": "n9",
+    "k": "0"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "LED-RED",
+   "nodes": {
+    "a": "0",
+    "k": "n9"
+   }
+  },
+  {
+   "ref": "TREBLE",
+   "kind": "POT",
+   "value": "A50K",
+   "nodes": [
+    "n10",
+    "n9",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n10",
+    "0"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A250K",
+   "nodes": [
+    "0",
+    "out",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "0",
+    "out"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "0",
+    "k": "vcc"
+   }
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "47R",
+   "nodes": [
+    "vcc",
+    "n3"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "R2"
+   ]
+  },
+  {
+   "id": "vref",
+   "category": "custom",
+   "label": "4.5V 기준",
+   "parts": [
+    "R3",
+    "R4",
+    "C2"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "논인버팅 게인단 (TL071)",
+   "parts": [
+    "U1",
+    "R5",
+    "C3",
+    "R6",
+    "DRIVE",
+    "C4"
+   ]
+  },
+  {
+   "id": "clip",
+   "category": "clipping",
+   "label": "LED 클리핑 + 톤",
+   "parts": [
+    "C5",
+    "R7",
+    "D1",
+    "D2",
+    "TREBLE",
+    "C6"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "VOLUME",
+    "R8"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원 (47R 필터)",
+   "parts": [
+    "D3",
+    "R9",
+    "C7"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "U1A": {
+   "x": 410,
+   "y": 610
+  },
+  "C5": {
+   "x": 370,
+   "y": 400,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 470,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 570,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 200,
+   "y": 470,
+   "rotation": 270
+  },
+  "R3": {
+   "x": 260,
+   "y": 500,
+   "rotation": 180
+  },
+  "R4": {
+   "x": 200,
+   "y": 570,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 260,
+   "y": 570,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 140,
+   "y": 570,
+   "rotation": 270
+  },
+  "DRIVE": {
+   "x": 360,
+   "y": 480,
+   "rotation": 180
+  },
+  "C4": {
+   "x": 300,
+   "y": 580,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 500,
+   "y": 470,
+   "rotation": 90
+  },
+  "D2": {
+   "x": 680,
+   "y": 470,
+   "rotation": 270
+  },
+  "TREBLE": {
+   "x": 560,
+   "y": 490,
+   "rotation": 180
+  },
+  "C6": {
+   "x": 650,
+   "y": 560,
+   "rotation": 90
+  },
+  "R8": {
+   "x": 750,
+   "y": 500,
+   "rotation": 270
+  },
+  "D3": {
+   "x": 600,
+   "y": 190,
+   "rotation": 270
+  },
+  "R9": {
+   "x": 290,
+   "y": 190,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 350,
+   "y": 570,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 220,
+   "y": 520,
+   "rotation": 0
+  },
+  "R6": {
+   "x": 340,
+   "y": 520,
+   "rotation": 180
+  },
+  "RLOAD": {
+   "x": 620,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

@@ -1,0 +1,80 @@
+id pp-green-hawk
+goods 186788028
+name Green Hawk
+motif Greer Tomahawk
+type overdrive
+desc TL071 논인버팅 게인단 - in+에 100n 입력과 330K→4.5V 기준(10K/10K+22uF), 피드백 47K+A1M DRIVE(100p 병렬), 접지 다리 6.8K+47n(기준으로), 출력 10uF→8.2K→적색 LED 대향 쌍 션트 클리핑, A50K TREBLE(와이퍼→47n 접지 가변 로우패스), A250K VOLUME. 9V는 47R 필터
+image img_02.jpg
+# TL071 notch up: 1=21 (NC), 2=28, 3=34, 4=42, 5=43 (NC), 6=35 (out), 7=29 (V+), 8=22 (NC).
+# DRIVE lugs 0 and 1 (wiper) are joined on the board: a variable resistor from lug 2. The pot's
+# connection to the output (lug 2 = pin 6) is not visible in the render; without it the stage has
+# no feedback, so it is taken as present (JUMP 2 35).
+BOM 1Mx2 330K 47K 10Kx2 8.2K 6.8K 47R 100n 47nx2 100p 22uFx2 10uF 1N400X LED-REDx2 TL071 A1M A250K A50K
+io IN=52 OUT=18 V9=49 GND=39
+JUMP 0 1
+JUMP 2 35
+NC 21 43 22 3   # offset-null and NC pins, unused treble lug
+
+STAGE input input 입력
+R 1M 53 54 R1
+C 100n 51 50 C1
+R 330K 32 33 R2
+
+STAGE vref custom 4.5V 기준
+R 10K 61 60 R3
+R 10K 40 41 R4
+C 22uF 59 58 C2
+
+STAGE gain gain 논인버팅 게인단 (TL071)
+IC TL071 2=28 3=34 4=42 6=35 7=29 U1
+R 6.8K 9 10 R5
+C 47n 20 19 C3
+R 47K 25 26 R6
+POT A1M DRIVE 0 1 2
+C 100p 11 27 C4
+
+STAGE clip clipping LED 클리핑 + 톤
+C 10uF 47 48 C5
+R 8.2K 37 15 R7
+D LED-RED a=23 k=30 D1
+D LED-RED a=31 k=24 D2
+POT A50K TREBLE 5 4 4   # lug 3 unused: wiper tied to the free lug (variable resistor to the 47n)
+C 47n 13 12 C6
+
+STAGE output output 출력 (볼륨)
+POT A250K VOLUME 8 7 6
+R 1M 16 17 R8
+
+STAGE power power 전원 (47R 필터)
+D 1N400X k=38 a=39 D3
+R 47R 36 14 R9
+C 22uF 44 55 C7
+
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT U1A 410 610
+AT C5 370 400 h
+AT R7 470 400 h
+AT VOLUME 570 400 r180
+AT R1 120 470 v
+AT R2 200 470 v-
+AT R3 260 500 h-
+AT R4 200 570 v
+AT C2 260 570 v
+AT C3 140 570 v-
+AT DRIVE 360 480 r180
+AT C4 300 580 v
+AT D1 500 470 v
+AT D2 680 470 v-
+AT TREBLE 560 490 r180
+AT C6 650 560 v
+AT R8 750 500 v-
+AT D3 600 190 v-
+AT R9 290 190 v
+AT C7 350 570 v
+AT R5 220 520 h
+AT R6 340 520 h-
+AT RLOAD 620 480 v

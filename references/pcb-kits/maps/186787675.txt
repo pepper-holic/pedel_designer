@@ -1,0 +1,79 @@
+id pp-how-lost
+goods 186787675
+name How Lost
+motif Marshall Plexi 스타일 오버드라이브 (How Lost)
+type overdrive
+desc JRC4558D 2단 - A: 56n/10K 입력에 33K∥22p 인버팅(4.5V 기준 100K/100K+47uF, 47K로 in+), B: 1K+100n 입력, 피드백에 1N4148 대향 쌍∥680p, A500K DRIVE가 출력에서 4.7K로 in−에 돌아오며 와이퍼→100n→10K→B500K VOLUME(47K 풀다운). 토글의 1n/4.7n은 Normal에서 미사용
+image img_02.jpg
+# 4558 notch at the BOTTOM: pins 1-4 go up the right side (38, 33, 28, 21), 5-8 down the left
+# (20, 27, 32, 37). Stage A out (pin 1) -> 1K (44-43) -> 100n (31-19) -> stage B in- (pin 6);
+# both 43 and 31 are lone in the extraction (trace under the 1K body): JUMP 43 31.
+BOM 1M 100Kx2 47Kx2 33K 10Kx2 4.7K 1K 100nx2 56n 22p 680p 100uF 47uF 1N400X 1N4148x2 JRC4558 A500K B500K
+# parts list also has 1n and 4.7n (toggle caps, not in the circuit)
+io IN=42 OUT=26 V9=36 GND=59
+JUMP 43 31
+NC 3 4
+
+STAGE input input 입력
+R 1M 24 41 R1
+C 56n 25 34 C1
+R 10K 23 40 R2
+
+STAGE vref custom 4.5V 기준
+R 100K 57 58 R3
+R 100K 56 55 R4
+C 47uF 50 49 C2
+R 47K 51 52 R5
+
+STAGE stage1 gain 1단 (인버팅, 4558 A)
+IC JRC4558 1=38 2=33 3=28 4=21 5=20 6=27 7=32 8=37 U1
+R 33K 22 39 R6
+C 22p 46 45 C3
+
+STAGE stage2 clipping 2단 (다이오드 피드백 클리핑)
+R 1K 43 44 R7
+C 100n 19 31 C4
+D 1N4148 a=16 k=29 D1
+D 1N4148 a=30 k=17 D2
+C 680p 18 35 C5
+POT A500K DRIVE 0 1 2
+R 4.7K 8 9 R8
+
+STAGE output output 출력 (볼륨)
+C 100n 10 11 C6
+R 10K 12 13 R9
+R 47K 14 15 R10
+POT B500K VOLUME 7 6 5
+
+STAGE power power 전원
+D 1N400X k=53 a=54 D3
+C 100uF 48 47 C7
+
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h-
+AT R2 270 400 h
+AT U1A 560 500
+AT DRIVE 570 400 r0
+AT C6 670 400 h
+AT R9 770 400 h
+AT VOLUME 870 400 r180
+AT R1 120 470 v-
+AT R6 300 470 v
+AT C3 300 520 h
+AT R7 300 600 v-
+AT C4 350 580 h-
+AT D1 450 520 h
+AT D2 450 580 h-
+AT C5 450 640 h
+AT R8 500 700 h
+AT R10 800 470 v
+AT D3 900 190 v-
+AT C7 940 190 v
+AT R3 140 880 h
+AT R4 240 880 h
+AT C2 340 880 h
+AT R5 440 880 h
+AT RLOAD 870 480 v

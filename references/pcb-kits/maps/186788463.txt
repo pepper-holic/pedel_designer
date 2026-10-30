@@ -1,0 +1,65 @@
+id pp-air-fryer-tb
+goods 186788463
+name AIR FRYER TB
+motif Greg Fryer / Pete Cornish 트레블 부스터
+type buffer-boost
+desc BC239 공통 이미터 트레블 부스터 - 6.8n 입력 캡(120K 풀다운) → 100K/22K 바이어스 노드(10p 두 개 접지) → 1K → 베이스(1n B-E), 6.8K 컬렉터, 2.2K 이미터 + 47uF, 47n→560R 출력에 180K 풀다운과 4.7n 하이컷, 1N400X + 100uF
+image img_00.jpg
+# Transistor C (19), B (26, lone - its trace to the 22K/1K/1n node runs under the body), E (32).
+# Both 10p caps sit on the bias node to ground. LED and its resistor are off the audio path.
+BOM 180K 120K 100K 22K 6.8K 2.2K 1K 560R 47n 6.8n 4.7n 1n 10px2 100uF 47uF 1N400X BC239
+io IN=39 OUT=49 V9=5 GND=14
+JUMP 20 11   # diode cathode to the filtered supply
+JUMP 26 22   # base to the 22K/1K/1n node
+NC 0 1 2 25 27
+
+STAGE input input 입력
+R 120K 28 41 R1
+C 6.8n 33 40 C1
+
+STAGE bias custom 바이어스 노드
+R 100K 8 21 R2
+C 10p 7 17 C2
+C 10p 34 42 C3
+R 1K 29 43 R3
+
+STAGE boost gain 공통 이미터 부스트
+Q BC239 c=19 b=26 e=32 Q1
+R 22K 9 22 R4
+C 1n 35 44 C4
+R 6.8K 10 23 R5
+R 2.2K 30 45 R6
+C 47uF 37 46 C5
+
+STAGE output output 출력
+C 47n 13 18 C6
+R 560R 12 24 R7
+R 180K 31 47 R8
+C 4.7n 36 48 C7
+
+STAGE power power 전원
+D 1N400X a=6 k=20 D1
+C 100uF 11 16 C8
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h-
+AT R3 270 400 h
+AT Q1 370 400
+AT C6 480 400 h-
+AT R7 580 400 h
+AT R1 120 470 v-
+AT R2 200 470 v-
+AT C2 260 470 v-
+AT C3 440 470 v
+AT R4 300 470 v-
+AT C4 340 520 h
+AT R5 300 580 h
+AT R6 510 500 v-
+AT C5 570 500 v
+AT R8 610 470 v
+AT C7 670 470 v-
+AT D1 200 190 v
+AT C8 200 570 v
+AT RLOAD 710 480 v

@@ -1,0 +1,63 @@
+id pp-sola-face-bc108
+goods 186788496
+name SoLa Face BC108c
+motif Analog Man Sun Face (실리콘)
+type fuzz
+desc BC108C 2석 퍼즈페이스 - 입력에 50K INPUT CLEAN 트리머(직렬 감쇠)와 1uF, Q1 컬렉터→Q2 베이스 직결, Q2 이미터→Q1 베이스 100K 피드백, B1K FUZZ 팟+22uF, Q2 컬렉터 5K BIAS 트리머+470R, 10n 출력 A250K 볼륨, 47uF 필터
+image img_01.jpg
+# Angle pots by net: 15-16-17 is FUZZ (lug 15 on Q2 emitter/100K, wiper 16 to the 22uF+, 17 ground);
+# 0-1-2 is a second, unused fuzz footprint (the parts list ships one B5K; B1K not included);
+# 18-19-20 is the A250K volume (18 from the 10n, wiper 19 to OUT, 20 ground). Supply: 9V -> 1N400X
+# -> 47uF+, 470R (then 10n to the pot) and 33K (Q1 collector load); Q2 collector -> 1K -> BIAS trimmer.
+BOM 100K 33K 1K 470R 10n 47uF 22uF 1uF 1N400X 50K 5K BC108Cx2 A250K B5K
+io IN=23 OUT=24 V9=11 GND=42
+JUMP 0 12    # unused fuzz footprint lug to the trimmer (trace under the title; harmless)
+JUMP 27 14   # 1K top to the BIAS trimmer wiper (cyan trace under the trimmer body)
+NC 1 2 31
+
+STAGE input input 입력 (INPUT CLEAN 트리머)
+POT 50K CLEAN 36 30 30
+C 1uF 33 32 C1
+
+STAGE core fuzz 퍼즈 코어 (Q1·Q2 직결)
+Q BC108C e=26 b=34 c=37 Q1
+R 33K 28 41 R1
+Q BC108C e=29 b=35 c=38 Q2
+R 470R 22 7 R2
+C 10n 8 21 C2
+POT 5K BIAS 13 12 14
+R 1K 27 40 R3
+
+STAGE feedback custom 피드백 (Q2 이미터 → Q1 베이스)
+R 100K 25 39 R4
+
+STAGE fuzz custom 퍼즈 (Q2 이미터 바이패스)
+POT B5K FUZZ 17 16 15
+C 22uF 4 3 C3
+
+STAGE output output 출력 (볼륨)
+POT A250K VOL 20 19 18
+
+STAGE power power 전원
+D 1N400X a=10 k=9 D1
+C 47uF 6 5 C4
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT CLEAN 150 400 r180
+AT C1 240 400 h-
+AT R4 330 400 h-
+AT FUZZ 420 400 r180
+AT C3 420 500 v
+AT Q1 530 400
+AT Q2 620 400
+AT R1 140 880 h
+AT R2 240 880 h
+AT R3 340 880 h
+AT BIAS 440 880 h
+AT C2 540 880 h
+AT VOL 640 880 h
+AT D1 740 880 h
+AT C4 840 880 h
+AT RLOAD 140 480 v

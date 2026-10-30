@@ -1,0 +1,4 @@
+# RANGER GE (186788519): germanium PNP Rangemaster run on a negative rail from an ICL7660 charge
+# pump (positive ground). The app has no charge-pump model and no PNP-germanium-on-negative-rail
+# supply convention yet; recorded only. Board: 470K/68K/1K bias, 5K BIAS trimmer, 47uF, 4.7n/22n/6.8n
+# input caps on a toggle, 10n/100n output, A10K volume off board, 2.2M pulldown.

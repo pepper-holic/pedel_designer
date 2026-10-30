@@ -1,0 +1,85 @@
+id pp-tb-face
+goods 186788539
+name T&B FACE
+motif Arbiter Treble & Bass Face
+type fuzz
+desc BC109C 2석 - Q1 이미터 팔로워 버퍼(100K 베이스 바이어스, 10K 이미터) → 100n → 패시브 톤 스택(6.8K/22n/220n/680R 베이스 팟, 4.7n/100n 트레블 팟, 3.9K) → A25K 볼륨 와이퍼 → 2.2uF → Q2 공통 이미터(47K/4.7K 베이스 분압, 470R+22uF 이미터, 4.7K 컬렉터, 1n) → 100n 출력
+image img_01.jpg
+# Q1 (57 E, 58 B, 59 C on the supply) is an emitter follower; Q2 (31 E, 32 B, 33 C) the gain stage.
+# Angle pots: 6-7-8 VOL (6 ground, wiper 7 -> 2.2uF, 8 on the stack output), 24-25-26 TREBLE
+# (24 from the 4.7n, wiper 25 on the stack output, 26 -> 100n to ground), 21-22-23 BASS.
+BOM 2.2M 100K 47K 10K 6.8K 4.7Kx2 3.9K 680R 470R 220n 100nx5 22n 4.7n 1n 100uF 22uF 2.2uF 1N400X BC109Cx2 A25Kx3
+io IN=55 OUT=36 V9=54 GND=64
+
+STAGE input buffer 입력 버퍼 (Q1 팔로워)
+R 2.2M 37 38 R1
+C 100n 47 48 C1
+R 100K 49 50 R2
+Q BC109C e=57 b=58 c=59 Q1
+R 10K 28 27 R3
+
+STAGE tone tone 톤 스택 (베이스·트레블)
+C 100n 29 30 C2
+R 6.8K 11 12 R4
+C 22n 2 5 C3
+POT A25K BASS 21 22 23
+C 220n 3 4 C4
+R 680R 10 9 R5
+C 4.7n 13 14 C5
+POT A25K TREBLE 24 25 26
+C 100n 16 15 C6
+R 3.9K 0 1 R6
+
+STAGE level custom 볼륨 → 2단 결합
+POT A25K VOL 6 7 8
+C 2.2uF 20 18 C7
+
+STAGE gain gain Q2 공통 이미터
+Q BC109C e=31 b=32 c=33 Q2
+R 47K 42 61 R7
+R 4.7K 43 62 R8
+R 470R 41 60 R9
+C 22uF 19 17 C8
+R 4.7K 44 63 R10
+C 1n 45 39 C9
+
+STAGE output output 출력
+C 100n 34 35 C10
+
+STAGE power power 전원
+D 1N400X a=53 k=52 D1
+C 100uF 51 46 C11
+C 100n 56 40 C12
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT R10 380 400 h-
+AT C10 480 400 h
+AT R1 120 470 v
+AT R2 240 520 h
+AT R3 350 500 v
+AT C2 290 590 v
+AT R4 350 620 h-
+AT C3 440 620 h
+AT BASS 440 680 r0
+AT C4 470 520 h
+AT R5 530 750 v
+AT C5 290 690 v
+AT TREBLE 350 720 r0
+AT C6 440 790 v
+AT R6 410 580 h-
+AT VOL 560 840 r180
+AT C7 560 940 v-
+AT R7 420 640 h-
+AT R8 560 1040 v
+AT C9 410 470 v
+AT D1 290 190 v
+AT C11 530 470 v
+AT C12 590 470 v
+AT Q2 620 970
+AT R9 140 880 h
+AT C8 240 880 h
+AT RLOAD 660 480 v
