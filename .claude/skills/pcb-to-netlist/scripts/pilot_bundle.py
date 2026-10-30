@@ -50,6 +50,7 @@ def main() -> None:
         "",
         f"# {len(nets['pads'])} pads; multi-pad nets: " + " ".join(f"n{k}={v}" for k, v in multi),
         f"# lone non-ground pads (off-board points or broken traces): {lone}",
+        *[f"# hint: pad {k} likely joins {v} (copper tint under the silk - confirm on the render, then JUMP)" for k, v in nets.get("hints", {}).items()],
         f"# seller: {kit['about']}",
         "",
         "STAGE input input 입력",

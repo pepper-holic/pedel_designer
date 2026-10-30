@@ -21,7 +21,8 @@
    417
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787697",
@@ -45,7 +46,8 @@
    271
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787695",
@@ -71,7 +73,8 @@
    278
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788132",
@@ -95,7 +98,8 @@
    257
   ],
   "twoLayer": false,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787689",
@@ -119,7 +123,8 @@
    279
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788027",
@@ -145,7 +150,8 @@
    263
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788277",
@@ -169,7 +175,8 @@
    251
   ],
   "twoLayer": false,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787694",
@@ -195,7 +202,8 @@
    279
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787696",
@@ -221,7 +229,8 @@
    279
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787844",
@@ -247,7 +256,8 @@
    226
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788026",
@@ -273,7 +283,8 @@
    211
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787513",
@@ -299,7 +310,8 @@
    244
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788663",
@@ -325,7 +337,8 @@
    422
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787690",
@@ -351,7 +364,8 @@
    286
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787692",
@@ -377,7 +391,8 @@
    279
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788504",
@@ -401,7 +416,8 @@
    382
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788537",
@@ -427,7 +443,8 @@
    338
   ],
   "twoLayer": false,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788500",
@@ -453,7 +470,8 @@
    300
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788501",
@@ -505,7 +523,8 @@
    426
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186785995",
@@ -529,7 +548,8 @@
    585
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787688",
@@ -555,7 +575,8 @@
    556
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 6
  },
  {
   "goodsNo": "186787691",
@@ -581,7 +602,8 @@
    279
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788496",
@@ -607,7 +629,8 @@
    389
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788497",
@@ -659,7 +682,8 @@
    286
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788664",
@@ -685,7 +709,8 @@
    422
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788463",
@@ -711,7 +736,8 @@
    388
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788465",
@@ -737,7 +763,8 @@
    388
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787537",
@@ -763,7 +790,8 @@
    256
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788031",
@@ -789,7 +817,8 @@
    271
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186786574",
@@ -815,7 +844,8 @@
    294
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788471",
@@ -841,7 +871,8 @@
    369
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788542",
@@ -867,7 +898,8 @@
    370
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186786840",
@@ -893,7 +925,8 @@
    554
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788016",
@@ -919,7 +952,8 @@
    283
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787676",
@@ -945,7 +979,8 @@
    328
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788345",
@@ -971,7 +1006,8 @@
    376
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788513",
@@ -1023,7 +1059,8 @@
    301
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788519",
@@ -1049,7 +1086,8 @@
    497
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788521",
@@ -1075,7 +1113,8 @@
    510
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788529",
@@ -1153,7 +1192,8 @@
    328
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788657",
@@ -1179,7 +1219,8 @@
    531
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788116",
@@ -1205,7 +1246,8 @@
    295
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788666",
@@ -1231,7 +1273,8 @@
    750
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788064",
@@ -1257,7 +1300,8 @@
    436
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788346",
@@ -1283,7 +1327,8 @@
    376
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788512",
@@ -1335,7 +1380,8 @@
    516
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788539",
@@ -1361,7 +1407,8 @@
    427
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788638",
@@ -1387,7 +1434,8 @@
    809
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787650",
@@ -1414,7 +1462,8 @@
    436
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788047",
@@ -1440,7 +1489,8 @@
    574
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788517",
@@ -1466,7 +1516,8 @@
    510
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788534",
@@ -1518,7 +1569,8 @@
    465
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788334",
@@ -1544,7 +1596,8 @@
    401
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788515",
@@ -1570,7 +1623,8 @@
    376
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787633",
@@ -1596,7 +1650,8 @@
    365
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186787512",
@@ -1622,7 +1677,8 @@
    414
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788063",
@@ -1648,7 +1704,8 @@
    436
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788540",
@@ -1674,7 +1731,8 @@
    1030
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788014",
@@ -1700,7 +1758,8 @@
    436
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788307",
@@ -1726,7 +1785,8 @@
    477
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787673",
@@ -1752,7 +1812,8 @@
    395
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788357",
@@ -1778,7 +1839,8 @@
    509
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787674",
@@ -1804,7 +1866,8 @@
    350
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 6
  },
  {
   "goodsNo": "186788129",
@@ -1830,7 +1893,8 @@
    437
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788029",
@@ -1856,7 +1920,8 @@
    383
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788030",
@@ -1908,7 +1973,8 @@
    640
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788520",
@@ -1934,7 +2000,8 @@
    637
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788533",
@@ -1986,7 +2053,8 @@
    625
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186787631",
@@ -2012,7 +2080,8 @@
    398
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788066",
@@ -2038,7 +2107,8 @@
    391
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788506",
@@ -2064,7 +2134,8 @@
    472
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186787541",
@@ -2090,7 +2161,8 @@
    391
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787680",
@@ -2116,7 +2188,8 @@
    409
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186787681",
@@ -2142,7 +2215,8 @@
    409
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788108",
@@ -2168,7 +2242,8 @@
    439
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788251",
@@ -2220,7 +2295,8 @@
    533
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788082",
@@ -2246,7 +2322,8 @@
    399
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788310",
@@ -2272,7 +2349,8 @@
    361
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788522",
@@ -2298,7 +2376,8 @@
    637
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788593",
@@ -2324,7 +2403,8 @@
    662
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186787490",
@@ -2350,7 +2430,8 @@
    471
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788149",
@@ -2376,7 +2457,8 @@
    355
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788518",
@@ -2402,7 +2484,8 @@
    637
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787639",
@@ -2428,7 +2511,8 @@
    383
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788106",
@@ -2454,7 +2538,8 @@
    437
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788569",
@@ -2480,7 +2565,8 @@
    560
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788105",
@@ -2506,7 +2592,8 @@
    404
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788145",
@@ -2532,7 +2619,8 @@
    400
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788309",
@@ -2558,7 +2646,8 @@
    361
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787554",
@@ -2584,7 +2673,8 @@
    406
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788110",
@@ -2610,7 +2700,8 @@
    399
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788308",
@@ -2636,7 +2727,8 @@
    630
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787677",
@@ -2662,7 +2754,8 @@
    410
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787678",
@@ -2714,7 +2807,8 @@
    533
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 19
  },
  {
   "goodsNo": "186788511",
@@ -2740,7 +2834,8 @@
    472
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788589",
@@ -2766,7 +2861,8 @@
    640
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186787948",
@@ -2792,7 +2888,8 @@
    421
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788044",
@@ -2818,7 +2915,8 @@
    547
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788159",
@@ -2844,7 +2942,8 @@
    426
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787532",
@@ -2870,7 +2969,8 @@
    436
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788016",
@@ -2896,7 +2996,8 @@
    458
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788572",
@@ -2922,7 +3023,8 @@
    538
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186787473",
@@ -2948,7 +3050,8 @@
    503
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787536",
@@ -2974,7 +3077,8 @@
    443
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186787642",
@@ -3000,7 +3104,8 @@
    493
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787643",
@@ -3104,7 +3209,8 @@
    493
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787534",
@@ -3130,7 +3236,8 @@
    504
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 7
  },
  {
   "goodsNo": "186788510",
@@ -3156,7 +3263,8 @@
    472
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787637",
@@ -3182,7 +3290,8 @@
    413
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788151",
@@ -3208,7 +3317,8 @@
    448
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788316",
@@ -3234,7 +3344,8 @@
    630
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788573",
@@ -3260,7 +3371,8 @@
    647
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788104",
@@ -3286,7 +3398,8 @@
    469
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186786078",
@@ -3310,7 +3423,8 @@
    397
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787949",
@@ -3336,7 +3450,8 @@
    451
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788665",
@@ -3362,7 +3477,8 @@
    634
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787553",
@@ -3388,7 +3504,8 @@
    534
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788013",
@@ -3414,7 +3531,8 @@
    533
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788032",
@@ -3440,7 +3558,8 @@
    526
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788335",
@@ -3466,7 +3585,8 @@
    656
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787636",
@@ -3492,7 +3612,8 @@
    413
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788015",
@@ -3518,7 +3639,8 @@
    458
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788146",
@@ -3544,7 +3666,8 @@
    474
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 9
  },
  {
   "goodsNo": "186788150",
@@ -3570,7 +3693,8 @@
    606
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788138",
@@ -3596,7 +3720,8 @@
    525
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186787535",
@@ -3622,7 +3747,8 @@
    444
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788033",
@@ -3648,7 +3774,8 @@
    556
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788577",
@@ -3674,7 +3801,8 @@
    641
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787546",
@@ -3700,7 +3828,8 @@
    451
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 7
  },
  {
   "goodsNo": "186788551",
@@ -3726,7 +3855,8 @@
    560
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788552",
@@ -3752,7 +3882,8 @@
    560
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787543",
@@ -3778,7 +3909,8 @@
    503
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788161",
@@ -3804,7 +3936,8 @@
    622
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788570",
@@ -3830,7 +3963,8 @@
    625
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186787488",
@@ -3856,7 +3990,8 @@
    582
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787634",
@@ -3882,7 +4017,8 @@
    481
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 6
  },
  {
   "goodsNo": "186788550",
@@ -3908,7 +4044,8 @@
    560
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787556",
@@ -3934,7 +4071,8 @@
    474
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787649",
@@ -3960,7 +4098,8 @@
    421
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788011",
@@ -3986,7 +4125,8 @@
    533
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788337",
@@ -4012,7 +4152,8 @@
    554
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788115",
@@ -4038,7 +4179,8 @@
    420
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788144",
@@ -4064,7 +4206,8 @@
    474
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 13
  },
  {
   "goodsNo": "186788336",
@@ -4090,7 +4233,8 @@
    630
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788339",
@@ -4116,7 +4260,8 @@
    567
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787635",
@@ -4142,7 +4287,8 @@
    488
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186787483",
@@ -4168,7 +4314,8 @@
    436
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788576",
@@ -4194,7 +4341,8 @@
    641
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186787840",
@@ -4220,7 +4368,8 @@
    541
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788065",
@@ -4246,7 +4395,8 @@
    469
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788107",
@@ -4272,7 +4422,8 @@
    447
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788658",
@@ -4298,7 +4449,8 @@
    750
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787548",
@@ -4324,7 +4476,8 @@
    482
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787846",
@@ -4350,7 +4503,8 @@
    518
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 6
  },
  {
   "goodsNo": "186788074",
@@ -4374,7 +4528,8 @@
    478
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787538",
@@ -4400,7 +4555,8 @@
    503
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 5
  },
  {
   "goodsNo": "186788303",
@@ -4426,7 +4582,8 @@
    561
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788317",
@@ -4452,7 +4609,8 @@
    522
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787464",
@@ -4478,7 +4636,8 @@
    520
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788304",
@@ -4504,7 +4663,8 @@
    630
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788600",
@@ -4530,7 +4690,8 @@
    391
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788148",
@@ -4556,7 +4717,8 @@
    523
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 6
  },
  {
   "goodsNo": "186787552",
@@ -4582,7 +4744,8 @@
    511
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186787638",
@@ -4608,7 +4771,8 @@
    511
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 6
  },
  {
   "goodsNo": "186788153",
@@ -4634,7 +4798,8 @@
    470
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788585",
@@ -4660,7 +4825,8 @@
    641
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788468",
@@ -4686,7 +4852,8 @@
    636
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787489",
@@ -4712,7 +4879,8 @@
    496
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186787529",
@@ -4738,7 +4906,8 @@
    631
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788143",
@@ -4764,7 +4933,8 @@
    577
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 20
  },
  {
   "goodsNo": "186787533",
@@ -4790,7 +4960,8 @@
    608
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787487",
@@ -4816,7 +4987,8 @@
    621
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788180",
@@ -4842,7 +5014,8 @@
    588
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788181",
@@ -4868,7 +5041,8 @@
    588
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788182",
@@ -4894,7 +5068,8 @@
    588
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788178",
@@ -4920,7 +5095,8 @@
    588
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788179",
@@ -4946,7 +5122,8 @@
    588
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788484",
@@ -4972,7 +5149,8 @@
    809
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788549",
@@ -4998,7 +5176,8 @@
    560
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788660",
@@ -5024,7 +5203,8 @@
    750
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788475",
@@ -5050,7 +5230,8 @@
    802
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788661",
@@ -5076,7 +5257,8 @@
    750
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787456",
@@ -5102,7 +5284,8 @@
    500
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788052",
@@ -5128,7 +5311,8 @@
    451
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787640",
@@ -5154,7 +5338,8 @@
    639
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788036",
@@ -5180,7 +5365,8 @@
    691
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788038",
@@ -5206,7 +5392,8 @@
    691
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788017",
@@ -5232,7 +5419,8 @@
    601
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788139",
@@ -5258,7 +5446,8 @@
    562
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 7
  },
  {
   "goodsNo": "186788173",
@@ -5284,7 +5473,8 @@
    633
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788586",
@@ -5310,7 +5500,8 @@
    749
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788587",
@@ -5336,7 +5527,8 @@
    749
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186787486",
@@ -5362,7 +5554,8 @@
    621
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 6
  },
  {
   "goodsNo": "186788053",
@@ -5388,7 +5581,8 @@
    451
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788588",
@@ -5414,7 +5608,8 @@
    536
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 5
  },
  {
   "goodsNo": "186787555",
@@ -5440,7 +5635,8 @@
    624
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788141",
@@ -5466,7 +5662,8 @@
    726
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 7
  },
  {
   "goodsNo": "186788142",
@@ -5492,7 +5689,8 @@
    726
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186787476",
@@ -5518,7 +5716,8 @@
    723
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788599",
@@ -5544,7 +5743,8 @@
    996
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788025",
@@ -5570,7 +5770,8 @@
    721
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 5
  },
  {
   "goodsNo": "186787458",
@@ -5596,7 +5797,8 @@
    693
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788140",
@@ -5622,7 +5824,8 @@
    726
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 5
  },
  {
   "goodsNo": "186788601",
@@ -5648,7 +5851,8 @@
    703
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788662",
@@ -5674,7 +5878,8 @@
    1040
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788152",
@@ -5700,7 +5905,8 @@
    432
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788473",
@@ -5726,7 +5932,8 @@
    809
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788598",
@@ -5752,7 +5959,8 @@
    383
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787468",
@@ -5778,7 +5986,8 @@
    708
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 7
  },
  {
   "goodsNo": "186788553",
@@ -5804,7 +6013,8 @@
    639
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788200",
@@ -5830,7 +6040,8 @@
    589
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788441",
@@ -5856,7 +6067,8 @@
    767
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186787467",
@@ -5882,7 +6094,8 @@
    250
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787467",
@@ -5908,7 +6121,8 @@
    250
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787467",
@@ -5934,7 +6148,8 @@
    250
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787467",
@@ -5960,7 +6175,8 @@
    250
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787467",
@@ -5986,7 +6202,8 @@
    250
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186787467",
@@ -6012,7 +6229,8 @@
    250
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787693",
@@ -6038,7 +6256,8 @@
    278
   ],
   "twoLayer": true,
-  "tier": "A"
+  "tier": "A",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186786839",
@@ -6064,7 +6283,8 @@
    553
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787647",
@@ -6090,7 +6310,8 @@
    353
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186787969",
@@ -6117,7 +6338,8 @@
    263
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788279",
@@ -6194,7 +6416,8 @@
    323
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787560",
@@ -6220,7 +6443,8 @@
    353
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788655",
@@ -6246,7 +6470,8 @@
    437
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788338",
@@ -6272,7 +6497,8 @@
    490
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787954",
@@ -6298,7 +6524,8 @@
    481
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788596",
@@ -6324,7 +6551,8 @@
    996
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787465",
@@ -6350,7 +6578,8 @@
    412
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186788446",
@@ -6376,7 +6605,8 @@
    548
   ],
   "twoLayer": false,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788265",
@@ -6428,7 +6658,8 @@
    248
   ],
   "twoLayer": false,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788024",
@@ -6454,7 +6685,8 @@
    541
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787641",
@@ -6480,7 +6712,8 @@
    572
   ],
   "twoLayer": false,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787679",
@@ -6506,7 +6739,8 @@
    500
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788509",
@@ -6532,7 +6766,8 @@
    630
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186787558",
@@ -6558,7 +6793,8 @@
    534
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788575",
@@ -6584,7 +6820,8 @@
    772
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787956",
@@ -6610,7 +6847,8 @@
    578
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788574",
@@ -6636,7 +6874,8 @@
    771
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788109",
@@ -6662,7 +6901,8 @@
    472
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788594",
@@ -6688,7 +6928,8 @@
    996
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788156",
@@ -6714,7 +6955,8 @@
    508
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788595",
@@ -6740,7 +6982,8 @@
    996
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788445",
@@ -6766,7 +7009,8 @@
    636
   ],
   "twoLayer": true,
-  "tier": "B"
+  "tier": "B",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788305",
@@ -6792,7 +7036,8 @@
    631
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787955",
@@ -6818,7 +7063,8 @@
    586
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 3
  },
  {
   "goodsNo": "186787484",
@@ -6844,7 +7090,8 @@
    662
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788477",
@@ -6870,7 +7117,8 @@
    732
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788111",
@@ -6896,7 +7144,8 @@
    564
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186787491",
@@ -6922,7 +7171,8 @@
    587
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 2
  },
  {
   "goodsNo": "186788054",
@@ -6948,7 +7198,8 @@
    403
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 4
  },
  {
   "goodsNo": "186788591",
@@ -6974,7 +7225,8 @@
    750
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788592",
@@ -7026,7 +7278,8 @@
    633
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788112",
@@ -7052,7 +7305,8 @@
    643
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788590",
@@ -7078,7 +7332,8 @@
    931
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788158",
@@ -7104,7 +7359,8 @@
    644
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788406",
@@ -7130,7 +7386,8 @@
    808
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 1
  },
  {
   "goodsNo": "186788597",
@@ -7157,7 +7414,8 @@
    995
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788113",
@@ -7183,7 +7441,8 @@
    726
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186788584",
@@ -7209,7 +7468,8 @@
    538
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 0
  },
  {
   "goodsNo": "186787478",
@@ -7235,6 +7495,7 @@
    1100
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "C",
+  "hintedPads": 6
  }
 ]

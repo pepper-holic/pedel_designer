@@ -9,10 +9,11 @@ image img_01.jpg
 # BS170 pads 67(D) 74(G) 81(S) sit on the left ends of the 10M / 10M / 1K rows (68, 75, 82). Hidden traces: 5.1K end 60 ->
 # the 470R/100uF rail (47); 10M end 69 -> gate (74); 1.5uF pad 73 -> source (81); 10uF pad 56 -> POWER lug (53). The boost
 # (B_IN 89 -> BS170 -> POWER level pot -> B_OUT 88) is a separate section; drawn boost-first with B_OUT wired to the OD
-# input ring 62 off board (JUMP 88 62), the 15K loads the POWER pot to ground. OUT is the ring pad 104
-# behind the 5.1K. Feedback diodes: 20(a)-21(k) + 41(a)-40(k) and 29(a)-28(k) + 35(a)-36(k).
+# input ring 62 off board (JUMP 88 62), the 15K loads the POWER pot to ground. OUT is the ring pad 104, joined
+# to the LEVEL wiper under the 5.1K body (tint hint); the 5.1K (105-106) is the output load to ground. Feedback diodes: 20(a)-21(k) + 41(a)-40(k) and 29(a)-28(k) + 35(a)-36(k).
 BOM 10Mx2 1M 470Kx3 15K 5.1Kx2 4.7K 3.3K 1K 820R 470R 330R 10R 470n 220n 150n 100nx2 47n 220p 47p 100uF 47uFx2 10uF 4.7uF 1.5uF 1N4007x5 ZENER JRC4558D BS170 A500K A100K C50K C25K B10K
 io IN=89 OUT=104 V9=3 GND=16
+JUMP 104 105
 JUMP 88 62
 JUMP 60 47
 JUMP 69 74
@@ -62,7 +63,7 @@ C 47n 17 16 C11
 
 STAGE output output 출력 (레벨)
 POT A100K LEVEL 95 94 93
-R 5.1K 105 104 R12
+R 5.1K 105 106 R12
 
 STAGE power power 전원
 R 10R 9 10 R13

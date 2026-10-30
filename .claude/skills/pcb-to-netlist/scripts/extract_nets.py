@@ -34,6 +34,11 @@ NEAR = 3
 # them also joined unrelated traces along component outlines on the reference boards, and a wrong
 # join hides in the netlist while a lone pad is flagged for a human to look at.
 SILK_BRIDGE = 4
+# Dark pixels that keep a copper tint (silk printed over a trace) are that trace - but only in the
+# second, "hint" pass: on the reference boards the tint also runs along the glyphs over a part body
+# where two traces pass 1px apart, so taken as fact it shorts feedback caps and pots. The official
+# nets ignore it; the hint pass reports which net each lone pad would join, for the reader to confirm.
+HINTS = True
 SHORT_SILK = 4
 PAD_MERGE = 0.8
 # A part body is a white area ringed by a silk outline, and on many boards it is painted over the
@@ -46,7 +51,7 @@ BODY_MIN_SILK_EDGE = 0.55
 STUB_MAX_CONTACT = 14
 
 
-def classify(r: int, g: int, b: int) -> str:
+def classify(r: int, g: int, b: int, tinted: bool = False) -> str:
     # Both pad shades are magenta; which of them means "ground pour" is decided per board later
     # (split_ground_pads), because small renders draw every pad in the duller shade.
     if r > 170 and b > 170 and g < 96 and abs(r - b) < 50:
@@ -58,6 +63,14 @@ def classify(r: int, g: int, b: int) -> str:
     if b > 170 and g > 150 and r < 140:
         return "bot"
     hi, lo = max(r, g, b), min(r, g, b)
+    # The silkscreen is printed semi-transparent: a grey letter over top copper comes out dark olive
+    # (r ~ g, b lower by 20+), over bottom copper dark cyan (b above r by 20+), over bare board plain
+    # grey. The tint only exists where copper actually is, so it is that layer's copper - this is what
+    # carries a trace through a board title or a value label without joining its neighbours.
+    if tinted and hi < 200 and hi >= 50 and abs(r - g) < 25 and r - b >= 20:
+        return "top"
+    if tinted and hi < 200 and hi >= 50 and b - r >= 20 and g >= r:
+        return "bot"
     # grey/black silkscreen, and silkscreen printed over yellow copper (dark olive: r ~ g > b)
     if hi < 200 and (hi - lo < 40 or (abs(r - g) < 20 and b < r)):
         return "silk"
@@ -262,15 +275,19 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
     im = Image.open(src).convert("RGB")
     w, h = im.size
     px = im.load()
-    mask: dict[tuple[int, int], str] = {}
-    for y in range(h):
-        for x in range(w):
-            k = classify(*px[x, y])
-            if k:
-                mask[(x, y)] = k
 
-    for layer in ("top", "bot"):
-        bridge(mask, layer, w, h)
+    def build_mask(tinted: bool) -> dict[tuple[int, int], str]:
+        m: dict[tuple[int, int], str] = {}
+        for y in range(h):
+            for x in range(w):
+                k = classify(*px[x, y], tinted)
+                if k:
+                    m[(x, y)] = k
+        for layer in ("top", "bot"):
+            bridge(m, layer, w, h)
+        return m
+
+    mask = build_mask(False)
 
     pads = []
     for comp in components(mask, {"pad", "gpad"}):
@@ -285,61 +302,74 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
     for i, p in enumerate(pads):
         p["id"] = i
 
-    parent = list(range(len(pads)))
+    def connect(cmask: dict[tuple[int, int], str]) -> tuple[list[int], int]:
+        """Union pads that one layer's copper joins; returns the union-find parent list and tunnel count."""
+        mask = cmask
+        parent = list(range(len(pads)))
+
+        def find(a: int) -> int:
+            while parent[a] != a:
+                parent[a] = parent[parent[a]]
+                a = parent[a]
+            return a
+
+        def union(a: int, b: int) -> None:
+            parent[find(a)] = find(b)
+
+        pad_at: dict[tuple[int, int], int] = {}
+        for p in pads:
+            # Reach grows with the pad: on blurry large renders the ring fades into the trace over several
+            # pixels, on crisp small ones a short reach keeps neighbouring pads apart.
+            near = max(NEAR, int(p["r"] * 0.3))
+            for (x, y) in p["pixels"]:
+                for dx in range(-near, near + 1):
+                    for dy in range(-near, near + 1):
+                        pad_at.setdefault((x + dx, y + dy), p["id"])
+            # Many renders draw the trace right through the hole: everything inside the ring is the pad's.
+            r = int(p["r"])
+            for dx in range(-r, r + 1):
+                for dy in range(-r, r + 1):
+                    if dx * dx + dy * dy <= r * r:
+                        pad_at.setdefault((int(p["x"]) + dx, int(p["y"]) + dy), p["id"])
+        pad_zone = {(x + dx, y + dy) for p in pads for (x, y) in p["pixels"] for dx in range(-8, 9, 2) for dy in range(-8, 9, 2)}
+        tunnels = 0
+        for layer in ("top", "bot"):
+            comps = components(mask, {layer})
+            joined = list(range(len(comps)))
+
+            def root(i: int) -> int:
+                while joined[i] != i:
+                    i = joined[i]
+                return i
+
+            # body_tunnels() is kept for reference but not used: on Green Giant it joined a collector and
+            # a base trace that both run along the 2.2M body. A wrong join hides in the netlist; a lone
+            # pad is flagged for a reader - so traces vanishing under bodies are left to the reader (JUMP).
+            for a, b in ([] if not BODY_TUNNELS else body_tunnels(mask, comps, pad_zone, [(p["x"], p["y"]) for p in pads], w, h)):
+                if root(a) != root(b):
+                    joined[root(a)] = root(b)
+                    tunnels += 1
+            pads_of: dict[int, set[int]] = defaultdict(set)
+            for i, comp in enumerate(comps):
+                pads_of[root(i)].update(pad_at[q] for q in comp if q in pad_at)
+            for touched in pads_of.values():
+                touched_list = sorted(touched)
+                for other in touched_list[1:]:
+                    union(touched_list[0], other)
+        grounds = [p["id"] for p in pads if p["ground"]]
+        for g in grounds[1:]:
+            union(grounds[0], g)
+
+        return parent, tunnels
+
+    parent, tunnels = connect(mask)
+    grounds = [p["id"] for p in pads if p["ground"]]
 
     def find(a: int) -> int:
         while parent[a] != a:
             parent[a] = parent[parent[a]]
             a = parent[a]
         return a
-
-    def union(a: int, b: int) -> None:
-        parent[find(a)] = find(b)
-
-    pad_at: dict[tuple[int, int], int] = {}
-    for p in pads:
-        # Reach grows with the pad: on blurry large renders the ring fades into the trace over several
-        # pixels, on crisp small ones a short reach keeps neighbouring pads apart.
-        near = max(NEAR, int(p["r"] * 0.3))
-        for (x, y) in p["pixels"]:
-            for dx in range(-near, near + 1):
-                for dy in range(-near, near + 1):
-                    pad_at.setdefault((x + dx, y + dy), p["id"])
-        # Many renders draw the trace right through the hole: everything inside the ring is the pad's.
-        r = int(p["r"])
-        for dx in range(-r, r + 1):
-            for dy in range(-r, r + 1):
-                if dx * dx + dy * dy <= r * r:
-                    pad_at.setdefault((int(p["x"]) + dx, int(p["y"]) + dy), p["id"])
-    pad_zone = {(x + dx, y + dy) for p in pads for (x, y) in p["pixels"] for dx in range(-8, 9, 2) for dy in range(-8, 9, 2)}
-    tunnels = 0
-    for layer in ("top", "bot"):
-        comps = components(mask, {layer})
-        joined = list(range(len(comps)))
-
-        def root(i: int) -> int:
-            while joined[i] != i:
-                i = joined[i]
-            return i
-
-        # body_tunnels() is kept for reference but not used: on Green Giant it joined a collector and
-        # a base trace that both run along the 2.2M body. A wrong join hides in the netlist; a lone
-        # pad is flagged for a reader - so traces vanishing under bodies are left to the reader (JUMP).
-        for a, b in ([] if not BODY_TUNNELS else body_tunnels(mask, comps, pad_zone, [(p["x"], p["y"]) for p in pads], w, h)):
-            if root(a) != root(b):
-                joined[root(a)] = root(b)
-                tunnels += 1
-        pads_of: dict[int, set[int]] = defaultdict(set)
-        for i, comp in enumerate(comps):
-            pads_of[root(i)].update(pad_at[q] for q in comp if q in pad_at)
-        for touched in pads_of.values():
-            touched_list = sorted(touched)
-            for other in touched_list[1:]:
-                union(touched_list[0], other)
-    grounds = [p["id"] for p in pads if p["ground"]]
-    for g in grounds[1:]:
-        union(grounds[0], g)
-
     roots: dict[int, int] = {}
     nets: dict[int, list[int]] = defaultdict(list)
     for p in pads:
@@ -347,11 +377,27 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
         p["net"] = net
         nets[net].append(p["id"])
 
+    hints: dict[str, list[int]] = {}
+    if HINTS:
+        tparent, _ = connect(build_mask(True))
+
+        def tfind(a: int) -> int:
+            while tparent[a] != a:
+                a = tparent[a]
+            return a
+
+        for p in pads:
+            if p["ground"] or len(nets[p["net"]]) > 1:
+                continue
+            mates = sorted(q["id"] for q in pads if q["id"] != p["id"] and tfind(q["id"]) == tfind(p["id"]))
+            if mates:
+                hints[str(p["id"])] = mates
     out = {
         "image": str(src),
         "size": [w, h],
         "pads": [{k: p[k] for k in ("id", "x", "y", "r", "ground", "net")} for p in pads],
         "nets": {str(k): v for k, v in sorted(nets.items())},
+        **({"hints": hints} if hints else {}),
     }
     Path(f"{prefix}.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
 
@@ -374,6 +420,7 @@ def run(src: Path, prefix: str, scale: int = 3) -> dict:
         "nets": len(nets),
         "multiPadNets": sum(1 for v in nets.values() if len(v) > 1),
         "loneNonGroundPads": sum(1 for v in nets.values() if len(v) == 1 and not pads[v[0]]["ground"]),
+        "hintedPads": len(hints),
         "bodyTunnels": tunnels,
         "bottomLayerPixels": sum(1 for k in mask.values() if k == "bot"),
         "topLayerPixels": sum(1 for k in mask.values() if k == "top"),
