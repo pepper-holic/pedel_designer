@@ -1,0 +1,78 @@
+id pp-ex-booster
+goods 186786840
+name EX 부스터
+motif Xotic EP Booster
+type buffer-boost
+desc 2N5457 JFET 공통 소스 증폭단의 소스 바이패스(10uF+C10K 가변저항)로 부스트량을 정하고, 15K/3.3n 저역통과(BRIGHT 딥스위치가 우회) 뒤 2N5088 이미터 폴로어로 내보낸다. BST 딥스위치는 출력 직렬 18K를 단락해 +3dB.
+image img_01.jpg
+BOM 1Mx3 47Kx1 33Kx1 18Kx1 15Kx1 10Kx3 8.2Kx1 4.7Kx1 1Kx1 100Rx1 47nx1 3.3nx1 47uFx1 10uFx3 2N5457x1 2N5088x1 C10Kx1
+io IN=54 OUT=26 V9=27 GND=16,19,21,25,32,41,46,50,51,52,4,38,39
+# 추출기가 놓친 트레이스: 2N5088 베이스(14) <- 15K/3.3n/1M 접점(5), 10uF 음극(44) <- 팟 와이퍼(22), 와이퍼(22)-러그(23) 실크 밑 연결
+JUMP 14 5
+JUMP 44 22
+JUMP 22 23
+# 딥스위치 둘 다 ON 기준 (BRIGHT: 15K 단락, BST: 18K 단락)
+JUMP 47 48
+JUMP 28 29
+# 팟 고정 구멍
+NC 9 10
+
+STAGE input input 입력
+STAGE gain gain JFET 부스트
+STAGE tone tone 브라이트
+STAGE buffer buffer 출력 버퍼
+STAGE output output 출력
+STAGE power power 전원
+
+R 1M 53 52 R1
+C 47n 55 56 C1
+R 33K 57 58 R2
+R 1M 49 50 R3
+Q 2N5457 g=58 d=37 s=40 Q1
+R 8.2K 36 37 R4
+R 4.7K 40 41 R5
+C 10uF 45 44 C2
+# 기판 뒷면 실장: 러그 순서가 뒤집혀 23이 1번 러그, 와이퍼(22)와 묶여 접지(21)까지의 가변저항
+POT C10K BOOST 23 22 21
+C 10uF 43 42 C3
+R 1K 31 30 R6
+R 15K 34 35 R7
+C 3.3n 5 4 C4
+R 10K 0 1 R8
+R 10K 12 25 R9
+R 1M 11 24 R10
+Q 2N5088 c=13 b=14 e=15 Q2
+R 10K 6 16 R11
+C 10uF 2 3 C5
+R 100R 7 17 R12
+R 18K 8 18 R13
+R 47K 33 32 R14
+C 47uF 20 19 C6
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R2 270 400 h
+AT Q1 370 400
+AT C3 480 400 h
+AT R6 580 400 h
+AT Q2 680 400
+AT C5 790 400 h
+AT R12 890 400 h
+AT R1 120 470 v
+AT R3 300 470 v
+AT R4 390 190 v
+AT R5 390 500 v
+AT C2 450 500 v
+AT BOOST 510 530 r0
+AT R7 610 520 h
+AT C4 790 470 v
+AT R10 670 530 v-
+AT R11 880 500 v
+AT R13 920 520 h
+AT R14 980 470 v
+AT C6 540 190 v
+AT R8 670 190 v-
+AT R9 670 630 v
+AT RLOAD 1020 480 v

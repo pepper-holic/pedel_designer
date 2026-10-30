@@ -1,0 +1,3 @@
+# Jubilee (186787537): Marshall Silver Jubilee style drive built around a JRC386D (LM386) gain
+# stage. The app has no LM386 model; recorded only. Board: 4.7K x3 / 1.8K / 330Ω / 47Ω, 100n-47n-22n
+# box caps, 390pF, 47uF x3, 1N400X supply diode, DRIVE A250K, TONE B50K, VOLUME A100K.

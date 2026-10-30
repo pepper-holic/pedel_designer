@@ -1,0 +1,77 @@
+id pp-2band-bass-pre
+goods 186788116
+name 2BAND BASS PRE
+motif Pensa-Suhr 2-band bass preamp
+type eq
+desc LF442(TL072) 한쪽은 입력 버퍼, 다른 쪽은 반전 EQ 증폭. BASS·TREBLE 팟의 양 끝을 버퍼 출력과 EQ 출력에 저항으로 걸고 와이퍼를 11K·4.7n으로 반전 입력에 넣는 부스트형 2밴드. 출력은 1K·47uF·2K.
+image img_03.jpg
+BOM 1Mx2 100Kx2 49.9Kx2 35.7Kx2 11Kx3 2Kx2 1Kx1 47nx2 22nx1 4.7nx1 100pFx1 47uFx1 4.7uFx1 1N400Xx1 LF442x1 B100Kx1 B50Kx1
+io IN=52 OUT=57 V9=0 GND=3,10
+# 추출기가 놓친 트레이스
+JUMP 27 48
+JUMP 28 43
+JUMP 13 22
+JUMP 12 39
+JUMP 31 11
+
+STAGE input input 입력
+STAGE buffer buffer 입력 버퍼
+STAGE eq tone 2밴드 EQ
+STAGE output output 출력
+STAGE power power 전원·바이어스
+
+C 47n 58 40 C1
+R 1M 59 60 R1
+R 2K 53 54 R2
+R 1M 27 43 R3
+IC LF442 1=46 2=47 3=48 4=49 5=33 6=32 7=31 8=30
+R 11K 41 42 R4
+R 11K 5 6 R5
+C 22n 19 20 C2
+R 11K 13 14 R6
+R 49.9K 21 22 R7
+POT B100K BASS 34 35 36
+R 35.7K 55 56 R8
+C 4.7n 17 18 C3
+R 35.7K 11 12 R9
+POT B50K TREBLE 37 38 39
+C 100pF 23 24 C4
+R 1K 1 2 R10
+C 47uF 7 8 C5
+R 49.9K 15 16 R11
+R 2K 25 26 R12
+R 100K 29 45 R13
+R 100K 28 44 R14
+C 4.7uF 50 51 C6
+D 1N400X a=3 k=4 D1
+C 47n 9 10 C7
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R2 270 400 h
+AT U1A 770 620
+AT R10 570 400 h
+AT C5 670 400 h
+AT R12 770 400 h
+AT R1 120 470 v
+AT R3 300 470 v
+AT R5 400 490 v-
+AT R6 500 490 v-
+AT R7 560 520 h-
+AT BASS 650 520 r180
+AT C3 460 490 v
+AT R9 500 580 v
+AT TREBLE 560 610 r180
+AT C4 450 520 h-
+AT R11 760 470 v
+AT R13 300 190 v
+AT R14 300 570 v
+AT C6 360 570 v
+AT R4 710 590 v
+AT C2 640 520 h-
+AT R8 650 580 h-
+AT D1 140 880 h
+AT C7 240 880 h
+AT RLOAD 800 480 v

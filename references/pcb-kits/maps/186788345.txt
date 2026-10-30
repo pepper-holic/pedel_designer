@@ -1,0 +1,77 @@
+id pp-axis-fuzz
+goods 186788345
+name AXIS FUZZ
+motif Roger Mayer Axis Fuzz
+type fuzz
+desc PNP(2N3906)+NPN(2N3904) 상보 쌍으로 짠 퍼즈 페이스 변형. Q1 베이스는 180K/22uF로 거른 전원에서 820K·680K로 바이어스하고 Q2 컬렉터에서 47K로 Q1 이미터에 되돌린다. DRIVE는 이미터 바이패스 가변저항, 출력은 22K/10K 분압 후 2.2uF.
+image img_01.jpg
+BOM 2.2Mx1 820Kx1 680Kx1 180Kx1 100Kx1 47Kx1 39Kx1 22Kx1 10Kx1 220Rx2 100nx2 1nx1 470pFx1 100uFx1 22uFx3 2.2uFx1 1N400Xx1 2N3906x1 2N3904x1 B50Kx1 B2Kx1
+io IN=39 OUT=19 V9=9 GND=57,58,59,60,5,6,13,14,20,23,38,47,48,49,51
+# 판매자 수정: DRIVE 팟 1번 다리(2, 접지 패드)는 잘라내고 3번 다리 패드(0)를 아래 680K 접지 패드(6)에 연결
+JUMP 0 6
+NC 2
+# 추출기가 놓친 트레이스: Q2 베이스(36) <- Q1 컬렉터 넷(42)
+JUMP 36 42
+
+STAGE input input 입력
+STAGE q1 fuzz Q1 (PNP)
+STAGE q2 fuzz Q2 (NPN)
+STAGE output output 출력
+STAGE power power 전원
+
+R 2.2M 40 49 R1
+C 100n 50 45 C1
+C 470pF 46 51 C2
+R 820K 41 52 R2
+R 180K 43 55 R3
+C 22uF 56 48 C3
+R 680K 21 6 R4
+Q 2N3906 e=29 b=30 c=31 Q1
+R 220R 22 7 R5
+R 47K 33 34 R6
+C 22uF 16 8 C4
+# 1번 다리를 잘라 와이퍼(1)~3번(0=접지) 구간만 쓰는 가변저항
+POT B2K DRIVE 1 1 0
+C 100n 17 23 C5
+R 220R 42 53 R7
+C 1n 54 47 C6
+R 100K 27 13 R8
+Q 2N3904 c=35 b=36 e=37 Q2
+R 39K 28 14 R9
+C 22uF 32 20 C7
+R 22K 12 26 R10
+R 10K 11 25 R11
+C 2.2uF 18 15 C8
+POT B50K VOLUME 5 4 3
+D 1N400X a=10 k=24 D1
+C 100uF 44 38 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT Q2 380 400
+AT R10 490 400 h-
+AT C8 590 400 h
+AT VOLUME 690 400 r180
+AT R1 120 470 v
+AT C2 200 470 v
+AT R2 260 530 v
+AT R3 320 560 h-
+AT C3 260 630 v
+AT R4 440 470 v
+AT R5 320 500 v
+AT R6 360 520 h
+AT C4 320 630 v
+AT DRIVE 380 660 r0
+AT C5 320 730 v
+AT R7 290 320 v
+AT C6 530 470 v
+AT R8 590 470 v
+AT R9 640 500 v
+AT C7 700 500 v
+AT R11 440 580 h-
+AT D1 350 190 v
+AT C9 530 630 v
+AT RLOAD 740 480 v

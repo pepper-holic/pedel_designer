@@ -1,0 +1,68 @@
+id pp-fuzz-fellow
+goods 186788657
+name FUZZ FELLOW
+motif Chase Tone Fuzz Fellow (Blue)
+type fuzz
+desc BC108C 두 개의 퍼즈 페이스를 확장한 실리콘 퍼즈. 입력에 330R+FEEL 가변저항, Q2 컬렉터 부하를 MIDS·바이어스 트리머·BASS·1.6K로 나누고 그 중간 마디에서 10n으로 출력을 뽑는다. FUZZ는 이미터 바이패스(22uF+22R).
+image img_01.jpg
+BOM 1Mx1 120Kx1 39Kx1 1.6Kx1 330Rx1 22Rx1 10nx1 27pFx1 100uFx1 22uFx1 2.2uFx1 1N400Xx1 BC108Cx2 A500Kx1 B1Kx2 B50Kx2 B20Kx1
+io IN=8 OUT=22 V9=4 GND=7
+# 추출기가 놓친 트레이스: 9V(2) -> 39K 하단/1.6K 상단(20) (다이오드 실크 밑 대각선)
+JUMP 2 20
+# 미니 딥팟 MIDS의 와이퍼(45)는 실크 밑에서 트리머 쪽 러그(44)에 묶인 것으로 본다
+JUMP 45 44
+# 딥팟 미사용 러그, 하단 6개 배선 패드, 육각 지지대
+NC 39 50 53 54 55 56 57 58 61 62
+
+STAGE input input 입력
+STAGE q1 fuzz Q1
+STAGE q2 fuzz Q2·부하 분할
+STAGE output output 출력
+STAGE power power 전원
+
+R 1M 9 10 R1
+R 330R 18 19 R2
+# 딥팟 값 배정(FEEL 50K / MIDS 1K / BASS 20K)은 기판에서 읽을 수 없어 전기적으로 말이 되는 쪽으로 추정
+POT B50K FEEL 41 40 40
+C 2.2uF 43 42 C1
+R 120K 6 5 R3
+Q BC108C e=11 b=12 c=13 Q1
+R 39K 1 20 R4
+C 27pF 0 17 C2
+Q BC108C e=14 b=15 c=16 Q2
+POT B1K FUZZ 30 29 28
+C 22uF 38 37 C3
+R 22R 23 24 R5
+POT B1K MIDS 46 45 44
+POT B50K TRIM 31 25 32
+POT B20K BASS 48 49 49
+R 1.6K 27 47 R6
+C 10n 26 36 C4
+POT A500K VOLUME 35 34 33
+D 1N400X a=21 k=2 D1
+C 100uF 3 7 C5
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT R2 60 530 v
+AT FEEL 120 560 r0
+AT C1 210 560 h-
+AT R3 300 560 h
+AT FUZZ 390 560 r180
+AT C3 390 660 v
+AT R5 390 760 v
+AT D1 420 190 v-
+AT C5 460 190 v
+AT Q1 500 560
+AT Q2 590 560
+AT R4 140 880 h
+AT C2 240 880 h
+AT MIDS 340 880 h
+AT TRIM 440 880 h
+AT BASS 540 880 h
+AT R6 640 880 h
+AT C4 740 880 h
+AT VOLUME 840 880 h
+AT RLOAD 190 480 v

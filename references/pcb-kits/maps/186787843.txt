@@ -1,0 +1,4 @@
+# RAM Fuzz (186787843): LM386N-3 power-amp fuzz (SAG A10K on the supply, VOLUME A100K). The app has
+# no LM386 model (internal gain-set pins 1/8, bootstrap, bridge output stage); recorded only.
+# Board: 2.2M input pulldown, 10Ω + 47uF supply filter with 1N400X reverse protection, 390pF input
+# cap, 1K + 22uF on the SAG pot, 100n pin1-8 gain cap, 10Ω/47uF output, 1uF coupling, on-on toggle.

@@ -1,0 +1,444 @@
+{
+ "id": "pp-spit-fuzz",
+ "goodsNo": "186788346",
+ "kitName": "SPIT FUZZ",
+ "motif": "Roger Mayer Spitfire",
+ "type": "fuzz",
+ "description": "BC549C 공통 이미터 단(47K/47K 분할 전원, 2.2M 바이어스) 뒤에 LM301 비반전 증폭(100K 피드백, 2.2uF+39R+GAIN 가변저항이 이득 결정)을 두고 10K 뒤 1N4148 쌍으로 접지 클리핑, 1.5K·2.2n 뒤 VOLUME으로 낸다.",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "680K",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "BC549C",
+   "nodes": {
+    "b": "n1",
+    "c": "n3",
+    "e": "n4"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n3",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n2",
+    "vcc"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "LM301",
+   "nodes": {
+    "2": "n5",
+    "3": "n3",
+    "4": "0",
+    "6": "n6",
+    "7": "vcc"
+   }
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n5",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "470pF",
+   "nodes": [
+    "n5",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "2.2uF",
+   "nodes": [
+    "n5",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "39R",
+   "nodes": [
+    "n7",
+    "n8"
+   ]
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "C10K",
+   "nodes": [
+    "0",
+    "0",
+    "n8"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "2.2uF",
+   "nodes": [
+    "n6",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n9",
+    "n10"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n10",
+    "k": "0"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "0",
+    "k": "n10"
+   }
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "1.5K",
+   "nodes": [
+    "n10",
+    "n11"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "2.2n",
+   "nodes": [
+    "n11",
+    "0"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A50K",
+   "nodes": [
+    "0",
+    "out",
+    "n11"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "0",
+    "k": "vcc"
+   }
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "vcc",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": []
+  },
+  {
+   "id": "q1",
+   "category": "gain",
+   "label": "BC549 증폭",
+   "parts": []
+  },
+  {
+   "id": "opamp",
+   "category": "gain",
+   "label": "LM301 증폭",
+   "parts": []
+  },
+  {
+   "id": "clip",
+   "category": "clipping",
+   "label": "클리핑",
+   "parts": []
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": []
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "R1",
+    "C1",
+    "R2",
+    "C2",
+    "R3",
+    "Q1",
+    "R4",
+    "R5",
+    "R6",
+    "C3",
+    "U1",
+    "R7",
+    "C5",
+    "C6",
+    "R8",
+    "GAIN",
+    "C7",
+    "R9",
+    "D1",
+    "D2",
+    "R10",
+    "C8",
+    "VOLUME",
+    "D3",
+    "C9"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q1": {
+   "x": 270,
+   "y": 400
+  },
+  "U1A": {
+   "x": 670,
+   "y": 580
+  },
+  "C7": {
+   "x": 480,
+   "y": 400,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 580,
+   "y": 400,
+   "rotation": 0
+  },
+  "R10": {
+   "x": 680,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 780,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 200,
+   "y": 470,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 440,
+   "y": 470,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 260,
+   "y": 530,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 350,
+   "y": 500,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 280,
+   "y": 520,
+   "rotation": 180
+  },
+  "R6": {
+   "x": 260,
+   "y": 190,
+   "rotation": 270
+  },
+  "C3": {
+   "x": 260,
+   "y": 630,
+   "rotation": 90
+  },
+  "R7": {
+   "x": 410,
+   "y": 550,
+   "rotation": 270
+  },
+  "C5": {
+   "x": 410,
+   "y": 520,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 470,
+   "y": 580,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 560,
+   "y": 580,
+   "rotation": 0
+  },
+  "GAIN": {
+   "x": 590,
+   "y": 670,
+   "rotation": 270
+  },
+  "D1": {
+   "x": 610,
+   "y": 470,
+   "rotation": 90
+  },
+  "D2": {
+   "x": 670,
+   "y": 470,
+   "rotation": 270
+  },
+  "C8": {
+   "x": 710,
+   "y": 470,
+   "rotation": 90
+  },
+  "D3": {
+   "x": 810,
+   "y": 190,
+   "rotation": 270
+  },
+  "C9": {
+   "x": 850,
+   "y": 190,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 780,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

@@ -1,0 +1,411 @@
+{
+ "id": "pp-ex-booster",
+ "goodsNo": "186786840",
+ "kitName": "EX 부스터",
+ "motif": "Xotic EP Booster",
+ "type": "buffer-boost",
+ "description": "2N5457 JFET 공통 소스 증폭단의 소스 바이패스(10uF+C10K 가변저항)로 부스트량을 정하고, 15K/3.3n 저역통과(BRIGHT 딥스위치가 우회) 뒤 2N5088 이미터 폴로어로 내보낸다. BST 딥스위치는 출력 직렬 18K를 단락해 +3dB.",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N5457",
+   "nodes": {
+    "g": "n2",
+    "d": "n3",
+    "s": "n4"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "8.2K",
+   "nodes": [
+    "vcc",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "BOOST",
+   "kind": "POT",
+   "value": "C10K",
+   "nodes": [
+    "n5",
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n3",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n6",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "15K",
+   "nodes": [
+    "n7",
+    "n7"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "3.3n",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n8",
+    "vcc"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n8",
+    "n7"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "2N5088",
+   "nodes": {
+    "c": "vcc",
+    "b": "n7",
+    "e": "n9"
+   }
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n9",
+    "0"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n9",
+    "n10"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n10",
+    "out"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "18K",
+   "nodes": [
+    "out",
+    "out"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "out",
+    "0"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "vcc",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": []
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "JFET 부스트",
+   "parts": []
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "브라이트",
+   "parts": []
+  },
+  {
+   "id": "buffer",
+   "category": "buffer",
+   "label": "출력 버퍼",
+   "parts": []
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": []
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "R1",
+    "C1",
+    "R2",
+    "R3",
+    "Q1",
+    "R4",
+    "R5",
+    "C2",
+    "BOOST",
+    "C3",
+    "R6",
+    "R7",
+    "C4",
+    "R8",
+    "R9",
+    "R10",
+    "Q2",
+    "R11",
+    "C5",
+    "R12",
+    "R13",
+    "R14",
+    "C6"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 270,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q1": {
+   "x": 370,
+   "y": 400
+  },
+  "C3": {
+   "x": 480,
+   "y": 400,
+   "rotation": 0
+  },
+  "R6": {
+   "x": 580,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q2": {
+   "x": 680,
+   "y": 400
+  },
+  "C5": {
+   "x": 790,
+   "y": 400,
+   "rotation": 0
+  },
+  "R12": {
+   "x": 890,
+   "y": 400,
+   "rotation": 0
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 300,
+   "y": 470,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 390,
+   "y": 190,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 390,
+   "y": 500,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 450,
+   "y": 500,
+   "rotation": 90
+  },
+  "BOOST": {
+   "x": 510,
+   "y": 530,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 610,
+   "y": 520,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 790,
+   "y": 470,
+   "rotation": 90
+  },
+  "R10": {
+   "x": 670,
+   "y": 530,
+   "rotation": 270
+  },
+  "R11": {
+   "x": 880,
+   "y": 500,
+   "rotation": 90
+  },
+  "R13": {
+   "x": 920,
+   "y": 520,
+   "rotation": 0
+  },
+  "R14": {
+   "x": 980,
+   "y": 470,
+   "rotation": 90
+  },
+  "C6": {
+   "x": 540,
+   "y": 190,
+   "rotation": 90
+  },
+  "R8": {
+   "x": 670,
+   "y": 190,
+   "rotation": 270
+  },
+  "R9": {
+   "x": 670,
+   "y": 630,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 1020,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

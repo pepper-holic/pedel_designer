@@ -130,9 +130,16 @@ def main() -> None:
         if head in META_KEYS:
             meta[head] = line[len(head) :].strip()
         elif head == "io":
+            # "GND=1,8,22": the first pad is the role's pad, the rest are joined to it (ground pads the
+            # extractor did not recognise, several supply pads...).
             for tok in rest:
                 k, v = tok.split("=")
-                io[k] = pad(v)
+                first, *more = v.split(",")
+                io[k] = pad(first)
+                for extra in more:
+                    parent[find(pad_net[pad(extra)])] = find(pad_net[io[k]])
+                    if k == "GND":
+                        ground_pads.add(pad(extra))
         elif head in ("R", "C", "L"):
             value, a, b, *ref = rest
             raw_parts.append({"ref": auto_ref(head, ref[0] if ref else None), "kind": head, "value": value, "pads": [pad(a), pad(b)]})

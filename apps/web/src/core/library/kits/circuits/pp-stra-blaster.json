@@ -1,0 +1,189 @@
+{
+ "id": "pp-stra-blaster",
+ "goodsNo": "186788444",
+ "kitName": "STRA BLASTER",
+ "motif": "Alembic Stratoblaster",
+ "type": "preamp",
+ "description": "기타 잭플레이트에 장착하는 JFET 1단 프리앰프. 68K를 거쳐 게이트로 들어가 22K 드레인·12K 소스 저항으로 증폭하고, 소스 바이패스(50K 팟+10uF)로 게인을 조절한다. 토글은 바이패스 전환.",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "68K",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1.5M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "vcc",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "12K",
+   "nodes": [
+    "0",
+    "n3"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N5457",
+   "nodes": {
+    "g": "n1",
+    "d": "n2",
+    "s": "n3"
+   }
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "n3",
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "1.5uF",
+   "nodes": [
+    "n2",
+    "out"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "0",
+    "out"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": []
+  },
+  {
+   "id": "preamp",
+   "category": "gain",
+   "label": "JFET 증폭단",
+   "parts": []
+  },
+  {
+   "id": "control",
+   "category": "control",
+   "label": "게인",
+   "parts": []
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "Q1",
+    "GAIN",
+    "C2",
+    "C1",
+    "R5"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "R1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q1": {
+   "x": 270,
+   "y": 400
+  },
+  "C1": {
+   "x": 380,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 290,
+   "y": 190,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 290,
+   "y": 500,
+   "rotation": 270
+  },
+  "GAIN": {
+   "x": 350,
+   "y": 460,
+   "rotation": 0
+  },
+  "C2": {
+   "x": 440,
+   "y": 530,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 530,
+   "y": 470,
+   "rotation": 270
+  },
+  "RLOAD": {
+   "x": 610,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

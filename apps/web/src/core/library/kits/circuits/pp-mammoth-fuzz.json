@@ -1,0 +1,368 @@
+{
+ "id": "pp-mammoth-fuzz",
+ "goodsNo": "186786574",
+ "kitName": "NEW MAMMOTH FUZZ",
+ "motif": "ZVex Woolly Mammoth",
+ "type": "fuzz",
+ "description": "2N3904 두 단을 직결한 베이스용 퍼즈. Q1 바이어스를 Q2 이미터에서 100K+PINCH 팟으로 되돌려 파형 폭을 바꾸고, 출력은 5.1K/220n 저역 경로와 10K/10n 고역 경로를 EQ 팟으로 섞어 VOLUME으로 낸다.",
+ "supply": 9,
+ "parts": [
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N3904",
+   "nodes": {
+    "e": "0",
+    "b": "n1",
+    "c": "n3"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "51K",
+   "nodes": [
+    "n3",
+    "vcc"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "2N3904",
+   "nodes": {
+    "e": "n4",
+    "b": "n3",
+    "c": "n5"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "2.2K",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "PINCH",
+   "kind": "POT",
+   "value": "B10K",
+   "nodes": [
+    "n4",
+    "n4",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "20K",
+   "nodes": [
+    "n5",
+    "vcc"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n5",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "5.1K",
+   "nodes": [
+    "n6",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n6",
+    "n8"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n5",
+    "n8"
+   ]
+  },
+  {
+   "ref": "EQ",
+   "kind": "POT",
+   "value": "B2K",
+   "nodes": [
+    "n7",
+    "n9",
+    "n8"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "B500K",
+   "nodes": [
+    "0",
+    "out",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "vcc",
+    "0"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "0",
+    "k": "vcc"
+   }
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": []
+  },
+  {
+   "id": "q1",
+   "category": "fuzz",
+   "label": "Q1 증폭",
+   "parts": []
+  },
+  {
+   "id": "q2",
+   "category": "fuzz",
+   "label": "Q2 증폭·PINCH",
+   "parts": []
+  },
+  {
+   "id": "eq",
+   "category": "tone",
+   "label": "EQ",
+   "parts": []
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": []
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "C1",
+    "R1",
+    "C2",
+    "R2",
+    "Q1",
+    "R3",
+    "Q2",
+    "R4",
+    "C3",
+    "PINCH",
+    "R5",
+    "C4",
+    "R6",
+    "R7",
+    "C5",
+    "C6",
+    "EQ",
+    "VOLUME",
+    "C7",
+    "D1"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q1": {
+   "x": 270,
+   "y": 400
+  },
+  "Q2": {
+   "x": 380,
+   "y": 400
+  },
+  "C6": {
+   "x": 490,
+   "y": 400,
+   "rotation": 0
+  },
+  "EQ": {
+   "x": 590,
+   "y": 400,
+   "rotation": 180
+  },
+  "VOLUME": {
+   "x": 690,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 200,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 260,
+   "y": 530,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 290,
+   "y": 190,
+   "rotation": 270
+  },
+  "R4": {
+   "x": 400,
+   "y": 500,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 460,
+   "y": 500,
+   "rotation": 90
+  },
+  "PINCH": {
+   "x": 320,
+   "y": 560,
+   "rotation": 180
+  },
+  "R5": {
+   "x": 400,
+   "y": 190,
+   "rotation": 270
+  },
+  "C4": {
+   "x": 400,
+   "y": 320,
+   "rotation": 90
+  },
+  "R6": {
+   "x": 510,
+   "y": 520,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 460,
+   "y": 580,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 800,
+   "y": 470,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 330,
+   "y": 190,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 450,
+   "y": 190,
+   "rotation": 270
+  },
+  "RLOAD": {
+   "x": 690,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

@@ -1,0 +1,70 @@
+id pp-mammoth-fuzz
+goods 186786574
+name NEW MAMMOTH FUZZ
+motif ZVex Woolly Mammoth
+type fuzz
+desc 2N3904 두 단을 직결한 베이스용 퍼즈. Q1 바이어스를 Q2 이미터에서 100K+PINCH 팟으로 되돌려 파형 폭을 바꾸고, 출력은 5.1K/220n 저역 경로와 10K/10n 고역 경로를 EQ 팟으로 섞어 VOLUME으로 낸다.
+image img_01.jpg
+BOM 1Mx1 100Kx1 51Kx1 20Kx1 10Kx1 5.1Kx1 2.2Kx1 220nx2 10nx2 1N400Xx1 100uFx3 2N3904x2 B500Kx1 B10Kx1 B2Kx1
+io IN=13 OUT=10 V9=49 GND=2,3,4,5,6,8,9,17,18,24,43,46,53,54
+# 추출기가 놓친 트레이스: 볼륨 상단(0) <- EQ 와이퍼(31), 10n(45) <- 10K 하단(40)
+JUMP 0 31
+JUMP 40 45
+# 팟 자리가 4곳(7-8-9, 20-31-41, 21-32-42, 0-1-2)인데 키트 팟은 3개. 원본의 WOOL(이미터 바이패스 직렬 가변저항)
+# 자리 7-8-9는 비워 두고 100uF 음극(12->7)을 접지(8)로 직결한 것으로 본다.
+JUMP 7 8
+NC 9
+
+STAGE input input 입력
+STAGE q1 fuzz Q1 증폭
+STAGE q2 fuzz Q2 증폭·PINCH
+STAGE eq tone EQ
+STAGE output output 출력
+STAGE power power 전원
+
+C 220n 19 29 C1
+R 1M 37 54 R1
+C 10n 39 53 C2
+R 100K 36 52 R2
+Q 2N3904 e=18 b=23 c=28 Q1
+R 51K 35 51 R3
+Q 2N3904 e=22 b=27 c=33 Q2
+R 2.2K 16 17 R4
+C 100uF 15 12 C3
+# 와이퍼(32)와 러그(21)가 모두 Q2 이미터: 100K와 직렬인 가변저항
+POT B10K PINCH 21 32 42
+R 20K 34 50 R5
+C 100uF 38 30 C4
+R 5.1K 25 11 R6
+R 10K 26 40 R7
+C 220n 14 24 C5
+C 10n 44 45 C6
+POT B2K EQ 20 31 41
+POT B500K VOLUME 2 1 0
+C 100uF 48 43 C7
+D 1N400X a=46 k=47 D1
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT Q2 380 400
+AT C6 490 400 h
+AT EQ 590 400 r180
+AT VOLUME 690 400 r180
+AT R1 120 470 v
+AT C2 200 470 v
+AT R2 260 530 v
+AT R3 290 190 v-
+AT R4 400 500 v
+AT C3 460 500 v
+AT PINCH 320 560 r180
+AT R5 400 190 v-
+AT C4 400 320 v
+AT R6 510 520 h
+AT R7 460 580 h
+AT C5 800 470 v
+AT C7 330 190 v
+AT D1 450 190 v-
+AT RLOAD 690 480 v

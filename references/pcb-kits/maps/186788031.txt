@@ -1,0 +1,4 @@
+# Green Punch (186788031): Greer Sucker Punch style drive: J201 (SMD) input stage with a 50K bias
+# trimmer feeding an LM386N-1 power-amp stage. The app has no LM386 model; recorded only. Board:
+# 2.2M / 10K / 1.5K, 100n + 10n x2, 22pF, 47uF + 22uF x2, 1N400X supply diode, GAIN A1M, TONE B100K,
+# VOLUME A250K.

@@ -146,6 +146,7 @@ const OPAMPS: [string, OpAmp, 1 | 2][] = [
   ["UA741", LM741_APPROX, 1],
   ["CA741", LM741_APPROX, 1],
   ["LM308", LM308_APPROX, 1],
+  ["LM301", LM741_APPROX, 1],
   ["CA3130", CA3130_APPROX, 1],
   ["OP07", OP07_APPROX, 1],
 ];

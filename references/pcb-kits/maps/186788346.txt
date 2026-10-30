@@ -1,0 +1,74 @@
+id pp-spit-fuzz
+goods 186788346
+name SPIT FUZZ
+motif Roger Mayer Spitfire
+type fuzz
+desc BC549C 공통 이미터 단(47K/47K 분할 전원, 2.2M 바이어스) 뒤에 LM301 비반전 증폭(100K 피드백, 2.2uF+39R+GAIN 가변저항이 이득 결정)을 두고 10K 뒤 1N4148 쌍으로 접지 클리핑, 1.5K·2.2n 뒤 VOLUME으로 낸다.
+image img_01.jpg
+BOM 2.2Mx2 680Kx1 100Kx1 47Kx2 22Kx1 10Kx1 1.5Kx1 39Rx1 100nx1 2.2nx1 1nx1 470pFx1 100uFx1 22uFx1 2.2uFx2 1N400Xx1 1N4148x2 LM301x1 BC549Cx1 C10Kx1 A50Kx1
+io IN=40 OUT=53 V9=12 GND=64
+# LM301 밸런스 핀 5, 보상 핀 1·8과 22pF(28-29)는 모델에 없어 회로에서 뺌
+NC 61 28 29 36 37
+
+STAGE input input 입력
+STAGE q1 gain BC549 증폭
+STAGE opamp gain LM301 증폭
+STAGE clip clipping 클리핑
+STAGE output output 출력
+STAGE power power 전원
+
+R 2.2M 55 54 R1
+C 100n 41 42 C1
+R 680K 34 33 R2
+C 1n 43 56 C2
+R 2.2M 17 16 R3
+Q BC549C b=50 c=44 e=57 Q1
+R 22K 63 62 R4
+R 47K 24 23 R5
+R 47K 18 19 R6
+C 22uF 11 6 C3
+IC LM301 2=46 3=51 4=60 6=52 7=47
+R 100K 35 58 R7
+C 470pF 45 59 C5
+C 2.2uF 25 20 C6
+R 39R 9 8 R8
+POT C10K GAIN 2 1 0
+C 2.2uF 48 49 C7
+R 10K 39 38 R9
+D 1N4148 a=21 k=22 D1
+D 1N4148 a=32 k=31 D2
+R 1.5K 30 10 R10
+C 2.2n 14 15 C8
+POT A50K VOLUME 5 4 3
+D 1N400X a=26 k=27 D3
+C 100uF 13 7 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT U1A 670 580
+AT C7 480 400 h
+AT R9 580 400 h
+AT R10 680 400 h
+AT VOLUME 780 400 r180
+AT R1 120 470 v
+AT R2 200 470 v
+AT C2 440 470 v
+AT R3 260 530 v
+AT R4 350 500 v
+AT R5 280 520 h-
+AT R6 260 190 v-
+AT C3 260 630 v
+AT R7 410 550 v-
+AT C5 410 520 h
+AT C6 470 580 h
+AT R8 560 580 h
+AT GAIN 590 670 r270
+AT D1 610 470 v
+AT D2 670 470 v-
+AT C8 710 470 v
+AT D3 810 190 v-
+AT C9 850 190 v
+AT RLOAD 780 480 v

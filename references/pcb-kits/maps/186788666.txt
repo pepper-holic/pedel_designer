@@ -1,0 +1,66 @@
+id pp-randy-plus
+goods 186788666
+name RANDY PLUS
+motif MXR Distortion+ (Randy Rhoads)
+type distortion
+desc UA741 비반전 증폭(1M 피드백, 47n+4.7K+GAIN 가변저항) 뒤 1N270 게르마늄 쌍으로 접지에 클리핑하는 디스토션+. 10K와 1n으로 출력을 다듬고 VOLUME으로 낸다. 토글은 1N4148 실리콘 쌍으로 전환.
+image img_01.jpg
+BOM 1Mx5 10Kx2 4.7Kx1 47nx1 10nx1 1nx2 1uFx2 10pFx1 1N270x2 UA741x1 C500Kx1 A50Kx1
+io IN=19 OUT=20 V9=10 GND=7
+# 토글(4 Si / 5 공통 / 6 Ge): 게르마늄 쪽 기준. 상단 1N4148 쌍(0-1, 2-3)과 LED 470R(53-54, 60-62)은 회로에서 뺌
+JUMP 5 6
+NC 0 1 2 3 4 53 54 60 61 62
+# 옵셋 널·NC 핀
+NC 44 55 56
+
+STAGE input input 입력
+STAGE gain gain op-amp 증폭
+STAGE clip clipping 클리핑
+STAGE output output 출력
+STAGE power power 바이어스
+
+C 1n 24 23 C1
+R 1M 17 16 R1
+C 10n 18 25 C2
+R 10K 26 35 R2
+R 1M 39 38 R3
+IC UA741 2=52 3=49 4=45 6=48 7=51
+C 47n 41 42 C3
+R 4.7K 43 59 R4
+POT C500K GAIN 11 12 13
+R 1M 40 57 R5
+C 10pF 50 58 C4
+C 1uF 47 46 C5
+R 10K 15 14 R6
+D 1N270 a=21 k=22 D1
+D 1N270 a=28 k=27 D2
+C 1n 31 32 C6
+POT A50K VOLUME 7 8 9
+R 1M 37 36 R7
+R 1M 34 33 R8
+C 1uF 30 29 C7
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C2 170 400 h
+AT R2 270 400 h
+AT U1A 660 520
+AT C5 470 400 h
+AT R6 570 400 h-
+AT VOLUME 670 400 r180
+AT C1 120 470 v
+AT R1 180 470 v
+AT R3 300 470 v
+AT R5 400 490 v-
+AT C4 400 520 h
+AT D1 600 470 v
+AT D2 780 470 v-
+AT C6 840 470 v
+AT R7 300 190 v-
+AT R8 300 570 v
+AT C7 480 570 v
+AT C3 400 590 v
+AT R4 400 690 v-
+AT GAIN 400 810 r270
+AT RLOAD 720 480 v
