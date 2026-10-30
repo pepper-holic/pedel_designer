@@ -1,0 +1,66 @@
+id pp-wt-fuzz
+goods 186787650
+name WT Fuzz
+motif WT Fuzz (NPN/PNP 복합 쌍)
+type fuzz
+desc 2N2222 공통 이미터 단의 컬렉터(18K)를 2N3906 이미터 폴로어 베이스에 직결하고, 그 이미터를 1K+WTF 가변저항으로 9V에 매달아 전압을 굶기는 퍼즈. GAIN은 입력 감쇠, 출력은 100n 뒤 1N4148 쌍 클리핑·470p·VOL. BOOST 팟/3PDT와 EQ 토글(4.7n/18n)은 기판 밖 배선이라 뺌.
+image img_01.png
+BOM 1Mx1 560Kx2 150Kx1 18Kx1 1Kx2 100nx2 22nx1 470pFx1 47pFx1 47uFx1 1N400Xx1 1N4148x2 2N2222x1 2N3906x1 A100Kx1 B100Kx2
+io IN=17 OUT=54 V9=19 GND=2
+# WTF 팟 3번 러그, 18K 상단 대체 패드, BOOST 팟·풋스위치 패드
+NC 3 6 16 56 57 64 66 67 37 40 42 51 52 65
+
+STAGE input input 입력
+STAGE q1 fuzz Q1 증폭
+STAGE q2 fuzz Q2 폴로어·WTF
+STAGE clip clipping 클리핑
+STAGE output output 출력
+STAGE power power 전원
+
+R 1M 28 43 R1
+POT B100K GAIN 2 1 0
+C 100n 8 21 C1
+R 150K 29 45 R2
+R 560K 24 9 R3
+C 22n 7 20 C2
+R 560K 10 30 R4
+Q 2N2222 e=46 b=38 c=31 Q1
+R 1K 23 44 R5
+R 18K 15 25 R6
+C 47pF 11 22 C3
+Q 2N3906 e=32 b=39 c=47 Q2
+R 1K 12 26 R7
+POT A100K WTF 5 4 4
+C 100n 33 48 C4
+C 470pF 49 34 C5
+D 1N4148 a=41 k=35 D1
+D 1N4148 a=36 k=50 D2
+POT B100K VOL 55 54 53
+D 1N400X a=27 k=13 D3
+C 47uF 14 18 C6
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT GAIN 170 400 r180
+AT C1 270 400 h
+AT Q1 370 400
+AT Q2 480 400
+AT C4 590 400 h
+AT VOL 690 400 r180
+AT R1 240 470 v
+AT R2 300 470 v
+AT R3 360 530 v
+AT C2 360 630 v
+AT R4 430 520 h-
+AT R5 510 500 v
+AT R6 440 580 h-
+AT C3 440 640 h-
+AT R7 560 500 v-
+AT WTF 620 530 r0
+AT C5 800 470 v
+AT D1 860 470 v
+AT D2 920 470 v-
+AT D3 200 190 v-
+AT C6 240 190 v
+AT RLOAD 690 480 v

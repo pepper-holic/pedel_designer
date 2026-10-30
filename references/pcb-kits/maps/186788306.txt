@@ -1,0 +1,4 @@
+# NEW Z-DRIVE (186788306): Hermida Zendrive. NE5532 gain stage with 2N7000 MOSFET + BAT41 clipping
+# (VOICE pot on the feedback) and a BAT41/2N7000 output section. The app has no MOSFET model;
+# recorded only. Board: 2.2M / 470K / 10K x3 / 1K x2, 470n x2, 100n, 3.3n, 100pF, 100uF, 47uF,
+# 1N400X, BAT41 x3, B500K GAIN, A100K VOLUME, B50K TONE, B10K VOICE.

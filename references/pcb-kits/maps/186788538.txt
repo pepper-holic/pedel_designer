@@ -1,0 +1,66 @@
+id pp-buzzrite-si
+goods 186788538
+name BUZZRITE Si
+motif Mosrite Fuzzrite (silicon)
+type fuzz
+desc 2N2222A 두 단을 470K 컬렉터-베이스 바이어스로 세운 퍼즈. DEPTH 팟이 Q1 컬렉터(2.2n)와 Q2 컬렉터(2.2n) 신호를 섞어 위상 상쇄로 질감을 바꾸고, 100K 부하 뒤 VOLUME으로 낸다. 빈티지 모드 기준(딥스위치 OFF).
+image img_01.jpg
+BOM 2.2Mx1 1.2Mx1 470Kx4 100Kx1 22Kx1 100Rx1 100nx1 47nx2 2.2nx2 100uFx1 1N400Xx1 2N2222Ax2 A50Kx1 B500Kx1
+io IN=63 OUT=44 V9=3 GND=10
+# 추출기가 놓친 트레이스: 2.2n 우측(13) <- Q2 컬렉터 470K(18), 실크 글자 밑
+JUMP 13 18
+# 모던 모드(딥스위치)로 더해지는 4.7n 두 개(28-41, 31-43)와 딥스위치 패드, 기판 LED(0-2)·LED_R는 회로에서 뺌
+NC 20 25 26 29 30 38 39 42 28 41 31 43 0 1 2 4 5
+
+STAGE input input 입력
+STAGE q1 fuzz Q1
+STAGE q2 fuzz Q2
+STAGE depth tone DEPTH 믹스
+STAGE output output 출력
+STAGE power power 전원
+
+R 2.2M 64 46 R1
+C 47n 55 45 C1
+Q 2N2222A e=48 b=53 c=56 Q1
+R 470K 49 65 R2
+R 470K 47 66 R3
+C 47n 50 57 C2
+Q 2N2222A e=52 b=54 c=58 Q2
+R 470K 51 67 R4
+R 470K 18 19 R5
+C 2.2n 40 27 C3
+C 2.2n 13 12 C4
+R 1.2M 21 22 R6
+R 22K 16 17 R7
+POT A50K DEPTH 33 34 35
+R 100K 23 24 R8
+POT B500K VOLUME 32 37 36
+D 1N400X a=7 k=6 D1
+R 100R 8 9 R9
+C 100uF 11 10 C5
+C 100n 15 14 C6
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT Q1 270 400
+AT C3 380 400 h
+AT DEPTH 480 400 r180
+AT VOLUME 580 400 r180
+AT R1 120 470 v
+AT R2 240 520 h
+AT R3 350 500 v-
+AT C2 290 320 v
+AT R4 350 350 h
+AT R5 360 520 h-
+AT C4 440 520 h
+AT R6 460 580 h-
+AT R7 690 470 v
+AT R8 540 500 v
+AT R9 350 600 v-
+AT C5 530 600 v
+AT C6 590 600 v
+AT D1 350 190 v
+AT Q2 700 350
+AT RLOAD 580 480 v

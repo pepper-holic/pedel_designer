@@ -1,0 +1,4 @@
+# ALL New Kantata (186788047): Keeley Katana clean boost. Two 2N5484 JFET stages run on an 18V rail
+# made by an ICL7660 voltage doubler (3x 1N400X, 100uF x2, 10uF x2); the push-pull A250K volume pot
+# switches the high-gain mode. The app has no charge-pump model; recorded only. Board: 1M x3,
+# 4.7K x2, 680R x2, 220n x2, 15n, 1n, 220pF.

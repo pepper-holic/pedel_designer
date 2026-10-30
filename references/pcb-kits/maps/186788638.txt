@@ -1,0 +1,4 @@
+# PAPADUMBLE (186788638): 1 W "overdrive special" practice amp - TL072 preamp into an LM386N-4 power
+# stage driving a speaker. The app has no LM386 (bridge power amp) model; recorded only. Board:
+# 100K x3 / 1M / 12K x2 / 560R / 10R, 100n x2 / 47n / 22n, 220uF x2 / 47uF x2 / 1uF, 1N400X, B1K
+# angle pot (volume), DC+ / SW1 / SW2 pads for a rocker power switch, SPK OUT.

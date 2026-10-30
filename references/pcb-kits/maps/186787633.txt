@@ -1,0 +1,84 @@
+id pp-caliber
+goods 186787633
+name CALIBER
+motif J. Rockett .45 Caliber
+type distortion
+desc 4558 A단 하나로 만든 JTM45 풍 드라이브. 비반전 증폭(GAIN 가변저항+4.7K 피드백, 820R→BASS 팟→470n/100n 접지가 이득 결정)이고 1N4001+1N4148 두 개 직렬 쌍이 피드백 양방향 클리핑. 출력은 4.7uF 뒤 TREBLE(47n 컷)·LOUD.
+image img_01.jpg
+BOM 1Mx1 470Kx1 47Kx3 4.7Kx1 820Rx1 10Rx1 470nx1 150nx1 100nx1 47nx1 220pFx1 22pFx1 47uFx2 4.7uFx1 1N4001x2 1N4148x3 JRC4558x1 A250Kx1 B100Kx1 B10Kx1 C50Kx1
+io IN=46 OUT=24 V9=0 GND=66
+# 추출기가 놓친 트레이스: 9V(0)-1N4148(1) 짧은 하단 트레이스, 4.7uF+(49) <- IC 실크 밑을 지나는 A단 출력(42)
+JUMP 0 1
+JUMP 49 42
+# 42->34 대각선 트레이스가 IN 패드 링을 스쳐 입력 넷이 반전 입력 넷과 합쳐짐: 입력 쪽 패드를 분리
+SPLIT 46 47 55 56
+# GAIN 3번 러그, 47K 상단 중복 패드, 미사용 B단(출력-반전 묶음, 비반전 접지)
+NC 3 11 23 17 18 72
+
+STAGE input input 입력
+STAGE gain gain A단 증폭
+STAGE clip clipping 클리핑
+STAGE tone tone 트레블·라우드
+STAGE output output 출력
+STAGE power power 전원·바이어스
+
+R 1M 55 54 R1
+C 220pF 56 57 C1
+C 150n 47 48 C2
+R 470K 20 37 R2
+IC JRC4558 1=42 2=34 3=35 4=36 8=16
+C 22pF 14 31 C3
+R 4.7K 15 33 R3
+POT A250K GAIN 5 4 4
+R 820R 44 45 R4
+C 100n 52 53 C4
+POT C50K BASS 63 64 65
+R 47K 59 60 R5
+C 470n 43 28 C5
+D 1N4001 a=13 k=12 D1
+D 1N4148 a=41 k=32 D2
+D 1N4001 a=26 k=25 D3
+D 1N4148 a=29 k=30 D4
+C 4.7uF 49 58 C6
+# 양 러그(70,72)가 같은 넷: 두 반쪽 병렬(최대 2.5K)인데 편집기는 한 노드 공유만 지원해 와이퍼-러그 가변저항으로 근사
+POT B10K TREBLE 70 71 71
+C 47n 62 61 C7
+POT B100K LOUD 7 6 8
+D 1N4148 a=1 k=2 D5
+R 10R 10 9 R6
+C 47uF 50 51 C8
+R 47K 22 38 R7
+R 47K 21 39 R8
+C 47uF 27 40 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C2 170 400 h
+AT U1A 710 420
+AT C6 370 400 h
+AT LOUD 470 400 r180
+AT R1 120 470 v
+AT C1 180 470 v
+AT R2 230 500 v-
+AT C3 300 490 v
+AT R3 360 520 h-
+AT GAIN 360 330 r180
+AT R4 300 590 v-
+AT C4 300 690 v-
+AT BASS 360 620 r180
+AT R5 360 520 h-
+AT C5 450 690 v
+AT D1 420 490 v
+AT D2 360 580 h-
+AT D3 240 590 v
+AT D4 270 520 h
+AT TREBLE 550 400 r0
+AT C7 610 470 v
+AT R7 200 600 v
+AT R8 470 600 v
+AT C9 530 600 v
+AT R6 200 700 v-
+AT C8 260 700 v
+AT D5 200 190 v
+AT RLOAD 470 480 v

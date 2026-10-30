@@ -1,0 +1,87 @@
+id pp-fuzz-buddy
+goods 186788515
+name FUZZ BUDDY
+motif Shin-ei Companion FY-2
+type fuzz
+desc 2SC536 두 단(컬렉터-베이스 2.2M/1.2M 바이어스)의 컬렉터 신호를 2.2n·3.3n을 거쳐 FUZZ 팟으로 섞는 버즈쏘 퍼즈. 10K/15K/1n/100n 톤 망 뒤 VOLUME, 2N3904 공통 이미터(10K/390R) 부스트로 출력.
+image img_01.jpg
+BOM 2.2Mx1 1.5Mx1 1.2Mx1 470Kx1 100Kx2 47Kx2 22Kx1 15Kx1 10Kx2 390Rx1 100nx1 47nx3 3.3nx1 2.2nx1 1nx2 47uFx1 10uFx2 1N400Xx1 2SC536x2 2N3904x1 B50Kx2
+io IN=27 OUT=19 V9=6 GND=3
+# 추출기가 놓친 트레이스: VOLUME 러그(23) <- 저항 실크 밑을 지나는 톤 망 입력 노드(7), 10uF+(49) <- Q3 컬렉터(47)
+JUMP 23 7
+JUMP 49 47
+
+STAGE input input 입력
+STAGE q1 fuzz Q1
+STAGE q2 fuzz Q2
+STAGE blend tone FUZZ 블렌드·톤 망
+STAGE boost gain 출력 부스트
+STAGE output output 출력
+STAGE power power 전원
+
+C 47n 39 57 C1
+R 1.5M 40 67 R1
+R 2.2M 41 68 R2
+C 1n 42 58 C2
+Q 2SC536 e=43 c=51 b=59 Q1
+R 22K 13 32 R3
+C 47n 44 60 C4
+R 1.2M 45 69 R4
+Q 2SC536 e=46 c=52 b=61 Q2
+R 47K 16 34 R5
+R 100K 15 33 R6
+C 47n 14 26 C5
+C 2.2n 28 29 C3
+C 3.3n 30 31 C6
+# 기판 가운데 패드(21)가 와이퍼: Q1 신호가 와이퍼, Q2 신호(22)와 톤 망(20)이 양 러그
+POT B50K FUZZ 20 21 22
+R 10K 1 10 R7
+R 15K 2 11 R8
+C 1n 0 7 C7
+C 100n 4 12 C8
+POT B50K VOLUME 25 24 23
+C 10uF 48 37 C9
+R 470K 18 36 R9
+R 47K 63 64 R10
+Q 2N3904 c=47 b=53 e=62 Q3
+R 10K 17 35 R11
+R 390R 70 71 R12
+C 10uF 49 38 C10
+R 100K 54 55 R13
+D 1N400X a=9 k=8 D1
+C 47uF 5 3 C11
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 120 470 v
+AT R1 180 470 v
+AT R2 120 570 v-
+AT C2 120 520 h
+AT R3 120 190 v
+AT C4 180 600 h
+AT R4 270 600 h-
+AT R5 360 600 h-
+AT R6 390 190 v
+AT C5 430 190 v
+AT C3 120 670 v-
+AT C6 300 670 v-
+AT FUZZ 360 700 r180
+AT R7 450 700 h-
+AT R8 540 700 h
+AT C7 480 520 h-
+AT C8 480 770 v
+AT VOLUME 450 640 r180
+AT C9 540 830 v-
+AT R9 540 190 v
+AT R10 540 930 v
+AT D1 480 190 v-
+AT C11 600 190 v
+AT Q1 530 600
+AT Q2 610 600
+AT Q3 600 860
+AT R11 140 880 h
+AT R12 240 880 h
+AT C10 340 880 h
+AT R13 440 880 h
+AT RLOAD 240 480 v

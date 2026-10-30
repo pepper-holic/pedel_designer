@@ -1,0 +1,76 @@
+id pp-red-sniper
+goods 186788064
+name New Red Sniper
+motif Menatone Red Snapper
+type overdrive
+desc 4558 A단은 비반전 증폭(10K+GAIN 피드백, 1N914 1+2 비대칭 클리핑, −입력의 47n+1K+BITE 가변저항이 저역 이득을 정함), B단은 6.8K 입력·1n/10n+CUT 피드백의 반전 저역통과. 100n 뒤 VOLUME.
+image img_01.jpg
+BOM 1Mx2 10Kx3 6.8Kx1 1Kx2 100nx1 47nx1 22nx1 10nx1 1nx1 100pFx1 47uFx1 22uFx1 1N400Xx1 1N914x3 JRC4558x1 A1Mx1 B250Kx1 B25Kx2
+io IN=61 OUT=67 V9=60 GND=5
+# 추출기가 놓친 트레이스: B단 −입력(28) <- 6.8K 우측(10), IC 실크 밑
+JUMP 28 10
+# BITE 팟 3번 러그 미사용
+NC 56
+
+STAGE input input 입력
+STAGE gain gain A단 증폭
+STAGE clip clipping 클리핑
+STAGE cut tone CUT 저역통과
+STAGE output output 출력
+STAGE power power 전원·바이어스
+
+R 1M 48 49 R1
+R 1K 44 45 R2
+C 22n 40 26 C1
+R 1M 46 47 R3
+IC JRC4558 1=14 2=23 3=27 4=35 5=36 6=28 7=24 8=15
+R 10K 12 13 R4
+POT A1M GAIN 0 1 2
+C 100pF 8 22 C2
+C 47n 21 34 C3
+R 1K 39 38 R5
+POT B25K BITE 54 55 55
+D 1N914 a=18 k=31 D1
+D 1N914 a=32 k=19 D2
+D 1N914 a=20 k=33 D3
+R 6.8K 9 10 R6
+C 1n 17 29 C4
+C 10n 30 43 C5
+POT B25K CUT 59 58 57
+C 100n 11 25 C6
+POT B250K VOLUME 5 4 3
+D 1N400X a=6 k=7 D4
+C 47uF 50 52 C7
+R 10K 16 37 R7
+R 10K 42 41 R8
+C 22uF 51 53 C8
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT R2 170 400 h
+AT C1 270 400 h
+AT U1A 660 520
+AT C6 570 400 h-
+AT VOLUME 670 400 r180
+AT R1 120 470 v
+AT R3 300 470 v
+AT R6 400 490 v-
+AT C4 450 520 h
+AT C5 340 490 v
+AT CUT 560 480 r180
+AT D4 700 190 v-
+AT C7 740 190 v
+AT R7 300 190 v
+AT R8 300 570 v
+AT C8 360 570 v
+AT R4 400 590 v-
+AT GAIN 460 620 r0
+AT C2 440 580 h
+AT C3 550 620 h
+AT R5 640 620 h
+AT BITE 730 620 r180
+AT D1 440 640 h-
+AT D2 520 690 v-
+AT D3 460 700 h
+AT RLOAD 720 480 v

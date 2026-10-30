@@ -1,0 +1,86 @@
+id pp-blue-color
+goods 186788063
+name New Blue Color
+motif Menatone Blue Collar
+type overdrive
+desc 4558 B단은 비반전 증폭(10K+DRIVE 피드백, 1N914 2:1 비대칭 클리핑, 470R+PRES 가변저항+0.22uF가 이득 결정). 1K·0.22uF 뒤 TONE 팟이 A단 반전 증폭(1K 피드백)의 입력을 나누고 100K/220R+0.22uF로 톤을 만든다. 22uF 뒤 LEVEL.
+image img_01.jpg
+BOM 1Mx2 100Kx1 10Kx3 1Kx3 470Rx1 220Rx1 27nx1 0.22uFx3 56pFx2 47uFx1 22uFx2 1N400Xx1 1N914x3 JRC4558x1 A500Kx1 A100Kx1 B25Kx1 B5Kx1
+io IN=68 OUT=75 V9=69 GND=70
+# 추출기가 놓친 트레이스: +A(18) <- Vref(36), 1K(29) <- B단 출력 넷(16), +B(12) <- 1K/56p 접점(39)
+JUMP 18 36
+JUMP 29 16
+JUMP 39 12
+# PRES 3번 러그
+NC 62
+
+STAGE input input 입력
+STAGE gainb gain B단 증폭
+STAGE clip clipping 클리핑
+STAGE tone tone 톤·A단
+STAGE output output 출력
+STAGE power power 전원·바이어스
+
+C 27n 44 45 C1
+R 1M 52 53 R1
+R 1K 38 39 R2
+C 56p 47 46 C2
+R 1M 48 49 R3
+IC JRC4558 1=27 2=22 3=18 4=13 5=12 6=17 7=21 8=26
+R 10K 7 8 R4
+POT A500K DRIVE 2 1 0
+C 56p 6 16 C3
+R 470R 11 25 R5
+POT B5K PRES 64 63 63
+C 0.22uF 55 54 C4
+D 1N914 a=10 k=9 D1
+D 1N914 a=15 k=14 D2
+D 1N914 a=19 k=20 D3
+R 1K 29 30 R6
+C 0.22uF 33 34 C5
+POT B25K TONE 67 66 65
+R 100K 59 58 R7
+R 220R 51 50 R8
+C 0.22uF 42 43 C6
+R 1K 23 37 R9
+C 22uF 28 24 C7
+POT A100K LEVEL 5 4 3
+D 1N400X a=31 k=32 D4
+C 47uF 56 60 C8
+R 10K 35 36 R10
+R 10K 41 40 R11
+C 22uF 57 61 C9
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R2 270 400 h
+AT R3 370 400 h
+AT U1A 760 420
+AT C7 570 400 h
+AT LEVEL 670 400 r180
+AT R1 120 470 v
+AT C2 300 470 v
+AT R9 500 490 v
+AT D4 700 190 v-
+AT C8 740 190 v
+AT R10 400 190 v
+AT R11 400 470 v
+AT C9 580 470 v
+AT TONE 560 550 r180
+AT R7 530 520 h-
+AT R8 560 650 v
+AT C6 560 750 v
+AT R6 650 550 h-
+AT C5 650 620 v
+AT DRIVE 740 550 r180
+AT C3 710 650 v-
+AT R5 770 680 h
+AT PRES 860 680 r180
+AT C4 950 750 v
+AT D1 800 620 v-
+AT D2 760 520 h
+AT D3 700 580 h
+AT R4 740 640 h
+AT RLOAD 670 480 v

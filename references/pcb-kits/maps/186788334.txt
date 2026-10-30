@@ -1,0 +1,4 @@
+# SEC RET PRE (186788334): Chase Tone Secret Preamp (Echoplex EP-3 preamp). A single SMD 2N5457
+# JFET stage run from an ICL7660 doubler (4x 1N400X, 100uF x2, 10uF x2, 22V zener), 50K bias
+# trimmer, A500K volume, on-off-on toggle. The app has no charge-pump model; recorded only.
+# Board: 1M x3, 240K, 110K x3, 3.6K, 100n, 22n x2, 10n, 22pF.

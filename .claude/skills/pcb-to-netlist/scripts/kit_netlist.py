@@ -129,6 +129,11 @@ def main() -> None:
         head, *rest = line.split()
         if head in META_KEYS:
             meta[head] = line[len(head) :].strip()
+        elif head == "SPLIT":
+            # Pads the extractor merged into a neighbouring net (a trace passing through a pad ring):
+            # pull them out into a net of their own, joined only to each other.
+            for tok in rest:
+                pad_net[pad(tok)] = f"split-{line_no}"
         elif head == "io":
             # "GND=1,8,22": the first pad is the role's pad, the rest are joined to it (ground pads the
             # extractor did not recognise, several supply pads...).
