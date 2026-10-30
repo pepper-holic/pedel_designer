@@ -1,4 +1,104 @@
-# DOC Overdrive (186788044): Fulltone OCD V4 - TL082 input/output stages with a 2N7000 MOSFET pair + 1N34A
-# hard clipper to ground, HP/LP toggle; DRIVE A1M, TONE B10K, VOLUME B500K. The app has no MOSFET model; recorded
-# only. Board: 1M, 470K, 220K, 150K, 39K, 33K, 22K, 18K, 10K x5, 4.7K, 2.2K, 100R, 100n x3, 68n, 47n, 22n, 1n,
-# 220p x2, 10uF x3, 1N400X, DIP on-on x2.
+id pp-doc-overdrive
+goods 186788044
+name DOC Overdrive
+motif Fulltone OCD V4
+type overdrive
+desc TL082 2단 OCD - 22n/10K 입력(470K Vref 바이어스)→A단 비반전(DRIVE A1M 가변저항+18K, 220p; 접지 다리 68n+2.2K)→10K→2N7000 다이오드 접속 + 2N7000 바디 다이오드·1N34A 직렬의 비대칭 Vref 클리퍼(1n)→10K→B단 비반전 x4.8(150K∥220p/39K)→10uF→33K→B10K 톤(47n)·B500K 볼륨
+image img_01.jpg
+# TL082 notch left: bottom 27=1(out A) 28=2 29=3 30=4(GND), top 12=8(V+) 13=7(out B) 14=6 15=5. Hidden traces: 10K end 59 ->
+# +in A (39/29); the V+ cyan trace 55 -> 68/74 (shunt 1N400X and 100n); out A (27) -> 220p/18K node 37 and the DRIVE
+# wiper 46 -> -in A (38) under the DRIVE silk, so the feedback is 18K + DRIVE with 220p across and the DIP leg hangs on -in. Clipper: M1 (41/43 tied) is diode-connected to Vref,
+# M2 (44 gate on Vref) works as its body diode in series with the 1N34A (anode 36) for the other half-cycle. "JHS V4" DIP
+# 71/75/81 picks the gain leg: drawn on 71 (68n + 2.2K); the 100n + 4.7K leg (79-80, 85-86) is left out. HP/LP DIP 72/78/84
+# drawn in LP (72 open), so the HP 22K (19-20) is left out. Kit list: 10K x5, 100n x3, 4.7K, 22K.
+BOM 1M 470K 220K 150K 39K 33K 18K 10Kx5 2.2K 100R 100nx2 68n 47n 22n 1n 220px2 10uFx3 1N400X 1N34A TL082 2N7000x2 A1M B500K B10K
+io IN=87 OUT=96 V9=4 GND=11
+JUMP 59 39
+JUMP 68 55
+JUMP 71 75
+JUMP 46 38
+JUMP 27 37
+NC 72 78 19 20 81 80 79 86 85 84
+
+STAGE input input 입력
+R 1M 76 77 R1
+C 22n 65 66 C1
+R 10K 60 59 R2
+R 470K 39 40 R3
+
+STAGE gain gain 게인단 (IC A)
+IC TL082 1=27 2=28 3=29 4=30 5=15 6=14 7=13 8=12 U1
+C 220p 38 37 C2
+R 18K 53 54 R4
+POT A1M DRIVE 47 46 45
+C 68n 69 70 C3
+R 2.2K 64 63 R5
+
+STAGE clip clipping MOSFET 클리퍼
+R 10K 18 33 R6
+C 1n 34 22 C4
+Q 2N7000 g=43 d=41 s=51 M1
+Q 2N7000 g=44 d=42 s=52 M2
+D 1N34A a=36 k=35 D1
+
+STAGE buffer buffer 출력단 (IC B)
+R 10K 32 17 R7
+R 220K 16 31 R8
+R 150K 6 7 R9
+C 220p 0 1 C5
+C 100n 8 9 C6
+R 39K 10 11 R10
+
+STAGE output output 톤·볼륨
+C 10uF 2 5 C7
+R 33K 23 24 R11
+C 47n 83 82 C8
+POT B10K TONE 90 89 88
+POT B500K VOLUME 50 49 48
+
+STAGE power power 전원
+R 100R 3 21 R12
+D 1N400X a=67 k=68 D2
+C 100n 74 73 C9
+C 10uF 25 26 C10
+R 10K 55 56 R13
+R 10K 62 61 R14
+C 10uF 57 58 C11
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R2 270 400 h
+AT U1A 600 690
+AT C7 570 400 h
+AT R11 670 400 h
+AT VOLUME 770 400 r180
+AT R1 120 470 v
+AT R3 300 470 v
+AT C4 360 500 h-
+AT D1 450 500 h-
+AT R7 390 570 v
+AT R8 340 520 h-
+AT R9 450 520 h-
+AT C5 450 580 h-
+AT C6 520 490 v
+AT R10 520 590 v
+AT C8 700 470 v
+AT TONE 760 500 r180
+AT R13 300 600 v-
+AT R14 600 570 v
+AT C11 660 570 v
+AT R6 390 660 v-
+AT R12 300 190 v
+AT D2 300 700 v-
+AT C9 480 700 v
+AT C10 540 700 v
+AT C2 390 760 v-
+AT R4 450 820 v
+AT DRIVE 510 790 r180
+AT C3 390 860 v-
+AT R5 390 960 v
+AT M1 850 500
+AT M2 960 500
+AT RLOAD 1020 480 v

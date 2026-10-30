@@ -1,5 +1,119 @@
-# Brown Charlie Childs (186787532): Marshall JTM45-style 4-knob overdrive built on three BS170 MOSFET gain stages
-# (9.1V zener bias); VOLUME B100K, TONE B100K, PRESS. B25K, GAIN B5K. The app has no MOSFET model; recorded only.
-# Seller value changes: bottom-left 100n -> 10n, top-centre 1n -> 100n, right-centre 100n -> 22n. Board: 10M, 1M x5,
-# 470K, 100K, 82K, 62K, 47K, 10K x2, 5.1K x2, 2.7K x2, 330R, 180R, 82R, 100n x2, 22n, 2.2n x2, 1n, 470pF, 47pF, 100uF,
-# 47uF, 10uF, 1uF, 1N400X.
+id pp-brown-charlie-childs
+goods 186787532
+name Brown Charlie Childs
+motif Marshall JTM45-style MOSFET overdrive
+type distortion
+desc BS170 3단 - 1n 입력→M1(62K/100K 분압을 10M으로 게이트 바이어스, 9.1V 보호 제너, 드레인 2.7K, 소스 2.7K∥(100uF+B5K GAIN))→100n→470K∥470p→M3(1M 드레인-게이트 바이어스, 5.1K/180R)→22n→M2(1M 바이어스, 5.1K/330R)→1uF→47K+22n·100n+82K/B25K PRESENCE→B100K TONE→10K/2.2n 2단 LPF→B100K 볼륨
+image img_01.jpg
+# Seller value changes (bottom-left 100n -> 10n, top-centre 1n -> 100n, right-centre 100n -> 22n) are not visible on this
+# render's silk; values written as printed. Hidden traces: 9V ring 86 -> 82R (87, cyan); IN ring 7 -> 1n (8); 100uF
+# top pad 22 -> GAIN pot lug 10 (the gain pot varies M1's source bypass). The 9.1V zener (29-30) sits gate-to-source on
+# M1 for protection and is written as a plain diode. GAIN B5K lugs 11/12 are ground (rheostat from 10).
+BOM 10M 1Mx5 470K 100K 82K 62K 47K 10Kx2 5.1Kx2 2.7Kx2 330R 180R 82R 100nx2 22nx2 2.2nx2 1n 470pF 47pF 100uF 47uF 10uF 1uF 1N400X ZENER BS170x3 B100Kx2 B25K B5K
+io IN=7 OUT=0 V9=86 GND=2
+JUMP 86 87
+JUMP 8 7
+JUMP 22 10
+
+STAGE input input 입력
+R 1M 1 2 R1
+C 1n 8 9 C1
+R 62K 36 37 R2
+R 100K 19 18 R3
+C 10uF 17 16 C2
+R 10M 27 28 R4
+C 47p 20 21 C3
+
+STAGE m1 gain M1 (BS170)
+Q BS170 g=42 d=41 s=43 M1
+D ZENER a=30 k=29 D1
+R 2.7K 48 47 R5
+R 2.7K 40 65 R6
+C 100uF 31 22 C4
+POT B5K GAIN 12 11 10
+
+STAGE m3 gain M3 (BS170)
+C 100n 52 53 C5
+R 470K 39 64 R7
+C 470p 38 54 C6
+R 1M 70 71 R8
+R 1M 63 62 R9
+Q BS170 g=75 d=74 s=76 M3
+R 5.1K 51 50 R10
+R 180R 79 80 R11
+
+STAGE m2 gain M2 (BS170)
+C 22n 61 60 C7
+R 1M 34 35 R12
+R 1M 69 68 R13
+Q BS170 g=56 d=55 s=57 M2
+R 5.1K 45 46 R14
+R 330R 26 25 R15
+
+STAGE tone tone 톤·프레즌스
+C 1uF 44 49 C8
+R 47K 58 59 R16
+C 22n 67 66 C9
+C 100n 77 78 C10
+R 82K 81 82 R17
+POT B25K PRESS 89 90 91
+POT B100K TONE 85 84 83
+R 10K 33 32 R18
+C 2.2n 15 16 C11
+R 10K 24 23 R19
+C 2.2n 13 14 C12
+
+STAGE output output 출력 (볼륨)
+POT B100K VOLUME 5 4 3
+
+STAGE power power 전원
+R 82R 87 88 R20
+D 1N400X a=93 k=92 D2
+C 47uF 72 73 C13
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT M1 270 400
+AT R5 380 400 h
+AT R14 480 400 h-
+AT C8 580 400 h
+AT R16 680 400 h
+AT TONE 780 400 r0
+AT R18 880 400 h
+AT R19 980 400 h
+AT VOLUME 1080 400 r180
+AT R1 120 470 v
+AT R2 410 470 v
+AT R3 410 570 v
+AT C2 470 570 v
+AT R4 300 520 h-
+AT C3 200 470 v
+AT D1 240 580 h-
+AT R6 470 500 v
+AT C4 290 650 v
+AT GAIN 290 770 r270
+AT C5 290 320 v
+AT R7 350 350 h
+AT C6 340 580 h
+AT R8 560 470 v
+AT R9 440 350 h
+AT R10 440 520 h-
+AT C7 530 350 h
+AT R12 620 470 v
+AT R13 540 520 h-
+AT C9 710 470 v
+AT C10 710 520 h
+AT R17 840 470 v
+AT PRESS 840 590 r270
+AT C11 910 470 v
+AT C12 1010 470 v
+AT R20 410 190 v
+AT D2 1110 190 v-
+AT C13 950 470 v
+AT M3 1190 350
+AT M2 1270 350
+AT R11 140 880 h
+AT R15 240 880 h
+AT RLOAD 1080 480 v

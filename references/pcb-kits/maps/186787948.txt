@@ -2,3 +2,5 @@
 # BAT41 x5 Schottky clippers; Sensitivity A1M, Accent B10K, Contour B50K, Level A100K. The app has no MOSFET model;
 # recorded only. Board: 2.2M, 470K, 56K, 33K, 22K, 18K, 10K x3, 8.2K, 1K, 820R x2, 220n, 100n x2, 47n, 8.2n, 2.2n, 1n,
 # 47pF x2, 220uF x2, 1N400X.
+# Update 2026-10-30: 2N7000/BS170 now have a model (square-law + body diode); this board stays recorded only because of
+# its hidden traces / off-board pads, see docs/kit-deferred.md.

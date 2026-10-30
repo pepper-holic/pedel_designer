@@ -1,17 +1,17 @@
-# 키트 기판 진행 현황 (2026-10-30 전하펌프 규약까지)
+# 키트 기판 진행 현황 (2026-10-30 MOSFET 모델·재분류까지)
 
 수집: pedalparts.co.kr 키트 기판 렌더 279건(triage). A등급=60패드 이하·고립 2개 이하, B등급=그 외 시뮬 가능 계열, C등급=모델 없는 계열(딜레이·모듈레이션 등).
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 70 |
-| 기록만 | 19 |
-| 보류 | 40 |
-| 미착수 | 83 |
+| 변환 완료 | 75 |
+| 기록만 | 10 |
+| 보류 | 44 |
+| 미착수 | 92 |
 | 중복 기판 | 18 |
-| C등급(범위 밖) | 49 |
+| C등급(범위 밖) | 40 |
 
-## 변환 완료 (70)
+## 변환 완료 (75)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -57,10 +57,12 @@
 | B | 186788539 | T&B FACE | fuzz | Arbiter Treble & Bass Face |
 | B | 186787650 | WT Fuzz | fuzz | WT Fuzz (NPN/PNP 복합 쌍) |
 | B | 186788047 | ALL New Kantata | overdrive | Keeley Katana |
+| B | 186788306 | NEW Z-DRIVE | overdrive | Hermida Audio Zendrive |
 | B | 186788515 | FUZZ BUDDY | fuzz | Shin-ei Companion FY-2 |
 | B | 186787633 | CALIBER | distortion | J. Rockett .45 Caliber |
 | B | 186788063 | New Blue Color | overdrive | Menatone Blue Collar |
 | B | 186788014 | Mark 4 | overdrive | Mark 4.23 clean boost |
+| B | 186788307 | NEW ZENFIRE | overdrive | Hermida Audio Mosferatu |
 | B | 186787673 | NEW BBreaker | unknown | Marshall Bluesbreaker |
 | B | 186787674 | Blues Pro | overdrive | MI Audio Blues Pro |
 | B | 186788029 | Green Land | overdrive | Greer Southland / Lightspeed |
@@ -80,13 +82,16 @@
 | B | 186787639 | Golden Drive | overdrive | Friedman Golden Pearl |
 | B | 186788110 | NEW Valve 808 | overdrive | Ibanez TS-808 |
 | B | 186788511 | VOO-DOO BASS | distortion | Roger Mayer Voodoo-1 (bass) |
+| B | 186788044 | DOC Overdrive | overdrive | Fulltone OCD V4 |
+| B | 186787532 | Brown Charlie Childs | distortion | Marshall JTM45-style MOSFET overdrive |
 | B | 186788572 | NARROW 808 | overdrive | Ibanez TS-808 (op-amp buffers) |
 | B | 186788510 | VOO-DOO-ONE | distortion | Roger Mayer Voodoo-1 |
 | B | 186788573 | PORTA 424 | distortion | Tascam 424 Portastudio channel |
 | B | 186787949 | TEXPRESS | overdrive | Vertex Steel String / Trainwreck-style overdrive |
+| B | 186788032 | Time Peace | overdrive | J. Rockett Tim Pierce signature |
 | B | 186787636 | Sweet OD | overdrive | Mad Professor Sweet Honey Overdrive |
 
-## 기록만 (19)
+## 기록만 (10)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -96,21 +101,12 @@
 | B | 186787537 | Jubelee | distortion | LM386 |
 | B | 186788031 | Green Punch | overdrive | LM386 |
 | B | 186788638 | PAPADUMBEL  (옵션) | unknown | LM386 |
-| B | 186788306 | NEW Z-DRIVE | overdrive | MOSFET |
-| B | 186788307 | NEW ZENFIRE | overdrive | MOSFET |
 | B | 186787680 | Feach Fuzz | fuzz | LM386 |
 | B | 186788593 | FUZZ FORGE 7K | fuzz | Ge PNP 양접지 |
-| B | 186788308 | NEW ZEN GU DONG | overdrive | MOSFET |
-| B | 186787948 | THIMBLE | overdrive | MOSFET |
-| B | 186788044 | DOC Overdrive | overdrive | MOSFET |
-| B | 186787532 | Brown Charlie Childs | distortion | MOSFET |
 | B | 186787637 | Gray Stone | distortion | CD4069 |
-| B | 186788032 | Time Peace | overdrive | MOSFET |
-| B | 186788138 | NEW ANDY PLUS | eq | MOSFET |
-| B | 186787535 | Dove Drive | overdrive | MOSFET |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (40)
+## 보류 (44)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -130,9 +126,11 @@
 | B | 186788145 | KONISH SS-2 | overdrive |  |
 | B | 186788309 | KO-N UI (케이스제외) | overdrive |  |
 | B | 186787554 | Flame mini Booster | buffer-boost |  |
+| B | 186788308 | NEW ZEN GU DONG | overdrive | MOSFET |
 | B | 186787677 | Wild Jack | overdrive |  |
 | B | 186788010 | Soulist | overdrive |  |
 | B | 186788589 | TIME V2 (잔레이) | overdrive |  |
+| B | 186787948 | THIMBLE | overdrive | MOSFET |
 | B | 186788159 | SONIX BABY | eq |  |
 | B | 186788016 | Pluto Blue | overdrive |  |
 | B | 186787473 | NEW MORNING | overdrive |  |
@@ -151,15 +149,21 @@
 | B | 186788015 | Tong Cap | preamp |  |
 | B | 186788146 | KONISH SS-3 | overdrive |  |
 | B | 186788150 | TUBE SV808 | overdrive |  |
+| B | 186788138 | NEW ANDY PLUS | eq | MOSFET |
+| B | 186787535 | Dove Drive | overdrive | MOSFET |
 | B | 186788577 | NEW RED CHARLES | distortion |  |
 | B | 186787546 | X-Touch | overdrive |  |
 | B | 186788551 | REAL CLEAN | buffer-boost |  |
 
-## 미착수 (83)
+## 미착수 (92)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
 | A | 186788277 | FUZZY FACE  (노브, 케이스 제외) | fuzz | 35패드, 고립 0 |
+| A | 186787693 | [1K] SHO | buffer-boost | 37패드, 고립 0 |
+| B | 186786839 | NEW FAT 부스터 | buffer-boost | 66패드, 고립 9 |
+| B | 186787969 | Octavia | fuzz | 69패드, 고립 15 |
+| B | 186788446 | OCB | fuzz | 100패드, 고립 2 |
 | B | 186788552 | ALMOST CLEAN | buffer-boost | 111패드, 고립 7 |
 | B | 186787543 | West Breeze | eq | 112패드, 고립 2 |
 | B | 186788161 | SONIX 482i | unknown | 112패드, 고립 21 |
@@ -171,10 +175,13 @@
 | B | 186787649 | Kluster Fuzz | fuzz | 115패드, 고립 3 |
 | B | 186788011 | Heavy Fist | distortion | 115패드, 고립 9 |
 | B | 186788337 | SURGE V2 | overdrive | 115패드, 고립 13 |
+| B | 186788509 | OCTA CLASSIC | fuzz | 115패드, 고립 3 |
 | B | 186788115 | NEW 1981 LEVEL | buffer-boost | 116패드, 고립 11 |
 | B | 186788144 | KONISH NG-2 | fuzz | 117패드, 고립 16 |
 | B | 186788336 | SIR RIOT | distortion | 118패드, 고립 16 |
 | B | 186788339 | SLASHMASTER | distortion | 118패드, 고립 10 |
+| B | 186787558 | Black CAB | eq | 118패드, 고립 15 |
+| B | 186788575 | BLACK AMP 65 | overdrive | 118패드, 고립 10 |
 | B | 186787635 | FLEX OD | overdrive | 119패드, 고립 5 |
 | B | 186787483 | King Cat | fuzz | 120패드, 고립 6 |
 | B | 186788576 | MUFFLER II | distortion | 120패드, 고립 6 |
@@ -186,6 +193,7 @@
 | B | 186787846 | BAD ASS | buffer-boost | 122패드, 고립 10 |
 | B | 186788074 | New Big Muffler | distortion | 123패드, 고립 8 |
 | B | 186787538 | RahRah | overdrive | 126패드, 고립 5 |
+| B | 186788574 | TWEED AMP 57 | overdrive | 126패드, 고립 16 |
 | B | 186788303 | J800CM | overdrive | 127패드, 고립 19 |
 | B | 186788317 | TOMATOMA BASS | preamp | 128패드, 고립 29 |
 | B | 186787464 | Marvel Drive | overdrive | 129패드, 고립 13 |
@@ -205,6 +213,7 @@
 | B | 186788180 | BIG SHERIFF PREAMP | preamp | 145패드, 고립 6 |
 | B | 186788181 | BIG JACK PREAMP | preamp | 145패드, 고립 6 |
 | B | 186788182 | BIG KRAKEN PREAMP | preamp | 145패드, 고립 6 |
+| B | 186788445 | OCTA KING | fuzz | 146패드, 고립 4 |
 | B | 186788178 | BIG COPPER PREAMP | preamp | 147패드, 고립 9 |
 | B | 186788179 | BIG DUTCH PREAMP | preamp | 147패드, 고립 8 |
 | B | 186788484 | BLUES BRKR BOX | overdrive | 147패드, 고립 14 |
@@ -266,7 +275,7 @@
 | C | 186788265 | GRAFF DYNAMIC 필코팩 | utility | = NEW Graff Dynamic |
 | C | 186788592 | DYNAMICA BASS | compressor | = DYNAMICA GTR |
 
-## C등급(범위 밖) (49)
+## C등급(범위 밖) (40)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -276,10 +285,7 @@
 | C | 186787467 | CE-2 Chorus | modulation | modulation |
 | C | 186787467 | CE-2 Chorus | modulation | modulation |
 | C | 186787467 | CE-2 Chorus | modulation | modulation |
-| C | 186787693 | [1K] SHO | noise-gate | noise-gate |
-| C | 186786839 | NEW FAT 부스터 | compressor | compressor |
 | C | 186787647 | Maguna Vibe | modulation | modulation |
-| C | 186787969 | Octavia | pitch | pitch |
 | C | 186787561 | 03 Pancake | noise-gate | noise-gate |
 | C | 186787560 | 77 Pancake | noise-gate | noise-gate |
 | C | 186788655 | BIG KNOB VERB | reverb | reverb |
@@ -287,21 +293,15 @@
 | C | 186787954 | Fake Reverb | reverb | reverb |
 | C | 186788596 | FAKE REVERB | reverb | reverb |
 | C | 186787465 | Gate Dog | noise-gate | noise-gate |
-| C | 186788446 | OCB | pitch | pitch |
 | C | 186787463 | Active FX Loop | utility | utility |
 | C | 186788024 | Blue Power | utility | utility |
 | C | 186787641 | NEW MULTI CAT | utility | utility |
 | C | 186787679 | FX-25 | filter | filter |
-| C | 186788509 | OCTA CLASSIC | pitch | pitch |
-| C | 186787558 | Black CAB | cabinet | cabinet |
-| C | 186788575 | BLACK AMP 65 | reverb | reverb |
 | C | 186787956 | Reverberation | reverb | reverb |
-| C | 186788574 | TWEED AMP 57 | utility | utility |
 | C | 186788109 | NEW DELAY ATN | delay | delay |
 | C | 186788594 | REVERBNATION | reverb | reverb |
 | C | 186788156 | NEW KOMPRE4 | compressor | compressor |
 | C | 186788595 | GHOST REVERB | reverb | reverb |
-| C | 186788445 | OCTA KING | pitch | pitch |
 | C | 186788305 | NEW FG Komp | compressor | compressor |
 | C | 186787955 | Ghost Reverb | reverb | reverb |
 | C | 186787484 | Opto Vibe | modulation | modulation |

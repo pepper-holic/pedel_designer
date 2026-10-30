@@ -1038,7 +1038,7 @@
   "goodsNo": "186786839",
   "name": "@ NEW FAT 부스터 Parts Pack",
   "item": "kit",
-  "type": "compressor",
+  "type": "buffer-boost",
   "categories": [
    "036",
    "087",
@@ -3869,7 +3869,7 @@
   "goodsNo": "186787558",
   "name": "@ Black CAB Parts pack",
   "item": "kit",
-  "type": "cabinet",
+  "type": "eq",
   "categories": [
    "036"
   ],
@@ -6219,7 +6219,7 @@
   "goodsNo": "186787693",
   "name": "[1K] SHO Parts pack",
   "item": "kit",
-  "type": "noise-gate",
+  "type": "buffer-boost",
   "categories": [
    "036"
   ],
@@ -8063,7 +8063,7 @@
   "goodsNo": "186787969",
   "name": "@ Octavia Parts pack",
   "item": "kit",
-  "type": "pitch",
+  "type": "fuzz",
   "categories": [
    "036"
   ],
@@ -14667,7 +14667,7 @@
   "goodsNo": "186788445",
   "name": "@ OCTA KING Parts pack",
   "item": "kit",
-  "type": "pitch",
+  "type": "fuzz",
   "categories": [
    "036",
    "087",
@@ -14710,7 +14710,7 @@
   "goodsNo": "186788446",
   "name": "@ OCB Parts pack",
   "item": "kit",
-  "type": "pitch",
+  "type": "fuzz",
   "categories": [
    "036",
    "087",
@@ -15962,7 +15962,7 @@
   "goodsNo": "186788509",
   "name": "@ OCTA CLASSIC Parts pack",
   "item": "kit",
-  "type": "pitch",
+  "type": "fuzz",
   "categories": [
    "114",
    "116"
@@ -17526,7 +17526,7 @@
   "goodsNo": "186788574",
   "name": "@ TWEED AMP 57 Parts pack",
   "item": "kit",
-  "type": "utility",
+  "type": "overdrive",
   "categories": [
    "036",
    "087"
@@ -17568,7 +17568,7 @@
   "goodsNo": "186788575",
   "name": "@ BLACK AMP 65 Parts pack",
   "item": "kit",
-  "type": "reverb",
+  "type": "overdrive",
   "categories": [
    "036",
    "087"

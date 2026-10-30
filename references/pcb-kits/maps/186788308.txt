@@ -2,3 +2,5 @@
 # 2N7000 MOSFET + 1N34A / red 3mm LED clipper set on a 3-position rotary; the app has no MOSFET model, so recorded
 # only. Board: 2.2M x2, 470K, 10K x4, 1K, 470n x2, 100n, 10n, 3.3n, 100pF, 100uF, 47uF, 1N400X, angle B500K /
 # B100K / B50K / B10K.
+# Update 2026-10-30: 2N7000/BS170 now have a model (square-law + body diode); this board stays recorded only because of
+# its hidden traces / off-board pads, see docs/kit-deferred.md.

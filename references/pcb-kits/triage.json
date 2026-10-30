@@ -6017,7 +6017,7 @@
  {
   "goodsNo": "186787693",
   "name": "[1K] SHO Parts pack",
-  "type": "noise-gate",
+  "type": "buffer-boost",
   "about": "미니 가변저항이 기판에 실장되는 타입으로 작은 공간을 차지하기에 페달형으로 제작하거나 다른 페달에 추가로 적용하실 수도 있습니다. 너무나도 유명",
   "board": 0,
   "image": "img_01.jpg",
@@ -6038,12 +6038,12 @@
    278
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "A"
  },
  {
   "goodsNo": "186786839",
   "name": "@ NEW FAT 부스터 Parts Pack",
-  "type": "compressor",
+  "type": "buffer-boost",
   "about": "LF442CN단종으로 TL072로 패킹됩니다. 가격은 반영되어 있습니다. 1590A케이스에 페달로 만드실때는 3파이LED를 사용해야 합니다 보호",
   "board": 0,
   "image": "img_02.jpg",
@@ -6064,7 +6064,7 @@
    553
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "B"
  },
  {
   "goodsNo": "186787647",
@@ -6095,7 +6095,7 @@
  {
   "goodsNo": "186787969",
   "name": "@ Octavia Parts pack",
-  "type": "pitch",
+  "type": "fuzz",
   "about": "Tychobrahe Octavia 옥타퍼즈입니다.. 1590B 케이스에 딱 맞게 크기를 줄여서 입고 되었습니다. 카본컴퍼지션 저항과 42TM02",
   "board": 0,
   "image": "img_03.jpg",
@@ -6117,7 +6117,7 @@
    263
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "B"
  },
  {
   "goodsNo": "186788279",
@@ -6355,7 +6355,7 @@
  {
   "goodsNo": "186788446",
   "name": "@ OCB Parts pack",
-  "type": "pitch",
+  "type": "fuzz",
   "about": "CLEAN OCTAVE BLEND 라는 이름의 옥타 퍼즈페달입니다. 다양한 톤에 대응 하는 현재적으로 해석된 옥타 퍼즈라고합니다",
   "board": 0,
   "image": "img_01.jpg",
@@ -6376,7 +6376,7 @@
    548
   ],
   "twoLayer": false,
-  "tier": "C"
+  "tier": "B"
  },
  {
   "goodsNo": "186788265",
@@ -6511,7 +6511,7 @@
  {
   "goodsNo": "186788509",
   "name": "@ OCTA CLASSIC Parts pack",
-  "type": "pitch",
+  "type": "fuzz",
   "about": "로저메이어가 최초 개발하고 양산하지 않았던 트랜스버전 이후 새로 설계해서 제작한 옥타퍼즈 페달입니다. 화이트 케이스의 비전 옥타비아도 있는데 외",
   "board": 0,
   "image": "img_01.jpg",
@@ -6532,12 +6532,12 @@
    630
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "B"
  },
  {
   "goodsNo": "186787558",
   "name": "@ Black CAB Parts pack",
-  "type": "cabinet",
+  "type": "eq",
   "about": "스피커 시스템의 주파수 응답을 에뮬레이트 하는 캐비넷 시뮬레이터 페달입니다. 원 페달에 있는 D.I + XLR 회로는 공개된것이 없어 캐비넷 시",
   "board": 0,
   "image": "img_01.jpg",
@@ -6558,12 +6558,12 @@
    534
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "B"
  },
  {
   "goodsNo": "186788575",
   "name": "@ BLACK AMP 65 Parts pack",
-  "type": "reverb",
+  "type": "overdrive",
   "about": "웜플러 블랙 65 페달입니다. 브라이언 웜플러가 실제 빈티지 모델과 비교하면서 제작한 것으로 유명합니다. 트윈리버브, 디럭스 리버브, 바이브로럭",
   "board": 0,
   "image": "img_01.jpg",
@@ -6584,7 +6584,7 @@
    772
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "B"
  },
  {
   "goodsNo": "186787956",
@@ -6615,7 +6615,7 @@
  {
   "goodsNo": "186788574",
   "name": "@ TWEED AMP 57 Parts pack",
-  "type": "utility",
+  "type": "overdrive",
   "about": "웜플러 트위드57 페달입니다. 브라이언 웜플러가 실제 빈티지 모델과 비교하면서 제작한 것으로 유명합니다. 펜터의 트위드 디럭스, 베이스맨, 챔프",
   "board": 0,
   "image": "img_01.jpg",
@@ -6636,7 +6636,7 @@
    771
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "B"
  },
  {
   "goodsNo": "186788109",
@@ -6745,7 +6745,7 @@
  {
   "goodsNo": "186788445",
   "name": "@ OCTA KING Parts pack",
-  "type": "pitch",
+  "type": "fuzz",
   "about": "킹톤 옥타랜드 미니 버전입니다. 높은 게인에서도 옥타브 특성이 유지되는 강렬하고 독창적인 회로의 옥타 퍼즈 페달입니다.",
   "board": 0,
   "image": "img_01.jpg",
@@ -6766,7 +6766,7 @@
    636
   ],
   "twoLayer": true,
-  "tier": "C"
+  "tier": "B"
  },
  {
   "goodsNo": "186788305",

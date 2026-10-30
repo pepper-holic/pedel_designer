@@ -1,4 +1,123 @@
-# Time Peace (186788032): J. Rockett Tim Pierce signature - 4558D with a BS170 MOSFET stage and 9.1V zener bias;
-# GAIN A500K, TONE B10K, POWER C50K, BASS C25K, LEVEL A100K. The app has no MOSFET model; recorded only. Board: 10M x2,
-# 1M, 470K x3, 15K, 5.1K x2, 4.7K, 3.3K, 1K, 820R, 470R, 330R, 10R, 470n, 220n, 150n, 100n x2, 47n, 220p, 47p, 100uF,
-# 47uF x2, 10uF, 4.7uF, 1.5uF, 1N4007 x5.
+id pp-time-peace
+goods 186788032
+name Time Peace
+motif J. Rockett Tim Pierce signature
+type overdrive
+desc 4558 OD + BS170 부스트 - IN→150n→A단 비반전(470K Vref 바이어스, 피드백 A500K GAIN+4.7K∥47p에 1N4007 2+2 직렬 역병렬, 접지 다리 820R+100n∥(C25K BASS+470n))→4.7uF→B10K 톤(47n)→A100K LEVEL→5.1K 출력; BS170 부스트(100n 입력, 10M/10M 바이어스, 5.1K 드레인, 1K+1.5uF/330R 소스)→10uF→C50K POWER 레벨이 OD 앞단에 놓인 구성
+image img_01.jpg
+# 4558 notch up: left 14=1(out A) 22=2 31=3 38=4, right 15=8(V+) 23=7 32=6 39=5; B is a Vref follower (470K/470K, 47uF).
+# BS170 pads 67(D) 74(G) 81(S) sit on the left ends of the 10M / 10M / 1K rows (68, 75, 82). Hidden traces: 5.1K end 60 ->
+# the 470R/100uF rail (47); 10M end 69 -> gate (74); 1.5uF pad 73 -> source (81); 10uF pad 56 -> POWER lug (53). The boost
+# (B_IN 89 -> BS170 -> POWER level pot -> B_OUT 88) is a separate section; drawn boost-first with B_OUT wired to the OD
+# input ring 62 off board (JUMP 88 62), the 15K loads the POWER pot to ground. OUT is the ring pad 104
+# behind the 5.1K. Feedback diodes: 20(a)-21(k) + 41(a)-40(k) and 29(a)-28(k) + 35(a)-36(k).
+BOM 10Mx2 1M 470Kx3 15K 5.1Kx2 4.7K 3.3K 1K 820R 470R 330R 10R 470n 220n 150n 100nx2 47n 220p 47p 100uF 47uFx2 10uF 4.7uF 1.5uF 1N4007x5 ZENER JRC4558D BS170 A500K A100K C50K C25K B10K
+io IN=89 OUT=104 V9=3 GND=16
+JUMP 88 62
+JUMP 60 47
+JUMP 69 74
+JUMP 73 81
+JUMP 56 53
+
+STAGE input input 입력
+R 1M 63 86 R1
+C 220p 71 85 C1
+C 150n 51 52 C2
+R 470K 42 43 R2
+
+STAGE gain gain 게인단 (IC A)
+IC JRC4558D 1=14 2=22 3=31 4=38 5=39 6=32 7=23 8=15 U1
+POT A500K GAIN 2 1 0
+R 4.7K 11 12 R3
+C 47p 13 30 C3
+D 1N4007 a=20 k=21 D1
+D 1N4007 a=41 k=40 D2
+D 1N4007 a=29 k=28 D3
+D 1N4007 a=35 k=36 D4
+R 820R 64 87 R4
+C 100n 61 48 C4
+POT C25K BASS 90 91 92
+C 470n 84 70 C5
+
+STAGE boost gain BS170 부스트
+C 100n 79 65 C6
+R 10M 75 76 R5
+R 10M 68 69 R6
+Q BS170 g=74 d=67 s=81 M1
+D ZENER a=80 k=66 D5
+R 1K 82 83 R7
+C 1.5uF 72 73 C7
+R 330R 77 98 R8
+R 5.1K 59 60 R9
+C 10uF 57 56 C8
+C 220n 97 96 C9
+R 3.3K 99 78 R10
+POT C50K POWER 55 54 53
+R 15K 58 37 R11
+
+STAGE tone tone 톤
+C 4.7uF 7 8 C10
+POT B10K TONE 6 5 4
+C 47n 17 16 C11
+
+STAGE output output 출력 (레벨)
+POT A100K LEVEL 95 94 93
+R 5.1K 105 104 R12
+
+STAGE power power 전원
+R 10R 9 10 R13
+C 47uF 18 19 C12
+D 1N4007 a=46 k=26 D6
+R 470K 24 44 R14
+R 470K 25 45 R15
+C 47uF 33 34 C13
+R 470R 27 47 R16
+C 100uF 49 50 C14
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C6 120 470 v
+AT R5 120 570 v
+AT R6 180 500 h-
+AT D5 180 570 v-
+AT R7 180 670 v
+AT C7 240 600 h-
+AT R8 270 670 v
+AT R9 270 500 h
+AT C8 300 570 v
+AT POWER 360 600 r180
+AT R11 420 670 v
+AT R16 360 500 h-
+AT C14 420 570 v
+AT R1 360 700 v
+AT C1 480 700 v
+AT C2 420 760 v
+AT R2 480 790 h
+AT C9 360 790 v
+AT R10 360 890 v
+AT R13 390 190 v
+AT C12 510 570 v
+AT D6 570 570 v-
+AT R14 450 500 h
+AT R15 660 570 v-
+AT C13 720 570 v
+AT U1A 580 790
+AT M1 780 500
+AT GAIN 140 880 h
+AT R3 240 880 h
+AT C3 340 880 h
+AT D1 440 880 h
+AT D2 540 880 h
+AT D3 640 880 h
+AT D4 740 880 h
+AT R4 840 880 h
+AT C4 940 880 h
+AT BASS 1040 880 h
+AT C5 1140 880 h
+AT C10 1240 880 h
+AT TONE 1340 880 h
+AT C11 1440 880 h
+AT LEVEL 1540 880 h
+AT R12 1640 880 h
+AT RLOAD 540 480 v

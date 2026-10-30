@@ -32,9 +32,10 @@
    18V 더블러 배선(Kantata)은 `supply 18` 같은 머리 줄로 레일 전압을 바꾼다. 양접지 Ge 퍼즈는 V9 패드가 -9V 넷이 되도록
    `io V9=...` 대신 `io VNEG=...`를 허용한다. 대상: RANGER GE, SOLA FACE GE, 1969 GE, BUZZRITE GE, BENDER II/III GE, Mark 4,
    Kantata, Secret Pre, 29 YUNA, Haunting FreQ, 1484 TWELVE(SMD라 보류), FUZZ FORGE 7K(양접지).
-2. **MOSFET**: 솔버에 `mosfet` 소자(레벨 1 제곱법칙 + 서브스레숄드 지수, 바디 다이오드) 추가, `partModels.ts`에 2N7000(Vth 2.1V,
-   K 0.1A/V²)·BS170(Vth 2.0V) 등록, 대응표 `Q 2N7000 g= d= s=`. 대상: Z-Drive, ZENFIRE, ZEN GU DONG, THIMBLE, DOC, Brown Charlie,
-   Time Peace, ANDY PLUS, Dove Drive.
+2. **MOSFET** - 완료(2026-10-30): 솔버 변경 없이 JFET 제곱법칙에 양의 핀치오프(=Vth)를 주어 2N7000(Vth 2.1, K 0.09)·BS170(Vth 2.0,
+   K 0.12)을 `partModels.ts`에 등록하고, 변환기가 소스→드레인 바디 다이오드를 따로 붙인다(OCD 클리퍼가 바디 다이오드를 쓴다). 제너는
+   `ZENER` 품번(순방향 다이오드)으로. 회로가 된 것: DOC Overdrive, Brown Charlie Childs, Time Peace, NEW ZENFIRE, NEW Z-DRIVE(5개).
+   남은 4개(THIMBLE, ANDY PLUS, Dove Drive, ZEN GU DONG)는 오프보드 팟·숨은 트레이스 문제라 ③으로.
 3. **LM386**: 고정 이득 20(1-8번 핀 캡이면 200)의 op-amp로 근사, 출력 레일 제한. 대상: RAM Fuzz, Jubilee, Green Punch, Papadumble,
    Feach Fuzz.
 4. 각 단계마다 해당 기록용 맵을 정식 대응표로 바꾸고 키트 테스트 통과까지. 소자 하나 추가할 때 `tests/solver`에 단위 테스트 1개씩.
@@ -64,4 +65,10 @@ Octavia·OCB·OCTA CLASSIC·OCTA KING(옥타브 퍼즈는 트랜지스터·다�
 
 ## 다음 할 일
 
-①-1 완료. 다음은 ①-2 MOSFET(솔버 소자 + 2N7000/BS170 모델, 기록 9개) → ①-3 LM386(기록 5개) 순. 한 단계마다 기록용 맵을 되살려 커밋한다.
+①-1·①-2·② 완료. 다음은 ①-3 LM386(기록 5개: RAM Fuzz, Jubilee, Green Punch, Papadumble, Feach Fuzz) → ③ 보류 회로도 대조.
+
+### ② 재분류 결과 (2026-10-30)
+
+index.json·triage.json의 계열을 손으로 고쳐 B로 올림: [1K] SHO(buffer-boost, A등급), NEW FAT 부스터(buffer-boost), Octavia·OCB·OCTA CLASSIC·
+OCTA KING(fuzz), Black CAB(eq, 캐비닛 필터만), BLACK AMP 65·TWEED AMP 57(overdrive, 앰프 인 어 박스). 나머지 C 40개(BBD·PT2399·OTA·광소자·
+전원 유틸·노이즈게이트)는 모델이 생길 때까지 범위 밖. `batch_prepare.py`를 다시 돌리면 index.json의 계열이 기준이라 유지된다.

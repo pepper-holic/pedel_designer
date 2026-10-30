@@ -1,3 +1,5 @@
 # NEW ANDY PLUS (186788138): Andy Timmons signature drive - LM833 with a BS170 MOSFET stage, 12V zener, BAT41 x2,
 # five angle pots (B1M, B100K, B25K, A100K, C10K) and a DIP on-off-on EQ/Air switch. The app has no MOSFET model; recorded
 # only. Board: 1M x6, 100K, 22K x2, 10K, 1K x4, 470R, 220n, 100n x3, 22n x3, 1n, 100p x2, 100uF x2, 10uF, 2.2uF, 1N400X.
+# Update 2026-10-30: 2N7000/BS170 now have a model (square-law + body diode); this board stays recorded only because of
+# its hidden traces / off-board pads, see docs/kit-deferred.md.

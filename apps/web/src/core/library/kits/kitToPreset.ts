@@ -4,6 +4,7 @@ import type { KitCircuit, KitMeta, KitPart, KitRail } from "./types";
 import { stageBlocks } from "./stageBlocks";
 import { parsePot, parseValue } from "./values";
 import { bjtModel, diodeModel, jfetModel, opAmpModel, OPAMP_PINOUT } from "./partModels";
+import { SILICON_DIODE_1N4148 } from "../deviceModels";
 
 /** Op-amp outputs stop this far short of the supply rails (a TL072/4558 on 9V swings ~1-8V). */
 const RAIL_HEADROOM = 1.2;
@@ -78,7 +79,11 @@ function partElements(part: KitPart, rails: Rails, knobs: KnobSpec[]): Element[]
       if (p.g) {
         const model = jfetModel(part.part ?? "");
         if (!model) throw new UnsupportedKitError(`${part.ref}: no JFET model for ${part.part}`);
-        return [{ id: part.ref, type: "jfet", nodes: [p.g, p.d, p.s], ...model }];
+        const { bodyDiode, ...fet } = model;
+        return [
+          { id: part.ref, type: "jfet", nodes: [p.g, p.d, p.s], ...fet },
+          ...(bodyDiode ? [{ id: `${part.ref}_D`, type: "diode" as const, nodes: [p.s, p.d] as [string, string], ...SILICON_DIODE_1N4148 }] : []),
+        ];
       }
       const model = bjtModel(part.part ?? "");
       if (!model) throw new UnsupportedKitError(`${part.ref}: no transistor model for ${part.part}`);

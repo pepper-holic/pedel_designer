@@ -1,3 +1,5 @@
 # Dove Drive (186787535): Chandler Tube Driver nuance - NE5532 with 2N3906 x2 and 2N7000 x2 (MOSFET), 1N60 / BAT46 x2
 # clippers, 10K trimmer; C5K, B100K, B50K. The app has no MOSFET model; recorded only. Board: 1M, 470K, 220K, 120K, 100K,
 # 82K, 33K x2, 10K x3, 4.7K, 1K x2, 560R, 470R, 330R, 100R, 1000n, 470n x2, 100n x4, 3.3n, 100pF, 100uF, 47uF, 22uF, 1N400X.
+# Update 2026-10-30: 2N7000/BS170 now have a model (square-law + body diode); this board stays recorded only because of
+# its hidden traces / off-board pads, see docs/kit-deferred.md.

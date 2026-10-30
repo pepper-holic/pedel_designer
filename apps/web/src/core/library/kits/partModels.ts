@@ -77,8 +77,19 @@ const BJTS: [string, Bjt][] = [
   ["AC187", ge("npn", 100)],
 ];
 
-type Jfet = { idss: number; pinchOffVoltage: number };
+type Jfet = { idss: number; pinchOffVoltage: number; bodyDiode?: boolean };
+/**
+ * Enhancement MOSFETs ride on the JFET square law with a positive "pinch-off" (the threshold): the solver's
+ * Id = Idss*(1 - Vgs/Vp)^2 equals K*(Vgs - Vth)^2 when Idss = K*Vth^2, and is zero below Vth. Saturation only
+ * (no triode region); the source-drain body diode is added as a separate silicon diode by the converter, since the
+ * OCD-style clippers use one MOSFET diode-connected and the other purely as its body diode.
+ */
+const mosfet = (vth: number, k: number): Jfet => ({ idss: k * vth * vth, pinchOffVoltage: vth, bodyDiode: true });
 const JFETS: [string, Jfet][] = [
+  ["2N7000", mosfet(2.1, 0.09)],
+  ["2N7002", mosfet(2.1, 0.09)],
+  ["BS170", mosfet(2.0, 0.12)],
+  ["BS250", mosfet(2.0, 0.12)],
   ["J201", JFET_J201],
   ["MMBFJ201", JFET_J201],
   ["2N5457", JFET_2N5457],
@@ -99,6 +110,7 @@ const DIODES: [string, Diode][] = [
   ["1S1588", SILICON_DIODE_1N4148],
   ["1S2473", SILICON_DIODE_1N4148],
   ["1N400", SILICON_DIODE_1N4148],
+  ["ZENER", SILICON_DIODE_1N4148], // gate-protection zeners: forward diode only, breakdown is never reached in these circuits
   ["1N34", GERMANIUM_DIODE],
   ["1N60", GERMANIUM_DIODE],
   ["1N270", GERMANIUM_DIODE],

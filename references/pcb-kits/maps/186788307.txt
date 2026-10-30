@@ -1,4 +1,89 @@
-# NEW ZENFIRE (186788307): Hermida Mosferatu (Zendrive variant with the TS-808 tone block). NE5532
-# (AD712 silk) with a 2N7000 MOSFET + 1N34A asymmetric clipper pair in the feedback; the app has no
-# MOSFET model yet, so recorded only. Board: 1M x2, 470K, 10K x2, 1K x5, 220R, 470n, 270n x3, 100pF,
-# 100uF, 47uF, 1N400X, 1N34A x2, 2N7000 x2, angle pots B500K / B100K / B25K / B10K.
+id pp-new-zenfire
+goods 186788307
+name NEW ZENFIRE
+motif Hermida Audio Mosferatu
+type overdrive
+desc NE5532(AD712 실크) 젠드라이브 변형 - 470n/470K 입력→A단 비반전(GAIN B500K+1K 피드백∥100p, 2N7000 다이오드 접속+1N34A 직렬 쌍을 역병렬로 피드백에, 접지 다리 1K→VOICE B100K 가변저항→270n→Vref)→1K→B단 톤(TONE B25K, 270n x2, 220R)→470n→1K→B10K 볼륨
+image img_01.jpg
+# Op-amp notch up: left 15=1(out A) 23=2 27=3 36=4(GND, no '+'), right 16=8(V+) 24=7(out B) 28=6 37=5. Clippers: M1 (60/61 on -in)
+# -> S 62 -> 1N34A 53(a)-72(k) -> out A; M2 (69/70 on out A) -> S 68 -> 1N34A 71(a)-52(k) -> -in. Angle pots are vertical pairs:
+# VOICE 66 / 63+51 (wiper tied, 270n to Vref), VOLUME 50 / 64 (= OUT) / 67 (ground lug, no trace -> GND). Hidden traces:
+# 100uF '+' 14 -> V+ (11); the second 270n's pad 55 -> TONE wiper 34 (wiper has 270n to X and 270n + 220R to ground).
+# Silk "4.7uF" on the Vref cap, kit list 47uF - written as shipped. Two 470n on the board (input, output) for 470n x1 on the list.
+BOM 1Mx2 470K 10Kx2 1Kx5 220R 470nx2 270nx3 100pF 100uF 47uF 1N400X 1N34Ax2 NE5532 2N7000x2 B500K B100K B25K B10K
+io IN=19 OUT=65 V9=5 GND=6,36,4,17,67,73,74,75,76
+JUMP 14 11
+JUMP 55 34
+
+STAGE input input 입력
+R 1M 18 39 R1
+C 470n 20 21 C1
+R 470K 26 9 R2
+
+STAGE gain gain 게인단 (IC A)
+IC NE5532 1=15 2=23 3=27 4=36 5=37 6=28 7=24 8=16 U1
+POT B500K GAIN 30 31 32
+R 1K 40 41 R3
+C 100p 48 49 C2
+Q 2N7000 g=61 d=60 s=62 M1
+D 1N34A a=53 k=72 D1
+Q 2N7000 g=69 d=70 s=68 M2
+D 1N34A a=71 k=52 D2
+R 1K 22 42 R4
+POT B100K VOICE 66 63 51
+C 270n 1 0 C3
+
+STAGE tone tone 톤단 (IC B)
+R 1K 43 44 R5
+C 270n 45 46 C4
+C 270n 55 56 C5
+R 220R 47 59 R6
+POT B25K TONE 33 34 35
+R 1K 12 29 R7
+
+STAGE output output 출력 (볼륨)
+C 470n 13 25 C6
+R 1K 38 54 R8
+POT B10K VOLUME 67 64 50
+R 1M 57 58 R9
+
+STAGE power power 전원
+D 1N400X a=3 k=2 D3
+C 100uF 14 17 C7
+R 10K 10 11 R10
+R 10K 7 6 R11
+C 47uF 8 4 C8
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT U1A 740 510
+AT C6 470 400 h
+AT R8 570 400 h
+AT VOLUME 670 400 r180
+AT R1 120 470 v
+AT R2 200 470 v
+AT C3 260 500 h-
+AT TONE 360 510 r180
+AT R7 350 520 h-
+AT R9 670 500 v
+AT R10 200 570 v
+AT R11 260 570 v
+AT C8 440 570 v
+AT VOICE 350 590 r180
+AT R5 450 510 h-
+AT C4 380 580 h-
+AT C5 360 670 v
+AT R6 360 770 v
+AT D3 200 190 v
+AT C7 200 670 v
+AT GAIN 540 510 r0
+AT R3 560 520 h
+AT C2 520 580 h
+AT D1 480 640 v-
+AT D2 600 580 v-
+AT R4 480 520 h-
+AT M1 830 510
+AT M2 940 510
+AT RLOAD 1020 480 v

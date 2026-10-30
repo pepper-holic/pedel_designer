@@ -1,0 +1,507 @@
+{
+ "id": "pp-new-zenfire",
+ "goodsNo": "186788307",
+ "kitName": "NEW ZENFIRE",
+ "motif": "Hermida Audio Mosferatu",
+ "type": "overdrive",
+ "description": "NE5532(AD712 실크) 젠드라이브 변형 - 470n/470K 입력→A단 비반전(GAIN B500K+1K 피드백∥100p, 2N7000 다이오드 접속+1N34A 직렬 쌍을 역병렬로 피드백에, 접지 다리 1K→VOICE B100K 가변저항→270n→Vref)→1K→B단 톤(TONE B25K, 270n x2, 220R)→470n→1K→B10K 볼륨",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "470n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "NE5532",
+   "nodes": {
+    "1": "n3",
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "5": "n5",
+    "6": "n6",
+    "7": "n7",
+    "8": "n8"
+   }
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "B500K",
+   "nodes": [
+    "n3",
+    "n9",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n9",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "M1",
+   "kind": "Q",
+   "part": "2N7000",
+   "nodes": {
+    "g": "n4",
+    "d": "n4",
+    "s": "n10"
+   }
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N34A",
+   "nodes": {
+    "a": "n10",
+    "k": "n3"
+   }
+  },
+  {
+   "ref": "M2",
+   "kind": "Q",
+   "part": "2N7000",
+   "nodes": {
+    "g": "n3",
+    "d": "n3",
+    "s": "n11"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N34A",
+   "nodes": {
+    "a": "n11",
+    "k": "n4"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n4",
+    "n12"
+   ]
+  },
+  {
+   "ref": "VOICE",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n12",
+    "n13",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "270n",
+   "nodes": [
+    "n13",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n3",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "270n",
+   "nodes": [
+    "n5",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "270n",
+   "nodes": [
+    "n14",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "220R",
+   "nodes": [
+    "n15",
+    "0"
+   ]
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B25K",
+   "nodes": [
+    "n5",
+    "n14",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "470n",
+   "nodes": [
+    "n7",
+    "n16"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n16",
+    "n17"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "B10K",
+   "nodes": [
+    "0",
+    "out",
+    "n17"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "out",
+    "0"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n8"
+   }
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n2",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "R2"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "게인단 (IC A)",
+   "parts": [
+    "U1",
+    "GAIN",
+    "R3",
+    "C2",
+    "M1",
+    "D1",
+    "M2",
+    "D2",
+    "R4",
+    "VOICE",
+    "C3"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "톤단 (IC B)",
+   "parts": [
+    "R5",
+    "C4",
+    "C5",
+    "R6",
+    "TONE",
+    "R7"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "C6",
+    "R8",
+    "VOLUME",
+    "R9"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D3",
+    "C7",
+    "R10",
+    "R11",
+    "C8"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "U1A": {
+   "x": 740,
+   "y": 510
+  },
+  "C6": {
+   "x": 470,
+   "y": 400,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 570,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 670,
+   "y": 400,
+   "rotation": 180
+  },
+  "R1": {
+   "x": 120,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 200,
+   "y": 470,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 260,
+   "y": 500,
+   "rotation": 180
+  },
+  "TONE": {
+   "x": 360,
+   "y": 510,
+   "rotation": 180
+  },
+  "R7": {
+   "x": 350,
+   "y": 520,
+   "rotation": 180
+  },
+  "R9": {
+   "x": 670,
+   "y": 500,
+   "rotation": 90
+  },
+  "R10": {
+   "x": 200,
+   "y": 570,
+   "rotation": 90
+  },
+  "R11": {
+   "x": 260,
+   "y": 570,
+   "rotation": 90
+  },
+  "C8": {
+   "x": 440,
+   "y": 570,
+   "rotation": 90
+  },
+  "VOICE": {
+   "x": 350,
+   "y": 590,
+   "rotation": 180
+  },
+  "R5": {
+   "x": 450,
+   "y": 510,
+   "rotation": 180
+  },
+  "C4": {
+   "x": 380,
+   "y": 580,
+   "rotation": 180
+  },
+  "C5": {
+   "x": 360,
+   "y": 670,
+   "rotation": 90
+  },
+  "R6": {
+   "x": 360,
+   "y": 770,
+   "rotation": 90
+  },
+  "D3": {
+   "x": 200,
+   "y": 190,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 200,
+   "y": 670,
+   "rotation": 90
+  },
+  "GAIN": {
+   "x": 540,
+   "y": 510,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 560,
+   "y": 520,
+   "rotation": 0
+  },
+  "C2": {
+   "x": 520,
+   "y": 580,
+   "rotation": 0
+  },
+  "D1": {
+   "x": 480,
+   "y": 640,
+   "rotation": 270
+  },
+  "D2": {
+   "x": 600,
+   "y": 580,
+   "rotation": 270
+  },
+  "R4": {
+   "x": 480,
+   "y": 520,
+   "rotation": 180
+  },
+  "M1": {
+   "x": 830,
+   "y": 510
+  },
+  "M2": {
+   "x": 940,
+   "y": 510
+  },
+  "RLOAD": {
+   "x": 1020,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

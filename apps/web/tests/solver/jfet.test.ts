@@ -9,6 +9,33 @@ import type { JfetElement } from "../../src/core/solver/types";
 
 const el: JfetElement = { id: "Q1", type: "jfet", nodes: ["g", "d", "s"], idss: 2e-3, pinchOffVoltage: -2.5 };
 
+describe("linearizeJfet as an enhancement MOSFET (positive threshold)", () => {
+  const fet: JfetElement = { id: "M1", type: "jfet", nodes: ["g", "d", "s"], idss: 0.09 * 2.1 * 2.1, pinchOffVoltage: 2.1 };
+  it("is off below the threshold and follows K*(Vgs-Vth)^2 above it", () => {
+    expect(linearizeJfet(fet, 0).id0).toBe(0);
+    expect(linearizeJfet(fet, 2.0).id0).toBe(0);
+    expect(linearizeJfet(fet, 3.1).id0).toBeCloseTo(0.09, 6);
+    expect(linearizeJfet(fet, 4.1).id0).toBeCloseTo(0.36, 6);
+    expect(linearizeJfet(fet, 3.1).gm).toBeCloseTo(0.18, 6);
+  });
+  it("solves a diode-connected 2N7000 at about Vth plus the square-law drop", () => {
+    const netlist = {
+      elements: [
+        { id: "V1", type: "vsource" as const, nodes: ["in", "0"], voltage: 9 },
+        { id: "R1", type: "resistor" as const, nodes: ["in", "d"], resistance: 10_000 },
+        { id: "M1", type: "jfet" as const, nodes: ["d", "d", "0"], idss: fet.idss, pinchOffVoltage: fet.pinchOffVoltage },
+      ],
+    };
+    const topology = buildTopology(netlist);
+    const { solution, converged } = solveNewton(netlist, topology, new Map(), 0);
+    expect(converged).toBe(true);
+    const vd = voltageAt(topology, solution, "d");
+    // Id = (9 - Vd)/10K ~ 0.68mA -> Vgs = Vth + sqrt(Id/K) ~ 2.1 + 0.087
+    expect(vd).toBeGreaterThan(2.1);
+    expect(vd).toBeLessThan(2.3);
+  });
+});
+
 describe("linearizeJfet", () => {
   it("returns Idss at Vgs=0, and keeps a slope there so Newton can move off it", () => {
     const { id0, gm } = linearizeJfet(el, 0);
