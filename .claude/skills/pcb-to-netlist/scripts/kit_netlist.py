@@ -283,9 +283,14 @@ def main() -> None:
         for ref in sorted(refs - set(layout)):
             if not any(p["ref"] == ref and p["kind"] == "IC" for p in parts):
                 problems.append(f"{ref} has no AT")
+        # Elements the app adds on its own can be placed too: a MOSFET's body diode (<ref>_D) and an LM386's internals.
+        mosfets = {p["ref"] for p in parts if p["kind"] == "Q" and re.match(r"(2N700|BS1|BS2)", p.get("part", "").upper())}
+        lm386s = {p["ref"] for p in parts if p["kind"] == "IC" and "386" in p.get("part", "")}
         for ref in sorted(set(layout) - refs):
-            if not re.fullmatch(r"(U\d+)[AB]", ref):
-                problems.append(f"AT {ref}: no such part")
+            base, _, suffix = ref.rpartition("_")
+            if re.fullmatch(r"(U\d+)[ABCD]", ref) or (suffix == "D" and base in mosfets) or base in lm386s:
+                continue
+            problems.append(f"AT {ref}: no such part")
     if bom:
         have: dict[str, int] = {}
         for p in parts + dropped:
