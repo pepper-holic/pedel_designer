@@ -1,17 +1,17 @@
-# 키트 기판 진행 현황 (2026-10-31 LM386 모델까지)
+# 키트 기판 진행 현황 (2026-10-31 LM386·보류 재검토·미착수 1차까지)
 
 수집: pedalparts.co.kr 키트 기판 렌더 279건(triage). A등급=60패드 이하·고립 2개 이하, B등급=그 외 시뮬 가능 계열, C등급=모델 없는 계열(딜레이·모듈레이션 등).
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 87 |
+| 변환 완료 | 88 |
 | 기록만 | 5 |
 | 보류 | 37 |
-| 미착수 | 92 |
-| 중복 기판 | 18 |
+| 미착수 | 90 |
+| 중복 기판 | 19 |
 | C등급(범위 밖) | 40 |
 
-## 변환 완료 (87)
+## 변환 완료 (88)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -103,6 +103,7 @@
 | B | 186787642 | NEW Cat | fuzz | ProCo RAT |
 | B | 186787646 | NEW Dirty Cat | fuzz | ProCo RAT (Dirty) |
 | B | 186788316 | EZK25:17 FUZZ | fuzz | 4단 클리퍼 op-amp 퍼즈 |
+| A | 186787693 | [1K] SHO | buffer-boost | Zvex Super Hard On |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -155,12 +156,10 @@
 | B | 186787546 | X-Touch | overdrive |  |
 | B | 186788551 | REAL CLEAN | buffer-boost |  |
 
-## 미착수 (92)
+## 미착수 (90)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
-| A | 186788277 | FUZZY FACE  (노브, 케이스 제외) | fuzz | 35패드, 고립 0 |
-| A | 186787693 | [1K] SHO | buffer-boost | 37패드, 고립 0 |
 | B | 186786839 | NEW FAT 부스터 | buffer-boost | 66패드, 고립 9 |
 | B | 186787969 | Octavia | fuzz | 69패드, 고립 15 |
 | B | 186788446 | OCB | fuzz | 100패드, 고립 2 |
@@ -252,10 +251,11 @@
 | B | 186788200 | SLOW 2CH PREAMP | preamp | 318패드, 고립 30 |
 | B | 186788441 | BASSLINE II (노브, 케이스 제외) | preamp | 343패드, 고립 77 |
 
-## 중복 기판 (18)
+## 중복 기판 (19)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
+| A | 186788277 | FUZZY FACE  (노브, 케이스 제외) | fuzz | = FUZZY FACE (pp-fuzzy-face, 셀프테스트 기준 기판) |
 | A | 186788501 | FUZZ Master | fuzz | = SODA Master |
 | B | 186788497 | LuNa Face BC109c | fuzz | = SoLa Face BC108c |
 | B | 186788513 | AXIS FUZZ | fuzz | = AXIS FUZZ  (노브, 케이스 제외) |
