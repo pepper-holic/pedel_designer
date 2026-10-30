@@ -72,3 +72,16 @@ Octavia·OCB·OCTA CLASSIC·OCTA KING(옥타브 퍼즈는 트랜지스터·다�
 index.json·triage.json의 계열을 손으로 고쳐 B로 올림: [1K] SHO(buffer-boost, A등급), NEW FAT 부스터(buffer-boost), Octavia·OCB·OCTA CLASSIC·
 OCTA KING(fuzz), Black CAB(eq, 캐비닛 필터만), BLACK AMP 65·TWEED AMP 57(overdrive, 앰프 인 어 박스). 나머지 C 40개(BBD·PT2399·OTA·광소자·
 전원 유틸·노이즈게이트)는 모델이 생길 때까지 범위 밖. `batch_prepare.py`를 다시 돌리면 index.json의 계열이 기준이라 유지된다.
+
+## 판독 문제 5종과 처리 (2026-10-31 검토)
+
+| # | 문제 | 처리 |
+|---|---|---|
+| 1 | 안 쓰는 IC 핀·빈 러그가 고립 목록에 섞임 | 추출기가 "동박 0" 패드를 `unconnected`로 분리, 뼈대에 따로 표시 → NC |
+| 2 | 라벨만 있는 더미 풋프린트(1969 GE CONTOUR/INPUT) | 동박이 없으면 NC. 배선도 찾지 않음 |
+| 3 | 글자·층 교차 밑으로 숨은 동박 | 반투명 실크의 기색(올리브/청록→녹색)으로 교차를 잇고, 글자 밑은 힌트로 제안 |
+| 4 | SMD 패드가 없음 | `--smd` 가상 패드(SMD 키트만) |
+| 5 | 팟 라벨 없음 | `fetch_photo.py`로 상품 사진을 받아 노브 순서로 배정 |
+
+남는 것은 원본에만 있는 값 정보(팟 값 배분, 변형 공용 기판의 미표기 저항)뿐이며, 이것은 원본 회로도 대조(③)로 간다.
+
