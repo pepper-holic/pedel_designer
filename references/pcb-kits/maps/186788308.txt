@@ -1,0 +1,4 @@
+# NEW ZEN GU DONG (186788308): Tanabe Zenkudo (Zendrive mod, 4 knobs, 3-way clipping rotary). JRC4558D with a
+# 2N7000 MOSFET + 1N34A / red 3mm LED clipper set on a 3-position rotary; the app has no MOSFET model, so recorded
+# only. Board: 2.2M x2, 470K, 10K x4, 1K, 470n x2, 100n, 10n, 3.3n, 100pF, 100uF, 47uF, 1N400X, angle B500K /
+# B100K / B50K / B10K.

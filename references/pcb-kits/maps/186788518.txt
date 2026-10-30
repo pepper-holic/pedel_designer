@@ -1,0 +1,4 @@
+# FUZZ BENDER II GE (186788518): germanium PNP Tone Bender MkII (Q1 hFE 50-80 leaky, three Ge PNP) run on a
+# negative rail from an ICL7660 inverter (positive ground). The app has no charge-pump model and no PNP-germanium-
+# on-negative-rail convention; recorded only. Board: 2.2M, 100K x2, 47K, 10K, 8.2K, 470R, 100R, 100n x3, 10n,
+# 100uF, 47uF, 10uF, 4.7uF x3, 1N400X, 100K / 10K trimmers, angle A100K / B1K, DIP dual on-on.

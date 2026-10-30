@@ -1,0 +1,88 @@
+id pp-golden-drive
+goods 186787639
+name Golden Drive
+motif Friedman Golden Pearl
+type overdrive
+desc LM833 2단 - 1M/22n/1K/47p 입력→A단 비반전(10K+(10K∥B500K 드라이브) 피드백, 100p, VOICE 토글로 1N4148 1:2 비대칭 또는 노란 LED 클리퍼; 접지 다리 2.2K+47n이 B25K 톤 팟을 거쳐 GND/출력)→10K→B단 반전(22K 피드백, HICUT 토글 2.2K+2.2n/3.9n)→10uF→A100K 볼륨
+image img_02.jpg
+# Hidden traces: 10K (13) -> drive pad 5 (n4); V+ pin 30 -> 10K/47uF node 60 (cyan under the IC). The extractor
+# chained 30 with the VOICE pad 47 - SPLIT. VOICE on-off-on (23-40-47) drawn on the diode side; the LED pair
+# (48/49, 66/67, on pad 47) is left out of the netlist and BOM (kit list: 5mm YEL LED x2). HICUT (35-41-56) drawn on
+# the 2.2n side; the 3.9n (45-46) is left out (kit list: 3.9n x1). Pots: TONE 2-1-0 (wiper 1 tied to lug 2 under the silk,
+# 0 ground: a variable ground-leg resistance), DRIVE 3-4-5 (4 wiper tied to 5), VOL 6-7-8 (8 ground, 7 = OUT).
+BOM 1Mx2 22K 10Kx4 2.2Kx2 1K 47n 22n 2.2n 100pF 47pF 47uF 22uF 10uF 1N400X 1N4148x3 LM833N A100K B500K B25K
+io IN=75 OUT=15 V9=82 GND=0
+SPLIT 47
+JUMP 13 5
+JUMP 30 60
+JUMP 40 23
+JUMP 41 35
+JUMP 2 1
+NC 45 47 48 49 66 67 46 56 57 58 64 65 70 16 22 28 74 83
+
+STAGE input input 입력
+R 1M 76 50 R1
+C 22n 59 77 C1
+R 1K 51 73 R2
+R 1M 78 79 R3
+C 47p 89 88 C2
+
+STAGE gain gain 게인단 (IC A)
+IC LM833N 1=29 2=37 3=43 4=52 5=53 6=44 7=38 8=30
+R 10K 19 20 R4
+POT B500K DRIVE 3 4 5
+C 100p 42 27 C3
+D 1N4148 a=26 k=25 D1
+D 1N4148 a=39 k=36 D2
+D 1N4148 a=17 k=18 D3
+R 2.2K 11 10 R5
+C 47n 24 9 C4
+POT B25K TONE 2 1 0
+
+STAGE stage2 gain 2단 (IC B)
+R 10K 12 13 R6
+R 22K 31 54 R7
+R 2.2K 32 55 R8
+C 2.2n 33 34 C5
+
+STAGE output output 출력 (볼륨)
+C 10uF 21 14 C6
+POT A100K VOL 8 7 6
+
+STAGE power power 전원
+D 1N400X a=81 k=80 D4
+C 47uF 63 72 C7
+R 10K 60 61 R9
+R 10K 68 69 R10
+C 22uF 62 71 C8
+
+# --- schematic placement: draft from suggest_layout.py ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R3 270 400 h
+AT U1A 560 500
+AT C6 470 400 h
+AT VOL 570 400 r180
+AT R1 120 470 v
+AT R2 200 470 v-
+AT C2 260 470 v
+AT R7 400 490 v
+AT R8 460 520 h-
+AT C5 440 520 h
+AT R9 300 470 v-
+AT R10 660 470 v-
+AT C8 720 470 v
+AT D4 300 190 v
+AT C7 300 570 v
+AT R4 140 880 h
+AT DRIVE 240 880 h
+AT C3 340 880 h
+AT D1 440 880 h
+AT D2 540 880 h
+AT D3 640 880 h
+AT R5 740 880 h
+AT C4 840 880 h
+AT TONE 940 880 h
+AT R6 1040 880 h
+AT RLOAD 620 480 v
