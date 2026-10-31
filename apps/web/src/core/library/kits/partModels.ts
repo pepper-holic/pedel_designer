@@ -110,6 +110,9 @@ const DIODES: [string, Diode][] = [
   ["1S1588", SILICON_DIODE_1N4148],
   ["1S2473", SILICON_DIODE_1N4148],
   ["1N400", SILICON_DIODE_1N4148],
+  ["BA282", SILICON_DIODE_1N4148],
+  ["BA482", SILICON_DIODE_1N4148],
+  ["MA856", SILICON_DIODE_1N4148],
   ["ZENER", SILICON_DIODE_1N4148], // gate-protection zeners: forward diode only, breakdown is never reached in these circuits
   ["1N34", GERMANIUM_DIODE],
   ["1N60", GERMANIUM_DIODE],
@@ -164,12 +167,15 @@ const OPAMPS: [string, OpAmp, 1 | 2 | 4][] = [
   ["NJM4565", JRC4558_APPROX, 2],
   ["JRC4565", JRC4558_APPROX, 2],
   ["LM833", NE5532_APPROX, 2],
+  ["MC33178", NE5532_APPROX, 2],
+  ["OPA2134", TL072_APPROX, 2],
   ["LM741", LM741_APPROX, 1],
   ["UA741", LM741_APPROX, 1],
   ["CA741", LM741_APPROX, 1],
   ["LM308", LM308_APPROX, 1],
   ["LM301", LM741_APPROX, 1],
   ["CA3130", CA3130_APPROX, 1],
+  ["CA3240", CA3130_APPROX, 2],
   ["OP07", OP07_APPROX, 1],
 ];
 
