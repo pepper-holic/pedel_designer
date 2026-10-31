@@ -1,0 +1,252 @@
+{
+ "id": "pp-tomatoma-bp",
+ "goodsNo": "186788317",
+ "kitName": "TOMATOMA BASS (BP)",
+ "motif": "HBE Hematoma - Bass Preamp 채널",
+ "type": "preamp",
+ "description": "2N5484 공통 소스 1단 베이스 프리앰프: 입력 1M·1n 접지, 47K 직렬 뒤 게이트(10M 접지), 1.8K 소스·12K 드레인, 4.7uF 탄탈 뒤 100K 부하와 PREGAIN 볼륨 팟. 같은 기판의 BO(오버드라이브) 채널과 9V 보호 다이오드·100uF만 공유한다.",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "10M",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N5484",
+   "nodes": {
+    "g": "n1",
+    "d": "n2",
+    "s": "n3"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "12K",
+   "nodes": [
+    "n4",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "1.8K",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "4.7uF",
+   "nodes": [
+    "n2",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "PREGAIN",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "0",
+    "out",
+    "n5"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "vcc",
+    "k": "n4"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "0",
+    "k": "n4"
+   }
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "R2",
+    "R3"
+   ]
+  },
+  {
+   "id": "pre",
+   "category": "gain",
+   "label": "프리앰프 (Q1 2N5484)",
+   "parts": [
+    "Q1",
+    "R4",
+    "R5"
+   ]
+  },
+  {
+   "id": "out",
+   "category": "output",
+   "label": "출력 (PREGAIN)",
+   "parts": [
+    "C2",
+    "R6",
+    "PREGAIN"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원 (BO와 공유)",
+   "parts": [
+    "D1",
+    "D2",
+    "C3"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D1": {
+   "x": 150,
+   "y": 160,
+   "rotation": 0
+  },
+  "D2": {
+   "x": 230,
+   "y": 220,
+   "rotation": 270
+  },
+  "C3": {
+   "x": 300,
+   "y": 220,
+   "rotation": 90
+  },
+  "R1": {
+   "x": 110,
+   "y": 470,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 170,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 240,
+   "y": 400,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 290,
+   "y": 470,
+   "rotation": 90
+  },
+  "Q1": {
+   "x": 350,
+   "y": 400
+  },
+  "R4": {
+   "x": 370,
+   "y": 290,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 370,
+   "y": 500,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 440,
+   "y": 370,
+   "rotation": 0
+  },
+  "R6": {
+   "x": 510,
+   "y": 440,
+   "rotation": 90
+  },
+  "PREGAIN": {
+   "x": 590,
+   "y": 400,
+   "rotation": 270
+  },
+  "RLOAD": {
+   "x": 690,
+   "y": 470,
+   "rotation": 90
+  }
+ }
+}

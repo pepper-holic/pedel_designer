@@ -29,6 +29,10 @@ The map names each part and the pads (ids from the extract_nets overlay) its lea
     supply -9                           # battery wired positive-ground: the V9 pad sits at -9V (default 9)
     IC ICL7660 8=3 3=4 2=10 4=11 5=12   # charge pump: pin 5 becomes an ideal -9V rail, the pump cap on 2/4 is dropped
     RAIL 40 18                          # the net of pad 40 is an ideal 18V rail (voltage-doubler output); nets vm9/v18/vm18
+    SHARED 186788317-b                  # a board holding two independent circuits gets two maps, <goods>-a.txt and
+                                        # <goods>-b.txt (same goods, own id/name); each names the other here so the pads
+                                        # the other circuit uses are left out of this map's "unused pad" check. Parts both
+                                        # circuits share (power filter, a common input buffer) are written in both maps.
 
 STAGE lines group the parts after them into the schematic's functional blocks, in signal order:
 "STAGE <id> <category> <label>", category one of input buffer gain clipping fuzz tone output power
@@ -60,6 +64,39 @@ from pathlib import Path
 META_KEYS = ("id", "goods", "name", "motif", "type", "desc", "image", "supply")
 CHARGE_PUMPS = ("ICL7660", "7660", "TC1044", "MAX1044", "LT1054")
 IO_NET = {"IN": "in", "OUT": "out", "V9": "vcc", "GND": "0"}
+PART_HEADS = ("R", "C", "L", "D", "Q", "POT", "IC", "T")
+
+
+def shared_map(map_path: Path, name: str) -> Path:
+    """The other circuit's map of the same board: maps/<goods>-b.txt beside a committed map, map-b.txt in a bundle."""
+    for cand in (map_path.parent / f"{name}.txt", map_path.parent / f"map-{name.rsplit('-', 1)[-1]}.txt"):
+        if cand.exists():
+            return cand
+    sys.exit(f"{map_path.name}: SHARED {name}: no such map beside it")
+
+
+def pads_listed_in(path: Path) -> set[int]:
+    """Every board pad another map uses (parts, io, NC, JUMP, SPLIT) - excluded from this map's unused-pad check."""
+    found: set[int] = set()
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        head, *rest = line.split()
+        if head in ("R", "C", "L"):
+            toks = rest[1:3]
+        elif head == "POT":
+            toks = rest[2:5]
+        elif head in ("D", "Q", "IC", "T"):
+            toks = [t.split("=", 1)[1] for t in rest if "=" in t]
+        elif head == "io":
+            toks = [v for t in rest for v in t.split("=", 1)[1].split(",")]
+        elif head in ("NC", "JUMP", "SPLIT"):
+            toks = rest
+        else:
+            continue
+        found.update(int(t) for t in toks if t.isdigit())
+    return found
 
 
 def used_offboard(raw_parts: list[dict], sentinel: int) -> set[str]:
@@ -110,6 +147,7 @@ def main() -> None:
     bom: dict[str, int] = {}
     rails: list[tuple[int, float]] = []  # (pad, volts): ideal supply rails besides V9
     pump_pads: list[set[int]] = []  # pads of a charge pump's flying-capacitor pins
+    shared_pads: set[int] = set()  # pads the other circuit on this board uses (SHARED)
 
     # Off-board points: a pot or jack wired straight to a part leg without a board pad (e.g. a level
     # pot whose wiper goes directly to the output jack). Written as IN/OUT/V9/GND in place of a pad.
@@ -202,6 +240,8 @@ def main() -> None:
                 pump_pads.append({pad(kv[k]) for k in ("2", "4") if k in kv})
         elif head == "RAIL":
             rails.append((pad(rest[0]), float(rest[1])))
+        elif head == "SHARED":
+            shared_pads |= pads_listed_in(shared_map(map_path, rest[0]))
         elif head == "STAGE":
             sid, category, *label = rest
             stages.append({"id": sid, "category": category, "label": " ".join(label), "parts": []})
@@ -233,7 +273,7 @@ def main() -> None:
                     print(f"  note: NC pad {t} no longer exists in {nets_path.name}")
         else:
             sys.exit(f"{map_path.name}:{line_no}: unknown line '{raw}'")
-        if stages and raw_parts and head in ("R", "C", "L", "D", "Q", "POT", "IC", "T") and raw_parts[-1]["ref"] not in stages[-1]["parts"]:
+        if stages and raw_parts and head in PART_HEADS and raw_parts[-1]["ref"] not in stages[-1]["parts"]:
             stages[-1]["parts"].append(raw_parts[-1]["ref"])
 
     for k in ("IN", "OUT", "V9", "GND"):
@@ -293,7 +333,7 @@ def main() -> None:
         if len(terms) == 1 and net not in ("in", "out", "vcc", "0") and net not in quiet_nets:
             problems.append(f"net {net} has one lead only: {terms[0]}")
     for p in extraction["pads"]:
-        if p["id"] in used_pads or p["ground"]:
+        if p["id"] in used_pads or p["ground"] or p["id"] in shared_pads:
             continue
         siblings = [q for q in extraction["nets"][str(p["net"])] if q != p["id"]]
         problems.append(f"pad {p['id']} unused (net with pads {siblings})" if siblings else f"pad {p['id']} unused (isolated)")
@@ -316,7 +356,7 @@ def main() -> None:
             vrail = re.fullmatch(r"Vrail(\d+)", ref)
             if vrail and 1 <= int(vrail.group(1)) <= len(rails):
                 continue
-            if re.fullmatch(r"(U\d+)[ABCD]", ref) or (suffix == "D" and base in mosfets) or base in lm386s:
+            if re.fullmatch(r"(U\d+)[A-F]", ref) or (suffix == "D" and base in mosfets) or base in lm386s:
                 continue
             problems.append(f"AT {ref}: no such part")
     if bom:

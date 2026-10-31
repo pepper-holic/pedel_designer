@@ -1,0 +1,53 @@
+id pp-tomatoma-bp
+goods 186788317
+name TOMATOMA BASS (BP)
+motif HBE Hematoma - Bass Preamp 채널
+type preamp
+desc 2N5484 공통 소스 1단 베이스 프리앰프: 입력 1M·1n 접지, 47K 직렬 뒤 게이트(10M 접지), 1.8K 소스·12K 드레인, 4.7uF 탄탈 뒤 100K 부하와 PREGAIN 볼륨 팟. 같은 기판의 BO(오버드라이브) 채널과 9V 보호 다이오드·100uF만 공유한다.
+image img_00.jpg
+SHARED 186788317-b
+# 기판 한 장에 독립 회로 둘([BP] 왼쪽, [BO] 오른쪽, IN/OUT/LED 따로). 이 맵은 BP만. 전원(1N4148·1N400X·100uF)은 양쪽 맵에.
+# 연보라 두꺼운 회색 고리·연보라 민무늬 패드는 모두 접지면 패드(5 GND 라벨과 같은 색), 진자홍 무동박 103만 빈 러그.
+# 팟 라벨 없음: 38(접지)-60(와이퍼→OUT)-77(신호) 세로 줄 = BP 볼륨(HBE Hematoma의 Pre-Gain). 값은 100K 부하와 병렬이라 B100K로 둠(B500K 후보 - 보고 참조).
+# 팟 1번: 볼륨은 시계방향이 커지는 쪽이 3번 = 신호(77), 1번 = 접지(38).
+BOM 10M 1M 47K 12K 1.8K 100K 1n 4.7uF 100uF 1N400X 1N4148 2N5484 B100K
+io IN=98 OUT=99 V9=26 GND=7,5,6,25,38,50,83,86,90,91,97,102,117,118,119,120,121,124,125
+
+STAGE input input 입력
+R 1M 93 75 R1
+C 1n 94 83 C1
+R 47K 92 74 R2
+R 10M 65 34 R3
+
+STAGE pre gain 프리앰프 (Q1 2N5484)
+Q 2N5484 g=67 d=45 s=59 Q1
+R 12K 36 68 R4
+R 1.8K 66 35 R5
+
+STAGE out output 출력 (PREGAIN)
+C 4.7uF 76 85 C2
+R 100K 69 37 R6
+POT B100K PREGAIN 38 60 77
+
+STAGE power power 전원 (BO와 공유)
+D 1N4148 a=11 k=12 D1
+D 1N400X a=13 k=14 D2
+C 100uF 15 6 C3
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D1 150 160 h
+AT D2 230 220 v-
+AT C3 300 220 v
+AT R1 110 470 v
+AT C1 170 470 v
+AT R2 240 400 h
+AT R3 290 470 v
+AT Q1 350 400
+AT R4 370 290 v
+AT R5 370 500 v
+AT C2 440 370 h
+AT R6 510 440 v
+AT PREGAIN 590 400 v-
+AT RLOAD 690 470 v

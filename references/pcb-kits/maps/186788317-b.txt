@@ -1,0 +1,102 @@
+id pp-tomatoma-bo
+goods 186788317
+name TOMATOMA BASS (BO)
+motif HBE Hematoma - Bass Overdrive 채널
+type overdrive
+desc MPSA18 이미터 폴로어(47n·1K 입력, 1M Vref 바이어스) 뒤 4558 A단 비반전(1.5K+470n 접지 다리, 10K 귀환에 GAIN 가변저항+47K와 녹색 LED/1N4148 역병렬 비대칭 클리퍼, 51p) → 1.5K/470n 저역통과(Vref 10K) → B단 버퍼(1K 귀환) → 4.7uF·1M → 1K·TONE B10K 직렬 팟(와이퍼 100n 접지, EQ SHIFT DIP는 100n 위치 고정) → LEVEL 볼륨. 같은 기판의 BP 채널과 9V 보호 다이오드·100uF만 공유.
+image img_00.jpg
+SHARED 186788317-a
+# 이 맵은 [BO] 오른쪽 회로만. 4558은 홈이 아래라 1번 핀이 오른쪽 아래(55): 4=24 접지, 8=54 9V로 확인.
+# 팟 라벨 없음(아래 가장자리 세 팟은 왼쪽이 3번·오른쪽이 1번): 102(접지)-101(와이퍼→OUT)-100 = LEVEL, 103(빈 러그)-104(와이퍼=A단 출력)-105(47K) = GAIN 가변저항(시계방향 저항 증가),
+#   80(→LEVEL)-81(와이퍼→DIP→캡 접지)-82(1K) = TONE(와이퍼가 82쪽일 때 밝음). 값: TONE은 100n과 짝이라 B10K, GAIN B500K(귀환 47K~547K), LEVEL B100K - GAIN/LEVEL/PREGAIN 값 배정은 후보(보고 참조).
+# 107(3.3n)-116(DIP)은 추출기가 9V 넷에 합쳤으나 trace_pad로 보면 둘만 이어진다 → SPLIT. EQ SHIFT DIP on-on은 100n 쪽(112-115) 고정, 3.3n은 BOM에서 뺌.
+# LED_R 두 개(89-111, 84-106)와 LED 패드(113 114 122 123 126 127)는 표시용이라 뺀다(470R x2 BOM 제외).
+BOM 1Mx3 10Kx6 47K 1.5Kx2 1Kx3 1000n 470nx2 100n 47n 51pF 4.7uF 100uF 47uF 1N400X 1N4148x2 LED-GREEN MPSA18 JRC4558D B500K B100K B10K
+io IN=110 OUT=109 V9=26 GND=7,5,6,25,38,50,83,86,90,91,97,102,117,118,119,120,121,124,125
+SPLIT 107 116
+JUMP 115 112
+NC 103 107 116 89 111 84 106 113 114 122 123 126 127
+
+STAGE input buffer 입력 버퍼 (Q1 MPSA18)
+R 1M 21 52 R1
+C 47n 51 29 C1
+R 1K 17 48 R2
+R 1M 18 49 R3
+Q MPSA18 b=39 c=27 e=46 Q1
+R 10K 16 47 R4
+
+STAGE gain gain 게인단 (U1A, GAIN·클리퍼)
+C 1000n 70 71 C2
+R 10K 3 4 R5
+IC JRC4558D 1=55 2=41 3=31 4=24 5=23 6=30 7=40 8=54 U1
+R 1.5K 32 33 R6
+C 470n 9 10 C3
+C 51pF 42 62 C4
+R 10K 43 44 R7
+D 1N4148 a=72 k=73 D1
+D LED-GREEN a=57 k=56 D2
+R 47K 58 79 R8
+POT B500K GAIN 105 104 104
+
+STAGE filt custom 저역통과·B단 버퍼 (U1B)
+R 1.5K 63 64 R9
+C 470n 28 50 C5
+R 10K 19 20 R10
+R 1K 22 53 R11
+
+STAGE tone tone 톤 (TONE, EQ SHIFT 100n)
+C 4.7uF 61 78 C6
+R 1M 95 96 R12
+R 1K 87 88 R13
+POT B10K TONE 80 81 82
+C 100n 91 108 C7
+
+STAGE out output 출력 (LEVEL)
+POT B100K LEVEL 102 101 100
+
+STAGE power power 전원·Vref (BP와 공유하는 보호 다이오드·100uF)
+D 1N4148 a=11 k=12 D3
+D 1N400X a=13 k=14 D4
+C 100uF 15 6 C8
+R 10K 0 1 R14
+R 10K 2 7 R15
+C 47uF 8 25 C9
+
+# --- schematic placement (hand) ---
+AT V1 60 530
+AT VCC 60 190
+AT D3 150 160 h
+AT D4 220 220 v-
+AT C8 290 220 v
+AT R14 360 220 v
+AT R15 360 300 v
+AT C9 420 300 v
+AT R1 100 570 v-
+AT C1 150 500 h
+AT R2 230 500 h
+AT R3 300 440 v
+AT Q1 330 500
+AT R4 350 600 v-
+AT C2 420 530 h
+AT R5 480 440 v
+AT U1A 560 520
+AT C4 560 600 h
+AT R7 560 640 h
+AT D1 650 640 h-
+AT D2 650 680 h
+AT R8 620 730 h
+AT GAIN 690 730 r0 m
+AT R6 530 700 v
+AT C3 530 790 v-
+AT R9 780 500 h-
+AT C5 840 570 v
+AT R10 840 430 v
+AT U1B 900 520
+AT R11 900 600 h
+AT C6 990 520 h
+AT R12 1050 590 v
+AT R13 1090 520 h
+AT TONE 1180 520 h- m
+AT C7 1180 610 v-
+AT LEVEL 1270 550 v-
+AT RLOAD 1370 580 v
