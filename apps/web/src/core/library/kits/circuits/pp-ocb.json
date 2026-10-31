@@ -1,0 +1,718 @@
+{
+ "id": "pp-ocb",
+ "goodsNo": "186788446",
+ "kitName": "OCB",
+ "motif": "클린 옥타브 블렌드 (COB, 위상 분할 + 다이오드 정류 옥타브)",
+ "type": "fuzz",
+ "description": "2N3904 x4 - 22K/1000n 입력→QA 공통 이미터(47K, 1.5K)·QB 이미터 폴로어 직결, 120K/100n/560K DC 귀환→10uF/10K 클린 신호(680K)→36K+OCTAVE 가변저항→100n→QC(1K)·QD 위상 분할(4.7K/4.7K, 100K/47K 귀환, 1n)→10uF 두 상→1N400X 두 개 전파 정류(애노드 공통, 100K 풀업)→10uF→BLEND(클린↔옥타브)→VOLUME",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N3904",
+   "nodes": {
+    "b": "n2",
+    "c": "n3",
+    "e": "n4"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "150K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "1.5K",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n5",
+    "n3"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "2N3904",
+   "nodes": {
+    "b": "n3",
+    "c": "n5",
+    "e": "n6"
+   }
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "0",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "120K",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "560K",
+   "nodes": [
+    "n2",
+    "n7"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n6",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n8",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "680K",
+   "nodes": [
+    "0",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "36K",
+   "nodes": [
+    "n10",
+    "n9"
+   ]
+  },
+  {
+   "ref": "OCTAVE",
+   "kind": "POT",
+   "value": "B1M",
+   "nodes": [
+    "n10",
+    "n10",
+    "n11"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n11",
+    "n12"
+   ]
+  },
+  {
+   "ref": "Q3",
+   "kind": "Q",
+   "part": "2N3904",
+   "nodes": {
+    "b": "n12",
+    "c": "n13",
+    "e": "n14"
+   }
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "0",
+    "n14"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n5",
+    "n13"
+   ]
+  },
+  {
+   "ref": "Q4",
+   "kind": "Q",
+   "part": "2N3904",
+   "nodes": {
+    "b": "n13",
+    "c": "n15",
+    "e": "n16"
+   }
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n5",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "0",
+    "n16"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n17",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R17",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n17",
+    "n16"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n17",
+    "0"
+   ]
+  },
+  {
+   "ref": "R18",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n17",
+    "0"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "n12",
+    "n16"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n15",
+    "n18"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n16",
+    "n19"
+   ]
+  },
+  {
+   "ref": "R19",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "0",
+    "n18"
+   ]
+  },
+  {
+   "ref": "R20",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "0",
+    "n19"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "n20",
+    "k": "n18"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "n20",
+    "k": "n19"
+   }
+  },
+  {
+   "ref": "R21",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n20",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n20",
+    "n21"
+   ]
+  },
+  {
+   "ref": "BLEND",
+   "kind": "POT",
+   "value": "B250K",
+   "nodes": [
+    "n21",
+    "n22",
+    "n9"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "0",
+    "out",
+    "n22"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n23"
+   }
+  },
+  {
+   "ref": "R22",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n5",
+    "n23"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "0",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "R2",
+    "C1"
+   ]
+  },
+  {
+   "id": "pre",
+   "category": "gain",
+   "label": "클린 프리앰프 (QA·QB)",
+   "parts": [
+    "Q1",
+    "R3",
+    "R4",
+    "R5",
+    "Q2",
+    "R6",
+    "R7",
+    "R8",
+    "C2",
+    "C3",
+    "R9",
+    "R10"
+   ]
+  },
+  {
+   "id": "split",
+   "category": "gain",
+   "label": "옥타브 드라이브·위상 분할 (QC·QD)",
+   "parts": [
+    "R11",
+    "OCTAVE",
+    "C4",
+    "Q3",
+    "R12",
+    "R13",
+    "Q4",
+    "R14",
+    "R15",
+    "R16",
+    "R17",
+    "C5",
+    "R18",
+    "C6"
+   ]
+  },
+  {
+   "id": "oct",
+   "category": "fuzz",
+   "label": "옥타브 정류 (1N400X x2)",
+   "parts": [
+    "C7",
+    "C8",
+    "R19",
+    "R20",
+    "D1",
+    "D2",
+    "R21",
+    "C9"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "BLEND·VOLUME",
+   "parts": [
+    "BLEND",
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D3",
+    "R22",
+    "C10",
+    "C11"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D3": {
+   "x": 130,
+   "y": 160,
+   "rotation": 0
+  },
+  "R22": {
+   "x": 220,
+   "y": 160,
+   "rotation": 180
+  },
+  "C10": {
+   "x": 270,
+   "y": 190,
+   "rotation": 270
+  },
+  "C11": {
+   "x": 310,
+   "y": 190,
+   "rotation": 90
+  },
+  "R1": {
+   "x": 110,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 150,
+   "y": 400,
+   "rotation": 0
+  },
+  "C1": {
+   "x": 240,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q1": {
+   "x": 330,
+   "y": 400
+  },
+  "R3": {
+   "x": 250,
+   "y": 470,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 350,
+   "y": 490,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 350,
+   "y": 310,
+   "rotation": 90
+  },
+  "Q2": {
+   "x": 420,
+   "y": 340
+  },
+  "R6": {
+   "x": 440,
+   "y": 430,
+   "rotation": 270
+  },
+  "R8": {
+   "x": 320,
+   "y": 600,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 410,
+   "y": 600,
+   "rotation": 0
+  },
+  "C2": {
+   "x": 365,
+   "y": 660,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 500,
+   "y": 370,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 590,
+   "y": 370,
+   "rotation": 0
+  },
+  "R10": {
+   "x": 640,
+   "y": 430,
+   "rotation": 270
+  },
+  "R11": {
+   "x": 690,
+   "y": 370,
+   "rotation": 180
+  },
+  "OCTAVE": {
+   "x": 780,
+   "y": 370,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 870,
+   "y": 370,
+   "rotation": 0
+  },
+  "Q3": {
+   "x": 960,
+   "y": 370
+  },
+  "R12": {
+   "x": 980,
+   "y": 460,
+   "rotation": 270
+  },
+  "R13": {
+   "x": 980,
+   "y": 280,
+   "rotation": 90
+  },
+  "Q4": {
+   "x": 1050,
+   "y": 310
+  },
+  "R14": {
+   "x": 1070,
+   "y": 220,
+   "rotation": 90
+  },
+  "R15": {
+   "x": 1070,
+   "y": 400,
+   "rotation": 270
+  },
+  "C6": {
+   "x": 1000,
+   "y": 600,
+   "rotation": 0
+  },
+  "R16": {
+   "x": 960,
+   "y": 660,
+   "rotation": 180
+  },
+  "R17": {
+   "x": 1050,
+   "y": 660,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 990,
+   "y": 720,
+   "rotation": 90
+  },
+  "R18": {
+   "x": 1030,
+   "y": 720,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 1150,
+   "y": 280,
+   "rotation": 180
+  },
+  "C8": {
+   "x": 1150,
+   "y": 440,
+   "rotation": 180
+  },
+  "R19": {
+   "x": 1195,
+   "y": 340,
+   "rotation": 270
+  },
+  "R20": {
+   "x": 1195,
+   "y": 500,
+   "rotation": 270
+  },
+  "D1": {
+   "x": 1240,
+   "y": 280,
+   "rotation": 180
+  },
+  "D2": {
+   "x": 1240,
+   "y": 440,
+   "rotation": 180
+  },
+  "R21": {
+   "x": 1270,
+   "y": 220,
+   "rotation": 270
+  },
+  "C9": {
+   "x": 1330,
+   "y": 440,
+   "rotation": 0
+  },
+  "BLEND": {
+   "x": 1420,
+   "y": 440,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 1510,
+   "y": 410,
+   "rotation": 180
+  },
+  "RLOAD": {
+   "x": 1570,
+   "y": 500,
+   "rotation": 90
+  }
+ }
+}
