@@ -350,7 +350,7 @@
   {
    "id": "fluff",
    "category": "custom",
-   "label": "FLUFF",
+   "label": "control FLUFF",
    "parts": [
     "C3",
     "FLUFF",

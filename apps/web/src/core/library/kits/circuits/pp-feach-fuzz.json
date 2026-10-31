@@ -302,7 +302,7 @@
   {
    "id": "fuzz",
    "category": "custom",
-   "label": "FUZZ",
+   "label": "control FUZZ",
    "parts": [
     "C4",
     "R7",
@@ -312,7 +312,7 @@
   },
   {
    "id": "amp1",
-   "category": "fuzz",
+   "category": "gain",
    "label": "LM386",
    "parts": [
     "U2",
@@ -323,7 +323,7 @@
   },
   {
    "id": "amp2",
-   "category": "fuzz",
+   "category": "gain",
    "label": "LM386",
    "parts": [
     "U3",

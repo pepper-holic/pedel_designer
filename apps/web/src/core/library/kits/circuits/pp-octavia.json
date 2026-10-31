@@ -288,8 +288,8 @@
   },
   {
    "id": "octave",
-   "category": "fuzz",
-   "label": "옥타브 (트랜스 + 1N34A 전파 정류)",
+   "category": "custom",
+   "label": "octave 트랜스 + 1N34A 전파 정류",
    "parts": [
     "C7",
     "T1",

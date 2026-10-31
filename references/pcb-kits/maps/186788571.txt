@@ -31,7 +31,7 @@ D 1N400X a=36 k=37 D2
 D 1N400X a=43 k=42 D3
 D 1N914 a=41 k=40 D4
 
-STAGE leg custom 접지 다리 (BASS·HOT)
+STAGE leg custom control 접지 다리 (BASS·HOT)
 R 820R 56 55 R4
 C 100n 67 66 C4
 POT C50K BASS 76 70 64

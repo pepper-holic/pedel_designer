@@ -17,17 +17,17 @@ STAGE input input 입력
 C 2.2uF 8 15
 R 1M 19 20
 
-STAGE core fuzz 퍼즈 코어 (Q1·Q2 직결)
+STAGE core gain 퍼즈 코어 (Q1·Q2 직결)
 Q BC183 e=21 b=24 c=25 Q1
 R 33K 9 10
 Q BC183C e=26 b=27 c=28 Q2   # the kit page lists Q2 as BC183C (high-gain grade)
 R 330R 11 12
 R 8.2K 16 17
 
-STAGE feedback custom 피드백 (Q2 이미터 → Q1 베이스)
+STAGE feedback custom feedback Q2 이미터 → Q1 베이스
 R 100K 30 31
 
-STAGE fuzz custom 퍼즈 (Q2 이미터 바이패스)
+STAGE fuzz custom control FUZZ (Q2 이미터 바이패스)
 POT B1K FUZZ 2 1 0
 C 22uF 7 14
 

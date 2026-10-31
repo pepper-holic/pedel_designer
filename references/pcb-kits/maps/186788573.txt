@@ -47,7 +47,7 @@ R 470K 10 33 R10
 C 47p 9 27 C9
 C 47uF 50 52 C10
 
-STAGE level custom 레벨 (IC2 B)
+STAGE level custom control 레벨 (IC2 B)
 C 10uF 41 48 C11
 POT A10K LEVEL 56 57 58
 C 10uF 42 49 C12

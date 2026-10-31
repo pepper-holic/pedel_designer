@@ -636,7 +636,7 @@
   {
    "id": "mode",
    "category": "custom",
-   "label": "FAT/CLN/MID (U1B)",
+   "label": "control FAT/CLN/MID (U1B)",
    "parts": [
     "C5",
     "R7",

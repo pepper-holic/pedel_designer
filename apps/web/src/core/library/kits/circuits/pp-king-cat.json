@@ -113,7 +113,7 @@
    "kind": "C",
    "value": "150n",
    "nodes": [
-    "n5",
+    "n3",
     "n5"
    ]
   },
@@ -404,7 +404,7 @@
   },
   {
    "id": "q23",
-   "category": "fuzz",
+   "category": "gain",
    "label": "Q2·Q3 (GAIN)",
    "parts": [
     "C5",

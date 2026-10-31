@@ -30,7 +30,7 @@ POT A25K TREBLE 24 25 26
 C 100n 16 15 C6
 R 3.9K 0 1 R6
 
-STAGE level custom 볼륨 → 2단 결합
+STAGE level custom control 볼륨 → 2단 결합
 POT A25K VOL 6 7 8
 C 2.2uF 20 18 C7
 

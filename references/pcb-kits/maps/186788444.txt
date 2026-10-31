@@ -17,7 +17,7 @@ NC 5 20 11
 
 STAGE input input 입력
 STAGE preamp gain JFET 증폭단
-STAGE control control 게인
+STAGE control custom control 게인
 STAGE output output 출력
 
 R 68K 16 17 R1

@@ -528,7 +528,7 @@
   {
    "id": "tight",
    "category": "custom",
-   "label": "TIGHT",
+   "label": "control TIGHT",
    "parts": [
     "C3",
     "R6",

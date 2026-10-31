@@ -531,7 +531,7 @@
   {
    "id": "vol",
    "category": "custom",
-   "label": "볼륨",
+   "label": "control 볼륨",
    "parts": [
     "VOL",
     "C13",

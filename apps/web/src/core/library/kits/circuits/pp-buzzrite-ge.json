@@ -241,7 +241,7 @@
   },
   {
    "id": "q1",
-   "category": "fuzz",
+   "category": "gain",
    "label": "Q1",
    "parts": [
     "Q1",
@@ -251,7 +251,7 @@
   },
   {
    "id": "q2",
-   "category": "fuzz",
+   "category": "gain",
    "label": "Q2",
    "parts": [
     "C2",

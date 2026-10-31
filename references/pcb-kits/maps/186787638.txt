@@ -64,7 +64,7 @@ C 3.9n 116 130 C11
 C 10n 117 132 C12
 R 91K 122 121 R13
 
-STAGE vol custom 볼륨
+STAGE vol custom control 볼륨
 POT A100K VOL 11 10 9
 C 56n 46 54 C13
 R 470K 45 67 R14

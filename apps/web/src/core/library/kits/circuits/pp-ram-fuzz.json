@@ -163,7 +163,7 @@
   },
   {
    "id": "amp",
-   "category": "fuzz",
+   "category": "gain",
    "label": "LM386 (이득 토글)",
    "parts": [
     "U1",

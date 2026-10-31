@@ -419,7 +419,7 @@
   {
    "id": "lp",
    "category": "custom",
-   "label": "로우패스",
+   "label": "filter 로우패스",
    "parts": [
     "R6",
     "C4",

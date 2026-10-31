@@ -432,7 +432,7 @@
   {
    "id": "couple",
    "category": "custom",
-   "label": "결합·바이어스",
+   "label": "bias 결합·바이어스",
    "parts": [
     "C4",
     "R8",

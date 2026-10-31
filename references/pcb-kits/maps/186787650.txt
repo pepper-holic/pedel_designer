@@ -11,8 +11,8 @@ io IN=17 OUT=54 V9=19 GND=2
 NC 3 6 16 56 57 64 66 67 37 40 42 51 52 65
 
 STAGE input input 입력
-STAGE q1 fuzz Q1 증폭
-STAGE q2 fuzz Q2 폴로어·WTF
+STAGE q1 gain Q1 증폭
+STAGE q2 gain Q2 폴로어·WTF
 STAGE clip clipping 클리핑
 STAGE output output 출력
 STAGE power power 전원

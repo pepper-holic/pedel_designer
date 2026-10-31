@@ -563,7 +563,7 @@
   {
    "id": "gainpot",
    "category": "custom",
-   "label": "GAIN 다리",
+   "label": "control GAIN 다리",
    "parts": [
     "C4",
     "R5",

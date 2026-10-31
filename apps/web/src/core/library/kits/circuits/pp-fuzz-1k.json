@@ -167,7 +167,7 @@
   },
   {
    "id": "core",
-   "category": "fuzz",
+   "category": "gain",
    "label": "퍼즈 코어 (Q1·Q2 직결)",
    "parts": [
     "Q1",
@@ -181,7 +181,7 @@
   {
    "id": "feedback",
    "category": "custom",
-   "label": "피드백·이미터",
+   "label": "feedback 이미터",
    "parts": [
     "R5",
     "R6",

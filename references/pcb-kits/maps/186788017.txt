@@ -45,7 +45,7 @@ D 1N4148 a=38 k=53 D3
 D 1N4148 a=54 k=39 D4
 C 2.7n 40 55 C9
 
-STAGE filt custom 필터
+STAGE filt custom filter
 R 43K 41 70 R12
 C 82n 83 69 C10
 R 12K 68 93 R13

@@ -33,7 +33,7 @@ POT C5K GAIN 13 12 11
 POT B10K TRIM 75 81 76
 R 470Ω 106 107 R7
 
-STAGE couple custom 결합·바이어스
+STAGE couple custom bias 결합·바이어스
 C 100n 90 91 C4
 R 120K 82 83 R8
 R 82K 108 109 R9

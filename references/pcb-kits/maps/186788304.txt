@@ -35,7 +35,7 @@ R 1.8K 29 30 R4
 C 1uF 35 43 C3
 POT 100K TRIM1 0 5 9
 
-STAGE gainpot custom GAIN 다리
+STAGE gainpot custom control GAIN 다리
 C 22n 17 18 C4
 R 2.2M 19 44 R5
 R 680K 16 38 R6

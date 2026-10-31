@@ -39,7 +39,7 @@ C 220n 39 40 C3
 R 5.6K 68 69 R6
 C 22uF 78 83 C4
 
-STAGE focus custom FOCUS 피드백·클리퍼
+STAGE focus custom feedback FOCUS·클리퍼
 C 1uF 13 14 C5
 R 2K 8 9 R7
 D 1N4007 a=18 k=19 D3

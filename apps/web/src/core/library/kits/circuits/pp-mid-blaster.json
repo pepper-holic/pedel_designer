@@ -245,7 +245,7 @@
   {
    "id": "bias",
    "category": "custom",
-   "label": "Vref",
+   "label": "bias Vref",
    "parts": [
     "R3",
     "R4",
@@ -282,8 +282,8 @@
   },
   {
    "id": "blend",
-   "category": "control",
-   "label": "블렌드",
+   "category": "custom",
+   "label": "mix 블렌드",
    "parts": [
     "MID",
     "R12"

@@ -221,7 +221,7 @@
   },
   {
    "id": "stage3",
-   "category": "fuzz",
+   "category": "gain",
    "label": "3단 (Q3 + 2N2907A)",
    "parts": [
     "Q3",

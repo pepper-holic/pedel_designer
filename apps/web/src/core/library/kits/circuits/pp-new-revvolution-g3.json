@@ -731,7 +731,7 @@
   {
    "id": "bright",
    "category": "custom",
-   "label": "고역 결합 (토글)",
+   "label": "filter 고역 결합 (토글)",
    "parts": [
     "C3",
     "C4",

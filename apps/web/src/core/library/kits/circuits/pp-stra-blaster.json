@@ -106,8 +106,8 @@
   },
   {
    "id": "control",
-   "category": "control",
-   "label": "게인",
+   "category": "custom",
+   "label": "control 게인",
    "parts": []
   },
   {

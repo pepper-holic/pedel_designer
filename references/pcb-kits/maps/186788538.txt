@@ -13,8 +13,8 @@ JUMP 13 18
 NC 20 25 26 29 30 38 39 42 28 41 31 43 0 1 2 4 5
 
 STAGE input input 입력
-STAGE q1 fuzz Q1
-STAGE q2 fuzz Q2
+STAGE q1 gain Q1
+STAGE q2 gain Q2
 STAGE depth tone DEPTH 믹스
 STAGE output output 출력
 STAGE power power 전원

@@ -61,7 +61,7 @@ D 1N4148 a=117 k=118 D1
 D 1N4148 a=125 k=126 D2
 C 10n 124 111 C7
 
-STAGE low custom 저역 갈래 (U2)
+STAGE low custom filter 저역 갈래 (U2)
 R 10K 123 122 R9
 C 100n 114 113 C8
 C 22n 132 131 C9

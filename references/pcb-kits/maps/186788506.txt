@@ -27,7 +27,7 @@ R 10K 2 3 R4
 R 1K 0 19 R5
 C 100n 4 5 C3
 
-STAGE core fuzz Q2·Q3 퍼즈 코어
+STAGE core gain Q2·Q3 퍼즈 코어
 Q BC109C c=12 b=16 e=23 Q2
 R 10K 6 7 R6
 R 100R 27 28 R7

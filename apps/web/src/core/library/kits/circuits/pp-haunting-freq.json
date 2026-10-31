@@ -369,7 +369,7 @@
   {
    "id": "svf",
    "category": "custom",
-   "label": "적분단 (SWEEP, BP·LP)",
+   "label": "filter 적분단 (SWEEP, BP·LP)",
    "parts": [
     "SWEEPA",
     "R7",

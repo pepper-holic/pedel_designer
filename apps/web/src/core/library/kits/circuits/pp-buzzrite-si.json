@@ -201,13 +201,13 @@
   },
   {
    "id": "q1",
-   "category": "fuzz",
+   "category": "gain",
    "label": "Q1",
    "parts": []
   },
   {
    "id": "q2",
-   "category": "fuzz",
+   "category": "gain",
    "label": "Q2",
    "parts": []
   },

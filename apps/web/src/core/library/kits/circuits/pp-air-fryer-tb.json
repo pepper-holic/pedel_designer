@@ -184,7 +184,7 @@
   {
    "id": "bias",
    "category": "custom",
-   "label": "바이어스 노드",
+   "label": "bias 노드",
    "parts": [
     "R2",
     "C2",

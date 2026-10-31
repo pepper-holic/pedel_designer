@@ -20,7 +20,7 @@ R 1M 53 54 R1
 C 100n 51 50 C1
 R 330K 32 33 R2
 
-STAGE vref custom 4.5V 기준
+STAGE vref custom bias 4.5V 기준
 R 10K 61 60 R3
 R 10K 40 41 R4
 C 22uF 59 58 C2

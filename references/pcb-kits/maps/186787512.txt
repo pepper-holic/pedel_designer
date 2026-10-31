@@ -21,7 +21,7 @@ C 56n 56 43 C1
 R 200K 44 61 R2
 IC TL072 1=12 2=23 3=27 4=32 5=33 6=28 7=24 8=13 U1
 
-STAGE blend custom 12dB 블렌드 (U1B)
+STAGE blend custom mix 12dB 블렌드 (U1B)
 POT B10K 12DB 5 4 3
 R 47K 45 62 R3
 R 10K 15 35 R4

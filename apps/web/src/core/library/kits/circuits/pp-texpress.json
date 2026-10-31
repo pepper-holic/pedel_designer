@@ -472,7 +472,7 @@
   {
    "id": "volume",
    "category": "custom",
-   "label": "볼륨",
+   "label": "control 볼륨",
    "parts": [
     "VOLUME",
     "R14",

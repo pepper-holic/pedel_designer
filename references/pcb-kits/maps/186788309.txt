@@ -19,7 +19,7 @@ C 22n 57 58 C1
 R 1K 59 60 R2
 R 1M 46 45 R3
 
-STAGE bias custom Vref
+STAGE bias custom bias Vref
 R 100K 20 19 R4
 R 100K 28 29 R5
 C 100uF 38 37 C2

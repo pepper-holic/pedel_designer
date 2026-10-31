@@ -7,10 +7,11 @@ desc 4558 TS-808 - 2SC1815 입력 버퍼(510K/10K)→1000n→A단 비반전(51K+
 image img_03.jpg
 # Angle pots: 39-40-41 DRIVE (40 wiper tied to 39 on out A, 41 to the 51K), 8-9-10 TONE (8 on node X, 9 to the
 # 220R/0.22uF leg, wiper 10 lone -> -in B under the IC), 36-37-38 LEVEL (37 wiper to the 100n, 38 at Vref).
-# Hidden traces: 100R (1) <- 1000n (16); Q2 base 62 <- 1K (72) and 510K (53). Pad 20 is the 1N914 anode on ground.
+# Hidden traces: Q2 base 62 <- 1K (72) and 510K (53). Pad 20 is the 1N914 anode on ground.
+# The 1000n at 16 is on IC pin 7 (47) with the 1K feedback (56); the 100R (1) is on the Q1 emitter (6) - the old
+# JUMP 1 16 (a guess from before ring extraction) tied the op-amp output to the output buffer's emitter (lint 2026-10-31).
 BOM 1M 510Kx2 51K 10Kx7 4.7K 1Kx4 220R 100R 1000nx2 100n 47n 22n 51pF 0.22uFx2 100uF 47uF 10uF 1N914x3 JRC4558D 2SC1815x2 A500K W20K B100K
 io IN=85 OUT=31 V9=0 GND=11
-JUMP 1 16
 # 10K R14 (12) joins the 100R (1) / Q1 emitter (6) node (ring extraction 2026-10-31; it was a lone pad before).
 JUMP 10 42
 JUMP 62 72

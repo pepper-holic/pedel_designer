@@ -15,8 +15,8 @@ JUMP 45 44
 NC 39 50 53 54 55 56 57 58 61 62
 
 STAGE input input 입력
-STAGE q1 fuzz Q1
-STAGE q2 fuzz Q2·부하 분할
+STAGE q1 gain Q1
+STAGE q2 gain Q2·부하 분할
 STAGE output output 출력
 STAGE power power 전원
 

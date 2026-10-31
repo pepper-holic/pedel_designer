@@ -15,7 +15,7 @@ STAGE input input 입력
 C 2.2uF 0 1 C1
 R 1M 20 21 R1
 
-STAGE core fuzz 퍼즈 코어 (Q1·Q2 직결)
+STAGE core gain 퍼즈 코어 (Q1·Q2 직결)
 Q 2N2219A c=4 b=10 e=16 Q1
 R 33K 6 7 R2
 Q 2N2219A c=5 b=12 e=17 Q2
@@ -23,10 +23,10 @@ R 8.2K 18 19 R3
 R 1.2K 14 15 R4
 NC 11 13
 
-STAGE feedback custom 피드백 (Q2 이미터 → Q1 베이스)
+STAGE feedback custom feedback Q2 이미터 → Q1 베이스
 R 100K 24 25 R5
 
-STAGE fuzz custom 퍼즈 (Q2 이미터 바이패스)
+STAGE fuzz custom control FUZZ (Q2 이미터 바이패스)
 POT B2K FUZZ 32 31 30
 C 22uF 28 26 C2
 

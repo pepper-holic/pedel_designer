@@ -180,7 +180,7 @@
   },
   {
    "id": "core",
-   "category": "fuzz",
+   "category": "gain",
    "label": "퍼즈 코어",
    "parts": [
     "Q1",
@@ -197,7 +197,7 @@
   {
    "id": "osc",
    "category": "custom",
-   "label": "발진 (이미터 노드 접지)",
+   "label": "osc 이미터 노드 접지",
    "parts": [
     "OSC"
    ]

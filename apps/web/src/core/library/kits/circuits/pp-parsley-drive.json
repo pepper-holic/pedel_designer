@@ -467,7 +467,7 @@
   {
    "id": "filt",
    "category": "custom",
-   "label": "PRES·MID 필터",
+   "label": "filter PRES·MID",
    "parts": [
     "R9",
     "R10",

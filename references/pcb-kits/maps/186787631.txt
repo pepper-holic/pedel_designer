@@ -30,7 +30,7 @@ D 1N4148 a=32 k=33 D2
 D 1N4001 k=25 a=26 D3
 D 1N4148 a=29 k=30 D4
 
-STAGE leg custom 접지 다리 (BASS·HOT)
+STAGE leg custom control 접지 다리 (BASS·HOT)
 R 820R 45 44 R4
 C 100n 66 52 C4
 POT C50K BASS 73 74 75

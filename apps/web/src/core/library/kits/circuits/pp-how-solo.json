@@ -214,7 +214,7 @@
   {
    "id": "vref",
    "category": "custom",
-   "label": "4.5V 기준 (B채널 버퍼)",
+   "label": "bias 4.5V 기준 (B채널 버퍼)",
    "parts": [
     "R5",
     "R6",

@@ -536,7 +536,7 @@
   {
    "id": "level",
    "category": "custom",
-   "label": "LEVEL",
+   "label": "control LEVEL",
    "parts": [
     "LEVEL",
     "R19",
