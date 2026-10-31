@@ -5,7 +5,7 @@ motif MXR ZW-44 / GT-OD
 type overdrive
 desc MPSA18 이미터 폴로어(2.2M/1.8M 바이어스) 뒤 18n로 비반전 B단: 귀환은 33K+GAIN B1M 가변저항, 120p, 1N4148 1:2 비대칭, −입력 다리 4.7K+47n. 10K·47n를 거쳐 A단이 TONE B20K(와이퍼 47n+470R 접지)를 −/+ 사이에 두고 10K∥10n 귀환, GTOD 토글이 −입력 10K를 Vref에 붙인다. 3.3uF·4.7K·OUTPUT.
 image img_02.jpg
-BOM 2.2Mx1 1.8Mx1 1Mx1 100Kx2 33Kx3 22Kx1 10Kx4 4.7Kx2 470Ωx1 47nx4 18nx1 10nx1 120pFx1 3.3uFx1 100uFx1 10uFx1 4.7uFx1 1N4007x1 1N4148x3 TL072x1 MPSA18x1 B1Mx1 B20Kx1 B10Kx1
+BOM 2.2Mx1 1.8Mx1 1Mx1 100Kx2 33Kx3 22Kx1 10Kx3 4.7Kx2 470Ωx1 47nx4 18nx1 10nx1 120pFx1 3.3uFx1 100uFx1 10uFx1 4.7uFx1 1N4007x1 1N4148x3 TL072x1 MPSA18x1 B1Mx1 B20Kx1 B10Kx1
 io IN=85 OUT=17 V9=47 GND=22
 # MPSA18 외곽선 둘레의 작은 조각들은 링 기준 패드 검출(pads.py) 뒤 이미터 패드 45로 합쳐졌다(예전 51·55·56·66은 없음).
 # GTOD 토글(on-on, 74-86): Wild Jack은 열림(상품 설명), 닫힘(GT-OD)은 GTO-D 186787678 맵. 2026-10-31 정정.
@@ -43,7 +43,8 @@ C 47n 12 13 C7
 R 470Ω 14 15 R11
 R 10K 23 42 R12
 C 10n 29 41 C8
-R 10K 49 48 R13
+# 토글 열림이라 −in A의 10K(49-48)는 한쪽이 떠서 회로·BOM에서 뺌(10Kx4→x3). 닫힘은 GTO-D 맵.
+NC 48 74 86
 
 STAGE output output 출력
 C 3.3uF 36 24 C9
