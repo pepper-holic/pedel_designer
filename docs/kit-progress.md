@@ -1,17 +1,16 @@
-# 키트 기판 진행 현황 (2026-10-31 미착수 4단계 묶음 2까지)
+# 키트 기판 진행 현황 (2026-10-31 미착수 4단계 묶음 3 진행 중)
 
-수집: pedalparts.co.kr 키트 기판 렌더 279건(triage). A등급=60패드 이하·고립 2개 이하, B등급=그 외 시뮬 가능 계열, C등급=모델 없는 계열(딜레이·모듈레이션 등).
+수집: pedalparts.co.kr 키트 기판 렌더 267건(같은 상품 중복 12건은 `kit-duplicates.md`로 빼고 집계 제외)(triage). A등급=60패드 이하·고립 2개 이하, B등급=그 외 시뮬 가능 계열, C등급=모델 없는 계열(딜레이·모듈레이션 등).
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 99 |
+| 변환 완료 | 104 |
 | 기록만 | 5 |
-| 보류 | 52 |
+| 보류 | 53 |
 | 미착수 | 64 |
-| 중복 기판 | 19 |
-| C등급(범위 밖) | 40 |
+| C등급(범위 밖) | 41 |
 
-## 변환 완료 (99)
+## 변환 완료 (104)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -115,6 +114,11 @@
 | B | 186787640 | BXM Boost | buffer-boost | Friedman Buxom Boost (ICL7660 ±9V) |
 | B | 186787552 | Honey Beast | distortion | CA3130 + 2N5952 x2 |
 | B | 186787529 | Abracadabra | fuzz | Rangemaster + Laney Supergroup |
+| B | 186787634 | TONE HAMMA | overdrive | TONE HAMMA (LM1458 2단 + 제임스 톤 + J201) |
+| B | 186788570 | NEW PRINCE TONE | overdrive | Analogman Prince of Tone (소프트 모드 고정) |
+| B | 186787840 | MELTDOWN | distortion | BS170 + CA3240 LED 클리핑 + BS170 |
+| B | 186788497 | LuNa Face BC109c | fuzz | SoLa Face 기판·부품표 + BC109C (변형) |
+| B | 186788030 | Green Light | overdrive | Green Land 기판 + Lightspeed 부품(4.7K, BAT41 없음, A500K/A100K) (변형) |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -125,7 +129,7 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (52)
+## 보류 (53)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -181,6 +185,7 @@
 | B | 186787548 | Tube Drive | overdrive | 4단계 보류(MOSFET 핀 오병합) |
 | B | 186787538 | RahRah | overdrive | 4단계 보류(제너 밑 선) |
 | B | 186788658 | ICE MUFF | fuzz | 4단계 보류(고립·무라벨 노브) |
+| B | 186788468 | SUPA FUZZ | fuzz | 앵글 팟 라벨 없음, Q2 이미터 넷 고립 - 원본 Super-Fuzz 대조 |
 
 ## 미착수 (64)
 
@@ -189,8 +194,6 @@
 | B | 186786839 | NEW FAT 부스터 | buffer-boost | 66패드, 고립 9 |
 | B | 186787969 | Octavia | fuzz | 69패드, 고립 15 |
 | B | 186788161 | SONIX 482i | unknown | 112패드, 고립 21 |
-| B | 186788570 | NEW PRINCE TONE | overdrive | 113패드, 고립 8 |
-| B | 186787634 | TONE HAMMA | overdrive | 114패드, 고립 10 |
 | B | 186788550 | TA7136 DS ONE | distortion | 114패드, 고립 8 |
 | B | 186787649 | Kluster Fuzz | fuzz | 115패드, 고립 3 |
 | B | 186788011 | Heavy Fist | distortion | 115패드, 고립 9 |
@@ -200,7 +203,6 @@
 | B | 186788336 | SIR RIOT | distortion | 118패드, 고립 16 |
 | B | 186788339 | SLASHMASTER | distortion | 118패드, 고립 10 |
 | B | 186788575 | BLACK AMP 65 | overdrive | 118패드, 고립 10 |
-| B | 186787840 | MELTDOWN | distortion | 121패드, 고립 8 |
 | B | 186788107 | NEW 1981 DRIV | distortion | 121패드, 고립 14 |
 | B | 186787846 | BAD ASS | buffer-boost | 122패드, 고립 10 |
 | B | 186788074 | New Big Muffler | distortion | 123패드, 고립 8 |
@@ -213,7 +215,6 @@
 | B | 186788148 | BUTTER MARKET | unknown | 133패드, 고립 26 |
 | B | 186787638 | DIRTY BOM | distortion | 138패드, 고립 13 |
 | B | 186788585 | PLEXI1959 | distortion | 140패드, 고립 16 |
-| B | 186788468 | SUPA FUZZ | fuzz | 141패드, 고립 3 |
 | B | 186787489 | Bowling Point | buffer-boost | 142패드, 고립 16 |
 | B | 186788143 | KONISH G-2 | overdrive | 143패드, 고립 21 |
 | B | 186787487 | Peanut Drive | overdrive | 145패드, 고립 6 |
@@ -250,32 +251,12 @@
 | B | 186788553 | 브라우니 PLUTO | overdrive | 277패드, 고립 28 |
 | B | 186788200 | SLOW 2CH PREAMP | preamp | 318패드, 고립 30 |
 | B | 186788441 | BASSLINE II (노브, 케이스 제외) | preamp | 343패드, 고립 77 |
+| B | 186787678 | GTO-D | overdrive | Wild Jack와 같은 기판, 부품표 다름 - 변형 회로(Wild Jack 보류 해결 후) |
+| B | 186787643 | NEW Cat II | fuzz | NEW Cat 공용 기판(CAT1/2·TURBO·VINTAGE·DIRTY), 품종별 부품 확인 필요 |
+| B | 186787644 | NEW Turbo Cat | fuzz | NEW Dirty Cat - NEW Cat 공용 기판, 품종별 부품 확인 필요 |
+| B | 186787645 | NEW Vintage Cat | fuzz | NEW Cat 공용 기판, 품종별 부품 확인 필요 |
 
-## 중복 기판 (19)
-
-| 등급 | goodsNo | 이름 | 계열 | 비고 |
-|---|---|---|---|---|
-| A | 186788277 | FUZZY FACE  (노브, 케이스 제외) | fuzz | = FUZZY FACE (pp-fuzzy-face, 셀프테스트 기준 기판) |
-| A | 186788501 | FUZZ Master | fuzz | = SODA Master |
-| B | 186788497 | LuNa Face BC109c | fuzz | = SoLa Face BC108c |
-| B | 186788513 | AXIS FUZZ | fuzz | = AXIS FUZZ  (노브, 케이스 제외) |
-| B | 186788529 | 레인지마스터 | fuzz | = RANGER GE |
-| B | 186788530 | 썬페이스퍼즈 | fuzz | = SOLA FACE GE |
-| B | 186788512 | SPIT FUZZ | fuzz | = SPIT FUZZ  (노브, 케이스 제외) |
-| B | 186788534 | 1969퍼즈 | fuzz | = 1969 GE FUZZ |
-| B | 186788030 | Green Light | overdrive | = Green Land |
-| B | 186788533 | 퍼즈라이트 | fuzz | = BUZZRITE GE |
-| B | 186788251 | VRAY X-CHIP | unknown | = NEW VRAY |
-| B | 186787678 | GTO-D | overdrive | = Wild Jack |
-| B | 186787643 | NEW Cat II | fuzz | = NEW Cat |
-| B | 186787644 | NEW Turbo Cat | fuzz | = NEW Cat |
-| B | 186787645 | NEW Vintage Cat | fuzz | = NEW Cat |
-| C | 186788279 | OCTA FUZZ  (노브, 케이스 제외) | pitch | = Octavia |
-| C | 186788508 | OCTA FUZZ | pitch | = Octavia |
-| C | 186788265 | GRAFF DYNAMIC 필코팩 | utility | = NEW Graff Dynamic |
-| C | 186788592 | DYNAMICA BASS | compressor | = DYNAMICA GTR |
-
-## C등급(범위 밖) (40)
+## C등급(범위 밖) (41)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -319,3 +300,4 @@
 | C | 186788113 | JUILLIARD CHORUS | modulation | modulation |
 | C | 186788584 | D.R.P.O  (노브 제외) | cabinet | cabinet |
 | C | 186787478 | StoneHenge Phaser | modulation | modulation |
+| C | 186788592 | DYNAMICA BASS | compressor | DYNAMICA GTR와 같은 기판, 부품표 다름(컴프레서) |
