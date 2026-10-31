@@ -44,6 +44,10 @@ HINTS = True
 SHORT_SILK = 4
 # A ground (pour) pad is at least this fraction of the board's median pad radius.
 GROUND_MIN_R = 0.6
+# Pads come in two shades (pour pads paler) when the largest jump in their mean green is at least this.
+SHADE_GAP = 12.0
+PAD_KINDS = ("pad", "gpad")
+SHADE_MIN_PADS = 3
 # A part body is a white area ringed by a silk outline, and on many boards it is painted over the
 # bottom-layer copper: a trace that turns a corner under a resistor vanishes there. When exactly two
 # traces of one layer poke into such a body (each by a short stub), they are one trace.
@@ -258,33 +262,47 @@ def touches(mask: dict[tuple[int, int], str], x: int, y: int, layer: str) -> boo
     return any(mask.get((x + dx, y + dy)) == layer for dx in (-3, 0, 3) for dy in (-3, 0, 3))
 
 
-def split_ground_pads(pads: list[dict], mask: dict[tuple[int, int], str]) -> None:
+def split_ground_pads(pads: list[dict], mask: dict[tuple[int, int], str], rgb) -> None:
     """Decide per board which pads sit on the ground pour. Those are drawn paler than the others and
     carry a grey "+" (a thermal-relief cross) inside the ring. On a board where every pad is the same
     shade there is no pour, and nothing is ground - the pad colour alone proves nothing."""
     for p in pads:
-        xs, ys = [q[0] for q in p["pixels"]], [q[1] for q in p["pixels"]]
         cx, cy, r = int(round(p["x"])), int(round(p["y"])), max(2, int(p["r"] * 0.45))
+        reach = int(p["r"]) + 2
         # A thermal-relief "+" is a horizontal AND a vertical silk stroke through the hole centre;
-        # a hole's dark outline ring, or a stray letter, never gives both.
-        # Each stroke is 1-2px wide and the centre is known to about a pixel: take the best single row
-        # (column) within 2px of the centre, so a 1px shift of the centre never loses the stroke.
+        # a hole's dark outline ring, or a stray letter, never gives both. Each stroke is 1-2px wide
+        # and the centre is known to about a pixel: take the best 3px band within 1px of the centre.
         row = max(sum(1 for x in range(cx - r, cx + r + 1) for dy in (s - 1, s, s + 1) if mask.get((x, cy + dy)) == "silk") for s in (-1, 0, 1))
         col = max(sum(1 for y in range(cy - r, cy + r + 1) for dx in (s - 1, s, s + 1) if mask.get((cx + dx, y)) == "silk") for s in (-1, 0, 1))
-        p["paleFraction"] = sum(1 for q in p["pixels"] if mask[q] == "gpad") / len(p["pixels"])
         at_centre = any(mask.get((cx + dx, cy + dy)) == "silk" for dx in (-1, 0, 1) for dy in (-1, 0, 1))
-        p["cross"] = row >= r and col >= r and at_centre
-    pale = [p for p in pads if p["paleFraction"] > 0.5]
-    two_shades = 0 < len(pale) < len(pads)
+        # The crossing must sit inside the ring: magenta on both sides of it along the row and along
+        # the column. An electrolytic's or LED's polarity "+" is the same glyph but beside the pad.
+        # Looked for beside the strokes (the "+" itself covers the band on the centre row and column).
+        off = max(3, int(p["r"] * 0.3))
+        ring = lambda dx, dy: all(any(mask.get((cx + dx * k + dy * o, cy + dy * k + dx * o)) in PAD_KINDS for k in range(2, reach)) for o in (-off, off))  # noqa: E731
+        # Magenta on at least three sides: one entering trace may cover the band on its side, but a
+        # polarity "+" has the pad on one side only (and often a passing trace on another).
+        inside = sum(ring(dx, dy) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))) >= 3
+        p["cross"] = row >= r and col >= r and at_centre and inside
+        # Shade of the ring, relative to this board's other pads: the mean green of its pixels (the
+        # pale pour pads lean grey). Absolute thresholds fail on renders where every pad is drawn pale.
+        p["shade"] = float(sum(int(rgb[y, x, 1]) for x, y in p["pixels"]) / len(p["pixels"]))
+    shades = sorted(p["shade"] for p in pads)
+    # Two shades: the biggest jump in the sorted shades is wide and leaves at least a few pads on
+    # each side (one odd pad - a ring under a trace - must not pass for a cluster).
+    gaps = [(b - a, a) for i, (a, b) in enumerate(zip(shades, shades[1:])) if SHADE_MIN_PADS <= i + 1 <= len(shades) - SHADE_MIN_PADS]
+    gap, below = max(gaps) if gaps else (0.0, 0.0)
+    two_shades = gap >= SHADE_GAP
     radii = sorted(p["r"] for p in pads)
     typical = radii[len(radii) // 2] if radii else 0
     for p in pads:
-        # Two shades on the board: ground = the pale ones with a cross. One shade (small renders):
-        # the cross alone marks the pour. A ring fragment well under the usual pad size is never the
-        # pour: the "+" of an LED or transistor outline lands on such fragments and pulled whole
-        # op-amp stages into ground (Fluffy Fuzz, Wild Jack pad 51).
+        # Two shades on the board: ground = the pale (greener) ones with a cross. One shade (small
+        # renders): the cross alone marks the pour. A ring fragment well under the usual pad size is
+        # never the pour: the "+" of an LED or transistor outline lands on such fragments and pulled
+        # whole op-amp stages into ground (Fluffy Fuzz, Wild Jack pad 51).
         full_size = p["r"] >= GROUND_MIN_R * typical
-        p["ground"] = full_size and p["cross"] and (p["paleFraction"] > 0.5 if two_shades else True)
+        pale = p["shade"] > below if two_shades else True
+        p["ground"] = full_size and p["cross"] and pale
 
 
 
@@ -319,7 +337,9 @@ def run(src: Path, prefix: str, scale: int = 3, smd: bool = False, layered: bool
     from pads import assign_ids, find_pads
 
     pads = find_pads(mask, w, h)
-    split_ground_pads(pads, mask)
+    import numpy as np
+
+    split_ground_pads(pads, mask, np.asarray(im))
     # Ids follow the previous extraction of this board (by default the json this run overwrites), so
     # a better pad reading never renumbers the pads a map refers to; `renumber` starts from scratch.
     prev_path = previous if previous else Path(f"{prefix}.json")

@@ -223,7 +223,9 @@ def assign_ids(pads: list[dict], previous: dict | None) -> tuple[list[int], dict
         next_id += 1
     pads.sort(key=lambda p: p["id"])
     lost = [old[oi]["id"] for oi in range(len(old)) if oi not in taken_old]
-    merged: dict[int, int] = {}
+    # Pieces absorbed in an earlier extraction stay resolvable as long as their ring is still here.
+    have = {p["id"] for p in pads}
+    merged: dict[int, int] = {int(k): v for k, v in previous.get("mergedIds", {}).items() if v in have}
     for oi in range(len(old)):
         if oi in taken_old:
             continue
