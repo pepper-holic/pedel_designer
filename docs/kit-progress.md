@@ -1,16 +1,16 @@
-# 키트 기판 진행 현황 (2026-10-31 미착수 4단계 묶음 3 진행 중)
+# 키트 기판 진행 현황 (2026-10-31 미착수 4단계 묶음 3까지)
 
 수집: pedalparts.co.kr 키트 기판 렌더 267건(같은 상품 중복 12건은 `kit-duplicates.md`로 빼고 집계 제외)(triage). A등급=60패드 이하·고립 2개 이하, B등급=그 외 시뮬 가능 계열, C등급=모델 없는 계열(딜레이·모듈레이션 등).
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 104 |
+| 변환 완료 | 112 |
 | 기록만 | 5 |
-| 보류 | 53 |
-| 미착수 | 64 |
+| 보류 | 63 |
+| 미착수 | 46 |
 | C등급(범위 밖) | 41 |
 
-## 변환 완료 (104)
+## 변환 완료 (112)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -119,6 +119,14 @@
 | B | 186787840 | MELTDOWN | distortion | BS170 + CA3240 LED 클리핑 + BS170 |
 | B | 186788497 | LuNa Face BC109c | fuzz | SoLa Face 기판·부품표 + BC109C (변형) |
 | B | 186788030 | Green Light | overdrive | Green Land 기판 + Lightspeed 부품(4.7K, BAT41 없음, A500K/A100K) (변형) |
+| B | 186787846 | BAD ASS | buffer-boost | MXR M77 계열 (BUMP 토글 닫힘 고정) |
+| B | 186787638 | DIRTY BOM | distortion | TL074 + 2N7000 몸체 다이오드 클리퍼, SUBB (MID RANGE 10n 위치 고정) |
+| B | 186788304 | Dr.DOOGIE | distortion | Runoffgroove Dr. Boogey (팟 값은 사진·역할로 배정) |
+| B | 186788303 | J800CM | overdrive | 2SK209 폴로어 + NE5532 3단 (SENS A25K·TONE B10K 배정 추정) |
+| B | 186786839 | NEW FAT 부스터 | buffer-boost | TL072 미드 부스트 (JUMP 42 59 한 곳 회로 논리로 추정) |
+| B | 186788475 | PARTHENON | overdrive | Bluesbreaker 모디 (토글 2개 고정) |
+| B | 186788336 | SIR RIOT | distortion | Suhr Riot (ASYM 위치 고정, 미사용 GE·LED 자리 제외) |
+| B | 186788337 | SURGE V2 | overdrive | Providence SOV-2 (ICL7660 ±레일) |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -129,7 +137,7 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (53)
+## 보류 (63)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -186,45 +194,38 @@
 | B | 186787538 | RahRah | overdrive | 4단계 보류(제너 밑 선) |
 | B | 186788658 | ICE MUFF | fuzz | 4단계 보류(고립·무라벨 노브) |
 | B | 186788468 | SUPA FUZZ | fuzz | 앵글 팟 라벨 없음, Q2 이미터 넷 고립 - 원본 Super-Fuzz 대조 |
+| B | 186787458 | BEE DS | overdrive | TL072x4, 접지 넷에 IC2 출력 핀 오병합, 오프보드 팟 6개 - 원본 Dirty Shirley 대조 |
+| B | 186788575 | BLACK AMP 65 | overdrive | 앵글 팟 5개 라벨 없음(A100K 둘 역할 모호), DIP 듀얼 토글 막다른 넷, 고립 10 - 원본 Black '65 대조 |
+| B | 186787489 | Bowling Point | buffer-boost | BASS 토글 공통이 A단 반전 입력에 붙는 경로 안 보임 - 나머지 JUMP는 결과 메모에 있음 |
+| B | 186788052 | Cream Cake Overdrive | overdrive | SOLO 팟이 오프보드 3PDT로 들어감, 러그 연결 미확정 |
+| B | 186787464 | Marvel Drive | overdrive | 넷 하나가 53패드 오병합, 듀얼 팟에 SMD 가상 패드 겹침 - 원본 Marvel/Plexi 대조 |
+| B | 186788107 | NEW 1981 DRIV | distortion | U2A 반전 입력 연결·TL072 B단 역할 불명 - 원본 1981 DRV 대조 |
+| B | 186788115 | NEW 1981 LEVEL | buffer-boost | 고립 9개(2N3904 이미터·바이어스·10uF·제너 등) - 원본 1981 LEVEL 대조 |
+| B | 186788074 | New Big Muffler | distortion | 기판에 값 실크 없음, 부품표는 자료실 PDF(sno=778, 9개 버전) 필요 |
+| B | 186788661 | ODR ONE | overdrive | 저항 줄 밑 선 겹침, U1B 출력 행선 불명, 앵글 팟 4개 라벨 없음 - 원본 ODR-1 대조 |
+| B | 186788317 | TOMATOMA BASS | preamp | 한 기판에 독립 회로 2개(BP 프리앰프·BO 드라이브), 팟 라벨 없음 - 프리셋 분리 필요 |
 
-## 미착수 (64)
+## 미착수 (46)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
-| B | 186786839 | NEW FAT 부스터 | buffer-boost | 66패드, 고립 9 |
 | B | 186787969 | Octavia | fuzz | 69패드, 고립 15 |
 | B | 186788161 | SONIX 482i | unknown | 112패드, 고립 21 |
 | B | 186788550 | TA7136 DS ONE | distortion | 114패드, 고립 8 |
 | B | 186787649 | Kluster Fuzz | fuzz | 115패드, 고립 3 |
 | B | 186788011 | Heavy Fist | distortion | 115패드, 고립 9 |
-| B | 186788337 | SURGE V2 | overdrive | 115패드, 고립 13 |
-| B | 186788115 | NEW 1981 LEVEL | buffer-boost | 116패드, 고립 11 |
 | B | 186788144 | KONISH NG-2 | fuzz | 117패드, 고립 16 |
-| B | 186788336 | SIR RIOT | distortion | 118패드, 고립 16 |
 | B | 186788339 | SLASHMASTER | distortion | 118패드, 고립 10 |
-| B | 186788575 | BLACK AMP 65 | overdrive | 118패드, 고립 10 |
-| B | 186788107 | NEW 1981 DRIV | distortion | 121패드, 고립 14 |
-| B | 186787846 | BAD ASS | buffer-boost | 122패드, 고립 10 |
-| B | 186788074 | New Big Muffler | distortion | 123패드, 고립 8 |
 | B | 186788574 | TWEED AMP 57 | overdrive | 126패드, 고립 16 |
-| B | 186788303 | J800CM | overdrive | 127패드, 고립 19 |
-| B | 186788317 | TOMATOMA BASS | preamp | 128패드, 고립 29 |
-| B | 186787464 | Marvel Drive | overdrive | 129패드, 고립 13 |
-| B | 186788304 | Dr.DOOGIE | distortion | 130패드, 고립 27 |
 | B | 186788600 | BREADCAST  (노브 제외) | preamp | 130패드, 고립 24 |
 | B | 186788148 | BUTTER MARKET | unknown | 133패드, 고립 26 |
-| B | 186787638 | DIRTY BOM | distortion | 138패드, 고립 13 |
 | B | 186788585 | PLEXI1959 | distortion | 140패드, 고립 16 |
-| B | 186787489 | Bowling Point | buffer-boost | 142패드, 고립 16 |
 | B | 186788143 | KONISH G-2 | overdrive | 143패드, 고립 21 |
 | B | 186787487 | Peanut Drive | overdrive | 145패드, 고립 6 |
 | B | 186788484 | BLUES BRKR BOX | overdrive | 147패드, 고립 14 |
 | B | 186788549 | J900CM | overdrive | 149패드, 고립 11 |
 | B | 186788660 | MOONSHINE BOTTLE | overdrive | 150패드, 고립 24 |
-| B | 186788475 | PARTHENON | overdrive | 151패드, 고립 9 |
-| B | 186788661 | ODR ONE | overdrive | 152패드, 고립 9 |
 | B | 186787456 | BEE OD | overdrive | 153패드, 고립 12 |
-| B | 186788052 | Cream Cake Overdrive | overdrive | 156패드, 고립 9 |
 | B | 186788036 | All of BB Cream | overdrive | 159패드, 고립 19 |
 | B | 186788038 | Bass BB Cream | overdrive | 159패드, 고립 34 |
 | B | 186788017 | Pluto Green | overdrive | 160패드, 고립 10 |
@@ -240,7 +241,6 @@
 | B | 186787476 | Train Wreck | distortion | 186패드, 고립 17 |
 | B | 186788599 | FRIEDMAN MARY | distortion | 186패드, 고립 21 |
 | B | 186788025 | Duality Bass Fuzz | fuzz | 189패드, 고립 29 |
-| B | 186787458 | BEE DS | overdrive | 198패드, 고립 9 |
 | B | 186788140 | NEW REVVOLUTION G3 | buffer-boost | 199패드, 고립 24 |
 | B | 186788601 | DIESEL V4  (노브 제외) | distortion | 200패드, 고립 35 |
 | B | 186788662 | SEROTONE | eq | 206패드, 고립 25 |
