@@ -362,7 +362,7 @@ Dove Drive, NEW RED CHARLES, X-Touch, Heavy Fist, FLEX OD, King Cat, MUFFLER II,
 BEE DS, PLEXI1959, NEW REVVOLUTION G3. 고정한 스위치 위치·추정한 팟 값·SPLIT 근거는 각 맵(`references/pcb-kits/maps/<goods>.txt`) 주석에 있다.
 무라벨 앵글 팟은 상품 사진(PLEXI1959·G3·THE BLOID)이나 회로 역할로 배정했고, 원본 회로도와는 대조하지 않았다.
 여전히 보류(5):
-- Hush FREQ 186787536 [모델]: 1N916A 다이오드 품번이 `partModels.ts`에 없다. 넷·부품표 대조는 끝났고 DIODES 표에 1N916(1N4148 모델) 한 줄이면 된다.
+- (해결) Hush FREQ 186787536: `partModels.ts` DIODES 표에 1N916 별칭(1N4148 모델)을 넣어 `pp-hush-freq`로 변환했다.
 - NEW 1981 LEVEL 186788115 [모델]: 3.3V 제너 두 개가 LM833 A 귀환에 직렬로 맞물린 제너 항복 클리퍼. 앱 ZENER는 순방향만이라 항복 모델이 필요하다.
 - KONISH SS-3 186788146 [오병합]: TL072 B측 핀 5·6·7과 10n·220p·100K·1M 윗줄이 한 넷. 600px 렌더라 핀 사이 선을 못 가른다.
 - NEW ANDY PLUS 186788138 [팟라벨]: 앵글 팟 5개 무라벨, 상품 사진 없음. BS170 부스트 섹션이 따로 있다([다회로] 성격).

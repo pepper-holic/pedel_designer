@@ -4,13 +4,13 @@
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 150 |
+| 변환 완료 | 151 |
 | 기록만 | 5 |
-| 보류 | 70 |
+| 보류 | 69 |
 | 미착수 | 0 |
 | C등급(범위 밖) | 41 |
 
-## 변환 완료 (150)
+## 변환 완료 (151)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -165,6 +165,7 @@
 | B | 186788140 | NEW REVVOLUTION G3 | buffer-boost | pp-new-revvolution-g3 (재시도3) |
 | B | 186788017 | Pluto Green | overdrive | pp-pluto-green (재시도3) |
 | B | 186788339 | SLASHMASTER | distortion | pp-slashmaster (재시도3) |
+| B | 186787536 | Hush FREQ | overdrive | pp-hush-freq (1N916 별칭 추가) |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -175,7 +176,7 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (70)
+## 보류 (69)
 
 보류 이유 태그:
 
@@ -184,7 +185,7 @@
 | [대조] | 20 | 원본 회로도와 대조해야 넷 확정 |
 | [팟라벨] | 18 | 노브·팟 역할 근거 없음(무라벨 앵글/오프보드 팟) |
 | [오병합] | 14 | 추출기 넷 오병합·숨은 선이 많아 렌더로 못 풂 |
-| [모델] | 5 | 앱에 소자 모델 없음 |
+| [모델] | 4 | 앱에 소자 모델 없음 |
 | [자료] | 9 | 부품표·값·배선 자료가 페이지에 없음 |
 | [다회로] | 4 | 한 기판에 회로 여러 개(프리셋 분리 필요) |
 
@@ -200,7 +201,6 @@
 | B | 186788145 | KONISH SS-2 | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186787554 | Flame mini Booster | buffer-boost | [대조] 디스크리트 op-amp 꼬리 노드(재시도2) |
 | B | 186788589 | TIME V2 (잔레이) | overdrive | [팟라벨] B단 큰 링 역할(재시도2) |
-| B | 186787536 | Hush FREQ | overdrive | [모델] 1N916A 품번 별칭 필요(재시도3) |
 | B | 186786078 | RC BEAST  (겸용) | buffer-boost | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788335 | 1484 TWELVE | unknown | [대조] ICL7660 전하펌프 |
 | B | 186788146 | KONISH SS-3 | overdrive | [오병합] TL072 B측 핀 넷 합침(재시도3) |
