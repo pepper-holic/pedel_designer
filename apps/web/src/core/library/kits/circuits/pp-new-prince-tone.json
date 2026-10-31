@@ -1,0 +1,713 @@
+{
+ "id": "pp-new-prince-tone",
+ "goodsNo": "186788570",
+ "kitName": "NEW PRINCE TONE",
+ "motif": "Analogman Prince of Tone (블루스브레이커 계열, KoT 한 채널)",
+ "type": "overdrive",
+ "description": "IN(1M)→22n→NJM4580 A 비반전(1M→B+·Vref, 27K+10n·33K+10n/1000n 이득 다리, 100K∥100p 귀환, DRIVE B100K 와이퍼가 출력·한끝 10K→반전 입력)→10K∥10K→100n→B 반전(220K∥47p, BA282 2+2 직렬 역병렬 6.8K 귀환 = 소프트)→1K→TONE B25K(10n)→6.8K→PRES 트리머+10n→VOL A100K(Vref 기준)→1uF∥1000n→OUT(1M)",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "NJM4580D",
+   "nodes": {
+    "1": "n3",
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "5": "n2",
+    "6": "n5",
+    "7": "n6",
+    "8": "n7"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "27K",
+   "nodes": [
+    "n8",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "n9",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n8",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n9",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n10",
+    "n3"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "100pF",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n11",
+    "n4"
+   ]
+  },
+  {
+   "ref": "DRIVE",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n11",
+    "n3",
+    "n10"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n10",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n10",
+    "n12"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n12",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "220K",
+   "nodes": [
+    "n6",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "47pF",
+   "nodes": [
+    "n6",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "6.8K",
+   "nodes": [
+    "n5",
+    "n13"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "BA282",
+   "nodes": {
+    "a": "n6",
+    "k": "n14"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "BA282",
+   "nodes": {
+    "a": "n14",
+    "k": "n13"
+   }
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "BA282",
+   "nodes": {
+    "a": "n13",
+    "k": "n15"
+   }
+  },
+  {
+   "ref": "D4",
+   "kind": "D",
+   "part": "BA282",
+   "nodes": {
+    "a": "n15",
+    "k": "n6"
+   }
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n6",
+    "n16"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n16",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n6",
+    "n17"
+   ]
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B25K",
+   "nodes": [
+    "n18",
+    "n19",
+    "n17"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n18",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "6.8K",
+   "nodes": [
+    "n19",
+    "n20"
+   ]
+  },
+  {
+   "ref": "PRES",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "n20",
+    "n20",
+    "n21"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n21",
+    "n2"
+   ]
+  },
+  {
+   "ref": "VOL",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n2",
+    "n22",
+    "n20"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n22",
+    "out"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n22",
+    "out"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "out",
+    "0"
+   ]
+  },
+  {
+   "ref": "D5",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n23"
+   }
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "47R",
+   "nodes": [
+    "n23",
+    "n7"
+   ]
+  },
+  {
+   "ref": "C13",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "C14",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n7",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R17",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C15",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "R2"
+   ]
+  },
+  {
+   "id": "a",
+   "category": "gain",
+   "label": "NJM4580 A 게인단",
+   "parts": [
+    "U1",
+    "R3",
+    "C2",
+    "R4",
+    "C3",
+    "C4",
+    "R5",
+    "C5",
+    "R6",
+    "DRIVE"
+   ]
+  },
+  {
+   "id": "b",
+   "category": "gain",
+   "label": "NJM4580 B 반전단·소프트 클리핑",
+   "parts": [
+    "R7",
+    "R8",
+    "C6",
+    "R9",
+    "C7",
+    "R10",
+    "D1",
+    "D2",
+    "D3",
+    "D4"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "톤·프레즌스",
+   "parts": [
+    "C8",
+    "R11",
+    "R12",
+    "TONE",
+    "C9",
+    "R13",
+    "PRES",
+    "C10"
+   ]
+  },
+  {
+   "id": "out",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "VOL",
+    "C11",
+    "C12",
+    "R14"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원·Vref",
+   "parts": [
+    "D5",
+    "R15",
+    "C13",
+    "C14",
+    "R16",
+    "R17",
+    "C15"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D5": {
+   "x": 130,
+   "y": 160,
+   "rotation": 0
+  },
+  "R15": {
+   "x": 200,
+   "y": 160,
+   "rotation": 0
+  },
+  "C13": {
+   "x": 260,
+   "y": 190,
+   "rotation": 90
+  },
+  "C14": {
+   "x": 310,
+   "y": 190,
+   "rotation": 90
+  },
+  "R16": {
+   "x": 480,
+   "y": 190,
+   "rotation": 90
+  },
+  "R17": {
+   "x": 480,
+   "y": 260,
+   "rotation": 90
+  },
+  "C15": {
+   "x": 530,
+   "y": 260,
+   "rotation": 90
+  },
+  "R1": {
+   "x": 100,
+   "y": 470,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 150,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 210,
+   "y": 470,
+   "rotation": 90
+  },
+  "U1A": {
+   "x": 330,
+   "y": 400
+  },
+  "C5": {
+   "x": 330,
+   "y": 300,
+   "rotation": 180
+  },
+  "R5": {
+   "x": 330,
+   "y": 340,
+   "rotation": 180
+  },
+  "R6": {
+   "x": 260,
+   "y": 530,
+   "rotation": 180
+  },
+  "DRIVE": {
+   "x": 360,
+   "y": 530,
+   "rotation": 180
+  },
+  "R3": {
+   "x": 230,
+   "y": 600,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 230,
+   "y": 680,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 290,
+   "y": 600,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 260,
+   "y": 740,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 340,
+   "y": 680,
+   "rotation": 90
+  },
+  "R7": {
+   "x": 470,
+   "y": 400,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 470,
+   "y": 460,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 560,
+   "y": 400,
+   "rotation": 0
+  },
+  "U1B": {
+   "x": 700,
+   "y": 400
+  },
+  "C7": {
+   "x": 700,
+   "y": 260,
+   "rotation": 180
+  },
+  "R9": {
+   "x": 700,
+   "y": 310,
+   "rotation": 180
+  },
+  "R10": {
+   "x": 650,
+   "y": 520,
+   "rotation": 180
+  },
+  "D1": {
+   "x": 720,
+   "y": 580,
+   "rotation": 0
+  },
+  "D2": {
+   "x": 800,
+   "y": 580,
+   "rotation": 0
+  },
+  "D3": {
+   "x": 800,
+   "y": 640,
+   "rotation": 180
+  },
+  "D4": {
+   "x": 720,
+   "y": 640,
+   "rotation": 180
+  },
+  "C8": {
+   "x": 820,
+   "y": 400,
+   "rotation": 0
+  },
+  "R11": {
+   "x": 900,
+   "y": 400,
+   "rotation": 0
+  },
+  "R12": {
+   "x": 980,
+   "y": 400,
+   "rotation": 0
+  },
+  "TONE": {
+   "x": 1060,
+   "y": 400,
+   "rotation": 180
+  },
+  "C9": {
+   "x": 1060,
+   "y": 490,
+   "rotation": 90
+  },
+  "R13": {
+   "x": 1150,
+   "y": 400,
+   "rotation": 0
+  },
+  "PRES": {
+   "x": 1230,
+   "y": 330,
+   "rotation": 180
+  },
+  "C10": {
+   "x": 1230,
+   "y": 250,
+   "rotation": 90
+  },
+  "VOL": {
+   "x": 1310,
+   "y": 400,
+   "rotation": 180
+  },
+  "C11": {
+   "x": 1400,
+   "y": 400,
+   "rotation": 0
+  },
+  "C12": {
+   "x": 1400,
+   "y": 460,
+   "rotation": 0
+  },
+  "R14": {
+   "x": 1470,
+   "y": 470,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 1530,
+   "y": 470,
+   "rotation": 90
+  }
+ }
+}
