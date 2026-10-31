@@ -69,6 +69,8 @@ Octavia·OCB·OCTA CLASSIC·OCTA KING(옥타브 퍼즈는 트랜지스터·다�
 ①·② 완료. ③은 2026-10-31에 8개를 회로로 만들고 나머지는 원본 회로도가 필요한 지점을 `kit-deferred.md` 끝에 적었다. 다음은 ④ 미착수(패드 적은 순 6개씩).
 ④ 묶음 1(2026-10-31): West Breeze, Brown Sound II, OCB, Parsley Drive, OCTA CLASSIC을 회로로, ALMOST CLEAN은 RC/AC 공용 기판이라 보류.
 OCTA CLASSIC은 TONE 가변저항이 두 캡 사이에 떠 있어(직류 섬) 변환기가 그런 섬을 감싼 캡에만 1GΩ 누설을 넣도록 했다(`kits/dcIslands.ts`).
+④ 묶음 2: Brown Charlie, Black CAB, KONISH P-1, BXM Boost, Honey Beast, Abracadabra를 회로로, 14개(BIG 프리앰프 5종 포함)는 보류.
+미착수 남은 64개는 고립 패드·최대 넷 크기 순으로 정렬해 다음 묶음을 고른다(사진 판독 성공률이 묶음당 절반 정도).
 Octavia는 오디오 트랜스포머(42TM022)라 대응표에 트랜스포머 줄(`coupledInductors`)이 생겨야 한다.
 
 ### ② 재분류 결과 (2026-10-30)

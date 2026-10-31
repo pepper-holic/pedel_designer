@@ -1,17 +1,17 @@
-# 키트 기판 진행 현황 (2026-10-31 미착수 4단계 묶음 1까지)
+# 키트 기판 진행 현황 (2026-10-31 미착수 4단계 묶음 2까지)
 
 수집: pedalparts.co.kr 키트 기판 렌더 279건(triage). A등급=60패드 이하·고립 2개 이하, B등급=그 외 시뮬 가능 계열, C등급=모델 없는 계열(딜레이·모듈레이션 등).
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 93 |
+| 변환 완료 | 99 |
 | 기록만 | 5 |
-| 보류 | 38 |
-| 미착수 | 84 |
+| 보류 | 52 |
+| 미착수 | 64 |
 | 중복 기판 | 19 |
 | C등급(범위 밖) | 40 |
 
-## 변환 완료 (93)
+## 변환 완료 (99)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -109,6 +109,12 @@
 | B | 186788446 | OCB | fuzz | 클린 옥타브 블렌드 |
 | B | 186787488 | Parsley Drive | overdrive | Wampler Paisley Drive |
 | B | 186788509 | OCTA CLASSIC | fuzz | 빈티지 옥타브 퍼즈 (직류 섬 누설) |
+| B | 186787533 | Brown Charlie | distortion | Marshall JTM45 (BS170 x3) |
+| B | 186787558 | Black CAB | eq | 캐비닛 시뮬 필터부 |
+| B | 186788153 | KONISH P-1 | distortion | Pete Cornish P-1 |
+| B | 186787640 | BXM Boost | buffer-boost | Friedman Buxom Boost (ICL7660 ±9V) |
+| B | 186787552 | Honey Beast | distortion | CA3130 + 2N5952 x2 |
+| B | 186787529 | Abracadabra | fuzz | Rangemaster + Laney Supergroup |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -119,7 +125,7 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (38)
+## 보류 (52)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -161,8 +167,22 @@
 | B | 186787546 | X-Touch | overdrive |  |
 | B | 186788551 | REAL CLEAN | buffer-boost |  |
 | B | 186788552 | ALMOST CLEAN | buffer-boost | RC/AC BST 공용 기판 |
+| B | 186787635 | FLEX OD | overdrive | 4단계 보류(오병합) |
+| B | 186788065 | Med Rox | distortion | 4단계 보류(IC 밑 선) |
+| B | 186787483 | King Cat | fuzz | 4단계 보류(오병합) |
+| B | 186788576 | MUFFLER II | distortion | 4단계 보류(오병합·무라벨 팟) |
+| B | 186788180 | BIG SHERIFF PREAMP | preamp | 4단계 보류(무라벨 노브) |
+| B | 186788181 | BIG JACK PREAMP | preamp | 4단계 보류(무라벨 노브) |
+| B | 186788182 | BIG KRAKEN PREAMP | preamp | 4단계 보류(무라벨 노브) |
+| B | 186788178 | BIG COPPER PREAMP | preamp | 4단계 보류(무라벨 노브) |
+| B | 186788179 | BIG DUTCH PREAMP | preamp | 4단계 보류(무라벨 노브) |
+| B | 186787555 | Flame Booster | buffer-boost | 4단계 보류(오병합·토글) |
+| B | 186788445 | OCTA KING | fuzz | 4단계 보류(무라벨 노브·DPDT) |
+| B | 186787548 | Tube Drive | overdrive | 4단계 보류(MOSFET 핀 오병합) |
+| B | 186787538 | RahRah | overdrive | 4단계 보류(제너 밑 선) |
+| B | 186788658 | ICE MUFF | fuzz | 4단계 보류(고립·무라벨 노브) |
 
-## 미착수 (84)
+## 미착수 (64)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -179,19 +199,11 @@
 | B | 186788144 | KONISH NG-2 | fuzz | 117패드, 고립 16 |
 | B | 186788336 | SIR RIOT | distortion | 118패드, 고립 16 |
 | B | 186788339 | SLASHMASTER | distortion | 118패드, 고립 10 |
-| B | 186787558 | Black CAB | eq | 118패드, 고립 15 |
 | B | 186788575 | BLACK AMP 65 | overdrive | 118패드, 고립 10 |
-| B | 186787635 | FLEX OD | overdrive | 119패드, 고립 5 |
-| B | 186787483 | King Cat | fuzz | 120패드, 고립 6 |
-| B | 186788576 | MUFFLER II | distortion | 120패드, 고립 6 |
 | B | 186787840 | MELTDOWN | distortion | 121패드, 고립 8 |
-| B | 186788065 | Med Rox | distortion | 121패드, 고립 3 |
 | B | 186788107 | NEW 1981 DRIV | distortion | 121패드, 고립 14 |
-| B | 186788658 | ICE MUFF | fuzz | 121패드, 고립 8 |
-| B | 186787548 | Tube Drive | overdrive | 122패드, 고립 8 |
 | B | 186787846 | BAD ASS | buffer-boost | 122패드, 고립 10 |
 | B | 186788074 | New Big Muffler | distortion | 123패드, 고립 8 |
-| B | 186787538 | RahRah | overdrive | 126패드, 고립 5 |
 | B | 186788574 | TWEED AMP 57 | overdrive | 126패드, 고립 16 |
 | B | 186788303 | J800CM | overdrive | 127패드, 고립 19 |
 | B | 186788317 | TOMATOMA BASS | preamp | 128패드, 고립 29 |
@@ -199,22 +211,12 @@
 | B | 186788304 | Dr.DOOGIE | distortion | 130패드, 고립 27 |
 | B | 186788600 | BREADCAST  (노브 제외) | preamp | 130패드, 고립 24 |
 | B | 186788148 | BUTTER MARKET | unknown | 133패드, 고립 26 |
-| B | 186787552 | Honey Beast | distortion | 136패드, 고립 5 |
 | B | 186787638 | DIRTY BOM | distortion | 138패드, 고립 13 |
-| B | 186788153 | KONISH P-1 | distortion | 139패드, 고립 5 |
 | B | 186788585 | PLEXI1959 | distortion | 140패드, 고립 16 |
 | B | 186788468 | SUPA FUZZ | fuzz | 141패드, 고립 3 |
 | B | 186787489 | Bowling Point | buffer-boost | 142패드, 고립 16 |
-| B | 186787529 | Abracadabra | fuzz | 143패드, 고립 11 |
 | B | 186788143 | KONISH G-2 | overdrive | 143패드, 고립 21 |
-| B | 186787533 | Brown Charlie | distortion | 144패드, 고립 4 |
 | B | 186787487 | Peanut Drive | overdrive | 145패드, 고립 6 |
-| B | 186788180 | BIG SHERIFF PREAMP | preamp | 145패드, 고립 6 |
-| B | 186788181 | BIG JACK PREAMP | preamp | 145패드, 고립 6 |
-| B | 186788182 | BIG KRAKEN PREAMP | preamp | 145패드, 고립 6 |
-| B | 186788445 | OCTA KING | fuzz | 146패드, 고립 4 |
-| B | 186788178 | BIG COPPER PREAMP | preamp | 147패드, 고립 9 |
-| B | 186788179 | BIG DUTCH PREAMP | preamp | 147패드, 고립 8 |
 | B | 186788484 | BLUES BRKR BOX | overdrive | 147패드, 고립 14 |
 | B | 186788549 | J900CM | overdrive | 149패드, 고립 11 |
 | B | 186788660 | MOONSHINE BOTTLE | overdrive | 150패드, 고립 24 |
@@ -222,7 +224,6 @@
 | B | 186788661 | ODR ONE | overdrive | 152패드, 고립 9 |
 | B | 186787456 | BEE OD | overdrive | 153패드, 고립 12 |
 | B | 186788052 | Cream Cake Overdrive | overdrive | 156패드, 고립 9 |
-| B | 186787640 | BXM Boost | buffer-boost | 157패드, 고립 22 |
 | B | 186788036 | All of BB Cream | overdrive | 159패드, 고립 19 |
 | B | 186788038 | Bass BB Cream | overdrive | 159패드, 고립 34 |
 | B | 186788017 | Pluto Green | overdrive | 160패드, 고립 10 |
@@ -233,7 +234,6 @@
 | B | 186787486 | Sovereign | overdrive | 169패드, 고립 14 |
 | B | 186788053 | Custard Cake Overdrive | overdrive | 172패드, 고립 11 |
 | B | 186788588 | DIAVOLO11K  (노브 제외) | distortion | 173패드, 고립 29 |
-| B | 186787555 | Flame Booster | buffer-boost | 174패드, 고립 14 |
 | B | 186788141 | NEW REVVOLUTION G4 | unknown | 175패드, 고립 26 |
 | B | 186788142 | NEW REVVOLUTION G2 | unknown | 175패드, 고립 30 |
 | B | 186787476 | Train Wreck | distortion | 186패드, 고립 17 |
