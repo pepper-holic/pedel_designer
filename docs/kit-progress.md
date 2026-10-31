@@ -4,13 +4,13 @@
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 171 |
+| 변환 완료 | 177 |
 | 기록만 | 5 |
-| 보류 | 49 |
+| 보류 | 43 |
 | 미착수 | 0 |
 | C등급(범위 밖) | 41 |
 
-## 변환 완료 (171)
+## 변환 완료 (177)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -186,6 +186,12 @@
 | B | 186787643 | NEW Cat II | fuzz | pp-new-cat-ii (변형표) |
 | B | 186787644 | NEW Turbo Cat | fuzz | pp-new-turbo-cat (변형표) |
 | B | 186787645 | NEW Vintage Cat | fuzz | pp-new-vintage-cat (변형표) |
+| B | 186788115 | NEW 1981 LEVEL | buffer-boost | pp-new-1981-level (제너 항복 모델) |
+| B | 186788598 | KOTT  (노브 제외) | overdrive | KOTT a/b (맵 둘) |
+| B | 186788152 | TWIN BLOID | overdrive | TWIN BLOID a/b (맵 둘) |
+| B | 186788553 | 브라우니 PLUTO | overdrive | 브라우니 PLUTO a/b (맵 둘) |
+| B | 186788600 | BREADCAST  (노브 제외) | preamp | pp-breadcast (트랜스 값 추정) |
+| B | 186788025 | Duality Bass Fuzz | fuzz | pp-duality-bass-fuzz (CD4049 모델) |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -196,7 +202,7 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (49)
+## 보류 (43)
 
 보류 이유 태그:
 
@@ -232,13 +238,10 @@
 | B | 186787489 | Bowling Point | buffer-boost | [대조] BASS 토글 공통이 A단 반전 입력에 붙는 경로 안 보임 - 나머지 JUMP는 결과 메모에 있음 |
 | B | 186787464 | Marvel Drive | overdrive | [오병합] 18V 선 따라 22패드 한 넷(재시도3) |
 | B | 186788107 | NEW 1981 DRIV | distortion | [대조] U2A 반전 입력 연결·TL072 B단 역할 불명 - 원본 1981 DRV 대조 |
-| B | 186788115 | NEW 1981 LEVEL | buffer-boost | [모델] 제너 항복 클리퍼(재시도3) |
 | B | 186788661 | ODR ONE | overdrive | [대조] 저항 줄 밑 선 겹침, U1B 출력 행선 불명, 앵글 팟 4개 라벨 없음 - 원본 ODR-1 대조 |
 | B | 186788586 | KENTAUR GOLD | overdrive | [대조] Klon 전체, 오프보드 팟 러그 9개 무라벨, 고립 11 |
 | B | 186788587 | KENTAUR SILVER | overdrive | [대조] KENTAUR GOLD와 같은 레이아웃, 같은 이유 |
 | B | 186788484 | BLUES BRKR BOX | overdrive | [오병합] 고립 12(톤·부스트 와이퍼, 토글 4개 러그) |
-| B | 186788598 | KOTT  (노브 제외) | overdrive | [다회로] KoT 두 채널, 고립 16 |
-| B | 186788152 | TWIN BLOID | overdrive | [다회로] 두 회로 한 케이스 |
 | B | 186788473 | VIG LEBOWSKI | overdrive | [팟라벨] 오프보드 팟 4개 무라벨, 고립 9 |
 | B | 186787476 | Train Wreck | distortion | [오병합] 고립 17, 토글 2개 |
 | B | 186788173 | SLOW PREAMP | preamp | [오병합] 자홍 고립 13, 팟 8자리 무라벨 |
@@ -246,17 +249,14 @@
 | B | 186788599 | FRIEDMAN MARY | distortion | [오병합] 자홍 고립 13, 팟 9자리 무라벨 |
 | B | 186788036 | All of BB Cream | overdrive | [대조] 괄호 대체값 7곳, ATM/COMP 토글 다이오드 묶음 |
 | B | 186788038 | Bass BB Cream | overdrive | [자료] All of BB 기판의 값 변경·점퍼 자료 필요 |
-| B | 186788553 | 브라우니 PLUTO | overdrive | [다회로] 프로틴 2채널 |
 | B | 186788660 | MOONSHINE BOTTLE | overdrive | [팟라벨] 앵글 팟 12패드 무라벨, 고립 21 |
 | B | 186788161 | SONIX 482i | unknown | [모델] NJM2153 엔헨서 칩, ICL7660 두 개 ±12V |
 | B | 186788144 | KONISH NG-2 | fuzz | [오병합] QE 베이스 구동 경로 없음(시안 넷이 접지인지 바이어스인지) |
 | B | 186788143 | KONISH G-2 | overdrive | [오병합] 고립 20, 접지 넷에 QB 컬렉터 오병합 |
 | B | 186788549 | J900CM | overdrive | [오병합] U1 출력 핀 둘 고립, 앵글 팟 4개 무라벨 |
 | B | 186788139 | NEW BLUE DRIVER | unknown | [팟라벨] 앵글 팟·듀얼 게인 무라벨, 고립 25, BD-2 이산 op-amp |
-| B | 186788600 | BREADCAST  (노브 제외) | preamp | [모델] 신호 경로 1:1 트랜스포머(이제 T 줄 지원, 해당 트랜스 값 필요), 2N404 |
 | B | 186788588 | DIAVOLO11K  (노브 제외) | distortion | [팟라벨] 앵글 팟 11개 중 이름 1개, 고립 22 |
 | B | 186788601 | DIESEL V4  (노브 제외) | distortion | [팟라벨] 노브 7개 무라벨, 고립 31 |
-| B | 186788025 | Duality Bass Fuzz | fuzz | [모델] CD4049UBE 인버터 증폭 모델 없음 |
 | B | 186788662 | SEROTONE | eq | [팟라벨] 앵글 팟 4개·트리머 3개 무라벨 |
 | B | 186787468 | Sam's Amp Classic | preamp | [오병합] 패드 133개가 한 넷, 렌더 해상도 낮음 |
 | B | 186788441 | BASSLINE II (노브, 케이스 제외) | preamp | [팟라벨] 노브 7개 무라벨, 고립 43 + [대조] Tech21 Bass DI V2 |
