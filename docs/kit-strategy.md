@@ -71,7 +71,8 @@ Octavia·OCB·OCTA CLASSIC·OCTA KING(옥타브 퍼즈는 트랜지스터·다�
 OCTA CLASSIC은 TONE 가변저항이 두 캡 사이에 떠 있어(직류 섬) 변환기가 그런 섬을 감싼 캡에만 1GΩ 누설을 넣도록 했다(`kits/dcIslands.ts`).
 ④ 묶음 2: Brown Charlie, Black CAB, KONISH P-1, BXM Boost, Honey Beast, Abracadabra를 회로로, 14개(BIG 프리앰프 5종 포함)는 보류.
 미착수 남은 64개는 고립 패드·최대 넷 크기 순으로 정렬해 다음 묶음을 고른다(사진 판독 성공률이 묶음당 절반 정도).
-Octavia는 오디오 트랜스포머(42TM022)라 대응표에 트랜스포머 줄(`coupledInductors`)이 생겨야 한다.
+Octavia는 오디오 트랜스포머(42TM022) - 대응표 `T` 줄과 `kits/transformer.ts`로 해결(2026-10-31).
+④ 2차(B·C등급 40개, 병렬 5세션 + 모델 1세션): 6개 회로, 나머지는 보류 태그([대조][팟라벨][오병합][모델][자료][다회로])로 분류. 미착수 0.
 
 ### ② 재분류 결과 (2026-10-30)
 
