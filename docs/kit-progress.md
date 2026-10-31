@@ -4,13 +4,13 @@
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 121 |
+| 변환 완료 | 125 |
 | 기록만 | 5 |
-| 보류 | 99 |
+| 보류 | 95 |
 | 미착수 | 0 |
 | C등급(범위 밖) | 41 |
 
-## 변환 완료 (121)
+## 변환 완료 (125)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -136,6 +136,10 @@
 | B | 186788540 | MID BLASTER | eq | pp-mid-blaster (층 분리 뒤 재시도) |
 | B | 186788357 | NEW ACC PREAMP | preamp | pp-new-acc-preamp (층 분리 뒤 재시도, EQ 팟 이름은 회로로) |
 | B | 186788310 | KO-N AZS (케이스제외) | overdrive | pp-ko-n-azs (층 분리 뒤 재시도) |
+| B | 186788105 | NEW Graff Mo-D | fuzz | pp-new-graff-mo-d (DIP 대칭 고정) |
+| B | 186788309 | KO-N UI (케이스제외) | overdrive | pp-ko-n-ui (층 분리 뒤 재시도) |
+| B | 186787677 | Wild Jack | overdrive | pp-wild-jack (MPSA18 가짜 접지 SPLIT, GTOD 켬) |
+| B | 186788010 | Soulist | overdrive | pp-soulist (STYLE 3.3K, DIP 끔) |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -146,7 +150,7 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (99)
+## 보류 (95)
 
 보류 이유 태그:
 
@@ -168,12 +172,8 @@
 | B | 186788518 | FUZZ BENDER II GE | fuzz | [대조] ICL7660 전하펌프 |
 | B | 186788106 | Timothy V3 | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788569 | BASS CLEAN | buffer-boost | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788105 | NEW Graff Mo-D | fuzz | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788145 | KONISH SS-2 | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788309 | KO-N UI (케이스제외) | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186787554 | Flame mini Booster | buffer-boost | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186787677 | Wild Jack | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788010 | Soulist | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788589 | TIME V2 (잔레이) | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788159 | SONIX BABY | eq | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186787473 | NEW MORNING | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
