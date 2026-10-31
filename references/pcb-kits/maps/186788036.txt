@@ -1,0 +1,165 @@
+id pp-all-of-bb-cream
+goods 186788036
+name All of BB Cream
+motif Xotic BB Preamp v1.5 (+ Andy Timmons mode, mid boost)
+type overdrive
+desc 2SC1815 입력 버퍼→1000n→4558 A단 비반전(10K+B1M GAIN∥47p, 4.7K+47n, 1N914 2직렬 쌍 귀환 클리핑 COMP)→1K→B단 비반전(1K 귀환, MID B20K 와이퍼 220n+220R)→1000n/1K→듀얼 B100K VOLUME 앞단(∥47K)→100n/10K→4558 반전(47K∥150p)→박산달(TREBLE·BASS B50K)→10uF→VOLUME→2SC1815 출력 버퍼→10uF/470R
+image img_01.jpg
+# Guitar values (seller: the values in brackets are the bass-version substitutes) - (10K) (100n) (10uF) (10n) (1n) (22K) are not used;
+# "(1n)" 73-74 and "220n (omit)" 55-56 have no guitar value and stay empty (220n x2 on the list, one is that omit spot).
+# MID pot fitted, so the 18K 65-66 and 1K 67-68 it replaces are left out (seller note).
+# ATM/COMP on-off-on (left ATM = Andy Timmons, centre boost, right COMP = v1.5 original): fixed on COMP (JUMP 3 4) - two series
+# 1N914 pairs 29-49-50-30 / 31-51-52-32 across the A stage; the ATM pair 0-13 / 1-14 is left out (1N914 x6 on the list).
+# 4558D: IC1 horizontal, notch right: 24=1 23=2 22=3 21=4 / 44=5 45=6 46=7 47=8; IC2 notch up: 81=1 85=2 91=3 100=4 / 101=5 92=6 86=7 82=8.
+# VOLUME B100K dual: gang 1 (130-131-132, wiper tied to 132) is a variable resistor beside the 47K from the stage-B node to the tone
+# amp; gang 2 (144-145-146) is the volume proper, wiper 145 -> 100n -> Q2, 146 on the undrawn ground plane. trace_pad: the extractor
+# joined 121/145 with 129/131/132/135 - SPLIT 121 145. GAIN B1M: "1" on 64 (-in A), wiper 63 (10K from out A), 62 unused.
+# TREBLE / BASS B50K: "1" on the right lug (61 / 138, the IC2B output side). '+' rings without drawn copper (17 53 115 146) are ground.
+BOM 1M 100K 470Kx2 47Kx2 33K 10Kx9 4.7Kx3 1Kx4 470R 220R 1000nx2 220n 100nx3 47n 33nx2 22n 4.7nx2 150p 47p 10uFx4 1N400X 1N914x4 JRC4558Dx2 2SC1815x2 B100Kx2 B50Kx2 B1M B20K
+io IN=148 OUT=153 V9=6 GND=150,17,53,115,146
+JUMP 3 4
+SPLIT 121 145
+NC 0 1 2 13 14 55 56 74 62 65 66 67 68 73 154 155 156 157 158
+
+STAGE input input 입력 버퍼 (Q1)
+R 1M 149 150 R1
+R 1K 143 120 R2
+C 22n 114 95 C1
+R 470K 15 16 R3
+Q 2SC1815 b=33 c=34 e=35 Q1
+R 10K 38 37 R4
+
+STAGE a gain A단 (GAIN)
+C 1000n 39 40 C2
+R 10K 41 18 R5
+IC JRC4558D 1=24 2=23 3=22 4=21 5=44 6=45 7=46 8=47 U1
+R 10K 25 48 R6
+POT B1M GAIN 64 63 63
+C 47p 26 36 C3
+R 4.7K 9 10 R7
+C 47n 11 12 C4
+
+STAGE clip clipping 1N914 2직렬 쌍 (COMP)
+D 1N914 a=29 k=49 D1
+D 1N914 a=50 k=30 D2
+D 1N914 a=32 k=52 D3
+D 1N914 a=51 k=31 D4
+
+STAGE b gain B단 (MID)
+R 1K 20 43 R8
+R 10K 42 19 R9
+R 1K 57 58 R10
+POT B20K MID 75 76 77
+C 220n 87 88 C5
+R 220R 89 90 R11
+
+STAGE vol1 custom control VOLUME (듀얼 1단)
+C 1000n 84 96 C6
+R 1K 105 129 R12
+POT B100K VOL2 130 131 132
+R 47K 135 134 R13
+C 100n 142 141 C7
+
+STAGE tone tone 박산달 (IC2)
+R 10K 140 139 R14
+IC JRC4558D 1=81 2=85 3=91 4=100 5=101 6=92 7=86 8=82 U2
+R 47K 79 98 R15
+C 150p 116 117 C8
+C 4.7n 70 69 C9
+POT B50K TREBLE 61 60 59
+C 4.7n 71 72 C10
+R 10K 80 99 R16
+R 4.7K 78 97 R17
+C 33n 124 125 C11
+POT B50K BASS 138 137 136
+C 33n 126 127 C12
+R 4.7K 113 112 R18
+R 33K 119 118 R19
+
+STAGE vol custom control VOLUME
+C 10uF 123 133 C13
+POT B100K VOLUME 146 145 144
+
+STAGE out output 출력 버퍼 (Q2)
+C 100n 121 106 C14
+R 470K 104 128 R20
+Q 2SC1815 b=107 c=108 e=109 Q2
+R 10K 93 94 R21
+C 10uF 110 111 C15
+R 470R 122 147 R22
+R 100K 152 151 R23
+
+STAGE bias custom bias Vref (10K/10K)
+R 10K 83 102 R24
+R 10K 8 7 R25
+C 10uF 103 115 C16
+
+STAGE power power 전원
+D 1N400X a=5 k=27 D5
+C 10uF 28 17 C17
+C 100n 54 53 C18
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 100 460 v
+AT R2 140 400 h
+AT C1 200 400 h
+AT R3 240 340 v-
+AT Q1 290 400
+AT R4 310 490 v
+AT C2 370 430 h
+AT R5 400 490 v
+AT U1A 450 450
+AT C4 420 530 v-
+AT R7 420 610 v-
+AT R6 470 350 h-
+AT GAIN 410 350 r0
+AT C3 450 300 h-
+AT D1 480 260 h-
+AT D2 420 260 h-
+AT D3 420 220 h
+AT D4 480 220 h
+AT R8 540 450 h
+AT R9 580 510 v
+AT U1B 630 470
+AT R10 630 400 h-
+AT MID 600 570 r90
+AT C5 670 570 h
+AT R11 700 630 v
+AT C6 720 470 h
+AT R12 780 470 h
+AT R13 840 470 h
+AT VOL2 840 430 r180 m
+AT C7 900 470 h
+AT R14 960 470 h
+AT U2A 1050 450
+AT R15 1050 390 h-
+AT C8 1050 350 h-
+AT R17 1150 450 h
+AT BASS 1210 450 r180
+AT C11 1180 400 h
+AT C12 1240 400 h
+AT R18 1300 450 h
+AT C9 1150 530 h
+AT TREBLE 1210 530 r180
+AT C10 1270 530 h
+AT R19 1270 600 h
+AT R16 1270 650 h
+AT U2B 1380 620
+AT C13 1450 620 h
+AT VOLUME 1510 650 r270 m
+AT C14 1570 650 h
+AT R20 1610 710 v
+AT Q2 1660 650
+AT R21 1680 740 v
+AT C15 1720 680 h
+AT R22 1780 680 h
+AT R23 1810 740 v
+AT RLOAD 1860 740 v
+AT R24 300 640 v
+AT R25 300 730 v-
+AT C16 350 730 v
+AT VCC 60 160
+AT D5 130 160 h
+AT C17 190 190 v
+AT C18 230 190 v
