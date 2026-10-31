@@ -1,0 +1,87 @@
+id pp-octavia
+goods 186787969
+name Octavia
+motif Tycobrahe Octavia
+type fuzz
+desc 2N5087 PNP + 2N4401 2석 직결 귀환 증폭(47K 귀환, FUZZ 1K 바이패스) → 42TM022 트랜스(600Ω 구동, 1.5K CT 접지) → 1N34A 2개 전파 정류 옥타브 → 볼륨
+image img_03.jpg
+BOM 1M 820K 680K 220K 180K 47K 22K 1.2K 1K 470R 220R 100n 1n 150p 100uFx2 33uFx2 1N34Ax2 42TM022 2N5087 2N4401x2 B1K A500K
+io IN=61 OUT=32 V9=17 GND=0,6,50,55,63,64
+
+# 47K 실크 몸통이 청록(아랫면 동박 색)으로 칠해져 추출기가 8-9를 단락했다. 8은 100uF+(10)·1K(21)로 가는 귀환 마디라 떼어 낸다.
+SPLIT 8 10 21
+# 33uF(-) 39 → 트랜스 58: 세로 GE 다이오드 몸통 밑을 지나는 선. 19 → 31: 가로 GE 다이오드 띠 쪽에서 내려가는 선.
+JUMP 39 58
+JUMP 19 31
+# 트랜스 아랫줄 가운데(600Ω 쪽 CT)는 동박 없음. 49는 트랜스 옆 큰 고정 구멍. 65-68은 GND 배선 점.
+NC 59 49 65 66 67 68
+
+STAGE input input 입력·바이어스
+C 100n 53 52 C1
+R 1M 62 63 R1
+R 680K 51 50 R2
+C 150p 57 56 C2
+R 820K 13 14 R3
+R 180K 16 15 R4
+C 33uF 27 41 C3
+
+STAGE gain gain 증폭 (Q1 PNP → Q2 팔로워 → Q3, 47K 귀환)
+# Q1: 1K를 거쳐 귀환 마디로 가는 쪽이 E, Q2 베이스·220K로 가는 쪽이 C.
+Q 2N5087 e=33 b=34 c=35 Q1
+R 220K 45 44 R5
+R 220R 46 47 R6
+C 1n 54 55 C4
+Q 2N4401 c=36 b=37 e=38 Q2
+R 22K 43 64 R7
+Q 2N4401 b=42 c=48 e=28 Q3
+R 470R 23 22 R8
+C 100uF 24 25 C5
+R 1.2K 11 12 R9
+R 47K 9 8 R10
+R 1K 21 20 R11
+
+# FUZZ: 귀환 마디(R10·R11 사이)를 100uF+B1K로 접지에 바이패스. B1K 와이퍼(1)와 한쪽 러그(2)가 묶인 가변저항. 라벨 없음: 저항이 작을수록 귀환이 줄어 이득이 커지므로 시계방향=작아지는 쪽(2를 1번)으로 둔다.
+C 100uF 10 7 C6
+POT B1K FUZZ 2 1 0
+
+STAGE octave fuzz 옥타브 (트랜스 + 1N34A 전파 정류)
+# 42TM022 = 1.5K CT : 600Ω CT. 판매처 설명대로 P(1.5K)가 팟 쪽 윗줄(29·30·31). Q3 컬렉터가 33uF로 600Ω 쪽(58-60)을 구동하고,
+# 1.5K 쪽 CT(30)는 접지, 양끝(29·31)이 1N34A 캐소드로 간다. 두 애노드가 모인 점이 볼륨 팟으로.
+C 33uF 26 39 C7
+T 42TM022 p1=29 pct=30 p2=31 s1=58 s2=60 T1
+D 1N34A a=3 k=40 D1
+D 1N34A a=18 k=19 D2
+
+STAGE out output 출력
+POT A500K VOLUME 6 5 4
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT C1 170 400 h
+AT R1 140 460 v
+AT R2 240 460 v
+AT C2 200 460 v
+AT R3 240 340 v-
+AT R4 240 250 v
+AT C3 190 310 v
+AT Q1 320 400 m
+AT R11 340 320 v
+AT R5 340 520 v
+AT R6 390 560 v
+AT C4 390 620 v
+AT Q2 420 460
+AT R7 440 560 v
+AT Q3 500 520
+AT R8 520 610 v
+AT C5 560 610 v
+AT R9 520 190 v
+AT R10 460 290 h-
+AT C6 370 240 v-
+AT FUZZ 420 210 r90
+AT C7 580 490 h
+AT T1 670 510 r180 m
+AT D1 760 490 h-
+AT D2 760 650 h-
+AT VOLUME 840 570 r270
+AT RLOAD 920 460 v

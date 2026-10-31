@@ -1,0 +1,142 @@
+id pp-ta7136-ds-one
+goods 186788550
+name TA7136 DS ONE
+motif Boss DS-1 (초기 TA7136AP판)
+type distortion
+desc 2N5088 이미터 팔로워 → 2N5088 트랜지스터 부스터(470K·240p 컬렉터-베이스 귀환) → TA7136AP 비반전 증폭(DIST 100K, 4.7K+1uF) → 2.2K·470n 뒤 1S2473 대칭 클리핑(Vref) → DS-1 톤(6.8K/100n 저역 · 220n/2.2K/6.8K 고역 혼합) → LEVEL → 2N5088 출력 팔로워
+image img_01.jpg
+BOM 2.2M 1M 470Kx2 100Kx4 27K 10Kx6 6.8Kx2 4.7K 2.2Kx2 1Kx2 22R 470nx2 220n 100n 47nx3 10n 240px2 150p 100uF 47uF 1uFx2 1N400X 1S2473x2 TA7136AP 2N5088x3 B100Kx2 B25K
+io IN=107 OUT=71 V9=9 GND=10
+
+# 실크 밑으로 끊긴 선(렌더에서 확인): 47uF+(49)는 Vref 줄(50)로, 또 왼쪽 아래로 내려가 Q1 바이어스 470K(89)로.
+# 34 → 큰 패드 29(Vref), 60(1M) → 47n 아래 80(Q3 베이스), Q2 E(77) → 22R(78), 10K(79) → Q2 C(69), 47n(94) → Q1 B(103).
+JUMP 49 50
+JUMP 49 89
+JUMP 34 29
+JUMP 60 80
+JUMP 77 78
+JUMP 79 69
+JUMP 94 103
+
+STAGE power power 전원·Vref
+# 1N400X 역접속 보호(띠 쪽 7이 캐소드) 뒤 100uF가 내부 V+(TA7136 7번, 트랜지스터 컬렉터)를 만든다.
+D 1N400X a=8 k=7 D1
+C 100uF 0 10 C1
+R 10K 11 12 R1
+R 10K 21 20 R2
+C 47uF 49 51 C2
+
+STAGE in buffer 입력 버퍼 (Q1 이미터 팔로워)
+R 2.2M 108 109 R3
+R 1K 100 101 R4
+C 47n 95 94 C3
+R 470K 89 88 R5
+Q 2N5088 e=102 b=103 c=104 Q1
+R 10K 86 66 R6
+
+STAGE boost gain 트랜지스터 부스터 (Q2)
+C 47n 106 96 C4
+R 100K 97 98 R7
+Q 2N5088 c=69 b=72 e=77 Q2
+R 470K 67 87 R8
+C 240p 68 76 C5
+R 22R 78 58 R9
+R 10K 59 79 R10
+
+STAGE op gain TA7136AP 비반전 증폭 (DIST)
+C 470n 48 32 C6
+R 100K 33 34 R11
+# 7핀 SIP, 1번은 둥근 링 쪽(14). 7=V+, 4=GND, 2=+입력(Vref 바이어스 신호), 3=-입력(귀환), 6=출력. 1번 150p(출력으로)·5번 27K(V+로)는 보상·바이어스 핀.
+IC TA7136AP 1=14 2=15 3=13 4=16 5=17 6=18 7=19 U1
+C 150p 1 2 C7
+R 27K 3 4 R12
+R 100K 27 28 R13
+C 240p 40 41 C8
+# DIST 라벨 없음: 출력(55)~와이퍼가 귀환 저항, 와이퍼~52가 4.7K+1uF 쪽 저항. 시계방향 이득 증가가 되도록 출력 쪽을 1번으로.
+POT B100K DIST 55 54 52
+R 4.7K 65 85 R14
+C 1uF 99 105 C9
+
+STAGE clip clipping 클리핑 (1S2473 대칭, Vref)
+R 2.2K 5 6 R15
+C 470n 25 38 C10
+D 1S2473 a=22 k=35 D2
+D 1S2473 a=36 k=23 D3
+C 10n 24 37 C11
+
+STAGE tone tone 톤 (DS-1 혼합형)
+R 6.8K 45 64 R16
+C 100n 63 50 C12
+C 220n 26 39 C13
+R 2.2K 47 46 R17
+R 6.8K 62 44 R18
+# TONE B25K: 53=저역(6.8K/100n) 끝, 56=고역(220n/2.2K) 끝. 시계방향 밝아지게 53을 1번으로.
+POT B25K TONE 53 57 56
+
+STAGE level custom LEVEL
+# LEVEL B100K: 1번(29)=Vref, 3번(31)=톤 와이퍼. 판매처 설명대로 볼륨이 분압 줄(Vref)에 붙어 있다.
+POT B100K LEVEL 29 30 31
+R 10K 43 61 R19
+C 47n 70 80 C14
+R 1M 42 60 R20
+
+STAGE out output 출력 버퍼 (Q3 이미터 팔로워)
+Q 2N5088 c=73 b=81 e=90 Q3
+R 10K 83 82 R21
+R 1K 91 92 R22
+C 1uF 93 84 C15
+R 100K 75 74 R23
+
+# --- schematic placement (hand) ---
+# 9V 레일(y=160)은 1N400X 뒤 내부 V+. Vref(10K/10K, 47uF)는 왼쪽 위. TA7136 1·5번 핀은 기호에 핀이 없어 C7·R12는 한쪽만 붙는다.
+AT V1 60 430
+AT VCC 60 190
+AT D1 130 160 h
+AT C1 180 190 v
+AT R1 220 190 v
+AT R2 220 280 v
+AT C2 260 280 v
+AT R4 130 400 h
+AT R3 100 460 v
+AT C3 210 400 h
+AT R5 300 310 v
+AT Q1 330 400
+AT R6 350 490 v
+AT C4 410 430 h
+AT R7 440 520 v
+AT Q2 490 430
+AT R8 490 340 h-
+AT C5 490 300 h-
+AT R9 510 520 v
+AT R10 510 220 v
+AT C6 580 400 h
+AT R11 630 340 v-
+AT U1 680 420
+AT R13 650 490 v
+AT DIST 680 560 r180 m
+AT C8 710 500 h
+AT R14 650 620 v
+AT C9 650 700 v
+AT C7 700 340 h
+AT R12 760 190 v-
+AT R15 780 420 h
+AT C10 850 420 h
+AT D2 900 310 v
+AT D3 940 310 v-
+AT C11 980 310 v
+AT C13 950 420 h
+AT R17 1040 420 h
+AT R18 1070 360 v-
+AT R16 950 520 h
+AT C12 1000 580 v
+AT TONE 1100 520 r0
+AT LEVEL 1190 440 r0
+AT R19 1220 410 h
+AT C14 1280 410 h
+AT R20 1320 350 v
+AT Q3 1370 410
+AT R21 1390 500 v
+AT R22 1420 440 h
+AT C15 1480 440 h
+AT R23 1510 500 v
+AT RLOAD 1550 500 v

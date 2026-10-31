@@ -1,0 +1,453 @@
+{
+ "id": "pp-octavia",
+ "goodsNo": "186787969",
+ "kitName": "Octavia",
+ "motif": "Tycobrahe Octavia",
+ "type": "fuzz",
+ "description": "2N5087 PNP + 2N4401 2석 직결 귀환 증폭(47K 귀환, FUZZ 1K 바이패스) → 42TM022 트랜스(600Ω 구동, 1.5K CT 접지) → 1N34A 2개 전파 정류 옥타브 → 볼륨",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "680K",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "150p",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "820K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "180K",
+   "nodes": [
+    "vcc",
+    "n2"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "33uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N5087",
+   "nodes": {
+    "e": "n3",
+    "b": "n1",
+    "c": "n4"
+   }
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "220K",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "220R",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "2N4401",
+   "nodes": {
+    "c": "vcc",
+    "b": "n4",
+    "e": "n6"
+   }
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q3",
+   "kind": "Q",
+   "part": "2N4401",
+   "nodes": {
+    "b": "n6",
+    "c": "n7",
+    "e": "n8"
+   }
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "470R",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "1.2K",
+   "nodes": [
+    "vcc",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n7",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n9",
+    "n3"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n9",
+    "n10"
+   ]
+  },
+  {
+   "ref": "FUZZ",
+   "kind": "POT",
+   "value": "B1K",
+   "nodes": [
+    "n10",
+    "n10",
+    "0"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "33uF",
+   "nodes": [
+    "n7",
+    "n11"
+   ]
+  },
+  {
+   "ref": "T1",
+   "kind": "T",
+   "part": "42TM022",
+   "nodes": {
+    "p1": "n12",
+    "pct": "0",
+    "p2": "n13",
+    "s1": "n11",
+    "s2": "0"
+   }
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N34A",
+   "nodes": {
+    "a": "n14",
+    "k": "n12"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N34A",
+   "nodes": {
+    "a": "n14",
+    "k": "n13"
+   }
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A500K",
+   "nodes": [
+    "0",
+    "out",
+    "n14"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력·바이어스",
+   "parts": [
+    "C1",
+    "R1",
+    "R2",
+    "C2",
+    "R3",
+    "R4",
+    "C3"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "증폭 (Q1 PNP → Q2 팔로워 → Q3, 47K 귀환)",
+   "parts": [
+    "Q1",
+    "R5",
+    "R6",
+    "C4",
+    "Q2",
+    "R7",
+    "Q3",
+    "R8",
+    "C5",
+    "R9",
+    "R10",
+    "R11",
+    "C6",
+    "FUZZ"
+   ]
+  },
+  {
+   "id": "octave",
+   "category": "fuzz",
+   "label": "옥타브 (트랜스 + 1N34A 전파 정류)",
+   "parts": [
+    "C7",
+    "T1",
+    "D1",
+    "D2"
+   ]
+  },
+  {
+   "id": "out",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "VOLUME"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "R1": {
+   "x": 140,
+   "y": 460,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 240,
+   "y": 460,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 200,
+   "y": 460,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 240,
+   "y": 340,
+   "rotation": 270
+  },
+  "R4": {
+   "x": 240,
+   "y": 250,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 190,
+   "y": 310,
+   "rotation": 90
+  },
+  "Q1": {
+   "x": 320,
+   "y": 400,
+   "mirror": true
+  },
+  "R11": {
+   "x": 340,
+   "y": 320,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 340,
+   "y": 520,
+   "rotation": 90
+  },
+  "R6": {
+   "x": 390,
+   "y": 560,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 390,
+   "y": 620,
+   "rotation": 90
+  },
+  "Q2": {
+   "x": 420,
+   "y": 460
+  },
+  "R7": {
+   "x": 440,
+   "y": 560,
+   "rotation": 90
+  },
+  "Q3": {
+   "x": 500,
+   "y": 520
+  },
+  "R8": {
+   "x": 520,
+   "y": 610,
+   "rotation": 90
+  },
+  "C5": {
+   "x": 560,
+   "y": 610,
+   "rotation": 90
+  },
+  "R9": {
+   "x": 520,
+   "y": 190,
+   "rotation": 90
+  },
+  "R10": {
+   "x": 460,
+   "y": 290,
+   "rotation": 180
+  },
+  "C6": {
+   "x": 370,
+   "y": 240,
+   "rotation": 270
+  },
+  "FUZZ": {
+   "x": 420,
+   "y": 210,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 580,
+   "y": 490,
+   "rotation": 0
+  },
+  "T1": {
+   "x": 670,
+   "y": 510,
+   "rotation": 180,
+   "mirror": true
+  },
+  "D1": {
+   "x": 760,
+   "y": 490,
+   "rotation": 180
+  },
+  "D2": {
+   "x": 760,
+   "y": 650,
+   "rotation": 180
+  },
+  "VOLUME": {
+   "x": 840,
+   "y": 570,
+   "rotation": 270
+  },
+  "RLOAD": {
+   "x": 920,
+   "y": 460,
+   "rotation": 90
+  }
+ }
+}

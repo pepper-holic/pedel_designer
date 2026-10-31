@@ -1,0 +1,108 @@
+id pp-kluster-fuzz
+goods 186787649
+name Kluster Fuzz
+motif 2석 실리콘 퍼즈 (MPSA13 + 2N5089, 로터리 클리핑·8-BIT 결합)
+type fuzz
+desc IN(1M, 680p)→47n→MPSA13 공통 이미터(1M/1M 분압, 2K 컬렉터, 10p C-B, 이미터 2K + 22uF·FUZZ C1K 가변)→47n→8-BIT B100K 가변+47Ω→2N5089(1M 컬렉터 귀환, 10K 컬렉터, 100Ω+22uF 이미터, 4.7n∥22n FILTER로 Q1 베이스와 결합)→100n→로터리 4번 1N4148 대칭 접지 클리퍼 / TONE B50K 직렬+1K·2.2n→100n→VOL A100K
+image img_03.jpg
+BOM 1Mx4 10K 2Kx2 1K 100 47 10 100nx2 47nx2 22n 4.7n 2.2n 680pF 10pF 220uF 22uFx2 1N4001 1N4148x2 2N5089 MPSA13 C1K A100K B100K B50K
+io IN=110 OUT=17 V9=96 GND=111
+# 트랜지스터 실크: MPSA13 위 E(44)·가운데 B·아래 C, 2N5089 위 C(29)·가운데 B(45)·아래 E(53).
+# 추출기가 n13 하나로 합친 것을 렌더 확대로 나눔: 9V 잭 쪽(96·79·67, 1N400X 캐소드), 10Ω 뒤 레일(78·73·64·66·89),
+# 2N5089 베이스(45·65·85·88 - 1M 컬렉터 귀환과 47Ω). 100n(23-20)의 오른쪽 끝(20·24)은 컬렉터가 아니라 로터리 P(33)로 가는 긴 선.
+# 로터리 5접점(P=33, 2=47 LED 쌍, 3=71 2N7000+1N4001, 4=86 1N4148 쌍, 5=101 BAT41 쌍)은 4번(1N4148)으로 고정.
+# 나머지 위치의 빨간 LED 2, 2N7000 2, 1N4001 2, BAT41 2는 넷리스트·BOM에서 뺀다(키트 1N4001x3 중 하나는 9V 보호).
+# FILTER SW(26-50)는 닫힘으로 고정: 50은 MPSA13 베이스와 이어진 선(렌더 확대), 22n이 4.7n과 병렬이 된다.
+# 8-BIT는 실크 "1"이 오른쪽(107), 와이퍼가 1번과 묶인 결합 가변저항. FUZZ C1K는 1번(3)과 와이퍼(2)가 접지 - 이미터 바이패스 가변저항. TONE은 와이퍼가 1번(6)과 묶인 직렬 가변저항.
+SPLIT 67 79 96
+SPLIT 45 65 85 88
+SPLIT 20 24
+JUMP 33 20
+JUMP 33 86
+JUMP 50 57
+JUMP 26 50
+NC 24 25 34 35 37 48 49 58 59 60 72 74 85
+NC 32 39 40 46 47 54 55 68 69 70 71 99 100 101
+
+STAGE input input 입력
+R 1M 109 108 R1
+C 680pF 104 103 C1
+C 47n 95 94 C2
+
+STAGE q1 fuzz MPSA13 1단
+Q MPSA13 b=57 c=62 e=44 Q1
+R 1M 73 77 R2
+R 1M 91 61 R3
+R 2K 64 63 R4
+C 10pF 76 93 C3
+R 2K 10 11 R5
+C 22uF 19 18 C4
+POT C1K FUZZ 3 2 1
+
+STAGE q2 fuzz 2N5089 2단
+C 47n 75 92 C5
+POT B100K 8BIT 107 106 105
+R 47 87 88 R6
+Q 2N5089 b=45 c=29 e=53 Q2
+R 1M 36 65 R7
+R 10K 30 66 R8
+R 100 21 22 R9
+C 22uF 43 42 C6
+C 4.7n 51 52 C7
+C 22n 27 28 C8
+
+STAGE clip clipping 로터리 클리퍼 (4번 1N4148)
+C 100n 23 20 C9
+D 1N4148 a=97 k=81 D1
+D 1N4148 a=82 k=98 D2
+
+STAGE tone tone 톤
+POT B50K TONE 6 5 4
+R 1K 12 13 R10
+C 2.2n 15 16 C10
+
+STAGE out output 출력
+C 100n 14 0 C11
+POT A100K VOL 9 8 7
+
+STAGE power power 전원
+D 1N4001 a=31 k=67 D3
+R 10 79 78 R11
+C 220uF 89 102 C12
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D3 110 190 v-
+AT R11 160 160 h
+AT C12 210 190 v
+AT R1 110 430 v
+AT C1 160 430 v
+AT C2 220 400 h
+AT R2 270 190 v
+AT R3 270 460 v
+AT Q1 320 400
+AT C3 310 330 h-
+AT R4 340 190 v
+AT R5 340 490 v
+AT C4 400 490 v
+AT FUZZ 400 580 r270 m
+AT C5 420 370 h
+AT 8BIT 510 370 r180
+AT R6 600 370 h
+AT Q2 660 370
+AT R7 650 290 h-
+AT R8 680 190 v-
+AT R9 680 460 v
+AT C6 730 460 v
+AT C7 500 520 h
+AT C8 500 560 h
+AT C9 800 400 v
+AT D1 780 490 v
+AT D2 820 490 v-
+AT TONE 880 340 r180
+AT R10 970 340 h
+AT C10 1010 370 v
+AT C11 1050 340 h
+AT VOL 1110 370 r270 m
+AT RLOAD 1170 400 v

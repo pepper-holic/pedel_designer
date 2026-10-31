@@ -1,0 +1,563 @@
+{
+ "id": "pp-kluster-fuzz",
+ "goodsNo": "186787649",
+ "kitName": "Kluster Fuzz",
+ "motif": "2석 실리콘 퍼즈 (MPSA13 + 2N5089, 로터리 클리핑·8-BIT 결합)",
+ "type": "fuzz",
+ "description": "IN(1M, 680p)→47n→MPSA13 공통 이미터(1M/1M 분압, 2K 컬렉터, 10p C-B, 이미터 2K + 22uF·FUZZ C1K 가변)→47n→8-BIT B100K 가변+47Ω→2N5089(1M 컬렉터 귀환, 10K 컬렉터, 100Ω+22uF 이미터, 4.7n∥22n FILTER로 Q1 베이스와 결합)→100n→로터리 4번 1N4148 대칭 접지 클리퍼 / TONE B50K 직렬+1K·2.2n→100n→VOL A100K",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "680pF",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "MPSA13",
+   "nodes": {
+    "b": "n1",
+    "c": "n2",
+    "e": "n3"
+   }
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n4",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "2K",
+   "nodes": [
+    "n4",
+    "n2"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "10pF",
+   "nodes": [
+    "n2",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "2K",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n3",
+    "n5"
+   ]
+  },
+  {
+   "ref": "FUZZ",
+   "kind": "POT",
+   "value": "C1K",
+   "nodes": [
+    "0",
+    "0",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n2",
+    "n6"
+   ]
+  },
+  {
+   "ref": "8BIT",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n7",
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "47",
+   "nodes": [
+    "n7",
+    "n8"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "2N5089",
+   "nodes": {
+    "b": "n8",
+    "c": "n9",
+    "e": "n10"
+   }
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n9",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n9",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "100",
+   "nodes": [
+    "n10",
+    "0"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n10",
+    "0"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "4.7n",
+   "nodes": [
+    "n1",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n1",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n9",
+    "n11"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n11",
+    "k": "0"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "0",
+    "k": "n11"
+   }
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "n12",
+    "n12",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n12",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "2.2n",
+   "nodes": [
+    "n13",
+    "0"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n13",
+    "n14"
+   ]
+  },
+  {
+   "ref": "VOL",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n14"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N4001",
+   "nodes": {
+    "a": "0",
+    "k": "vcc"
+   }
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "10",
+   "nodes": [
+    "vcc",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "220uF",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "C2"
+   ]
+  },
+  {
+   "id": "q1",
+   "category": "fuzz",
+   "label": "MPSA13 1단",
+   "parts": [
+    "Q1",
+    "R2",
+    "R3",
+    "R4",
+    "C3",
+    "R5",
+    "C4",
+    "FUZZ"
+   ]
+  },
+  {
+   "id": "q2",
+   "category": "fuzz",
+   "label": "2N5089 2단",
+   "parts": [
+    "C5",
+    "8BIT",
+    "R6",
+    "Q2",
+    "R7",
+    "R8",
+    "R9",
+    "C6",
+    "C7",
+    "C8"
+   ]
+  },
+  {
+   "id": "clip",
+   "category": "clipping",
+   "label": "로터리 클리퍼 (4번 1N4148)",
+   "parts": [
+    "C9",
+    "D1",
+    "D2"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "톤",
+   "parts": [
+    "TONE",
+    "R10",
+    "C10"
+   ]
+  },
+  {
+   "id": "out",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "C11",
+    "VOL"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D3",
+    "R11",
+    "C12"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D3": {
+   "x": 110,
+   "y": 190,
+   "rotation": 270
+  },
+  "R11": {
+   "x": 160,
+   "y": 160,
+   "rotation": 0
+  },
+  "C12": {
+   "x": 210,
+   "y": 190,
+   "rotation": 90
+  },
+  "R1": {
+   "x": 110,
+   "y": 430,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 160,
+   "y": 430,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 220,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 270,
+   "y": 190,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 270,
+   "y": 460,
+   "rotation": 90
+  },
+  "Q1": {
+   "x": 320,
+   "y": 400
+  },
+  "C3": {
+   "x": 310,
+   "y": 330,
+   "rotation": 180
+  },
+  "R4": {
+   "x": 340,
+   "y": 190,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 340,
+   "y": 490,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 400,
+   "y": 490,
+   "rotation": 90
+  },
+  "FUZZ": {
+   "x": 400,
+   "y": 580,
+   "rotation": 270,
+   "mirror": true
+  },
+  "C5": {
+   "x": 420,
+   "y": 370,
+   "rotation": 0
+  },
+  "8BIT": {
+   "x": 510,
+   "y": 370,
+   "rotation": 180
+  },
+  "R6": {
+   "x": 600,
+   "y": 370,
+   "rotation": 0
+  },
+  "Q2": {
+   "x": 660,
+   "y": 370
+  },
+  "R7": {
+   "x": 650,
+   "y": 290,
+   "rotation": 180
+  },
+  "R8": {
+   "x": 680,
+   "y": 190,
+   "rotation": 270
+  },
+  "R9": {
+   "x": 680,
+   "y": 460,
+   "rotation": 90
+  },
+  "C6": {
+   "x": 730,
+   "y": 460,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 500,
+   "y": 520,
+   "rotation": 0
+  },
+  "C8": {
+   "x": 500,
+   "y": 560,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 800,
+   "y": 400,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 780,
+   "y": 490,
+   "rotation": 90
+  },
+  "D2": {
+   "x": 820,
+   "y": 490,
+   "rotation": 270
+  },
+  "TONE": {
+   "x": 880,
+   "y": 340,
+   "rotation": 180
+  },
+  "R10": {
+   "x": 970,
+   "y": 340,
+   "rotation": 0
+  },
+  "C10": {
+   "x": 1010,
+   "y": 370,
+   "rotation": 90
+  },
+  "C11": {
+   "x": 1050,
+   "y": 340,
+   "rotation": 0
+  },
+  "VOL": {
+   "x": 1110,
+   "y": 370,
+   "rotation": 270,
+   "mirror": true
+  },
+  "RLOAD": {
+   "x": 1170,
+   "y": 400,
+   "rotation": 90
+  }
+ }
+}
