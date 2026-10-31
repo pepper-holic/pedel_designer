@@ -1,5 +1,104 @@
-# 29 YUNA (186788665): Elite Unity Amplifier style buffer - TL072 on a bipolar rail from an ICL7660S (1N5817 x5, 10uF x6,
-# 100uF), tantalum caps in the signal path, three DIP on-on mode switches. The app has no charge-pump model; recorded only.
-# Board: 3.3M x3, 220K x2, 100K, 22K, 11K, 1.5K x4, 470R, 10R, 1000n x3, 220n, 100n, 3pF, 47uF/10uF/1uF x2 tantalum.
-# Update 2026-10-30: the charge-pump supply convention now exists (IC ICL7660 pin 5 -> -9V rail, RAIL <pad> <V>);
-# this board stays recorded only because of its hidden traces / SMD pads, see docs/kit-deferred.md.
+id pp-29-yuna
+goods 186788665
+name 29 YUNA
+motif Elite UNity Amplifier (버퍼)
+type buffer-boost
+desc TL072 ±18V 버퍼 - 11K→1000n∥1uF→A단 비반전(100K∥(1.5K+10uF) 피드백, 220K 접지, 220n→22K·H 470R+100n·B 1.5K 토글 션트)→B단 폴로어(1.5K∥1uF 피드백, L 1.5K+1000n 토글 다리)→47uF∥1000n→10R→OUT. ICL7660 더블러
+image img_03.jpg
+# TL072 notch up: 30=1 37=2 42=3 51=4(V-) / 52=5 43=6 38=7 31=8(V+). ICL7660 notch up: 72=1 84=2 90=3 94=4 / 95=5 91=6 85=7 73=8.
+# Supply: 9V ring 14 -> 1N5817 24->47 -> +9V n20 (100uF). Pump: 10uF 71-81 flying cap on pins 2/4. Pin 4 also drives 10uF 75-76
+# into 1N5817 63->64 / 65->66 = +18V (op-amp V+ 31, 10uF 13-9), and 10uF 77-78 into 96<-97 / 92<-93 = -18V (op-amp V- 51, 10uF 82-83).
+# Those four diodes and two pump caps are not simulated and left out of the BOM line (RAIL 31 18, RAIL 51 -18).
+# 10uF 82-83 and 98-99: the square + pads (83, 99) have no drawn copper - taken as ground-plane pads.
+# Three on-on toggles H/B/L: centre (10/11/12) to the bottom ground pad (15/20/23) engages, the top pads (4/6/8) are copper-less.
+# Fixed all three engaged: H = 470R+100n shunt and B = 1.5K shunt on the 220n ground leg of stage A, L = 1.5K+1000n leg on stage B.
+# Parts list: 10uF aluminium x6, 1N5817 x5.
+BOM 3.3Mx3 220Kx2 100K 22K 11K 1.5Kx4 470R 10R 1000nx3 220n 100n 3pF 47uF 10uFx5 1uFx2 100uF 1N5817 TL072 ICL7660S
+io IN=74 OUT=39 V9=14 GND=100,83,99
+RAIL 31 18
+RAIL 51 -18
+JUMP 10 15
+JUMP 11 20
+JUMP 12 23
+NC 4 6 8 85 91 102 103 63 64 65 66 92 93 96 97 75 76 77 78
+
+STAGE input input 입력
+R 11K 80 79 R1
+R 3.3M 87 86 R2
+C 3pF 88 89 C1
+C 1000n 69 57 C2
+C 1uF 70 58 C3
+R 3.3M 67 68 R3
+
+STAGE stageA gain A단 (비반전, H·B 토글)
+IC TL072 1=30 2=37 3=42 4=51 5=52 6=43 7=38 8=31 U1
+R 100K 29 50 R4
+C 10uF 27 41 C4
+R 1.5K 49 28 R5
+R 220K 48 25 R6
+C 220n 40 26 C5
+R 22K 1 18 R7
+R 470R 0 17 R8
+C 100n 16 5 C6
+R 1.5K 2 19 R9
+
+STAGE stageB buffer B단 (폴로어, L 토글)
+R 1.5K 32 53 R10
+C 1uF 34 44 C7
+R 1.5K 21 3 R11
+C 1000n 22 7 C8
+R 220K 33 54 R12
+
+STAGE output output 출력
+C 47uF 35 45 C9
+C 1000n 36 46 C10
+R 10R 55 56 R13
+R 3.3M 60 59 R14
+
+STAGE power power 전원 (ICL7660 ±18V)
+D 1N5817 a=24 k=47 D1
+C 100uF 61 62 C11
+IC ICL7660S 1=72 2=84 3=90 4=94 5=95 8=73 U2
+C 10uF 71 81 C12
+C 10uF 13 9 C13
+C 10uF 82 83 C14
+C 10uF 99 98 C15
+
+# --- schematic placement (hand) ---
+AT V1 60 420
+AT VCC 60 190
+AT D1 130 160 h
+AT C11 200 190 v
+AT Vrail1 620 190
+AT Vrail2 690 190
+AT Vrail3 760 190
+AT C13 420 190 v
+AT C14 480 190 v
+AT C15 540 190 v-
+AT R1 170 400 h
+AT R2 100 460 v
+AT C1 140 460 v
+AT C2 260 400 h
+AT C3 260 340 h
+AT R3 320 460 v
+AT U1A 380 420
+AT R4 380 490 h-
+AT R5 380 540 h-
+AT C4 440 540 h-
+AT C5 320 600 h-
+AT R6 350 660 v
+AT R7 290 630 v
+AT R9 230 630 v
+AT R8 170 630 v
+AT C6 170 690 v
+AT U1B 540 420
+AT R10 540 490 h-
+AT C7 540 540 h-
+AT R11 510 610 v
+AT C8 510 670 v
+AT R12 620 450 v
+AT C9 690 420 h
+AT C10 690 360 h
+AT R13 780 420 h
+AT R14 840 450 v
+AT RLOAD 900 450 v

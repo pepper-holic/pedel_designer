@@ -1,0 +1,732 @@
+{
+ "id": "pp-heavy-fist",
+ "goodsNo": "186788011",
+ "kitName": "Heavy Fist",
+ "motif": "King Tone Heavy Hand (Duellist B + BODY·CLIP)",
+ "type": "overdrive",
+ "description": "RC4558 2단(Duel B 계열) - A단 비반전(133K+360K∥DRIVE B250K, 100p, −입력 다리 28.7K/30.1K+10n·10n, BODY C250K+47n, 4.7K+STYLE 4.7n)→22K/10K→100n→B단 반전(220K, CLIP 토글로 5.6K+1N914 2:3 비대칭)→1K→1000n→1N914 역병렬 Vref 클리퍼(DIP2)→수동 톤(B25K, 9.53K, 10n)→1000n→LEVEL.",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n2",
+    "n1"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "RC4558P",
+   "nodes": {
+    "1": "n3",
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "5": "n2",
+    "6": "n5",
+    "7": "n6",
+    "8": "n7"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "133K",
+   "nodes": [
+    "n8",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "360K",
+   "nodes": [
+    "n8",
+    "n3"
+   ]
+  },
+  {
+   "ref": "DRIVE",
+   "kind": "POT",
+   "value": "B250K",
+   "nodes": [
+    "n8",
+    "n3",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "100pF",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "30.1K",
+   "nodes": [
+    "n4",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n11",
+    "n10"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "28.7K",
+   "nodes": [
+    "n4",
+    "n11"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n11",
+    "n2"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n11",
+    "n12"
+   ]
+  },
+  {
+   "ref": "BODY",
+   "kind": "POT",
+   "value": "C250K",
+   "nodes": [
+    "n2",
+    "n2",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n4",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "4.7n",
+   "nodes": [
+    "n13",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n3",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n9",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n14",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "220K",
+   "nodes": [
+    "n6",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "5.6K",
+   "nodes": [
+    "n5",
+    "n15"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n6",
+    "k": "n16"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n16",
+    "k": "n6"
+   }
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n15",
+    "k": "n16"
+   }
+  },
+  {
+   "ref": "D4",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n16",
+    "k": "n17"
+   }
+  },
+  {
+   "ref": "D5",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n17",
+    "k": "n15"
+   }
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n6",
+    "n18"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n18",
+    "n19"
+   ]
+  },
+  {
+   "ref": "D6",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n2",
+    "k": "n19"
+   }
+  },
+  {
+   "ref": "D7",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n19",
+    "k": "n2"
+   }
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B25K",
+   "nodes": [
+    "n20",
+    "n21",
+    "n19"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n20",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "9.53K",
+   "nodes": [
+    "n21",
+    "n22"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n22",
+    "n2"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n22",
+    "n23"
+   ]
+  },
+  {
+   "ref": "LEVEL",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n23"
+   ]
+  },
+  {
+   "ref": "D8",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n24"
+   }
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n24",
+    "n7"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "C13",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n7",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C14",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "R2"
+   ]
+  },
+  {
+   "id": "drive",
+   "category": "gain",
+   "label": "드라이브단 (IC A, DRIVE·BODY·STYLE)",
+   "parts": [
+    "U1",
+    "R3",
+    "R4",
+    "DRIVE",
+    "C2",
+    "R5",
+    "C3",
+    "R6",
+    "C4",
+    "C5",
+    "BODY",
+    "R7",
+    "C6"
+   ]
+  },
+  {
+   "id": "dist",
+   "category": "clipping",
+   "label": "디스토션단 (IC B, CLIP)",
+   "parts": [
+    "R8",
+    "R9",
+    "C7",
+    "R10",
+    "R11",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "톤 (DIP2 클리퍼)",
+   "parts": [
+    "R12",
+    "C8",
+    "D6",
+    "D7",
+    "TONE",
+    "C9",
+    "R13",
+    "C10"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "C11",
+    "LEVEL"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D8",
+    "R14",
+    "C12",
+    "C13",
+    "R15",
+    "R16",
+    "C14"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D8": {
+   "x": 130,
+   "y": 160,
+   "rotation": 0
+  },
+  "R14": {
+   "x": 200,
+   "y": 160,
+   "rotation": 0
+  },
+  "C12": {
+   "x": 260,
+   "y": 190,
+   "rotation": 90
+  },
+  "C13": {
+   "x": 310,
+   "y": 190,
+   "rotation": 90
+  },
+  "R15": {
+   "x": 370,
+   "y": 190,
+   "rotation": 90
+  },
+  "R16": {
+   "x": 370,
+   "y": 250,
+   "rotation": 90
+  },
+  "C14": {
+   "x": 430,
+   "y": 250,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 140,
+   "y": 400,
+   "rotation": 0
+  },
+  "R1": {
+   "x": 100,
+   "y": 430,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 180,
+   "y": 370,
+   "rotation": 90
+  },
+  "U1A": {
+   "x": 240,
+   "y": 420
+  },
+  "C2": {
+   "x": 240,
+   "y": 490,
+   "rotation": 180
+  },
+  "R3": {
+   "x": 240,
+   "y": 540,
+   "rotation": 180
+  },
+  "R4": {
+   "x": 300,
+   "y": 540,
+   "rotation": 0
+  },
+  "DRIVE": {
+   "x": 300,
+   "y": 610,
+   "rotation": 0
+  },
+  "R5": {
+   "x": 150,
+   "y": 700,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 150,
+   "y": 790,
+   "rotation": 270
+  },
+  "R6": {
+   "x": 210,
+   "y": 700,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 210,
+   "y": 790,
+   "rotation": 90
+  },
+  "C5": {
+   "x": 270,
+   "y": 760,
+   "rotation": 90
+  },
+  "BODY": {
+   "x": 270,
+   "y": 850,
+   "rotation": 270,
+   "mirror": true
+  },
+  "R7": {
+   "x": 330,
+   "y": 700,
+   "rotation": 90
+  },
+  "C6": {
+   "x": 330,
+   "y": 790,
+   "rotation": 90
+  },
+  "R8": {
+   "x": 300,
+   "y": 420,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 360,
+   "y": 420,
+   "rotation": 0
+  },
+  "C7": {
+   "x": 420,
+   "y": 420,
+   "rotation": 0
+  },
+  "U1B": {
+   "x": 510,
+   "y": 440,
+   "mirror": true
+  },
+  "R10": {
+   "x": 510,
+   "y": 380,
+   "rotation": 180
+  },
+  "R11": {
+   "x": 450,
+   "y": 450,
+   "rotation": 90
+  },
+  "D1": {
+   "x": 600,
+   "y": 520,
+   "rotation": 180
+  },
+  "D2": {
+   "x": 600,
+   "y": 560,
+   "rotation": 0
+  },
+  "D3": {
+   "x": 510,
+   "y": 600,
+   "rotation": 0
+  },
+  "D5": {
+   "x": 480,
+   "y": 640,
+   "rotation": 180
+  },
+  "D4": {
+   "x": 540,
+   "y": 640,
+   "rotation": 180
+  },
+  "R12": {
+   "x": 660,
+   "y": 440,
+   "rotation": 0
+  },
+  "C8": {
+   "x": 720,
+   "y": 440,
+   "rotation": 0
+  },
+  "D7": {
+   "x": 750,
+   "y": 470,
+   "rotation": 90
+  },
+  "D6": {
+   "x": 780,
+   "y": 470,
+   "rotation": 270
+  },
+  "TONE": {
+   "x": 840,
+   "y": 440,
+   "rotation": 180,
+   "mirror": true
+  },
+  "C9": {
+   "x": 870,
+   "y": 470,
+   "rotation": 90
+  },
+  "R13": {
+   "x": 870,
+   "y": 380,
+   "rotation": 0
+  },
+  "C10": {
+   "x": 900,
+   "y": 410,
+   "rotation": 90
+  },
+  "C11": {
+   "x": 930,
+   "y": 380,
+   "rotation": 0
+  },
+  "LEVEL": {
+   "x": 990,
+   "y": 410,
+   "rotation": 270,
+   "mirror": true
+  },
+  "RLOAD": {
+   "x": 1060,
+   "y": 440,
+   "rotation": 90
+  }
+ }
+}

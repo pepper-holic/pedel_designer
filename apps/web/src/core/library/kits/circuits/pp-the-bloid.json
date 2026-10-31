@@ -1,0 +1,662 @@
+{
+ "id": "pp-the-bloid",
+ "goodsNo": "186788151",
+ "kitName": "THE BLOID",
+ "motif": "Zendrive 계열 덤블형 (일본 부티크 Bloid)",
+ "type": "overdrive",
+ "description": "BC550C 이미터 폴로어 입력 뒤 TL072 A단 비반전(DRIVE A1M+10K 귀환, 82p, 220n+1.8K 접지), 1K·220n 뒤 B단(ACCENT 가변저항+1K와 빨간 LED 귀환, TONE 팟 와이퍼가 100n+220R로 접지), 2.2uF·1K 뒤 VOL과 BC550C 이미터 폴로어 출력(Rock 위치 고정).",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "0",
+    "in"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "470n",
+   "nodes": [
+    "n1",
+    "in"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n2",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "150K",
+   "nodes": [
+    "n2",
+    "n3"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "BC550C",
+   "nodes": {
+    "b": "n2",
+    "c": "n4",
+    "e": "n5"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n5",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n6",
+    "n3"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "TL072",
+   "nodes": {
+    "1": "n7",
+    "2": "n8",
+    "3": "n6",
+    "4": "0",
+    "5": "n9",
+    "6": "n10",
+    "7": "n11",
+    "8": "n4"
+   }
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "82p",
+   "nodes": [
+    "n7",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n8",
+    "n12"
+   ]
+  },
+  {
+   "ref": "DRIVE",
+   "kind": "POT",
+   "value": "A1M",
+   "nodes": [
+    "n12",
+    "n7",
+    "n7"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n8",
+    "n13"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "1.8K",
+   "nodes": [
+    "n13",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n7",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n3",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n9",
+    "0"
+   ]
+  },
+  {
+   "ref": "ACCENT",
+   "kind": "POT",
+   "value": "B25K",
+   "nodes": [
+    "n10",
+    "n14",
+    "n14"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n11",
+    "n14"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "LED-RED",
+   "nodes": {
+    "a": "n10",
+    "k": "n11"
+   }
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B25K",
+   "nodes": [
+    "n10",
+    "n15",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n16",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "220R",
+   "nodes": [
+    "n16",
+    "0"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "2.2uF",
+   "nodes": [
+    "n11",
+    "n17"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n17",
+    "n18"
+   ]
+  },
+  {
+   "ref": "VOL",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n3",
+    "n19",
+    "n18"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n20",
+    "n19"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n20",
+    "n3"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "BC550C",
+   "nodes": {
+    "b": "n20",
+    "c": "n4",
+    "e": "n21"
+   }
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n21",
+    "0"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n22",
+    "n21"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n22",
+    "out"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "out",
+    "0"
+   ]
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n4"
+   }
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "R17",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n4",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R18",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "buffer",
+   "label": "입력 버퍼 (Q1)",
+   "parts": [
+    "C1",
+    "R1",
+    "C2",
+    "R2",
+    "R3",
+    "Q1",
+    "R4"
+   ]
+  },
+  {
+   "id": "stageA",
+   "category": "gain",
+   "label": "A단 (DRIVE)",
+   "parts": [
+    "C3",
+    "R5",
+    "U1",
+    "C4",
+    "R6",
+    "DRIVE",
+    "C5",
+    "R7"
+   ]
+  },
+  {
+   "id": "stageB",
+   "category": "clipping",
+   "label": "B단 (ACCENT·TONE·LED)",
+   "parts": [
+    "R8",
+    "R9",
+    "C6",
+    "ACCENT",
+    "R10",
+    "D1",
+    "TONE",
+    "C7",
+    "R11"
+   ]
+  },
+  {
+   "id": "out",
+   "category": "output",
+   "label": "볼륨·출력 버퍼 (Q2)",
+   "parts": [
+    "C8",
+    "R12",
+    "VOL",
+    "C9",
+    "R13",
+    "Q2",
+    "R14",
+    "R15",
+    "C10",
+    "R16"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원·Vref",
+   "parts": [
+    "D2",
+    "C11",
+    "R17",
+    "R18",
+    "C12"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D2": {
+   "x": 130,
+   "y": 160,
+   "rotation": 0
+  },
+  "C11": {
+   "x": 190,
+   "y": 190,
+   "rotation": 90
+  },
+  "R17": {
+   "x": 250,
+   "y": 190,
+   "rotation": 90
+  },
+  "R18": {
+   "x": 250,
+   "y": 250,
+   "rotation": 90
+  },
+  "C12": {
+   "x": 300,
+   "y": 250,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 110,
+   "y": 430,
+   "rotation": 90
+  },
+  "R1": {
+   "x": 150,
+   "y": 430,
+   "rotation": 270
+  },
+  "C2": {
+   "x": 200,
+   "y": 400,
+   "rotation": 180
+  },
+  "R2": {
+   "x": 260,
+   "y": 400,
+   "rotation": 180
+  },
+  "R3": {
+   "x": 290,
+   "y": 370,
+   "rotation": 270
+  },
+  "Q1": {
+   "x": 320,
+   "y": 400
+  },
+  "R4": {
+   "x": 340,
+   "y": 460,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 370,
+   "y": 430,
+   "rotation": 0
+  },
+  "R5": {
+   "x": 400,
+   "y": 400,
+   "rotation": 270
+  },
+  "U1A": {
+   "x": 460,
+   "y": 450
+  },
+  "C4": {
+   "x": 460,
+   "y": 500,
+   "rotation": 180
+  },
+  "C5": {
+   "x": 400,
+   "y": 500,
+   "rotation": 180
+  },
+  "R7": {
+   "x": 370,
+   "y": 530,
+   "rotation": 90
+  },
+  "R6": {
+   "x": 460,
+   "y": 560,
+   "rotation": 0
+  },
+  "DRIVE": {
+   "x": 550,
+   "y": 560,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 560,
+   "y": 450,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 590,
+   "y": 420,
+   "rotation": 90
+  },
+  "C6": {
+   "x": 620,
+   "y": 480,
+   "rotation": 90
+  },
+  "U1B": {
+   "x": 690,
+   "y": 470
+  },
+  "D1": {
+   "x": 690,
+   "y": 530,
+   "rotation": 0
+  },
+  "ACCENT": {
+   "x": 690,
+   "y": 570,
+   "rotation": 0,
+   "mirror": true
+  },
+  "R10": {
+   "x": 750,
+   "y": 570,
+   "rotation": 180
+  },
+  "TONE": {
+   "x": 630,
+   "y": 620,
+   "rotation": 180
+  },
+  "C7": {
+   "x": 630,
+   "y": 680,
+   "rotation": 270
+  },
+  "R11": {
+   "x": 630,
+   "y": 740,
+   "rotation": 90
+  },
+  "C8": {
+   "x": 780,
+   "y": 470,
+   "rotation": 0
+  },
+  "R12": {
+   "x": 840,
+   "y": 470,
+   "rotation": 0
+  },
+  "VOL": {
+   "x": 900,
+   "y": 470,
+   "rotation": 180
+  },
+  "C9": {
+   "x": 930,
+   "y": 500,
+   "rotation": 180
+  },
+  "R13": {
+   "x": 960,
+   "y": 470,
+   "rotation": 270
+  },
+  "Q2": {
+   "x": 990,
+   "y": 500
+  },
+  "R14": {
+   "x": 1010,
+   "y": 560,
+   "rotation": 90
+  },
+  "R15": {
+   "x": 1040,
+   "y": 530,
+   "rotation": 180
+  },
+  "C10": {
+   "x": 1100,
+   "y": 530,
+   "rotation": 0
+  },
+  "R16": {
+   "x": 1130,
+   "y": 560,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 1180,
+   "y": 560,
+   "rotation": 90
+  }
+ }
+}

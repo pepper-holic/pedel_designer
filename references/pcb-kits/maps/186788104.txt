@@ -1,0 +1,114 @@
+id pp-new-graff-dynamic
+goods 186788104
+name NEW Graff Dynamic
+motif Landgraff Dynamic Overdrive
+type overdrive
+desc 2SC1815 이미터 폴로어 입력 뒤 JRC4558D 비반전 A단(DRIVE A1M+10K 귀환, 51p, 1K+220n 접지)에 1N914 1+2 비대칭 귀환 클리핑(DIP을 실리콘 위치로 고정), 1K·220n 뒤 TS식 TONE(W20K, 220n+220R)과 B단, 1000n·1K 뒤 VOLUME과 2SC1815 이미터 폴로어 출력.
+image img_03.jpg
+BOM 1M 510Kx2 10Kx8 1Kx5 220R 100R 1000nx2 220nx3 100n 22n 51pF 100uF 47uF 10uF 1N914x4 JRC4558D 2SC1815x2 A1M W20K B100K
+# '+' 패드 82(220n 왼쪽)는 추출기가 접지로 못 잡았다. 101은 동박 없는 GND 뱅크 링.
+io IN=95 OUT=79 V9=5 GND=99,82
+NC 101
+# JRC4558D 홈 오른쪽(90도): 49=1 48=2 47=3 46=4(GND) / 64=5 65=6 66=7 67=8(V+). 실크 ⊖ + - ▷ / + - ▽ ⊕와 일치.
+# DIP on-off-on: 공통 26(-A). 20 = 빨간 LED 쌍(8·11·18·19), 가운데 = 클리핑 없음, 29 = 1N914 1+2 비대칭. 29(실리콘)로 고정해
+# 빨간 LED 2개는 넷리스트와 BOM에서 뺀다(BOM RED LEDx2 제외).
+JUMP 26 29
+NC 20 8 11 18 19
+# 팟 라벨이 없어 넷으로 정함: 55/56/57 = DRIVE(56 와이퍼 = 출력, 57 → 10K → -A, 55는 빈 러그), 52/53/54 = VOLUME(54가 Vref),
+# 96/97/98 = TONE(-B/와이퍼/+B, 와이퍼 → 220n → 220R). 값은 부품표 A1M/B100K/W20K. DRIVE 1번 = 57(시계방향 = 귀환 저항 증가),
+# VOLUME 1번 = 54, TONE 1번 = 98(+B 쪽, 시계방향 = -B 쪽 = 밝게; 방향 추정).
+NC 55
+
+STAGE input buffer 입력 버퍼 (Q2)
+R 1M 89 90 R1
+C 22n 87 88 C1
+R 1K 58 84 R2
+R 510K 38 39 R3
+Q 2SC1815 b=76 c=77 e=78 Q2
+R 10K 60 86 R4
+
+STAGE stageA clipping A단 (DRIVE·클리핑)
+C 1000n 61 62 C2
+R 10K 40 41 R5
+IC JRC4558D 1=49 2=48 3=47 4=46 5=64 6=65 7=66 8=67 U1
+C 51pF 42 43 C3
+R 10K 51 69 R6
+POT A1M DRIVE 57 56 56
+R 1K 32 33 R7
+C 220n 24 25 C4
+D 1N914 a=28 k=27 D1
+D 1N914 a=34 k=35 D2
+D 1N914 a=36 k=37 D3
+
+STAGE tone tone 톤 (B단)
+R 1K 50 68 R8
+C 220n 82 83 C5
+R 10K 45 63 R9
+POT W20K TONE 98 97 96
+C 220n 93 94 C6
+R 220R 91 92 R10
+R 1K 72 74 R11
+
+STAGE out output 볼륨·출력 버퍼 (Q1)
+C 1000n 80 81 C7
+R 1K 59 85 R12
+POT B100K VOLUME 54 53 52
+C 100n 22 23 C8
+R 510K 30 31 R13
+Q 2SC1815 b=0 c=1 e=2 Q1
+R 10K 9 10 R14
+R 100R 3 4 R15
+C 10uF 12 13 C9
+R 10K 21 44 R16
+
+STAGE power power 전원·Vref
+D 1N914 a=73 k=75 D4
+C 100uF 70 71 C10
+R 10K 16 17 R17
+R 10K 14 15 R18
+C 47uF 7 6 C11
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D4 120 190 v-
+AT C10 170 190 v
+AT R17 230 190 v
+AT R18 230 250 v-
+AT C11 280 250 v
+AT R1 110 430 v
+AT C1 160 400 h-
+AT R2 220 400 h-
+AT R3 250 370 v-
+AT Q2 280 400
+AT R4 300 460 v
+AT C2 330 430 h
+AT R5 360 400 v
+AT U1A 420 450
+AT C4 360 470 h
+AT R7 330 500 v-
+AT C3 420 500 h
+AT D1 420 540 h-
+AT D2 420 580 h
+AT D3 480 580 h
+AT R6 420 620 h-
+AT DRIVE 480 620 r0 m
+AT R8 510 450 h
+AT C5 540 480 v-
+AT R9 570 420 v
+AT U1B 630 470
+AT R11 630 530 h-
+AT TONE 630 580 r180
+AT C6 630 640 v-
+AT R10 630 700 v-
+AT C7 690 470 h-
+AT R12 750 470 h-
+AT VOLUME 810 470 r180
+AT C8 840 500 h-
+AT R13 870 470 v-
+AT Q1 900 500
+AT R14 920 560 v
+AT R15 950 530 h
+AT C9 1010 530 h
+AT R16 1040 560 v
+AT RLOAD 1090 560 v

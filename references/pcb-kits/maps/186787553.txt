@@ -1,5 +1,108 @@
-# Haunting FreQ (186787553): sweepable-mid EQ preamp (Wide Range family) - two TL072 on a bipolar rail from an ICL7660
-# (silk 7660, 47uF/10uF pump caps), MID A10K, SWEEP B10K, RESONANCE 1M trimmer, VOLUME A100K. The app has no charge-pump
-# model; recorded only. Board: 1M, 100K x3, 33K, 12K, 10K x4, 5K x3, 1K x2, 33R x2, 220n, 10n x2, 68pF, 47uF, 10uF, 1N400X.
-# Update 2026-10-30: the charge-pump supply convention now exists (IC ICL7660 pin 5 -> -9V rail, RAIL <pad> <V>);
-# this board stays recorded only because of its hidden traces / SMD pads, see docs/kit-deferred.md.
+id pp-haunting-freq
+goods 186787553
+name Haunting FreQ
+motif 스위퍼블 미드 EQ 프리앰프 (상태변수 필터)
+type eq
+desc TL072 x2 ±9V 상태변수 필터 - 220n/100K→U1A 합산(HP, +in에 100K·68p·RESONANCE 1M·토글 12K 감쇠)→SWEEP B10K 듀얼(33Ω+1K)→적분 10n x2(BP·LP)→U2B 합산(HP/2+LP/2+MID A10K×BP, 33K/10K)→47uF→A100K 볼륨. ICL7660
+image img_02.jpg
+# TL072 notch up, both: U1 32=1 38=2 45=3 56=4(V-) / 57=5(GND) 46=6 39=7 33=8; U2 36=1 40=2 49=3(GND) 58=4 / 59=5(GND) 50=6 41=7 37=8.
+# ICL7660 notch down: 94=1 90=2 80=3 73=4 / 72=5 79=6 89=7 93=8 (6, 7 copper-less). Pin 5 = -9V (op-amp V-, 47uF 62/60).
+# HP = U1A out (n9), BP = U1B out, LP = U2A out. U2B sums HP and LP through 5K/5K dividers (HP+LP = notch) and MID = BP from
+# an A10K (lug1 "1" = pad 3 GND), so MID turns the notch into a cut or a boost. SWEEP B10K dual: lug1 "1" on the right
+# (84, 97 -> 33R to GND), lug3 82 (HP) / 95 (BP), wipers 83/96 -> 1K -> integrator inputs.
+# RESONANCE 1M trimmer: 100 from BP, wiper 102 tied to 101 at U1A +in. Mini toggle SW uses two pads (75 -> 12K, 74 GND):
+# fixed closed (12K damping leg in). IN ring 68 -> 69 (220n) and 42 (1M); the extractor merged the cap's far end 55/43 into
+# the input net - SPLIT. The B10K dual is written as two knobs (SWEEPA/SWEEPB, BOM counts each gang). 76/78/81 are one pad (100K right end) found three times.
+BOM 1M 100Kx4 33K 12K 10Kx4 5.1Kx4 1Kx2 33Rx2 220n 10nx2 68pF B1M 47uFx2 10uF 1N400X TL072x2 ICL7660 B10Kx2 A100K A10K
+io IN=68 OUT=14 V9=0 GND=103
+SPLIT 43 55
+JUMP 75 74
+NC 79 89 78 81 31 104 105 106 66 67
+
+STAGE input input 입력
+C 220n 69 55 C1
+R 1M 42 20 R1
+R 100K 43 21 R2
+
+STAGE sum gain 합산단 (U1A, HP)
+IC TL072 1=32 2=38 3=45 4=56 5=57 6=46 7=39 8=33 U1
+R 100K 22 44 R3
+R 100K 24 23 R4
+R 100K 76 77 R5
+C 68pF 88 87 C2
+R 12K 71 70 R6
+POT B1M RESONANCE 100 102 101
+
+STAGE svf custom 적분단 (SWEEP, BP·LP)
+POT B10K SWEEPA 84 83 82
+R 33R 85 86 R7
+R 1K 64 65 R8
+C 10n 34 47 C3
+IC TL072 1=36 2=40 3=49 4=58 5=59 6=50 7=41 8=37 U2
+POT B10K SWEEPB 97 96 95
+R 33R 98 99 R9
+R 1K 91 92 R10
+C 10n 35 48 C4
+
+STAGE mix gain 믹스단 (U2B, MID)
+R 5.1K 15 16 R11
+R 5.1K 10 9 R12
+R 10K 11 12 R13
+R 5.1K 25 26 R14
+R 5.1K 27 51 R15
+R 10K 28 52 R16
+POT A10K MID 3 2 1
+R 10K 17 18 R17
+R 33K 29 53 R18
+
+STAGE output output 출력 (볼륨)
+C 47uF 19 13 C5
+R 10K 30 54 R19
+POT A100K VOLUME 6 5 4
+
+STAGE power power 전원 (ICL7660 -9V)
+D 1N400X a=7 k=8 D1
+IC ICL7660 1=94 2=90 3=80 4=73 5=72 8=93 U3
+C 10uF 63 61 C6
+C 47uF 62 60 C7
+
+# --- schematic placement (hand) ---
+AT V1 60 420
+AT VCC 60 130
+AT D1 130 100 h
+AT Vrail1 220 130
+AT C7 280 130 v-
+AT C1 130 400 h
+AT R1 100 460 v
+AT R2 220 400 h
+AT U1A 310 380
+AT R5 160 290 v
+AT C2 200 290 v
+AT R6 240 290 v
+AT RESONANCE 340 260 r180
+AT R3 310 460 h-
+AT R4 310 510 h-
+AT SWEEPA 430 380 r180 m
+AT R7 460 410 v
+AT R8 490 350 h
+AT U1B 580 380
+AT C3 580 460 h-
+AT SWEEPB 700 380 r180 m
+AT R9 730 410 v
+AT R10 760 350 h
+AT U2A 850 380
+AT C4 850 460 h-
+AT U2B 1100 380
+AT R18 1100 460 h-
+AT R14 980 540 h
+AT R15 1010 570 v
+AT R16 1040 540 h
+AT R11 980 680 h
+AT R12 1010 710 v
+AT R13 1040 680 h
+AT MID 950 850 r0
+AT R17 1040 820 h
+AT C5 1190 380 h
+AT R19 1250 410 v
+AT VOLUME 1310 380 r180
+AT RLOAD 1310 460 v

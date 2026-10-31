@@ -1,0 +1,632 @@
+{
+ "id": "pp-x-touch",
+ "goodsNo": "186787546",
+ "kitName": "X-Touch",
+ "motif": "Wampler Euphoria",
+ "type": "overdrive",
+ "description": "MC1458 비반전 1단: 입력 100p·22n·470K(Vref), 귀환 GAIN A1M 가변저항+10K∥100p, −입력 1K 뒤 47n ∥ BASS C10K+2.2uF 접지 → 47K 뒤 1N4148 역병렬(CRUNCH 위치, 별도 Vref로) → 비반전 2단(47K∥100p / 33K+2.2uF) → 1uF·1K·TONE B25K(와이퍼 22n) 직렬 → VOL.",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100pF",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "MC1458",
+   "nodes": {
+    "1": "n3",
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "5": "n5",
+    "6": "n6",
+    "7": "n7",
+    "8": "n8"
+   }
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "A1M",
+   "nodes": [
+    "n9",
+    "n3",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n9",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "100pF",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n4",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n10",
+    "0"
+   ]
+  },
+  {
+   "ref": "BASS",
+   "kind": "POT",
+   "value": "C10K",
+   "nodes": [
+    "n11",
+    "n11",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "2.2uF",
+   "nodes": [
+    "n11",
+    "0"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n3",
+    "n5"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n5",
+    "k": "n12"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n12",
+    "k": "n5"
+   }
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n5",
+    "n13"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100pF",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "n6",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "2.2uF",
+   "nodes": [
+    "n14",
+    "0"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n7",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n15",
+    "n16"
+   ]
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B25K",
+   "nodes": [
+    "n17",
+    "n18",
+    "n16"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n18",
+    "0"
+   ]
+  },
+  {
+   "ref": "VOL",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n17"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n8"
+   }
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n8",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n8",
+    "n13"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n13",
+    "0"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n13",
+    "0"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n8",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n12",
+    "0"
+   ]
+  },
+  {
+   "ref": "C13",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n12",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "C2",
+    "R2"
+   ]
+  },
+  {
+   "id": "gain1",
+   "category": "gain",
+   "label": "1단 (GAIN·BASS)",
+   "parts": [
+    "U1",
+    "GAIN",
+    "R3",
+    "C3",
+    "R4",
+    "C4",
+    "BASS",
+    "C5"
+   ]
+  },
+  {
+   "id": "clip",
+   "category": "clipping",
+   "label": "하드 클리퍼 (CRUNCH)",
+   "parts": [
+    "R5",
+    "D1",
+    "D2",
+    "R6"
+   ]
+  },
+  {
+   "id": "gain2",
+   "category": "gain",
+   "label": "2단",
+   "parts": [
+    "R7",
+    "C6",
+    "R8",
+    "C7"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "TONE",
+   "parts": [
+    "C8",
+    "R9",
+    "TONE",
+    "C9"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "VOL"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D3",
+    "C10",
+    "R10",
+    "R11",
+    "C11",
+    "R12",
+    "R13",
+    "C12",
+    "R14",
+    "R15",
+    "C13"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D3": {
+   "x": 130,
+   "y": 160,
+   "rotation": 0
+  },
+  "C10": {
+   "x": 190,
+   "y": 190,
+   "rotation": 90
+  },
+  "R10": {
+   "x": 250,
+   "y": 190,
+   "rotation": 90
+  },
+  "R11": {
+   "x": 250,
+   "y": 250,
+   "rotation": 90
+  },
+  "C11": {
+   "x": 290,
+   "y": 250,
+   "rotation": 90
+  },
+  "R12": {
+   "x": 350,
+   "y": 190,
+   "rotation": 90
+  },
+  "R13": {
+   "x": 350,
+   "y": 250,
+   "rotation": 90
+  },
+  "C12": {
+   "x": 390,
+   "y": 250,
+   "rotation": 90
+  },
+  "R14": {
+   "x": 450,
+   "y": 190,
+   "rotation": 90
+  },
+  "R15": {
+   "x": 450,
+   "y": 250,
+   "rotation": 90
+  },
+  "C13": {
+   "x": 490,
+   "y": 250,
+   "rotation": 90
+  },
+  "R1": {
+   "x": 100,
+   "y": 430,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 140,
+   "y": 430,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 200,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 230,
+   "y": 370,
+   "rotation": 270
+  },
+  "U1A": {
+   "x": 290,
+   "y": 420
+  },
+  "R3": {
+   "x": 300,
+   "y": 480,
+   "rotation": 180
+  },
+  "GAIN": {
+   "x": 350,
+   "y": 450,
+   "rotation": 270,
+   "mirror": true
+  },
+  "C3": {
+   "x": 380,
+   "y": 480,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 260,
+   "y": 560,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 230,
+   "y": 620,
+   "rotation": 90
+  },
+  "BASS": {
+   "x": 290,
+   "y": 620,
+   "rotation": 270
+  },
+  "C5": {
+   "x": 290,
+   "y": 680,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 440,
+   "y": 420,
+   "rotation": 0
+  },
+  "D1": {
+   "x": 470,
+   "y": 450,
+   "rotation": 90
+  },
+  "D2": {
+   "x": 500,
+   "y": 450,
+   "rotation": 270
+  },
+  "R6": {
+   "x": 530,
+   "y": 390,
+   "rotation": 270
+  },
+  "U1B": {
+   "x": 600,
+   "y": 440
+  },
+  "R7": {
+   "x": 600,
+   "y": 500,
+   "rotation": 180
+  },
+  "C6": {
+   "x": 600,
+   "y": 540,
+   "rotation": 180
+  },
+  "R8": {
+   "x": 570,
+   "y": 600,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 570,
+   "y": 660,
+   "rotation": 90
+  },
+  "C8": {
+   "x": 660,
+   "y": 440,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 720,
+   "y": 440,
+   "rotation": 0
+  },
+  "TONE": {
+   "x": 780,
+   "y": 440,
+   "rotation": 180
+  },
+  "C9": {
+   "x": 780,
+   "y": 500,
+   "rotation": 90
+  },
+  "VOL": {
+   "x": 840,
+   "y": 470,
+   "rotation": 270,
+   "mirror": true
+  },
+  "RLOAD": {
+   "x": 920,
+   "y": 500,
+   "rotation": 90
+  }
+ }
+}

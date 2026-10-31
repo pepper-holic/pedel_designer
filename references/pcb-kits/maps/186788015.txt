@@ -1,0 +1,125 @@
+id pp-tong-cap
+goods 186788015
+name Tong Cap
+motif Darkglass Tone Capsule
+type eq
+desc TL074 베이스 3밴드 능동 EQ - 100n/1K/1M 입력 폴로어(A)→10uF→D단 박산달(LOW 70Hz B50K, 5.1K x3·47n x2, 고역은 22n·22K·1.5K 고정, 1M∥33p)→C단 LOW MID(B50K, 1K·100n, 와이퍼 10n)→B단 HIGH MID(B50K, 1K·15n, 와이퍼 1.5n)→820n∥680n→1K→OUT
+image img_01.jpg
+# TL074 notch on the left: pins 1-7 along the bottom row 81..87, 8-14 back along the top row 67..61. Pin 4 (84) V+, pin 11 (64) GND,
+# pins 5/10/12 at Vref (10K/10K 105-106/96-97, 100uF 107-98). A is a unity follower (2-1 tied) on the input; B, C and D are
+# inverting stages in the signal order D -> C -> B.
+# D: Baxandall bass - input 5.1K -> lug3 (0), wiper -> 5.1K -> -in, lug1 (2, silk "1") -> 5.1K -> out, 47n across each half.
+#    The treble half is fixed: 22n -> 22K -> node (1.5K to -in) -> 22K -> 22n -> out.
+# C/B: the same mid band on each - pot ends between the previous output (1K, lug3) and this output (1K, lug1 "1") with 100n / 15n
+#    across, wiper -> 10n / 1.5n -> -in, 100K in and 100K feedback. CW (toward lug3) boosts on all three.
+# 1N400X 91-92 is a reverse-polarity shunt (band at 92 on V+). 108/109, 110/111, 113-115 are duplicate detections of 19/31, 46 and
+# the 9V ring 112. Seller notes the original uses an SMD MC3327 quad; the kit ships TL074 (16-pin socket in the list).
+BOM 1Mx3 100Kx5 22Kx2 10Kx2 5.1Kx3 1.5K 1Kx6 820n 680n 100nx3 47nx2 22nx2 15n 10n 1.5n 33pF 100uF 10uFx2 1N400X TL074 B50Kx3
+io IN=72 OUT=77 V9=112 GND=89
+NC 108 109 110 111 113 114 115 104 78 90 99 100
+
+STAGE input buffer 입력 버퍼 (A)
+C 100n 73 74 C1
+R 1M 69 68 R1
+R 1K 79 80 R2
+R 1M 94 95 R3
+IC TL074 1=81 2=82 3=83 4=84 5=85 6=86 7=87 8=67 9=66 10=65 11=64 12=63 13=62 14=61 U1
+C 10uF 60 53 C2
+
+STAGE low tone 저역 박산달 (D)
+R 5.1K 36 11 R4
+POT B50K LOW 2 1 0
+C 47n 28 12 C3
+C 47n 29 13 C4
+R 5.1K 15 40 R5
+R 5.1K 14 39 R6
+C 22n 46 45 C5
+R 22K 34 9 R7
+R 22K 10 35 R8
+C 22n 37 54 C6
+R 1.5K 17 42 R9
+R 1M 57 56 R10
+C 33pF 38 55 C7
+
+STAGE lowmid tone 로우 미드 (C)
+R 1K 41 16 R11
+POT B50K LOWMID 5 4 3
+C 100n 18 19 C8
+R 1K 31 30 R12
+C 10n 22 32 C9
+R 100K 47 48 R13
+R 100K 49 50 R14
+
+STAGE highmid tone 하이 미드 (B)
+R 1K 23 24 R15
+POT B50K HIGHMID 8 7 6
+C 15n 20 21 C10
+R 1K 27 52 R16
+C 1.5n 25 33 C11
+R 100K 43 44 R17
+R 100K 26 51 R18
+
+STAGE output output 출력
+C 820n 58 70 C12
+C 680n 59 71 C13
+R 100K 88 89 R19
+R 1K 75 76 R20
+
+STAGE power power 전원
+D 1N400X a=91 k=92 D1
+C 100n 102 101 C14
+C 10uF 103 93 C15
+R 10K 105 106 R21
+R 10K 96 97 R22
+C 100uF 107 98 C16
+
+# --- schematic placement (hand) ---
+AT V1 60 420
+AT VCC 60 190
+AT D1 130 190 v-
+AT C14 190 190 v
+AT C15 240 190 v
+AT R21 300 190 v
+AT R22 300 250 v
+AT C16 360 250 v
+AT C1 130 400 h
+AT R1 100 460 v
+AT R2 220 400 h
+AT R3 260 340 v-
+AT U1A 310 420
+AT C2 400 420 h
+AT R4 480 280 h
+AT LOW 570 280 r180
+AT C3 540 340 h
+AT C4 600 340 h
+AT R6 690 280 h
+AT R5 570 370 v
+AT U1D 720 380
+AT R10 720 450 h
+AT C7 720 490 h
+AT C5 480 560 h
+AT R7 540 560 h
+AT R9 590 530 v-
+AT R8 630 560 h
+AT C6 690 560 h
+AT R11 840 280 h
+AT LOWMID 930 280 r180
+AT C8 930 220 h
+AT R12 1020 280 h
+AT C9 930 340 v
+AT R13 900 400 h
+AT U1C 1040 380
+AT R14 1040 460 h
+AT R15 1160 280 h
+AT HIGHMID 1250 280 r180
+AT C10 1250 220 h
+AT R16 1340 280 h
+AT C11 1250 340 v
+AT R17 1220 400 h
+AT U1B 1360 380
+AT R18 1360 460 h
+AT C12 1450 380 h
+AT C13 1450 320 h
+AT R19 1510 410 v
+AT R20 1570 380 h
+AT RLOAD 1630 410 v

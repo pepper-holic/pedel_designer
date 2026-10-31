@@ -1,0 +1,122 @@
+id pp-new-red-charles
+goods 186788577
+name NEW RED CHARLES
+motif JHS Angry Charles V3 (MI Audio Crunch Box 계열)
+type distortion
+desc LM833 비반전 1단(DRIVE 팟 와이퍼=출력, 한끝 −입력·다른 끝 100n로 다음 단, −입력 1K+220n 접지, 100p) → 10K/1M∥100p 반전 2단 → 2.2uF·470R 뒤 빨간 LED 역병렬 접지 클리핑 → 2.2uF → TL072 능동 3밴드(BASS 6.8K·47n, MID 2.2K·10n, TREBLE 2.2n·10K·15K, −입력 10n/68K) → 2.2uF·6.8K·22n → VOLUME. TL072 다른 반쪽은 Vref 버퍼.
+image img_01.jpg
+BOM 1Mx3 68Kx1 22Kx2 15Kx1 10Kx2 6.8Kx3 2.2Kx2 1Kx2 470Rx1 220nx1 100nx1 47nx1 22nx2 10nx2 2.2nx1 1nx1 100px2 100uFx2 2.2uFx3 1N400Xx1 LED-REDx2 LM833Nx1 TL072x1 A100Kx1 B100Kx2 B25Kx2
+io IN=83 OUT=105 V9=4 GND=104,12,45
+# LM833 홈 왼쪽: 35=1 36=2 38=3 37=4 / 17=5 16=6 15=7 14=8. TL072 홈 왼쪽: 42=1 43=2 44=3 45=4 / 25=5 24=6 23=7 22=8.
+# 12(LED2 사각)·45(TL072 4번)는 동박 없는 '+' 접지 패드(접지면) - GND 목록에 넣었다. LED 둘은 n3과 접지 사이 역병렬(5·12가 애노드).
+# 팟 역할은 넷으로 정했다: 아래 세로 두 개 중 84/95/103 = DRIVE(와이퍼 95=1단 출력), 85/96/104 = VOLUME(104 접지, 와이퍼 96=OUT).
+#   윗줄 63-65 = TREBLE(입력 n8과 출력 사이 직결, 와이퍼 2.2n), 66-68 = MID(2.2K·10n), 69-71 = BASS(6.8K·47n이 팟 양단).
+# 값 배정(추정): VOLUME A100K, DRIVE·TREBLE B100K, MID·BASS B25K(팟 끝 저항 2.2K/6.8K에 맞춤, 스킬 메모 "톤스택은 큰 값이 TREBLE").
+# 팟 방향은 회로 논리: DRIVE 시계방향에 피드백 저항(95-84) 증가. 톤 팟은 1번=입력 쪽(n8 쪽 러그)으로 둠(시계방향에 부스트).
+
+STAGE input input 입력
+R 1M 87 97 R1
+C 22n 98 92 C1
+R 1K 56 32 R2
+C 1n 34 19 C2
+R 1M 18 39 R3
+
+STAGE gain1 gain 1단 (DRIVE)
+IC LM833N 1=35 2=36 3=38 4=37 5=17 6=16 7=15 8=14 U1
+POT B100K DRIVE 84 95 103
+C 100p 48 49 C3
+R 1K 89 102 R4
+C 220n 101 94 C4
+C 100n 100 93 C5
+
+STAGE gain2 gain 2단 (반전 1M/10K)
+R 10K 99 88 R5
+R 1M 7 8 R6
+C 100p 13 33 C6
+
+STAGE clip clipping LED 클리퍼
+C 2.2uF 28 29 C7
+R 470R 30 31 R7
+D LED-RED a=5 k=11 D1
+D LED-RED a=12 k=6 D2
+C 2.2uF 20 21 C8
+
+STAGE tone tone 능동 3밴드 톤
+IC TL072 1=42 2=43 3=44 4=45 5=25 6=24 7=23 8=22 U2
+POT B100K TREBLE 63 64 65
+C 2.2n 57 58 C9
+R 10K 40 41 R8
+POT B25K MID 66 67 68
+R 2.2K 72 73 R9
+C 10n 74 75 C10
+R 2.2K 51 50 R10
+R 15K 59 60 R11
+C 10n 54 55 C11
+POT B25K BASS 69 70 71
+R 6.8K 76 77 R12
+C 47n 78 79 C12
+R 6.8K 53 52 R13
+R 68K 62 61 R14
+
+STAGE output output 출력
+C 2.2uF 90 91 C13
+R 6.8K 81 80 R15
+C 22n 82 86 C14
+POT A100K VOLUME 104 96 85
+
+STAGE power power 전원
+D 1N400X a=0 k=1 D3
+C 100uF 10 3 C15
+R 22K 27 47 R16
+R 22K 26 46 R17
+C 100uF 9 2 C16
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D3 130 160 h
+AT C15 190 190 v
+AT R16 250 190 v
+AT R17 250 250 v
+AT U2B 310 240
+AT C16 370 270 v
+AT R1 100 430 v
+AT C1 150 400 h
+AT R2 210 400 h
+AT C2 240 430 v
+AT R3 270 370 v
+AT U1A 330 420
+AT C3 330 480 h-
+AT DRIVE 410 450 r0
+AT R4 300 540 v
+AT C4 300 600 v
+AT C5 470 450 h
+AT R5 530 450 h
+AT U1B 590 470 m
+AT R6 590 410 h-
+AT C6 590 370 h-
+AT C7 650 470 h
+AT R7 710 470 h
+AT D1 740 500 v
+AT D2 770 500 v-
+AT C8 800 470 h-
+AT TREBLE 900 300 r0 m
+AT C9 930 330 h
+AT R8 990 330 h
+AT C11 1050 330 h
+AT R9 860 420 h
+AT MID 920 420 r0 m
+AT C10 920 390 h
+AT R10 980 420 h
+AT R11 950 450 h
+AT R12 860 530 h
+AT BASS 920 530 r0 m
+AT C12 920 500 h
+AT R13 980 530 h
+AT R14 950 560 h
+AT U2A 1220 620 m
+AT C13 1280 620 h
+AT R15 1340 620 h
+AT C14 1370 650 v
+AT VOLUME 1420 650 r270 m
+AT RLOAD 1500 680 v

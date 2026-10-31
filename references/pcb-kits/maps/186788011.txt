@@ -1,0 +1,131 @@
+id pp-heavy-fist
+goods 186788011
+name Heavy Fist
+motif King Tone Heavy Hand (Duellist B + BODY·CLIP)
+type overdrive
+desc RC4558 2단(Duel B 계열) - A단 비반전(133K+360K∥DRIVE B250K, 100p, −입력 다리 28.7K/30.1K+10n·10n, BODY C250K+47n, 4.7K+STYLE 4.7n)→22K/10K→100n→B단 반전(220K, CLIP 토글로 5.6K+1N914 2:3 비대칭)→1K→1000n→1N914 역병렬 Vref 클리퍼(DIP2)→수동 톤(B25K, 9.53K, 10n)→1000n→LEVEL.
+image img_02.jpg
+BOM 2.2Mx1 1Mx1 360Kx1 220Kx1 47Kx2 22Kx1 10Kx1 5.6Kx1 4.7Kx1 1Kx1 100Rx1 133Kx1 30.1Kx1 28.7Kx1 9.53Kx1 1000nx2 100nx2 47nx1 10nx5 4.7nx1 100pFx1 100uFx2 1N400Xx1 1N914x7 RC4558Px1 B250Kx1 A100Kx1 C250Kx1 B25Kx1
+io IN=8 OUT=13 V9=14 GND=1
+# RC4558 홈 아래: 38=1 33=2 28=3 18=4 / 17=5 27=6 32=7 37=8 (Duel B와 같은 방향).
+# 100R(26-45) 몸통 밑으로 −입력 B(25·27)와 출력 B(31·32)가 V자로 지나가 추출기가 −입력 B를 레일(36·37·45·52·53, 청록)에 합쳤고,
+# 1N914 넷의 가운데 사각 고리(55·56·62·63)와 CLIP 링 71·72도 같은 넷에 들어갔다. 렌더대로 셋으로 나눈다.
+SPLIT 25 27 46 71
+SPLIT 55 56 62 63 72
+# 다이오드: 출력 B(54/61)와 가운데(M) 사이 역병렬 한 쌍, M→64→(79-80)→n17 두 개 / n17(57)→M 한 개, n17은 5.6K(90)로 CLIP 70에.
+# CLIP 토글(on-off-on, 공통 71=−입력 B): 70쪽은 5.6K+2:3 다이오드 줄, 72쪽은 M(5.6K 없이 한 쌍만), 가운데 클린. 70쪽으로 고정(모든 다이오드 사용).
+JUMP 70 71
+NC 72
+# DIP 2P: 1번(91-92)은 79-80 다이오드를 단락(2:2 대칭) - 끔. 2번(83-84)은 톤 입력의 1N914 역병렬(77-88/78-89)을 Vref에 - 켬(JUMP 83 84).
+JUMP 83 84
+# STYLE 토글(on-off-on, 가운데 113=Vref): 112쪽 4.7n으로 고정. 114쪽 10n(100-101)은 넷리스트와 BOM에서 뺐다(부품표 10nx6).
+JUMP 112 113
+NC 101 114 100
+# DIP 1번 끔: 91·92는 빈 접점.
+NC 91 92
+# BODY: 실크·부품표는 C250K, 판매자 메모는 C500K 권장 - 부품표대로 C250K. 1번(111)과 와이퍼(110)가 Vref로 묶인 가변저항.
+# 팟 "1"은 모두 오른쪽. DRIVE 1번=7(133K·360K 쪽), LEVEL 1번=4(접지), TONE 1번=108(10n→Vref).
+
+STAGE input input 입력
+R 2.2M 0 1 R1
+C 10n 9 10 C1
+R 1M 11 12 R2
+
+STAGE drive gain 드라이브단 (IC A, DRIVE·BODY·STYLE)
+IC RC4558P 1=38 2=33 3=28 4=18 5=17 6=27 7=32 8=37 U1
+R 133K 21 41 R3
+R 360K 22 42 R4
+POT B250K DRIVE 7 6 5
+C 100pF 23 34 C2
+R 30.1K 65 66 R5
+C 10n 58 59 C3
+R 28.7K 73 74 R6
+C 10n 103 102 C4
+C 47n 94 93 C5
+POT C250K BODY 111 110 109
+R 4.7K 82 81 R7
+C 4.7n 99 98 C6
+
+STAGE dist clipping 디스토션단 (IC B, CLIP)
+R 22K 40 20 R8
+R 10K 19 39 R9
+C 100n 47 46 C7
+R 220K 24 25 R10
+R 5.6K 69 90 R11
+D 1N914 a=54 k=55 D1
+D 1N914 a=62 k=61 D2
+D 1N914 a=57 k=56 D3
+D 1N914 a=63 k=64 D4
+D 1N914 a=80 k=79 D5
+
+STAGE tone tone 톤 (DIP2 클리퍼)
+R 1K 31 30 R12
+C 1000n 51 67 C8
+D 1N914 a=77 k=88 D6
+D 1N914 a=78 k=89 D7
+POT B25K TONE 108 107 106
+C 10n 97 96 C9
+R 9.53K 95 75 R13
+C 10n 76 87 C10
+
+STAGE output output 출력
+C 1000n 44 29 C11
+POT A100K LEVEL 4 3 2
+
+STAGE power power 전원
+D 1N400X a=15 k=16 D8
+R 100R 26 45 R14
+C 100uF 53 60 C12
+C 100n 52 68 C13
+R 47K 36 35 R15
+R 47K 85 86 R16
+C 100uF 104 105 C14
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D8 130 160 h
+AT R14 200 160 h
+AT C12 260 190 v
+AT C13 310 190 v
+AT R15 370 190 v
+AT R16 370 250 v
+AT C14 430 250 v
+AT C1 140 400 h
+AT R1 100 430 v
+AT R2 180 370 v
+AT U1A 240 420
+AT C2 240 490 h-
+AT R3 240 540 h-
+AT R4 300 540 h
+AT DRIVE 300 610 r0
+AT R5 150 700 v
+AT C3 150 790 v-
+AT R6 210 700 v
+AT C4 210 790 v
+AT C5 270 760 v
+AT BODY 270 850 r270 m
+AT R7 330 700 v
+AT C6 330 790 v
+AT R8 300 420 h
+AT R9 360 420 h
+AT C7 420 420 h
+AT U1B 510 440 m
+AT R10 510 380 h-
+AT R11 450 450 v
+AT D1 600 520 h-
+AT D2 600 560 h
+AT D3 510 600 h
+AT D5 480 640 h-
+AT D4 540 640 h-
+AT R12 660 440 h
+AT C8 720 440 h
+AT D7 750 470 v
+AT D6 780 470 v-
+AT TONE 840 440 r180 m
+AT C9 870 470 v
+AT R13 870 380 h
+AT C10 900 410 v
+AT C11 930 380 h
+AT LEVEL 990 410 r270 m
+AT RLOAD 1060 440 v

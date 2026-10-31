@@ -1,0 +1,106 @@
+id pp-flex-od
+goods 186787635
+name FLEX OD
+motif 아처(켄타 복각) 제작사의 오리지널 오버드라이브
+type overdrive
+desc IN(1M, 220p)→100n→JRC4580 A 비반전(470K Vref, 귀환 GAIN A500K+1K∥22p, 1K+220n 접지 다리, CLIP 토글의 1N4148 2:1 비대칭 귀환 클리퍼)→22K→B 폴로어(10n 접지, TONE B5K 와이퍼 100Ω+10n)→1000n→68K/120K→J201 공통 소스(1K 소스, 50K 트리머 드레인)→1000n→22K→VOLUME A100K
+image img_02.jpg
+# 고정한 스위치: CLIP(on-off-on) 위 = 1N4148 2:1 귀환(아래 = 1N60+1N4005 직렬 역병렬, 가운데 = 클리퍼 없음),
+#   FAT(on-on) 끔 = 220n 하나(켜면 4-5의 220n이 병렬로 붙어 저역 증가), TREBLE(on-off-on) 가운데 = 추가 캡 없음(위 10n, 아래 22n을 B단 입력에 접지).
+#   꺼진 갈래 부품(1N60x2, 1N4005x2, 220n x1, 10n x1, 22n)은 넷리스트와 BOM에서 뺐다.
+# 부품표 원본: 1M 470Kx3 120K 68K 22Kx2 1Kx3 100Ω 10Ω 1000nx2 220nx2 100n 22n 10nx3 220pF 22pF 47uFx2 1N4005x2 1N4148x4 1N60x2 50K JRC4580D J201 A500K A100K B5K
+BOM 1M 470Kx3 120K 68K 22Kx2 1Kx3 100Ω 10Ω 1000nx2 220n 100n 10nx2 220pF 22pF 47uFx2 1N4148x4 JRC4580 J201 A500K A100K B5K B50K
+io IN=83 OUT=23 V9=110 GND=113
+# 층 분리 뒤에도 남은 오병합 두 곳: (1) op-amp 출력(1번)과 −입력(2번)이 22K 다리 밑에서 한 넷(n5) - 2번 쪽(1K 오른쪽 20·25·26, 22p 아래 54, CLIP 가운데 59)을 떼어 낸다.
+# (2) IN 패드(83)가 바로 옆 V+ 470K(84)와, 1N4005 오른쪽(91)이 10Ω 오른쪽 V+와 한 넷(n14) - IN 갈래(73·83·103·111)와 1N60/1N4005 갈래(71·91)를 떼어 낸다.
+SPLIT 20 25 26 54 55 59
+SPLIT 73 83 103 111
+SPLIT 71 91
+# SMD J201이지만 TO-92 링(D 위 78, S 가운데 88, G 아래 98)으로 읽는다(원본 board0_nets.json, 가상 패드 없음).
+# JRC4580 홈 위: 49=1 55=2 62=3 68=4 / 69=5 63=6 56=7 50=8. 팟 "1": GAIN·VOLUME 오른쪽, TONE 왼쪽.
+JUMP 52 59
+NC 66 72 79 81 89 70 80 47 48 71 91 2 3 4 5 53 67 58 41 65 77 34 45 36 43 26 82 90 99 101 102 46 60
+
+STAGE input input 입력
+R 1M 103 104 R1
+C 220pF 111 112 C1
+C 100n 73 61 C2
+R 470K 74 75 R2
+
+STAGE gain gain A단 (GAIN)
+IC JRC4580 1=49 2=55 3=62 4=68 5=69 6=63 7=56 8=50 U1
+POT A500K GAIN 10 9 8
+R 1K 19 20 R3
+C 22pF 38 54 C4
+R 1K 29 25 R4
+C 220n 1 0 C3
+
+STAGE clip clipping CLIP 1N4148 2:1
+D 1N4148 a=17 k=18 D1
+D 1N4148 a=28 k=27 D2
+D 1N4148 a=37 k=35 D3
+
+STAGE tone tone B단 폴로어 (TONE)
+R 22K 44 39 R5
+C 10n 33 32 C5
+POT B5K TONE 11 12 13
+R 100Ω 21 22 R6
+C 10n 31 30 C6
+
+STAGE jfet output J201 복원단·VOLUME
+C 1000n 64 76 C7
+R 68K 86 87 R7
+R 120K 97 96 R8
+Q J201 g=98 s=88 d=78 Q1
+R 1K 106 105 R9
+POT B50K TRIM 40 51 57
+C 1000n 42 24 C8
+R 22K 7 6 R10
+POT A100K VOLUME 16 15 14
+
+STAGE power power 전원
+R 10Ω 92 100 R11
+C 47uF 107 117 C9
+D 1N4148 a=118 k=93 D4
+R 470K 84 85 R12
+R 470K 95 94 R13
+C 47uF 108 109 C10
+
+# --- schematic placement (hand) ---
+AT VCC 60 190
+AT R11 130 160 h
+AT C9 190 200 v
+AT D4 240 200 v-
+AT R12 300 200 v
+AT R13 300 290 v
+AT C10 360 290 v
+AT V1 60 430
+AT R1 120 460 v
+AT C1 170 460 v
+AT C2 240 400 h
+AT R2 300 470 v
+AT U1A 400 420
+AT C4 400 480 h-
+AT R3 400 540 h-
+AT GAIN 490 540 r0
+AT R4 330 520 v-
+AT C3 330 610 v
+AT D3 430 600 h
+AT D2 430 650 h-
+AT D1 520 650 h-
+AT R5 600 420 h
+AT C5 660 480 v
+AT U1B 760 440
+AT TONE 760 530 r0 m
+AT R6 760 590 v
+AT C6 760 650 v
+AT C7 850 440 h
+AT R7 940 440 h
+AT R8 1000 500 v
+AT Q1 1030 440
+AT R9 1050 530 v
+AT TRIM 1050 350 r90
+AT C8 1110 380 h
+AT R10 1200 380 h
+AT VOLUME 1260 440 r270 m
+AT RLOAD 1330 470 v

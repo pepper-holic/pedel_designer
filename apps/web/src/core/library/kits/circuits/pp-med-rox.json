@@ -1,0 +1,849 @@
+{
+ "id": "pp-med-rox",
+ "goodsNo": "186788065",
+ "kitName": "Med Rox",
+ "motif": "Downer Prince Red Rox",
+ "type": "distortion",
+ "description": "IN(2.2M, 100p)→10n→LM833 A 비반전(1M Vref, 3.3K+47n 이득 다리, 귀환 PREAMP C100K(와이퍼=출력)+4.7K∥100p, 반대 끝 1n)→PREAMP 반대 끝→68n→4.7K→B 반전(680K∥68p)→100n→4.7K→1N34A+1N400X / 1N4148+1N400X 비대칭 접지 클리퍼→3.3K→TONE A100K+47n→220n→47K→둘째 LM833 B 반전(220K∥470p)→CONTOUR 망(6.8n, 10K·10K, 4.7n·4.7n, 33n+A50K)→470n→100K→A 반전(100K∥220p)→1K→4.7uF→MASTER A10K",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "LM833",
+   "nodes": {
+    "1": "n3",
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "5": "n2",
+    "6": "n5",
+    "7": "n6",
+    "8": "n7"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "3.3K",
+   "nodes": [
+    "n4",
+    "n8"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "PREAMP",
+   "kind": "POT",
+   "value": "C100K",
+   "nodes": [
+    "n9",
+    "n3",
+    "n10"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n9",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "n9",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "68n",
+   "nodes": [
+    "n10",
+    "n11"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n11",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "680K",
+   "nodes": [
+    "n6",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "68p",
+   "nodes": [
+    "n6",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n6",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n12",
+    "n13"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N34A",
+   "nodes": {
+    "a": "n13",
+    "k": "n14"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "n14",
+    "k": "0"
+   }
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "n15",
+    "k": "n13"
+   }
+  },
+  {
+   "ref": "D4",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "0",
+    "k": "n15"
+   }
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "3.3K",
+   "nodes": [
+    "n13",
+    "n16"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n16",
+    "n17"
+   ]
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n17",
+    "0",
+    "0"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n16",
+    "n18"
+   ]
+  },
+  {
+   "ref": "U2",
+   "kind": "IC",
+   "part": "LM833",
+   "nodes": {
+    "1": "n19",
+    "2": "n20",
+    "3": "n2",
+    "4": "0",
+    "5": "n2",
+    "6": "n21",
+    "7": "n22",
+    "8": "n7"
+   }
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n18",
+    "n21"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "220K",
+   "nodes": [
+    "n22",
+    "n21"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "470p",
+   "nodes": [
+    "n22",
+    "n21"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "6.8n",
+   "nodes": [
+    "n22",
+    "n23"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n22",
+    "n24"
+   ]
+  },
+  {
+   "ref": "C13",
+   "kind": "C",
+   "value": "4.7n",
+   "nodes": [
+    "n24",
+    "0"
+   ]
+  },
+  {
+   "ref": "C14",
+   "kind": "C",
+   "value": "33n",
+   "nodes": [
+    "n24",
+    "n25"
+   ]
+  },
+  {
+   "ref": "CONTOUR",
+   "kind": "POT",
+   "value": "A50K",
+   "nodes": [
+    "0",
+    "n25",
+    "n25"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n24",
+    "n23"
+   ]
+  },
+  {
+   "ref": "C15",
+   "kind": "C",
+   "value": "4.7n",
+   "nodes": [
+    "n23",
+    "0"
+   ]
+  },
+  {
+   "ref": "C16",
+   "kind": "C",
+   "value": "470n",
+   "nodes": [
+    "n23",
+    "n26"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n26",
+    "n20"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n19",
+    "n20"
+   ]
+  },
+  {
+   "ref": "C17",
+   "kind": "C",
+   "value": "220p",
+   "nodes": [
+    "n19",
+    "n20"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n19",
+    "n27"
+   ]
+  },
+  {
+   "ref": "C18",
+   "kind": "C",
+   "value": "4.7uF",
+   "nodes": [
+    "n27",
+    "n28"
+   ]
+  },
+  {
+   "ref": "MASTER",
+   "kind": "POT",
+   "value": "A10K",
+   "nodes": [
+    "0",
+    "out",
+    "n28"
+   ]
+  },
+  {
+   "ref": "D5",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n7"
+   }
+  },
+  {
+   "ref": "C19",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "C20",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n7",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R17",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C21",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "C2",
+    "R2"
+   ]
+  },
+  {
+   "id": "pre",
+   "category": "gain",
+   "label": "A단 (PREAMP)",
+   "parts": [
+    "U1",
+    "R3",
+    "C3",
+    "C4",
+    "PREAMP",
+    "R4",
+    "C5"
+   ]
+  },
+  {
+   "id": "drive",
+   "category": "gain",
+   "label": "B단 반전",
+   "parts": [
+    "C6",
+    "R5",
+    "R6",
+    "C7"
+   ]
+  },
+  {
+   "id": "clip",
+   "category": "clipping",
+   "label": "클리퍼",
+   "parts": [
+    "C8",
+    "R7",
+    "D1",
+    "D2",
+    "D3",
+    "D4"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "TONE",
+   "parts": [
+    "R8",
+    "C9",
+    "TONE",
+    "C10"
+   ]
+  },
+  {
+   "id": "amp2",
+   "category": "gain",
+   "label": "둘째 LM833 B 반전",
+   "parts": [
+    "U2",
+    "R9",
+    "R10",
+    "C11"
+   ]
+  },
+  {
+   "id": "contour",
+   "category": "tone",
+   "label": "CONTOUR",
+   "parts": [
+    "C12",
+    "R11",
+    "C13",
+    "C14",
+    "CONTOUR",
+    "R12",
+    "C15"
+   ]
+  },
+  {
+   "id": "out",
+   "category": "output",
+   "label": "A 반전 복원단·MASTER",
+   "parts": [
+    "C16",
+    "R13",
+    "R14",
+    "C17",
+    "R15",
+    "C18",
+    "MASTER"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D5",
+    "C19",
+    "C20",
+    "R16",
+    "R17",
+    "C21"
+   ]
+  }
+ ],
+ "layout": {
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D5": {
+   "x": 130,
+   "y": 160,
+   "rotation": 0
+  },
+  "C19": {
+   "x": 190,
+   "y": 200,
+   "rotation": 90
+  },
+  "C20": {
+   "x": 240,
+   "y": 200,
+   "rotation": 90
+  },
+  "R16": {
+   "x": 300,
+   "y": 200,
+   "rotation": 90
+  },
+  "R17": {
+   "x": 300,
+   "y": 290,
+   "rotation": 90
+  },
+  "C21": {
+   "x": 360,
+   "y": 290,
+   "rotation": 90
+  },
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "R1": {
+   "x": 110,
+   "y": 460,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 160,
+   "y": 460,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 220,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 280,
+   "y": 460,
+   "rotation": 90
+  },
+  "U1A": {
+   "x": 360,
+   "y": 420
+  },
+  "R3": {
+   "x": 300,
+   "y": 520,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 300,
+   "y": 600,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 360,
+   "y": 480,
+   "rotation": 180
+  },
+  "R4": {
+   "x": 360,
+   "y": 530,
+   "rotation": 180
+  },
+  "PREAMP": {
+   "x": 450,
+   "y": 560,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 450,
+   "y": 620,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 530,
+   "y": 470,
+   "rotation": 270
+  },
+  "R5": {
+   "x": 590,
+   "y": 440,
+   "rotation": 0
+  },
+  "U1B": {
+   "x": 660,
+   "y": 420
+  },
+  "R6": {
+   "x": 660,
+   "y": 500,
+   "rotation": 180
+  },
+  "C7": {
+   "x": 660,
+   "y": 550,
+   "rotation": 180
+  },
+  "C8": {
+   "x": 750,
+   "y": 420,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 840,
+   "y": 420,
+   "rotation": 0
+  },
+  "D1": {
+   "x": 900,
+   "y": 470,
+   "rotation": 90
+  },
+  "D2": {
+   "x": 900,
+   "y": 530,
+   "rotation": 90
+  },
+  "D3": {
+   "x": 950,
+   "y": 470,
+   "rotation": 270
+  },
+  "D4": {
+   "x": 950,
+   "y": 530,
+   "rotation": 270
+  },
+  "R8": {
+   "x": 1000,
+   "y": 420,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 1060,
+   "y": 480,
+   "rotation": 90
+  },
+  "TONE": {
+   "x": 1060,
+   "y": 560,
+   "rotation": 90
+  },
+  "C10": {
+   "x": 1110,
+   "y": 420,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 1190,
+   "y": 440,
+   "rotation": 0
+  },
+  "U2B": {
+   "x": 1260,
+   "y": 420
+  },
+  "R10": {
+   "x": 1260,
+   "y": 500,
+   "rotation": 180
+  },
+  "C11": {
+   "x": 1260,
+   "y": 550,
+   "rotation": 180
+  },
+  "R11": {
+   "x": 1360,
+   "y": 420,
+   "rotation": 0
+  },
+  "C13": {
+   "x": 1400,
+   "y": 480,
+   "rotation": 90
+  },
+  "C14": {
+   "x": 1440,
+   "y": 480,
+   "rotation": 90
+  },
+  "CONTOUR": {
+   "x": 1440,
+   "y": 570,
+   "rotation": 270
+  },
+  "R12": {
+   "x": 1450,
+   "y": 420,
+   "rotation": 0
+  },
+  "C12": {
+   "x": 1420,
+   "y": 340,
+   "rotation": 0
+  },
+  "C15": {
+   "x": 1510,
+   "y": 480,
+   "rotation": 90
+  },
+  "C16": {
+   "x": 1550,
+   "y": 420,
+   "rotation": 0
+  },
+  "R13": {
+   "x": 1640,
+   "y": 440,
+   "rotation": 0
+  },
+  "U2A": {
+   "x": 1710,
+   "y": 420
+  },
+  "R14": {
+   "x": 1710,
+   "y": 500,
+   "rotation": 180
+  },
+  "C17": {
+   "x": 1710,
+   "y": 550,
+   "rotation": 180
+  },
+  "R15": {
+   "x": 1800,
+   "y": 420,
+   "rotation": 0
+  },
+  "C18": {
+   "x": 1890,
+   "y": 420,
+   "rotation": 0
+  },
+  "MASTER": {
+   "x": 1960,
+   "y": 470,
+   "rotation": 270,
+   "mirror": true
+  },
+  "RLOAD": {
+   "x": 2040,
+   "y": 500,
+   "rotation": 90
+  }
+ }
+}

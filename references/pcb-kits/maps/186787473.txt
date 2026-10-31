@@ -1,0 +1,118 @@
+id pp-new-morning
+goods 186787473
+name NEW MORNING
+motif JHS Morning Glory (Marshall Bluesbreaker 계열)
+type overdrive
+desc LM833 비반전 A단(DRIVE B100K가 귀환과 다음 단 직렬 저항을 나눠 맡음, 4.7K/3.3K+10n 접지망) 뒤 B단 반전 증폭(220K∥470p, 6.8K+1N4148 2직렬 역병렬 클리핑), 1K-TONE-6.8K·10n 고역 쉘빙, 2N5457 공통 소스단(드레인 22K)과 VOLUME.
+image img_01.jpg
+BOM 2.2M 1Mx2 220K 100K 68K 47Kx2 22K 12Kx2 10K 6.8Kx2 4.7K 3.3K 1K 100nx3 47n 10nx4 470pF 47pF 100uFx2 10uF 2.2uF 1N400X 1N4148x4 LM833 2N5457 A100K B100K B25K
+# 연보라 접지 패드 중 '+'가 안 보이는 것: 25 27 55 60 68 93. GND 뱅크 96~98은 동박 없음.
+io IN=2 OUT=91 V9=56 GND=95,25,27,55,60,68,93
+NC 96 97 98
+# LM833 홈 오른쪽(90도): 23=1 22=2 21=3 20=4(GND) / 43=5 44=6 45=7 46=8(V+). 실크 +/-/▷ 표시와 일치.
+# 2N5457 SMD: G=82, S=74(청록 선), D=86(청록 선).
+# DIP on-on: 공통 80, 72(동박 없음)/83. 83 쪽으로 고정해 470p를 B단 귀환에 넣는다(HI-CUT 켬). 72 쪽이면 470p가 빠진다.
+JUMP 80 83
+NC 72
+# 팟 라벨·"1" 실크가 없다. 회로 논리로 정함: DRIVE는 41(-in)을 1번(시계방향 = 귀환 저항 증가), TONE은 36(1K 쪽)을 3번(시계방향 = 밝게),
+# VOLUME은 세로 줄 60(GND)-77(와이퍼 → OUT 91)-90(2.2uF). 값은 부품표 B100K/B25K를 DRIVE/TONE에 배정.
+
+STAGE input input 입력
+R 2.2M 0 1 R1
+C 47n 3 4 C1
+R 1M 5 6 R2
+
+STAGE stageA gain A단 (DRIVE)
+IC LM833 1=23 2=22 3=21 4=20 5=43 6=44 7=45 8=46 U1
+C 47pF 15 16 C2
+POT B100K DRIVE 41 40 39
+R 4.7K 7 8 R3
+C 10n 9 10 C3
+R 3.3K 13 14 R4
+C 10n 11 12 C4
+
+STAGE stageB clipping B단 (클리핑)
+C 100n 30 31 C5
+R 10K 63 84 R5
+R 220K 61 62 R6
+C 470pF 78 79 C6
+R 6.8K 69 70 R7
+D 1N4148 a=52 k=34 D1
+D 1N4148 a=28 k=17 D2
+D 1N4148 a=18 k=29 D3
+D 1N4148 a=35 k=53 D4
+
+STAGE tone tone 톤
+R 1K 19 42 R8
+POT B25K TONE 38 37 36
+C 10n 47 59 C7
+R 6.8K 32 33 R9
+C 10n 57 58 C8
+R 100K 65 66 R10
+
+STAGE jfet output JFET 단·볼륨
+C 100n 75 76 C9
+R 68K 81 82 R11
+R 1M 88 89 R12
+Q 2N5457 g=82 d=86 s=74 Q1
+R 12K 49 74 R13
+R 12K 48 73 R14
+C 10uF 26 27 C10
+R 22K 71 94 R15
+C 2.2uF 86 87 C11
+POT A100K VOLUME 60 77 90
+
+STAGE power power 전원·Vref
+D 1N400X a=64 k=85 D5
+C 100uF 92 93 C12
+C 100n 54 55 C13
+R 47K 50 51 R16
+R 47K 24 25 R17
+C 100uF 67 68 C14
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D5 130 160 h
+AT C12 190 190 v
+AT C13 230 190 v
+AT R16 290 190 v-
+AT R17 290 250 v
+AT C14 340 250 v
+AT R1 110 430 v-
+AT C1 170 400 h
+AT R2 230 370 v
+AT U1A 290 420
+AT R3 260 500 v-
+AT C2 290 470 h
+AT R4 200 500 v-
+AT C4 230 530 h-
+AT C3 260 560 v-
+AT DRIVE 390 450 r0
+AT C5 450 450 h
+AT R5 510 450 h
+AT U1B 600 430
+AT R6 600 510 h
+AT C6 600 550 h-
+AT R7 570 610 v
+AT D1 600 670 h
+AT D2 660 670 h
+AT D4 600 710 h-
+AT D3 660 710 h-
+AT R8 690 430 h-
+AT TONE 750 430 r180
+AT C7 780 460 v
+AT R9 750 520 v-
+AT C8 810 580 v
+AT R10 860 580 v
+AT C9 920 550 h-
+AT R11 980 550 h
+AT Q1 1040 550
+AT R12 1010 610 v-
+AT R13 1060 610 v-
+AT R14 1110 610 v-
+AT C10 1110 670 v
+AT R15 1060 490 v
+AT C11 1090 520 h
+AT VOLUME 1150 520 r180
+AT RLOAD 1210 580 v

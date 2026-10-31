@@ -1,0 +1,124 @@
+id pp-duel-b
+goods 186788013
+name Duel B
+motif King Tone Duellist (B side)
+type overdrive
+desc RC4558 2단 - A단 비반전(133K+360K∥B250K 드라이브, 접지 다리 28.7K/30.1K+10n/4.7K+토글 캡, 100p)→22K/10K→100n→B단 반전(220K, 1N914 2:3 비대칭 피드백 클리퍼)→1K→4.7uF→1N914 역병렬 접지 클리퍼(DIP1)→수동 톤(B25K, 9.53K, 10n x3)→1000n→A100K 볼륨
+image img_02.jpg
+# Op-amp notch points down: pin 1 bottom-right (48), 2-4 up the right column (41, 34, 27=GND), 5-8 down the left (26=Vref, 33, 40, 47=V+).
+# Signal: IN ring 16 -> 10n -> +in A (2.2M to GND, 1M to Vref). A's feedback: 133K from -in to DRIVE lug1 (n5), 360K n5 -> out A,
+# DRIVE wiper = out A, lug3 -> 22K/10K junction (so CW raises A's gain and feeds more of out A forward). The -in A leg to Vref is
+# all capacitive (28.7K -> n13 -> 10n; 30.1K+10n; 4.7K -> 4.7n via toggle), so A sits at unity DC gain.
+# B is inverting (+in at Vref): 10K -> 100n -> -in, 220K feedback, and 5.6K into a 2-diode / 3-diode back-to-back string to out B.
+# Diode bands: 59-77 k=59, 60-61 k=61, 62-63 k=63, 69-70 k=69, 67-68 k=67, 80-81 k=80, 89-90 k=90.
+# DIP 2P sliders run across: switch 2 = 78-79 (shorts 67-68 -> 2:2 symmetric), switch 1 = 87-88 (puts the 80/89 anti-parallel
+# pair from the tone input to Vref). Fixed DIP1 on, DIP2 off so all seven 1N914 are in circuit.
+# Toggle on-off-on 96-97-98 (centre 97 = Vref) drawn in the 4.7n position (96); the 15n branch (72-83 -> 98) is left out of the
+# netlist and the BOM line (kit list has 15n x1).
+# TONE silk says W20K; the parts list ships B25K, used here. lug1 ("1") is pad 95 (-> 10n -> Vref), lug3 pad 93 (signal).
+# Seller's erratum (47K bottom-right, left end to GND) matches the render: 91 is a ground pad.
+BOM 2.2M 1M 360K 220K 47Kx2 22K 10K 5.6K 4.7K 1K 100R 133K 30.1K 28.7K 9.53K 1000n 100nx2 10nx5 4.7n 100pF 100uFx2 4.7uF 1N400X 1N914x7 RC4558P B250K A100K B25K
+io IN=16 OUT=10 V9=30 GND=2
+JUMP 96 97
+JUMP 87 88
+NC 98 83 72 78 79 99 102 103 104
+
+STAGE input input 입력
+C 10n 15 14 C1
+R 2.2M 22 23 R1
+R 1M 21 20 R2
+
+STAGE drive gain 드라이브단 (IC A)
+IC RC4558P 1=48 2=41 3=34 4=27 5=26 6=33 7=40 8=47
+R 133K 35 17 R3
+R 360K 19 18 R4
+POT B250K DRIVE 5 4 3
+C 100pF 42 54 C2
+R 28.7K 28 29 R5
+C 10n 73 84 C3
+R 30.1K 43 64 R6
+C 10n 65 49 C4
+R 4.7K 36 55 R7
+C 4.7n 71 82 C5
+
+STAGE dist clipping 디스토션단 (IC B, 피드백 클리퍼)
+R 22K 8 9 R8
+R 10K 7 6 R9
+C 100n 13 25 C6
+R 220K 38 39 R10
+R 5.6K 52 53 R11
+D 1N914 a=77 k=59 D1
+D 1N914 a=60 k=61 D2
+D 1N914 a=62 k=63 D3
+D 1N914 a=70 k=69 D4
+D 1N914 a=68 k=67 D5
+
+STAGE tone tone 톤
+R 1K 46 45 R12
+C 4.7uF 75 74 C7
+D 1N914 a=81 k=80 D6
+D 1N914 a=89 k=90 D7
+POT B25K TONE 95 94 93
+R 9.53K 66 44 R13
+C 10n 105 106 C8
+C 10n 56 76 C9
+
+STAGE output output 출력 (볼륨)
+C 1000n 37 24 C10
+POT A100K VOLUME 2 1 0
+
+STAGE power power 전원
+D 1N400X a=31 k=11 D8
+R 100R 12 32 R14
+C 100n 58 57 C11
+C 100uF 86 85 C12
+R 47K 51 50 R15
+R 47K 92 91 R16
+C 100uF 100 101 C13
+
+# --- schematic placement (hand) ---
+AT V1 60 420
+AT VCC 60 190
+AT D8 130 160 h
+AT R14 200 160 h
+AT C11 260 190 v
+AT C12 310 190 v
+AT R15 370 190 v
+AT R16 370 250 v
+AT C13 430 250 v
+AT C1 130 400 h
+AT R1 100 460 v
+AT R2 180 340 v-
+AT U1A 240 420
+AT C2 240 490 h
+AT R3 240 540 h
+AT R4 300 540 h
+AT DRIVE 300 610 r0
+AT R6 150 710 v
+AT C4 150 800 v
+AT R5 210 710 v
+AT C3 210 800 v
+AT R7 270 710 v
+AT C5 270 800 v
+AT R8 330 420 h
+AT R9 420 420 h
+AT C6 510 420 h
+AT U1B 600 400
+AT R10 600 480 h-
+AT R11 600 600 h
+AT D1 690 450 v
+AT D2 690 510 v
+AT D5 750 450 v-
+AT D4 750 510 v-
+AT D3 750 570 v-
+AT R12 840 400 h
+AT C7 930 400 h
+AT D7 990 460 v
+AT D6 1040 460 v-
+AT TONE 1110 400 r180 m
+AT C8 1140 450 v
+AT R13 1200 340 h
+AT C9 1260 370 v
+AT C10 1320 340 h
+AT VOLUME 1380 340 r180
+AT RLOAD 1380 420 v

@@ -1,0 +1,114 @@
+id pp-the-bloid
+goods 186788151
+name THE BLOID
+motif Zendrive 계열 덤블형 (일본 부티크 Bloid)
+type overdrive
+desc BC550C 이미터 폴로어 입력 뒤 TL072 A단 비반전(DRIVE A1M+10K 귀환, 82p, 220n+1.8K 접지), 1K·220n 뒤 B단(ACCENT 가변저항+1K와 빨간 LED 귀환, TONE 팟 와이퍼가 100n+220R로 접지), 2.2uF·1K 뒤 VOL과 BC550C 이미터 폴로어 출력(Rock 위치 고정).
+image img_01.jpg
+BOM 1M 150K 100K 10Kx8 1.8K 1Kx3 220R 100Rx2 1000n 470n 220nx3 100n 100p 82p 47uFx2 22uF 2.2uF 1N400X LED-RED TL072 BC550Cx2 A1M B25Kx2 B100K
+# '+' 접지 패드 중 31(100p 아래)·95(220n 오른쪽)는 추출기가 못 잡았다.
+io IN=8 OUT=9 V9=2 GND=96,31,95
+# TL072 홈 위: 56=1 60=2 74=3 78=4(GND) / 79=5 75=6 61=7 57=8(V+). 실크 ⊕/▷/-/+ 표시와 일치.
+# 팟 라벨이 없어 상품 사진(노브: 위 Vol·Drive, 아래 Tone·Accent, 토글 Jazz/Rock)으로 정함. 기판은 케이스 앞면과 좌우가 뒤집혀
+# 위 줄 45-47 = DRIVE, 48-50 = VOL, 아래 63/80/92 = ACCENT, 64/81/93 = TONE. 넷 역할도 맞다(DRIVE는 A단 귀환, VOL은 Vref로 가는 분압,
+# ACCENT는 B단 귀환 가변저항, TONE 와이퍼는 100n+220R 접지 - Zendrive의 VOICE/TONE 구조). 값: A1M=DRIVE, B100K=VOL, B25K=TONE·ACCENT.
+# 1번 러그: VOL은 50(Vref)이 1번(시계방향 = 커짐), DRIVE도 같은 쪽 47이 1번(시계방향 = 귀환 저항 증가), ACCENT는 63(-B)을 1번으로 둔
+# 가변저항(92는 동박 없는 빈 러그), TONE은 같은 위치 64(-B)를 1번. ACCENT·TONE의 방향은 추정.
+NC 92
+# Jazz/Rock DIP on-on: 공통 43, 51(GND) 쪽이 470n(35-36)을 출력단 100R 뒤에 접지로 거는 Jazz, 34(동박 없음)가 Rock.
+# Rock으로 고정: 470n(35-36)은 넷리스트·BOM에서 뺀다(BOM 470nx2 → x1).
+NC 34 43 51 35 36
+
+STAGE input buffer 입력 버퍼 (Q1)
+C 100p 19 31 C1
+R 1M 17 18 R1
+C 470n 6 7 C2
+R 100R 25 26 R2
+R 150K 21 42 R3
+Q BC550C b=4 c=5 e=3 Q1
+R 10K 29 30 R4
+
+STAGE stageA gain A단 (DRIVE)
+C 1000n 54 72 C3
+R 10K 90 91 R5
+IC TL072 1=56 2=60 3=74 4=78 5=79 6=75 7=61 8=57 U1
+C 82p 55 73 C4
+R 10K 37 38 R6
+POT A1M DRIVE 47 46 45
+C 220n 77 89 C5
+R 1.8K 98 99 R7
+
+STAGE stageB clipping B단 (ACCENT·TONE·LED)
+R 1K 83 84 R8
+R 10K 68 87 R9
+C 220n 94 95 C6
+POT B25K ACCENT 63 80 80
+R 1K 65 85 R10
+D LED-RED a=76 k=62 D1
+POT B25K TONE 64 81 93
+C 100n 67 82 C7
+R 220R 66 86 R11
+
+STAGE out output 볼륨·출력 버퍼 (Q2)
+C 2.2uF 44 39 C8
+R 1K 23 24 R12
+POT B100K VOL 50 49 48
+C 220n 58 59 C9
+R 100K 40 41 R13
+Q BC550C b=13 c=14 e=12 Q2
+R 10K 10 11 R14
+R 100R 15 16 R15
+C 22uF 20 22 C10
+R 10K 0 1 R16
+
+STAGE power power 전원·Vref
+D 1N400X a=28 k=27 D2
+C 47uF 53 52 C11
+R 10K 32 33 R17
+R 10K 69 88 R18
+C 47uF 70 71 C12
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D2 130 160 h
+AT C11 190 190 v
+AT R17 250 190 v
+AT R18 250 250 v
+AT C12 300 250 v
+AT C1 110 430 v
+AT R1 150 430 v-
+AT C2 200 400 h-
+AT R2 260 400 h-
+AT R3 290 370 v-
+AT Q1 320 400
+AT R4 340 460 v
+AT C3 370 430 h
+AT R5 400 400 v-
+AT U1A 460 450
+AT C4 460 500 h-
+AT C5 400 500 h-
+AT R7 370 530 v
+AT R6 460 560 h
+AT DRIVE 550 560 r0
+AT R8 560 450 h
+AT R9 590 420 v
+AT C6 620 480 v
+AT U1B 690 470
+AT D1 690 530 h
+AT ACCENT 690 570 r0 m
+AT R10 750 570 h-
+AT TONE 630 620 r180
+AT C7 630 680 v-
+AT R11 630 740 v
+AT C8 780 470 h
+AT R12 840 470 h
+AT VOL 900 470 r180
+AT C9 930 500 h-
+AT R13 960 470 v-
+AT Q2 990 500
+AT R14 1010 560 v
+AT R15 1040 530 h-
+AT C10 1100 530 h
+AT R16 1130 560 v
+AT RLOAD 1180 560 v
