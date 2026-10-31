@@ -1,0 +1,152 @@
+id pp-tweed-amp-57
+goods 186788574
+name TWEED AMP 57
+motif Wampler Tweed '57
+type overdrive
+desc J201(SMD) 6개 트위드 프리앰프 - 12K·470p 입력→1단(단일)→1.5n·10K→GAIN(100p 블리드, 68K)→2단(J201 병렬 2개, 47uF 바이패스는 DIP로)→220n→펜더 톤스택(5.6K, 2.2n/220n/220n, TREBLE·MID·BASS)→3단(병렬 2개, 22uF)→10K·10K·1.5n 브리지드-T(22K‖1M→DIP→접지)→100K→A500K VOLUME→220n→소스 폴로어(1M/1M 바이어스)→10K→OUT
+image img_01.jpg
+# J201은 SMD라 다리 패드가 없다 - 다리가 붙은 동박의 패드로 적음(렌더 확대 확인): Q1 g=14 d=15 s=4, Q2·Q3 병렬 g=55/56 d=43 s=58,
+#   Q4·Q5 병렬 g=52/53 d=42 s=57, Q6 g=99 d=115(9V) s=106.
+# 트리머 50K x3: 한 끝과 와이퍼가 같은 넷이라 가변저항(와이퍼는 축에서 비낀 패드).
+# DIP 듀얼 on-off-on = NORM/BRIGHT/LINK 토글: 가운데 줄 67·68이 접지 공통. 윗줄 62(22K‖1M 위쪽)·63(47uF)이 한 위치,
+#   아랫줄 77·78(브리지드-T 가운데 n27)이 반대 위치, 가운데는 둘 다 열림. 모든 부품이 쓰이는 윗줄 위치로 고정(JUMP 62 67, 63 68):
+#   2단 소스 1K에 47uF 바이패스가 들어가고 브리지드-T 가운데가 22K‖1M로 접지된다. 어느 이름의 모드인지는 미확인. 54·80은 DIP 양끝 빈 패드.
+# 97-98 캡은 실크 "100p"(부품표에 빠짐) - BLACK AMP 65의 같은 자리는 10p.
+# 팟 이름: 실크 없음. 상품 사진 = 윗줄 BASS·MID·TREBLE, 아랫줄 GAIN·VOLUME. 기판은 케이스 기준 좌우 거울상
+#   (아랫줄 왼쪽 109-111이 접지 끝·와이퍼→220n→폴로어 = VOLUME, 오른쪽 112-114가 10K 뒤 분압→게이트 = GAIN).
+#   추측: 33-35 TREBLE(와이퍼 34→3단 게이트, 2.2n 끝), 36-38 MID(38 접지, 와이퍼 37에 220n 주입), 39-41 BASS(39=40 가변저항).
+# 팟 값(부품표 A500K, A100Kx2, B25K, B2K): VOLUME A500K, GAIN A100K, MID B2K(펜더 10K 미드의 축소값).
+#   후보: TREBLE/BASS = A100K/B25K 또는 B25K/A100K, 지금은 TREBLE A100K·BASS B25K.
+# LED- 117·118, LED_R 119-121은 표시등.
+BOM 1Mx6 100K 68K 22K 12K 10Kx5 5.6K 1Kx3 1000nx2 220nx4 100n 2.2n 1.5nx3 470p 100p 100uF 47uFx2 22uF 1N400X B50Kx3 J201x6 A500K A100Kx2 B25K B2K
+io IN=16 OUT=71 V9=0 GND=122,123,124,125
+JUMP 62 67
+JUMP 63 68
+NC 54 80 77 78 117 118 119 120 121
+
+STAGE input input 입력
+R 1M 1 2 R1
+R 12K 11 12 R2
+C 470p 18 17 C1
+C 100n 19 20 C2
+R 1M 14 13 R3
+
+STAGE gain1 gain 1단 (Q1)
+Q J201 g=14 d=15 s=4 Q1
+POT B50K BIAS1 7 15 8
+R 1K 4 3 R4
+C 47uF 5 6 C3
+
+STAGE gainctl custom GAIN
+C 1.5n 31 32 C4
+R 10K 84 83 R5
+C 100p 97 98 C5
+POT A100K GAIN 112 113 114
+R 68K 90 89 R6
+
+STAGE gain2 gain 2단 (Q2·Q3 병렬)
+Q J201 g=55 d=43 s=58 Q2
+Q J201 g=56 d=43 s=58 Q3
+POT B50K BIAS2 46 49 59
+R 1K 81 82 R7
+C 47uF 70 69 C6
+C 220n 45 44 C7
+
+STAGE tone tone 톤 스택 (TREBLE·MID·BASS)
+R 5.6K 23 24 R8
+C 2.2n 26 25 C8
+C 220n 28 27 C9
+C 220n 29 30 C10
+POT A100K TREBLE 33 34 35
+POT B2K MID 38 37 36
+POT B25K BASS 41 40 39
+
+STAGE gain3 gain 3단 (Q4·Q5 병렬)
+Q J201 g=52 d=42 s=57 Q4
+Q J201 g=53 d=42 s=57 Q5
+POT B50K BIAS3 64 72 79
+R 1K 60 61 R9
+C 22uF 47 48 C11
+C 1000n 91 92 C12
+
+STAGE notch custom 브리지드-T (DIP)
+R 10K 93 94 R10
+R 10K 66 65 R11
+C 1.5n 86 85 C13
+C 1.5n 76 75 C14
+R 22K 74 62 R12
+R 1M 73 51 R13
+
+STAGE volume custom VOLUME
+R 100K 101 102 R14
+POT A500K VOLUME 111 110 109
+C 220n 103 104 C15
+
+STAGE output output 출력 폴로어 (Q6)
+R 1M 116 115 R15
+R 1M 99 100 R16
+Q J201 g=99 d=115 s=106 Q6
+R 10K 106 105 R17
+C 1000n 107 108 C16
+R 10K 95 96 R18
+R 1M 88 87 R19
+
+STAGE power power 전원
+D 1N400X a=10 k=9 D1
+C 100uF 21 22 C17
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D1 150 190 h
+AT C17 230 250 v
+AT R1 110 480 v
+AT R2 170 400 h
+AT C1 220 480 v
+AT C2 280 400 h
+AT R3 310 480 v
+AT Q1 370 400
+AT BIAS1 420 290 r180
+AT R4 370 500 v
+AT C3 420 500 v
+AT C4 470 400 h
+AT R5 560 400 h
+AT GAIN 650 400 r0
+AT C5 650 470 h
+AT R6 730 480 v
+AT Q2 870 400
+AT Q3 870 540
+AT BIAS2 920 290 r180
+AT R7 920 620 v
+AT C6 980 620 v
+AT C7 970 400 h-
+AT C8 1060 330 h-
+AT TREBLE 1160 330 r0
+AT R8 1060 400 h
+AT C9 1160 400 h-
+AT BASS 1260 400 r0
+AT C10 1120 470 v
+AT MID 1200 540 r0
+AT Q4 1470 400
+AT Q5 1470 540
+AT BIAS3 1520 290 r180
+AT R9 1520 620 v
+AT C11 1580 620 v
+AT C12 1570 400 h
+AT R10 1660 400 h
+AT R11 1760 400 h-
+AT C13 1690 470 v
+AT C14 1830 470 v
+AT R12 1730 560 v
+AT R13 1790 560 v
+AT R14 1870 400 h
+AT VOLUME 1940 400 r180
+AT C15 2010 400 h
+AT R15 2050 310 v
+AT R16 2050 480 v
+AT Q6 2110 400
+AT R17 2110 500 v
+AT C16 2200 430 h
+AT R18 2280 430 h
+AT R19 2320 500 v
+AT RLOAD 2380 500 v

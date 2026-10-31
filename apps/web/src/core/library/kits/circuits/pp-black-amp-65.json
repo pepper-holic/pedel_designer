@@ -1,0 +1,813 @@
+{
+ "id": "pp-black-amp-65",
+ "goodsNo": "186788575",
+ "kitName": "BLACK AMP 65",
+ "motif": "Wampler Black '65",
+ "type": "overdrive",
+ "description": "J201(SMD) 4단 펜더 블랙페이스 프리앰프 - 부스트단(DIP로 투입)→240K/240K→1단→1.5n·22K→GAIN(10p 블리드, 68K)→2단→1000n→펜더 톤스택(5.6K, 2.2n/220n/220n, TREBLE·MID·BASS)→3단→10K·1n·10K·1.5n 로우패스→A500K VOLUME. 각 단 드레인은 50K 트리머",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "0",
+    "in"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "10p",
+   "nodes": [
+    "0",
+    "n2"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "J201",
+   "nodes": {
+    "g": "n2",
+    "d": "n3",
+    "s": "n4"
+   }
+  },
+  {
+   "ref": "BIAS1",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "n5",
+    "n3",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "0",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "4.7uF",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n6",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "240K",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "240K",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "0",
+    "n7"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n8",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n9",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n9",
+    "0"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "10p",
+   "nodes": [
+    "0",
+    "n9"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "J201",
+   "nodes": {
+    "g": "n9",
+    "d": "n10",
+    "s": "n11"
+   }
+  },
+  {
+   "ref": "BIAS2",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "n5",
+    "n10",
+    "n10"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n11",
+    "0"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n11",
+    "0"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "1.5n",
+   "nodes": [
+    "n10",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n13",
+    "n12"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "10p",
+   "nodes": [
+    "n13",
+    "n14"
+   ]
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n13",
+    "n14",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "68K",
+   "nodes": [
+    "0",
+    "n15"
+   ]
+  },
+  {
+   "ref": "Q3",
+   "kind": "Q",
+   "part": "J201",
+   "nodes": {
+    "g": "n14",
+    "d": "n16",
+    "s": "n17"
+   }
+  },
+  {
+   "ref": "BIAS3",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "n16",
+    "n5",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "0",
+    "n17"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n18",
+    "n16"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "5.6K",
+   "nodes": [
+    "n18",
+    "n19"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "2.2n",
+   "nodes": [
+    "n20",
+    "n18"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n21",
+    "n19"
+   ]
+  },
+  {
+   "ref": "C13",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "n19",
+    "n22"
+   ]
+  },
+  {
+   "ref": "TREBLE",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n20",
+    "n23",
+    "n21"
+   ]
+  },
+  {
+   "ref": "MID",
+   "kind": "POT",
+   "value": "B2K",
+   "nodes": [
+    "0",
+    "n22",
+    "n24"
+   ]
+  },
+  {
+   "ref": "BASS",
+   "kind": "POT",
+   "value": "B25K",
+   "nodes": [
+    "n21",
+    "n24",
+    "n24"
+   ]
+  },
+  {
+   "ref": "Q4",
+   "kind": "Q",
+   "part": "J201",
+   "nodes": {
+    "g": "n23",
+    "d": "n25",
+    "s": "n26"
+   }
+  },
+  {
+   "ref": "BIAS4",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "n25",
+    "n5",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n26",
+    "0"
+   ]
+  },
+  {
+   "ref": "C14",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n27",
+    "n25"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n27",
+    "n28"
+   ]
+  },
+  {
+   "ref": "C15",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "n28",
+    "0"
+   ]
+  },
+  {
+   "ref": "R17",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n28",
+    "n29"
+   ]
+  },
+  {
+   "ref": "C16",
+   "kind": "C",
+   "value": "1.5n",
+   "nodes": [
+    "n29",
+    "0"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A500K",
+   "nodes": [
+    "0",
+    "out",
+    "n29"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n5"
+   }
+  },
+  {
+   "ref": "C17",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "boost",
+   "category": "gain",
+   "label": "부스트단 (Q1, DIP ON)",
+   "parts": [
+    "R1",
+    "C1",
+    "R2",
+    "R3",
+    "C2",
+    "Q1",
+    "BIAS1",
+    "R4",
+    "C3",
+    "C4",
+    "R5",
+    "R6"
+   ]
+  },
+  {
+   "id": "gain1",
+   "category": "gain",
+   "label": "1단 (Q2)",
+   "parts": [
+    "R7",
+    "C5",
+    "R8",
+    "R9",
+    "C6",
+    "Q2",
+    "BIAS2",
+    "R10",
+    "C7"
+   ]
+  },
+  {
+   "id": "gainctl",
+   "category": "custom",
+   "label": "GAIN",
+   "parts": [
+    "C8",
+    "R11",
+    "C9",
+    "GAIN",
+    "R12"
+   ]
+  },
+  {
+   "id": "gain2",
+   "category": "gain",
+   "label": "2단 (Q3)",
+   "parts": [
+    "Q3",
+    "BIAS3",
+    "R13",
+    "C10"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "톤 스택 (TREBLE·MID·BASS)",
+   "parts": [
+    "R14",
+    "C11",
+    "C12",
+    "C13",
+    "TREBLE",
+    "MID",
+    "BASS"
+   ]
+  },
+  {
+   "id": "gain3",
+   "category": "gain",
+   "label": "3단 (Q4)",
+   "parts": [
+    "Q4",
+    "BIAS4",
+    "R15",
+    "C14"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 필터·볼륨",
+   "parts": [
+    "R16",
+    "C15",
+    "R17",
+    "C16",
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D1",
+    "C17"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D1": {
+   "x": 150,
+   "y": 190,
+   "rotation": 0
+  },
+  "C17": {
+   "x": 230,
+   "y": 250,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "R1": {
+   "x": 110,
+   "y": 480,
+   "rotation": 270
+  },
+  "R2": {
+   "x": 270,
+   "y": 400,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 290,
+   "y": 480,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 330,
+   "y": 480,
+   "rotation": 270
+  },
+  "Q1": {
+   "x": 370,
+   "y": 400
+  },
+  "BIAS1": {
+   "x": 420,
+   "y": 290,
+   "rotation": 180
+  },
+  "R4": {
+   "x": 370,
+   "y": 500,
+   "rotation": 270
+  },
+  "C3": {
+   "x": 420,
+   "y": 500,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 470,
+   "y": 400,
+   "rotation": 180
+  },
+  "R5": {
+   "x": 560,
+   "y": 400,
+   "rotation": 180
+  },
+  "R6": {
+   "x": 610,
+   "y": 470,
+   "rotation": 90
+  },
+  "R7": {
+   "x": 660,
+   "y": 470,
+   "rotation": 270
+  },
+  "C5": {
+   "x": 720,
+   "y": 400,
+   "rotation": 180
+  },
+  "R8": {
+   "x": 810,
+   "y": 400,
+   "rotation": 180
+  },
+  "R9": {
+   "x": 800,
+   "y": 480,
+   "rotation": 90
+  },
+  "C6": {
+   "x": 840,
+   "y": 480,
+   "rotation": 270
+  },
+  "Q2": {
+   "x": 870,
+   "y": 400
+  },
+  "BIAS2": {
+   "x": 920,
+   "y": 290,
+   "rotation": 180
+  },
+  "R10": {
+   "x": 870,
+   "y": 500,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 920,
+   "y": 500,
+   "rotation": 90
+  },
+  "C8": {
+   "x": 970,
+   "y": 400,
+   "rotation": 0
+  },
+  "R11": {
+   "x": 1060,
+   "y": 400,
+   "rotation": 180
+  },
+  "GAIN": {
+   "x": 1150,
+   "y": 400,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 1150,
+   "y": 470,
+   "rotation": 0
+  },
+  "R12": {
+   "x": 1230,
+   "y": 480,
+   "rotation": 270
+  },
+  "Q3": {
+   "x": 1370,
+   "y": 400
+  },
+  "BIAS3": {
+   "x": 1420,
+   "y": 290,
+   "rotation": 180
+  },
+  "R13": {
+   "x": 1370,
+   "y": 500,
+   "rotation": 270
+  },
+  "C10": {
+   "x": 1470,
+   "y": 400,
+   "rotation": 180
+  },
+  "C11": {
+   "x": 1560,
+   "y": 330,
+   "rotation": 180
+  },
+  "TREBLE": {
+   "x": 1660,
+   "y": 330,
+   "rotation": 0
+  },
+  "R14": {
+   "x": 1560,
+   "y": 400,
+   "rotation": 0
+  },
+  "C12": {
+   "x": 1660,
+   "y": 400,
+   "rotation": 180
+  },
+  "BASS": {
+   "x": 1760,
+   "y": 400,
+   "rotation": 0
+  },
+  "C13": {
+   "x": 1620,
+   "y": 470,
+   "rotation": 90
+  },
+  "MID": {
+   "x": 1700,
+   "y": 540,
+   "rotation": 0
+  },
+  "Q4": {
+   "x": 1970,
+   "y": 400
+  },
+  "BIAS4": {
+   "x": 2020,
+   "y": 290,
+   "rotation": 180
+  },
+  "R15": {
+   "x": 1970,
+   "y": 500,
+   "rotation": 90
+  },
+  "C14": {
+   "x": 2070,
+   "y": 400,
+   "rotation": 180
+  },
+  "R16": {
+   "x": 2160,
+   "y": 400,
+   "rotation": 0
+  },
+  "C15": {
+   "x": 2200,
+   "y": 470,
+   "rotation": 90
+  },
+  "R17": {
+   "x": 2250,
+   "y": 400,
+   "rotation": 0
+  },
+  "C16": {
+   "x": 2290,
+   "y": 470,
+   "rotation": 90
+  },
+  "VOLUME": {
+   "x": 2350,
+   "y": 400,
+   "rotation": 180
+  },
+  "RLOAD": {
+   "x": 2420,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

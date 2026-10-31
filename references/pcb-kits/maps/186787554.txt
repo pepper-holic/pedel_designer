@@ -1,0 +1,97 @@
+id pp-flame-mini-booster
+goods 186787554
+name Flame mini Booster
+motif TC Electronic Spark Mini Booster
+type boost
+desc 디스크리트 op-amp 부스트 - 100n·1K 입력→2N3904 차동쌍 Q1/Q3(100K 부하, 22K/22K Vref 바이어스, 1n+1K 보상, 4.7uF Vref-테일)·2N3904 Q4/Q5 전류원 테일→2N3906 Q2(1K 베이스, 100p 밀러, 1K 부하)→B500K GAIN 가변저항∥100p 귀환, 10K+1uF 접지 다리→10uF·100R 출력
+image img_01.jpg
+# Discrete op-amp (Spark Mini style): Q1 (+in from the 100n/1K input, biased by 22K/22K Vref through 100K) and Q3 (-in = GAIN lug 1)
+# share emitters (n12) fed by the Q4/Q5 current source (Q4 base 100K from V+, 1K emitter sensed by Q5). Q2 (2N3906) is the
+# PNP voltage stage: base 1K from Q1's collector, 100p Miller cap, 1K load to ground; its collector (n1) is the output node.
+# GAIN B500K silk "1" on the right = pad 3 (Q3 base); wiper 2 is tied to lug 1 (n1) so the pot is a feedback rheostat
+# (clockwise = more gain) with 100p across it and the 10K + 1uF ground leg on Q3's base. 4.7uF 62-69 sits between the emitter
+# node (62) and Vref (69, '+') per trace_pad. 1N400X band at 72: cathode on the filtered V+ (n7), anode to ground (shunt protection).
+# Transistor pins follow the silk C/B/E (top to bottom); Q1 22/29/40, Q2 23/30/42, Q3 24/31/44, Q4 56/58/70, Q5 53/67/71.
+BOM 1M 100Kx4 22Kx2 10K 1Kx5 100R 47R 100nx2 1n 100pFx2 220uF 10uF 4.7uF 1uF 1N400X 2N3906 2N3904x4 B500K
+io IN=0 OUT=85 V9=84 GND=10
+
+STAGE input input 입력
+C 100n 6 5 C1
+R 1M 11 10 R1
+R 1K 26 25 R2
+
+STAGE diff gain 차동쌍 (Q1·Q3)
+Q 2N3904 b=29 c=22 e=40 Q1
+Q 2N3904 b=31 c=24 e=44 Q3
+R 100K 19 18 R3
+R 100K 33 32 R4
+C 1n 46 45 C2
+R 1K 51 52 R5
+C 4.7uF 69 62 C3
+
+STAGE tail custom 전류원 (Q4·Q5)
+Q 2N3904 b=58 c=56 e=70 Q4
+Q 2N3904 b=67 c=53 e=71 Q5
+R 100K 76 75 R6
+R 1K 63 64 R7
+
+STAGE vas gain 전압 증폭 (Q2)
+Q 2N3906 b=30 c=23 e=42 Q2
+R 1K 12 13 R8
+C 100pF 14 15 C4
+R 1K 7 8 R9
+
+STAGE fb custom 귀환 (GAIN)
+POT B500K GAIN 3 2 1
+C 100pF 16 17 C5
+R 10K 20 21 R10
+C 1uF 27 34 C6
+
+STAGE output output 출력
+C 10uF 28 35 C7
+R 100K 47 48 R11
+R 100R 54 55 R12
+
+STAGE power power 전원·Vref
+R 47R 79 80 R13
+D 1N400X a=73 k=72 D1
+C 220uF 77 83 C8
+C 100n 78 92 C9
+R 22K 82 81 R14
+R 22K 86 87 R15
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 100 480 v
+AT C1 140 400 h
+AT R2 210 400 h
+AT Q1 300 400
+AT R3 300 300 v-
+AT R4 240 330 v-
+AT C2 240 460 v
+AT R5 240 530 v
+AT C3 190 500 v
+AT Q3 400 400 m
+AT Q4 320 600 m
+AT R6 390 560 v-
+AT Q5 420 660
+AT R7 320 700 v
+AT Q2 620 340 r180 m
+AT R8 480 340 h
+AT C4 560 400 h
+AT R9 620 450 v
+AT GAIN 520 480 r0
+AT C5 520 540 h
+AT R10 460 560 v
+AT C6 460 640 v
+AT C7 690 400 h
+AT R11 720 460 v
+AT R12 780 400 h
+AT RLOAD 850 460 v
+AT VCC 60 190
+AT R13 130 190 h
+AT D1 200 240 v-
+AT C8 680 240 v
+AT C9 730 240 v
+AT R14 120 250 v
+AT R15 120 330 v

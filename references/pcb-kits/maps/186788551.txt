@@ -1,0 +1,129 @@
+id pp-real-clean
+goods 186788551
+name REAL CLEAN
+motif Xotic RC Booster
+type buffer-boost
+desc 2SC1815 이미터 팔로워 입력 버퍼 → 4558 A단 반전 증폭(22K 입력, 47K+GAIN 귀환, 1N914 3+3 직렬 역병렬 클리퍼) → B단 반전 박산달 TREBLE/BASS → VOLUME → 2SC1815 출력 버퍼
+image img_01.jpg
+# RC BST / <AC> BST 공용 기판의 RC 조립. 꺾쇠 <> 자리는 AC 변형(0ohm 자리 <1K>, 22K 자리 <10K>, 1000n 자리 <47n>·<22n>, <100n>)이라
+# RC는 꺾쇠 밖 값으로 두고 <100n>(21-37)은 미실장(NC). 0ohm(0-1)은 선으로 적었다.
+# 다이오드 뱅크: 몸통(불투명 주황) 밑 동박을 층 마스크로 읽음 - 9=13, 14=30, 18=33/34. 띠는 8·13 왼쪽, 19·33 오른쪽, 30 아래, 12 위.
+#   out A → D(11→30) → D(14→13) → D(9→8) → -in A, -in A → D(32→33) → D(18→19) → D(31→12) → out A: 3+3 직렬 역병렬.
+#   회색 세로 자리(10-34)는 미실장(변형용). GAIN 러그 56=57은 D(32) 몸통 밑으로 -in A(32)에 닿는다(trace_pad: 몸통 왼끝에서 끊김).
+# 4558D 반달 홈이 오른쪽: 1=28 2=27 3=26 4=25(GND) / 5=46 6=47 7=48 8=49(9V).
+# 부품표(NEW RC BEAST)는 22K x1인데 기판은 22K 두 자리(15-16 입력, 101-102 Vref 아래)를 다 쓴다 - BOM 줄은 x2로 적음.
+# 팟 라벨 실크 없음. 역할로 배정: 56/57/59=47K 귀환 끝의 가변저항 → GAIN(B250K), 73/88/100=1000n 출력·Vref 사이 분압 → VOLUME(B100K),
+#   58/51/52=4.7n-4.7n 사이·와이퍼 10K→-in B → TREBLE(B50K), 72/87/99=4.7K-4.7K 사이·33n·와이퍼 33K→-in B → BASS(B50K).
+BOM 1Mx2 470K 100K 47K 33K 22Kx2 15K 10Kx4 6.8K 4.7Kx2 470R 1000nx3 100n 33nx2 4.7nx2 150p 10uFx3 1N400X 1N914x6 JRC4558D 2SC1815x2 B250K B100K B50Kx2
+io IN=93 OUT=90 V9=17 GND=103
+
+STAGE input buffer 입력 버퍼 (Q1)
+R 1M 107 108 R1
+R 10K 97 98 R2
+C 1000n 109 94 C1
+R 1M 82 64 R3
+Q 2SC1815 b=79 c=70 e=63 Q1
+R 10K 4 5 R4
+
+STAGE gain gain A단 반전 증폭 (GAIN)
+C 1000n 39 23 C2
+R 22K 15 16 R5
+IC JRC4558D 1=28 2=27 3=26 4=25 5=46 6=47 7=48 8=49
+R 47K 2 3 R6
+POT B250K GAIN 59 57 56
+C 150p 6 7 C3
+JUMP 56 32
+JUMP 0 1
+
+STAGE clip clipping 클리퍼 (1N914 3+3)
+D 1N914 a=11 k=30 D1
+D 1N914 a=14 k=13 D2
+D 1N914 a=9 k=8 D3
+D 1N914 a=32 k=33 D4
+D 1N914 a=18 k=19 D5
+D 1N914 a=31 k=12 D6
+JUMP 9 13
+JUMP 14 30
+JUMP 18 34
+NC 10
+
+STAGE tone tone 톤 (B단 박산달)
+R 4.7K 20 45 R7
+C 4.7n 22 38 C4
+POT B50K TREBLE 58 51 52
+C 4.7n 24 40 C5
+R 10K 60 61 R8
+POT B50K BASS 99 87 72
+C 33n 110 95 C6
+C 33n 71 85 C7
+R 4.7K 53 54 R9
+R 33K 67 86 R10
+NC 21 37
+
+STAGE out output 출력 (VOLUME + Q2 버퍼)
+C 1000n 55 68 C8
+POT B100K VOLUME 100 88 73
+C 100n 89 74 C9
+R 470K 75 96 R11
+Q 2SC1815 b=69 c=76 e=80 Q2
+R 10K 35 36 R12
+C 10uF 77 78 C10
+R 100K 44 43 R13
+R 470R 62 81 R14
+
+STAGE power power 전원
+D 1N400X a=29 k=50 D7
+C 10uF 41 42 C11
+R 15K 83 65 R15
+R 6.8K 84 66 R16
+R 22K 101 102 R17
+C 10uF 91 92 C12
+
+# --- schematic placement (hand): 9V rail y=160, Vref divider at left, signal row y=480/510, stage-A feedback above U1A, Baxandall rows above/below U1B ---
+AT VCC 60 190
+AT D7 130 160 h
+AT C11 200 220 v
+AT R15 260 210 v
+AT R16 260 290 v
+AT R17 260 370 v
+AT C12 200 370 v
+AT V1 60 510
+AT R1 100 540 v
+AT R2 150 480 h
+AT C1 230 480 h
+AT Q1 310 480
+AT R3 280 410 v-
+AT R4 330 570 v
+AT C2 390 510 h
+AT R5 470 510 h
+AT U1A 600 490
+AT GAIN 530 380 r180
+AT R6 620 380 h-
+AT C3 610 330 h-
+AT D3 530 280 h-
+AT D2 610 280 h-
+AT D1 690 280 h-
+AT D4 530 230 h
+AT D5 610 230 h
+AT D6 690 230 h
+AT R7 830 350 h
+AT BASS 920 350 r0
+AT C6 890 290 v-
+AT C7 950 290 v-
+AT R10 1070 260 h-
+AT R9 1230 350 h-
+AT C4 830 620 h
+AT TREBLE 920 620 r0 m
+AT R8 1010 690 h
+AT C5 1230 620 h
+AT U1B 1200 490
+AT C8 1320 490 h
+AT VOLUME 1410 490 r180
+AT C9 1480 560 h
+AT R11 1510 500 v-
+AT Q2 1570 560
+AT R12 1590 650 v
+AT C10 1660 590 h
+AT R13 1690 650 v
+AT R14 1750 590 h
+AT RLOAD 1820 620 v

@@ -1,0 +1,547 @@
+{
+ "id": "pp-flame-mini-booster",
+ "goodsNo": "186787554",
+ "kitName": "Flame mini Booster",
+ "motif": "TC Electronic Spark Mini Booster",
+ "type": "boost",
+ "description": "디스크리트 op-amp 부스트 - 100n·1K 입력→2N3904 차동쌍 Q1/Q3(100K 부하, 22K/22K Vref 바이어스, 1n+1K 보상, 4.7uF Vref-테일)·2N3904 Q4/Q5 전류원 테일→2N3906 Q2(1K 베이스, 100p 밀러, 1K 부하)→B500K GAIN 가변저항∥100p 귀환, 10K+1uF 접지 다리→10uF·100R 출력",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n2",
+    "n1"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N3904",
+   "nodes": {
+    "b": "n2",
+    "c": "n3",
+    "e": "n4"
+   }
+  },
+  {
+   "ref": "Q3",
+   "kind": "Q",
+   "part": "2N3904",
+   "nodes": {
+    "b": "n5",
+    "c": "n6",
+    "e": "n4"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n3",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n2",
+    "n7"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "n2",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n8",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "4.7uF",
+   "nodes": [
+    "n7",
+    "n4"
+   ]
+  },
+  {
+   "ref": "Q4",
+   "kind": "Q",
+   "part": "2N3904",
+   "nodes": {
+    "b": "n9",
+    "c": "n4",
+    "e": "n10"
+   }
+  },
+  {
+   "ref": "Q5",
+   "kind": "Q",
+   "part": "2N3904",
+   "nodes": {
+    "b": "n10",
+    "c": "n9",
+    "e": "0"
+   }
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n9",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n10",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "2N3906",
+   "nodes": {
+    "b": "n11",
+    "c": "n12",
+    "e": "n6"
+   }
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n3",
+    "n11"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "100pF",
+   "nodes": [
+    "n11",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n12",
+    "0"
+   ]
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "B500K",
+   "nodes": [
+    "n5",
+    "n12",
+    "n12"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "100pF",
+   "nodes": [
+    "n5",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n5",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n13",
+    "0"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n12",
+    "n14"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n14",
+    "0"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n14",
+    "out"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "47R",
+   "nodes": [
+    "vcc",
+    "n6"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "0",
+    "k": "n6"
+   }
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "220uF",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n6",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "C1",
+    "R1",
+    "R2"
+   ]
+  },
+  {
+   "id": "diff",
+   "category": "gain",
+   "label": "차동쌍 (Q1·Q3)",
+   "parts": [
+    "Q1",
+    "Q3",
+    "R3",
+    "R4",
+    "C2",
+    "R5",
+    "C3"
+   ]
+  },
+  {
+   "id": "tail",
+   "category": "custom",
+   "label": "전류원 (Q4·Q5)",
+   "parts": [
+    "Q4",
+    "Q5",
+    "R6",
+    "R7"
+   ]
+  },
+  {
+   "id": "vas",
+   "category": "gain",
+   "label": "전압 증폭 (Q2)",
+   "parts": [
+    "Q2",
+    "R8",
+    "C4",
+    "R9"
+   ]
+  },
+  {
+   "id": "fb",
+   "category": "custom",
+   "label": "귀환 (GAIN)",
+   "parts": [
+    "GAIN",
+    "C5",
+    "R10",
+    "C6"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "C7",
+    "R11",
+    "R12"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원·Vref",
+   "parts": [
+    "R13",
+    "D1",
+    "C8",
+    "C9",
+    "R14",
+    "R15"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "R1": {
+   "x": 100,
+   "y": 480,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 140,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 210,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q1": {
+   "x": 300,
+   "y": 400
+  },
+  "R3": {
+   "x": 300,
+   "y": 300,
+   "rotation": 270
+  },
+  "R4": {
+   "x": 240,
+   "y": 330,
+   "rotation": 270
+  },
+  "C2": {
+   "x": 240,
+   "y": 460,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 240,
+   "y": 530,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 190,
+   "y": 500,
+   "rotation": 90
+  },
+  "Q3": {
+   "x": 400,
+   "y": 400,
+   "mirror": true
+  },
+  "Q4": {
+   "x": 320,
+   "y": 600,
+   "mirror": true
+  },
+  "R6": {
+   "x": 390,
+   "y": 560,
+   "rotation": 270
+  },
+  "Q5": {
+   "x": 420,
+   "y": 660
+  },
+  "R7": {
+   "x": 320,
+   "y": 700,
+   "rotation": 90
+  },
+  "Q2": {
+   "x": 620,
+   "y": 340,
+   "rotation": 180,
+   "mirror": true
+  },
+  "R8": {
+   "x": 480,
+   "y": 340,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 560,
+   "y": 400,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 620,
+   "y": 450,
+   "rotation": 90
+  },
+  "GAIN": {
+   "x": 520,
+   "y": 480,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 520,
+   "y": 540,
+   "rotation": 0
+  },
+  "R10": {
+   "x": 460,
+   "y": 560,
+   "rotation": 90
+  },
+  "C6": {
+   "x": 460,
+   "y": 640,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 690,
+   "y": 400,
+   "rotation": 0
+  },
+  "R11": {
+   "x": 720,
+   "y": 460,
+   "rotation": 90
+  },
+  "R12": {
+   "x": 780,
+   "y": 400,
+   "rotation": 0
+  },
+  "RLOAD": {
+   "x": 850,
+   "y": 460,
+   "rotation": 90
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "R13": {
+   "x": 130,
+   "y": 190,
+   "rotation": 0
+  },
+  "D1": {
+   "x": 200,
+   "y": 240,
+   "rotation": 270
+  },
+  "C8": {
+   "x": 680,
+   "y": 240,
+   "rotation": 90
+  },
+  "C9": {
+   "x": 730,
+   "y": 240,
+   "rotation": 90
+  },
+  "R14": {
+   "x": 120,
+   "y": 250,
+   "rotation": 90
+  },
+  "R15": {
+   "x": 120,
+   "y": 330,
+   "rotation": 90
+  }
+ }
+}

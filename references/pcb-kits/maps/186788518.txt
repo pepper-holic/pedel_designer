@@ -1,5 +1,94 @@
-# FUZZ BENDER II GE (186788518): germanium PNP Tone Bender MkII on the ICL7660's -9V rail (positive ground). The
-# charge-pump convention now exists; what blocks it are three hidden traces - the 100K BIAS trimmer lug 5, the 470R
-# end 36 and Q2's base 18 are lone pads (the -9V feeds for the Q2/Q3 loads and the Q1->Q2 coupling run under silk),
-# plus the A/B DIP (30/33/34) on the 4.7uF input cap. See docs/kit-deferred.md. Board: 2.2M, 100K x2, 47K, 10K, 8.2K,
-# 470R, 100R, 100n x3, 10n, 100uF, 47uF, 10uF, 4.7uF x3, 1N400X, 100K / 10K trimmers, angle A100K / B1K.
+id pp-fuzz-bender-ii-ge
+goods 186788518
+name FUZZ BENDER II GE
+motif Sola Sound Tone Bender MkII (germanium)
+type fuzz
+desc 게르마늄 PNP 3석 톤벤더 MkII, ICL7660의 -9V 레일에 양접지 - 4.7uF→Q1(누설 바이어스 100K, 10K 부하)→100n→Q2/Q3 직결 쌍(47K+100K BIAS 부하, Q3 E→100K 귀환, 8.2K+10K BIAS+470R 부하)→100R·B1K ATTACK(4.7uF)→10n→A100K 볼륨
+image img_01.jpg
+# Positive ground: emitters 21/62 and the dark '+' squares 56/67 (electrolytic + ends, no drawn copper) sit on 0V; n5 (ICL7660
+# pin 5: pads 5/7/36/63/68/77/84) is the -9V rail. ICL7660 notch left, pins 4 3 2 1 top (50 51 52 53) / 5 6 7 8 bottom
+# (68 69 70 71); 10uF 48-58 is the flying cap, pin 1 (53) is tied to V+ on the board. 9V in 55 -> 1N400X 54/72 -> n1 (V+, 100uF 82).
+# MKII/MK1.5 DIP (DIP DUAL on-on, columns A 33-38-46 / B 34-39-47, commons 38 = IN, 39 = Q2 base): fixed in the MkII position
+# (JUMP 38 46, 39 47) so Q1 is in circuit; the MK1.5 position's 4.7uF 23-24 (IN straight to Q2 base) is left out of the
+# netlist and the BOM (4.7uF x3 on the parts list). Centre pads 30/49 are empty. The extractor merged 46/64/73 (Q1 input)
+# with 47/61 (Q1 collector 100n) under the DIP - SPLIT (trace_pad: 46 -> 64, 73; 47 -> 61).
+# Trimmers: 10K (Q3 collector) lug 2 - wiper 6 tied to lug 3; 100K (Q2 collector) lug 4 - wiper 7 tied to lug 5 (-9V).
+# ATTACK B1K rings 40 (100R) / 41 wiper (4.7uF to 0V) / 42 ground; LEVEL A100K rings 43 (10n) / 44 wiper = OUT 25 / 45 ground.
+# Two 10n on the board (26-27 output, 60-73 input shunt) for 10n x1 on the parts list. Status LED 8-9 and LED_R 0-1 (470R) are
+# not audio and are left out (parts list has a second 470R for it); LED- pad 10 is off-board.
+BOM 2.2M 100Kx3 47K 10Kx2 8.2K 470R 100R 100nx3 10nx2 100uF 47uF 10uF 4.7uFx2 1N400X ICL7660 GE-PNPx3 A100K B1K
+io IN=37 OUT=25 V9=55 GND=85,56,67
+SPLIT 47 61
+JUMP 38 46
+JUMP 39 47
+NC 0 1 8 9 10 30 33 34 23 24 49 69 70
+
+STAGE input input 입력
+R 2.2M 32 31 R1
+C 10n 73 60 C1
+C 4.7uF 64 65 C2
+
+STAGE q1 gain Q1 (누설 바이어스)
+Q GE-PNP b=66 c=76 e=62 Q1
+R 100K 59 74 R2
+R 10K 83 84 R3
+C 100n 61 75 C3
+
+STAGE q23 fuzz Q2·Q3 (직결 쌍)
+Q GE-PNP b=18 c=14 e=21 Q2
+R 47K 22 12 R4
+POT 100K BIAS2 4 7 5
+Q GE-PNP b=15 c=13 e=20 Q3
+R 100K 16 17 R5
+R 8.2K 19 11 R6
+POT 10K BIAS3 2 6 3
+R 470R 35 36 R7
+
+STAGE attack custom ATTACK
+R 100R 29 28 R8
+POT B1K ATTACK 42 41 40
+C 4.7uF 56 57 C4
+
+STAGE output output 출력 (볼륨)
+C 10n 27 26 C5
+POT A100K LEVEL 45 44 43
+
+STAGE power power 전원 (ICL7660 -9V)
+D 1N400X a=54 k=72 D1
+C 100uF 82 81 C6
+IC ICL7660 1=53 2=52 3=51 4=50 5=68 8=71 U1
+C 10uF 58 48 C7
+C 47uF 67 63 C8
+C 100n 77 78 C9
+C 100n 80 79 C10
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 90 480 v
+AT C1 140 480 v
+AT C2 170 400 h
+AT Q1 270 400
+AT R2 240 480 v
+AT R3 270 300 v-
+AT C3 340 370 h
+AT Q2 450 400
+AT R4 450 300 v-
+AT BIAS2 450 220 r270
+AT Q3 580 340
+AT R5 500 520 h-
+AT R6 580 250 v-
+AT BIAS3 640 190 r0
+AT R7 720 190 h
+AT C5 670 340 v
+AT LEVEL 720 420 r180
+AT RLOAD 760 500 v
+AT R8 580 430 v
+AT ATTACK 580 510 r270
+AT C4 640 570 h-
+AT VCC 60 700
+AT D1 130 700 h
+AT C6 200 750 v
+AT C10 260 750 v
+AT Vrail1 820 190
+AT C8 880 240 v-
+AT C9 930 240 v

@@ -1,0 +1,616 @@
+{
+ "id": "pp-time-v2",
+ "goodsNo": "186788589",
+ "kitName": "TIME V2",
+ "motif": "Paul Cochrane Timmy V2",
+ "type": "overdrive",
+ "description": "LM1458 2단 - A단 비반전 이득(피드백 A1M GAIN + 1N914 클리퍼, 이득 다리 9.1K·10K 트리머 → 39n ∥ B50K BASS+1000n → Vref), C50K TREBLE 직렬 저항 + 10n 저역통과, B단 이득 2(10K/10K, 2.2n), 1000n → A25K VOLUME(18K 테이퍼 보정)",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "39n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "510K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "47p",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "LM1458",
+   "nodes": {
+    "1": "n3",
+    "2": "n4",
+    "3": "n1",
+    "4": "0",
+    "5": "n5",
+    "6": "n6",
+    "7": "n7",
+    "8": "n8"
+   }
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "A1M",
+   "nodes": [
+    "n3",
+    "n9",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "3.3K",
+   "nodes": [
+    "n9",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "9.1K",
+   "nodes": [
+    "n4",
+    "n10"
+   ]
+  },
+  {
+   "ref": "TRIM",
+   "kind": "POT",
+   "value": "10K",
+   "nodes": [
+    "n4",
+    "n4",
+    "n11"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "680R",
+   "nodes": [
+    "n11",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "39n",
+   "nodes": [
+    "n10",
+    "n2"
+   ]
+  },
+  {
+   "ref": "BASS",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "n12",
+    "n12",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n12",
+    "n2"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n13",
+    "k": "n4"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n4",
+    "k": "n13"
+   }
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n3",
+    "k": "n13"
+   }
+  },
+  {
+   "ref": "D4",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n13",
+    "k": "n3"
+   }
+  },
+  {
+   "ref": "D5",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n4",
+    "k": "n3"
+   }
+  },
+  {
+   "ref": "TREBLE",
+   "kind": "POT",
+   "value": "C50K",
+   "nodes": [
+    "n3",
+    "n3",
+    "n14"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n14",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "2.2n",
+   "nodes": [
+    "n7",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n6",
+    "n2"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n7",
+    "n15"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A25K",
+   "nodes": [
+    "0",
+    "out",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "18K",
+   "nodes": [
+    "n15",
+    "out"
+   ]
+  },
+  {
+   "ref": "D6",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n16"
+   }
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n16",
+    "n8"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "8.2K",
+   "nodes": [
+    "n8",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "C1",
+    "R1",
+    "R2",
+    "C2"
+   ]
+  },
+  {
+   "id": "gain",
+   "category": "gain",
+   "label": "A단 이득 (GAIN·BASS)",
+   "parts": [
+    "U1",
+    "GAIN",
+    "R3",
+    "C3",
+    "R4",
+    "TRIM",
+    "R5",
+    "C4",
+    "BASS",
+    "C5"
+   ]
+  },
+  {
+   "id": "clip",
+   "category": "clipping",
+   "label": "클리퍼 (DIP 47 위치)",
+   "parts": [
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "TREBLE",
+   "parts": [
+    "TREBLE",
+    "R6",
+    "C6"
+   ]
+  },
+  {
+   "id": "recov",
+   "category": "gain",
+   "label": "B단 (이득 2)",
+   "parts": [
+    "R7",
+    "C7",
+    "R8"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (VOLUME)",
+   "parts": [
+    "C8",
+    "VOLUME",
+    "R9"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D6",
+    "R10",
+    "C9",
+    "C10",
+    "R11",
+    "R12",
+    "C11"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D6": {
+   "x": 130,
+   "y": 190,
+   "rotation": 0
+  },
+  "R10": {
+   "x": 210,
+   "y": 190,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 260,
+   "y": 240,
+   "rotation": 90
+  },
+  "C10": {
+   "x": 310,
+   "y": 240,
+   "rotation": 90
+  },
+  "R11": {
+   "x": 380,
+   "y": 240,
+   "rotation": 90
+  },
+  "R12": {
+   "x": 380,
+   "y": 330,
+   "rotation": 90
+  },
+  "C11": {
+   "x": 440,
+   "y": 330,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 130,
+   "y": 400,
+   "rotation": 0
+  },
+  "R1": {
+   "x": 100,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 190,
+   "y": 340,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 190,
+   "y": 470,
+   "rotation": 90
+  },
+  "U1A": {
+   "x": 300,
+   "y": 420
+  },
+  "GAIN": {
+   "x": 400,
+   "y": 520,
+   "rotation": 180
+  },
+  "R3": {
+   "x": 340,
+   "y": 560,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 400,
+   "y": 600,
+   "rotation": 0
+  },
+  "D2": {
+   "x": 370,
+   "y": 660,
+   "rotation": 0
+  },
+  "D4": {
+   "x": 440,
+   "y": 660,
+   "rotation": 0
+  },
+  "D1": {
+   "x": 370,
+   "y": 700,
+   "rotation": 180
+  },
+  "D3": {
+   "x": 440,
+   "y": 700,
+   "rotation": 180
+  },
+  "D5": {
+   "x": 400,
+   "y": 740,
+   "rotation": 0
+  },
+  "R4": {
+   "x": 200,
+   "y": 540,
+   "rotation": 90
+  },
+  "TRIM": {
+   "x": 120,
+   "y": 560,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 120,
+   "y": 640,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 200,
+   "y": 640,
+   "rotation": 90
+  },
+  "BASS": {
+   "x": 230,
+   "y": 740,
+   "rotation": 180
+  },
+  "C5": {
+   "x": 300,
+   "y": 790,
+   "rotation": 0
+  },
+  "TREBLE": {
+   "x": 400,
+   "y": 400,
+   "rotation": 0
+  },
+  "R6": {
+   "x": 470,
+   "y": 400,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 500,
+   "y": 470,
+   "rotation": 90
+  },
+  "U1B": {
+   "x": 560,
+   "y": 420
+  },
+  "R7": {
+   "x": 560,
+   "y": 500,
+   "rotation": 180
+  },
+  "C7": {
+   "x": 560,
+   "y": 540,
+   "rotation": 180
+  },
+  "R8": {
+   "x": 490,
+   "y": 540,
+   "rotation": 90
+  },
+  "C8": {
+   "x": 640,
+   "y": 400,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 700,
+   "y": 400,
+   "rotation": 180
+  },
+  "R9": {
+   "x": 700,
+   "y": 470,
+   "rotation": 0
+  },
+  "RLOAD": {
+   "x": 780,
+   "y": 480,
+   "rotation": 90
+  }
+ }
+}

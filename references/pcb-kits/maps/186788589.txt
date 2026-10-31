@@ -1,0 +1,112 @@
+id pp-time-v2
+goods 186788589
+name TIME V2
+motif Paul Cochrane Timmy V2
+type overdrive
+desc LM1458 2단 - A단 비반전 이득(피드백 A1M GAIN + 1N914 클리퍼, 이득 다리 9.1K·10K 트리머 → 39n ∥ B50K BASS+1000n → Vref), C50K TREBLE 직렬 저항 + 10n 저역통과, B단 이득 2(10K/10K, 2.2n), 1000n → A25K VOLUME(18K 테이퍼 보정)
+image img_01.jpg
+# LM1458 notch top-left: 54=1(out A) 67=2(-in A) 70=3(+in A) 76=4(GND) / 55=8(V+) 68=7(out B) 71=6(-in B) 77=5(+in B).
+# Vref n6 = 8.2K(12-13)/10K(62-82) + 47uF(63-64). Pot rings are unlabelled: assigned by circuit role.
+#   추측: 41-42-43 = GAIN A1M (lug on -in A, lug on out A, wiper via 3.3K to -in A: feedback resistor 3.3K..1M).
+#   추측: 44-45-46 = BASS B50K (rheostat 44 -> 45=46 -> 1000n -> Vref, in parallel with the 39n on the gain leg).
+#   추측: 65-72-87 = TREBLE C50K (rheostat 65=72 on out A -> 87 -> 1K -> +in B with 10n to ground: series low-pass).
+#   추측: 58-73-88 = VOLUME A25K (88 is a ground ring, wiper 73 = OUT 81, lug 58 via 1000n from out B; 18K 59-81 lug3-to-wiper taper mod).
+#   Pot lugs written so clockwise = more gain / bass / treble (original Timmy turns the bass/treble cut the other way).
+# 10K trimmer 21/14/22: wiper 14 tied to lug 21 (-in A); 22 -> 680R -> gain-leg node n9: parallels the 9.1K (max-gain trim).
+# DIP on-off-on 32/37/47 (37 = -in A): off = 2+2 symmetric (D1-D4), 32 = 1+1 (D3/D4), 47 = D5 single vs 2 series (asymmetric).
+#   Fixed at 37-47 (all five 1N914 in use): JUMP 37 47, NC 32.
+# Status LED: 680R 2-3 (seller: actually 7.5K), LED pads 0/1/7 - not in the audio path, left out of the BOM. Pad 74 = second OUT point.
+BOM 2.2M 510K 18K 10Kx4 9.1K 8.2K 3.3K 1K 680R 100R 1000nx2 100n 39nx2 10n 2.2n 100p 47p 100uF 47uF 1N400X 1N914x5 LM1458 A1M A25K B50K C50K
+io IN=91 OUT=81 V9=4 GND=92,93,94,95
+JUMP 37 47
+NC 0 1 2 3 7 32 74
+
+STAGE input input 입력
+C 39n 75 66 C1
+R 2.2M 83 84 R1
+R 510K 89 90 R2
+C 47p 40 29 C2
+
+STAGE gain gain A단 이득 (GAIN·BASS)
+IC LM1458 1=54 2=67 3=70 4=76 5=77 6=71 7=68 8=55 U1
+POT A1M GAIN 43 42 41
+R 3.3K 31 30 R3
+C 100p 53 52 C3
+R 9.1K 23 24 R4
+POT 10K TRIM 21 14 22
+R 680R 15 16 R5
+C 39n 17 27 C4
+POT B50K BASS 46 45 44
+C 1000n 28 18 C5
+
+STAGE clip clipping 클리퍼 (DIP 47 위치)
+D 1N914 a=26 k=25 D1
+D 1N914 a=33 k=34 D2
+D 1N914 a=39 k=38 D3
+D 1N914 a=48 k=49 D4
+D 1N914 a=36 k=35 D5
+
+STAGE tone tone TREBLE
+POT C50K TREBLE 65 72 87
+R 1K 80 57 R6
+C 10n 50 51 C6
+
+STAGE recov gain B단 (이득 2)
+R 10K 56 79 R7
+C 2.2n 69 78 C7
+R 10K 85 86 R8
+
+STAGE output output 출력 (VOLUME)
+C 1000n 61 60 C8
+POT A25K VOLUME 88 73 58
+R 18K 59 81 R9
+
+STAGE power power 전원
+D 1N400X a=5 k=6 D6
+R 100R 9 10 R10
+C 100uF 11 8 C9
+C 100n 20 19 C10
+R 8.2K 12 13 R11
+R 10K 62 82 R12
+C 47uF 63 64 C11
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D6 130 190 h
+AT R10 210 190 h
+AT C9 260 240 v
+AT C10 310 240 v
+AT R11 380 240 v
+AT R12 380 330 v
+AT C11 440 330 v
+AT C1 130 400 h
+AT R1 100 470 v
+AT R2 190 340 v
+AT C2 190 470 v
+AT U1A 300 420
+AT GAIN 400 520 r180
+AT R3 340 560 h
+AT C3 400 600 h
+AT D2 370 660 h
+AT D4 440 660 h
+AT D1 370 700 h-
+AT D3 440 700 h-
+AT D5 400 740 h
+AT R4 200 540 v
+AT TRIM 120 560 r90
+AT R5 120 640 v
+AT C4 200 640 v
+AT BASS 230 740 r180
+AT C5 300 790 h
+AT TREBLE 400 400 r0
+AT R6 470 400 h
+AT C6 500 470 v
+AT U1B 560 420
+AT R7 560 500 h-
+AT C7 560 540 h-
+AT R8 490 540 v
+AT C8 640 400 h
+AT VOLUME 700 400 r180
+AT R9 700 470 h
+AT RLOAD 780 480 v

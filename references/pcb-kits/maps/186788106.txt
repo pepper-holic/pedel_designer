@@ -1,0 +1,110 @@
+id pp-timothy-v3
+goods 186788106
+name Timothy V3
+motif Paul Cochrane Timmy (V3)
+type overdrive
+desc LM1458 A단 비반전(39n·2.2K 입력, 1M 바이어스, 100p 접지; 귀환 A500K GAIN+3.3K∥100p, 1N4148 2+2 대칭 클리퍼(DIP SYM), -입력 다리 3.3K→39n·C50K BASS→820n→Vref, 토글 게인부스트 360R+220n)→2.2K·C50K TREBLE→6.8n→B단 비반전(3.3K/3.3K∥6.8n)→820n→A25K VOLUME(18K 러그-와이퍼)
+image img_02.jpg
+# LM1458 notch up: 38=1(out A) 44=2(-in A) 55=3(+in A) 61=4(GND) / 62=5(+in B) 56=6(-in B) 45=7(out B) 39=8(V+ n8).
+# Vref n3 = 8.2K (51-73) / 10K (52-74) + 47uF 87. 9V 23 -> 1N400X 22(a)->21(k) -> V+ (47uF 58).
+# Angle pots (4 knobs, parts list A500K / C50K x2 / A25K): GAIN A500K 32-33-34 (32 = -in A, 34 = out A, wiper 33 -> 3.3K 8-24 -> -in A;
+# clockwise toward 32 raises the feedback resistance), BASS C50K 35-36-37 (36 wiper tied to 37 -> 820n 13-14 -> Vref; written
+# 37 36 35 so clockwise shortens the leg = more bass), TREBLE C50K vertical rings 46 (out A) / 65 wiper (2.2K 48-71 from out A) /
+# 78 (+in B, 6.8n 64-77 to ground), VOLUME A25K vertical rings 47 (820n 50-67 from out B, 18K 49-72 to the wiper) / 66 wiper = OUT 80 /
+# 79 ground ('+' ring without drawn copper). Lug numbering of the unlabeled vertical pots is from the circuit role.
+# DPDT toggle = the 2x3 rings 11/12 (contacts), 19/20 (commons, n2 = the 3.3K/39n node of the -in leg), 29/30 (empty):
+# seller: up = transparent overdrive, down = gain boost (volume and highs up). Fixed in the gain-boost position (JUMP 19 11,
+# JUMP 20 12) so the 360R (0-1, parallel to the 3.3K leg) and 220n (4-5, to Vref) are in circuit; 29/30 have no copper.
+# 1P DIP 9-10 (SYM/ASYM): left open = symmetric 2+2 (D1 a=15 k=16 -> D2 a=17 k=18 toward out A; D4 a=28 k=27 -> D3 a=26 k=25 back).
+# Closing it shorts D2 (asymmetric 1:2). Pads 60/79 are '+' ground rings with no drawn copper (100p 43-60, VOLUME lug).
+BOM 1Mx2 18K 10K 8.2K 3.3Kx4 2.2Kx2 360R 820nx2 220n 39nx2 6.8nx2 100pFx2 47uFx2 1N400X 1N4148x4 LM1458 A500K C50Kx2 A25K
+io IN=54 OUT=80 V9=23 GND=82,60,79
+JUMP 19 11
+JUMP 20 12
+NC 29 30 9 10
+
+STAGE input input 입력
+R 1M 59 83 R1
+C 39n 68 84 C1
+R 1M 85 86 R2
+R 2.2K 69 70 R3
+C 100pF 43 60 C2
+
+STAGE stageA gain A단 (GAIN·클리퍼)
+IC LM1458 1=38 2=44 3=55 4=61 5=62 6=56 7=45 8=39 U1
+POT A500K GAIN 34 33 32
+R 3.3K 8 24 R4
+C 100pF 31 42 C3
+D 1N4148 a=15 k=16 D1
+D 1N4148 a=17 k=18 D2
+D 1N4148 a=26 k=25 D3
+D 1N4148 a=28 k=27 D4
+
+STAGE leg custom -입력 다리 (BASS·부스트 토글)
+R 3.3K 6 7 R5
+C 39n 2 3 C4
+POT C50K BASS 37 36 35
+C 820n 13 14 C5
+R 360R 0 1 R6
+C 220n 4 5 C6
+
+STAGE treble tone TREBLE
+R 2.2K 48 71 R7
+POT C50K TREBLE 46 65 78
+C 6.8n 64 77 C7
+
+STAGE stageB buffer B단 (x2 버퍼)
+R 3.3K 40 63 R8
+C 6.8n 41 57 C8
+R 3.3K 75 76 R9
+
+STAGE output output 출력 (VOLUME)
+C 820n 50 67 C9
+R 18K 49 72 R10
+POT A25K VOLUME 79 66 47
+
+STAGE power power 전원·Vref
+D 1N400X a=22 k=21 D5
+C 47uF 58 53 C10
+R 8.2K 51 73 R11
+R 10K 74 52 R12
+C 47uF 87 81 C11
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 100 480 v
+AT C1 150 400 h
+AT R2 200 330 v-
+AT R3 250 400 h-
+AT C2 290 470 v
+AT U1A 350 420
+AT R5 310 520 v
+AT R6 250 520 v
+AT C4 260 600 v
+AT C6 200 600 v
+AT BASS 360 600 r180
+AT C5 450 600 h-
+AT GAIN 350 300 r180
+AT R4 330 380 v-
+AT C3 350 240 h
+AT D1 320 190 h
+AT D2 380 190 h
+AT D3 320 140 h-
+AT D4 380 140 h-
+AT R7 440 340 h
+AT TREBLE 480 400 r0
+AT C7 530 470 v
+AT U1B 580 420
+AT R8 580 320 h-
+AT C8 580 260 h-
+AT R9 540 520 v
+AT C9 670 400 h-
+AT VOLUME 740 440 r180
+AT R10 680 460 v
+AT RLOAD 800 520 v
+AT VCC 60 120
+AT D5 130 120 h
+AT C10 200 170 v
+AT R11 120 190 v
+AT R12 120 280 v
+AT C11 170 280 v

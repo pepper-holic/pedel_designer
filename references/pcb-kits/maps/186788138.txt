@@ -1,5 +1,107 @@
-# NEW ANDY PLUS (186788138): Andy Timmons signature drive - LM833 with a BS170 MOSFET stage, 12V zener, BAT41 x2,
-# five angle pots (B1M, B100K, B25K, A100K, C10K) and a DIP on-off-on EQ/Air switch. The app has no MOSFET model; recorded
-# only. Board: 1M x6, 100K, 22K x2, 10K, 1K x4, 470R, 220n, 100n x3, 22n x3, 1n, 100p x2, 100uF x2, 10uF, 2.2uF, 1N400X.
-# Update 2026-10-30: 2N7000/BS170 now have a model (square-law + body diode); this board stays recorded only because of
-# its hidden traces / off-board pads, see docs/kit-deferred.md.
+id pp-andy-plus
+goods 186788138
+name NEW ANDY PLUS
+motif JHS AT+ (Andy Timmons, Angry Charlie 계열)
+type overdrive
+desc LM833 2단 - 22n·1K 입력 → A단 비반전(B1M DRIVE 와이퍼가 출력: 한쪽 끝은 1K→-in 귀환, 다른 끝은 100n→10K→B단), 220n·1K 이득 다리 → B단 반전(1M∥100p/10K) → 2.2uF·470R → 접지 클리퍼(DIP: BAT41 / LED / 없음) → B25K AIR 직렬 + 22n → B100K EQ(22n) → A100K VOLUME. BS170 부스트 섹션은 별도(미포함)
+image img_00.jpg
+# LM833 notch top: 37=1(out A) 46=2(-in A) 53=3(+in A) 63=4(GND) / 64=5(+in B = Vref) 54=6(-in B) 47=7(out B) 38=8(V+ n4).
+# Vref n22 = 22K(75-76)/22K(86-85) + 100uF(80-81). V+ n4 after 1N400X(k=9) with 100n 14-15 and 100uF 27-26.
+# Pots are off-board rings; assigned by circuit role (seller: Volume, Drive, EQ, Air + boost knob):
+#   추측: DRIVE B1M = 16-17-18 (wiper 17 on out A; 18 -> 1K 31-52 -> -in A is the feedback end, 16 -> 100n 22-23 -> 10K -> -in B
+#     feeds the next stage - the Angry Charlie dual-action drive pot).
+#   추측: VOLUME A100K = 19-20-21 (21 is a ground ring, wiper 20 = OUT 28, 19 <- EQ wiper 92).
+#   후보: 94-95-96 (rheostat, 95=96 tied) between the clip node n3 and the 22n 102-103 node = AIR, 91-92-93 (lug 93 -> 22n 101-100 ->
+#     GND, wiper 92 -> VOLUME) = EQ. Parts list has B25K and B100K; assigned AIR=B25K (series), EQ=B100K (RAT-style filter) - could be swapped.
+#   Lugs written so clockwise = more drive / brighter AIR / brighter EQ / louder.
+# Clipper DIP on-off-on 2/3/4 (3 = GND common): 4 -> BAT41 x2 antiparallel (5-12 k=12, 6-13 k=6) = seller's "25W"; 2 -> red LED x2
+#   antiparallel (0-7, 8-1) = "50W"; centre off = "100W" (no clipping). Fixed in the BAT41 position: JUMP 3 4; LEDs 0/1/7/8 and pad 2
+#   left out of the netlist and the BOM (parts list: 3mm RED LED x2).
+# Boost section (dashed box, B-IN 97 / B-OUT 87 / GND 104, not in this circuit): B-IN -> 100n 98-99 -> n23 (1M 69-70 to GND,
+#   C10K rings 88-89-90: 89=90 on n23, 88 on the gate) -> BS170 77(S, GND)/78(G)/79(D): gate 1M 49-50 to GND, 1M 58-59 to drain,
+#   12V zener 41-68 gate-GND; drain 1K 42-43 to V+, 10uF 25(+)-24 -> B-OUT 87 with 100K 35-36 to GND.
+#   Its parts (1M x3, 100K, 1K, 100n, 10uF, 12V zener, BS170, C10K) are left out of the BOM line.
+BOM 1Mx3 22Kx2 10K 1Kx3 470R 220n 100nx2 22nx3 1n 100px2 100uFx2 2.2uF 1N400X BAT41x2 LM833 B1M B100K B25K A100K
+io IN=83 OUT=28 V9=11 GND=105,106,107,108,21
+JUMP 3 4
+NC 0 1 2 7 8 24 25 35 36 41 42 43 49 50 58 59 68 69 70 77 78 79 87 88 89 90 97 98 99 104
+
+STAGE input input 입력
+R 1M 82 55 R1
+C 22n 73 60 C1
+R 1K 84 62 R2
+C 1n 61 74 C2
+R 1M 71 72 R3
+
+STAGE a gain A단 (DRIVE)
+IC LM833 1=37 2=46 3=53 4=63 5=64 6=54 7=47 8=38 U1
+C 100p 32 45 C3
+R 1K 30 51 R4
+C 220n 29 44 C4
+R 1K 31 52 R5
+POT B1M DRIVE 18 17 16
+C 100n 22 23 C5
+R 10K 33 34 R6
+
+STAGE b gain B단 (반전 x100)
+R 1M 39 56 R7
+C 100p 48 65 C6
+C 2.2uF 66 67 C7
+R 470R 57 40 R8
+
+STAGE clip clipping 클리퍼 (DIP BAT41 위치)
+D BAT41 a=5 k=12 D1
+D BAT41 a=13 k=6 D2
+
+STAGE tone tone AIR·EQ
+POT B25K AIR 96 95 94
+C 22n 102 103 C8
+POT B100K EQ 93 92 91
+C 22n 101 100 C9
+
+STAGE output output 출력 (VOLUME)
+POT A100K VOLUME 21 20 19
+
+STAGE power power 전원
+D 1N400X a=10 k=9 D3
+C 100n 14 15 C10
+C 100uF 27 26 C11
+R 22K 75 76 R9
+R 22K 86 85 R10
+C 100uF 80 81 C12
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D3 130 190 h
+AT C10 200 240 v
+AT C11 250 240 v
+AT R9 330 240 v
+AT R10 330 320 v
+AT C12 390 320 v
+AT R1 100 470 v
+AT C1 130 400 h
+AT R2 200 400 h
+AT C2 230 470 v
+AT R3 230 330 v
+AT U1A 300 420
+AT C3 300 520 h-
+AT R5 250 570 v-
+AT DRIVE 330 620 r0
+AT R4 190 570 v-
+AT C4 190 650 v
+AT C5 420 620 h
+AT R6 490 620 h
+AT U1B 600 420
+AT R7 600 500 h-
+AT C6 600 540 h-
+AT C7 680 400 h-
+AT R8 750 400 h
+AT D1 800 480 v-
+AT D2 850 480 v
+AT AIR 900 400 r0
+AT C8 960 470 v
+AT EQ 1020 400 r180
+AT C9 1060 470 v
+AT VOLUME 1130 400 r180
+AT RLOAD 1200 480 v
