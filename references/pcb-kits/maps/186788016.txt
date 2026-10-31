@@ -1,0 +1,117 @@
+id pp-pluto-blue
+goods 186788016
+name Pluto Blue
+motif Browne Amplification Protein (blue side)
+type overdrive
+desc TL072 A단 비반전(DRIVE B100K 귀환∥56p, 4.7K·10n·10n·3.3K 접지망)→DRIVE 나머지 반쪽→220n/10K→B단 반전(220K 귀환, 6.8K+1N4148 2직렬 쌍 소프트 클리핑)→1K→TONE B25K(10n)→6.8K/10n→1000n/10K→TL071 비반전(6.8K, 10uF+2.4K)→4.7uF→A5K LEVEL
+image img_03.jpg
+# The full board is the second render (img_03, board1_nets.json, copied in as the bundle's board0_nets.json); board0 is a cropped
+# instruction picture. TL072 notch up: 25=1 33=2 38=3 45=4 / 26=8 34=7 39=6 46=5; TL071: 65=2 73=3 82=4 74=6 66=7 (1/5/8 unused).
+# Seller fix: the two red pads (the 4.7uF's minus pad and LEVEL's lug 3) must not be used; wire the 4.7uF's short leg straight to
+# LEVEL lug 3. Neither red pad is extracted, so that wire node is written on the unused TL071 pin-1 pad 57.
+# DRIVE B100K ("1" on 2): lug1 2 = -in A, wiper 1 = out A, lug3 0 -> 220n -> 10K -> -in B, so the pot is A's feedback resistor and,
+# from the wiper, the series feed into stage B. TONE B25K "1" on 5 (10n to Vref), lug3 3 (1K from out B), wiper 4 -> 6.8K.
+# TL071 + input: 1M from V+ and 1M to the 10uF/2.4K leg node (as on the board).
+BOM 2.2M 1Mx3 220K 100K 47Kx2 10Kx2 6.8Kx3 4.7K 3.3K 2.4K 1K 1000n 220n 47n 10nx4 56pF 100uFx2 10uF 4.7uF 1N400X 1N4148x4 TL072 TL071 B100K B25K A5K
+io IN=75 OUT=14 V9=90 GND=97
+NC 58 83
+
+STAGE a gain A단 (DRIVE)
+R 2.2M 67 68 R1
+C 47n 59 60 C1
+R 1M 51 50 R2
+IC TL072 1=25 2=33 3=38 4=45 5=46 6=39 7=34 8=26 U1
+POT B100K DRIVE 2 1 0
+C 56pF 8 9 C2
+R 4.7K 24 23 R3
+C 10n 44 43 C3
+C 10n 37 36 C4
+R 3.3K 31 32 R4
+
+STAGE b gain B단 반전 (소프트 클리핑)
+C 220n 15 16 C5
+R 10K 17 18 R5
+R 220K 27 47 R6
+R 6.8K 54 79 R7
+
+STAGE clip clipping 1N4148 2직렬 쌍
+D 1N4148 a=53 k=52 D1
+D 1N4148 a=61 k=62 D2
+D 1N4148 a=78 k=77 D3
+D 1N4148 a=69 k=70 D4
+
+STAGE tone tone TONE
+R 1K 11 10 R8
+POT B25K TONE 5 4 3
+C 10n 12 13 C6
+R 6.8K 19 20 R9
+C 10n 29 30 C7
+R 100K 21 22 R10
+
+STAGE c gain TL071 비반전
+C 1000n 28 40 C8
+R 10K 55 56 R11
+R 1M 63 64 R12
+R 1M 72 71 R13
+IC TL071 2=65 3=73 4=82 6=74 7=66 U2
+R 6.8K 48 49 R14
+C 10uF 41 35 C9
+R 2.4K 80 81 R15
+
+STAGE out output 출력 (LEVEL)
+C 4.7uF 42 57 C10
+POT A5K LEVEL 7 6 57
+
+STAGE bias custom bias Vref (47K/47K)
+R 47K 86 85 R16
+R 47K 91 92 R17
+C 100uF 84 76 C11
+
+STAGE power power 전원
+D 1N400X a=89 k=88 D5
+C 100uF 87 93 C12
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 100 460 v
+AT C1 140 400 h
+AT R2 180 460 v
+AT U1A 240 420
+AT R3 210 500 v
+AT C3 210 590 v
+AT C4 250 530 h
+AT R4 280 470 v-
+AT DRIVE 240 340 r0
+AT C2 240 290 h-
+AT C5 330 340 h
+AT R5 390 340 h
+AT U1B 470 320
+AT R6 470 260 h-
+AT R7 410 250 v-
+AT D1 530 180 h-
+AT D2 470 180 h-
+AT D3 470 140 h
+AT D4 530 140 h
+AT R8 560 320 h
+AT TONE 620 320 r180
+AT C6 680 350 v
+AT R9 620 400 v
+AT C7 620 490 v
+AT R10 660 490 v
+AT C8 680 430 h
+AT R11 740 430 h
+AT U2 830 450
+AT R12 780 370 v
+AT R13 760 520 v
+AT R14 830 530 h
+AT C9 790 600 v
+AT R15 790 690 v
+AT C10 900 450 h
+AT LEVEL 960 480 r270 m
+AT RLOAD 1030 510 v
+AT R16 300 640 v
+AT R17 300 730 v
+AT C11 350 730 v
+AT VCC 60 160
+AT D5 130 160 h
+AT C12 190 190 v
