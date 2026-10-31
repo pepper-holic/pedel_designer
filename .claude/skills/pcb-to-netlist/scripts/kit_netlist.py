@@ -149,10 +149,13 @@ def main() -> None:
             # Pads the extractor merged into a neighbouring net (a trace passing through a pad ring):
             # pull them out into a net of their own, joined only to each other.
             # A piece that is now part of a ring is not pulled out with it: the ring has its own net.
+            # A pad listed here also loses its ground flag: the usual wrong merge is a polarity "+" of an
+            # electrolytic or LED read as a thermal cross, which would drag the split net back to ground.
             for tok in rest:
                 if int(tok) in merged_ids:
                     continue
                 pad_net[pad(tok)] = f"split-{line_no}"
+                ground_pads.discard(int(tok))
         elif head == "io":
             # "GND=1,8,22": the first pad is the role's pad, the rest are joined to it (ground pads the
             # extractor did not recognise, several supply pads...).
