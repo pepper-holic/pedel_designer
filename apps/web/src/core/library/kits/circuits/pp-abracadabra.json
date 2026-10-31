@@ -599,7 +599,7 @@
   {
    "id": "gainctl",
    "category": "custom",
-   "label": "GAIN",
+   "label": "control GAIN",
    "parts": [
     "C9",
     "C10",

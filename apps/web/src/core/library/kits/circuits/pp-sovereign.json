@@ -638,7 +638,7 @@
   {
    "id": "gain",
    "category": "custom",
-   "label": "GAIN",
+   "label": "control GAIN",
    "parts": [
     "C5",
     "R10",

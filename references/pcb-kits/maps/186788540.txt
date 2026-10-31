@@ -23,7 +23,7 @@ R 1M 21 22 R1
 C 47n 17 11 C1
 R 1M 33 34 R2
 
-STAGE bias custom Vref
+STAGE bias custom bias Vref
 R 100K 40 41 R3
 R 100K 39 55 R4
 C 4.7uF 75 68 C2
@@ -46,7 +46,7 @@ R 20K 65 53 R11
 C 220n 66 56 C7
 C 10n 57 67 C8
 
-STAGE blend control 블렌드
+STAGE blend custom mix 블렌드
 POT B50K MID 12 16 18
 R 220K 25 26 R12
 

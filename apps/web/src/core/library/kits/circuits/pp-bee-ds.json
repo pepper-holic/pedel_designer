@@ -742,7 +742,7 @@
   {
    "id": "tight",
    "category": "custom",
-   "label": "TGHT 저역 차단",
+   "label": "control TIGHT 저역 차단",
    "parts": [
     "C3",
     "R6",
@@ -817,7 +817,7 @@
   {
    "id": "vol",
    "category": "custom",
-   "label": "VOLUME",
+   "label": "control VOLUME",
    "parts": [
     "R20",
     "VOLUME",

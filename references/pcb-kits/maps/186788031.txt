@@ -28,7 +28,7 @@ POT B50K BIAS 30 39 43
 R 1.5K 31 50 R2
 C 22uF 36 35 C1
 
-STAGE gain custom GAIN (입력 감쇠)
+STAGE gain custom control GAIN (입력 감쇠)
 C 10n 17 16 C2
 POT A1M GAIN 8 7 6
 R 10K 25 24 R3

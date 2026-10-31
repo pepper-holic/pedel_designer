@@ -14,8 +14,8 @@ NC 2
 JUMP 36 42
 
 STAGE input input 입력
-STAGE q1 fuzz Q1 (PNP)
-STAGE q2 fuzz Q2 (NPN)
+STAGE q1 gain Q1 (PNP)
+STAGE q2 gain Q2 (NPN)
 STAGE output output 출력
 STAGE power power 전원
 

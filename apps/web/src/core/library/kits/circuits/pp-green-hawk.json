@@ -235,7 +235,7 @@
   {
    "id": "vref",
    "category": "custom",
-   "label": "4.5V 기준",
+   "label": "bias 4.5V 기준",
    "parts": [
     "R3",
     "R4",

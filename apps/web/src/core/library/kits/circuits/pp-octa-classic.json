@@ -443,7 +443,7 @@
   },
   {
    "id": "fuzz",
-   "category": "fuzz",
+   "category": "gain",
    "label": "퍼즈 귀환쌍 (2N3906·MPSA13)",
    "parts": [
     "Q1",
@@ -477,7 +477,7 @@
   {
    "id": "oct",
    "category": "custom",
-   "label": "위상 분할·옥타브 정류",
+   "label": "octave 위상 분할·정류",
    "parts": [
     "Q3",
     "R11",

@@ -546,7 +546,7 @@
   {
    "id": "low",
    "category": "custom",
-   "label": "저역 갈래 (U2)",
+   "label": "filter 저역 갈래 (U2)",
    "parts": [
     "R9",
     "C8",

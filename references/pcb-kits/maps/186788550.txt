@@ -73,7 +73,7 @@ R 6.8K 62 44 R18
 # TONE B25K: 53=저역(6.8K/100n) 끝, 56=고역(220n/2.2K) 끝. 시계방향 밝아지게 53을 1번으로.
 POT B25K TONE 53 57 56
 
-STAGE level custom LEVEL
+STAGE level custom control LEVEL
 # LEVEL B100K: 1번(29)=Vref, 3번(31)=톤 와이퍼. 판매처 설명대로 볼륨이 분압 줄(Vref)에 붙어 있다.
 POT B100K LEVEL 29 30 31
 R 10K 43 61 R19

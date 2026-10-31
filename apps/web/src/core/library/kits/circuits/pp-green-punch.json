@@ -194,7 +194,7 @@
   {
    "id": "gain",
    "category": "custom",
-   "label": "GAIN (입력 감쇠)",
+   "label": "control GAIN (입력 감쇠)",
    "parts": [
     "C2",
     "GAIN",

@@ -41,7 +41,7 @@ R 1M 21 3 R7
 R 1M 19 2 R8
 C 56n 7 20 C4
 
-STAGE gain custom GAIN
+STAGE gain custom control GAIN
 C 22n 13 14 C5
 R 470K 10 11 R9
 C 470pF 15 16 C6

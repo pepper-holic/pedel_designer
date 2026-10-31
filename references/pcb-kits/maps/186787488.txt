@@ -40,7 +40,7 @@ STAGE clip clipping 클리퍼 (1N4148)
 D 1N4148 a=26 k=25 D1
 D 1N4148 a=32 k=33 D2
 
-STAGE filt custom PRES·MID 필터
+STAGE filt custom filter PRES·MID
 R 1K 42 43 R9
 R 330R 10 11 R10
 C 220n 3 4 C6

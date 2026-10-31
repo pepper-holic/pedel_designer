@@ -31,7 +31,7 @@ C 1n 108 107 C2
 Q 2SK209 g=108 d=3 s=93 Q1
 R 10K 48 25 R4
 
-STAGE sens custom SENS
+STAGE sens custom control SENS
 C 220n 93 92 C3
 R 22K 79 80 R5
 C 220n 90 91 C4
@@ -50,7 +50,7 @@ R 100R 9 10 R9
 D 1N4148 a=19 k=37 D2
 R 10K 1 2 R10
 
-STAGE inter custom 단간 필터
+STAGE inter custom filter 단간
 C 470n 46 31 C8
 R 22K 22 44 R11
 C 220n 30 45 C9

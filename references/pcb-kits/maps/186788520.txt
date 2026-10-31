@@ -20,12 +20,12 @@ STAGE input input 입력
 C 47n 69 59 C1
 R 2.2M 74 60 R1
 
-STAGE q1 fuzz Q1
+STAGE q1 gain Q1
 Q GE-PNP b=67 c=70 e=62 Q1
 R 10M 63 76 R2
 R 22K 75 61 R3
 
-STAGE q2 fuzz Q2
+STAGE q2 gain Q2
 C 47n 64 71 C2
 Q GE-PNP b=68 c=72 e=66 Q2
 R 1M 65 77 R4

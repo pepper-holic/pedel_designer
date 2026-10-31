@@ -381,7 +381,7 @@
   {
    "id": "mix",
    "category": "custom",
-   "label": "가산 (PROCESS·CONTOUR)",
+   "label": "mix 가산 (PROCESS·CONTOUR)",
    "parts": [
     "R14",
     "PROCESS",

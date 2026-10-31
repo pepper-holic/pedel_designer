@@ -19,7 +19,7 @@ R 1M 39 52 R1
 POT 50K INPUT 45 49 49
 C 1uF 56 57 C1
 
-STAGE core fuzz 퍼즈 코어 (Q1·Q2)
+STAGE core gain 퍼즈 코어 (Q1·Q2)
 Q GE-PNP b=47 c=50 e=41 Q1
 R 33K 43 55 R2
 Q GE-PNP b=48 c=51 e=44 Q2
@@ -27,7 +27,7 @@ R 100K 40 53 R3
 POT B1K FUZZ 31 30 29
 C 22uF 17 16 C2
 
-STAGE bias custom Q2 컬렉터 부하 (BIAS)
+STAGE bias custom bias Q2 컬렉터 부하 (BIAS)
 R 1K 42 54 R4
 POT 10K BIAS 28 27 24
 POT B5K BIAS2 8 9 10

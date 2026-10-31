@@ -455,8 +455,8 @@
   },
   {
    "id": "oct",
-   "category": "fuzz",
-   "label": "옥타브 정류 (1N400X x2)",
+   "category": "custom",
+   "label": "octave 정류 (1N400X x2)",
    "parts": [
     "C7",
     "C8",

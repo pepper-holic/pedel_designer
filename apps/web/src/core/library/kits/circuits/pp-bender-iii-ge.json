@@ -351,7 +351,7 @@
   {
    "id": "attack",
    "category": "custom",
-   "label": "ATTACK",
+   "label": "control ATTACK",
    "parts": [
     "C4",
     "ATTACK",
@@ -360,7 +360,7 @@
   },
   {
    "id": "q3",
-   "category": "fuzz",
+   "category": "gain",
    "label": "Q3 (퍼즈)",
    "parts": [
     "Q3",

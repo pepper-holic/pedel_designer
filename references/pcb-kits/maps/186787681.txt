@@ -29,7 +29,7 @@ C 100p 41 54 C2
 D LED-RED a=39 k=45 D1
 D LED-RED a=46 k=40 D2
 
-STAGE fluff custom FLUFF
+STAGE fluff custom control FLUFF
 C 10uF 23 22 C3
 POT B100K FLUFF 2 1 0
 R 1.5K 10 9 R5

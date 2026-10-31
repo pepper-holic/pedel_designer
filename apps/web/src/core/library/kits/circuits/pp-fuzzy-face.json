@@ -132,7 +132,7 @@
   },
   {
    "id": "core",
-   "category": "fuzz",
+   "category": "gain",
    "label": "퍼즈 코어 (Q1·Q2 직결)",
    "parts": [
     "Q1",
@@ -145,7 +145,7 @@
   {
    "id": "feedback",
    "category": "custom",
-   "label": "피드백 (Q2 이미터 → Q1 베이스)",
+   "label": "feedback Q2 이미터 → Q1 베이스",
    "parts": [
     "R5"
    ]
@@ -153,7 +153,7 @@
   {
    "id": "fuzz",
    "category": "custom",
-   "label": "퍼즈 (Q2 이미터 바이패스)",
+   "label": "control FUZZ (Q2 이미터 바이패스)",
    "parts": [
     "FUZZ",
     "C2"

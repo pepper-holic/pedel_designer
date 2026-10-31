@@ -16,8 +16,8 @@ JUMP 7 8
 NC 9
 
 STAGE input input 입력
-STAGE q1 fuzz Q1 증폭
-STAGE q2 fuzz Q2 증폭·PINCH
+STAGE q1 gain Q1 증폭
+STAGE q2 gain Q2 증폭·PINCH
 STAGE eq tone EQ
 STAGE output output 출력
 STAGE power power 전원

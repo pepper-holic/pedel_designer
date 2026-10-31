@@ -520,7 +520,7 @@
   {
    "id": "sens",
    "category": "custom",
-   "label": "SENS",
+   "label": "control SENS",
    "parts": [
     "C3",
     "R5",
@@ -549,7 +549,7 @@
   {
    "id": "inter",
    "category": "custom",
-   "label": "단간 필터",
+   "label": "filter 단간",
    "parts": [
     "C8",
     "R11",

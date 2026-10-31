@@ -282,7 +282,7 @@
   {
    "id": "blend",
    "category": "custom",
-   "label": "12dB 블렌드 (U1B)",
+   "label": "mix 12dB 블렌드 (U1B)",
    "parts": [
     "12DB",
     "R3",

@@ -218,7 +218,7 @@
   },
   {
    "id": "core",
-   "category": "fuzz",
+   "category": "gain",
    "label": "퍼즈 코어 (Q1·Q2)",
    "parts": [
     "Q1",
@@ -232,7 +232,7 @@
   {
    "id": "bias",
    "category": "custom",
-   "label": "Q2 컬렉터 부하 (BIAS)",
+   "label": "bias Q2 컬렉터 부하 (BIAS)",
    "parts": [
     "R4",
     "BIAS",

@@ -416,7 +416,7 @@
   {
    "id": "level",
    "category": "custom",
-   "label": "레벨 (IC2 B)",
+   "label": "control 레벨 (IC2 B)",
    "parts": [
     "C11",
     "LEVEL",

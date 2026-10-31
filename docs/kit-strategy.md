@@ -122,6 +122,10 @@ OCTA KING(fuzz), Black CAB(eq, 캐비닛 필터만), BLACK AMP 65·TWEED AMP 57(
   단에 귀환이 없는 op-amp, BOM 불일치. 전부 돌려 기존 152개에서 걸리는 것을 먼저 본다.
 - 금메달 세트: 원본 회로도로 대조가 끝난 기판(CDOS, Fluffy Fuzz, Little Green Box 등 10~20개)을 `tests/reference_maps.json`으로 고정한다.
   스크립트 채점은 이 세트를 기준으로 하고, 나머지 152개는 은메달(교차검증 대상)로 둔다.
+- 결과(2026-10-31): 어휘는 SKILL.md 2절(custom 접두어 bias·control·feedback·filter·mix·octave·osc), 66개 맵 정리. lint 경고 6건
+  (확인 필요 2: SoLa/LuNa Face BIAS 자리, 의도된 단락 4)과 고친 맵 2개(King Cat, NEW Valve 808)는 `kit-lint.md`. 금메달 12개 -
+  문서 근거 3(CDOS, Fluffy Fuzz, Fuzzy Face)에 공개 회로도 대조 9(RAT 2, TS-808, Distortion+, LPB-1, Rangemaster 2, Fuzz Face 2).
+  Little Green Box는 회로도 대조 기록이 없어 뺐다.
 
 1단계. 실크 OCR 초안 (진행 중, `silk_ocr.py`·`auto_map.py`·`score_automap.py`)
 - 채점은 금메달 세트로, 은메달 152개와의 불일치는 목록으로 뽑아 렌더로 어느 쪽이 틀렸는지 가린다(기존 맵 교차검증).

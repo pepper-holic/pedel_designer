@@ -19,19 +19,19 @@ R 1M 34 49 R1
 C 10p 33 43 C1
 C 2.2uF 51 48 C2
 
-STAGE core fuzz 퍼즈 코어 (Q1·Q2 직결)
+STAGE core gain 퍼즈 코어 (Q1·Q2 직결)
 Q 2SC828 b=45 c=46 e=47 Q1
 R 33K 10 21 R2
 Q 2SC828 e=29 c=30 b=31 Q2
 C 10p 32 42 C3
 
-STAGE feedback custom 피드백·퍼즈
+STAGE feedback custom feedback 퍼즈
 R 100K 27 44 R3
 POT B1K FUZZ 15 16 17
 C 22uF 37 36 C4
 D 1N914 a=26 k=40 D1
 
-STAGE bias custom Q2 컬렉터 부하 (BIAS·트리머)
+STAGE bias custom bias Q2 컬렉터 부하 (BIAS·트리머)
 R 220R 20 8 R4
 POT B1K BIAS 0 1 1
 R 1K 7 19 R5

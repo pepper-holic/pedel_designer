@@ -54,7 +54,7 @@ export interface KitRail {
 
 export interface KitStage {
   id: string;
-  /** A BlockCategory: input, buffer, gain, clipping, fuzz, tone, output, power, custom. */
+  /** A BlockCategory: input, buffer, gain, clipping, tone, output, power, custom (the kit STAGE vocabulary, stage_vocab.py). */
   category: string;
   label: string;
   parts: string[];

@@ -32,12 +32,12 @@ C 10uF 37 36 C3
 R 1K 9 21 R6
 POT 50K BIAS2 7 6 2
 
-STAGE attack custom ATTACK
+STAGE attack custom control ATTACK
 C 220n 5 12 C4
 POT A250K ATTACK 27 26 25
 D 1N34A a=1 k=19 D1
 
-STAGE q3 fuzz Q3 (퍼즈)
+STAGE q3 gain Q3 (퍼즈)
 Q GE-PNP b=11 c=15 e=8 Q3
 R 18K 23 24 R7
 R 1K 13 14 R8

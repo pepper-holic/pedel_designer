@@ -324,7 +324,7 @@
   {
    "id": "leg",
    "category": "custom",
-   "label": "접지 다리 (BASS·HOT)",
+   "label": "control 접지 다리 (BASS·HOT)",
    "parts": [
     "R4",
     "C4",

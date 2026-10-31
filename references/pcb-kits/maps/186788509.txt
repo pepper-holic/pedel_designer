@@ -21,7 +21,7 @@ C 10n 97 103 C1
 R 2.2M 90 102 R1
 C 470p 98 105 C2
 
-STAGE fuzz fuzz 퍼즈 귀환쌍 (2N3906·MPSA13)
+STAGE fuzz gain 퍼즈 귀환쌍 (2N3906·MPSA13)
 Q 2N3906 b=88 c=92 e=82 Q1
 R 820K 86 87 R2
 R 180K 80 81 R3
@@ -44,7 +44,7 @@ POT C50K TONE 43 44 45
 C 10n 54 55 C7
 C 100n 46 47 C8
 
-STAGE oct custom 위상 분할·옥타브 정류
+STAGE oct custom octave 위상 분할·정류
 Q MPSA13 b=27 c=19 e=37 Q3
 R 470K 28 29 R11
 R 270K 38 39 R12

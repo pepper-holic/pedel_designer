@@ -689,7 +689,7 @@
   {
    "id": "filt",
    "category": "custom",
-   "label": "필터",
+   "label": "filter",
    "parts": [
     "R12",
     "C10",

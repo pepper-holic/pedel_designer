@@ -38,8 +38,12 @@ python -E -P $S/silk_train.py                                 # (처음 한 번,
 python -E -P $S/pilot_bundle.py references/pcb-kits <goodsNo> <작업폴더>   # 오버레이·렌더·부품표·map.txt 뼈대 + auto_map 부품 초안
 #   (판단) 초안 검토(아래) 후 board0_nets.png와 부품표로 빠진 부품 줄·STAGE·BOM·io·JUMP를 쓴다
 bash $S/finish_kit.sh <작업폴더> <goodsNo> --layout           # 넷리스트 생성·검사, 배치 초안, 역투영, maps/ 복사, 테스트
+python -E -P $S/lint_circuit.py apps/web/src/core/library/kits/circuits/<id>.json   # 구조 lint(뜬 노드·귀환·바이어스·BOM·STAGE)
 python -E -P $S/selftest.py                                   # extract_nets.py를 고쳤으면 반드시
 ```
+
+`tests/reference_nets.json`은 selftest가 쓰는 손검증 넷이고, `tests/reference_maps.json`(금메달 세트)은 원본 회로도와 대조가 끝난
+기판 목록이다 - 자동 맵·OCR 같은 스크립트가 만든 맵을 채점할 정답이고, 여기 든 맵을 고칠 때는 회로도를 다시 대조한다.
 
 `finish_kit.sh`의 `check:` 줄이 0개, 역투영(verify.png)의 라벨이 모두 같은 값의 실크 위, 키트 테스트 통과가 완료 조건.
 
@@ -154,9 +158,15 @@ P1=4 패드가 고립이어도 다른 넷과 잇지 않는다(추출기 힌트�
   (`T1A`·`T1B`)으로 나눈다 - `AT T1` 한 줄이면 B 반쪽은 120px 아래에 자동으로 놓인다. 새 품번은 그 표에 데이터시트 인덕턴스로 넣는다.
 - 표준과 핀이 다른 op-amp 패키지는 `OPAMPS` 표의 네 번째 칸에 핀 배치를 준다(TA7136AP: 7핀 SIP, 2=+, 3=-, 6=출력, 7=V+, 4=GND;
   1·5번 보상·바이어스 핀은 시뮬레이션하지 않아 거기 붙은 150p·27K는 회로도에서 한쪽만 붙는다).
-- `STAGE <id> <category> <라벨>`로 부품을 신호 순서의 기능 단계로 묶는다: 입력 → 버퍼 → 프리앰프/게인 →
-  피드백·바이어스(custom) → 컨트롤(custom) → 클리퍼/퍼즈 → 톤 → 복원단 → 출력, 전원(power). 앱이 이 순서대로
-  블록을 좌→우로 배치하므로 바둑판이 아니라 사람이 읽는 회로도가 된다.
+- `STAGE <id> <category> <라벨>`로 부품을 신호 순서의 기능 단계로 묶는다(앱이 이 순서대로 블록을 좌→우로 배치한다).
+  **어휘는 고정**(키트끼리 단을 비교·조합하려고): category는 `input buffer gain clipping tone output power custom`만 쓴다 -
+  트랜지스터 퍼즈·LM386 퍼즈단은 `gain`, 다이오드 클리퍼는 `clipping`. `custom` 라벨은 접두어 하나로 시작한다:
+  `bias`(둘 이상의 단이 쓰는 Vref·분압·공용 컬렉터 부하), `control`(단 사이에 따로 선 팟 망 - GAIN·VOLUME·TIGHT·모드 토글),
+  `feedback`(단을 건너는 귀환 - Q2 이미터→Q1 베이스), `filter`(톤이 아닌 단간 필터), `mix`(블렌드·가산), `octave`(위상 분할·정류),
+  `osc`(발진부), 뒤에 자유 설명(`control FUZZ (Q2 이미터 바이패스)`). 소자 소속 기준: 한 단의 이득을 정하는 귀환·이미터·바이어스
+  소자는 그 단에 넣고(op-amp 귀환 R·C·클리핑 다이오드, 베이스 바이어스 분압, 이미터 R·바이패스 C), 단과 단 사이 커플링 캡과 그
+  뒤 풀다운은 다음 단 입력으로, 출력 커플링 캡·볼륨 팟·출력 풀다운은 `output`, 전원 필터·역극성 다이오드·Vref가 단 하나에만
+  쓰이면 그 단 아니면 `power`/`bias`. `stage_vocab.py report|check`가 어휘 집계와 위반 목록을 낸다(`lint_circuit.py`도 검사).
 
 - **한 기판에 독립 회로 둘**(2채널, 프리앰프+드라이브)은 맵을 `maps/<goods>-a.txt`·`<goods>-b.txt`로 나눈다(`goods` 같고 `id`·`name` 다름,
   `finish_kit.sh <번들> <goods>-a`는 `map-a.txt`를 읽는다). 각 맵은 자기 회로 패드만 쓰고 머리에 `SHARED <goods>-b`로 상대 맵을 가리키면

@@ -298,7 +298,7 @@
   {
    "id": "level",
    "category": "custom",
-   "label": "볼륨 → 2단 결합",
+   "label": "control 볼륨 → 2단 결합",
    "parts": [
     "VOL",
     "C7"

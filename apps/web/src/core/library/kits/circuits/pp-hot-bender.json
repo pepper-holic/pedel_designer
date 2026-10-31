@@ -341,7 +341,7 @@
   },
   {
    "id": "core",
-   "category": "fuzz",
+   "category": "gain",
    "label": "Q2·Q3 퍼즈 코어",
    "parts": [
     "Q2",

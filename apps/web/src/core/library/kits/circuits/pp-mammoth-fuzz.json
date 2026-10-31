@@ -202,13 +202,13 @@
   },
   {
    "id": "q1",
-   "category": "fuzz",
+   "category": "gain",
    "label": "Q1 증폭",
    "parts": []
   },
   {
    "id": "q2",
-   "category": "fuzz",
+   "category": "gain",
    "label": "Q2 증폭·PINCH",
    "parts": []
   },

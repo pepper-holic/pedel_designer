@@ -27,7 +27,7 @@ R 1M 33 10 R4
 R 1M 34 11 R5
 C 68n 61 62 C4
 
-STAGE gainctl custom GAIN
+STAGE gainctl custom control GAIN
 C 22n 35 24 C5
 R 470K 36 22 R6
 C 470p 28 12 C6

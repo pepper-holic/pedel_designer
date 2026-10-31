@@ -17,7 +17,7 @@ STAGE input input 입력
 R 120K 28 41 R1
 C 6.8n 33 40 C1
 
-STAGE bias custom 바이어스 노드
+STAGE bias custom bias 노드
 R 100K 8 21 R2
 C 10p 7 17 C2
 C 10p 34 42 C3

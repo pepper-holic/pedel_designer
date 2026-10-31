@@ -21,7 +21,7 @@ R 1M 21 22 R3
 Q 2SC1815 b=37 c=38 e=39 Q1
 R 10K 64 63 R4
 
-STAGE bias custom Vref
+STAGE bias custom bias Vref
 R 100K 23 24 R5
 R 100K 67 68 R6
 C 100uF 73 74 C2

@@ -45,7 +45,7 @@ R 1M 25 26 R12
 Q 2N5457 g=34 s=33 d=31 Q2
 R 1K 42 43 R13
 
-STAGE gainctl custom GAIN
+STAGE gainctl custom control GAIN
 C 22n 35 16 C9
 C 47pF 10 11 C10
 POT A1M GAIN 4 3 2

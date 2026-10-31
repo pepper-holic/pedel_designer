@@ -346,7 +346,7 @@
   {
    "id": "bias",
    "category": "custom",
-   "label": "Vref",
+   "label": "bias Vref",
    "parts": [
     "R4",
     "R5",

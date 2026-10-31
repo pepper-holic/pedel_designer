@@ -50,7 +50,7 @@ C 27n 46 47 C8
 R 6.8K 35 16 R12
 R 27K 36 17 R13
 
-STAGE volume custom 볼륨
+STAGE volume custom control 볼륨
 POT B50K VOLUME 5 6 7
 R 1K 9 8 R14
 C 47n 0 1 C9

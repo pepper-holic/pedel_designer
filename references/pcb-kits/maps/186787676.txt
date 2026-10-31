@@ -28,7 +28,7 @@ C 470n 23 22 C3
 R 4.7K 10 9 R4
 POT C500K DRIVE 0 1 1
 
-STAGE vref custom 4.5V 기준 (B채널 버퍼)
+STAGE vref custom bias 4.5V 기준 (B채널 버퍼)
 R 22K 26 43 R5
 R 22K 48 47 R6
 C 47uF 49 58 C4

@@ -50,7 +50,7 @@ C 100n 14 32 C5
 R 100K 37 55 R18
 C 1n 35 50 C6
 
-STAGE oct fuzz 옥타브 정류 (1N400X x2)
+STAGE oct custom octave 정류 (1N400X x2)
 C 10uF 59 58 C7
 C 10uF 57 56 C8
 R 100K 76 77 R19
