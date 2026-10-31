@@ -69,6 +69,7 @@ def classify(r: int, g: int, b: int, tinted: bool = False) -> str:
     # is treated as top and bottom when components are built - so a top trace crossing under a
     # bottom one is not cut there, while a cyan trace with nothing under it stays plain cyan.
     # (b well above r keeps the anti-aliased edge of a green footprint outline, where r ~ b, out.)
+    # Most overlap pixels still have b > 170 and stop at the rule above; layers.py fits them properly.
     if g > 170 and r < 140 and g - b >= 20 and b >= 150 and b - r >= 40:
         return "both"
     hi, lo = max(r, g, b), min(r, g, b)
@@ -115,9 +116,10 @@ def components(mask: dict[tuple[int, int], str], kinds: set[str]) -> list[list[t
     return out
 
 
-def bridge(mask: dict[tuple[int, int], str], layer: str, w: int, h: int) -> None:
+def bridge(mask: dict[tuple[int, int], str], layer: str, w: int, h: int, soft: set[tuple[int, int]] = frozenset()) -> None:
     """Turn short horizontal/vertical runs of silk that sit between two copper pixels of one layer into
-    copper, so a resistor outline or a value printed across a trace no longer splits it."""
+    copper, so a resistor outline or a value printed across a trace no longer splits it. `soft` copper
+    (seen only as a tint under silk) is not bridged into a pad: a trace grazing a pad's outline tints it."""
     fill: list[tuple[int, int]] = []
     for y in range(h):
         for x in range(w):
@@ -131,6 +133,9 @@ def bridge(mask: dict[tuple[int, int], str], layer: str, w: int, h: int) -> None
                     if kind == "silk":
                         run.append(q)
                         continue
+                    to_pad = kind in ("pad", "gpad") or mask.get((x, y)) in ("pad", "gpad")
+                    if to_pad and ((x, y) in soft or q in soft):
+                        break
                     if kind in (layer, "both", "pad", "gpad") and run and (mask.get((x, y)) in (layer, "both") or kind in (layer, "both")):
                         # Up to 4px: any thin outline or text stroke. Longer (thick title text): only
                         # when the trace runs along this axis on both sides, so a gap along a
@@ -295,21 +300,29 @@ def merge_pads(pads: list[dict], mask: dict[tuple[int, int], str]) -> list[dict]
     return merged
 
 
-def run(src: Path, prefix: str, scale: int = 3, smd: bool = False) -> dict:
-    """Extract pads and nets from one render; write <prefix>.json/.png and return summary counts."""
+def run(src: Path, prefix: str, scale: int = 3, smd: bool = False, layered: bool = True) -> dict:
+    """Extract pads and nets from one render; write <prefix>.json/.png and return summary counts.
+    Copper comes from layers.py (each pixel judged per layer); `layered=False` (--flat) is the older
+    one-label-per-pixel reading, kept for comparison."""
     im = Image.open(src).convert("RGB")
     w, h = im.size
     px = im.load()
 
     def build_mask(tinted: bool) -> dict[tuple[int, int], str]:
-        m: dict[tuple[int, int], str] = {}
-        for y in range(h):
-            for x in range(w):
-                k = classify(*px[x, y], tinted)
-                if k:
-                    m[(x, y)] = k
+        soft: set[tuple[int, int]] = set()
+        if layered and not tinted:
+            import numpy as np
+            from layers import label_mask
+            m, soft = label_mask(np.asarray(im))
+        else:
+            m = {}
+            for y in range(h):
+                for x in range(w):
+                    k = classify(*px[x, y], tinted)
+                    if k:
+                        m[(x, y)] = k
         for layer in ("top", "bot"):
-            bridge(m, layer, w, h)
+            bridge(m, layer, w, h, soft)
         return m
 
     mask = build_mask(False)
@@ -526,10 +539,10 @@ def run(src: Path, prefix: str, scale: int = 3, smd: bool = False) -> dict:
 
 
 def main() -> None:
-    args = [a for a in sys.argv[1:] if a != "--smd"]
+    args = [a for a in sys.argv[1:] if a not in ("--smd", "--flat")]
     src, prefix = Path(args[0]), args[1]
     scale = int(args[2]) if len(args) > 2 else 3
-    st = run(src, prefix, scale, smd="--smd" in sys.argv)
+    st = run(src, prefix, scale, smd="--smd" in sys.argv, layered="--flat" not in sys.argv)
     print(f"{st['pads']} pads ({st['groundPads']} on the ground pour), {st['nets']} nets ({st['multiPadNets']} with 2+ pads, {st['loneNonGroundPads']} lone)")
 
 
