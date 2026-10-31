@@ -1,0 +1,768 @@
+{
+ "id": "pp-black-cab",
+ "goodsNo": "186787558",
+ "kitName": "Black CAB",
+ "motif": "캐비닛 시뮬레이터 (D.I/XLR부 제외, 필터부만)",
+ "type": "eq",
+ "description": "470n/1M 입력→10K→TL072 A 버퍼→100n·100n+1K 노치(MID A10K)→22K→Sallen-Key 저역(10K, 4.7n/470p, TL074 버퍼)→HIGH 가변저항+4.7K→Sallen-Key 저역(10K, 8.2n/1n)→RESONA 가변저항∥10n→1K→Sallen-Key 고역(47n/47n, 4.7K, 100K+CAB A500K→Vref)→TL074 D 비반전(PUNCH B100K·GAIN A100K 귀환, 5.6n/18n/15K, 10K+470n, 3.3n)→TL072 B 버퍼→470n/10K→출력",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "0",
+    "in"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "470n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n1",
+    "n3"
+   ]
+  },
+  {
+   "ref": "U2",
+   "kind": "IC",
+   "part": "TL072",
+   "nodes": {
+    "1": "n4",
+    "2": "n4",
+    "3": "n3",
+    "4": "0",
+    "5": "n5",
+    "6": "n6",
+    "7": "n6",
+    "8": "n7"
+   }
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n4",
+    "n8"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n8",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "MID",
+   "kind": "POT",
+   "value": "A10K",
+   "nodes": [
+    "n9",
+    "n10",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n10",
+    "n11"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "TL074",
+   "nodes": {
+    "1": "n12",
+    "2": "n12",
+    "3": "n13",
+    "4": "n7",
+    "5": "n14",
+    "6": "n15",
+    "7": "n15",
+    "8": "n16",
+    "9": "n16",
+    "10": "n17",
+    "11": "0",
+    "12": "n16",
+    "13": "n18",
+    "14": "n5"
+   }
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n11",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "4.7n",
+   "nodes": [
+    "n11",
+    "n12"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "470pF",
+   "nodes": [
+    "n13",
+    "0"
+   ]
+  },
+  {
+   "ref": "HIGH",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n19",
+    "n19",
+    "n12"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n19",
+    "n20"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n20",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "8.2n",
+   "nodes": [
+    "n20",
+    "n15"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "n14",
+    "0"
+   ]
+  },
+  {
+   "ref": "RESONA",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n21",
+    "n21",
+    "n15"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n15",
+    "n21"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n21",
+    "n22"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n22",
+    "n23"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n23",
+    "n17"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n23",
+    "n16"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n17",
+    "n24"
+   ]
+  },
+  {
+   "ref": "CAB",
+   "kind": "POT",
+   "value": "A500K",
+   "nodes": [
+    "n2",
+    "n24",
+    "n24"
+   ]
+  },
+  {
+   "ref": "PUNCH",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n25",
+    "n18",
+    "n26"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "5.6n",
+   "nodes": [
+    "n26",
+    "n27"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "15K",
+   "nodes": [
+    "n27",
+    "0"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "18n",
+   "nodes": [
+    "n27",
+    "n25"
+   ]
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n5",
+    "n25",
+    "n25"
+   ]
+  },
+  {
+   "ref": "C13",
+   "kind": "C",
+   "value": "3.3n",
+   "nodes": [
+    "n25",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n25",
+    "n28"
+   ]
+  },
+  {
+   "ref": "C14",
+   "kind": "C",
+   "value": "470n",
+   "nodes": [
+    "n28",
+    "0"
+   ]
+  },
+  {
+   "ref": "C15",
+   "kind": "C",
+   "value": "470n",
+   "nodes": [
+    "n29",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n29",
+    "out"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "out",
+    "0"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n7"
+   }
+  },
+  {
+   "ref": "C16",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "n7",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R17",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "C17",
+   "kind": "C",
+   "value": "22uF",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "buffer",
+   "label": "입력·버퍼 (TL072 A)",
+   "parts": [
+    "R1",
+    "C1",
+    "R2",
+    "R3",
+    "U2"
+   ]
+  },
+  {
+   "id": "mid",
+   "category": "tone",
+   "label": "MID 노치",
+   "parts": [
+    "C2",
+    "C3",
+    "R4",
+    "MID",
+    "R5"
+   ]
+  },
+  {
+   "id": "lp1",
+   "category": "tone",
+   "label": "저역 1 (TL074 A)",
+   "parts": [
+    "U1",
+    "R6",
+    "C4",
+    "C5"
+   ]
+  },
+  {
+   "id": "lp2",
+   "category": "tone",
+   "label": "HIGH 저역 2 (TL074 B)",
+   "parts": [
+    "HIGH",
+    "R7",
+    "R8",
+    "C6",
+    "C7"
+   ]
+  },
+  {
+   "id": "hp",
+   "category": "tone",
+   "label": "RESONA·CAB 고역 (TL074 C)",
+   "parts": [
+    "RESONA",
+    "C8",
+    "R9",
+    "C9",
+    "C10",
+    "R10",
+    "R11",
+    "CAB"
+   ]
+  },
+  {
+   "id": "punch",
+   "category": "gain",
+   "label": "PUNCH·GAIN (TL074 D)",
+   "parts": [
+    "PUNCH",
+    "C11",
+    "R12",
+    "C12",
+    "GAIN",
+    "C13",
+    "R13",
+    "C14"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (TL072 B)",
+   "parts": [
+    "C15",
+    "R14",
+    "R15"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원·Vref",
+   "parts": [
+    "D1",
+    "C16",
+    "R16",
+    "R17",
+    "C17"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D1": {
+   "x": 130,
+   "y": 160,
+   "rotation": 0
+  },
+  "C16": {
+   "x": 190,
+   "y": 190,
+   "rotation": 90
+  },
+  "R16": {
+   "x": 250,
+   "y": 190,
+   "rotation": 90
+  },
+  "R17": {
+   "x": 250,
+   "y": 250,
+   "rotation": 90
+  },
+  "C17": {
+   "x": 300,
+   "y": 250,
+   "rotation": 90
+  },
+  "R1": {
+   "x": 110,
+   "y": 470,
+   "rotation": 270
+  },
+  "C1": {
+   "x": 150,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 200,
+   "y": 340,
+   "rotation": 270
+  },
+  "R3": {
+   "x": 240,
+   "y": 400,
+   "rotation": 0
+  },
+  "U2A": {
+   "x": 330,
+   "y": 420
+  },
+  "C2": {
+   "x": 420,
+   "y": 420,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 510,
+   "y": 420,
+   "rotation": 0
+  },
+  "R4": {
+   "x": 465,
+   "y": 480,
+   "rotation": 90
+  },
+  "MID": {
+   "x": 465,
+   "y": 340,
+   "rotation": 180,
+   "mirror": true
+  },
+  "R5": {
+   "x": 525,
+   "y": 310,
+   "rotation": 0
+  },
+  "R6": {
+   "x": 615,
+   "y": 310,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 650,
+   "y": 370,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 660,
+   "y": 250,
+   "rotation": 0
+  },
+  "U1A": {
+   "x": 720,
+   "y": 330
+  },
+  "HIGH": {
+   "x": 810,
+   "y": 330,
+   "rotation": 180
+  },
+  "R7": {
+   "x": 870,
+   "y": 330,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 960,
+   "y": 330,
+   "rotation": 0
+  },
+  "C7": {
+   "x": 1000,
+   "y": 390,
+   "rotation": 90
+  },
+  "C6": {
+   "x": 960,
+   "y": 270,
+   "rotation": 0
+  },
+  "U1B": {
+   "x": 1060,
+   "y": 350
+  },
+  "RESONA": {
+   "x": 1150,
+   "y": 350,
+   "rotation": 180
+  },
+  "C8": {
+   "x": 1150,
+   "y": 290,
+   "rotation": 0
+  },
+  "R9": {
+   "x": 1240,
+   "y": 350,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 1330,
+   "y": 350,
+   "rotation": 0
+  },
+  "C10": {
+   "x": 1420,
+   "y": 350,
+   "rotation": 0
+  },
+  "R11": {
+   "x": 1450,
+   "y": 410,
+   "rotation": 90
+  },
+  "CAB": {
+   "x": 1450,
+   "y": 500,
+   "rotation": 270
+  },
+  "U1C": {
+   "x": 1520,
+   "y": 370
+  },
+  "R10": {
+   "x": 1460,
+   "y": 270,
+   "rotation": 0
+  },
+  "U1D": {
+   "x": 400,
+   "y": 700
+  },
+  "PUNCH": {
+   "x": 370,
+   "y": 800,
+   "rotation": 0
+  },
+  "C11": {
+   "x": 400,
+   "y": 860,
+   "rotation": 90
+  },
+  "R12": {
+   "x": 400,
+   "y": 950,
+   "rotation": 90
+  },
+  "C12": {
+   "x": 340,
+   "y": 890,
+   "rotation": 180
+  },
+  "GAIN": {
+   "x": 400,
+   "y": 620,
+   "rotation": 180
+  },
+  "C13": {
+   "x": 400,
+   "y": 560,
+   "rotation": 0
+  },
+  "R13": {
+   "x": 250,
+   "y": 580,
+   "rotation": 180
+  },
+  "C14": {
+   "x": 220,
+   "y": 640,
+   "rotation": 90
+  },
+  "U2B": {
+   "x": 560,
+   "y": 720
+  },
+  "C15": {
+   "x": 650,
+   "y": 720,
+   "rotation": 180
+  },
+  "R14": {
+   "x": 740,
+   "y": 720,
+   "rotation": 0
+  },
+  "R15": {
+   "x": 790,
+   "y": 780,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 850,
+   "y": 790,
+   "rotation": 90
+  }
+ }
+}

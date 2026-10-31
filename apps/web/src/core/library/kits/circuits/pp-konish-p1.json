@@ -1,0 +1,1012 @@
+{
+ "id": "pp-konish-p1",
+ "goodsNo": "186788153",
+ "kitName": "KONISH P-1",
+ "motif": "Pete Cornish P-1 (빅머프 계열)",
+ "type": "distortion",
+ "description": "BC549C x5 - 220n/1K 입력→Q1 부트스트랩 이미터 폴로어(120K/120K/200K, 2.2uF)→10uF/33K→Q2 빅머프 게인단(10K/120R, 470K∥470p, 47K)→100n→SUSTAIN B100K(1K 접지)→100n/10K→Q4 클리핑단(1N914 역병렬+1000n, 150R)→100n/10K→Q5 클리핑단(15K)→1uF→빅머프 톤(33K/10n, 3.9n/22K, TONE B100K)→100n→Q3 복원단(430K/100K, 15K/3.3K)→1000n→VOLUME B100K",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "220n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "BC549C",
+   "nodes": {
+    "b": "n2",
+    "c": "n3",
+    "e": "n4"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "120K",
+   "nodes": [
+    "n2",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "120K",
+   "nodes": [
+    "n3",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "200K",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "2.2uF",
+   "nodes": [
+    "n5",
+    "n4"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n2",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "15K",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n4",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "n6",
+    "n7"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "BC549C",
+   "nodes": {
+    "b": "n7",
+    "c": "n8",
+    "e": "n9"
+   }
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "120R",
+   "nodes": [
+    "n9",
+    "0"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n3",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n8",
+    "n7"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "470pF",
+   "nodes": [
+    "n8",
+    "n7"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n8",
+    "n10"
+   ]
+  },
+  {
+   "ref": "SUSTAIN",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n11",
+    "n12",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n12",
+    "n13"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n13",
+    "n14"
+   ]
+  },
+  {
+   "ref": "Q4",
+   "kind": "Q",
+   "part": "BC549C",
+   "nodes": {
+    "b": "n14",
+    "c": "n15",
+    "e": "n16"
+   }
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n14",
+    "0"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "150R",
+   "nodes": [
+    "n16",
+    "0"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n17",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n15",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "470pF",
+   "nodes": [
+    "n15",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n18",
+    "n14"
+   ]
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n15",
+    "k": "n18"
+   }
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n18",
+    "k": "n15"
+   }
+  },
+  {
+   "ref": "R17",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n11",
+    "0"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n15",
+    "n19"
+   ]
+  },
+  {
+   "ref": "R18",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n19",
+    "n20"
+   ]
+  },
+  {
+   "ref": "Q5",
+   "kind": "Q",
+   "part": "BC549C",
+   "nodes": {
+    "b": "n20",
+    "c": "n21",
+    "e": "n22"
+   }
+  },
+  {
+   "ref": "R19",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n20",
+    "0"
+   ]
+  },
+  {
+   "ref": "R20",
+   "kind": "R",
+   "value": "150R",
+   "nodes": [
+    "n22",
+    "0"
+   ]
+  },
+  {
+   "ref": "R21",
+   "kind": "R",
+   "value": "15K",
+   "nodes": [
+    "n17",
+    "n21"
+   ]
+  },
+  {
+   "ref": "R22",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n21",
+    "n20"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "470pF",
+   "nodes": [
+    "n21",
+    "n20"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n23",
+    "n20"
+   ]
+  },
+  {
+   "ref": "D4",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n21",
+    "k": "n23"
+   }
+  },
+  {
+   "ref": "D5",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n23",
+    "k": "n21"
+   }
+  },
+  {
+   "ref": "C13",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n21",
+    "n24"
+   ]
+  },
+  {
+   "ref": "R23",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "n24",
+    "n25"
+   ]
+  },
+  {
+   "ref": "C14",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n25",
+    "0"
+   ]
+  },
+  {
+   "ref": "C15",
+   "kind": "C",
+   "value": "3.9n",
+   "nodes": [
+    "n24",
+    "n26"
+   ]
+  },
+  {
+   "ref": "R24",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n26",
+    "0"
+   ]
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n25",
+    "n27",
+    "n26"
+   ]
+  },
+  {
+   "ref": "C16",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n27",
+    "n28"
+   ]
+  },
+  {
+   "ref": "Q3",
+   "kind": "Q",
+   "part": "BC549C",
+   "nodes": {
+    "b": "n28",
+    "c": "n29",
+    "e": "n30"
+   }
+  },
+  {
+   "ref": "R25",
+   "kind": "R",
+   "value": "430K",
+   "nodes": [
+    "n28",
+    "n17"
+   ]
+  },
+  {
+   "ref": "R26",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n28",
+    "0"
+   ]
+  },
+  {
+   "ref": "R27",
+   "kind": "R",
+   "value": "3.3K",
+   "nodes": [
+    "n30",
+    "0"
+   ]
+  },
+  {
+   "ref": "R28",
+   "kind": "R",
+   "value": "15K",
+   "nodes": [
+    "n29",
+    "n17"
+   ]
+  },
+  {
+   "ref": "C17",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n29",
+    "n31"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "0",
+    "out",
+    "n31"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "0",
+    "k": "vcc"
+   }
+  },
+  {
+   "ref": "R29",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "vcc",
+    "n17"
+   ]
+  },
+  {
+   "ref": "C18",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n17",
+    "0"
+   ]
+  },
+  {
+   "ref": "R30",
+   "kind": "R",
+   "value": "330R",
+   "nodes": [
+    "n3",
+    "n17"
+   ]
+  },
+  {
+   "ref": "C19",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "buffer",
+   "label": "입력 버퍼 (Q1)",
+   "parts": [
+    "C1",
+    "R1",
+    "R2",
+    "Q1",
+    "R3",
+    "R4",
+    "R5",
+    "C2",
+    "C3",
+    "R6",
+    "C4"
+   ]
+  },
+  {
+   "id": "g1",
+   "category": "gain",
+   "label": "게인단 (Q2)",
+   "parts": [
+    "R7",
+    "Q2",
+    "R8",
+    "R9",
+    "R10",
+    "R11",
+    "C5",
+    "C6",
+    "SUSTAIN"
+   ]
+  },
+  {
+   "id": "c1",
+   "category": "clipping",
+   "label": "클리핑단 1 (Q4)",
+   "parts": [
+    "C7",
+    "R12",
+    "Q4",
+    "R13",
+    "R14",
+    "R15",
+    "R16",
+    "C8",
+    "C9",
+    "D2",
+    "D3",
+    "R17"
+   ]
+  },
+  {
+   "id": "c2",
+   "category": "clipping",
+   "label": "클리핑단 2 (Q5)",
+   "parts": [
+    "C10",
+    "R18",
+    "Q5",
+    "R19",
+    "R20",
+    "R21",
+    "R22",
+    "C11",
+    "C12",
+    "D4",
+    "D5"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "톤 (빅머프)",
+   "parts": [
+    "C13",
+    "R23",
+    "C14",
+    "C15",
+    "R24",
+    "TONE"
+   ]
+  },
+  {
+   "id": "rec",
+   "category": "output",
+   "label": "복원단 (Q3)·VOLUME",
+   "parts": [
+    "C16",
+    "Q3",
+    "R25",
+    "R26",
+    "R27",
+    "R28",
+    "C17",
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D1",
+    "R29",
+    "C18",
+    "R30",
+    "C19"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D1": {
+   "x": 120,
+   "y": 220,
+   "rotation": 270
+  },
+  "R29": {
+   "x": 180,
+   "y": 160,
+   "rotation": 0
+  },
+  "C18": {
+   "x": 240,
+   "y": 190,
+   "rotation": 90
+  },
+  "R30": {
+   "x": 300,
+   "y": 160,
+   "rotation": 180
+  },
+  "C19": {
+   "x": 360,
+   "y": 190,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 150,
+   "y": 400,
+   "rotation": 0
+  },
+  "R1": {
+   "x": 110,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 240,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q1": {
+   "x": 330,
+   "y": 400
+  },
+  "R3": {
+   "x": 290,
+   "y": 330,
+   "rotation": 270
+  },
+  "R4": {
+   "x": 290,
+   "y": 250,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 240,
+   "y": 320,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 350,
+   "y": 300,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 310,
+   "y": 470,
+   "rotation": 90
+  },
+  "R6": {
+   "x": 350,
+   "y": 490,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 410,
+   "y": 430,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 500,
+   "y": 430,
+   "rotation": 0
+  },
+  "Q2": {
+   "x": 580,
+   "y": 430
+  },
+  "R8": {
+   "x": 540,
+   "y": 500,
+   "rotation": 90
+  },
+  "R9": {
+   "x": 600,
+   "y": 520,
+   "rotation": 90
+  },
+  "R10": {
+   "x": 600,
+   "y": 330,
+   "rotation": 90
+  },
+  "R11": {
+   "x": 560,
+   "y": 380,
+   "rotation": 180
+  },
+  "C5": {
+   "x": 560,
+   "y": 350,
+   "rotation": 180
+  },
+  "C6": {
+   "x": 660,
+   "y": 400,
+   "rotation": 0
+  },
+  "SUSTAIN": {
+   "x": 720,
+   "y": 460,
+   "rotation": 270,
+   "mirror": true
+  },
+  "R17": {
+   "x": 720,
+   "y": 550,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 790,
+   "y": 460,
+   "rotation": 0
+  },
+  "R12": {
+   "x": 870,
+   "y": 460,
+   "rotation": 0
+  },
+  "Q4": {
+   "x": 960,
+   "y": 460
+  },
+  "R13": {
+   "x": 920,
+   "y": 530,
+   "rotation": 90
+  },
+  "R14": {
+   "x": 980,
+   "y": 550,
+   "rotation": 90
+  },
+  "R15": {
+   "x": 1010,
+   "y": 370,
+   "rotation": 90
+  },
+  "R16": {
+   "x": 945,
+   "y": 400,
+   "rotation": 180
+  },
+  "C8": {
+   "x": 945,
+   "y": 350,
+   "rotation": 180
+  },
+  "C9": {
+   "x": 945,
+   "y": 300,
+   "rotation": 180
+  },
+  "D2": {
+   "x": 1040,
+   "y": 280,
+   "rotation": 270
+  },
+  "D3": {
+   "x": 1080,
+   "y": 280,
+   "rotation": 90
+  },
+  "C10": {
+   "x": 1080,
+   "y": 430,
+   "rotation": 0
+  },
+  "R18": {
+   "x": 1170,
+   "y": 430,
+   "rotation": 0
+  },
+  "Q5": {
+   "x": 1260,
+   "y": 430
+  },
+  "R19": {
+   "x": 1220,
+   "y": 500,
+   "rotation": 90
+  },
+  "R20": {
+   "x": 1280,
+   "y": 520,
+   "rotation": 90
+  },
+  "R21": {
+   "x": 1310,
+   "y": 340,
+   "rotation": 90
+  },
+  "R22": {
+   "x": 1245,
+   "y": 370,
+   "rotation": 180
+  },
+  "C11": {
+   "x": 1245,
+   "y": 320,
+   "rotation": 180
+  },
+  "C12": {
+   "x": 1245,
+   "y": 270,
+   "rotation": 180
+  },
+  "D4": {
+   "x": 1340,
+   "y": 250,
+   "rotation": 270
+  },
+  "D5": {
+   "x": 1380,
+   "y": 250,
+   "rotation": 90
+  },
+  "C13": {
+   "x": 1370,
+   "y": 400,
+   "rotation": 0
+  },
+  "R23": {
+   "x": 1460,
+   "y": 400,
+   "rotation": 0
+  },
+  "C14": {
+   "x": 1500,
+   "y": 460,
+   "rotation": 90
+  },
+  "C15": {
+   "x": 1460,
+   "y": 280,
+   "rotation": 0
+  },
+  "R24": {
+   "x": 1520,
+   "y": 310,
+   "rotation": 90
+  },
+  "TONE": {
+   "x": 1560,
+   "y": 370,
+   "rotation": 270,
+   "mirror": true
+  },
+  "C16": {
+   "x": 1650,
+   "y": 370,
+   "rotation": 0
+  },
+  "Q3": {
+   "x": 1740,
+   "y": 370
+  },
+  "R25": {
+   "x": 1700,
+   "y": 300,
+   "rotation": 270
+  },
+  "R26": {
+   "x": 1700,
+   "y": 440,
+   "rotation": 90
+  },
+  "R27": {
+   "x": 1760,
+   "y": 460,
+   "rotation": 90
+  },
+  "R28": {
+   "x": 1760,
+   "y": 280,
+   "rotation": 270
+  },
+  "C17": {
+   "x": 1830,
+   "y": 340,
+   "rotation": 0
+  },
+  "VOLUME": {
+   "x": 1920,
+   "y": 340,
+   "rotation": 180
+  },
+  "RLOAD": {
+   "x": 1980,
+   "y": 440,
+   "rotation": 90
+  }
+ }
+}
