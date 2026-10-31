@@ -4,13 +4,13 @@
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 177 |
+| 변환 완료 | 186 |
 | 기록만 | 5 |
-| 보류 | 43 |
+| 보류 | 34 |
 | 미착수 | 0 |
 | C등급(범위 밖) | 41 |
 
-## 변환 완료 (177)
+## 변환 완료 (186)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -192,6 +192,15 @@
 | B | 186788553 | 브라우니 PLUTO | overdrive | 브라우니 PLUTO a/b (맵 둘) |
 | B | 186788600 | BREADCAST  (노브 제외) | preamp | pp-breadcast (트랜스 값 추정) |
 | B | 186788025 | Duality Bass Fuzz | fuzz | pp-duality-bass-fuzz (CD4049 모델) |
+| B | 186788180 | BIG SHERIFF PREAMP | preamp | pp-big-sheriff-preamp (팟 추측) |
+| B | 186788181 | BIG JACK PREAMP | preamp | pp-big-jack-preamp (팟 추측) |
+| B | 186788182 | BIG KRAKEN PREAMP | preamp | pp-big-kraken-preamp (팟 추측) |
+| B | 186788178 | BIG COPPER PREAMP | preamp | pp-big-copper-preamp (팟 추측) |
+| B | 186788179 | BIG DUTCH PREAMP | preamp | pp-big-dutch-preamp (팟 추측) |
+| B | 186788445 | OCTA KING | fuzz | pp-octa-king (팟 추측) |
+| B | 186788658 | ICE MUFF | fuzz | pp-ice-muff (팟 추측) |
+| B | 186788660 | MOONSHINE BOTTLE | overdrive | pp-moonshine-bottle (팟 추측) |
+| B | 186788139 | NEW BLUE DRIVER | unknown | pp-new-blue-driver (팟 추측) |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -202,7 +211,7 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (43)
+## 보류 (34)
 
 보류 이유 태그:
 
@@ -227,13 +236,6 @@
 | B | 186788146 | KONISH SS-3 | overdrive | [오병합] TL072 B측 핀 넷 합침(재시도3) |
 | B | 186788150 | TUBE SV808 | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788138 | NEW ANDY PLUS | eq | [팟라벨] 앵글 팟 5개 무라벨·사진 없음(재시도3) |
-| B | 186788180 | BIG SHERIFF PREAMP | preamp | [팟라벨] 4단계 보류(무라벨 노브) |
-| B | 186788181 | BIG JACK PREAMP | preamp | [팟라벨] 4단계 보류(무라벨 노브) |
-| B | 186788182 | BIG KRAKEN PREAMP | preamp | [팟라벨] 4단계 보류(무라벨 노브) |
-| B | 186788178 | BIG COPPER PREAMP | preamp | [팟라벨] 4단계 보류(무라벨 노브) |
-| B | 186788179 | BIG DUTCH PREAMP | preamp | [팟라벨] 4단계 보류(무라벨 노브) |
-| B | 186788445 | OCTA KING | fuzz | [팟라벨] 4단계 보류(무라벨 노브·DPDT) |
-| B | 186788658 | ICE MUFF | fuzz | [팟라벨] 4단계 보류(고립·무라벨 노브) |
 | B | 186788468 | SUPA FUZZ | fuzz | [대조] 앵글 팟 라벨 없음, Q2 이미터 넷 고립 - 원본 Super-Fuzz 대조 |
 | B | 186787489 | Bowling Point | buffer-boost | [대조] BASS 토글 공통이 A단 반전 입력에 붙는 경로 안 보임 - 나머지 JUMP는 결과 메모에 있음 |
 | B | 186787464 | Marvel Drive | overdrive | [오병합] 18V 선 따라 22패드 한 넷(재시도3) |
@@ -249,12 +251,10 @@
 | B | 186788599 | FRIEDMAN MARY | distortion | [오병합] 자홍 고립 13, 팟 9자리 무라벨 |
 | B | 186788036 | All of BB Cream | overdrive | [대조] 괄호 대체값 7곳, ATM/COMP 토글 다이오드 묶음 |
 | B | 186788038 | Bass BB Cream | overdrive | [자료] All of BB 기판의 값 변경·점퍼 자료 필요 |
-| B | 186788660 | MOONSHINE BOTTLE | overdrive | [팟라벨] 앵글 팟 12패드 무라벨, 고립 21 |
 | B | 186788161 | SONIX 482i | unknown | [모델] NJM2153 엔헨서 칩, ICL7660 두 개 ±12V |
 | B | 186788144 | KONISH NG-2 | fuzz | [오병합] QE 베이스 구동 경로 없음(시안 넷이 접지인지 바이어스인지) |
 | B | 186788143 | KONISH G-2 | overdrive | [오병합] 고립 20, 접지 넷에 QB 컬렉터 오병합 |
 | B | 186788549 | J900CM | overdrive | [오병합] U1 출력 핀 둘 고립, 앵글 팟 4개 무라벨 |
-| B | 186788139 | NEW BLUE DRIVER | unknown | [팟라벨] 앵글 팟·듀얼 게인 무라벨, 고립 25, BD-2 이산 op-amp |
 | B | 186788588 | DIAVOLO11K  (노브 제외) | distortion | [팟라벨] 앵글 팟 11개 중 이름 1개, 고립 22 |
 | B | 186788601 | DIESEL V4  (노브 제외) | distortion | [팟라벨] 노브 7개 무라벨, 고립 31 |
 | B | 186788662 | SEROTONE | eq | [팟라벨] 앵글 팟 4개·트리머 3개 무라벨 |
