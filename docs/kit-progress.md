@@ -4,13 +4,13 @@
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 163 |
+| 변환 완료 | 171 |
 | 기록만 | 5 |
-| 보류 | 57 |
+| 보류 | 49 |
 | 미착수 | 0 |
 | C등급(범위 밖) | 41 |
 
-## 변환 완료 (163)
+## 변환 완료 (171)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -178,6 +178,14 @@
 | B | 186788141 | NEW REVVOLUTION G4 | unknown | pp-new-revvolution-g4 (재시도2) |
 | B | 186788574 | TWEED AMP 57 | overdrive | pp-tweed-amp-57 (재시도2, 팟 추측) |
 | B | 186787456 | BEE OD | overdrive | pp-bee-od (재시도2) |
+| B | 186788334 | SEC RET PRE | preamp | pp-sec-ret-pre (자료 없음, 토글·볼륨 추정) |
+| B | 186788052 | Cream Cake Overdrive | overdrive | pp-cream-cake-overdrive (솔로 고정) |
+| B | 186788074 | New Big Muffler | distortion | pp-new-big-muffler (Stock 값, PDS 778) |
+| B | 186788053 | Custard Cake Overdrive | overdrive | pp-custard-cake-overdrive (솔로 고정) |
+| B | 186787678 | GTO-D | overdrive | pp-gto-d (Wild Jack 기판, 토글 닫힘) |
+| B | 186787643 | NEW Cat II | fuzz | pp-new-cat-ii (변형표) |
+| B | 186787644 | NEW Turbo Cat | fuzz | pp-new-turbo-cat (변형표) |
+| B | 186787645 | NEW Vintage Cat | fuzz | pp-new-vintage-cat (변형표) |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -188,7 +196,7 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (57)
+## 보류 (49)
 
 보류 이유 태그:
 
@@ -204,7 +212,6 @@
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
 | B | 186788016 | Pluto Blue | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788334 | SEC RET PRE | preamp | [자료] 소스 토글·볼륨 배선(재시도1) |
 | B | 186788129 | NEW SON OF BEN | preamp | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788518 | FUZZ BENDER II GE | fuzz | [대조] ICL7660 전하펌프 |
 | B | 186788569 | BASS CLEAN | buffer-boost | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
@@ -223,11 +230,9 @@
 | B | 186788658 | ICE MUFF | fuzz | [팟라벨] 4단계 보류(고립·무라벨 노브) |
 | B | 186788468 | SUPA FUZZ | fuzz | [대조] 앵글 팟 라벨 없음, Q2 이미터 넷 고립 - 원본 Super-Fuzz 대조 |
 | B | 186787489 | Bowling Point | buffer-boost | [대조] BASS 토글 공통이 A단 반전 입력에 붙는 경로 안 보임 - 나머지 JUMP는 결과 메모에 있음 |
-| B | 186788052 | Cream Cake Overdrive | overdrive | [자료] SOLO 팟이 오프보드 3PDT로 들어감, 러그 연결 미확정 |
 | B | 186787464 | Marvel Drive | overdrive | [오병합] 18V 선 따라 22패드 한 넷(재시도3) |
 | B | 186788107 | NEW 1981 DRIV | distortion | [대조] U2A 반전 입력 연결·TL072 B단 역할 불명 - 원본 1981 DRV 대조 |
 | B | 186788115 | NEW 1981 LEVEL | buffer-boost | [모델] 제너 항복 클리퍼(재시도3) |
-| B | 186788074 | New Big Muffler | distortion | [자료] 기판에 값 실크 없음, 부품표는 자료실 PDF(sno=778, 9개 버전) 필요 |
 | B | 186788661 | ODR ONE | overdrive | [대조] 저항 줄 밑 선 겹침, U1B 출력 행선 불명, 앵글 팟 4개 라벨 없음 - 원본 ODR-1 대조 |
 | B | 186788586 | KENTAUR GOLD | overdrive | [대조] Klon 전체, 오프보드 팟 러그 9개 무라벨, 고립 11 |
 | B | 186788587 | KENTAUR SILVER | overdrive | [대조] KENTAUR GOLD와 같은 레이아웃, 같은 이유 |
@@ -242,7 +247,6 @@
 | B | 186788036 | All of BB Cream | overdrive | [대조] 괄호 대체값 7곳, ATM/COMP 토글 다이오드 묶음 |
 | B | 186788038 | Bass BB Cream | overdrive | [자료] All of BB 기판의 값 변경·점퍼 자료 필요 |
 | B | 186788553 | 브라우니 PLUTO | overdrive | [다회로] 프로틴 2채널 |
-| B | 186788053 | Custard Cake Overdrive | overdrive | [자료] 오프보드 S·B·P 배선은 자료실 PDS 777에만 |
 | B | 186788660 | MOONSHINE BOTTLE | overdrive | [팟라벨] 앵글 팟 12패드 무라벨, 고립 21 |
 | B | 186788161 | SONIX 482i | unknown | [모델] NJM2153 엔헨서 칩, ICL7660 두 개 ±12V |
 | B | 186788144 | KONISH NG-2 | fuzz | [오병합] QE 베이스 구동 경로 없음(시안 넷이 접지인지 바이어스인지) |
@@ -256,10 +260,6 @@
 | B | 186788662 | SEROTONE | eq | [팟라벨] 앵글 팟 4개·트리머 3개 무라벨 |
 | B | 186787468 | Sam's Amp Classic | preamp | [오병합] 패드 133개가 한 넷, 렌더 해상도 낮음 |
 | B | 186788441 | BASSLINE II (노브, 케이스 제외) | preamp | [팟라벨] 노브 7개 무라벨, 고립 43 + [대조] Tech21 Bass DI V2 |
-| B | 186787678 | GTO-D | overdrive | [자료] Wild Jack 기판의 변형, Wild Jack 보류가 풀리면 부품표로 |
-| B | 186787643 | NEW Cat II | fuzz | [자료] NEW Cat 공용 기판, 품종별 다이오드·op-amp 정보 없음 |
-| B | 186787644 | NEW Turbo Cat | fuzz | [자료] NEW Dirty Cat, 품종별 부품 정보 없음 |
-| B | 186787645 | NEW Vintage Cat | fuzz | [자료] NEW Vintage Cat, 품종별 부품 정보 없음 |
 
 ## 미착수 (0)
 
