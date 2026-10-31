@@ -1,0 +1,118 @@
+id pp-konish-ss2
+goods 186788145
+name KONISH SS-2
+motif Cornish SS-2
+type overdrive
+desc LM1458 2단 - A단 비반전 고이득(150K∥10p, -in→470n→510R→SUST 가변저항∥4.7n)→1000n→10K→1N34A 역병렬 접지 클리퍼→10n 톤(W20K, 10n 션트)→220n→B단 비반전(6.8K∥1n, 10uF+2.4K, 1M/1M 바이어스)→22uF→91R→A10K 볼륨
+image img_01.jpg
+# LM1458 notch up: 47=1 53=2 60=3 71=4 / 48=8 54=7 61=6 72=5.
+# trace_pad + render: Vref (65, 78, 79, 90) was merged into ground - 150K 41-65 from V+ and 150K 89-90 to the ground '+' pad 89
+# with 10uF 79-91, so SPLIT puts it back as its own net. +in B (72) reaches only 64 (10K), not -in B (61) - SPLIT 72 64.
+# The 22uF 45-34 pads are on two nets (45 = out B; 34-32-33 = 91R/10K): SPLIT 45 39 49 54.
+# B-half bias: +in B node n8 (25/40/42/43) has 1M to V+ (42-66) and 1M to the -in leg node (43-67, then 2.4K to ground),
+# so the 2.4K is shared by the gain leg and the bias divider (as on the board).
+# Pots: silk "1" sits on the right lug of each. SUST B50K 2 (lug1, ground) - wiper 1 (ground) - 0: a variable resistor in the -in leg.
+# TONE W20K lug1 5 (10n to ground) - wiper 4 - 3 (10n from the clipper); VOLUME A10K lug1 8 (ground) - wiper 7 = OUT 18 - 6.
+BOM 1Mx4 150Kx3 100K 10Kx4 6.8K 2.4K 510R 91R 1000n 470n 220n 10nx4 4.7n 1nx2 10p 1N400X 1N34Ax2 100uF 22uF 10uFx2 LM1458 B50K W20K A10K
+io IN=85 OUT=18 V9=80 GND=84,89
+SPLIT 65 78 79 90
+SPLIT 72 64
+SPLIT 45 39 49 54
+
+STAGE input input 입력
+R 1M 57 86 R1
+R 10K 87 58 R2
+C 10n 70 88 C1
+C 1n 76 56 C2
+R 1M 77 78 R3
+
+STAGE a gain A단 (SUST)
+IC LM1458 1=47 2=53 3=60 4=71 5=72 6=61 7=54 8=48 U1
+R 150K 37 38 R4
+C 10p 46 59 C3
+C 470n 51 50 C4
+R 510R 35 19 R5
+POT B50K SUST 2 1 0
+C 4.7n 9 10 C5
+
+STAGE clip clipping 1N34A 역병렬
+C 1000n 27 28 C6
+R 10K 36 22 R6
+D 1N34A a=24 k=23 D1
+D 1N34A a=29 k=30 D2
+C 10n 21 20 C7
+
+STAGE tone tone 톤 (W20K)
+C 10n 11 12 C8
+POT W20K TONE 5 4 3
+C 10n 15 26 C9
+R 100K 14 31 R7
+
+STAGE b gain B단 (비반전)
+C 220n 13 25 C10
+R 10K 40 64 R8
+R 1M 42 66 R9
+R 1M 43 67 R10
+R 6.8K 39 63 R11
+C 1n 49 62 C11
+C 10uF 52 55 C12
+R 2.4K 68 44 R12
+
+STAGE out output 출력
+C 22uF 45 34 C13
+R 10K 33 17 R13
+R 91R 32 16 R14
+POT A10K VOLUME 8 7 6
+
+STAGE bias custom bias Vref (150K/150K)
+R 150K 41 65 R15
+R 150K 90 89 R16
+C 10uF 79 91 C14
+
+STAGE power power 전원
+D 1N400X a=73 k=74 D3
+C 100uF 69 75 C15
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 100 460 v-
+AT R2 160 400 h
+AT C1 240 400 h
+AT C2 300 460 v
+AT R3 340 460 v
+AT R16 340 550 v
+AT C14 380 550 v
+AT R15 280 520 h
+AT U1A 520 420
+AT R4 520 340 h-
+AT C3 520 300 h-
+AT C4 490 500 v
+AT R5 490 580 v
+AT SUST 490 670 r270 m
+AT C5 550 640 v
+AT C6 610 420 h
+AT R6 670 420 h
+AT D1 720 450 v-
+AT D2 760 450 v
+AT C7 800 450 v
+AT C8 860 400 h
+AT TONE 920 430 r180 m
+AT C9 950 460 v
+AT R7 1000 430 v
+AT C10 1060 400 h
+AT R9 1090 340 v-
+AT R10 1090 460 v
+AT R8 1120 400 h
+AT U1B 1210 420
+AT R11 1210 340 h-
+AT C11 1210 300 h-
+AT C12 1180 500 v
+AT R12 1180 580 v
+AT C13 1290 420 h
+AT R14 1350 420 h
+AT R13 1320 480 v
+AT VOLUME 1410 450 r270 m
+AT RLOAD 1480 480 v
+AT VCC 60 160
+AT D3 130 160 h
+AT C15 190 190 v

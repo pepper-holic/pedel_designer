@@ -34,7 +34,7 @@ R 100K 59 74 R2
 R 10K 83 84 R3
 C 100n 61 75 C3
 
-STAGE q23 clipping Q2·Q3 (직결 쌍)
+STAGE q23 gain Q2·Q3 (직결 쌍)
 Q GE-PNP b=18 c=14 e=21 Q2
 R 47K 22 12 R4
 POT 100K BIAS2 4 7 5

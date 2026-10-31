@@ -1,0 +1,127 @@
+id pp-1981-driv
+goods 186788107
+name NEW 1981 DRIV
+motif 1981 Inventions DRV
+type distortion
+desc TL072 x2, 18V(ICL7660 더블러) - 100n/1K 입력→U1B 비반전(10K∥390p, 2.2K+47uF, 이득 5.5)→22n/1K→U2A RAT형(1K+A100K GAIN∥3.3n, 470R+220n)→4.7uF/1K→1N914 역병렬 접지→A100K FILTER+1.5K+3.3n→22n→U2B 버퍼(10K∥3.3n)→4.7uF/470R→A100K VOLUME; U1A는 버퍼 출력(Buff Out)
+image img_03.jpg
+# Both ICs are TL072 (seller: the left one's "4558D" silk is a misprint). Left notch: 65=1 74=2 83=3 93=4 / 66=8 75=7 84=6 94=5;
+# right: 71=1 77=2 89=3 95=4 / 72=8 78=7 90=6 96=5 (silk marks: ⊕ V+, ∇ out, - / + inputs).
+# Supply: 9V 0 -> 1N400X 1-20 -> +9V n1; ICL7660 (2=1 6=2 13=3 21=4 / 3=8 7=7 14=6 22=5, pins 4-7 unused) with 1N400X 4-23 / 5-24 and
+# 10uF 28-29 / 30-31 makes +18V on 24/31/66/72/118 (both op-amps' V+, top of the 10K/10K Vref). The pump, its two diodes and two
+# caps are not simulated and left out of the BOM line (RAIL 66 18). Vref 47uF 91-80: its minus pad 80 shows no copper, wired to ground.
+# U1A is a unity buffer for the "Buff Out" jack (4.7uF 32-25, 100K, 470R 33-11 -> pad 10); that jack is off-board, so the 470R
+# that only reaches it is left out (470R x3 on the list).
+# Angle A100K pots, unlabelled (mounted under the board), assigned by net: 44/45-46 sits between the 1K from U2A's output and U2A's
+# -in -> GAIN (wiper 45 tied to 44); 15-16/17 between the clipper node and the 1.5K/3.3n low pass -> FILTER (wiper 16 tied to 17);
+# 49-50-51 after the output 470R, wiper 50 = OUT, 51 ground -> VOLUME.
+BOM 2.2Mx5 100K 10Kx4 2.2K 1.5K 1Kx4 470Rx2 220n 100n 22nx2 3.3nx3 390pF 100uF 47uFx2 4.7uFx3 1N400X 1N914x2 TL072x2 A100Kx3
+io IN=55 OUT=60 V9=0 GND=113,80
+RAIL 66 18
+NC 2 3 4 5 6 7 10 11 13 14 21 22 23 24 28 29 30 31 33 112
+
+STAGE input input 입력
+R 2.2M 56 57 R1
+C 100n 63 82 C1
+R 1K 64 92 R2
+R 2.2M 115 87 R3
+
+STAGE buf custom mix Buff Out 버퍼 (U1A)
+IC TL072 1=65 2=74 3=83 4=93 5=94 6=84 7=75 8=66 U1
+C 4.7uF 32 25 C2
+R 100K 34 12 R4
+
+STAGE pre gain U1B 프리앰프
+R 10K 76 101 R5
+C 390pF 85 102 C3
+R 2.2K 100 99 R6
+C 47uF 109 108 C4
+
+STAGE dist gain U2A 디스토션 (GAIN)
+C 22n 81 103 C5
+R 1K 114 86 R7
+R 2.2M 88 116 R8
+IC TL072 1=71 2=77 3=89 4=95 5=96 6=90 7=78 8=72 U2
+R 1K 48 47 R9
+POT A100K GAIN 46 45 44
+C 3.3n 69 70 C6
+R 470R 53 54 R10
+C 220n 68 67 C7
+
+STAGE clip clipping 1N914 역병렬
+C 4.7uF 52 43 C8
+R 1K 42 41 R11
+D 1N914 a=18 k=35 D1
+D 1N914 a=36 k=19 D2
+
+STAGE filter tone FILTER
+POT A100K FILTER 15 16 17
+R 1.5K 37 38 R12
+C 3.3n 9 8 C9
+
+STAGE obuf output 출력 버퍼 (U2B)
+C 22n 39 40 C10
+R 2.2M 105 104 R13
+R 10K 97 73 R14
+C 3.3n 98 79 C11
+R 2.2M 106 107 R15
+C 4.7uF 62 61 C12
+R 470R 59 58 R16
+POT A100K VOLUME 51 50 49
+
+STAGE bias custom bias Vref (10K/10K, 18V)
+R 10K 118 117 R17
+R 10K 119 120 R18
+C 47uF 91 80 C13
+
+STAGE power power 전원
+D 1N400X a=1 k=20 D3
+C 100uF 27 26 C14
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 100 460 v
+AT C1 140 400 h
+AT R2 200 400 h
+AT R3 240 460 v
+AT U1B 320 420
+AT R5 320 340 h-
+AT C3 320 300 h-
+AT R6 290 490 v
+AT C4 290 570 v
+AT U1A 200 620
+AT C2 280 620 h
+AT R4 310 680 v
+AT C5 410 420 h
+AT R7 470 420 h
+AT R8 510 480 v
+AT U2A 560 440
+AT R9 590 360 h-
+AT GAIN 500 360 r0
+AT C6 560 300 h
+AT R10 530 520 v
+AT C7 530 600 v
+AT C8 650 440 h
+AT R11 710 440 h
+AT D1 760 470 v-
+AT D2 800 470 v
+AT FILTER 860 440 r0
+AT R12 920 440 h
+AT C9 950 480 v
+AT C10 1000 440 h
+AT R13 1040 500 v
+AT U2B 1090 460
+AT R14 1090 380 h-
+AT C11 1090 340 h-
+AT R15 1060 540 v
+AT C12 1170 460 h
+AT R16 1230 460 h
+AT VOLUME 1290 490 r270 m
+AT RLOAD 1360 520 v
+AT R17 700 620 v
+AT R18 700 710 v
+AT C13 750 710 v
+AT VCC 60 160
+AT D3 130 160 h
+AT C14 190 190 v-
+AT Vrail1 260 190

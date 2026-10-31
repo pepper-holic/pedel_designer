@@ -1,0 +1,141 @@
+id pp-bowling-point
+goods 186787489
+name Bowling Point
+motif Ibanez TS808 (bass boost / clip mode variant)
+type overdrive
+desc TS808 계열 - MPSA18 입력 버퍼→RC4558 A단(1K+470n 접지 다리 BASS, 10K+A1M DRIVE 귀환∥51p, 1N4148 1:3 비대칭 클리퍼)→1K/150n→B단 액티브 톤(B2K, 220R+150n)→1000n→1K→B100K LEVEL→MPSA18 출력 버퍼→100R→10uF
+image img_02.jpg
+# RC4558P notch up: 55=1 58=2 72=3 81=4 / 50=8 59=7 73=6 82=5 (45/46 are fragments of pin 1's ring).
+# Seller note: CLIP C1/C2/C3 on-off-on (up = 1N4148 asymmetric, centre = no clipping, down = red LEDs); BASS B1/B3 on-on with
+# its common B2 wired to C2 (= -in A, pad 14). Fixed: CLIP up (JUMP 14 15: 1N4148 one forward 17->16, three back 23->22->37/38->39->18),
+# BASS on B1 (470n 9-10: the boost position). Left out with their pads: red LEDs 31-35 / 32-36 (C1 throw 13) and 220n 28-44 (B3 throw 19).
+# Hidden copper (render + seller wiring + TS808 topology): pin 1 -> 1K at 93 (vertical run beside the IC), out B 60 -> 83 (1000n),
+# 1K 60-95 -> -in B 73 (feedback), Q2 collector 62 <- V+ 50 (bottom-layer run under the logo the extractor dropped),
+# Level lug1 8 (Vref, 10K/10K 21-54 / 99-128) -> 107 (47uF Vref, 10K to +in A / +in B), 125 (output 10K) -> OUT 141 (under the
+# resistor row). DRIVE A1M: wiper 1 tied to lug 2 (= out A), the other lug 0 -> 10K -> -in A; seller says the silk "1" is
+# swapped, so lug1 = 0 and gain rises clockwise. TONE "1" on pad 3 (+in B side); LEVEL "1" on pad 8 (Vref end).
+# Parts list has 100R metal x1 and carbon x1; only the carbon one (98-127) has a place on the board - the metal one is left out.
+# 1N400X 47-77 is a reverse-polarity shunt (cathode on V+).
+BOM 4.7M 620K 510K 10Kx8 220R 100R 1Kx5 1000nx2 470n 150nx2 100nx6 22n 51pF 10uF 100uF 47uF 1N400X 1N4148x4 RC4558P MPSA18x2 A1M B2K B100K
+io IN=134 OUT=141 V9=68 GND=138
+JUMP 14 15
+JUMP 14 20
+JUMP 93 55
+JUMP 83 60
+JUMP 73 95
+JUMP 50 62
+JUMP 8 107
+JUMP 125 141
+NC 13 31 32 35 36 19 28 44 45 46
+
+STAGE input input 입력 버퍼 (Q1)
+R 4.7M 120 121 R1
+C 22n 133 132 C1
+R 1K 131 130 R2
+R 620K 117 119 R3
+Q MPSA18 b=92 c=76 e=103 Q1
+R 10K 113 114 R4
+
+STAGE a gain A단 (DRIVE·BASS)
+C 1000n 105 79 C2
+R 10K 80 116 R5
+IC RC4558P 1=55 2=58 3=72 4=81 5=82 6=73 7=59 8=50 U1
+R 10K 70 42 R6
+POT A1M DRIVE 0 1 2
+C 51pF 71 49 C3
+C 470n 10 9 C4
+R 1K 52 29 R7
+
+STAGE clip clipping 1N4148 1:3 비대칭
+D 1N4148 a=17 k=16 D1
+D 1N4148 a=23 k=22 D2
+D 1N4148 a=37 k=38 D3
+D 1N4148 a=39 k=18 D4
+
+STAGE tone tone 액티브 톤 (B단)
+R 1K 93 94 R8
+C 150n 110 109 C5
+R 10K 106 107 R9
+POT B2K TONE 3 4 5
+C 150n 12 11 C6
+R 220R 24 25 R10
+R 1K 60 95 R11
+
+STAGE level custom control LEVEL
+C 1000n 83 61 C7
+R 1K 51 26 R12
+POT B100K LEVEL 8 7 6
+
+STAGE out output 출력 버퍼 (Q2)
+C 100n 27 43 C8
+R 510K 53 30 R13
+Q MPSA18 b=66 c=57 e=89 Q2
+R 10K 97 126 R14
+R 100R 98 127 R15
+C 10uF 140 139 C9
+R 10K 125 96 R16
+
+STAGE bias custom bias Vref (10K/10K)
+R 10K 54 21 R17
+R 10K 99 128 R18
+C 47uF 115 124 C10
+C 100n 123 122 C11
+
+STAGE power power 전원
+D 1N400X a=47 k=77 D5
+C 100uF 65 56 C12
+C 100n 69 48 C13
+C 100n 40 41 C14
+C 100n 78 104 C15
+C 100n 62 86 C16
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 100 460 v
+AT C1 140 400 h
+AT R2 200 400 h
+AT R3 240 460 v
+AT Q1 290 400
+AT R4 310 470 v
+AT C2 360 430 h
+AT R5 400 490 v
+AT U1A 450 450
+AT C4 420 530 v
+AT R7 420 610 v
+AT R6 420 350 h
+AT DRIVE 500 350 r0
+AT C3 460 300 h
+AT D1 460 260 h-
+AT D2 430 220 h
+AT D3 490 220 h
+AT D4 550 220 h
+AT R8 540 450 h
+AT C5 590 480 v
+AT R9 630 510 v
+AT U1B 700 470
+AT TONE 640 590 r0 m
+AT C6 640 650 v
+AT R10 640 730 v
+AT R11 700 410 h-
+AT C7 790 470 h
+AT R12 850 470 h
+AT LEVEL 910 470 r180
+AT C8 960 530 h
+AT R13 1000 590 v
+AT Q2 1050 530
+AT R14 1070 620 v
+AT R15 1110 560 h
+AT C9 1170 560 h
+AT R16 1200 620 v
+AT RLOAD 1250 620 v
+AT R17 300 640 v-
+AT R18 300 730 v
+AT C10 350 730 v
+AT C11 390 730 v-
+AT VCC 60 160
+AT D5 130 190 v-
+AT C12 170 190 v
+AT C13 210 190 v
+AT C14 250 190 v
+AT C15 290 190 v
+AT C16 330 190 v

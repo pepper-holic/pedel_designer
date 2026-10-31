@@ -1,0 +1,474 @@
+{
+ "id": "pp-fuzz-bender-ii-ge",
+ "goodsNo": "186788518",
+ "kitName": "FUZZ BENDER II GE",
+ "motif": "Sola Sound Tone Bender MkII (germanium)",
+ "type": "fuzz",
+ "description": "게르마늄 PNP 3석 톤벤더 MkII, ICL7660의 -9V 레일에 양접지 - 4.7uF→Q1(누설 바이어스 100K, 10K 부하)→100n→Q2/Q3 직결 쌍(47K+100K BIAS 부하, Q3 E→100K 귀환, 8.2K+10K BIAS+470R 부하)→100R·B1K ATTACK(4.7uF)→10n→A100K 볼륨",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "4.7uF",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "GE-PNP",
+   "nodes": {
+    "b": "n1",
+    "c": "n2",
+    "e": "0"
+   }
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n2",
+    "vm9"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n3",
+    "n2"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "GE-PNP",
+   "nodes": {
+    "b": "n3",
+    "c": "n4",
+    "e": "0"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "BIAS2",
+   "kind": "POT",
+   "value": "100K",
+   "nodes": [
+    "n5",
+    "vm9",
+    "vm9"
+   ]
+  },
+  {
+   "ref": "Q3",
+   "kind": "Q",
+   "part": "GE-PNP",
+   "nodes": {
+    "b": "n4",
+    "c": "n6",
+    "e": "n7"
+   }
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n7",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "8.2K",
+   "nodes": [
+    "n6",
+    "n8"
+   ]
+  },
+  {
+   "ref": "BIAS3",
+   "kind": "POT",
+   "value": "10K",
+   "nodes": [
+    "n8",
+    "n9",
+    "n9"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "470R",
+   "nodes": [
+    "n9",
+    "vm9"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n7",
+    "n10"
+   ]
+  },
+  {
+   "ref": "ATTACK",
+   "kind": "POT",
+   "value": "B1K",
+   "nodes": [
+    "0",
+    "n11",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "4.7uF",
+   "nodes": [
+    "0",
+    "n11"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n9",
+    "n12"
+   ]
+  },
+  {
+   "ref": "LEVEL",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n12"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n13"
+   }
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n13",
+    "0"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "ICL7660",
+   "nodes": {
+    "1": "n13",
+    "2": "n14",
+    "3": "0",
+    "4": "n15",
+    "5": "vm9",
+    "8": "n13"
+   }
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "47uF",
+   "nodes": [
+    "0",
+    "vm9"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "vm9",
+    "0"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n13",
+    "0"
+   ]
+  }
+ ],
+ "rails": [
+  {
+   "net": "vm9",
+   "voltage": -9.0
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "C2"
+   ]
+  },
+  {
+   "id": "q1",
+   "category": "gain",
+   "label": "Q1 (누설 바이어스)",
+   "parts": [
+    "Q1",
+    "R2",
+    "R3",
+    "C3"
+   ]
+  },
+  {
+   "id": "q23",
+   "category": "gain",
+   "label": "Q2·Q3 (직결 쌍)",
+   "parts": [
+    "Q2",
+    "R4",
+    "BIAS2",
+    "Q3",
+    "R5",
+    "R6",
+    "BIAS3",
+    "R7"
+   ]
+  },
+  {
+   "id": "attack",
+   "category": "custom",
+   "label": "control ATTACK",
+   "parts": [
+    "R8",
+    "ATTACK",
+    "C4"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (볼륨)",
+   "parts": [
+    "C5",
+    "LEVEL"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원 (ICL7660 -9V)",
+   "parts": [
+    "D1",
+    "C6",
+    "U1",
+    "C7",
+    "C8",
+    "C9",
+    "C10"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "R1": {
+   "x": 90,
+   "y": 480,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 140,
+   "y": 480,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "Q1": {
+   "x": 270,
+   "y": 400
+  },
+  "R2": {
+   "x": 240,
+   "y": 480,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 270,
+   "y": 300,
+   "rotation": 270
+  },
+  "C3": {
+   "x": 340,
+   "y": 370,
+   "rotation": 0
+  },
+  "Q2": {
+   "x": 450,
+   "y": 400
+  },
+  "R4": {
+   "x": 450,
+   "y": 300,
+   "rotation": 270
+  },
+  "BIAS2": {
+   "x": 450,
+   "y": 220,
+   "rotation": 270
+  },
+  "Q3": {
+   "x": 580,
+   "y": 340
+  },
+  "R5": {
+   "x": 500,
+   "y": 520,
+   "rotation": 180
+  },
+  "R6": {
+   "x": 580,
+   "y": 250,
+   "rotation": 270
+  },
+  "BIAS3": {
+   "x": 640,
+   "y": 190,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 720,
+   "y": 190,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 670,
+   "y": 340,
+   "rotation": 90
+  },
+  "LEVEL": {
+   "x": 720,
+   "y": 420,
+   "rotation": 180
+  },
+  "RLOAD": {
+   "x": 760,
+   "y": 500,
+   "rotation": 90
+  },
+  "R8": {
+   "x": 580,
+   "y": 430,
+   "rotation": 90
+  },
+  "ATTACK": {
+   "x": 580,
+   "y": 510,
+   "rotation": 270
+  },
+  "C4": {
+   "x": 640,
+   "y": 570,
+   "rotation": 180
+  },
+  "VCC": {
+   "x": 60,
+   "y": 700
+  },
+  "D1": {
+   "x": 130,
+   "y": 700,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 200,
+   "y": 750,
+   "rotation": 90
+  },
+  "C10": {
+   "x": 260,
+   "y": 750,
+   "rotation": 90
+  },
+  "Vrail1": {
+   "x": 820,
+   "y": 190
+  },
+  "C8": {
+   "x": 880,
+   "y": 240,
+   "rotation": 270
+  },
+  "C9": {
+   "x": 930,
+   "y": 240,
+   "rotation": 90
+  }
+ }
+}

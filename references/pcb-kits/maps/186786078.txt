@@ -1,0 +1,125 @@
+id pp-rc-beast
+goods 186786078
+name RC BEAST
+motif Xotic RC Booster
+type boost
+desc 2SC1815 입력 버퍼(1M 바이어스)→1000n→22K→JRC4558 A단 반전(47K+B250K GAIN∥150p, 1N4148 3+3 대칭 귀환 클리핑)→B단 반전 박산달(BASS·TREBLE B50K)→1000n→A100K LEVEL→2SC1815 출력 버퍼→10uF→470R
+image img_01.jpg
+# Guitar build (seller: the bass build drops the six 1N4148, 47K -> 22K, 47n -> 100n). No parts-list image on the page, so the
+# values are the board silk and there is no BOM line. Seller: both transistors are 2SC1815 (the right one is silked 2N5088).
+# JRC4558 notch up: 35=1 49=2 57=3 62=4 / 36=8 50=7 58=6 63=5. Both + inputs sit on Vref (n11: 22K from V+, 6.8K+15K to ground,
+# 10uF 93-94), so both halves are inverting stages; Q1's base is biased from the 6.8K/15K tap through 1M.
+# The red-filled 47n box at the left edge hides its two pads (the extractor finds neither); its top pad joins 61 (10K from IN) and
+# its bottom pad runs to Q1's base 85, so it is written on 61 and 85. The output 470R's left pad 82 runs under its red body to
+# OUT (91/92) - JUMP 82 91.
+# Pots ("1" on the right lug of each): GAIN B250K lug1 12 (out A), wiper 11 tied to 10 (47K to -in A): more feedback R clockwise;
+# BASS B50K lug1 4 (out B side) - wiper 1 - 0 (out A side); TREBLE B50K lug1 3 (out B side) - wiper 2 - 5; LEVEL A100K lug1 15 (Vref)
+# - wiper 14 - 13 (1000n from out B).
+io IN=95 OUT=92 V9=71 GND=105
+JUMP 82 91
+
+STAGE input input 입력 버퍼 (Q1)
+R 1M 96 97 R1
+R 10K 84 61 R2
+C 47n 61 85 C1
+R 1M 98 99 R3
+Q 2SC1815 b=85 c=79 e=67 Q1
+R 10K 86 87 R4
+
+STAGE gain gain A단 반전 (GAIN)
+C 1000n 68 69 C2
+R 22K 70 48 R5
+IC JRC4558 1=35 2=49 3=57 4=62 5=63 6=58 7=50 8=36 U1
+R 47K 53 23 R6
+POT B250K GAIN 12 11 10
+C 150p 34 56 C3
+
+STAGE clip clipping 1N4148 3+3 귀환 클리핑
+D 1N4148 a=42 k=24 D1
+D 1N4148 a=43 k=25 D2
+D 1N4148 a=44 k=26 D3
+D 1N4148 a=27 k=45 D4
+D 1N4148 a=28 k=46 D5
+D 1N4148 a=55 k=54 D6
+
+STAGE tone tone 박산달 (B단)
+R 4.7K 47 16 R7
+C 33n 17 18 C4
+POT B50K BASS 4 1 0
+C 33n 6 7 C5
+R 4.7K 32 31 R8
+C 4.7n 19 20 C6
+POT B50K TREBLE 3 2 5
+C 4.7n 22 21 C7
+R 33K 29 30 R9
+R 10K 9 8 R10
+
+STAGE level custom control LEVEL
+C 1000n 37 38 C8
+POT A100K LEVEL 15 14 13
+
+STAGE out output 출력 버퍼 (Q2)
+C 100n 39 59 C9
+R 470K 81 80 R11
+Q 2SC1815 b=74 c=75 e=66 Q2
+R 10K 60 33 R12
+C 10uF 64 77 C10
+R 470R 83 82 R13
+R 100K 91 90 R14
+
+STAGE bias custom bias Vref (22K / 6.8K+15K)
+R 22K 72 73 R15
+R 6.8K 101 100 R16
+R 15K 88 89 R17
+C 10uF 93 94 C11
+
+STAGE power power 전원
+C 10uF 51 52 C12
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 100 460 v
+AT R2 140 400 h
+AT C1 200 400 h
+AT Q1 290 400
+AT R3 240 460 v
+AT R17 240 550 v
+AT R16 180 520 h
+AT R15 150 490 v
+AT C11 120 580 v
+AT R4 310 490 v
+AT C2 370 430 h
+AT R5 430 430 h
+AT U1A 520 410
+AT R6 500 330 h
+AT GAIN 560 330 r180
+AT C3 520 280 h-
+AT D1 460 240 h
+AT D2 520 240 h
+AT D3 580 240 h
+AT D6 460 200 h-
+AT D5 520 200 h-
+AT D4 580 200 h-
+AT R7 640 480 h
+AT BASS 730 480 r180
+AT C4 700 430 h
+AT C5 760 430 h
+AT R8 820 480 h-
+AT C6 640 580 h
+AT TREBLE 730 580 r180
+AT C7 820 580 h-
+AT R9 790 660 h
+AT R10 790 700 h
+AT U1B 900 700
+AT C8 970 700 h
+AT LEVEL 1030 730 r270 m
+AT C9 1090 730 h
+AT R11 1130 790 v
+AT Q2 1180 730
+AT R12 1200 820 v
+AT C10 1240 760 h
+AT R13 1300 760 h
+AT R14 1330 820 v
+AT RLOAD 1380 820 v
+AT VCC 60 160
+AT C12 120 190 v
