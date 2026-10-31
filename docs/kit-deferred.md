@@ -331,3 +331,15 @@ Abracadabra(PRES 6-7 노랑), Robin Drive, How Lost, RAM Fuzz(SPLIT 14 / JUMP 5 
 (팟 다리, 청록 밑 노랑 24·26·40), Blue Color(18 ↔ 30·33·67, 맵은 JUMP 18 36), NEW VALVE 808, 2BAND BASS PRE, BUTTER MARKET, STRA BLASTER,
 1970 Fuzz 2SC828·BC108C, Fuzz Buddy, Brunch Box. Fuzzy Face는 판정 이미지(186788277)가 이 기기에 없어 비교 대상 아님.
 Sovereign·Peanut Drive는 27K/22K 라벨 상자를 맵이 SPLIT으로 이미 떼어 놔서 결과가 같다.
+
+## 2026-10-31 층 분리 뒤 재시도 묶음 1 (고립 0 후보, 패드 적은 순)
+
+회로가 됨: MID BLASTER(헤더 0-28…4-32 JUMP, 토글은 이펙트 쪽 14-15 고정), NEW ACC PREAMP, KO-N AZS(연보라 접지 패드 9개를 io GND로).
+여전히 보류(막힌 이유가 선이 아님):
+- SEC RET PRE: 소스 바이패스 on-off-on 토글(0/8/20)의 공통 8이 1M(9-10)로만 이어져 접지 경로가 없고, 3.6K 오른쪽(12)·볼륨 A500K 가운데(48)는
+  동박이 없다. 토글·볼륨이 어떻게 배선되는지 키트 배선도가 있어야 한다. [자료]
+- Fluffy Fuzz: LED 외곽선의 '+'에 걸린 작은 패드 조각 51이 접지로 판정돼 op-amp B단(48·49·56~59·66·67·72·73)이 접지 넷에 섞였다.
+  SPLIT으로 나눌 수는 있지만 390p(58-72)와 1M(49-73)·LED 쌍이 −in B와 출력 사이에 어떻게 놓이는지(직류 귀환 경로) 원본 Cream Puff로 확인해야 한다. [대조]
+  추출기 개선 후보: 반지름이 보통 패드의 2/3 미만인 조각은 접지 판정에서 뺀다.
+- Timothy V3: DPDT 6러그(46·47 / 65·66 / 78·79)에서 한쪽 위치가 OUT(66)을 접지 79에 붙이고, 다른 위치는 B단 +입력(78)이 6.8n만 남는다.
+  모드 토글의 두 위치가 무엇인지 원본 V3 배선이 필요하다. 클리퍼(1N4148 2+2, SYM DIP)·게인 팟·C50K 두 개는 읽혔다. [대조]

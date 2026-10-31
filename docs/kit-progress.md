@@ -4,13 +4,13 @@
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 118 |
+| 변환 완료 | 121 |
 | 기록만 | 5 |
-| 보류 | 102 |
+| 보류 | 99 |
 | 미착수 | 0 |
 | C등급(범위 밖) | 41 |
 
-## 변환 완료 (118)
+## 변환 완료 (121)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -133,6 +133,9 @@
 | B | 186788148 | BUTTER MARKET | unknown | 2N5088 + LF353 2갈래 블렌드 (팟 값 일부 추정) |
 | B | 186787969 | Octavia | fuzz | Octavia (42TM022 트랜스포머 모델 추가, 원본 대조 안 함) |
 | B | 186788550 | TA7136 DS ONE | distortion | Boss DS-1 계열 (TA7136AP op-amp 근사 추가, 원본 대조 안 함) |
+| B | 186788540 | MID BLASTER | eq | pp-mid-blaster (층 분리 뒤 재시도) |
+| B | 186788357 | NEW ACC PREAMP | preamp | pp-new-acc-preamp (층 분리 뒤 재시도, EQ 팟 이름은 회로로) |
+| B | 186788310 | KO-N AZS (케이스제외) | overdrive | pp-ko-n-azs (층 분리 뒤 재시도) |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -143,7 +146,7 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (102)
+## 보류 (99)
 
 보류 이유 태그:
 
@@ -160,11 +163,8 @@
 |---|---|---|---|---|
 | B | 186788016 | Pluto Blue | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788334 | SEC RET PRE | preamp | [대조] ICL7660 전하펌프 |
-| B | 186788540 | MID BLASTER | eq | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788357 | NEW ACC PREAMP | preamp | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788129 | NEW SON OF BEN | preamp | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186787681 | Fluffy Fuzz | fuzz | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788310 | KO-N AZS (케이스제외) | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788518 | FUZZ BENDER II GE | fuzz | [대조] ICL7660 전하펌프 |
 | B | 186788106 | Timothy V3 | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788569 | BASS CLEAN | buffer-boost | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
