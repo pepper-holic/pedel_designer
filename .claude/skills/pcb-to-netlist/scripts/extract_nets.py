@@ -1,7 +1,7 @@
 """Find pads and copper nets in a pedalparts board-trace render, and draw a numbered overlay.
 
 Usage:
-    python -E -P extract_nets.py <board.jpg> <out_prefix> [scale=3]
+    python -E -P extract_nets.py <board.jpg> <out_prefix> [scale=3] [--smd] [--flat] [--previous <nets.json>] [--renumber]
 
 Writes <out_prefix>.json  {"pads": [{"id", "x", "y", "r", "ground", "net"}], "nets": {net: [pad ids]}}
 and    <out_prefix>.png   the render scaled up, every pad labelled "id" in its net's colour, with the
@@ -42,7 +42,8 @@ SILK_BRIDGE = 4
 # nets ignore it; the hint pass reports which net each lone pad would join, for the reader to confirm.
 HINTS = True
 SHORT_SILK = 4
-PAD_MERGE = 0.8
+# A ground (pour) pad is at least this fraction of the board's median pad radius.
+GROUND_MIN_R = 0.6
 # A part body is a white area ringed by a silk outline, and on many boards it is painted over the
 # bottom-layer copper: a trace that turns a corner under a resistor vanishes there. When exactly two
 # traces of one layer poke into such a body (each by a short stub), they are one trace.
@@ -266,41 +267,29 @@ def split_ground_pads(pads: list[dict], mask: dict[tuple[int, int], str]) -> Non
         cx, cy, r = int(round(p["x"])), int(round(p["y"])), max(2, int(p["r"] * 0.45))
         # A thermal-relief "+" is a horizontal AND a vertical silk stroke through the hole centre;
         # a hole's dark outline ring, or a stray letter, never gives both.
-        row = sum(1 for x in range(cx - r, cx + r + 1) for dy in (-1, 0, 1) if mask.get((x, cy + dy)) == "silk")
-        col = sum(1 for y in range(cy - r, cy + r + 1) for dx in (-1, 0, 1) if mask.get((cx + dx, y)) == "silk")
+        # Each stroke is 1-2px wide and the centre is known to about a pixel: take the best single row
+        # (column) within 2px of the centre, so a 1px shift of the centre never loses the stroke.
+        row = max(sum(1 for x in range(cx - r, cx + r + 1) for dy in (s - 1, s, s + 1) if mask.get((x, cy + dy)) == "silk") for s in (-1, 0, 1))
+        col = max(sum(1 for y in range(cy - r, cy + r + 1) for dx in (s - 1, s, s + 1) if mask.get((cx + dx, y)) == "silk") for s in (-1, 0, 1))
         p["paleFraction"] = sum(1 for q in p["pixels"] if mask[q] == "gpad") / len(p["pixels"])
-        p["cross"] = row >= r and col >= r and mask.get((cx, cy)) == "silk"
+        at_centre = any(mask.get((cx + dx, cy + dy)) == "silk" for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+        p["cross"] = row >= r and col >= r and at_centre
     pale = [p for p in pads if p["paleFraction"] > 0.5]
     two_shades = 0 < len(pale) < len(pads)
+    radii = sorted(p["r"] for p in pads)
+    typical = radii[len(radii) // 2] if radii else 0
     for p in pads:
         # Two shades on the board: ground = the pale ones with a cross. One shade (small renders):
-        # the cross alone marks the pour.
-        p["ground"] = p["cross"] and (p["paleFraction"] > 0.5 if two_shades else True)
+        # the cross alone marks the pour. A ring fragment well under the usual pad size is never the
+        # pour: the "+" of an LED or transistor outline lands on such fragments and pulled whole
+        # op-amp stages into ground (Fluffy Fuzz, Wild Jack pad 51).
+        full_size = p["r"] >= GROUND_MIN_R * typical
+        p["ground"] = full_size and p["cross"] and (p["paleFraction"] > 0.5 if two_shades else True)
 
 
-def merge_pads(pads: list[dict], mask: dict[tuple[int, int], str]) -> list[dict]:
-    """A ring broken by silkscreen ("+", a footprint bar) comes out as several arcs: join arcs whose
-    centres are closer than their radii."""
-    merged: list[dict] = []
-    for p in sorted(pads, key=lambda q: -len(q["pixels"])):
-        for m in merged:
-            # Arcs of one ring: centres close, or their bounding boxes overlap (a ring cut in two
-            # by a trace through its middle gives two half-rings whose centres sit a radius apart).
-            close = abs(m["x"] - p["x"]) + abs(m["y"] - p["y"]) < PAD_MERGE * (m["r"] + p["r"]) + 2
-            boxes_touch = abs(m["x"] - p["x"]) <= m["r"] + p["r"] - 2 and abs(m["y"] - p["y"]) <= m["r"] + p["r"] - 2 and max(m["r"], p["r"]) < 16
-            if close or boxes_touch:
-                m["pixels"] = m["pixels"] + p["pixels"]
-                xs, ys = [q[0] for q in m["pixels"]], [q[1] for q in m["pixels"]]
-                m["x"], m["y"] = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
-                m["r"] = max(max(xs) - min(xs), max(ys) - min(ys)) / 2
-                m["ground"] = sum(1 for q in m["pixels"] if mask[q] == "gpad") > len(m["pixels"]) / 2
-                break
-        else:
-            merged.append(p)
-    return merged
 
 
-def run(src: Path, prefix: str, scale: int = 3, smd: bool = False, layered: bool = True) -> dict:
+def run(src: Path, prefix: str, scale: int = 3, smd: bool = False, layered: bool = True, previous: Path | None = None, renumber: bool = False) -> dict:
     """Extract pads and nets from one render; write <prefix>.json/.png and return summary counts.
     Copper comes from layers.py (each pixel judged per layer); `layered=False` (--flat) is the older
     one-label-per-pixel reading, kept for comparison."""
@@ -327,18 +316,15 @@ def run(src: Path, prefix: str, scale: int = 3, smd: bool = False, layered: bool
 
     mask = build_mask(False)
 
-    pads = []
-    for comp in components(mask, {"pad", "gpad"}):
-        if len(comp) < MIN_PAD_PIXELS:
-            continue
-        xs, ys = [p[0] for p in comp], [p[1] for p in comp]
-        ground = sum(1 for p in comp if mask[p] == "gpad") > len(comp) / 2
-        pads.append({"x": (min(xs) + max(xs)) / 2, "y": (min(ys) + max(ys)) / 2, "r": max(max(xs) - min(xs), max(ys) - min(ys)) / 2, "ground": ground, "pixels": comp})
-    pads = merge_pads(pads, mask)
+    from pads import assign_ids, find_pads
+
+    pads = find_pads(mask, w, h)
     split_ground_pads(pads, mask)
-    pads.sort(key=lambda p: (round(p["y"] / 8), p["x"]))
-    for i, p in enumerate(pads):
-        p["id"] = i
+    # Ids follow the previous extraction of this board (by default the json this run overwrites), so
+    # a better pad reading never renumbers the pads a map refers to; `renumber` starts from scratch.
+    prev_path = previous if previous else Path(f"{prefix}.json")
+    prev = json.loads(prev_path.read_text(encoding="utf-8")) if not renumber and prev_path.exists() else None
+    lost_ids, merged_ids = assign_ids(pads, prev)
     # SMD parts (a J201 drawn as a filled dark body with three short legs) have no pad rings: the
     # traces just end at the legs. Each spot where copper meets such a filled silk blob becomes a
     # virtual pad, numbered after the real pads so existing ids stay put. Opt-in (--smd): on
@@ -368,14 +354,14 @@ def run(src: Path, prefix: str, scale: int = 3, smd: bool = False, layered: bool
             continue
         for cl in clusters:
             cx, cy = sum(q[0] for q in cl) / len(cl), sum(q[1] for q in cl) / len(cl)
-            pads.append({"x": cx, "y": cy, "r": 3.0, "ground": False, "pixels": cl, "id": len(pads), "smd": True})
+            pads.append({"x": cx, "y": cy, "r": 3.0, "ground": False, "pixels": cl, "id": max(p["id"] for p in pads) + 1, "smd": True})
 
     def connect(cmask: dict[tuple[int, int], str], vias: bool = False) -> tuple[list[int], int]:
         """Union pads that one layer's copper joins; returns the union-find parent list and tunnel count.
         With `vias`, a trace of one layer that dead-ends into a trace of the other layer (a via the render
         does not draw) joins the two as well - hint pass only."""
         mask = cmask
-        parent = list(range(len(pads)))
+        parent = {p["id"]: p["id"] for p in pads}
         comp_pads: dict[tuple[str, int], set[int]] = {}
         pixel_comp: dict[tuple[int, int], tuple[str, int]] = {}
 
@@ -507,6 +493,8 @@ def run(src: Path, prefix: str, scale: int = 3, smd: bool = False, layered: bool
         "nets": {str(k): v for k, v in sorted(nets.items())},
         **({"hints": hints} if hints else {}),
         **({"unconnected": unconnected} if unconnected else {}),
+        **({"lostIds": [i for i in lost_ids if i not in merged_ids]} if lost_ids else {}),
+        **({"mergedIds": {str(k): v for k, v in merged_ids.items()}} if merged_ids else {}),
     }
     Path(f"{prefix}.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
 
@@ -528,7 +516,7 @@ def run(src: Path, prefix: str, scale: int = 3, smd: bool = False, layered: bool
         "groundPads": len(grounds),
         "nets": len(nets),
         "multiPadNets": sum(1 for v in nets.values() if len(v) > 1),
-        "loneNonGroundPads": sum(1 for v in nets.values() if len(v) == 1 and not pads[v[0]]["ground"]),
+        "loneNonGroundPads": sum(1 for v in nets.values() if len(v) == 1 and not {p["id"]: p for p in pads}[v[0]]["ground"]),
         "hintedPads": len(hints),
         "unconnectedPads": len(unconnected),
         "bodyTunnels": tunnels,
@@ -539,10 +527,13 @@ def run(src: Path, prefix: str, scale: int = 3, smd: bool = False, layered: bool
 
 
 def main() -> None:
-    args = [a for a in sys.argv[1:] if a not in ("--smd", "--flat")]
+    argv = sys.argv[1:]
+    previous = Path(argv[argv.index("--previous") + 1]) if "--previous" in argv else None
+    skip = {"--smd", "--flat", "--renumber", "--previous", str(previous)}
+    args = [a for a in argv if a not in skip]
     src, prefix = Path(args[0]), args[1]
     scale = int(args[2]) if len(args) > 2 else 3
-    st = run(src, prefix, scale, smd="--smd" in sys.argv, layered="--flat" not in sys.argv)
+    st = run(src, prefix, scale, smd="--smd" in argv, layered="--flat" not in argv, previous=previous, renumber="--renumber" in argv)
     print(f"{st['pads']} pads ({st['groundPads']} on the ground pour), {st['nets']} nets ({st['multiPadNets']} with 2+ pads, {st['loneNonGroundPads']} lone)")
 
 

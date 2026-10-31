@@ -26,8 +26,10 @@ def main() -> None:
         if not image.exists():
             print(f"skip {ref['name']}: {image} not collected here")
             continue
+        # Ids follow the board's reference extraction (pads.assign_ids), as every map does.
+        previous = image.parent / "board0_nets.json"
         with tempfile.TemporaryDirectory() as tmp:
-            run(image, f"{tmp}/x", 1)
+            run(image, f"{tmp}/x", 1, previous=previous if previous.exists() else None)
             got = json.loads(Path(f"{tmp}/x.json").read_text(encoding="utf-8"))
         nets = sorted(sorted(v) for v in got["nets"].values())
         if len(got["pads"]) != ref["pads"] or nets != ref["nets"]:

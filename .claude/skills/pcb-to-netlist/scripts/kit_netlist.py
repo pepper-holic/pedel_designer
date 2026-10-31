@@ -117,10 +117,16 @@ def main() -> None:
     for k, v in offboard.items():
         pad_net[v] = f"offboard-{k}"
 
+    # Ids of pad pieces that a later extraction read as part of one ring (pads.assign_ids): a map
+    # written against the old pieces still resolves.
+    merged_ids = {int(k): v for k, v in extraction.get("mergedIds", {}).items()}
+
     def pad(token: str) -> int:
         if token in offboard:
             return offboard[token]
         p = int(token)
+        if p not in pad_net and p in merged_ids:
+            p = merged_ids[p]
         if p not in pad_net:
             sys.exit(f"pad {p} does not exist in {nets_path.name}")
         used_pads.add(p)
@@ -142,7 +148,10 @@ def main() -> None:
         elif head == "SPLIT":
             # Pads the extractor merged into a neighbouring net (a trace passing through a pad ring):
             # pull them out into a net of their own, joined only to each other.
+            # A piece that is now part of a ring is not pulled out with it: the ring has its own net.
             for tok in rest:
+                if int(tok) in merged_ids:
+                    continue
                 pad_net[pad(tok)] = f"split-{line_no}"
         elif head == "io":
             # "GND=1,8,22": the first pad is the role's pad, the rest are joined to it (ground pads the
@@ -213,8 +222,12 @@ def main() -> None:
             a, b = pad(rest[0]), pad(rest[1])
             parent[find(pad_net[a])] = find(pad_net[b])
         elif head == "NC":
+            # A piece absorbed into a ring, or gone from a newer extraction, needs no NC any more.
             for t in rest:
-                pad(t)
+                if int(t) in pad_net:
+                    pad(t)
+                elif int(t) not in merged_ids:
+                    print(f"  note: NC pad {t} no longer exists in {nets_path.name}")
         else:
             sys.exit(f"{map_path.name}:{line_no}: unknown line '{raw}'")
         if stages and raw_parts and head in ("R", "C", "L", "D", "Q", "POT", "IC", "T") and raw_parts[-1]["ref"] not in stages[-1]["parts"]:
