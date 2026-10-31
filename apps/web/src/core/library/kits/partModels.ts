@@ -101,6 +101,7 @@ const JFETS: [string, Jfet][] = [
   ["J310", { idss: 40e-3, pinchOffVoltage: -4.0 }],
   ["2SK30", { idss: 2.0e-3, pinchOffVoltage: -1.0 }],
   ["KSK30", { idss: 2.0e-3, pinchOffVoltage: -1.0 }],
+  ["2SK209", { idss: 4.0e-3, pinchOffVoltage: -0.7 }], // GR grade (Idss 2.6-6.5mA)
 ];
 
 type Diode = typeof SILICON_DIODE_1N4148;
