@@ -309,3 +309,25 @@ Sovereign의 안 쓰는 4580 A 반쪽 생략(넣으면 DC가 수렴 안 함)은 
 - SONIX 482i 186788161: NJM2153 엔헨서 칩, ICL7660 두 개 ±12V.
 - Duality Bass Fuzz 186788025: CD4049UBE 인버터 증폭단. 팟 라벨은 실크에 있어 모델만 생기면 진행 가능.
 - BREADCAST 186788600: 신호 경로 1:1 트랜스포머(+2N404). `T` 줄은 이제 지원하니 그 트랜스의 인덕턴스만 정하면 다시 볼 수 있다.
+
+## 2026-10-31 층 분리 추출기(`layers.py`) 뒤 재평가
+
+고립 패드(번호 뒤 괄호는 패드 수, 대괄호는 남은 고립 수). 0이어도 막힌 이유가 선이 아닌 태그는 그대로 보류다.
+
+- [대조] 45 중 고립 0이 31: SEC RET PRE(72), MID BLASTER(76), NEW ACC PREAMP(78), Fluffy Fuzz(86), KO-N AZS(87), Timothy V3(91),
+  NEW Graff Mo-D(92), KO-N UI(92), Flame mini Booster(93), Wild Jack(95), Soulist(95), TIME V2(96), SONIX BABY(97), NEW MORNING(99),
+  Hush FREQ(99), Claw(100), THE BLOID(102), NEW Graff Dynamic(103), 29 YUNA(106), Haunting FreQ(107), Duel B(107), Tong Cap(108),
+  KONISH SS-3(108), NEW ANDY PLUS(109), Dove Drive(110), NEW RED CHARLES(110), X-Touch(111), SLASHMASTER(118), SUPA FUZZ(141),
+  ODR ONE(152), All of BB Cream(159). 남음: NEW SON OF BEN[1], FUZZ BENDER II GE[1], KONISH SS-2[1], NEW 1981 DRIV[1], KENTAUR GOLD[1],
+  RC BEAST[2], TUBE SV808[2], ALMOST CLEAN[3], Pluto Blue[3], REAL CLEAN[4], Bowling Point[4], BASS CLEAN[5], 1484 TWELVE[5], KENTAUR SILVER[5].
+- [오병합] 26 중 고립 0이 18: Heavy Fist(115), NEW 1981 LEVEL(116), FLEX OD(119), King Cat(120), MUFFLER II(120), Med Rox(121),
+  Tube Drive(122), RahRah(126), Marvel Drive(129), PLEXI1959(140), J900CM(149), Pluto Green(160), SLOW PREAMP(167), Flame Booster(174),
+  FRIEDMAN MARY(186), BEE DS(198), NEW REVVOLUTION G3(199), SLOW 2CH PREAMP(318). 남음: KONISH NG-2[1], BLUES BRKR BOX[1],
+  NEW REVVOLUTION G4[1], Train Wreck[1], KONISH G-2[3], BEE OD[3], Sam's Amp Classic[5], NEW REVVOLUTION G2[9].
+- [팟라벨] 16 중 12, [자료] 8 중 6, [다회로] 4 중 4, [모델] 3 중 1이 고립 0.
+
+새 넷과 맵이 어긋나는 기존 회로 17개(예전 판독을 JUMP/SPLIT으로 메웠거나 다르게 읽음): Little Green Box(470R → LF353 6번),
+Abracadabra(PRES 6-7 노랑), Robin Drive, How Lost, RAM Fuzz(SPLIT 14 / JUMP 5 14), THIMBLE(가짜 접지 SPLIT), Green Land·Green Light
+(팟 다리, 청록 밑 노랑 24·26·40), Blue Color(18 ↔ 30·33·67, 맵은 JUMP 18 36), NEW VALVE 808, 2BAND BASS PRE, BUTTER MARKET, STRA BLASTER,
+1970 Fuzz 2SC828·BC108C, Fuzz Buddy, Brunch Box. Fuzzy Face는 판정 이미지(186788277)가 이 기기에 없어 비교 대상 아님.
+Sovereign·Peanut Drive는 27K/22K 라벨 상자를 맵이 SPLIT으로 이미 떼어 놔서 결과가 같다.
