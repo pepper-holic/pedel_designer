@@ -1,0 +1,152 @@
+id pp-j800cm
+goods 186788303
+name J800CM
+motif Marshall JCM800 페달형 오버드라이브
+type overdrive
+desc 2SK209 소스 팔로워(22n/2.2M Vref, 4.7K·1n 게이트)→220n·22K∥220n→SENS(68n 브라이트, 330R)→1uF/10K→NE5532 반전(470K∥100p, 1N4148 두 개를 100R·10K 직렬로 귀환)→470n·22K∥220n/22K→1uF/47K→NE5532 반전(47K+1M∥GAIN 귀환, 1N4148 직결·100K 직렬, 150p)→1uF→TONE(68n)→VOLUME→470n→NE5532 팔로워→1K/470n
+image img_01.jpg
+# Light-purple rings without copper are ground-plane pads (8 12 32 39 58 77 107 117 120); 123-126 are the off-board GND points.
+# U1 (top, vertical, "1" at 14): 14 28 33 39 / 15 29 34 40 = pins 1-4 / 8-5. U1A is a follower on Vref with nothing on its output.
+# U2 (bottom, notch right): top row 86 85 84 83 = pins 1-4, bottom row 99 100 101 102 = pins 5-8.
+# JUMP 86 89: U2A out runs under the NE5532 body silk to the 1uF+ (and the GAIN pot / 1M). JUMP 95 116: 1uF- runs down the
+# left edge and along the bottom to the TONE pot lug. JUMP 88 103: TONE wiper diagonal to the VOLUME lug. JUMP 93 48: 2SK209 S
+# (cyan up to the 220n pad 93) goes on up to the 10K source resistor. 2SK209 D is the long cyan round the board edge to 9V (3).
+# Pots carry no labels; photo GAIN SENS / VOLUME TONE. By role: GAIN = rheostat in U2A feedback (A1M), SENS = attenuator after
+# the JFET (330R to ground, 68n lug-wiper), TONE = pot from signal to 68n-to-ground (wiper out), VOLUME = A100K. SENS/TONE between
+# A25K and B10K is a guess (SENS A25K audio attenuator, TONE B10K).
+BOM 2.2Mx2 1M 470Kx3 100K 47Kx2 22Kx3 10Kx5 4.7K 1K 330R 100R 22R 470nx3 220nx3 100nx2 68nx2 22n 1n 150p 100p 1N400X 1N4148x4 100uFx2 1uFx3 NE5532x2 2SK209 A1M A100K A25K B10K
+io IN=122 OUT=94 V9=7 GND=21,8,12,32,39,58,77,107,117,120
+NC 123 124 125 126
+JUMP 86 89
+JUMP 95 116
+JUMP 88 103
+JUMP 93 48
+
+STAGE input buffer 입력 버퍼 (2SK209)
+R 2.2M 114 115 R1
+C 22n 121 109 C1
+R 2.2M 78 106 R2
+R 4.7K 96 97 R3
+C 1n 108 107 C2
+Q 2SK209 g=108 d=3 s=93 Q1
+R 10K 48 25 R4
+
+STAGE sens custom SENS
+C 220n 93 92 C3
+R 22K 79 80 R5
+C 220n 90 91 C4
+POT A25K SENS 73 72 71
+C 68n 56 57 C5
+R 330R 47 24 R6
+
+STAGE gain1 gain 1단 반전 증폭 (U1B)
+C 1uF 11 23 C6
+R 10K 20 42 R7
+IC NE5532 1=14 2=28 3=33 4=39 5=40 6=34 7=29 8=15 U1
+R 470K 16 41 R8
+C 100p 17 35 C7
+D 1N4148 a=36 k=18 D1
+R 100R 9 10 R9
+D 1N4148 a=19 k=37 D2
+R 10K 1 2 R10
+
+STAGE inter custom 단간 필터
+C 470n 46 31 C8
+R 22K 22 44 R11
+C 220n 30 45 C9
+R 22K 43 21 R12
+C 1uF 63 55 C10
+R 47K 54 53 R13
+
+STAGE gain2 gain 2단 반전 증폭 (U2A, GAIN)
+IC NE5532 1=86 2=85 3=84 4=83 5=99 6=100 7=101 8=102 U2
+R 47K 51 52 R14
+R 1M 59 60 R15
+POT A1M GAIN 66 65 64
+D 1N4148 a=67 k=68 D3
+D 1N4148 a=62 k=61 D4
+R 100K 69 70 R16
+C 150p 74 75 C11
+
+STAGE tone tone TONE·VOLUME
+C 1uF 89 95 C12
+POT B10K TONE 87 103 116
+C 68n 76 77 C13
+POT A100K VOLUME 117 104 88
+
+STAGE output output 출력 버퍼 (U2B)
+C 470n 105 118 C14
+R 470K 82 98 R17
+R 1K 112 113 R18
+C 470n 111 110 C15
+R 470K 81 58 R19
+
+STAGE power power 전원
+D 1N400X a=6 k=5 D5
+R 22R 4 3 R20
+C 100uF 0 8 C16
+C 100n 13 12 C17
+C 100n 119 120 C18
+R 10K 27 50 R21
+R 10K 26 49 R22
+C 100uF 38 32 C19
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D5 120 160 h
+AT R20 210 160 h
+AT C16 250 190 v
+AT C17 290 190 v
+AT C18 330 190 v
+AT R21 380 190 v
+AT R22 380 250 v
+AT C19 430 250 v
+AT R1 100 460 v
+AT C1 150 400 h
+AT R2 200 370 v
+AT R3 250 400 h
+AT C2 300 460 v
+AT Q1 340 400
+AT R4 340 490 v
+AT C3 400 430 h
+AT R5 490 430 h-
+AT C4 490 480 h-
+AT SENS 550 490 r270 m
+AT R6 550 580 v
+AT C5 580 400 h
+AT C6 640 460 h-
+AT R7 710 460 h
+AT U1B 800 480
+AT U1A 800 600
+AT R8 800 400 h-
+AT C7 800 350 h-
+AT D1 770 300 h
+AT R9 830 300 h-
+AT D2 770 250 h-
+AT R10 830 250 h-
+AT C8 920 480 h
+AT R11 1010 480 h
+AT C9 1010 530 h
+AT R12 1060 560 v
+AT C10 1110 480 h-
+AT R13 1190 480 h
+AT U2A 1290 500
+AT C11 1290 410 h
+AT D3 1290 360 h
+AT D4 1250 310 h-
+AT R16 1340 310 h-
+AT R14 1250 260 h-
+AT R15 1340 260 h-
+AT GAIN 1340 210 r0
+AT C12 1450 500 h
+AT TONE 1510 560 r270 m
+AT C13 1510 650 v
+AT VOLUME 1580 600 r270 m
+AT C14 1660 600 h
+AT R17 1700 540 v
+AT U2B 1770 620
+AT R18 1860 620 h-
+AT C15 1950 620 h
+AT R19 1990 680 v
+AT RLOAD 2050 680 v

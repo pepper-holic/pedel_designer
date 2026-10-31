@@ -1,0 +1,160 @@
+id pp-dr-doogie
+goods 186788304
+name Dr.DOOGIE
+motif Runoffgroove Dr. Boogey (Mesa Dual Rectifier 레드 채널)
+type distortion
+desc J201 x5 - 100n/68K 입력→J1 공통 소스(1.8K∥1uF, 220p G-S, 100K 트리머 드레인)→22n→680K∥2.2n/2.2M→A1M GAIN(1n 브라이트)→680K→J2(220p·22p)→22n→470K/1M→J3(3.9K, 드레인 1n)→22n→220K/330K→J4→J5 소스 팔로워 직결→10K/6.8n/220n·220n TMB 톤→2.2K·33n·B5K 프레즌스→A100K VOLUME
+image img_01.jpg
+# Light-purple rings without copper are ground-plane pads (10 31 34 43 44 48 51 54 59 88 93 99 101 102 106 108 125); the
+# GND column 100 109 119 129 is the off-board ground point.
+# J201s are SMD (G left, S top tab, D bottom tab); each tab ends in a via: J1 D 25 -> yellow up to trimmer 9; J2 D 85 -> trimmer 72;
+# J3 D 86 -> trimmer 75 (yellow at x~300); J4 D 89 -> J5 gate 78; J5 (vertical, S left/D right/G down) S 66 -> yellow round the
+# right edge to the 10K source resistor 107. Trimmers are 100K drain loads with the wiper tied to one end.
+# Pots carry no labels; the photo reads VOL PRESS GAIN / TREBLE MIDDLE BASS, mirrored on the board (angle pots under the board).
+# Values by role from the BOM: GAIN A1M, VOLUME A100K, BASS A100K (rheostat), TREBLE A25K, MIDDLE B10K, PRESENCE B5K (rheostat
+# under 2.2K+33n from the treble wiper to ground).
+BOM 2.2Mx2 1M 680Kx3 470K 330K 220K 68K 10Kx2 5.1K 3.9K 2.2K 1.8Kx3 100Rx2 220nx2 100nx2 33n 22nx3 6.8n 2.2n 1nx2 220px3 22p 1N400X 100uFx2 1uFx3 100Kx4 J201x5 A1M A100Kx2 A25K B10K B5K
+io IN=6 OUT=56 V9=24 GND=1,10,31,34,43,44,48,51,54,59,88,93,99,101,102,106,108,125
+NC 100 109 119 129
+JUMP 25 9
+JUMP 85 72
+JUMP 86 75
+JUMP 89 78
+JUMP 66 107
+
+STAGE input input 입력
+R 2.2M 1 2 R1
+C 100n 7 8 C1
+R 680K 4 21 R2
+R 68K 3 20 R3
+
+STAGE q1 gain J1 공통 소스
+Q J201 g=20 d=25 s=29 Q1
+C 220p 28 45 C2
+R 1.8K 29 30 R4
+C 1uF 35 43 C3
+POT 100K TRIM1 0 5 9
+
+STAGE gainpot custom GAIN 다리
+C 22n 17 18 C4
+R 2.2M 19 44 R5
+R 680K 16 38 R6
+C 2.2n 26 27 C5
+C 1n 36 37 C6
+POT A1M GAIN 48 47 46
+
+STAGE q2 gain J2 공통 소스
+R 680K 58 79 R7
+C 22p 59 71 C7
+C 220p 57 70 C8
+Q J201 g=80 d=85 s=83 Q2
+R 1.8K 83 102 R8
+C 1uF 94 101 C9
+POT 100K TRIM2 60 67 72
+
+STAGE q3 gain J3 공통 소스
+C 22n 61 73 C10
+R 470K 84 103 R9
+R 1M 98 99 R10
+Q J201 g=91 d=86 s=92 Q3
+R 3.9K 92 93 R11
+POT 100K TRIM3 63 68 75
+C 1n 62 74 C11
+
+STAGE q4 gain J4 공통 소스 + J5 팔로워
+C 22n 64 76 C12
+R 330K 87 88 R12
+R 220K 81 82 R13
+C 220p 104 105 C13
+Q J201 g=82 d=89 s=96 Q4
+R 1.8K 96 97 R14
+C 1uF 95 106 C14
+POT 100K TRIM4 65 69 77
+Q J201 g=78 d=55 s=66 Q5
+R 10K 107 108 R15
+
+STAGE tone tone TMB 톤
+R 10K 115 116 R16
+C 6.8n 117 118 C15
+C 220n 111 112 C16
+C 220n 113 114 C17
+POT A25K TREBLE 128 127 126
+POT A100K BASS 122 121 120
+POT B10K MIDDLE 125 124 123
+R 5.1K 90 110 R17
+
+STAGE output output 프레즌스·볼륨
+R 2.2K 41 42 R18
+C 33n 39 40 C18
+POT B5K PRESENCE 51 50 49
+POT A100K VOLUME 54 53 52
+
+STAGE power power 전원
+D 1N400X a=15 k=14 D1
+R 100R 12 13 R19
+C 100uF 11 10 C19
+R 100R 22 23 R20
+C 100n 31 32 C20
+C 100uF 33 34 C21
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D1 120 160 h
+AT R19 210 160 h-
+AT C19 250 190 v
+AT R20 320 160 h
+AT C20 360 190 v-
+AT C21 400 190 v
+AT C1 140 400 h
+AT R1 100 460 v-
+AT R2 200 460 v
+AT R3 240 400 h
+AT Q1 300 400
+AT C2 260 460 v
+AT R4 300 490 v
+AT C3 350 490 v
+AT TRIM1 300 290 r90
+AT C4 380 370 h-
+AT R5 430 430 v
+AT R6 470 370 h
+AT C5 470 320 h-
+AT GAIN 530 430 r270 m
+AT C6 560 370 h
+AT R7 640 400 h
+AT Q2 730 400
+AT C7 650 460 v-
+AT C8 690 460 v
+AT R8 730 490 v
+AT C9 780 490 v
+AT TRIM2 730 290 r90
+AT C10 790 370 h
+AT R9 860 400 h
+AT R10 900 460 v
+AT Q3 940 400
+AT R11 940 490 v
+AT TRIM3 940 290 r90
+AT C11 990 290 v
+AT C12 1000 370 h
+AT R12 1040 430 v
+AT R13 1080 400 h
+AT Q4 1170 400
+AT C13 1130 460 v
+AT R14 1170 490 v
+AT C14 1220 490 v
+AT TRIM4 1170 290 r90
+AT Q5 1260 370
+AT R15 1260 460 v
+AT C15 1350 310 h
+AT R16 1330 430 h-
+AT TREBLE 1420 340 r270 m
+AT C16 1420 430 v
+AT BASS 1500 430 r270 m
+AT C17 1420 520 v
+AT MIDDLE 1500 550 r270
+AT R17 1550 550 v-
+AT R18 1560 340 h-
+AT C18 1630 400 v-
+AT PRESENCE 1630 490 r270
+AT VOLUME 1720 400 r270 m
+AT RLOAD 1800 460 v

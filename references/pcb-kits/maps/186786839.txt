@@ -1,0 +1,90 @@
+id pp-new-fat-booster
+goods 186786839
+name NEW FAT 부스터
+motif Dimitar / James Tyler 미드 부스트
+type buffer-boost
+desc TL072(LF442 실크) 미드 부스트 - 47n/1M Vref 입력→A단 비반전(33K∥22p, 100K→Vref, 이득 1.33)→1.8K·1000n→MID 한쪽 끝; A단 출력→B단 비반전(100K∥22p 귀환, −in 접지 다리 20K+100n 직렬·100K)→20K·220n/10n 저역 통과→MID 다른 끝; MID B50K 와이퍼가 OUT(220K)
+image img_02.jpg
+# Seller packs TL072 for the discontinued LF442CN. Chip silk symbols (notch at the bottom): left + 32 / - 42 / out 44 / V+ 52,
+# right V- 33 / + 43 / - 45 / out 53 -> pin 1 = 53, 2 = 45, 3 = 43, 4 = 33, 5 = 32, 6 = 42, 7 = 44, 8 = 52.
+# JUMP 38 43: A +in runs under the resistor bodies to the 1M / 47n node. JUMP 32 53: B +in goes round to A out (under the chip).
+# JUMP 42 59: B -in runs down under the chip body and drops into the middle of the 20K silk (x~256, between 58 at 210 and 59
+# at 308). Read as 59 (the 20K/100K junction, which otherwise has no third lead): B's ground leg is then 20K+100n in series
+# (gain 6 above ~80Hz) with 100K setting DC gain 2, and the 20K/10n low-pass after it makes the mid peak. The other choice (58)
+# would put 100n straight from -in to Vref (open-ended treble gain), which is not a mid boost.
+# JUMP 16 17 25: OUT, the 220K pulldown and the MID wiper share the yellow at y~190 (x~300 drops to the wiper).
+# JUMP 20 24: the 220n/10n node runs right then down to the MID lug 24. Pads 10/11 are bare mounting rings.
+# Earlier pass (kit-deferred) left this for a Fender mid-boost schematic check; that check is still not done.
+BOM 1Mx2 220K 100Kx5 33K 20Kx2 1.8K 1000n 220n 100n 47n 10n 22px2 47uF 4.7uF 1N400X TL072 B50K
+io IN=12 OUT=16 V9=13 GND=0,1
+NC 10 11 21 28
+JUMP 38 43
+JUMP 32 53
+JUMP 42 59
+JUMP 16 17
+JUMP 17 25
+JUMP 20 24
+
+STAGE input input 입력
+R 1M 3 2 R1
+C 47n 18 27 C1
+R 1M 38 48 R2
+
+STAGE stagea gain A단 (U1A)
+IC TL072 1=53 2=45 3=43 4=33 5=32 6=42 7=44 8=52 U1
+R 33K 35 55 R3
+C 22p 36 46 C2
+R 100K 37 47 R4
+R 1.8K 54 34 R5
+C 1000n 22 23 C3
+
+STAGE stageb tone B단 미드 (U1B)
+R 100K 40 50 R6
+C 22p 39 49 C4
+R 20K 58 59 R7
+R 100K 60 61 R8
+C 100n 63 62 C5
+R 20K 51 41 R9
+C 220n 30 20 C6
+C 10n 29 19 C7
+
+STAGE output output MID·출력
+POT B50K MID 26 25 24
+R 220K 17 31 R10
+
+STAGE power power 전원
+D 1N400X a=7 k=6 D1
+C 47uF 5 1 C8
+R 100K 9 8 R11
+R 100K 15 14 R12
+C 4.7uF 4 0 C9
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D1 120 160 h
+AT C8 180 190 v
+AT R11 240 190 v
+AT R12 240 250 v
+AT C9 290 250 v
+AT C1 140 400 h
+AT R1 100 460 v
+AT R2 190 460 v
+AT U1A 280 410
+AT R4 250 520 v
+AT R3 290 480 h
+AT C2 290 530 h
+AT R5 360 410 h
+AT C3 440 410 h
+AT MID 560 410 r0
+AT R10 640 440 v
+AT RLOAD 700 440 v
+AT U1B 330 650
+AT R6 330 590 h
+AT C4 330 560 h
+AT R8 270 740 v
+AT R7 220 720 v-
+AT C5 220 810 v
+AT R9 420 650 h
+AT C6 500 650 h
+AT C7 560 710 v
