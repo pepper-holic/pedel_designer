@@ -1,6 +1,128 @@
-# 1484 TWELVE (186788335): JHS Twin Twelve V1 (Silvertone 1484) - four SMD J201 stages on an ICL7660 bipolar rail
-# (the SMD pads are hidden under the silk and the app has no charge-pump model); recorded only. Board: 1M x2, 180K,
-# 100K x3, 68K, 27K, 12K, 4.7K, 1.5K, 47R, 100n, 22n x2, 10n x3, 2.2n x3, 1n, 680p, 100uF x3, 10uF, 1N400X x3,
-# 100K trimmers x4, angle B1M / A1M / A100K.
-# Update 2026-10-30: the charge-pump supply convention now exists (IC ICL7660 pin 5 -> -9V rail, RAIL <pad> <V>);
-# this board stays recorded only because of its hidden traces / SMD pads, see docs/kit-deferred.md.
+id pp-1484-twelve
+goods 186788335
+name 1484 TWELVE
+motif JHS Twin Twelve V1 (Silvertone 1484)
+type preamp
+desc J201 SMD 4단, ICL7660 더블러 약 15V - Q1(68K 입력, 1.5K 소스)→22n/180K→톤 스택(680p·TREBLE B1M·10n, 100K·1n·BASS B1M·22n·68K)→100K→A1M DRIVE→Q2(4.7K)→10n→Q3(1.5K)→10n→Q4(47R)→2.2n/12K·2.2n/12K·2.2n 저역통과→A100K VOLUME
+image img_01.jpg
+# SMD J201 legs are drawn as cyan runs from the black SOT-23 bodies to the next pad; the extractor gives them no pads, so each
+# leg is written on the pad its run reaches: Q1 (left) G 62 / D 34 / S 60, Q2 G 52 (DRIVE wiper) / D 9 / S 15, Q3 G 25 / D 11 / S 17,
+# Q4 G 27 / D 13 / S 19. Ground: the '+' rings with no drawn copper (31 36 38 45 49 56 72 90) sit on the undrawn ground plane.
+# Supply: 9V 57 -> 1N400X 68-86 -> 9V (100uF 89-90) -> ICL7660 (87=1 93=2 98=3 103=4 / 88=8 94=7 99=6 104=5) doubler with 1N400X
+# 77-78 / 69-70, 100uF 97-102 and 10uF 71-72, then 47R 66-67 to the high rail n0 (seller: about 15V there). The pump, its two
+# diodes, two caps and the 47R are not simulated and left out of the BOM line; n0 is an ideal 15V rail (RAIL 67 15).
+# Trimmers 100K x4 (seller: set every J201 drain to about 7.4V): each has two lugs on n0, so it is a variable resistor from the
+# high rail to the drain. A pot is simulated at its midpoint, so each is written as the fixed value that puts its drain near 7.4V
+# (TRIM1..4) and the BOM line carries those values in place of the 100K trims.
+# Angle pots, no silk names; parts list B1M x2, A1M, A100K, roles from the nets:
+#   73-84-95: 680p from the stack input on 95, 10n to ground on 73, wiper 84 to the DRIVE pot -> TREBLE B1M (lug1 73).
+#   74-85-96: 100K from the stack input on 74, wiper 85 with 1n from 74 and 22n to 96, 68K from 96 to ground -> BASS B1M (lug1 96).
+#   51-52-53: stack output on 51, wiper 52 = Q2's gate, 53 -> 27K to ground -> DRIVE A1M.  54-55-56: wiper 55 = OUT -> VOLUME A100K.
+BOM 1Mx2 180K 100Kx3 68Kx2 27K 12Kx3 4.7K 33Kx2 75K 1.5Kx2 47R 100n 22nx2 10nx3 2.2nx3 1n 680p 100uFx2 1N400X J201x4 B1Mx2 A1M A100K
+io IN=92 OUT=44 V9=57 GND=98,31,36,38,45,49,56,72,90
+RAIL 67 15
+NC 6 7 8 35 66 69 70 71 77 78 93 97 102 87 88 94 99 103 104 100 101 105 106
+
+STAGE q1 gain Q1 입력단
+R 68K 81 62 R1
+R 1M 61 80 R2
+Q J201 g=62 d=34 s=60 Q1
+R 33K 33 34 TRIM1
+R 1.5K 60 79 R3
+
+STAGE tone tone 톤 스택 (TREBLE·BASS)
+C 22n 39 40 C1
+R 180K 41 42 R4
+C 680p 63 75 C2
+POT B1M TREBLE 73 84 95
+C 10n 50 49 C3
+R 100K 47 48 R5
+C 1n 59 58 C4
+POT B1M BASS 96 85 74
+C 22n 76 91 C5
+R 68K 82 64 R6
+R 100K 65 83 R7
+
+STAGE drive custom control DRIVE
+POT A1M DRIVE 53 52 51
+R 27K 23 24 R8
+
+STAGE q2 gain Q2
+Q J201 g=52 d=9 s=15 Q2
+R 75K 0 9 TRIM2
+R 4.7K 15 16 R9
+
+STAGE q3 gain Q3
+C 10n 1 10 C6
+R 1M 25 26 R10
+Q J201 g=25 d=11 s=17 Q3
+R 33K 2 11 TRIM3
+R 1.5K 17 18 R11
+
+STAGE q4 gain Q4
+C 10n 3 12 C7
+R 100K 27 28 R12
+Q J201 g=27 d=13 s=19 Q4
+R 12K 4 13 TRIM4
+R 47R 19 20 R13
+
+STAGE out output 출력 (저역통과·VOLUME)
+C 2.2n 5 14 C8
+R 12K 21 22 R14
+C 2.2n 32 31 C9
+R 12K 30 29 R15
+C 2.2n 43 38 C10
+POT A100K VOLUME 56 55 54
+
+STAGE power power 전원
+D 1N400X a=68 k=86 D1
+C 100uF 89 90 C11
+C 100n 37 36 C12
+C 100uF 46 45 C13
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 130 400 h
+AT R2 180 460 v
+AT Q1 230 400
+AT TRIM1 250 310 v
+AT R3 250 490 v
+AT C1 310 370 h
+AT R4 370 370 h
+AT C2 430 300 h
+AT TREBLE 490 330 r270 m
+AT C3 490 390 v
+AT R5 430 460 h
+AT BASS 490 490 r270 m
+AT C4 530 440 h
+AT C5 550 520 v
+AT R6 490 580 v
+AT R7 580 490 h
+AT DRIVE 650 420 r270 m
+AT R8 650 510 v
+AT Q2 740 420
+AT TRIM2 760 330 v
+AT R9 760 510 v
+AT C6 820 390 h
+AT R10 860 450 v
+AT Q3 910 390
+AT TRIM3 930 300 v
+AT R11 930 480 v
+AT C7 990 360 h
+AT R12 1030 420 v
+AT Q4 1080 360
+AT TRIM4 1100 270 v
+AT R13 1100 450 v
+AT C8 1160 330 h
+AT R14 1220 330 h
+AT C9 1250 390 v
+AT R15 1280 330 h
+AT C10 1310 390 v
+AT VOLUME 1370 360 r270 m
+AT RLOAD 1440 390 v
+AT VCC 60 160
+AT D1 130 160 h
+AT C11 190 190 v
+AT Vrail1 260 190
+AT C12 320 190 v
+AT C13 360 190 v

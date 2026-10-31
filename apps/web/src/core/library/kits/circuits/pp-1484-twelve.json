@@ -1,0 +1,717 @@
+{
+ "id": "pp-1484-twelve",
+ "goodsNo": "186788335",
+ "kitName": "1484 TWELVE",
+ "motif": "JHS Twin Twelve V1 (Silvertone 1484)",
+ "type": "preamp",
+ "description": "J201 SMD 4단, ICL7660 더블러 약 15V - Q1(68K 입력, 1.5K 소스)→22n/180K→톤 스택(680p·TREBLE B1M·10n, 100K·1n·BASS B1M·22n·68K)→100K→A1M DRIVE→Q2(4.7K)→10n→Q3(1.5K)→10n→Q4(47R)→2.2n/12K·2.2n/12K·2.2n 저역통과→A100K VOLUME",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "68K",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "J201",
+   "nodes": {
+    "g": "n1",
+    "d": "n2",
+    "s": "n3"
+   }
+  },
+  {
+   "ref": "TRIM1",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "v15",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "1.5K",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n2",
+    "n4"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "180K",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "680p",
+   "nodes": [
+    "n5",
+    "n6"
+   ]
+  },
+  {
+   "ref": "TREBLE",
+   "kind": "POT",
+   "value": "B1M",
+   "nodes": [
+    "n7",
+    "n8",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n7",
+    "0"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n5",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "1n",
+   "nodes": [
+    "n9",
+    "n10"
+   ]
+  },
+  {
+   "ref": "BASS",
+   "kind": "POT",
+   "value": "B1M",
+   "nodes": [
+    "n11",
+    "n10",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n10",
+    "n11"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "68K",
+   "nodes": [
+    "n11",
+    "0"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n10",
+    "n8"
+   ]
+  },
+  {
+   "ref": "DRIVE",
+   "kind": "POT",
+   "value": "A1M",
+   "nodes": [
+    "n12",
+    "n13",
+    "n8"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "27K",
+   "nodes": [
+    "n12",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "J201",
+   "nodes": {
+    "g": "n13",
+    "d": "n14",
+    "s": "n15"
+   }
+  },
+  {
+   "ref": "TRIM2",
+   "kind": "R",
+   "value": "75K",
+   "nodes": [
+    "v15",
+    "n14"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n15",
+    "0"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n14",
+    "n16"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n16",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q3",
+   "kind": "Q",
+   "part": "J201",
+   "nodes": {
+    "g": "n16",
+    "d": "n17",
+    "s": "n18"
+   }
+  },
+  {
+   "ref": "TRIM3",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "v15",
+    "n17"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "1.5K",
+   "nodes": [
+    "n18",
+    "0"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n17",
+    "n19"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n19",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q4",
+   "kind": "Q",
+   "part": "J201",
+   "nodes": {
+    "g": "n19",
+    "d": "n20",
+    "s": "n21"
+   }
+  },
+  {
+   "ref": "TRIM4",
+   "kind": "R",
+   "value": "12K",
+   "nodes": [
+    "v15",
+    "n20"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "47R",
+   "nodes": [
+    "n21",
+    "0"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "2.2n",
+   "nodes": [
+    "n20",
+    "n22"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "12K",
+   "nodes": [
+    "n22",
+    "n23"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "2.2n",
+   "nodes": [
+    "n23",
+    "0"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "12K",
+   "nodes": [
+    "n23",
+    "n24"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "2.2n",
+   "nodes": [
+    "n24",
+    "0"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n24"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n25"
+   }
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n25",
+    "0"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "v15",
+    "0"
+   ]
+  },
+  {
+   "ref": "C13",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "v15",
+    "0"
+   ]
+  }
+ ],
+ "rails": [
+  {
+   "net": "v15",
+   "voltage": 15.0
+  }
+ ],
+ "stages": [
+  {
+   "id": "q1",
+   "category": "gain",
+   "label": "Q1 입력단",
+   "parts": [
+    "R1",
+    "R2",
+    "Q1",
+    "TRIM1",
+    "R3"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "톤 스택 (TREBLE·BASS)",
+   "parts": [
+    "C1",
+    "R4",
+    "C2",
+    "TREBLE",
+    "C3",
+    "R5",
+    "C4",
+    "BASS",
+    "C5",
+    "R6",
+    "R7"
+   ]
+  },
+  {
+   "id": "drive",
+   "category": "custom",
+   "label": "control DRIVE",
+   "parts": [
+    "DRIVE",
+    "R8"
+   ]
+  },
+  {
+   "id": "q2",
+   "category": "gain",
+   "label": "Q2",
+   "parts": [
+    "Q2",
+    "TRIM2",
+    "R9"
+   ]
+  },
+  {
+   "id": "q3",
+   "category": "gain",
+   "label": "Q3",
+   "parts": [
+    "C6",
+    "R10",
+    "Q3",
+    "TRIM3",
+    "R11"
+   ]
+  },
+  {
+   "id": "q4",
+   "category": "gain",
+   "label": "Q4",
+   "parts": [
+    "C7",
+    "R12",
+    "Q4",
+    "TRIM4",
+    "R13"
+   ]
+  },
+  {
+   "id": "out",
+   "category": "output",
+   "label": "출력 (저역통과·VOLUME)",
+   "parts": [
+    "C8",
+    "R14",
+    "C9",
+    "R15",
+    "C10",
+    "VOLUME"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D1",
+    "C11",
+    "C12",
+    "C13"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "R1": {
+   "x": 130,
+   "y": 400,
+   "rotation": 0
+  },
+  "R2": {
+   "x": 180,
+   "y": 460,
+   "rotation": 90
+  },
+  "Q1": {
+   "x": 230,
+   "y": 400
+  },
+  "TRIM1": {
+   "x": 250,
+   "y": 310,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 250,
+   "y": 490,
+   "rotation": 90
+  },
+  "C1": {
+   "x": 310,
+   "y": 370,
+   "rotation": 0
+  },
+  "R4": {
+   "x": 370,
+   "y": 370,
+   "rotation": 0
+  },
+  "C2": {
+   "x": 430,
+   "y": 300,
+   "rotation": 0
+  },
+  "TREBLE": {
+   "x": 490,
+   "y": 330,
+   "rotation": 270,
+   "mirror": true
+  },
+  "C3": {
+   "x": 490,
+   "y": 390,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 430,
+   "y": 460,
+   "rotation": 0
+  },
+  "BASS": {
+   "x": 490,
+   "y": 490,
+   "rotation": 270,
+   "mirror": true
+  },
+  "C4": {
+   "x": 530,
+   "y": 440,
+   "rotation": 0
+  },
+  "C5": {
+   "x": 550,
+   "y": 520,
+   "rotation": 90
+  },
+  "R6": {
+   "x": 490,
+   "y": 580,
+   "rotation": 90
+  },
+  "R7": {
+   "x": 580,
+   "y": 490,
+   "rotation": 0
+  },
+  "DRIVE": {
+   "x": 650,
+   "y": 420,
+   "rotation": 270,
+   "mirror": true
+  },
+  "R8": {
+   "x": 650,
+   "y": 510,
+   "rotation": 90
+  },
+  "Q2": {
+   "x": 740,
+   "y": 420
+  },
+  "TRIM2": {
+   "x": 760,
+   "y": 330,
+   "rotation": 90
+  },
+  "R9": {
+   "x": 760,
+   "y": 510,
+   "rotation": 90
+  },
+  "C6": {
+   "x": 820,
+   "y": 390,
+   "rotation": 0
+  },
+  "R10": {
+   "x": 860,
+   "y": 450,
+   "rotation": 90
+  },
+  "Q3": {
+   "x": 910,
+   "y": 390
+  },
+  "TRIM3": {
+   "x": 930,
+   "y": 300,
+   "rotation": 90
+  },
+  "R11": {
+   "x": 930,
+   "y": 480,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 990,
+   "y": 360,
+   "rotation": 0
+  },
+  "R12": {
+   "x": 1030,
+   "y": 420,
+   "rotation": 90
+  },
+  "Q4": {
+   "x": 1080,
+   "y": 360
+  },
+  "TRIM4": {
+   "x": 1100,
+   "y": 270,
+   "rotation": 90
+  },
+  "R13": {
+   "x": 1100,
+   "y": 450,
+   "rotation": 90
+  },
+  "C8": {
+   "x": 1160,
+   "y": 330,
+   "rotation": 0
+  },
+  "R14": {
+   "x": 1220,
+   "y": 330,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 1250,
+   "y": 390,
+   "rotation": 90
+  },
+  "R15": {
+   "x": 1280,
+   "y": 330,
+   "rotation": 0
+  },
+  "C10": {
+   "x": 1310,
+   "y": 390,
+   "rotation": 90
+  },
+  "VOLUME": {
+   "x": 1370,
+   "y": 360,
+   "rotation": 270,
+   "mirror": true
+  },
+  "RLOAD": {
+   "x": 1440,
+   "y": 390,
+   "rotation": 90
+  },
+  "VCC": {
+   "x": 60,
+   "y": 160
+  },
+  "D1": {
+   "x": 130,
+   "y": 160,
+   "rotation": 0
+  },
+  "C11": {
+   "x": 190,
+   "y": 190,
+   "rotation": 90
+  },
+  "Vrail1": {
+   "x": 260,
+   "y": 190
+  },
+  "C12": {
+   "x": 320,
+   "y": 190,
+   "rotation": 90
+  },
+  "C13": {
+   "x": 360,
+   "y": 190,
+   "rotation": 90
+  }
+ }
+}

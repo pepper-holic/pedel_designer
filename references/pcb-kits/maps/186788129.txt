@@ -1,0 +1,111 @@
+id pp-son-of-ben
+goods 186788129
+name NEW SON OF BEN
+motif Son of Benson (Benson/Chimera 30W JFET preamp)
+type preamp
+desc J201 SMD 3단 - Q1(220K 입력, 1M 게이트, 12K 드레인)→22n/470K→B2M BASS 직렬 가변저항∥240p→A1M GAIN(470p+470K 브라이트)→Q2(50K 트리머+10K 드레인, 1K∥10uF 소스)→22n→Q3(같은 구성)→22n/47K·2.2n→A100K VOLUME, Q3 드레인에 22n+A250K TONE 션트
+image img_03.jpg
+# SMD J201 legs are the virtual pads from the SMD pass: Q1 S 85 / G 86 / D 87, Q2 S 79 / G 81 / D 80, Q3 D 82 / G 84 / S 83.
+# Trimmers 50K: the side pad 9 / 12 shows no copper, so each is a variable resistor from V+ (2 / 5) to the T.P node (10-11 / 13-14)
+# feeding the 10K drain resistor. Seller: set the drain to about 4V. A pot is simulated at its midpoint (25K), which pulls the J201
+# drain below ground, so each trimmer is written as the fixed 8.2K that gives 3.9V at the drain (TRIM1 / TRIM2); the BOM line
+# carries 8.2Kx2 in place of the parts list's 50K trim x2.
+# Angle pots, no silk names; values from the parts list (B2M, A1M, A250K, A100K), roles from the nets:
+#   34-35-36: wiper 35 = OUT, 36 ground -> VOLUME A100K.
+#   31-32-33: Q1's signal (n11) on 31, wiper 32 = Q2's gate, 33 ground; 470p+470K from 31 to the wiper -> GAIN A1M (bright divider).
+#   48(no copper)-59-68: a series variable resistor 59-68 between the 470K and the GAIN pot, bypassed by 240p -> BASS B2M
+#     (guess: less resistance clockwise passes more lows; the other candidate name is "FAT"/"BODY").
+#   49(no copper)-60-69: 22n from Q3's drain to 69, wiper 60 on ground -> TONE A250K (treble shunt, brighter clockwise).
+# Parts list says 10uF x1 but the board has two source bypass caps (17-18, 24-25); both kept. 1N400X 6-26 is a reverse shunt.
+BOM 1Mx2 470Kx2 220K 100K 47K 12K 10Kx2 1Kx3 100nx2 22nx4 2.2n 470pF 240pF 100uF 10uFx2 1N400X J201x3 8.2Kx2 B2M A1M A250K A100K
+io IN=71 OUT=41 V9=0 GND=78
+NC 9 11 12 14 48 49
+
+STAGE q1 gain Q1 입력단
+R 1M 66 67 R1
+C 100n 65 56 C1
+R 220K 57 72 R2
+R 1M 53 52 R3
+Q J201 g=86 d=87 s=85 Q1
+R 12K 44 45 R4
+R 1K 51 50 R5
+
+STAGE gain custom control BASS·GAIN
+C 22n 62 73 C2
+R 470K 74 58 R6
+POT B2M BASS 59 59 68
+C 240pF 61 70 C3
+POT A1M GAIN 33 32 31
+C 470pF 37 38 C4
+R 470K 42 43 R7
+
+STAGE q2 gain Q2
+Q J201 g=81 d=80 s=79 Q2
+R 8.2K 2 10 TRIM1
+R 10K 19 20 R8
+R 1K 28 27 R9
+C 10uF 18 17 C5
+
+STAGE q3 gain Q3
+C 22n 16 3 C6
+R 100K 4 21 R10
+Q J201 g=84 d=82 s=83 Q3
+R 8.2K 5 13 TRIM2
+R 10K 23 22 R11
+R 1K 30 29 R12
+C 10uF 24 25 C7
+
+STAGE tone tone TONE
+C 22n 64 63 C8
+POT A250K TONE 69 60 60
+
+STAGE out output 출력 (VOLUME)
+C 22n 54 55 C9
+R 47K 47 46 R13
+C 2.2n 39 40 C10
+POT A100K VOLUME 36 35 34
+
+STAGE power power 전원
+D 1N400X a=26 k=6 D1
+C 100uF 8 7 C11
+C 100n 1 15 C12
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 100 460 v
+AT C1 140 400 h
+AT R2 200 400 h
+AT R3 240 460 v
+AT Q1 290 400
+AT R4 310 310 v
+AT R5 310 490 v
+AT C2 370 370 h
+AT R6 430 370 h
+AT BASS 490 370 r0
+AT C3 490 310 h
+AT GAIN 560 400 r270 m
+AT C4 600 310 h
+AT R7 630 370 v
+AT Q2 680 400
+AT R8 700 310 v
+AT TRIM1 700 230 v
+AT R9 700 490 v
+AT C5 740 490 v
+AT C6 760 370 h
+AT R10 810 430 v
+AT Q3 860 370
+AT R11 880 280 v
+AT TRIM2 880 200 v
+AT R12 880 460 v
+AT C7 920 460 v
+AT C8 960 400 v
+AT TONE 960 490 r90
+AT C9 1030 340 h
+AT R13 1090 340 h-
+AT C10 1120 400 v
+AT VOLUME 1170 370 r270 m
+AT RLOAD 1240 400 v
+AT VCC 60 160
+AT D1 130 190 v-
+AT C11 170 190 v
+AT C12 210 190 v
