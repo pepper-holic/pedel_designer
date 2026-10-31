@@ -7,6 +7,10 @@ import { voltageAt } from "../../src/core/solver/solution";
 import { runTransient } from "../../src/core/solver/transient";
 import { loadPedalPreset } from "../../src/editor/templateLoading";
 
+/** A GBW-limited op-amp driving a large capacitor straight off its output (Brown Charlie's Vref buffer into
+ * 100uF) takes a few seconds of transient on its own, more under a full parallel run. */
+const SIGNAL_TIMEOUT_MS = 20_000;
+
 describe("kit circuit values", () => {
   it("reads the notations printed on kit boards", () => {
     expect(parseValue("4.7K")).toBeCloseTo(4700);
@@ -69,7 +73,7 @@ describe("kit circuits", () => {
       const out = r.traces.get(preset.outputNode)!;
       expect(out.every(Number.isFinite)).toBe(true);
       expect(Math.max(...out.subarray(480).map(Math.abs))).toBeGreaterThan(1e-4);
-    });
+    }, SIGNAL_TIMEOUT_MS);
 
     it("keeps every hand-placed part where its layout puts it", () => {
       if (!preset.layout) return;

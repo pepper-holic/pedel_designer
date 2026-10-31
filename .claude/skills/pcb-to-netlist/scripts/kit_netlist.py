@@ -40,7 +40,7 @@ optional xN count: "BOM 1M 150Kx2 220nx2 2N5088x3 B100Kx2".
 AT places a part on the schematic by hand: "AT <ref> <x> <y> [h|v|h-|v-|r0|r90|r180|r270] [m]",
 x/y in canvas pixels (grid 10; 2-terminal parts are 60 long, a BJT's pins sit 30 off its centre).
 h keeps the first-listed lead left, v puts it on top, h-/v- the other way; m mirrors (a pot's wiper
-down instead of up). V1 (audio input), VCC (9V source) and RLOAD (amp input) can be placed too.
+down instead of up). V1 (audio input), VCC (9V source), RLOAD (amp input) and Vrail1.. (extra rails) can be placed too.
 Once any AT is given every part should have one: the app then pins each part where it is put and
 only hangs ground symbols and reroutes the wires - use it when the automatic layout comes out
 tangled (multi-transistor stages, Baxandall tone stacks).
@@ -288,6 +288,9 @@ def main() -> None:
         lm386s = {p["ref"] for p in parts if p["kind"] == "IC" and "386" in p.get("part", "")}
         for ref in sorted(set(layout) - refs):
             base, _, suffix = ref.rpartition("_")
+            vrail = re.fullmatch(r"Vrail(\d+)", ref)
+            if vrail and 1 <= int(vrail.group(1)) <= len(rails):
+                continue
             if re.fullmatch(r"(U\d+)[ABCD]", ref) or (suffix == "D" and base in mosfets) or base in lm386s:
                 continue
             problems.append(f"AT {ref}: no such part")
