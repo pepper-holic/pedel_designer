@@ -367,3 +367,25 @@ BEE DS, PLEXI1959, NEW REVVOLUTION G3. 고정한 스위치 위치·추정한 팟
 - KONISH SS-3 186788146 [오병합]: TL072 B측 핀 5·6·7과 10n·220p·100K·1M 윗줄이 한 넷. 600px 렌더라 핀 사이 선을 못 가른다.
 - NEW ANDY PLUS 186788138 [팟라벨]: 앵글 팟 5개 무라벨, 상품 사진 없음. BS170 부스트 섹션이 따로 있다([다회로] 성격).
 - Marvel Drive 186787464 [오병합]: 18V 세로 시안 선을 따라 22패드가 한 넷(27K 양끝 포함), '+' 패드로 접지와도 합쳐진다.
+
+## 2026-10-31 Fluffy Fuzz 원인 확정 (PedalPCB Cream Pie 회로도 대조)
+
+기판은 Cream Puff 그대로다(1M·390p·LED 쌍이 B단 6-7번 사이, 1uF 출력 캡이 7번 줄에서 내려감). 보류 원인은 모두 인식 쪽이었다:
+(1) LED 외곽선 '+'에 걸린 작은 조각 51(반지름 6.5, 중앙값 11)이 접지로 판정됨 - 접지 크기 규칙(GROUND_MIN_R 0.6)으로 해결.
+(2) 왼쪽 LED의 둥근 패드(50/51)와 사각 패드(60)가 8px 떨어져 있는데 사각 패드가 자기 트레이스에 잘려 윗조각의 상자가 둥근 패드 상자와
+2px 겹쳐 한 패드로 합쳐짐 - 출력(7번)과 −입력(6번)이 이 패드로 붙는다. merge_pads 조건을 바꾸는 시도(겹침 3px, 축별 상자, 가로세로비
+1.3~1.6)는 모두 다른 기판 7~9개의 패드 번호를 밀어서 되돌렸다. 해결: 패드를 링 중심(고리 자 매칭)으로 잡는 `pads.py`로 바꾸고 번호는
+이전 추출에서 물려받게 했다(SKILL.md). 이제 LED 패드 둘이 따로 잡히고 7번·6번 줄이 분리된다. 맵은 아직 안 썼다(회로도 대조 끝, 변환 대기).
+(3) 100K 몸통 밑으로 내려가 390p 아래로 가는 선을 판독자가 저항의 일부로 봄.
+- (메모) Tong Cap 186788015 맵은 `--smd` 추출의 가상 패드 112를 V9로 쓴다. 기준 넷(`board0_nets.json`, 108패드)에는 없어서 `verify_maps`가
+  "pad 112 does not exist"를 낸다. 회로 JSON은 그 세션의 묶음으로 만들어 문제없고, 기준 넷을 --smd로 다시 뽑거나 V9를 실제 링으로 바꾸면 된다.
+
+## 2026-10-31 링 기준 패드 검출(pads.py) 뒤 다시 볼 기존 회로
+
+`verify_maps`에서 새 넷과 어긋나는 회로. 앱의 회로 JSON은 아직 예전 것이다(Wild Jack·Peanut Drive만 새 넷으로 다시 만들었다).
+- 예전부터 알던 17개(층 분리 뒤 목록, 위 절): Little Green Box, Abracadabra, Robin Drive, How Lost, RAM Fuzz, THIMBLE, Green Land, Green Light,
+  Blue Color, NEW VALVE 808, 2BAND BASS PRE, BUTTER MARKET, STRA BLASTER, 1970 Fuzz x2, Fuzz Buddy, Brunch Box.
+- 링 검출로 새로 바뀐 6개(모두 조각 패드를 핀·SPLIT에 쓴 맵, 바뀐 곳은 한 핀씩): BEE DS(GAIN 러그·R11이 Vref 넷에 붙음 - 의심),
+  King Cat(R10 한쪽이 C6/R7 쪽으로), Honey Beast(C2/R3와 R2/R4가 갈라짐), Flame Booster(R9 한쪽 분리), Kluster Fuzz(C9.1이 TONE.2로 - 예전엔 떠 있던 캡 끝),
+  Meltdown(R2.1 분리). 각 자리를 렌더로 확인해 맵(조각 번호 → 링 번호)과 회로를 고친다.
+- Sovereign: 맵의 NC 0이 사라진 패드(경고만). Tong Cap: --smd 가상 패드 112(위 메모).
