@@ -346,7 +346,7 @@
   {
    "id": "leg",
    "category": "custom",
-   "label": "-입력 다리 (BASS·부스트 토글)",
+   "label": "feedback -입력 다리 (BASS·부스트 토글)",
    "parts": [
     "R5",
     "C4",

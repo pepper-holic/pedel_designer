@@ -67,3 +67,9 @@ mix 3, octave 3, osc 1). 어휘와 소자 소속 기준은 SKILL.md 2절.
 `kit_netlist.py`로 통째로 다시 만들지 말고, 맵을 고칠 때는 패드 번호부터 지금 추출에 맞춘다(이번 STAGE 정리는 stages만 옮겼다).
 
 - pp-andy-1k, pp-bomb-1k, pp-dirty-bom, pp-fuzzy-face, pp-od-one, pp-x-touch
+
+## 병합 뒤 추가 경고 (2026-10-31, 새로 등록한 회로 포함)
+
+- short(두 리드가 같은 넷): EX Booster R7(n7)·R13(out), REVVOLUTION G2 C16(n34), Peanut Drive R6(접지), Sovereign R7(접지) - 맵의 패드 번호 오류 가능성, 렌더로 확인.
+- one-lead: Luna Face BC109C·Sola Face BC108의 BIAS 팟 러그 1·2만 있는 넷 - 러그 하나가 빈 자리인지 확인.
+- REVVOLUTION G2: U2.6에 레일까지 직류 경로 없음, U2B 출력이 −입력으로 3부품 안에 안 돌아옴 - 귀환망 판독 재확인.

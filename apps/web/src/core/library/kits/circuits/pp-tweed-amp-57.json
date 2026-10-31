@@ -508,7 +508,7 @@
   {
    "id": "gainctl",
    "category": "custom",
-   "label": "GAIN",
+   "label": "control GAIN",
    "parts": [
     "C4",
     "R5",
@@ -560,7 +560,7 @@
   {
    "id": "notch",
    "category": "custom",
-   "label": "브리지드-T (DIP)",
+   "label": "filter 브리지드-T (DIP)",
    "parts": [
     "R10",
     "R11",
@@ -573,7 +573,7 @@
   {
    "id": "volume",
    "category": "custom",
-   "label": "VOLUME",
+   "label": "control VOLUME",
    "parts": [
     "R14",
     "VOLUME",

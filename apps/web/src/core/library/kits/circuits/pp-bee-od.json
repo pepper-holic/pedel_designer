@@ -592,7 +592,7 @@
   {
    "id": "tight",
    "category": "custom",
-   "label": "TIGHT",
+   "label": "control TIGHT",
    "parts": [
     "C3",
     "R6",
@@ -646,7 +646,7 @@
   {
    "id": "pres",
    "category": "custom",
-   "label": "PRESENCE",
+   "label": "control PRESENCE",
    "parts": [
     "PRES",
     "R15",

@@ -38,7 +38,7 @@ D LED-GREEN a=57 k=56 D2
 R 47K 58 79 R8
 POT B500K GAIN 105 104 104
 
-STAGE filt custom 저역통과·B단 버퍼 (U1B)
+STAGE filt custom filter 저역통과·B단 버퍼 (U1B)
 R 1.5K 63 64 R9
 C 470n 28 50 C5
 R 10K 19 20 R10

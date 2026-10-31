@@ -29,7 +29,7 @@ C 1n 46 45 C2
 R 1K 51 52 R5
 C 4.7uF 69 62 C3
 
-STAGE tail custom 전류원 (Q4·Q5)
+STAGE tail custom bias 전류원 (Q4·Q5)
 Q 2N3904 b=58 c=56 e=70 Q4
 Q 2N3904 b=67 c=53 e=71 Q5
 R 100K 76 75 R6
@@ -41,7 +41,7 @@ R 1K 12 13 R8
 C 100pF 14 15 C4
 R 1K 7 8 R9
 
-STAGE fb custom 귀환 (GAIN)
+STAGE fb custom feedback 귀환 (GAIN)
 POT B500K GAIN 3 2 1
 C 100pF 16 17 C5
 R 10K 20 21 R10

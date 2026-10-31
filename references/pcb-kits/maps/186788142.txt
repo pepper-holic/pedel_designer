@@ -43,7 +43,7 @@ IC TL074 1=96 2=88 3=81 4=73 5=66 6=59 7=51 8=50 9=58 10=65 11=72 12=80 13=87 14
 R 82K 85 86 R4
 R 47K 79 78 R5
 
-STAGE bright custom 결합 (토글)
+STAGE bright custom filter 결합 (토글)
 C 4.7n 151 137 C3
 C 2.2n 144 145 C4
 R 33K 130 105 R6

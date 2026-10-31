@@ -46,7 +46,7 @@ POT B50K BIAS2 93 84 94
 R 1K 66 67 R10
 C 47uF 60 51 C7
 
-STAGE gainctl custom GAIN
+STAGE gainctl custom control GAIN
 C 1.5n 74 75 C8
 R 22K 85 86 R11
 C 10p 98 99 C9

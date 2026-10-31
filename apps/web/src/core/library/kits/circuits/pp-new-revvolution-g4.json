@@ -653,7 +653,7 @@
   {
    "id": "bright",
    "category": "custom",
-   "label": "결합 (토글)",
+   "label": "filter 결합 (토글)",
    "parts": [
     "C3",
     "C4",

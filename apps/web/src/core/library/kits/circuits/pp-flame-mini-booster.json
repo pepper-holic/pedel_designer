@@ -321,7 +321,7 @@
   {
    "id": "tail",
    "category": "custom",
-   "label": "전류원 (Q4·Q5)",
+   "label": "bias 전류원 (Q4·Q5)",
    "parts": [
     "Q4",
     "Q5",
@@ -343,7 +343,7 @@
   {
    "id": "fb",
    "category": "custom",
-   "label": "귀환 (GAIN)",
+   "label": "feedback 귀환 (GAIN)",
    "parts": [
     "GAIN",
     "C5",

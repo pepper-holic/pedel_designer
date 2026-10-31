@@ -40,7 +40,7 @@ D 1N4148 a=17 k=18 D2
 D 1N4148 a=26 k=25 D3
 D 1N4148 a=28 k=27 D4
 
-STAGE leg custom -입력 다리 (BASS·부스트 토글)
+STAGE leg custom feedback -입력 다리 (BASS·부스트 토글)
 R 3.3K 6 7 R5
 C 39n 2 3 C4
 POT C50K BASS 37 36 35

@@ -350,7 +350,7 @@
   {
    "id": "filt",
    "category": "custom",
-   "label": "저역통과·B단 버퍼 (U1B)",
+   "label": "filter 저역통과·B단 버퍼 (U1B)",
    "parts": [
     "R9",
     "C5",
