@@ -4,13 +4,13 @@
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 125 |
+| 변환 완료 | 150 |
 | 기록만 | 5 |
-| 보류 | 95 |
+| 보류 | 70 |
 | 미착수 | 0 |
 | C등급(범위 밖) | 41 |
 
-## 변환 완료 (125)
+## 변환 완료 (150)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -140,6 +140,31 @@
 | B | 186788309 | KO-N UI (케이스제외) | overdrive | pp-ko-n-ui (층 분리 뒤 재시도) |
 | B | 186787677 | Wild Jack | overdrive | pp-wild-jack (MPSA18 가짜 접지 SPLIT, GTOD 켬) |
 | B | 186788010 | Soulist | overdrive | pp-soulist (STYLE 3.3K, DIP 끔) |
+| B | 186788159 | SONIX BABY | eq | pp-sonix-baby (재시도3) |
+| B | 186787473 | NEW MORNING | overdrive | pp-new-morning (재시도3, HI-CUT DIP 켬) |
+| B | 186787534 | Claw | eq | pp-claw (재시도3) |
+| B | 186788151 | THE BLOID | overdrive | pp-the-bloid (재시도3, Rock) |
+| B | 186788104 | NEW Graff Dynamic | overdrive | pp-new-graff-dynamic (재시도3, 실리콘) |
+| B | 186788665 | 29 YUNA | buffer-boost | pp-29-yuna (재시도3, ±18V) |
+| B | 186787553 | Haunting FreQ | eq | pp-haunting-freq (재시도3, -9V) |
+| B | 186788013 | Duel B | overdrive | pp-duel-b (재시도3) |
+| B | 186788015 | Tong Cap | preamp | pp-tong-cap (재시도3) |
+| B | 186787535 | Dove Drive | overdrive | pp-dove-drive (재시도3) |
+| B | 186788577 | NEW RED CHARLES | distortion | pp-new-red-charles (재시도3) |
+| B | 186787546 | X-Touch | overdrive | pp-x-touch (재시도3, CRUNCH) |
+| B | 186787635 | FLEX OD | overdrive | pp-flex-od (재시도3) |
+| B | 186788065 | Med Rox | distortion | pp-med-rox (재시도3) |
+| B | 186787483 | King Cat | fuzz | pp-king-cat (재시도3) |
+| B | 186788576 | MUFFLER II | distortion | pp-muffler-ii (재시도3) |
+| B | 186787555 | Flame Booster | buffer-boost | pp-flame-booster (재시도3, CLN) |
+| B | 186787548 | Tube Drive | overdrive | pp-tube-drive (재시도3) |
+| B | 186787538 | RahRah | overdrive | pp-rahrah (재시도3) |
+| B | 186787458 | BEE DS | overdrive | pp-bee-ds (재시도3) |
+| B | 186788011 | Heavy Fist | distortion | pp-heavy-fist (재시도3) |
+| B | 186788585 | PLEXI1959 | distortion | pp-plexi1959 (재시도3) |
+| B | 186788140 | NEW REVVOLUTION G3 | buffer-boost | pp-new-revvolution-g3 (재시도3) |
+| B | 186788017 | Pluto Green | overdrive | pp-pluto-green (재시도3) |
+| B | 186788339 | SLASHMASTER | distortion | pp-slashmaster (재시도3) |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -150,73 +175,53 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (95)
+## 보류 (70)
 
 보류 이유 태그:
 
 | 태그 | 수 | 뜻 |
 |---|---|---|
-| [대조] | 45 | 원본 회로도와 대조해야 넷 확정 |
-| [팟라벨] | 16 | 노브·팟 역할 근거 없음(무라벨 앵글/오프보드 팟) |
-| [오병합] | 26 | 추출기 넷 오병합·숨은 선이 많아 렌더로 못 풂 |
-| [모델] | 3 | 앱에 소자 모델 없음 |
-| [자료] | 8 | 부품표·값·배선 자료가 페이지에 없음 |
+| [대조] | 20 | 원본 회로도와 대조해야 넷 확정 |
+| [팟라벨] | 18 | 노브·팟 역할 근거 없음(무라벨 앵글/오프보드 팟) |
+| [오병합] | 14 | 추출기 넷 오병합·숨은 선이 많아 렌더로 못 풂 |
+| [모델] | 5 | 앱에 소자 모델 없음 |
+| [자료] | 9 | 부품표·값·배선 자료가 페이지에 없음 |
 | [다회로] | 4 | 한 기판에 회로 여러 개(프리셋 분리 필요) |
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
 | B | 186788016 | Pluto Blue | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788334 | SEC RET PRE | preamp | [대조] ICL7660 전하펌프 |
+| B | 186788334 | SEC RET PRE | preamp | [자료] 소스 토글·볼륨 배선(재시도1) |
 | B | 186788129 | NEW SON OF BEN | preamp | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186787681 | Fluffy Fuzz | fuzz | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
+| B | 186787681 | Fluffy Fuzz | fuzz | [대조] 가짜 접지 조각 + 귀환 구조(재시도1) |
 | B | 186788518 | FUZZ BENDER II GE | fuzz | [대조] ICL7660 전하펌프 |
-| B | 186788106 | Timothy V3 | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
+| B | 186788106 | Timothy V3 | overdrive | [대조] DPDT 모드 토글 위치(재시도1) |
 | B | 186788569 | BASS CLEAN | buffer-boost | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788145 | KONISH SS-2 | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186787554 | Flame mini Booster | buffer-boost | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788589 | TIME V2 (잔레이) | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788159 | SONIX BABY | eq | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186787473 | NEW MORNING | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186787536 | Hush FREQ | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186787534 | Claw | eq | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788151 | THE BLOID | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788104 | NEW Graff Dynamic | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
+| B | 186787554 | Flame mini Booster | buffer-boost | [대조] 디스크리트 op-amp 꼬리 노드(재시도2) |
+| B | 186788589 | TIME V2 (잔레이) | overdrive | [팟라벨] B단 큰 링 역할(재시도2) |
+| B | 186787536 | Hush FREQ | overdrive | [모델] 1N916A 품번 별칭 필요(재시도3) |
 | B | 186786078 | RC BEAST  (겸용) | buffer-boost | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788665 | 29 YUNA | buffer-boost | [대조] ICL7660 전하펌프 |
-| B | 186787553 | Haunting FreQ | eq | [대조] ICL7660 전하펌프 |
-| B | 186788013 | Duel B | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788335 | 1484 TWELVE | unknown | [대조] ICL7660 전하펌프 |
-| B | 186788015 | Tong Cap | preamp | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788146 | KONISH SS-3 | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
+| B | 186788146 | KONISH SS-3 | overdrive | [오병합] TL072 B측 핀 넷 합침(재시도3) |
 | B | 186788150 | TUBE SV808 | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186788138 | NEW ANDY PLUS | eq | [대조] MOSFET |
-| B | 186787535 | Dove Drive | overdrive | [대조] MOSFET |
-| B | 186788577 | NEW RED CHARLES | distortion | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186787546 | X-Touch | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
+| B | 186788138 | NEW ANDY PLUS | eq | [팟라벨] 앵글 팟 5개 무라벨·사진 없음(재시도3) |
 | B | 186788551 | REAL CLEAN | buffer-boost | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788552 | ALMOST CLEAN | buffer-boost | [대조] RC/AC BST 공용 기판 |
-| B | 186787635 | FLEX OD | overdrive | [오병합] 4단계 보류(오병합) |
-| B | 186788065 | Med Rox | distortion | [오병합] 4단계 보류(IC 밑 선) |
-| B | 186787483 | King Cat | fuzz | [오병합] 4단계 보류(오병합) |
-| B | 186788576 | MUFFLER II | distortion | [오병합] 4단계 보류(오병합·무라벨 팟) |
 | B | 186788180 | BIG SHERIFF PREAMP | preamp | [팟라벨] 4단계 보류(무라벨 노브) |
 | B | 186788181 | BIG JACK PREAMP | preamp | [팟라벨] 4단계 보류(무라벨 노브) |
 | B | 186788182 | BIG KRAKEN PREAMP | preamp | [팟라벨] 4단계 보류(무라벨 노브) |
 | B | 186788178 | BIG COPPER PREAMP | preamp | [팟라벨] 4단계 보류(무라벨 노브) |
 | B | 186788179 | BIG DUTCH PREAMP | preamp | [팟라벨] 4단계 보류(무라벨 노브) |
-| B | 186787555 | Flame Booster | buffer-boost | [오병합] 4단계 보류(오병합·토글) |
 | B | 186788445 | OCTA KING | fuzz | [팟라벨] 4단계 보류(무라벨 노브·DPDT) |
-| B | 186787548 | Tube Drive | overdrive | [오병합] 4단계 보류(MOSFET 핀 오병합) |
-| B | 186787538 | RahRah | overdrive | [오병합] 4단계 보류(제너 밑 선) |
 | B | 186788658 | ICE MUFF | fuzz | [팟라벨] 4단계 보류(고립·무라벨 노브) |
 | B | 186788468 | SUPA FUZZ | fuzz | [대조] 앵글 팟 라벨 없음, Q2 이미터 넷 고립 - 원본 Super-Fuzz 대조 |
-| B | 186787458 | BEE DS | overdrive | [오병합] TL072x4, 접지 넷에 IC2 출력 핀 오병합, 오프보드 팟 6개 - 원본 Dirty Shirley 대조 |
 | B | 186788575 | BLACK AMP 65 | overdrive | [팟라벨] 앵글 팟 5개 라벨 없음(A100K 둘 역할 모호), DIP 듀얼 토글 막다른 넷, 고립 10 - 원본 Black '65 대조 |
 | B | 186787489 | Bowling Point | buffer-boost | [대조] BASS 토글 공통이 A단 반전 입력에 붙는 경로 안 보임 - 나머지 JUMP는 결과 메모에 있음 |
 | B | 186788052 | Cream Cake Overdrive | overdrive | [자료] SOLO 팟이 오프보드 3PDT로 들어감, 러그 연결 미확정 |
-| B | 186787464 | Marvel Drive | overdrive | [오병합] 넷 하나가 53패드 오병합, 듀얼 팟에 SMD 가상 패드 겹침 - 원본 Marvel/Plexi 대조 |
+| B | 186787464 | Marvel Drive | overdrive | [오병합] 18V 선 따라 22패드 한 넷(재시도3) |
 | B | 186788107 | NEW 1981 DRIV | distortion | [대조] U2A 반전 입력 연결·TL072 B단 역할 불명 - 원본 1981 DRV 대조 |
-| B | 186788115 | NEW 1981 LEVEL | buffer-boost | [오병합] 고립 9개(2N3904 이미터·바이어스·10uF·제너 등) - 원본 1981 LEVEL 대조 |
+| B | 186788115 | NEW 1981 LEVEL | buffer-boost | [모델] 제너 항복 클리퍼(재시도3) |
 | B | 186788074 | New Big Muffler | distortion | [자료] 기판에 값 실크 없음, 부품표는 자료실 PDF(sno=778, 9개 버전) 필요 |
 | B | 186788661 | ODR ONE | overdrive | [대조] 저항 줄 밑 선 겹침, U1B 출력 행선 불명, 앵글 팟 4개 라벨 없음 - 원본 ODR-1 대조 |
 | B | 186788317 | TOMATOMA BASS | preamp | [다회로] 한 기판에 독립 회로 2개(BP 프리앰프·BO 드라이브), 팟 라벨 없음 - 프리셋 분리 필요 |
@@ -225,11 +230,8 @@
 | B | 186788484 | BLUES BRKR BOX | overdrive | [오병합] 고립 12(톤·부스트 와이퍼, 토글 4개 러그) |
 | B | 186788598 | KOTT  (노브 제외) | overdrive | [다회로] KoT 두 채널, 고립 16 |
 | B | 186788152 | TWIN BLOID | overdrive | [다회로] 두 회로 한 케이스 |
-| B | 186788011 | Heavy Fist | distortion | [오병합] 고립 9가 몸통 밑 숨은 선, 토글 3개 |
 | B | 186788473 | VIG LEBOWSKI | overdrive | [팟라벨] 오프보드 팟 4개 무라벨, 고립 9 |
-| B | 186788585 | PLEXI1959 | distortion | [오병합] 자홍 고립 15 |
 | B | 186787476 | Train Wreck | distortion | [오병합] 고립 17, 토글 2개 |
-| B | 186788140 | NEW REVVOLUTION G3 | buffer-boost | [오병합] 자홍 고립 약 20, 팟 줄 무라벨 |
 | B | 186788142 | NEW REVVOLUTION G2 | unknown | [오병합] 자홍 고립 22 (G3 계열) |
 | B | 186788141 | NEW REVVOLUTION G4 | unknown | [오병합] 자홍 고립 24 (G3 계열) |
 | B | 186788173 | SLOW PREAMP | preamp | [오병합] 자홍 고립 13, 팟 8자리 무라벨 |
@@ -237,14 +239,12 @@
 | B | 186788599 | FRIEDMAN MARY | distortion | [오병합] 자홍 고립 13, 팟 9자리 무라벨 |
 | B | 186788036 | All of BB Cream | overdrive | [대조] 괄호 대체값 7곳, ATM/COMP 토글 다이오드 묶음 |
 | B | 186788038 | Bass BB Cream | overdrive | [자료] All of BB 기판의 값 변경·점퍼 자료 필요 |
-| B | 186788017 | Pluto Green | overdrive | [오병합] GAIN 러그 등 숨은 윗면 선 |
 | B | 186788553 | 브라우니 PLUTO | overdrive | [다회로] 프로틴 2채널 |
 | B | 186788053 | Custard Cake Overdrive | overdrive | [자료] 오프보드 S·B·P 배선은 자료실 PDS 777에만 |
 | B | 186788660 | MOONSHINE BOTTLE | overdrive | [팟라벨] 앵글 팟 12패드 무라벨, 고립 21 |
 | B | 186788161 | SONIX 482i | unknown | [모델] NJM2153 엔헨서 칩, ICL7660 두 개 ±12V |
 | B | 186788144 | KONISH NG-2 | fuzz | [오병합] QE 베이스 구동 경로 없음(시안 넷이 접지인지 바이어스인지) |
 | B | 186788143 | KONISH G-2 | overdrive | [오병합] 고립 20, 접지 넷에 QB 컬렉터 오병합 |
-| B | 186788339 | SLASHMASTER | distortion | [대조] Shredmaster, 톤망 직류 경로·클리퍼 위치 |
 | B | 186788574 | TWEED AMP 57 | overdrive | [팟라벨] 앵글 팟 5개 무라벨(A100K 둘), J201 게이트 고립 |
 | B | 186788549 | J900CM | overdrive | [오병합] U1 출력 핀 둘 고립, 앵글 팟 4개 무라벨 |
 | B | 186787456 | BEE OD | overdrive | [오병합] Vref 버퍼가 접지 넷에 합쳐짐, IC2 핀 고립 |

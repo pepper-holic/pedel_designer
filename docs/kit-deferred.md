@@ -354,3 +354,16 @@ Sovereign·Peanut Drive는 27K/22K 라벨 상자를 맵이 SPLIT으로 이미 �
 - TIME V2: A단(A1M 게인 와이퍼→3.3K, 1N914 2+2 귀환 클리퍼·DIP, 9.1K/680R+트리머·39n/1000n+베이스 팟 접지 다리)은 읽혔다.
   B단 주변 큰 링 58·65·72·73·74·87·88 중 트레블 C50K·볼륨 A25K 러그가 어느 것인지 정해지지 않는다. [팟라벨]
 - 추출기 개선 후보(두 번째 사례): 반지름이 보통 패드의 절반 이하인 조각은 접지 판정에서 뺀다(Fluffy Fuzz 51, Wild Jack 51).
+
+## 2026-10-31 재시도 묶음 3 (병렬 세션 5개, 30개 중 25개 변환)
+
+회로가 됨(25): SONIX BABY, NEW MORNING, Claw, THE BLOID, NEW Graff Dynamic, Duel B, 29 YUNA, Haunting FreQ, Tong Cap, SLASHMASTER,
+Dove Drive, NEW RED CHARLES, X-Touch, Heavy Fist, FLEX OD, King Cat, MUFFLER II, Med Rox, Tube Drive, RahRah, Pluto Green, Flame Booster,
+BEE DS, PLEXI1959, NEW REVVOLUTION G3. 고정한 스위치 위치·추정한 팟 값·SPLIT 근거는 각 맵(`references/pcb-kits/maps/<goods>.txt`) 주석에 있다.
+무라벨 앵글 팟은 상품 사진(PLEXI1959·G3·THE BLOID)이나 회로 역할로 배정했고, 원본 회로도와는 대조하지 않았다.
+여전히 보류(5):
+- Hush FREQ 186787536 [모델]: 1N916A 다이오드 품번이 `partModels.ts`에 없다. 넷·부품표 대조는 끝났고 DIODES 표에 1N916(1N4148 모델) 한 줄이면 된다.
+- NEW 1981 LEVEL 186788115 [모델]: 3.3V 제너 두 개가 LM833 A 귀환에 직렬로 맞물린 제너 항복 클리퍼. 앱 ZENER는 순방향만이라 항복 모델이 필요하다.
+- KONISH SS-3 186788146 [오병합]: TL072 B측 핀 5·6·7과 10n·220p·100K·1M 윗줄이 한 넷. 600px 렌더라 핀 사이 선을 못 가른다.
+- NEW ANDY PLUS 186788138 [팟라벨]: 앵글 팟 5개 무라벨, 상품 사진 없음. BS170 부스트 섹션이 따로 있다([다회로] 성격).
+- Marvel Drive 186787464 [오병합]: 18V 세로 시안 선을 따라 22패드가 한 넷(27K 양끝 포함), '+' 패드로 접지와도 합쳐진다.
