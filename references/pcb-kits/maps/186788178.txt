@@ -1,0 +1,158 @@
+id pp-big-copper-preamp
+goods 186788178
+name BIG COPPER PREAMP
+motif Victory The Copper (V4 프리앰프)
+type preamp
+desc TL074 ±9V(ICL7660) 3단 제너 클리핑 프리앰프 - 22n·68K 입력 → C단 비반전 x5.7(220K∥100p, 6.2V·5.1V 제너) → 2.2n → GAIN(100p 브라이트) → B단 x23(220K, 3.3V 제너 쌍) → 100n → AC30 톱부스트형 톤(100p·100K·22n x2·10K, TREBLE·BASS) → 470K/470K → A단 x5.5(3.3V 제너 쌍) → 10n·100K → CUT(4.7n) → VOLUME → D단 x5.7 출력
+image img_01.jpg
+# TL074 notch left: bottom row 87..93 = pins 1..7, top row 77..71 = pins 8..14.
+#   A: out 87, -in 88, +in 89 (470K 110-111 to GND, 470K 119-120 from TREBLE wiper)  B: +in 91, -in 92, out 93
+#   C: +in 75, -in 76, out 77  D: +in 73, -in 72, out 71.
+# ICL7660 notch top: 1=8 2=16 3=22 4=33 5=34(-9V) 8=9; 6=23, 7=17 unused. Pump 10uF 24(+)-32, -9V 10uF 25(+ GND square)-18 and 100n 19-20.
+# Pots are on-board angle pots with no labels (49-51, 55-57, 137-139, 140-142, 143/144/146); parts list A1M x2, B1M, A250K, B250K.
+#   추측: TREBLE B1M = 140-141-142 (100p from the stage-B coupling node to lug 140, lug 142 on the bass 22n, wiper -> 470K -> +in A) - AC30 top boost.
+#   추측: BASS = 144-143-146 (lug 144 on the TREBLE bottom, wiper on the second 22n + 10K, 146 GND) - AC30 top boost bass pot.
+#   추측: CUT = 137-138-139 rheostat (138=139 on the post-A node, 137 -> 4.7n -> GND), written so clockwise cuts more as on a Vox.
+#   추측: GAIN A1M = 55-56-57 (2.2n from C out to lug 55, 100p lug-wiper, wiper on +in B). 추측: VOLUME A1M = 49-50-51 (wiper on +in D).
+#   후보: BASS A250K / CUT B250K 또는 반대, 지금은 BASS=A250K CUT=B250K (Vox 베이스는 로그, 컷은 선형).
+# Status LED (0-4, LED_R 470R) left out of the netlist and BOM.
+BOM 1Mx2 470Kx2 220Kx2 100Kx3 68K 47Kx3 22K 10Kx3 220R 100R 1000nx3 100nx4 47n 22nx3 10n 4.7n 2.2n 220p 100px3 100uF 10uFx2 1N400X 1N4148x2 6.2V 5.1V 3.3Vx4 TL074 ICL7660 A1Mx2 B1M A250K B250K
+io IN=21 OUT=39 V9=14 GND=15,25
+NC 0 1 2 3 4 17 23
+
+STAGE input input 입력
+C 22n 31 30 C1
+R 1M 26 27 R1
+R 1M 35 36 R2
+R 68K 40 62 R3
+
+STAGE c gain C단 (x5.7, 제너 6.2V·5.1V)
+IC TL074 1=87 2=88 3=89 4=90 5=91 6=92 7=93 8=77 9=76 10=75 11=74 12=73 13=72 14=71 U1
+R 220K 78 79 R4
+C 100p 63 64 C2
+D 5.1V a=66 k=65 D2
+D 6.2V a=58 k=42 D1
+C 47n 81 82 C3
+R 47K 112 113 R5
+
+STAGE gainpot custom control GAIN (2.2n 결합, 100p 브라이트)
+C 2.2n 41 54 C4
+POT A1M GAIN 57 56 55
+C 100p 43 44 C5
+
+STAGE b gain B단 (x23, 제너 3.3V 쌍)
+R 220K 101 100 R6
+D 3.3V a=97 k=96 D3
+D 3.3V a=107 k=106 D4
+C 1000n 98 99 C6
+R 10K 121 122 R7
+
+STAGE tone tone 톱부스트 톤 (TREBLE·BASS)
+C 100n 109 108 C7
+C 100p 127 126 C8
+POT B1M TREBLE 142 141 140
+R 100K 115 116 R8
+C 22n 129 128 C9
+C 22n 130 131 C10
+POT A250K BASS 146 143 144
+R 10K 132 133 R9
+
+STAGE a gain A단 (x5.5, 제너 3.3V 쌍)
+R 470K 120 119 R10
+R 470K 111 110 R11
+R 100K 94 95 R12
+D 3.3V a=84 k=83 D5
+D 3.3V a=85 k=86 D6
+C 100n 105 104 C11
+R 22K 103 102 R13
+
+STAGE cut custom control CUT (4.7n)
+C 10n 117 118 C12
+R 100K 135 134 R14
+POT B250K CUT 139 138 137
+C 4.7n 124 125 C13
+
+STAGE output output 출력 (VOLUME·D단 x5.7)
+POT A1M VOLUME 51 50 49
+R 47K 60 61 R15
+C 220p 52 53 C14
+R 10K 38 37 R16
+C 1000n 29 28 C15
+D 1N4148 a=45 k=59 D7
+D 1N4148 a=47 k=46 D8
+R 220R 70 69 R17
+C 1000n 68 67 C16
+R 47K 48 80 R18
+
+STAGE power power 전원 (±9V)
+D 1N400X a=13 k=12 D9
+R 100R 11 10 R20
+C 100n 6 5 C20
+C 100uF 7 15 C21
+IC ICL7660 1=8 2=16 3=22 4=33 5=34 8=9 U2
+C 10uF 24 32 C22
+C 10uF 25 18 C23
+C 100n 19 20 C24
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 160
+AT D9 130 160 h
+AT R20 200 160 h
+AT C20 250 210 v
+AT C21 290 210 v
+AT Vrail1 360 160
+AT C23 410 210 v-
+AT C24 450 210 v-
+AT C1 130 400 h
+AT R1 100 470 v
+AT R2 190 460 v
+AT R3 230 400 h
+AT U1C 320 420
+AT R4 320 490 h-
+AT C2 320 530 h-
+AT D2 290 580 h-
+AT D1 380 580 h
+AT C3 260 640 v
+AT R5 260 720 v
+AT C4 410 420 h
+AT GAIN 500 420 r180
+AT C5 470 480 v
+AT U1B 600 470
+AT R6 600 540 h-
+AT D3 570 590 h-
+AT D4 660 590 h
+AT C6 540 650 v
+AT R7 540 730 v
+AT C7 700 470 h
+AT C8 790 400 h
+AT TREBLE 880 400 r180
+AT R8 790 490 h
+AT C9 870 490 h
+AT C10 830 560 v
+AT BASS 940 560 r0 m
+AT R9 870 640 v
+AT R10 1010 430 h
+AT R11 1040 520 v
+AT U1A 1100 450
+AT R12 1100 530 h-
+AT D6 1070 580 h-
+AT D5 1130 580 h
+AT C11 1020 640 v
+AT R13 1020 720 v
+AT C12 1200 450 h
+AT R14 1270 450 h
+AT CUT 1330 520 r0
+AT C13 1360 580 v
+AT VOLUME 1380 450 r180
+AT U1D 1480 500
+AT R15 1480 570 h-
+AT C14 1480 610 h-
+AT R16 1420 600 v
+AT C15 1420 680 v
+AT D7 1550 440 v-
+AT D8 1590 560 v-
+AT R17 1600 500 h
+AT C16 1670 500 h
+AT R18 1710 560 v
+AT RLOAD 1760 530 v
