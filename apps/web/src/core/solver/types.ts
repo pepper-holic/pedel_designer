@@ -17,6 +17,9 @@ export interface CapacitorElement extends ElementBase {
   type: "capacitor";
   nodes: [NodeId, NodeId];
   capacitance: number;
+  /** Parallel leakage resistance in ohms. Real capacitors leak; set it where a node sits only
+   * between capacitors, so the DC operating point has a solution. Unset means an ideal capacitor. */
+  leakage?: number;
 }
 
 export interface InductorElement extends ElementBase {

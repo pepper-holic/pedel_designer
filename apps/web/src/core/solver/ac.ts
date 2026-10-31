@@ -138,6 +138,7 @@ function solveAcSweep(
         case "capacitor": {
           const [p, ni] = el.nodes.map((node) => nodeOf(topology, node));
           stampB(p, ni, omega * el.capacitance);
+          if (el.leakage) stampG(p, ni, 1 / el.leakage);
           break;
         }
         case "inductor": {

@@ -6,6 +6,7 @@ import { parsePot, parseValue } from "./values";
 import { bjtModel, diodeModel, jfetModel, opAmpModel, OPAMP_PINOUT } from "./partModels";
 import { SILICON_DIODE_1N4148 } from "../deviceModels";
 import { isLm386, lm386Elements, lm386Spots } from "./lm386";
+import { withIslandLeakage } from "./dcIslands";
 
 /** Op-amp outputs stop this far short of the supply rails (a TL072/4558 on 9V swings ~1-8V). */
 const RAIL_HEADROOM = 1.2;
@@ -153,13 +154,13 @@ export function kitToPreset(kit: KitCircuit): PedalPreset {
   const byRef = new Map(kit.parts.map((part) => [part.ref, partElements(part, rails, knobs)]));
   const parts = [...byRef.values()].flat();
   const meta: KitMeta = { goodsNo: kit.goodsNo, kitName: kit.kitName, motif: kit.motif, family: kit.type };
-  const elements: Element[] = [
+  const elements: Element[] = withIslandLeakage([
     { id: "V1", type: "vsource", nodes: ["in", "0"], voltage: 0 },
     { id: "Vcc", type: "vsource", nodes: ["vcc", "0"], voltage: kit.supply, role: "supply" },
     ...rails.extra.map((r, i): Element => ({ id: `Vrail${i + 1}`, type: "vsource", nodes: [r.net, "0"], voltage: r.voltage, role: "supply" })),
     ...parts,
     { id: "RLOAD", type: "resistor", nodes: ["out", "0"], resistance: LOAD_RESISTANCE },
-  ];
+  ]);
   return {
     id: kit.id,
     name: `${kit.kitName} (${kit.motif} 스타일, 키트 기판)`,

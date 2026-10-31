@@ -17,7 +17,8 @@ import type { StampContext } from "./context";
 export function stampCapacitor(el: CapacitorElement, ctx: StampContext): void {
   const p = nodeOf(ctx.topology, el.nodes[0]);
   const n = nodeOf(ctx.topology, el.nodes[1]);
-  if (ctx.dt <= 0) return; // DC operating point: capacitor is an open circuit.
+  if (el.leakage) ctx.system.stampConductance(p, n, 1 / el.leakage);
+  if (ctx.dt <= 0) return; // DC operating point: capacitor is an open circuit (bar its leakage).
 
   const trapezoidal = ctx.integration === "trapezoidal";
   const geq = (trapezoidal ? 2 : 1) * (el.capacitance / ctx.dt);
