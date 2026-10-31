@@ -11,6 +11,7 @@ image img_03.jpg
 BOM 1M 510Kx2 51K 10Kx7 4.7K 1Kx4 220R 100R 1000nx2 100n 47n 22n 51pF 0.22uFx2 100uF 47uF 10uF 1N914x3 JRC4558D 2SC1815x2 A500K W20K B100K
 io IN=85 OUT=31 V9=0 GND=11
 JUMP 1 16
+# 10K R14 (12) joins the 100R (1) / Q1 emitter (6) node (ring extraction 2026-10-31; it was a lone pad before).
 JUMP 10 42
 JUMP 62 72
 JUMP 53 62

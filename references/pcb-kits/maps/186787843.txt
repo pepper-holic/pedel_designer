@@ -7,8 +7,8 @@ desc LM386N-3 파워앰프 퍼즈 - 100n 입력→3번 핀, 1-8번 핀 1uF 이�
 image img_01.jpg
 # LM386 notch at the top: pin 1 top-left (19), pins 1-4 down the left (19 23 28 35), 5-8 up the right (36 29 24 20).
 # Pin 2 and pin 4 sit on the ground pour; pin 7 (bypass, 24) has no copper.
-# The extractor tied OUT (14) into ground: the trace from the VOLUME wiper (5) bends within reach of the grounded
-# lug 6 and misses pad 5's ring - split it out and join it to the wiper. Pad 46 (390pF foot) carries the ground
+# The extractor ties the wiper (5) - OUT (14) trace into ground (it bends within reach of the grounded lug 6) and the
+# pin 1 (19) - 10R (22) - 1uF (47) group too (beside the grounded pin 2): both split out (ring extraction 2026-10-31). Pad 46 (390pF foot) carries the ground
 # "+" the small render hides from the extractor.
 # SW1/SW2 (41/42) are the on-on gain toggle's two wired lugs: closed puts 1uF across pins 1-8 (gain ~200),
 # fixed closed here (the fuzz setting); open leaves the chip at its internal gain of 20.
@@ -16,8 +16,8 @@ image img_01.jpg
 # supply after the 9V pad.
 BOM 2.2M 1K 47R 10Rx2 100n 390p 47uFx2 22uF 1uF 1N400X LM386N-3 A100K A10K
 io IN=26 OUT=14 V9=8 GND=0,46
-SPLIT 14
-JUMP 5 14
+SPLIT 5 14
+SPLIT 19 22 47
 JUMP 41 42
 NC 24
 

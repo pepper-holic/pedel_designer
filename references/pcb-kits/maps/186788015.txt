@@ -12,11 +12,11 @@ image img_01.jpg
 #    The treble half is fixed: 22n -> 22K -> node (1.5K to -in) -> 22K -> 22n -> out.
 # C/B: the same mid band on each - pot ends between the previous output (1K, lug3) and this output (1K, lug1 "1") with 100n / 15n
 #    across, wiper -> 10n / 1.5n -> -in, 100K in and 100K feedback. CW (toward lug3) boosts on all three.
-# 1N400X 91-92 is a reverse-polarity shunt (band at 92 on V+). 108/109, 110/111, 113-115 are duplicate detections of 19/31, 46 and
-# the 9V ring 112. Seller notes the original uses an SMD MC3327 quad; the kit ships TL074 (16-pin socket in the list).
+# 1N400X 91-92 is a reverse-polarity shunt (band at 92 on V+). The 9V ring is pad 104 on the V+ net (the --smd extraction
+# numbered it 112; the reference nets are the plain extraction). Seller notes the original uses an SMD MC3327 quad; the kit ships TL074 (16-pin socket in the list).
 BOM 1Mx3 100Kx5 22Kx2 10Kx2 5.1Kx3 1.5K 1Kx6 820n 680n 100nx3 47nx2 22nx2 15n 10n 1.5n 33pF 100uF 10uFx2 1N400X TL074 B50Kx3
-io IN=72 OUT=77 V9=112 GND=89
-NC 108 109 110 111 113 114 115 104 78 90 99 100
+io IN=72 OUT=77 V9=104 GND=89
+NC 78 90 99 100
 
 STAGE input buffer 입력 버퍼 (A)
 C 100n 73 74 C1

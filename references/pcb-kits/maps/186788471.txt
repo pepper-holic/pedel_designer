@@ -5,13 +5,13 @@ motif Fulltone '70 Fuzz
 type fuzz
 desc 2SC828 실리콘 2석 퍼즈페이스 변형 - Q1 컬렉터(33K)→Q2 베이스 직결, Q2 이미터→Q1 베이스 100K 피드백, FUZZ B1K+22uF(와이퍼에서 1N914로 Q1 베이스), Q2 컬렉터 부하는 220R→(B1K BIAS 팟∥1K)→1K→5K 트리머, 10p 밀러·입력 RF 캡, 100n 출력에 1N34A 션트와 A250K 볼륨
 image img_01.jpg
-# Q1 C (46) runs under the Q2 outline to Q2 B (31); the 100n's top pad (9) to Q2 C (30).
+# Q1 C (46) runs under the Q2 outline to Q2 B (31). The 100n's top pad (9) joins the 1K/1K/BIAS node (6 7 0) under the 220R,
+# not Q2 C (ring extraction 2026-10-31; the earlier JUMP 9 30 was a guess for a lone pad).
 # Angle pots: 0-1-2 BIAS (B1K, wiper 1 on the 220R node, lug 0 on the 1K chain, lug 2 unused),
 # 15-16-17 FUZZ (B1K, lug 15 Q2 emitter, wiper 16 to the 22uF, 17 ground), 23-24-25 VOL (A250K).
 BOM 1Mx2 100K 33K 1Kx2 220R 100n 10px2 47uF 22uF 2.2uF 1N400X 1N914 1N34A 5K 2SC828x2 A250K B1Kx2
 io IN=52 OUT=39 V9=5 GND=53
 JUMP 46 31
-JUMP 9 30
 NC 2 41
 
 STAGE input input 입력

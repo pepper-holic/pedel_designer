@@ -5,7 +5,7 @@
  "motif": "Alembic Stratoblaster",
  "type": "preamp",
  "description": "기타 잭플레이트에 장착하는 JFET 1단 프리앰프. 68K를 거쳐 게이트로 들어가 22K 드레인·12K 소스 저항으로 증폭하고, 소스 바이패스(50K 팟+10uF)로 게인을 조절한다. 토글은 바이패스 전환.",
- "supply": 9,
+ "supply": 9.0,
  "parts": [
   {
    "ref": "R1",

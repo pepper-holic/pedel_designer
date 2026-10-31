@@ -5,7 +5,7 @@
  "motif": "Greer Southland / Lightspeed",
  "type": "overdrive",
  "description": "TL072 2단 - A단 비반전(A1M 드라이브+5.6K, 100p, 1N4148 3:2 직렬 역병렬 피드백 클리퍼, 3.3K→47n∥12K+470n 접지 다리), 5.6K/10n→BAT41 클램프→B단 비반전(22K/3.9K), 3.3K와 1000n으로 A10K FREQ 틸트(220n), A250K 볼륨",
- "supply": 9,
+ "supply": 9.0,
  "parts": [
   {
    "ref": "R1",
@@ -217,8 +217,8 @@
    "kind": "R",
    "value": "3.3K",
    "nodes": [
-    "n7",
-    "n15"
+    "n15",
+    "n16"
    ]
   },
   {
@@ -226,8 +226,8 @@
    "kind": "C",
    "value": "1000n",
    "nodes": [
-    "n7",
-    "n16"
+    "n15",
+    "n7"
    ]
   },
   {
@@ -236,7 +236,7 @@
    "value": "A10K",
    "nodes": [
     "n17",
-    "n15",
+    "n16",
     "n16"
    ]
   },
@@ -256,7 +256,7 @@
    "nodes": [
     "0",
     "out",
-    "n15"
+    "n16"
    ]
   },
   {

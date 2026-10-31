@@ -7,8 +7,7 @@ desc LF442(TL072) 한쪽은 입력 버퍼, 다른 쪽은 반전 EQ 증폭. BASS�
 image img_03.jpg
 BOM 1Mx2 100Kx2 49.9Kx2 35.7Kx2 11Kx3 2Kx2 1Kx1 47nx2 22nx1 4.7nx1 100pFx1 47uFx1 4.7uFx1 1N400Xx1 LF442x1 B100Kx1 B50Kx1
 io IN=52 OUT=57 V9=0 GND=3,10
-# 추출기가 놓친 트레이스
-JUMP 27 48
+# 추출기가 놓친 트레이스. 2K(53-54): 53은 47n(40)·1M(27), 54는 LF442 3번(48)으로 간다(링 기준 추출(2026-10-31); 예전 JUMP 27 48은 2K 단락).
 JUMP 28 43
 JUMP 13 22
 JUMP 12 39

@@ -12,6 +12,7 @@ BOM 1M 100Kx2 47Kx2 33K 10Kx2 4.7K 1K 100nx2 56n 22p 680p 100uF 47uF 1N400X 1N41
 # parts list also has 1n and 4.7n (toggle caps, not in the circuit)
 io IN=42 OUT=26 V9=36 GND=59
 JUMP 43 31
+# DRIVE lugs 0 and 1 are tied by a trace (rheostat), read 2026-10-31 with the ring extraction.
 NC 3 4
 
 STAGE input input 입력

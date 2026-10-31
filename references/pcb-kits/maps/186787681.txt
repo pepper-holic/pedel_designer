@@ -1,0 +1,105 @@
+id pp-fluffy-fuzz
+goods 186787681
+name Fluffy Fuzz
+motif Frantone Cream Puff
+type fuzz
+desc IN(1M)→33K→(10K 접지)→1uF→RC4558 A단 반전(−입력; 1M∥100p∥적색 LED 역병렬 쌍 귀환, +입력 Vref)→10uF→FLUFF B100K(3번→1.5K→접지, 와이퍼→10uF→2.2K)→B단 반전(1M∥390p∥LED 쌍 귀환, 100K→Vref)→1uF→10K→4.7n(47K 접지)·20K→150n 접지·2.2K→TONE B10K→VOLUME B100K
+image img_01.jpg
+# PedalPCB Cream Pie 빌드 문서(docs.pedalpcb.com/project/CreamPieFuzz.pdf 3쪽) 회로도와 연결 전부 일치: 1M·390p·LED 쌍이 B단 6-7번 사이,
+#   1uF 출력 캡이 7번 줄에서 내려간다. 톤 망은 기판대로 - 1uF 뒤 노드에서 10K(→4.7n→TONE 3번·47K 접지)와 20K(→150n 접지·2.2K→TONE 1번)가 갈라진다.
+# 판매자 메모대로 실크 VOLUME/FLUFF 표기가 바뀌어 있다: 실크 "VOL B100K"(0·1·2)가 FLUFF, "FLUFF B100K"(8·5·6)가 VOLUME.
+# RC4558P 홈 위: 42=1 47=2 55=3 64=4 / 65=5 56=6 48=7 43=8. 사각 패드는 전해 +(23·25·38·52·74·35).
+# 링 기준 추출(pads.py)로 왼쪽 LED의 둥근 패드와 사각 패드가 따로 잡히고(옛 판독은 50/51/60 조각이 한 패드로 합쳐져 7번·6번이 붙었다),
+#   LED 외곽선 '+'에 걸린 조각이 접지로 판정되지 않아 SPLIT·JUMP가 필요 없다.
+# 팟 "1": FLUFF는 2(1.5K 쪽, 시계방향이 10uF 쪽 = 퍼즈 증가), TONE은 3(2.2K·150n 저역 쪽, 시계방향이 4.7n 고역), VOLUME은 6(접지).
+# 1N400X는 9V(21, 띠)-접지(20) 역전압 보호 션트.
+BOM 1Mx3 100K 47K 33Kx3 20K 10Kx2 2.2Kx2 1.5K 10Ω 150n 4.7n 390pF 100pF 100uF 10uFx3 1uFx2 1N400X LED-REDx4 RC4558P B100Kx2 B10K
+io IN=81 OUT=15 V9=36 GND=82
+
+STAGE input input 입력
+R 1M 77 76 R1
+R 33K 68 69 R2
+R 10K 61 63 R3
+C 1uF 52 62 C1
+
+STAGE gainA gain A단 (반전, LED 귀환)
+IC RC4558P 1=42 2=47 3=55 4=64 5=65 6=56 7=48 8=43 U1
+R 1M 32 53 R4
+C 100p 41 54 C2
+D LED-RED a=39 k=45 D1
+D LED-RED a=46 k=40 D2
+
+STAGE fluff custom FLUFF
+C 10uF 23 22 C3
+POT B100K FLUFF 2 1 0
+R 1.5K 10 9 R5
+C 10uF 25 24 C4
+R 2.2K 33 34 R6
+
+STAGE gainB gain B단 (반전, LED 귀환)
+R 100K 57 80 R7
+R 1M 49 73 R8
+C 390p 58 72 C5
+D LED-RED a=51 k=66 D3
+D LED-RED a=67 k=59 D4
+
+STAGE tone tone 톤
+C 1uF 38 37 C6
+R 10K 11 12 R9
+C 4.7n 18 19 C7
+R 47K 13 14 R10
+R 20K 16 17 R11
+C 150n 28 29 C8
+R 2.2K 27 26 R12
+POT B10K TONE 3 7 4
+
+STAGE output output 출력
+POT B100K VOLUME 6 5 8
+
+STAGE power power 전원
+D 1N400X a=20 k=21 D5
+R 10Ω 31 30 R13
+C 100uF 35 44 C9
+R 33K 70 71 R14
+R 33K 79 78 R15
+C 10uF 74 75 C10
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT R1 120 470 v
+AT R2 180 400 h-
+AT R3 240 470 v
+AT C1 300 400 h-
+AT U1A 420 400
+AT R4 420 330 h-
+AT C2 420 280 h-
+AT D1 420 230 h-
+AT D2 420 180 h
+AT C3 520 400 h
+AT FLUFF 610 400 r180
+AT R5 680 470 v
+AT C4 610 500 v-
+AT R6 690 540 h
+AT U1B 800 400
+AT R8 800 330 h-
+AT C5 800 280 h-
+AT D3 800 230 h-
+AT D4 800 180 h
+AT R7 840 560 v
+AT C6 890 400 h
+AT R9 980 400 h
+AT C7 1060 400 h
+AT R10 1120 470 v
+AT R11 930 480 v
+AT C8 930 580 v
+AT R12 1170 480 v-
+AT TONE 1140 400 r180
+AT VOLUME 1260 400 r180
+AT RLOAD 1260 480 v
+AT VCC 60 190
+AT D5 130 220 v-
+AT R13 220 160 h-
+AT C9 290 220 v
+AT R14 560 220 v
+AT R15 560 310 v
+AT C10 620 310 v

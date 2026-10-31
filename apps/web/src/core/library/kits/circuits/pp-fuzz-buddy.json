@@ -5,7 +5,7 @@
  "motif": "Shin-ei Companion FY-2",
  "type": "fuzz",
  "description": "2SC536 두 단(컬렉터-베이스 2.2M/1.2M 바이어스)의 컬렉터 신호를 2.2n·3.3n을 거쳐 FUZZ 팟으로 섞는 버즈쏘 퍼즈. 10K/15K/1n/100n 톤 망 뒤 VOLUME, 2N3904 공통 이미터(10K/390R) 부스트로 출력.",
- "supply": 9,
+ "supply": 9.0,
  "parts": [
   {
    "ref": "C1",
@@ -188,7 +188,7 @@
    "nodes": [
     "0",
     "n11",
-    "n8"
+    "n10"
    ]
   },
   {

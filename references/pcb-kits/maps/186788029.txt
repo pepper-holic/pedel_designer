@@ -5,15 +5,13 @@ motif Greer Southland / Lightspeed
 type overdrive
 desc TL072 2단 - A단 비반전(A1M 드라이브+5.6K, 100p, 1N4148 3:2 직렬 역병렬 피드백 클리퍼, 3.3K→47n∥12K+470n 접지 다리), 5.6K/10n→BAT41 클램프→B단 비반전(22K/3.9K), 3.3K와 1000n으로 A10K FREQ 틸트(220n), A250K 볼륨
 image img_02.jpg
-# Hidden traces: IC out B (40) -> 1000n (41) and 3.3K (50); input 47n (70) -> IN; 1000n (26) -> FREQ lug 3.
+# Out B (40) -> 22K (24) and 1000n (26) (yellow under the cyan); 1000n (41) -> 3.3K (50) -> FREQ wiper+lug 3 (4=3 tied, rheostat)
+# and VOLUME lug (6). Ring extraction 2026-10-31; the earlier JUMPs 40 41 / 40 50 / 26 3 were guesses. Input 47n (70) -> IN.
 # Silk offers DRIVE A500K/A1M, FREQ/RANGE A10K, LOUD A100K/VOLUME A250K and 4.7K/22K for the B feedback -
 # the parts list ships A1M, A10K, A250K and 22K. Both BAT41 cathodes sit on +in B as drawn. Drive lug 0 is unused.
 BOM 1M 430K 22K 12K 5.6Kx3 4.7K 3.9K 3.3Kx2 1000n 470n 220n 47nx2 10n 100p 22uFx2 1N400X 1N4148x5 BAT41x2 TL072 A1M A250K A10K
 io IN=57 OUT=18 V9=59 GND=8
 JUMP 70 57
-JUMP 40 41
-JUMP 40 50
-JUMP 26 3
 JUMP 40 24
 NC 0
 

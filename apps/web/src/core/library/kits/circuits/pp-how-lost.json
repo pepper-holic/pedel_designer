@@ -5,7 +5,7 @@
  "motif": "Marshall Plexi 스타일 오버드라이브 (How Lost)",
  "type": "overdrive",
  "description": "JRC4558D 2단 - A: 56n/10K 입력에 33K∥22p 인버팅(4.5V 기준 100K/100K+47uF, 47K로 in+), B: 1K+100n 입력, 피드백에 1N4148 대향 쌍∥680p, A500K DRIVE가 출력에서 4.7K로 in−에 돌아오며 와이퍼→100n→10K→B500K VOLUME(47K 풀다운). 토글의 1n/4.7n은 Normal에서 미사용",
- "supply": 9,
+ "supply": 9.0,
  "parts": [
   {
    "ref": "R1",
@@ -154,8 +154,8 @@
    "value": "A500K",
    "nodes": [
     "n7",
-    "n9",
-    "n10"
+    "n7",
+    "n9"
    ]
   },
   {
@@ -164,7 +164,7 @@
    "value": "4.7K",
    "nodes": [
     "n6",
-    "n10"
+    "n9"
    ]
   },
   {
@@ -172,8 +172,8 @@
    "kind": "C",
    "value": "100n",
    "nodes": [
-    "n9",
-    "n11"
+    "n7",
+    "n10"
    ]
   },
   {
@@ -181,8 +181,8 @@
    "kind": "R",
    "value": "10K",
    "nodes": [
-    "n11",
-    "n12"
+    "n10",
+    "n11"
    ]
   },
   {
@@ -190,7 +190,7 @@
    "kind": "R",
    "value": "47K",
    "nodes": [
-    "n12",
+    "n11",
     "0"
    ]
   },
@@ -201,7 +201,7 @@
    "nodes": [
     "0",
     "out",
-    "n12"
+    "n11"
    ]
   },
   {

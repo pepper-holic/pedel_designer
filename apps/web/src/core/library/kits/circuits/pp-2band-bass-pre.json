@@ -5,7 +5,7 @@
  "motif": "Pensa-Suhr 2-band bass preamp",
  "type": "eq",
  "description": "LF442(TL072) 한쪽은 입력 버퍼, 다른 쪽은 반전 EQ 증폭. BASS·TREBLE 팟의 양 끝을 버퍼 출력과 EQ 출력에 저항으로 걸고 와이퍼를 11K·4.7n으로 반전 입력에 넣는 부스트형 2밴드. 출력은 1K·47uF·2K.",
- "supply": 9,
+ "supply": 9.0,
  "parts": [
   {
    "ref": "C1",
@@ -39,7 +39,7 @@
    "kind": "R",
    "value": "1M",
    "nodes": [
-    "n2",
+    "n1",
     "n3"
    ]
   },

@@ -4,7 +4,7 @@
  "kitName": "Little Green Box",
  "motif": "808-style overdrive with BODY control",
  "type": "overdrive",
- "description": "2N5457 소스 폴로어 입력(5.6K/47n/1M)→1uF/5.6K→LF353 A단 비반전(B500K 드라이브+5.6K∥100p, 초록 LED 역병렬 피드백 클리퍼; 접지 다리 1K+1uF+BODY 1갱, 2K+220n)와 +in의 470R+47n+BODY 2갱 션트→2K/100n LPF→B단 버퍼→2K→1uF→5.6K→B50K 볼륨",
+ "description": "2N5457 소스 폴로어 입력(5.6K/47n/1M)→1uF/5.6K→LF353 A단 비반전(B500K 드라이브+5.6K∥100p, 초록 LED 역병렬 피드백 클리퍼; 접지 다리 1K+1uF+BODY 1갱, 2K+220n)→2K/100n LPF→B단 비반전(2K 귀환, −입력 다리 470R+47n+BODY 2갱)→2K→1uF→5.6K→B50K 볼륨",
  "supply": 9.0,
  "parts": [
   {
@@ -202,7 +202,7 @@
    "value": "470R",
    "nodes": [
     "n17",
-    "n7"
+    "n11"
    ]
   },
   {

@@ -5,7 +5,7 @@
  "motif": "MI Audio Crunch Box / JHS Angry Charles",
  "type": "distortion",
  "description": "LM833 2단 - A단 비반전(B100K 게인 팟 와이퍼가 출력, 100p, 1K+220n 접지 다리), 팟 반대 러그→100n+10K→B단 반전(1M∥100p 피드백, 게인 100), 2.2uF+470R→빨간 LED 2개 접지 역병렬 클리퍼, C10K 톤 가변저항+22n, B25K 프레즌스(22n 션트), B100K 볼륨",
- "supply": 9,
+ "supply": 9.0,
  "parts": [
   {
    "ref": "R1",
@@ -238,7 +238,7 @@
    "kind": "C",
    "value": "100uF",
    "nodes": [
-    "vcc",
+    "n8",
     "0"
    ]
   },

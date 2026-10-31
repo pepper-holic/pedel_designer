@@ -5,12 +5,12 @@ motif Fulltone Fulldrive (Robin Trower)
 type overdrive
 desc JRC4558 TS계 - 1M/22n/1K 입력→B단 비반전(470K 바이어스, 47n+4.7K 접지 다리, 18K+B1M 게인 가변저항∥51p, 1N914+1N4005 같은 방향 피드백 클리퍼)→1K→TS 톤(B25K, 220n·220R)→A단→1000n→1K→B100K 볼륨→100n→2SC1815 이미터 폴로어→100R→10uF 출력
 image img_01.jpg
-# The 10K at 63-64 (Vref side at 63) ends in a lone pad; written as the +in B bias in parallel with the 470K (64->65).
+# The 10K (63 Vref, 64) runs up the long trace to +in A (42) with TONE lug 1 (5), the 1K (19) and the 220n (9): the A-stage bias
+# (ring extraction 2026-10-31; the earlier JUMP 64 65 to +in B was a guess).
 # Both feedback diodes point out->-in (anodes 30/36 on the output node). Gain pot: lug 7 (-in B), wiper 6 on the 18K,
 # lug 3 unpopulated.
 BOM 1M 510K 470K 100K 18K 10Kx4 4.7K 1Kx4 220R 100R 1000n 220nx2 100n 47n 22n 51pF 100uF 10uFx2 1N400X 1N4005 1N914 JRC4558D 2SC1815 B1M B100K B25K
 io IN=76 OUT=40 V9=77 GND=80
-JUMP 64 65
 
 STAGE input input 입력
 R 1M 60 59 R1

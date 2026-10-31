@@ -20,8 +20,11 @@ image img_02.jpg
 # The 220n and 47n both sit between the 820R end (16) and the Accent wiper (17) - read as drawn (parallel).
 BOM 2.2M 470K 56K 33K 22K 18K 10Kx3 8.2K 1K 820Rx2 220n 100nx2 47n 8.2n 2.2n 1n 47pFx2 220uFx2 1N400X BAT41x5 2N7000x2 TL072 A1M B10K B50K A100K
 io IN=96 OUT=36 V9=0 GND=10
-SPLIT 2 9 14 17 18 22 53 55 56
-NC 17 18 23 27 34 35
+# (링 기준 추출 뒤에는 가운데 패드가 23 하나이고 접지로 잡히지 않아 - 입력 넷(2 9 14 23 53 55 56)을 SPLIT할 필요가 없다.)
+
+# The right 220uF's square (+) pad came out as a small piece (97, old 25) with the polarity '+' beside it and was called a
+# ground pad, which put the 22K-bottom node (34 33 21 11 40) into ground - split it out (ring extraction 2026-10-31).
+SPLIT 97 34 33 21 11 40
 
 STAGE input input 입력
 R 33K 95 94 R1

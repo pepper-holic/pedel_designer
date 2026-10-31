@@ -5,7 +5,7 @@
  "motif": "Fulltone '70 Fuzz",
  "type": "fuzz",
  "description": "2SC828 실리콘 2석 퍼즈페이스 변형 - Q1 컬렉터(33K)→Q2 베이스 직결, Q2 이미터→Q1 베이스 100K 피드백, FUZZ B1K+22uF(와이퍼에서 1N914로 Q1 베이스), Q2 컬렉터 부하는 220R→(B1K BIAS 팟∥1K)→1K→5K 트리머, 10p 밀러·입력 RF 캡, 100n 출력에 1N34A 션트와 A250K 볼륨",
- "supply": 9,
+ "supply": 9.0,
  "parts": [
   {
    "ref": "R1",
@@ -161,7 +161,7 @@
    "kind": "C",
    "value": "100n",
    "nodes": [
-    "n4",
+    "n7",
     "n9"
    ]
   },
