@@ -1,0 +1,147 @@
+id pp-konish-ng-2
+goods 186788144
+name KONISH NG-2
+motif Pete Cornish NG-2
+type fuzz
+desc BC549 5석 - Q2 이미터 접지 입력단(10K/390R)→100n→DRIVE A100K→22u·1K→Q1 컬렉터-베이스 귀환(470K·1n, 220n+1N34A 역병렬)→100n→SUSTAIN A50K·10n→4.7u→Q3(470K 귀환)→100n→1N914→Q4·Q5 직결 2단(50K 트림 부하, 360R+1K∥10u 이미터, 100K DC 귀환)→5.6K/1K 컬렉터 탭→100n→TONE B100K·22n→A10K 볼륨
+image img_01.jpg
+BOM 1Mx2 470Kx2 100Kx4 15K 10Kx2 5.6K 2.7K 1Kx5 680R 390R 360Rx2 220n 100nx5 22nx2 10n 1n B50K 1N400X 1N914 1N34Ax2 100uF 22uF 10uF 4.7uF BC549x5 A100K A50K B100K A10K
+io IN=93 OUT=102 V9=23 GND=113
+# 2026-10-31 ring extraction + trace_pad: the flood runs along each BC549's drawn leg line (pins joined C-B-E), so nets that
+# hold two pins of one transistor are split by the copper seen in the render: Q1 base {3,9,19,26,35,36,37} (the 470K-left
+# trace runs under the 470K body to the 1n/1K junction), collector {14,20,21,27,28,29} (220n diagonal runs under the 15K body
+# to its left pad 29, not to the V+ pad 30), emitter {47,48}; Q2 collector {25,62,63}, emitter {43,44}; Q3 emitter {40,58};
+# Q5 collector {78,103}, emitter {97,104}; Q4 emitter {89,98}. The old [오병합] note (QE base n35, pad 67/92) no longer applies.
+SPLIT 14 20 21 27 28 29
+SPLIT 47 48
+SPLIT 25 62 63
+SPLIT 43 44
+SPLIT 40 58
+SPLIT 78 103
+SPLIT 97 104
+SPLIT 89 98
+# Pot lug1 = silk "1" (right) on every pot; VOLUME lug1 = GND confirms it. DRIVE silk reads "A100L" = A100K (BOM).
+# The 100n at 85-86 (auto_map read 150nF) is the fifth 100n of the BOM.
+
+STAGE input input Q2 입력단
+R 1M 94 68 R1
+C 100n 75 76 C1
+R 1M 52 51 R2
+R 100K 69 70 R3
+Q BC549 b=50 c=62 e=43 Q2
+R 10K 64 63 R4
+R 390R 44 45 R5
+
+STAGE drive custom control DRIVE
+C 100n 25 11 C2
+POT A100K DRIVE 2 1 0
+R 1K 12 33 R6
+C 22uF 18 13 C3
+
+STAGE fuzz gain Q1 귀환 퍼즈 (1N34A)
+R 1K 34 35 R7
+Q BC549 b=36 c=28 e=47 Q1
+R 15K 30 29 R8
+R 680R 48 49 R9
+R 470K 27 26 R10
+C 1n 20 19 C4
+R 100K 37 38 R11
+C 220n 14 5 C5
+D 1N34A a=4 k=3 D1
+D 1N34A a=9 k=10 D2
+
+STAGE sustain custom control SUSTAIN
+C 100n 21 22 C6
+POT A50K SUSTAIN 8 7 6
+R 1K 17 39 R12
+C 10n 15 16 C7
+
+STAGE q3 gain Q3 귀환 증폭
+C 4.7uF 32 24 C8
+Q BC549 b=41 c=42 e=40 Q3
+R 10K 57 81 R13
+R 470K 84 60 R14
+R 100K 59 83 R15
+R 2.7K 58 82 R16
+
+STAGE pair gain Q4·Q5 직결 2단
+C 100n 61 74 C9
+D 1N914 a=67 k=80 D3
+R 100K 92 91 R17
+Q BC549 b=88 c=79 e=98 Q4
+R 360R 89 90 R18
+POT B50K TRIM 55 66 73
+Q BC549 b=87 c=78 e=97 Q5
+R 360R 104 105 R19
+R 1K 100 101 R20
+C 10uF 99 106 C10
+R 5.6K 103 77 R21
+R 1K 46 71 R22
+C 22n 53 72 C11
+
+STAGE tone tone TONE
+C 100n 86 85 C12
+POT B100K TONE 109 108 107
+C 22n 96 95 C13
+
+STAGE out output VOLUME
+POT A10K VOLUME 112 111 110
+
+STAGE pwr power 전원
+D 1N400X a=31 k=56 D4
+C 100uF 54 65 C14
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D4 120 160 h
+AT C14 180 190 v
+AT C1 130 400 h
+AT R1 100 430 v
+AT Q2 200 400
+AT R2 160 320 v
+AT R3 170 460 v
+AT R4 220 280 v
+AT R5 220 490 v
+AT C2 280 370 h
+AT DRIVE 340 400 r270 m
+AT R6 340 460 v
+AT C3 400 400 h-
+AT R7 460 400 h
+AT Q1 520 400
+AT R8 540 280 v
+AT R9 540 480 v
+AT R10 540 560 h-
+AT C4 540 590 h-
+AT C5 580 620 h-
+AT D1 520 620 h-
+AT D2 520 650 h
+AT C6 630 400 h
+AT SUSTAIN 690 430 r270 m
+AT R12 690 490 v
+AT C7 740 490 v
+AT C8 780 430 h-
+AT Q3 840 430
+AT R13 860 280 v
+AT R16 860 490 v
+AT R15 810 490 v
+AT R14 835 360 h-
+AT C9 920 400 h
+AT D3 1010 400 h
+AT Q4 1070 400
+AT R18 1090 460 v
+AT TRIM 1090 280 r90
+AT Q5 1150 370
+AT R19 1170 430 v
+AT R20 1170 490 v
+AT C10 1210 490 v
+AT R17 1060 560 h
+AT R21 1170 300 v-
+AT R22 1170 210 v
+AT C11 1220 210 v
+AT C12 1250 260 h
+AT TONE 1310 290 r270 m
+AT C13 1310 350 v
+AT VOLUME 1380 320 r270 m
+AT RLOAD 1450 350 v
+AT R11 490 470 v
