@@ -34,8 +34,9 @@ description: DIY 이펙터 키트의 기판 레이아웃 이미지(페달파츠 
 ```bash
 S=.claude/skills/pcb-to-netlist/scripts
 python -E -P $S/batch_prepare.py references/pcb-kits          # 전 키트 패드·넷 추출 + triage.json (A/B/C 등급)
-python -E -P $S/pilot_bundle.py references/pcb-kits <goodsNo> <작업폴더>   # 오버레이·렌더·부품표·map.txt 뼈대
-#   (판단) board0_nets.png와 부품표를 보고 map.txt의 부품 줄·STAGE·BOM·io·JUMP를 쓴다
+python -E -P $S/silk_train.py                                 # (처음 한 번, 맵 추가 뒤) 실크 글자 템플릿 silk_glyphs.npz
+python -E -P $S/pilot_bundle.py references/pcb-kits <goodsNo> <작업폴더>   # 오버레이·렌더·부품표·map.txt 뼈대 + auto_map 부품 초안
+#   (판단) 초안 검토(아래) 후 board0_nets.png와 부품표로 빠진 부품 줄·STAGE·BOM·io·JUMP를 쓴다
 bash $S/finish_kit.sh <작업폴더> <goodsNo> --layout           # 넷리스트 생성·검사, 배치 초안, 역투영, maps/ 복사, 테스트
 python -E -P $S/selftest.py                                   # extract_nets.py를 고쳤으면 반드시
 ```
@@ -119,6 +120,18 @@ P1=4 패드가 고립이어도 다른 넷과 잇지 않는다(추출기 힌트�
 원본 페달에는 있는 컨트롤이라도 키트는 빼고 만든 것이니(1969 GE의 CONTOUR/INPUT 미니팟) 배선도를 찾지 말고 `NC`로 적는다.
 같은 풋프린트의 다른 패드에 동박이 있으면(토글 양끝 등) 그쪽만 쓰고, 선택 토글은 닫힌 위치를 `JUMP`로 고정한다.
 
+## 초안 검토 (auto_map 초안이 있는 map.txt)
+
+`pilot_bundle.py`는 `auto_map.py`로 부품 줄 초안을 map.txt에 넣는다. 실크 글자를 완성된 맵에서 배운 글자 템플릿
+(`references/pcb-kits/silk_glyphs.npz`, 커밋 안 함 - 없으면 `python -E -P $S/silk_train.py`로 1분 안에 만든다. 맵을 추가하면 다시 만든다)
+으로 읽고, 값 어휘(E24/E12·품번·팟 라벨, `lexicon.py`)에 맞춰 패드에 붙인다.
+- **살아 있는 줄**은 저항뿐: 외곽선 안 축 위에서 깨끗이 읽힌 값(채점 정밀도 92%). 그래도 overlay에서 값·패드를 훑는다.
+- **`# ? ` 줄**은 주석이다. 맞으면 `# ? `를 지워 살리고, 틀리면 고친다. 캡 값(정답 76%: 전해 값이 원에 걸려 잘림, `22uF`↔`2.2uF`),
+  다이오드 방향·품번, 트랜지스터 핀(C/B/E 글자), 팟 러그 순서(라벨 읽는 방향의 왼쪽을 lug1로 둔다 - 틀리는 일이 잦다), IC 핀1(홈 판정)이 주로 틀린다.
+- `# ? ? ? a b`는 외곽선만 있고 라벨을 못 읽은 짝, `io` 줄은 IN/OUT/9V 글자에 가장 가까운 빈 패드(정답 55%)라 반드시 확인한다.
+- 초안이 못 찾는 것(부품의 약 20%: 팟·IC의 절반 이상, 모양이 어긋난 패드 줄, 공용 라벨 `1N4148 x 4`)은 아래 suggest_parts 후보와 overlay로 채운다.
+- 정확도를 바꾸는 수정 뒤에는 `python -E -P $S/score_automap.py <report.tsv>`로 정답 맵 173개(기판 172개) 전체를 다시 채점한다(각 기판은 자기 글자·어휘를 빼고 읽는다, 약 1분).
+
 ## 2. 부품 대응표 작성 (`references/pcb-kits/maps/<goodsNo>.txt`, 커밋)
 
 형식은 `scripts/kit_netlist.py` 맨 위 설명. 요점:
@@ -144,6 +157,10 @@ P1=4 패드가 고립이어도 다른 넷과 잇지 않는다(추출기 힌트�
 - `STAGE <id> <category> <라벨>`로 부품을 신호 순서의 기능 단계로 묶는다: 입력 → 버퍼 → 프리앰프/게인 →
   피드백·바이어스(custom) → 컨트롤(custom) → 클리퍼/퍼즈 → 톤 → 복원단 → 출력, 전원(power). 앱이 이 순서대로
   블록을 좌→우로 배치하므로 바둑판이 아니라 사람이 읽는 회로도가 된다.
+
+- **한 기판에 독립 회로 둘**(2채널, 프리앰프+드라이브)은 맵을 `maps/<goods>-a.txt`·`<goods>-b.txt`로 나눈다(`goods` 같고 `id`·`name` 다름,
+  `finish_kit.sh <번들> <goods>-a`는 `map-a.txt`를 읽는다). 각 맵은 자기 회로 패드만 쓰고 머리에 `SHARED <goods>-b`로 상대 맵을 가리키면
+  상대가 쓰는 패드는 "미사용 패드" 검사에서 빠진다. 전원 필터·공용 입력 버퍼처럼 둘이 같이 쓰는 부품은 양쪽 맵에 모두 적는다.
 
 기판 밖 연결: 팟 와이퍼가 패드 없이 바로 잭으로 가면 패드 번호 대신 `OUT`/`IN`/`V9`/`GND`를 쓴다
 (`POT A100K LEVEL 12 OUT 11` - io의 OUT은 생략 가능).

@@ -5,8 +5,9 @@ Usage:
 
 Copies the numbered pad overlay(s), the board render(s), the parts-list image(s), the seller text
 and the extraction JSON, then writes <out_dir>/map.txt with the header filled in from index.json,
-an "io" line to complete, and the list of multi-pad nets as comments. Reading the overlay and the
-parts list and writing the part lines is the part that needs a human (or an LLM).
+the io line and part lines drafted by auto_map.py (silk read with the glyph bank; doubtful lines
+commented "# ?"), and the list of multi-pad nets as comments. Checking the draft against the overlay
+and the parts list, and writing what it missed, is the part that needs a human (or an LLM).
 """
 
 import json
@@ -17,6 +18,20 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from kit_types import NOISE_WORDS  # noqa: E402
+
+
+def auto_draft(board: Path, nets: Path) -> list[str] | None:
+    """Part lines from auto_map.py, or None when the glyph bank is not built yet."""
+    from silk_ocr import BANK_PATH  # noqa: E402
+
+    if not BANK_PATH.exists():
+        print(f"no {BANK_PATH.name}: map.txt gets no auto_map draft (build it with silk_train.py)")
+        return None
+    from auto_map import draft, render  # noqa: E402
+    from lexicon import Lexicon  # noqa: E402
+    from silk_ocr import Bank  # noqa: E402
+
+    return render(draft(board, nets, Bank.load(), Lexicon()))
 
 
 def main() -> None:
@@ -67,6 +82,13 @@ def main() -> None:
         check=True,
         capture_output=True,
     )
+    draft = auto_draft(out / boards[0], out / "board0_nets.json")
+    if draft:
+        io = next((ln for ln in draft if ln.startswith("io ")), None)
+        if io:
+            lines[lines.index("io IN= OUT= V9= GND=")] = f"{io}   # auto_map: check the pads"
+        lines += ["", "# --- auto_map.py draft: live lines read clearly, '# ?' lines need a look (SKILL.md: 초안 검토) ---"]
+        lines += [ln for ln in draft if ln and not ln.startswith("io ")]
     lines += ["", "# --- part candidates from suggest_parts.py (fill kind/value; check every line against suggest.png) ---"]
     lines += ["# " + ln for ln in (out / "suggest.txt").read_text(encoding="utf-8").splitlines()]
     (out / "map.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")

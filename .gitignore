@@ -8,3 +8,5 @@ references/pcb-kits/*/
 references/parts/*/
 __pycache__/
 *.pyc
+# Silk glyph bank for auto_map.py, rebuilt from the local kit renders by silk_train.py
+references/pcb-kits/silk_glyphs.npz
