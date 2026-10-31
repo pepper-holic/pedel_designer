@@ -389,3 +389,26 @@ BEE DS, PLEXI1959, NEW REVVOLUTION G3. 고정한 스위치 위치·추정한 팟
   King Cat(R10 한쪽이 C6/R7 쪽으로), Honey Beast(C2/R3와 R2/R4가 갈라짐), Flame Booster(R9 한쪽 분리), Kluster Fuzz(C9.1이 TONE.2로 - 예전엔 떠 있던 캡 끝),
   Meltdown(R2.1 분리). 각 자리를 렌더로 확인해 맵(조각 번호 → 링 번호)과 회로를 고친다.
 - Sovereign: 맵의 NC 0이 사라진 패드(경고만). Tong Cap: --smd 가상 패드 112(위 메모).
+
+## 2026-10-31 링 기준 패드 검출 뒤 기존 회로 23개 재판독 결과
+
+`verify_maps`로 어긋난 23개를 모두 렌더 동박 추적(`scripts/trace_pad.py`: 패드에서 동박만 따라 flood, 접지 플래그 무시)으로 확인했다.
+**새 판독이 맞아 회로가 바뀐 기판 19개**(예전 맵의 JUMP/SPLIT은 끊긴 패드를 추측으로 메운 것): Little Green Box(470R→−in B, BODY 2갱이 B단 이득 다리),
+Abracadabra(PRES 와이퍼=3번 묶임), Robin Drive(10K Vref→+in A·톤 마디), Honey Beast(1uF+470R+PREGAIN은 소스 바이패스, 게이트는 1M·15K뿐),
+Flame Booster(1M·3.9K 중간점이 FAT 러그 28; 조각 39가 40으로 잘못 물려받아져 41로 고침), Kluster Fuzz(TONE 3번=100n 오른쪽=로터리 P),
+How Lost(DRIVE 와이퍼=러그), Meltdown(4.7M은 Vref에서 게이트로), Green Land·Green Light(out B→22K·1000n, 1000n→3.3K→FREQ 3=와이퍼·VOLUME),
+Blue Color(+A는 TONE 1번·0.22 마디), NEW VALVE 808(R14→100R·Q1 이미터), 2BAND BASS PRE(2K: 47n·1M ↔ LF442 3번), BUTTER MARKET(컬렉터·47uF·100n은 100R 뒤 레일),
+1970 Fuzz x2(100n 윗패드는 1K/1K/BIAS 마디), Fuzz Buddy(VOLUME 러그는 1n 위·15K 아래), Brunch Box(100uF+는 다이오드 뒤 레일), BEE DS(GAIN 러그 60↔LED↔22K 94는
+47n 상자 밑 세로선으로 실제 연결 - 예전 회로는 LED만 접지에 두고 러그·22K를 띄웠다).
+**예전 판독이 맞아 맵만 고친 기판 4개**: King Cat(조각 26이 이웃 링 25로 물려받아져 R10을 27로), THIMBLE(220uF 사각 패드 조각 97의 극성 '+'가 접지 판정 → SPLIT),
+RAM Fuzz(와이퍼-OUT 선과 1번 핀-10Ω-1uF 묶음이 접지 패드 옆에서 접지에 합쳐짐 → SPLIT 둘), STRA BLASTER(기판은 와이퍼=3번 러그, 판매자 수정대로 SPLIT 14 + JUMP 14 10).
+Sovereign은 사라진 `NC 0`만 지웠고, Tong Cap은 V9를 --smd 가상 패드 112에서 실제 9V 링 104로 바꿨다. 25개 모두 check 0, 동작점 conv=true, 전체 테스트 통과.
+
+남은 패턴(추출기 쪽):
+- 전해·LED 사각 패드의 극성 '+'가 접지 십자로 읽힌다. 조각이 작아도 반지름이 중앙값의 60%를 넘으면(THIMBLE 97 r7.0, BEE DS 198 r6.5, RAM Fuzz 47 r7.0) 접지가 된다.
+  `kit_netlist`의 SPLIT이 이제 접지 플래그도 지우므로 맵에서 막을 수 있지만, 추출기가 '+'가 패드 고리 안에 있는지(열 십자) 밖에 있는지(극성 표시)를 가리면 맵이 필요 없다.
+- 이전 추출의 조각 번호를 좌표로 물려받을 때 이웃 링에 붙는다(King Cat 26→25, Flame Booster 39→40). 맵이 조각 번호를 핀에 쓴 기판은 번호를 눈으로 다시 봐야 한다.
+- 접지 패드 바로 옆을 지나는 선이 접지에 합쳐진다(RAM Fuzz 5-14, 19-22-47). 링 기준 검출과 무관한 bridge 쪽 오탐이다.
+- BUTTER MARKET T1 트리머: 동박은 러그 81·82를 U2A 귀환 중간점(100p·6.8K·T2 마디)에 잇는데, 그러면 트리머→1.8K·1K→VOLUME 직류 경로로 U2B가 0V 레일에 붙어
+  동작점이 안 풀린다. 원본 회로도가 없어 T1은 예전 2.2K·47n 마디에 둔 채 보류(맵 주석). [대조]
+

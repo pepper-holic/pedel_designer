@@ -92,6 +92,10 @@ python -E -P scripts/extract_nets.py <board.jpg> <scratch>/<kit> 3
 그래서 검출을 고쳐도 맵의 패드 번호는 그대로다. `--renumber`는 처음부터 번호를 매긴다(새 기판·셀프테스트 기준 만들 때만).
 층별 확인 이미지: `python -E -P scripts/layers.py <board.jpg> <scratch>/x` → `x_top.png`/`x_bot.png`(주황=겹침·실크 밑, 빨강=버린 조각).
 예전 판독은 `extract_nets.py ... --flat`. 키트 기판 회로 맵 중 예전 판독을 JUMP/SPLIT으로 메운 것은 새 넷과 어긋날 수 있다.
+한 패드에서 그려진 동박이 어디까지 닿는지는 `python -E -P scripts/trace_pad.py <goods> <board_n> <out.png> <scale> <시작 패드> <같이 볼 패드...> [--pad 여백]`로
+본다(윗면 빨강·아랫면 파랑으로 칠하고 닿은 패드를 찍는다; 접지 플래그를 안 합치므로 추출기가 접지라 한 패드가 이웃에만 닿으면 가짜 접지다).
+가짜 접지의 흔한 원인은 전해·LED 사각 패드 옆 극성 '+'이고, `SPLIT`에 그 패드들을 적으면 접지 플래그도 같이 지워진다(2026-10-31). 맵이 조각 번호를
+핀에 썼던 기판은 번호 물려받기가 이웃 링에 붙을 수 있으니(King Cat 26→25) 실크 자리와 맞는지 본다.
 
 **SMD 키트**: info.txt에 SMD가 있으면 `pilot_bundle`이 `--smd`로 다시 추출해, 동박이 닿는 검정 몸통의 다리마다 가상 패드(`"smd": true`,
 번호는 실제 패드 뒤)를 만든다. `Q J201 g= d= s=`에 그 번호를 쓴다. 다른 기판에서는 트랜지스터 외곽선·팟 박스를 잘못 잡아 켜지 않는다.

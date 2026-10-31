@@ -4,13 +4,13 @@
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 151 |
+| 변환 완료 | 152 |
 | 기록만 | 5 |
-| 보류 | 69 |
+| 보류 | 68 |
 | 미착수 | 0 |
 | C등급(범위 밖) | 41 |
 
-## 변환 완료 (151)
+## 변환 완료 (152)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -166,6 +166,7 @@
 | B | 186788017 | Pluto Green | overdrive | pp-pluto-green (재시도3) |
 | B | 186788339 | SLASHMASTER | distortion | pp-slashmaster (재시도3) |
 | B | 186787536 | Hush FREQ | overdrive | pp-hush-freq (1N916 별칭 추가) |
+| B | 186787681 | Fluffy Fuzz | fuzz | 원본 Cream Puff 회로도 일치, 링 기준 추출로 LED 패드 분리·가짜 접지 해소 |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -176,7 +177,7 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (69)
+## 보류 (68)
 
 보류 이유 태그:
 
@@ -194,7 +195,6 @@
 | B | 186788016 | Pluto Blue | overdrive | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
 | B | 186788334 | SEC RET PRE | preamp | [자료] 소스 토글·볼륨 배선(재시도1) |
 | B | 186788129 | NEW SON OF BEN | preamp | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
-| B | 186787681 | Fluffy Fuzz | fuzz | [대조] 가짜 접지 조각 + 귀환 구조(재시도1) |
 | B | 186788518 | FUZZ BENDER II GE | fuzz | [대조] ICL7660 전하펌프 |
 | B | 186788106 | Timothy V3 | overdrive | [대조] DPDT 모드 토글 위치(재시도1) |
 | B | 186788569 | BASS CLEAN | buffer-boost | [대조] 원본 회로도 대조 대기(③, kit-deferred.md) |
