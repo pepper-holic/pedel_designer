@@ -44,7 +44,7 @@ R 470Ω 14 15 R11
 R 10K 23 42 R12
 C 10n 29 41 C8
 # 토글 열림이라 −in A의 10K(49-48)는 한쪽이 떠서 회로·BOM에서 뺌(10Kx4→x3). 닫힘은 GTO-D 맵.
-NC 48 74 86
+NC 48 49 74 86
 
 STAGE output output 출력
 C 3.3uF 36 24 C9
@@ -94,7 +94,6 @@ AT C8 860 360 h-
 AT TONE 800 560 r0 m
 AT C7 800 630 v
 AT R11 800 690 v
-AT R13 900 560 v
 AT C9 950 470 h
 AT R14 1030 470 h
 AT OUTPUT 1090 500 r270 m
