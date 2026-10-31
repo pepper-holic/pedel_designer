@@ -7,6 +7,7 @@ import { bjtModel, diodeModel, jfetModel, opAmpModel, transformerModel } from ".
 import { transformerElements } from "./transformer";
 import { SILICON_DIODE_1N4148 } from "../deviceModels";
 import { isLm386, lm386Elements, lm386Spots } from "./lm386";
+import { inverterElements, inverterPinout, inverterSpots } from "./cmosInverter";
 import { withIslandLeakage } from "./dcIslands";
 
 /** Op-amp outputs stop this far short of the supply rails (a TL072/4558 on 9V swings ~1-8V). */
@@ -51,12 +52,18 @@ function resolveLayout(layout: Record<string, LayoutSpot>, elements: Element[]):
   return out;
 }
 
-/** LM386 internals have no AT line of their own: cluster them around the chip so they don't land on the auto grid. */
+/** Chip internals (LM386 gain network, a CMOS inverter package's threshold divider) have no AT line of their own: cluster
+ * them around the chip - the LM386's own spot, or an inverter package's A channel - so they don't land on the auto grid. */
 function withChipInternals(layout: Record<string, LayoutSpot>, parts: KitPart[], elements: Element[]): Record<string, LayoutSpot> {
   const ids = new Set(elements.map((e) => e.id));
-  const extra = parts
-    .filter((p) => p.kind === "IC" && isLm386(p.part ?? "") && layout[p.ref])
-    .flatMap((p) => Object.entries(lm386Spots(p.ref, layout[p.ref])).filter(([id]) => ids.has(id) && !layout[id]));
+  const internalSpots = (p: KitPart): Record<string, LayoutSpot> => {
+    const part = p.part ?? "";
+    if (isLm386(part) && layout[p.ref]) return lm386Spots(p.ref, layout[p.ref]);
+    const anchor = layout[`${p.ref}A`] ?? layout[p.ref];
+    if (inverterPinout(part) && anchor) return inverterSpots(p.ref, anchor);
+    return {};
+  };
+  const extra = parts.filter((p) => p.kind === "IC").flatMap((p) => Object.entries(internalSpots(p)).filter(([id]) => ids.has(id) && !layout[id]));
   return { ...layout, ...Object.fromEntries(extra) };
 }
 
@@ -130,6 +137,11 @@ function partElements(part: KitPart, rails: Rails, knobs: KnobSpec[]): Element[]
       if (isLm386(part.part ?? "")) {
         const p = pins(part);
         return lm386Elements(part.ref, p, { top: railVoltage(p["6"] ?? "", rails) ?? Math.max(rails.supply, 0), bottom: railVoltage(p["4"] ?? "", rails) ?? 0 });
+      }
+      const inverter = inverterPinout(part.part ?? "");
+      if (inverter) {
+        const p = pins(part);
+        return inverterElements(part.ref, inverter, p, { top: railVoltage(p[inverter.vdd] ?? "", rails) ?? Math.max(rails.supply, 0), bottom: railVoltage(p[inverter.vss] ?? "", rails) ?? 0 });
       }
       const found = opAmpModel(part.part ?? "");
       if (!found) throw new UnsupportedKitError(`${part.ref}: no model for IC ${part.part}`);

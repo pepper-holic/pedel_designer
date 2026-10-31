@@ -70,6 +70,11 @@ export interface DiodeElement extends ElementBase {
   emissionCoefficient: number;
   /** Optional bulk/lead series resistance in ohms, for accuracy in the high-current knee region. Undefined/0 disables it (unchanged ideal-junction behavior). */
   seriesResistance?: number;
+  /** Reverse breakdown (zener) voltage in volts, positive: below -breakdownVoltage the reverse current grows exponentially,
+   * reaching `breakdownCurrent` (1mA when unset) at -breakdownVoltage. Undefined/0 keeps the plain junction (no breakdown). */
+  breakdownVoltage?: number;
+  /** Reverse current at -breakdownVoltage, in amps (SPICE IBV). Only used with breakdownVoltage. */
+  breakdownCurrent?: number;
 }
 
 export interface BjtElement extends ElementBase {

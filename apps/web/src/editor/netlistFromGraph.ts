@@ -97,6 +97,8 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
         break;
       case "diode": {
         const seriesResistance = Number(part.params.seriesResistance) || 0;
+        const breakdownVoltage = Number(part.params.breakdownVoltage) || 0;
+        const breakdownCurrent = Number(part.params.breakdownCurrent) || 0;
         elements.push({
           id: part.id,
           type: "diode",
@@ -105,6 +107,7 @@ export function netlistFromGraph(parts: PartInstance[], wires: Wire[]): GraphNet
           thermalVoltage: Number(part.params.thermalVoltage),
           emissionCoefficient: Number(part.params.emissionCoefficient),
           ...(seriesResistance > 0 ? { seriesResistance } : {}),
+          ...(breakdownVoltage > 0 ? { breakdownVoltage, ...(breakdownCurrent > 0 ? { breakdownCurrent } : {}) } : {}),
         });
         break;
       }

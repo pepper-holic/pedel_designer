@@ -14,6 +14,8 @@ export interface ParamMeta {
 export const PARAM_META: Record<string, ParamMeta> = {
   resistance: { label: "저항값", unit: "Ω", min: 0.001 },
   seriesResistance: { label: "직렬 저항", unit: "Ω", min: 0, advanced: true },
+  breakdownVoltage: { label: "항복(제너) 전압", unit: "V", min: 0, advanced: true },
+  breakdownCurrent: { label: "항복 기준 전류", unit: "A", min: 0, advanced: true },
   capacitance: { label: "커패시턴스", unit: "F", min: 1e-15 },
   inductance: { label: "인덕턴스", unit: "H", min: 1e-9 },
   inductanceA: { label: "1차 인덕턴스", unit: "H", min: 1e-9 },

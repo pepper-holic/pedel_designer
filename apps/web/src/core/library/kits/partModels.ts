@@ -104,7 +104,7 @@ const JFETS: [string, Jfet][] = [
   ["2SK209", { idss: 4.0e-3, pinchOffVoltage: -0.7 }], // GR grade (Idss 2.6-6.5mA)
 ];
 
-type Diode = typeof SILICON_DIODE_1N4148;
+type Diode = typeof SILICON_DIODE_1N4148 & { breakdownVoltage?: number };
 const DIODES: [string, Diode][] = [
   ["1N4148", SILICON_DIODE_1N4148],
   ["1N914", SILICON_DIODE_1N4148],
@@ -115,7 +115,7 @@ const DIODES: [string, Diode][] = [
   ["BA282", SILICON_DIODE_1N4148],
   ["BA482", SILICON_DIODE_1N4148],
   ["MA856", SILICON_DIODE_1N4148],
-  ["ZENER", SILICON_DIODE_1N4148], // gate-protection zeners: forward diode only, breakdown is never reached in these circuits
+  ["ZENER", SILICON_DIODE_1N4148], // bare "ZENER" (gate-protection parts whose voltage was not read): forward diode only, as before
   ["1N34", GERMANIUM_DIODE],
   ["1N60", GERMANIUM_DIODE],
   ["1N270", GERMANIUM_DIODE],
@@ -132,6 +132,32 @@ const DIODES: [string, Diode][] = [
   ["LED-BLUE", BLUE_LED],
   ["LED-WHITE", BLUE_LED],
 ];
+
+/** Zener series whose part number carries no voltage: nominal voltages in order from the first number of each series. */
+const zenerSeries = (prefix: string, first: number, volts: number[]): [string, number][] => volts.map((v, i) => [`${prefix}${first + i}`, v]);
+const ZENERS: [string, number][] = [
+  // 1N4728A..1N4749A (1W)
+  ...zenerSeries("1N47", 28, [3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1, 10, 11, 12, 13, 15, 16, 18, 20, 22, 24]),
+  // 1N5226B..1N5250B (500mW)
+  ...zenerSeries("1N52", 26, [3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.0, 6.2, 6.8, 7.5, 8.2, 8.7, 9.1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]),
+];
+
+/**
+ * Zener voltage from how a map writes the part: the silk-style "3V3" / "9V1" / "12V", "ZENER3V3" / "ZENER3.3" / "ZD9V1", a
+ * BZX55/BZX79/BZX85/BZV55 code ("BZX55C3V3", "BZX79-C9V1"), or a 1N47xx/1N52xx number. Bare "ZENER" has no voltage.
+ */
+function zenerVoltage(part: string): number | undefined {
+  const key = part.toUpperCase().replace(/[\s-]/g, "");
+  const m = /^(?:ZENER|ZD|BZ[XV]\d+[ABC]?)?(\d+)(?:V(\d*)|\.(\d+)V?)$/.exec(key);
+  if (m) return Number(`${m[1]}.${m[2] || m[3] || "0"}`);
+  return ZENERS.find(([prefix]) => key.startsWith(prefix))?.[1];
+}
+
+/** A zener as a silicon diode with reverse breakdown at its nominal voltage (1mA at the knee; see components/diode.ts). */
+export const zenerModel = (part: string): Diode | undefined => {
+  const breakdownVoltage = zenerVoltage(part);
+  return breakdownVoltage === undefined ? undefined : { ...SILICON_DIODE_1N4148, breakdownVoltage };
+};
 
 type OpAmp = typeof TL072_APPROX;
 type OpAmpPinout = { channels: readonly { out: string; inMinus: string; inPlus: string }[]; vPlus: string; vMinus: string };
@@ -198,7 +224,7 @@ const lookup = <T>(table: [string, T][], part: string): T | undefined => {
 
 export const bjtModel = (part: string): Bjt | undefined => lookup(BJTS, part);
 export const jfetModel = (part: string): Jfet | undefined => lookup(JFETS, part);
-export const diodeModel = (part: string): Diode | undefined => lookup(DIODES, part);
+export const diodeModel = (part: string): Diode | undefined => zenerModel(part) ?? lookup(DIODES, part);
 
 export function opAmpModel(part: string): { model: OpAmp; channels: 1 | 2 | 4; pinout: OpAmpPinout } | undefined {
   const key = part.toUpperCase().replace(/\s+/g, "");

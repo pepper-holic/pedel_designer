@@ -5,7 +5,7 @@ import { solveComplexLinear } from "./complexLinear";
 import { linearizeBjt } from "../components/bjt";
 import { linearizeJfet, JFET_GMIN } from "../components/jfet";
 import { bufferBranchId, clipSlope, hasGbwp, hasRailClipping, integratorGm, POLE_CAPACITANCE, poleNodeId } from "../components/opamp";
-import { hasSeriesResistance, seriesNodeId } from "../components/diode";
+import { hasSeriesResistance, junctionCurrent, seriesNodeId } from "../components/diode";
 import { coupledInductorsAcTerms } from "../components/coupledInductors";
 import type { Netlist, NodeId } from "./types";
 
@@ -181,13 +181,11 @@ function solveAcSweep(
         case "diode": {
           const p = nodeOf(topology, el.nodes[0]);
           const ni = nodeOf(topology, el.nodes[1]);
-          const veff = el.emissionCoefficient * el.thermalVoltage;
           const useRs = hasSeriesResistance(el);
           const junctionNodeId = useRs ? seriesNodeId(el.id) : el.nodes[0];
           const junctionP = useRs ? nodeOf(topology, junctionNodeId) : p;
           const vd = voltageAt(topology, dcSolution, junctionNodeId) - voltageAt(topology, dcSolution, el.nodes[1]);
-          const id = el.saturationCurrent * (Math.exp(vd / veff) - 1);
-          const gd = (id + el.saturationCurrent) / veff;
+          const gd = junctionCurrent(el, vd).conductance;
           if (useRs) stampG(p, junctionP, 1 / el.seriesResistance!);
           stampG(junctionP, ni, gd);
           break;
