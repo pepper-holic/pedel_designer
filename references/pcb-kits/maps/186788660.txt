@@ -1,0 +1,159 @@
+id pp-moonshine-bottle
+goods 186788660
+name MOONSHINE BOTTLE
+motif JHS Moonshine (튜브 스크리머 계열, 18V 승압·블렌드)
+type overdrive
+desc 18V(ICL7660 더블러) TS 계열 블렌드 드라이브 - 1000n·1M → NE5532 A 버퍼 → 27n → 2N3904 이미터 팔로워 → LM833 A TS 단(1K·330n 다리, DRIVE A500K, 51p, 1N4148 x2 대칭 클리핑 + 10K∥1N5817·LED 비대칭 갈래) → 1K·220n → LM833 B TS 톤(TONE) → 1000n·1K → VOLUME → 2N3904 팔로워 → 100R·10uF·15K ┐ 버퍼 출력 → 15K 클린 갈래 → BLEND(와이퍼 Vref 팬) → NE5532 B 반전 합산(53.6K∥100p) → 1000n·100R 출력
+image img_01.jpg
+# LM833 notch up: 1=29(out A) 2=34 3=45 4=53(GND) / 5=54(+in B) 6=46 7=35(out B) 8=30(18V).
+# NE5532 notch up: 1=102(out A) 2=112(-in A, tied to out = buffer) 3=116 4=126 / 5=127(Vref) 6=117 7=113(out B) 8=103(18V).
+# Supply: 9V ring 4 -> 1N5817 38-39 -> n10 (100uF 26). ICL7660 doubler: pin 2 drives 10uF 71(+)-78, 1N5817 48->47 and 64->37 make the
+#   18V rail (100uF 67). The pump's diodes and cap are not simulated and left out of the BOM line (RAIL 37 18); parts list 1N5817 x4, 10uF x2.
+#   Vref = 47K/47K from 18V + 100uF 24.
+# The silk at 76-83 says 1N4002 but the parts list has no 1N400X - it is the 4th 1N5817. 92-93 is the 3mm red LED (round, + square = anode).
+# Mode DIP on-on 77/84/91 (common 84 = out A): fixed at 77-84 (the 1N4148 pair, silk BA482, across the feedback). 84-91 would put the LED
+#   straight from out A to -in. The 1N5817 76->83 and the LED 93->92 stay in circuit beside the 10K either way.
+# Pots are rings with no labels (85-87, 88-90, 107/119/136, 108/120/137); parts list A500K, B100K, B10K, B5K.
+#   추측: DRIVE A500K = 85-86-87 rheostat (85=86 on out A, 87 -> 10K -> -in A) - TS drive pot.
+#   추측: TONE B10K = 137-120-108 (lugs on +in B and -in B, wiper -> 220n -> 220R -> GND) - TS tone.
+#   추측: VOLUME = 88-89-90 (lug 88 from the TS stage via 1000n·1K, wiper -> 100n -> Q2 follower, lug 90 Vref).
+#   추측: BLEND = 136-119-107 (wiper 119 on Vref, lug 136 on the drive path 15K, lug 107 on the clean path 15K) - clockwise = more drive.
+#   후보: VOLUME B100K / BLEND B5K 또는 반대, 지금은 VOLUME=B100K (1K 뒤 팔로워 입력), BLEND=B5K (15K 합산 저항 대비).
+BOM 1Mx2 510Kx2 53.6K 47Kx2 15Kx4 10Kx6 1Kx5 220R 100Rx2 1000nx5 330n 220nx2 100n 27n 100p 51p 100uFx3 10uF 1N5817x2 1N4148x2 LED-RED LM833 NE5532 ICL7660 2N3904x2 A500K B100K B10K B5K
+io IN=49 OUT=147 V9=4 GND=140
+RAIL 37 18
+JUMP 77 84
+NC 47 48 61 64 65 66 71 73 78 79 80 91
+
+STAGE input buffer 입력 버퍼 (NE5532 A)
+R 1M 40 16 R1
+C 1000n 59 74 C1
+R 1M 115 144 R2
+IC NE5532 1=102 2=112 3=116 4=126 5=127 6=117 7=113 8=103 U2
+
+STAGE pre buffer Q1 팔로워 (27n 하이패스)
+C 1000n 75 60 C2
+R 1K 51 50 R3
+C 27n 32 18 C3
+R 510K 17 41 R4
+Q 2N3904 b=8 c=9 e=7 Q1
+R 10K 6 5 R5
+
+STAGE ts gain TS 드라이브 (LM833 A, DRIVE)
+C 1000n 19 33 C4
+R 10K 43 42 R6
+IC LM833 1=29 2=34 3=45 4=53 5=54 6=46 7=35 8=30 U1
+C 330n 11 10 C6
+R 1K 1 0 R9
+C 51p 44 28 C5
+D 1N4148 a=63 k=62 D1
+D 1N4148 a=69 k=70 D2
+R 10K 52 76 R8
+POT A500K DRIVE 87 86 85
+D 1N5817 a=76 k=83 D3
+D LED-RED a=93 k=92 D4
+
+STAGE tone tone TS 톤 (LM833 B, TONE)
+R 1K 20 21 R10
+C 220n 14 15 C7
+R 10K 22 23 R11
+R 1K 31 55 R12
+POT B10K TONE 137 120 108
+C 220n 121 109 C8
+R 220R 96 81 R13
+
+STAGE level custom control VOLUME·Q2 팔로워 (드라이브 갈래)
+C 1000n 36 56 C9
+R 1K 82 97 R14
+POT B100K VOLUME 90 89 88
+C 100n 110 122 C10
+R 510K 99 123 R15
+Q 2N3904 b=111 c=98 e=114 Q2
+R 10K 124 100 R16
+R 100R 101 125 R17
+C 10uF 133 132 C11
+R 15K 131 130 R18
+
+STAGE mix custom mix BLEND·합산 (NE5532 B)
+R 15K 94 95 R19
+POT B5K BLEND 136 119 107
+R 15K 135 134 R20
+R 15K 106 129 R21
+R 53.6K 104 128 R22
+C 100p 105 118 C12
+
+STAGE output output 출력
+C 1000n 142 143 C13
+R 10K 138 139 R23
+R 100R 145 146 R24
+
+STAGE power power 전원 (18V 승압·Vref)
+D 1N5817 a=38 k=39 D5
+C 100uF 26 27 C14
+IC ICL7660 1=57 3=72 8=58 U3
+C 100uF 67 68 C15
+R 47K 2 3 R25
+R 47K 12 13 R26
+C 100uF 24 25 C16
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 160
+AT D5 130 160 h
+AT C14 180 210 v
+AT Vrail1 260 160
+AT C15 310 210 v
+AT R25 380 210 v
+AT R26 380 290 v
+AT C16 430 290 v
+AT R1 100 470 v
+AT C1 140 400 h
+AT R2 180 470 v
+AT U2A 230 420
+AT C2 300 420 h
+AT R3 370 420 h
+AT C3 440 420 h
+AT R4 490 480 v
+AT Q1 540 420
+AT R5 540 510 v
+AT C4 590 450 h
+AT R6 620 510 v
+AT U1A 700 470
+AT C6 620 580 v
+AT R9 620 660 v
+AT C5 700 540 h
+AT D1 700 580 h-
+AT D2 700 620 h
+AT R8 670 690 v
+AT DRIVE 730 720 r0 m
+AT D3 700 790 h
+AT D4 760 790 h
+AT R10 790 470 h
+AT C7 830 530 v
+AT R11 870 530 v
+AT U1B 920 490
+AT R12 920 560 h-
+AT TONE 920 620 r180
+AT C8 920 700 v
+AT R13 920 780 v
+AT C9 1000 490 h
+AT R14 1070 490 h
+AT VOLUME 1140 490 r180
+AT C10 1180 520 h
+AT R15 1220 460 v
+AT Q2 1270 520
+AT R16 1270 610 v
+AT R17 1310 550 h
+AT C11 1380 550 h
+AT R18 1450 550 h
+AT R19 1450 330 h
+AT BLEND 1530 440 r0
+AT R20 1620 330 h-
+AT R21 1620 550 h-
+AT U2B 1720 450
+AT R22 1720 520 h-
+AT C12 1720 560 h-
+AT C13 1800 450 h
+AT R23 1840 510 v
+AT R24 1880 450 h
+AT RLOAD 1950 510 v

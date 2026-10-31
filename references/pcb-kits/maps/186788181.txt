@@ -1,0 +1,154 @@
+id pp-big-jack-preamp
+goods 186788181
+name BIG JACK PREAMP
+motif Victory The Jack (V4 프리앰프)
+type preamp
+desc BIG SHERIFF와 같은 기판·배선, 값만 다름 - TL074 ±9V(ICL7660) 3단 제너 클리핑: C단 x4.1(68K/22K) → 2.2n → GAIN → B단 x51 → A단 반전 x10 → 220K·470n 슬로프 FMV 톤(220p 트레블, 33n 미드) → VOLUME → D단 x7.7(100n·33K) 출력
+image img_01.jpg
+# TL074 notch left: bottom row 85..91 = pins 1..7, top row 73..67 = pins 8..14 (silk ▽/△ = out, | = -in, + = +in).
+#   A: out 85, -in 86, +in 87(GND)  B: +in 89, -in 90, out 91  C: +in 71, -in 72, out 73  D: +in 69, -in 68, out 67.
+# ICL7660 notch top: 1=7(V+) 2=15 3=22(GND) 4=31 5=32(-9V) 8=8(V+); 6=23, 7=16 unused. Pump cap 10uF 24(+)-30, reservoir 10uF 25(+ GND square,
+#   no copper - ground plane)-17 and 100n 18-19 on -9V.
+# Pots are on-board angle pots with no labels (rings 49-51, 54-56, 134-136, 137-139, 140-142); parts list A250K B1M A1M B25K B250K.
+#   추측: TREBLE B250K = 134-135-136 (wiper is the tone-stack output -> 47K -> VOLUME, lug 134 from 330p+100K treble path, lug 136 to BASS) - FMV.
+#   추측: BASS B1M = 140-141-142 rheostat (140=141) from the TREBLE bottom to 10K -> GND - FMV bass pot.
+#   추측: MIDDLE B25K = 137-138-139 rheostat (137=138) from the 47n shunt to GND - FMV mid pot.
+#   추측: GAIN = 54-55-56 (2.2n from C out to lug 54, wiper on +in B, 56 GND). 추측: VOLUME = 49-50-51 (wiper on +in D output stage, 51 GND).
+#   후보: GAIN A1M / VOLUME A250K 또는 반대, 지금은 GAIN=A1M VOLUME=A250K (Victory 프리앰프 게인 1M 관례).
+# Status LED (0-4, LED_R 470R) left out of the netlist and BOM.
+BOM 1Mx2 220Kx3 100Kx3 68Kx3 47K 33K 22K 10Kx3 2K 100R 47R 1000n 470nx2 100nx5 33n 22n 10n 4.7n 2.2n 470px2 220p 100uF 10uFx2 1N400X 1N4148x2 6.2V 5.1Vx2 3.6V 2.7Vx2 TL074 ICL7660 A250K B1M A1M B25K B250K
+io IN=20 OUT=39 V9=13 GND=14,25
+NC 0 1 2 3 4 16 23
+
+STAGE input input 입력
+C 10n 27 26 C1
+R 1M 28 29 R1
+R 1M 33 34 R2
+R 68K 40 62 R3
+
+STAGE c gain C단 (x4.1, 제너 6.2V·5.1V)
+IC TL074 1=85 2=86 3=87 4=88 5=89 6=90 7=91 8=73 9=72 10=71 11=70 12=69 13=68 14=67 U1
+R 68K 74 75 R4
+D 6.2V a=42 k=41 D1
+D 5.1V a=58 k=57 D2
+C 100n 77 92 C2
+R 22K 106 79 R5
+
+STAGE gainpot custom control GAIN (2.2n 결합)
+C 2.2n 44 43 C3
+POT A1M GAIN 56 55 54
+
+STAGE b gain B단 (x51, 제너 2.7V·3.6V)
+R 100K 102 103 R6
+D 2.7V a=105 k=104 D3
+D 3.6V a=117 k=116 D4
+C 470n 123 124 C4
+R 2K 107 80 R7
+
+STAGE a gain A단 반전 (x10, 제너 5.1V·2.7V)
+R 10K 115 114 R8
+C 100n 99 98 C5
+R 100K 94 95 R9
+D 5.1V a=82 k=81 D5
+D 2.7V a=83 k=84 D6
+
+STAGE tone tone FMV 톤 (TREBLE·BASS·MIDDLE)
+R 220K 100 101 R10
+C 470n 96 97 C6
+C 220p 111 110 C7
+R 100K 109 108 R11
+R 220K 120 121 R12
+R 68K 112 113 R13
+C 22n 131 132 C8
+C 33n 130 129 C9
+C 4.7n 128 127 C10
+POT B250K TREBLE 136 135 134
+POT B1M BASS 142 141 140
+R 10K 143 118 R14
+POT B25K MIDDLE 139 138 137
+
+STAGE output output 출력 (VOLUME·D단 x7.7)
+R 47K 126 125 R15
+C 470p 93 78 C11
+POT A250K VOLUME 51 50 49
+R 220K 60 61 R16
+C 470p 52 53 C12
+R 33K 36 35 R17
+C 100n 38 37 C13
+D 1N4148 a=45 k=59 D7
+D 1N4148 a=47 k=46 D8
+R 47R 66 65 R18
+C 1000n 64 63 C14
+R 10K 48 76 R19
+
+STAGE power power 전원 (±9V)
+D 1N400X a=12 k=11 D9
+R 100R 10 9 R20
+C 100n 5 21 C15
+C 100uF 6 14 C16
+IC ICL7660 1=7 2=15 3=22 4=31 5=32 8=8 U2
+C 10uF 24 30 C17
+C 10uF 25 17 C18
+C 100n 18 19 C19
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 160
+AT D9 130 160 h
+AT R20 200 160 h
+AT C15 250 210 v
+AT C16 290 210 v
+AT Vrail1 360 160
+AT C18 410 210 v-
+AT C19 450 210 v-
+AT C1 130 400 h
+AT R1 100 470 v
+AT R2 190 460 v
+AT R3 230 400 h
+AT U1C 320 420
+AT R4 320 490 h-
+AT D2 290 540 h-
+AT D1 380 540 h
+AT C2 260 600 v
+AT R5 260 680 v
+AT C3 410 420 h
+AT GAIN 500 420 r180
+AT U1B 600 470
+AT R6 600 540 h
+AT D3 570 590 h-
+AT D4 660 590 h
+AT C4 540 650 v
+AT R7 540 730 v
+AT R8 700 470 h
+AT C5 770 470 h
+AT U1A 860 450
+AT R9 860 530 h-
+AT D6 830 580 h-
+AT D5 920 580 h
+AT R10 960 450 h
+AT C6 1030 450 h
+AT C7 1100 340 h
+AT R11 1170 340 h
+AT R12 1240 280 h
+AT TREBLE 1240 340 r180
+AT R13 1100 460 h
+AT C8 1170 460 h
+AT BASS 1300 520 r180
+AT R14 1360 560 v
+AT C9 1140 520 v
+AT MIDDLE 1170 580 r180
+AT C10 1110 620 v
+AT R15 1400 400 h
+AT C11 1440 460 v
+AT VOLUME 1490 400 r180
+AT U1D 1580 450
+AT R16 1580 520 h-
+AT C12 1580 560 h-
+AT C13 1500 540 v
+AT R17 1500 620 v
+AT D7 1650 390 v-
+AT D8 1690 510 v-
+AT R18 1700 450 h
+AT C14 1770 450 h
+AT R19 1810 510 v
+AT RLOAD 1860 480 v

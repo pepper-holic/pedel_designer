@@ -1,0 +1,955 @@
+{
+ "id": "pp-big-copper-preamp",
+ "goodsNo": "186788178",
+ "kitName": "BIG COPPER PREAMP",
+ "motif": "Victory The Copper (V4 프리앰프)",
+ "type": "preamp",
+ "description": "TL074 ±9V(ICL7660) 3단 제너 클리핑 프리앰프 - 22n·68K 입력 → C단 비반전 x5.7(220K∥100p, 6.2V·5.1V 제너) → 2.2n → GAIN(100p 브라이트) → B단 x23(220K, 3.3V 제너 쌍) → 100n → AC30 톱부스트형 톤(100p·100K·22n x2·10K, TREBLE·BASS) → 470K/470K → A단 x5.5(3.3V 제너 쌍) → 10n·100K → CUT(4.7n) → VOLUME → D단 x5.7 출력",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n1",
+    "0"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "68K",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "TL074",
+   "nodes": {
+    "1": "n3",
+    "2": "n4",
+    "3": "n5",
+    "4": "n6",
+    "5": "n7",
+    "6": "n8",
+    "7": "n9",
+    "8": "n10",
+    "9": "n11",
+    "10": "n2",
+    "11": "vm9",
+    "12": "n12",
+    "13": "n13",
+    "14": "n14"
+   }
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "220K",
+   "nodes": [
+    "n10",
+    "n11"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n10",
+    "n11"
+   ]
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "5.1V",
+   "nodes": {
+    "a": "n15",
+    "k": "n11"
+   }
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "6.2V",
+   "nodes": {
+    "a": "n15",
+    "k": "n10"
+   }
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n11",
+    "n16"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n16",
+    "0"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "2.2n",
+   "nodes": [
+    "n10",
+    "n17"
+   ]
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "A1M",
+   "nodes": [
+    "0",
+    "n7",
+    "n17"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n17",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "220K",
+   "nodes": [
+    "n9",
+    "n8"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "3.3V",
+   "nodes": {
+    "a": "n18",
+    "k": "n8"
+   }
+  },
+  {
+   "ref": "D4",
+   "kind": "D",
+   "part": "3.3V",
+   "nodes": {
+    "a": "n18",
+    "k": "n9"
+   }
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n8",
+    "n19"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n19",
+    "0"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n9",
+    "n20"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "100p",
+   "nodes": [
+    "n20",
+    "n21"
+   ]
+  },
+  {
+   "ref": "TREBLE",
+   "kind": "POT",
+   "value": "B1M",
+   "nodes": [
+    "n22",
+    "n23",
+    "n21"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n20",
+    "n24"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n24",
+    "n22"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n24",
+    "n25"
+   ]
+  },
+  {
+   "ref": "BASS",
+   "kind": "POT",
+   "value": "A250K",
+   "nodes": [
+    "0",
+    "n25",
+    "n22"
+   ]
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n25",
+    "0"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n23",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n3",
+    "n4"
+   ]
+  },
+  {
+   "ref": "D5",
+   "kind": "D",
+   "part": "3.3V",
+   "nodes": {
+    "a": "n26",
+    "k": "n3"
+   }
+  },
+  {
+   "ref": "D6",
+   "kind": "D",
+   "part": "3.3V",
+   "nodes": {
+    "a": "n26",
+    "k": "n4"
+   }
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n4",
+    "n27"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n27",
+    "0"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n3",
+    "n28"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n28",
+    "n29"
+   ]
+  },
+  {
+   "ref": "CUT",
+   "kind": "POT",
+   "value": "B250K",
+   "nodes": [
+    "n29",
+    "n29",
+    "n30"
+   ]
+  },
+  {
+   "ref": "C13",
+   "kind": "C",
+   "value": "4.7n",
+   "nodes": [
+    "n30",
+    "0"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A1M",
+   "nodes": [
+    "0",
+    "n12",
+    "n29"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "n14",
+    "n13"
+   ]
+  },
+  {
+   "ref": "C14",
+   "kind": "C",
+   "value": "220p",
+   "nodes": [
+    "n14",
+    "n13"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n13",
+    "n31"
+   ]
+  },
+  {
+   "ref": "C15",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n31",
+    "0"
+   ]
+  },
+  {
+   "ref": "D7",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n14",
+    "k": "n6"
+   }
+  },
+  {
+   "ref": "D8",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "vm9",
+    "k": "n14"
+   }
+  },
+  {
+   "ref": "R17",
+   "kind": "R",
+   "value": "220R",
+   "nodes": [
+    "n14",
+    "n32"
+   ]
+  },
+  {
+   "ref": "C16",
+   "kind": "C",
+   "value": "1000n",
+   "nodes": [
+    "n32",
+    "out"
+   ]
+  },
+  {
+   "ref": "R18",
+   "kind": "R",
+   "value": "47K",
+   "nodes": [
+    "out",
+    "0"
+   ]
+  },
+  {
+   "ref": "D9",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n33"
+   }
+  },
+  {
+   "ref": "R20",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n33",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C20",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "C21",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "U2",
+   "kind": "IC",
+   "part": "ICL7660",
+   "nodes": {
+    "1": "n6",
+    "2": "n34",
+    "3": "0",
+    "4": "n35",
+    "5": "vm9",
+    "8": "n6"
+   }
+  },
+  {
+   "ref": "C23",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "0",
+    "vm9"
+   ]
+  },
+  {
+   "ref": "C24",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "vm9",
+    "0"
+   ]
+  }
+ ],
+ "rails": [
+  {
+   "net": "vm9",
+   "voltage": -9.0
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "C1",
+    "R1",
+    "R2",
+    "R3"
+   ]
+  },
+  {
+   "id": "c",
+   "category": "gain",
+   "label": "C단 (x5.7, 제너 6.2V·5.1V)",
+   "parts": [
+    "U1",
+    "R4",
+    "C2",
+    "D2",
+    "D1",
+    "C3",
+    "R5"
+   ]
+  },
+  {
+   "id": "gainpot",
+   "category": "custom",
+   "label": "control GAIN (2.2n 결합, 100p 브라이트)",
+   "parts": [
+    "C4",
+    "GAIN",
+    "C5"
+   ]
+  },
+  {
+   "id": "b",
+   "category": "gain",
+   "label": "B단 (x23, 제너 3.3V 쌍)",
+   "parts": [
+    "R6",
+    "D3",
+    "D4",
+    "C6",
+    "R7"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "톱부스트 톤 (TREBLE·BASS)",
+   "parts": [
+    "C7",
+    "C8",
+    "TREBLE",
+    "R8",
+    "C9",
+    "C10",
+    "BASS",
+    "R9"
+   ]
+  },
+  {
+   "id": "a",
+   "category": "gain",
+   "label": "A단 (x5.5, 제너 3.3V 쌍)",
+   "parts": [
+    "R10",
+    "R11",
+    "R12",
+    "D5",
+    "D6",
+    "C11",
+    "R13"
+   ]
+  },
+  {
+   "id": "cut",
+   "category": "custom",
+   "label": "control CUT (4.7n)",
+   "parts": [
+    "C12",
+    "R14",
+    "CUT",
+    "C13"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력 (VOLUME·D단 x5.7)",
+   "parts": [
+    "VOLUME",
+    "R15",
+    "C14",
+    "R16",
+    "C15",
+    "D7",
+    "D8",
+    "R17",
+    "C16",
+    "R18"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원 (±9V)",
+   "parts": [
+    "D9",
+    "R20",
+    "C20",
+    "C21",
+    "U2",
+    "C22",
+    "C23",
+    "C24"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 160
+  },
+  "D9": {
+   "x": 130,
+   "y": 160,
+   "rotation": 0
+  },
+  "R20": {
+   "x": 200,
+   "y": 160,
+   "rotation": 0
+  },
+  "C20": {
+   "x": 250,
+   "y": 210,
+   "rotation": 90
+  },
+  "C21": {
+   "x": 290,
+   "y": 210,
+   "rotation": 90
+  },
+  "Vrail1": {
+   "x": 360,
+   "y": 160
+  },
+  "C23": {
+   "x": 410,
+   "y": 210,
+   "rotation": 270
+  },
+  "C24": {
+   "x": 450,
+   "y": 210,
+   "rotation": 270
+  },
+  "C1": {
+   "x": 130,
+   "y": 400,
+   "rotation": 0
+  },
+  "R1": {
+   "x": 100,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 190,
+   "y": 460,
+   "rotation": 90
+  },
+  "R3": {
+   "x": 230,
+   "y": 400,
+   "rotation": 0
+  },
+  "U1C": {
+   "x": 320,
+   "y": 420
+  },
+  "R4": {
+   "x": 320,
+   "y": 490,
+   "rotation": 180
+  },
+  "C2": {
+   "x": 320,
+   "y": 530,
+   "rotation": 180
+  },
+  "D2": {
+   "x": 290,
+   "y": 580,
+   "rotation": 180
+  },
+  "D1": {
+   "x": 380,
+   "y": 580,
+   "rotation": 0
+  },
+  "C3": {
+   "x": 260,
+   "y": 640,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 260,
+   "y": 720,
+   "rotation": 90
+  },
+  "C4": {
+   "x": 410,
+   "y": 420,
+   "rotation": 0
+  },
+  "GAIN": {
+   "x": 500,
+   "y": 420,
+   "rotation": 180
+  },
+  "C5": {
+   "x": 470,
+   "y": 480,
+   "rotation": 90
+  },
+  "U1B": {
+   "x": 600,
+   "y": 470
+  },
+  "R6": {
+   "x": 600,
+   "y": 540,
+   "rotation": 180
+  },
+  "D3": {
+   "x": 570,
+   "y": 590,
+   "rotation": 180
+  },
+  "D4": {
+   "x": 660,
+   "y": 590,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 540,
+   "y": 650,
+   "rotation": 90
+  },
+  "R7": {
+   "x": 540,
+   "y": 730,
+   "rotation": 90
+  },
+  "C7": {
+   "x": 700,
+   "y": 470,
+   "rotation": 0
+  },
+  "C8": {
+   "x": 790,
+   "y": 400,
+   "rotation": 0
+  },
+  "TREBLE": {
+   "x": 880,
+   "y": 400,
+   "rotation": 180
+  },
+  "R8": {
+   "x": 790,
+   "y": 490,
+   "rotation": 0
+  },
+  "C9": {
+   "x": 870,
+   "y": 490,
+   "rotation": 0
+  },
+  "C10": {
+   "x": 830,
+   "y": 560,
+   "rotation": 90
+  },
+  "BASS": {
+   "x": 940,
+   "y": 560,
+   "rotation": 0,
+   "mirror": true
+  },
+  "R9": {
+   "x": 870,
+   "y": 640,
+   "rotation": 90
+  },
+  "R10": {
+   "x": 1010,
+   "y": 430,
+   "rotation": 0
+  },
+  "R11": {
+   "x": 1040,
+   "y": 520,
+   "rotation": 90
+  },
+  "U1A": {
+   "x": 1100,
+   "y": 450
+  },
+  "R12": {
+   "x": 1100,
+   "y": 530,
+   "rotation": 180
+  },
+  "D6": {
+   "x": 1070,
+   "y": 580,
+   "rotation": 180
+  },
+  "D5": {
+   "x": 1130,
+   "y": 580,
+   "rotation": 0
+  },
+  "C11": {
+   "x": 1020,
+   "y": 640,
+   "rotation": 90
+  },
+  "R13": {
+   "x": 1020,
+   "y": 720,
+   "rotation": 90
+  },
+  "C12": {
+   "x": 1200,
+   "y": 450,
+   "rotation": 0
+  },
+  "R14": {
+   "x": 1270,
+   "y": 450,
+   "rotation": 0
+  },
+  "CUT": {
+   "x": 1330,
+   "y": 520,
+   "rotation": 0
+  },
+  "C13": {
+   "x": 1360,
+   "y": 580,
+   "rotation": 90
+  },
+  "VOLUME": {
+   "x": 1380,
+   "y": 450,
+   "rotation": 180
+  },
+  "U1D": {
+   "x": 1480,
+   "y": 500
+  },
+  "R15": {
+   "x": 1480,
+   "y": 570,
+   "rotation": 180
+  },
+  "C14": {
+   "x": 1480,
+   "y": 610,
+   "rotation": 180
+  },
+  "R16": {
+   "x": 1420,
+   "y": 600,
+   "rotation": 90
+  },
+  "C15": {
+   "x": 1420,
+   "y": 680,
+   "rotation": 90
+  },
+  "D7": {
+   "x": 1550,
+   "y": 440,
+   "rotation": 270
+  },
+  "D8": {
+   "x": 1590,
+   "y": 560,
+   "rotation": 270
+  },
+  "R17": {
+   "x": 1600,
+   "y": 500,
+   "rotation": 0
+  },
+  "C16": {
+   "x": 1670,
+   "y": 500,
+   "rotation": 0
+  },
+  "R18": {
+   "x": 1710,
+   "y": 560,
+   "rotation": 90
+  },
+  "RLOAD": {
+   "x": 1760,
+   "y": 530,
+   "rotation": 90
+  }
+ }
+}

@@ -1,0 +1,179 @@
+id pp-new-blue-driver
+goods 186788139
+name NEW BLUE DRIVER
+motif Boss BD-2 Blues Driver (Keeley 모드, 앵글 팟)
+type overdrive
+desc BD-2 이산 op-amp 2단 - 100n·220K 입력 → J201 차동쌍 + 2N3906 이산 op-amp 비반전(22K+GAIN/1.5K·150n, 47p) → 100K·47n·100n / 220p·330K 단간 필터 → 1N4002 직렬쌍 접지 클리핑 → 2.2n → 두 번째 이산 op-amp(33K+GAIN/2.2K·1uF, 100p) → 5.6K∥5.6n·5.6n → 33n(+68n DIP) → TONE(18n) → LEVEL → 47n → TL071 비반전(6.8K∥2.2n, 입력 간 1N4148/1N4002, 56n·1.2K·2N3904 부트스트랩 다리) → 10uF 출력
+image img_01.jpg
+# Discrete op-amp B (input): J201 g=138 d=121 s=126 (- input, drain on V+) and g=139 d=122 s=127 (+ input, 2.2K drain load 116-117),
+#   tail 4.7K 115-137, 2N3906 VAS e=124 b=128 c=141 with 2.2K 130-108 to GND, 47p 123-140 drain->out. Op-amp A the same at 16/0/10, 17/1/11,
+#   4.7K 25-26, 2.2K 2-27, 2N3906 e=4 b=12 c=19, 2.2K 38-39, 100p 3-18. Pins by net: the PNP emitter sits on V+, its base on the loaded drain.
+# TL071 notch up: 2=66(-in) 3=71(+in) 4=80 6=72(out) 7=67(V+); 1=56, 5=81, 8=57 unused. 2N3904 e=8 b=13 c=20 (collector on V+).
+# Vref = 10K/10K + 47uF. 1N400X 113-135 is a reverse-polarity shunt (cathode on V+).
+# Pots are angle pots with no labels; parts list A250K dual, A100K, B10K.
+#   추측: GAINA/GAINB A250K 듀얼 = 96-97-98 (rheostat, 96=97 on op-amp B's output, 98 -> 22K -> - input) and 84-85-86 (84=85 on op-amp A's
+#     output, 86 -> 33K -> - input) - the BD-2 dual gain pot, one gang per stage; clockwise = more resistance = more gain.
+#   추측: TONE B10K = 61-62-63 (lug 63 from the 33n/68n, lug 61 -> 18n -> GND, wiper -> LEVEL) - clockwise = brighter.
+#   추측: LEVEL A100K = 92-93-94 (lug 92 from TONE's wiper, wiper -> 47n -> TL071 +in, 94 GND).
+# DIP on-on 125/129/142 (common 129 after the 68n, 125 no copper): fixed at 129-142, 68n beside the 33n (Keeley fat mode).
+BOM 2.2Mx2 1Mx2 470Kx2 330K 220K 100K 33K 22K 15K 10Kx3 6.8K 5.6K 4.7Kx2 2.2Kx5 1.5K 1.2K 150n 100nx2 68n 56nx2 47nx2 33n 18n 5.6nx2 2.2nx2 220p 100px2 47px2 100uF 47uF 10uF 1uF 1N400X 1N4002x5 1N4148 J201x4 2N3906x2 2N3904 TL071 A250Kx2 A100K B10K
+io IN=149 OUT=95 V9=14 GND=159
+JUMP 129 142
+NC 24 56 57 81 91 125 165 166
+# 165/166 are the TL071 corner silk circle read as pads; they bridge the V+ trace and the output net 37/54/72/106.
+SPLIT 37 54 72 106
+
+STAGE input input 입력
+R 2.2M 136 114 R1
+C 100n 150 151 C1
+R 220K 152 153 R2
+
+STAGE ub gain 1단 이산 op-amp (J201 차동, GAINA)
+Q J201 g=139 d=122 s=127 J4
+Q J201 g=138 d=121 s=126 J3
+R 2.2K 117 116 R3
+R 4.7K 137 115 R4
+Q 2N3906 b=128 c=141 e=124 Q4
+C 47p 123 140 C2
+R 2.2K 130 108 R5
+POT A250K GAINA 98 97 96
+R 22K 75 74 R6
+C 47p 104 105 C3
+R 1.5K 73 45 R7
+C 150n 33 15 C4
+
+STAGE clip clipping 단간 필터·1N4002 접지 클리핑
+R 100K 109 131 R8
+C 100n 162 145 C5
+C 47n 161 144 C6
+R 15K 132 110 R9
+R 1M 134 112 R10
+C 220p 160 143 C7
+R 330K 133 111 R11
+D 1N4002 a=154 k=155 D1
+D 1N4002 a=146 k=118 D2
+D 1N4002 a=164 k=163 D3
+D 1N4002 a=119 k=147 D4
+
+STAGE ua gain 2단 이산 op-amp (GAINB)
+C 2.2n 99 87 C8
+R 1M 28 29 R12
+Q J201 g=17 d=1 s=11 J2
+Q J201 g=16 d=0 s=10 J1
+R 2.2K 2 27 R13
+R 4.7K 26 25 R14
+Q 2N3906 b=12 c=19 e=4 Q2
+C 100p 3 18 C9
+R 2.2K 39 38 R15
+POT A250K GAINB 86 85 84
+R 33K 59 58 R16
+C 100p 64 65 C10
+R 2.2K 46 47 R17
+C 1uF 43 44 C11
+
+STAGE tone tone 톤 (TONE)
+R 5.6K 77 100 R18
+C 5.6n 78 79 C12
+C 5.6n 101 88 C13
+C 33n 89 90 C14
+C 68n 102 103 C15
+POT B10K TONE 61 62 63
+C 18n 60 76 C16
+
+STAGE output output 출력 (LEVEL·TL071)
+POT A100K LEVEL 94 93 92
+C 47n 83 82 C17
+IC TL071 2=66 3=71 4=80 6=72 7=67 U1
+R 470K 68 51 R19
+D 1N4148 a=69 k=55 D5
+D 1N4002 a=52 k=70 D6
+R 6.8K 54 53 R20
+C 2.2n 37 36 C18
+C 56n 23 22 C19
+R 1.2K 32 7 R21
+Q 2N3904 b=13 c=20 e=8 Q3
+R 10K 6 31 R23
+C 56n 21 9 C20
+R 470K 5 30 R22
+C 10uF 106 107 C21
+R 2.2M 120 148 R24
+
+STAGE power power 전원·Vref
+D 1N400X a=135 k=113 D7
+C 100uF 35 34 C22
+R 10K 40 41 R25
+R 10K 49 48 R26
+C 47uF 42 50 C23
+
+# --- schematic placement (hand) ---
+AT V1 60 470
+AT VCC 60 160
+AT D7 120 220 v-
+AT C22 170 210 v
+AT R25 230 210 v
+AT R26 230 290 v
+AT C23 280 290 v
+AT R1 100 530 v
+AT C1 150 470 h
+AT R2 190 540 v
+AT J4 250 470
+AT J3 380 470 m
+AT R3 250 400 v
+AT R4 310 540 v
+AT Q4 320 360
+AT C2 290 300 h
+AT R5 420 400 v
+AT GAINA 500 520 r0
+AT R6 440 520 h-
+AT C3 470 580 h
+AT R7 410 600 v
+AT C4 410 680 v
+AT R8 600 430 h
+AT C5 670 430 h
+AT C6 640 500 v
+AT R9 640 590 v
+AT R10 690 530 h
+AT C7 620 360 h
+AT R11 690 360 h
+AT D1 760 500 h
+AT D2 790 560 v
+AT D3 760 620 h-
+AT D4 790 680 v-
+AT C8 800 430 h
+AT R12 840 500 v
+AT J2 890 430
+AT J1 1010 430 m
+AT R13 890 360 v
+AT R14 950 500 v
+AT Q2 960 300
+AT C9 930 250 h
+AT R15 1060 370 v
+AT GAINB 1110 500 r0
+AT R16 1060 550 h-
+AT C10 1060 600 h
+AT R17 1040 650 v
+AT C11 1040 730 v
+AT R18 1180 430 h
+AT C12 1180 380 h
+AT C13 1220 500 v
+AT C14 1260 430 h
+AT C15 1260 380 h
+AT TONE 1330 430 r180
+AT C16 1370 490 v
+AT LEVEL 1420 520 r180
+AT C17 1470 550 h
+AT U1 1560 560
+AT R19 1500 610 v
+AT D5 1470 610 v
+AT D6 1440 610 v-
+AT R20 1560 640 h-
+AT C18 1560 680 h-
+AT C19 1560 750 v
+AT R21 1610 780 h
+AT Q3 1690 750
+AT R23 1690 840 v
+AT C20 1610 730 h
+AT R22 1650 690 v-
+AT C21 1660 560 h
+AT R24 1740 620 v
+AT RLOAD 1790 620 v

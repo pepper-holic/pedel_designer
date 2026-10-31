@@ -1,0 +1,135 @@
+id pp-ice-muff
+goods 186788658
+name ICE MUFF
+motif EHX Big Muff Pi Op-Amp (1978, 톤 바이패스·Analogguru 게인 모드)
+type fuzz
+desc RC4558 + CA741 빅머프 - 150n·56K 입력 → A단 반전 x5.9(330K) → 10K·47K·10n/4.7n 샐런키 LPF → B단 비반전 x10(560K/62K) → 10uF → GAIN 분압 → 1000n·8.2K → CA741 반전 x57(470K∥330p, 1N914 3단 직렬 역병렬 클리핑) → 빅머프 톤(5.6K·120n / 100n·1.2K, TONE) → VOLUME
+image img_01.jpg
+# RC4558P notch down: 1=35(out A) 2=27 3=19 4=14(GND) / 5=13(+in B) 6=18 7=26(out B) 8=34(V+).
+# CA741 notch up: 2=75(-in) 3=83(+in) 4=89(GND) 6=84(out) 7=76(V+); 1=69, 5=92, 8=70 no copper.
+# V+ = 9V -> 1N5817 (k=4) -> 47R 12-29. Vref A = 220K/220K + 10uF 46; Vref C (+in CA741) = 820K/1M + 10uF 22.
+# Pots are angle pots with no labels (62-64, 65-67, 110-112); parts list A100K, B10K x2.
+#   추측: VOLUME A100K = 65-66-67 (wiper 66 -> OUT 68 with 100K pulldown, 67 GND, lug 65 from the tone/bypass DIP common 93).
+#   추측: TONE B10K = 110-111-112 (lug 110 on the 100n·1.2K high-pass, lug 112 on the 5.6K·120n low-pass, wiper 111 -> DIP 88) - Big Muff tone.
+#   추측: GAIN B10K = 62-63-64 (lug 62 via 10uF from out B, lug 64 via 47R to the 62K/10uF gain-leg node, wiper -> 1000n -> 8.2K -> CA741):
+#     Analogguru gain mod, clockwise toward out B = more drive into the clipping stage.
+# DIP on-on (tone bypass) 88/93/103: fixed in the TONE position, JUMP 88 93. The bypass branch (150n 87-102, 47K 105-80, 47K 79-104 -> 103)
+#   is left out of the netlist and the BOM (parts list: 150n x2, 47K x3 - one of each stays). "null" 57-58 (n16 to GND) is an empty footprint.
+BOM 2.2M 1M 820K 560K 470K 330K 220Kx2 100K 62K 56K 47K 10K 8.2K 5.6K 1.2K 47Rx2 1000nx2 150n 120n 100nx2 10n 4.7n 330p 100uF 10uFx4 1N5817 1N914x6 RC4558P CA741 A100K B10Kx2
+io IN=40 OUT=68 V9=6 GND=117
+JUMP 88 93
+NC 57 58 69 70 92 79 80 87 102 103 104 105
+
+STAGE input input 입력
+R 2.2M 49 50 R1
+C 150n 52 51 C1
+
+STAGE a gain A단 반전 (x5.9)
+IC RC4558P 1=35 2=27 3=19 4=14 5=13 6=18 7=26 8=34 U1
+R 56K 48 47 R2
+R 330K 43 44 R3
+
+STAGE vref custom bias Vref A (220K/220K, A단·B단 공용)
+R 220K 36 37 R4
+R 220K 45 41 R5
+C 10uF 46 42 C2
+
+STAGE lpf custom filter 샐런키 LPF (10K·47K·10n·4.7n)
+R 10K 28 11 R6
+R 47K 10 9 R7
+C 10n 1 0 C3
+C 4.7n 3 2 C4
+
+STAGE b gain B단 비반전 (x10)
+R 560K 8 25 R8
+R 62K 7 24 R9
+C 10uF 39 38 C5
+
+STAGE gainpot custom control GAIN (Analogguru)
+C 10uF 17 16 C6
+R 47R 33 55 R10
+POT B10K GAIN 64 63 62
+
+STAGE c clipping CA741 반전 클리핑 (1N914 x3 역병렬)
+C 1000n 60 71 C7
+R 8.2K 97 96 R11
+IC CA741 2=75 3=83 4=89 6=84 7=76 U2
+R 820K 31 32 R12
+R 1M 21 20 R13
+C 10uF 22 23 C8
+R 470K 108 109 R14
+C 330p 115 116 C9
+D 1N914 a=74 k=73 D1
+D 1N914 a=91 k=90 D2
+D 1N914 a=107 k=106 D3
+D 1N914 a=81 k=82 D4
+D 1N914 a=94 k=95 D5
+D 1N914 a=113 k=114 D6
+
+STAGE tone tone 빅머프 톤 (TONE)
+C 1000n 61 72 C10
+R 5.6K 78 101 R15
+C 120n 100 86 C11
+C 100n 85 99 C12
+R 1.2K 98 77 R16
+POT B10K TONE 112 111 110
+
+STAGE output output 출력 (VOLUME)
+POT A100K VOLUME 67 66 65
+R 100K 56 59 R17
+
+STAGE power power 전원
+D 1N5817 a=5 k=4 D7
+R 47R 12 29 R18
+C 100n 30 15 C13
+C 100uF 54 53 C14
+
+# --- schematic placement (hand) ---
+AT V1 60 470
+AT VCC 60 160
+AT D7 130 160 h
+AT R18 200 160 h
+AT C13 330 210 v
+AT C14 370 210 v
+AT R4 240 240 v
+AT R5 240 320 v
+AT C2 280 320 v
+AT R12 830 250 v
+AT R13 830 330 v
+AT C8 870 330 v
+AT R1 100 510 v
+AT C1 140 440 h
+AT R2 210 440 h
+AT U1A 300 420
+AT R3 300 500 h
+AT R6 380 420 h
+AT R7 450 420 h
+AT C3 490 480 v
+AT C4 470 340 h
+AT U1B 570 440
+AT R8 570 510 h
+AT R9 520 540 v
+AT C5 520 620 v
+AT R10 560 570 h
+AT C6 650 440 h
+AT GAIN 720 500 r180
+AT C7 740 440 h
+AT R11 800 440 h
+AT U2 880 420
+AT R14 880 500 h
+AT C9 880 540 h
+AT D1 830 590 h
+AT D2 900 590 h
+AT D3 970 590 h
+AT D4 830 640 h-
+AT D5 900 640 h-
+AT D6 970 640 h-
+AT C10 980 420 h
+AT R15 1050 420 h
+AT C11 1090 480 v
+AT C12 1010 320 h
+AT R16 1050 370 v
+AT TONE 1140 420 r0 m
+AT VOLUME 1240 420 r180
+AT R17 1300 490 v
+AT RLOAD 1350 480 v
