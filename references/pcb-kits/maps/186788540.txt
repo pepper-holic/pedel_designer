@@ -1,0 +1,85 @@
+id pp-mid-blaster
+goods 186788540
+name MID BLASTER
+motif Dimitri / James Tyler Mid Boost
+type buffer-boost
+desc 잭플레이트에 넣는 미드 부스트. 1단 비반전(33K/100K)이 클린 신호를 만들고, 2단 비반전이 100n+20K 다리로 중역을 올린다. B50K 팟이 클린(1.8K+1000n)과 미드(20K+220n, 10n 션트) 사이를 섞고 220K로 출력, 토글은 패시브 바이패스.
+image img_04.jpg
+BOM 1Mx2 220Kx1 100Kx5 33Kx1 20Kx2 1.8Kx1 1000nx1 220nx1 100nx1 47nx1 10nx1 22px2 47uFx1 4.7uFx1 1N400Xx1 LF442CNx1 B50Kx1
+io IN=19 OUT=10 V9=5 GND=6
+# 팟 보드(0~27)와 메인 보드(28~75)는 5핀 앵글 헤더로 0-28 1-29 2-30 3-31 4-32가 이어진다.
+JUMP 0 28
+JUMP 1 29
+JUMP 3 31
+JUMP 4 32
+# FAT 토글(on-on): 공통 14=OUT, 13=IN(패시브 바이패스), 15=팟 와이퍼. 이펙트 쪽으로 고정.
+JUMP 14 15
+# 7·23은 미니팟 고정 다리.
+NC 7 23 13 54
+# LF442CN(키트는 TL072로 패킹), 홈이 오른쪽: 위 줄 ▷52 −51 +50 ⊖49, 아래 줄 +61 −62 ▷63 ⊕64.
+
+STAGE input input 입력
+R 1M 21 22 R1
+C 47n 17 11 C1
+R 1M 33 34 R2
+
+STAGE bias custom Vref
+R 100K 40 41 R3
+R 100K 39 55 R4
+C 4.7uF 75 68 C2
+
+STAGE clean gain 1단 (클린)
+IC LF442CN 1=52 2=51 3=50 4=49 5=61 6=62 7=63 8=64 U1
+R 33K 42 43 R5
+C 22p 35 36 C3
+R 100K 48 60 R6
+R 1.8K 37 38 R7
+C 1000n 45 44 C4
+
+STAGE mid gain 2단 (미드 부스트)
+R 100K 47 59 R8
+C 100n 46 58 C5
+R 20K 69 70 R9
+R 100K 71 72 R10
+C 22p 73 74 C6
+R 20K 65 53 R11
+C 220n 66 56 C7
+C 10n 57 67 C8
+
+STAGE blend control 블렌드
+POT B50K MID 12 16 18
+R 220K 25 26 R12
+
+STAGE power power 전원
+D 1N400X a=8 k=9 D1
+C 47uF 20 24 C9
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT D1 150 160 h
+AT C9 210 190 v
+AT R3 270 190 v
+AT R4 270 250 v
+AT C2 330 250 v
+AT C1 180 400 h
+AT R1 120 460 v
+AT R2 220 460 v
+AT U1A 300 420
+AT R6 240 530 v
+AT R5 300 500 h
+AT C3 300 540 h
+AT R7 420 340 h
+AT C4 560 340 h
+AT U1B 480 440
+AT R10 480 520 h
+AT C6 480 560 h
+AT R8 420 540 v
+AT R9 380 600 v
+AT C5 380 660 v
+AT R11 570 440 h
+AT C7 650 440 h
+AT MID 740 390 r90
+AT C8 700 510 v
+AT R12 820 460 v
+AT RLOAD 880 460 v

@@ -1,0 +1,90 @@
+id pp-new-acc-preamp
+goods 186788357
+name NEW ACC PREAMP
+motif K&K Trinity 어쿠스틱 프리앰프
+type preamp
+desc 어쿠스틱 픽업용 프리앰프. B단 비반전(1M/1M 바이어스, 10K+1uF 다리, B10K 가변저항 피드백)으로 게인을 주고, A단이 능동 3밴드 EQ(박산달식 베이스·미드·트레블, 와이퍼가 −입력으로)를 거쳐 A10K 볼륨과 4.7K로 출력한다.
+image img_01.jpg
+BOM 1Mx2 100Kx2 18Kx1 15Kx1 10Kx5 4.7Kx1 1.8Kx1 1Kx1 470nx1 47nx1 22nx2 10nx1 3.3nx1 100uFx1 1uFx2 TL082x1 B100Kx3 A10Kx1 B10Kx1 1N400Xx1
+# 부품표에는 1N400X가 없지만 기판에 역전압 보호 자리(5-18)가 있어 넣는다.
+io IN=35 OUT=69 V9=36 GND=74
+NC 75 76 77
+# TL072/TL082, 홈이 위: 왼쪽 열 ◁2 −12 +16 ⊖25, 오른쪽 열 ⊕3 ▷13 −17 +26.
+# 앵글 팟 이름은 회로로 정했다: 44-45-46 트레블(와이퍼→3.3n→10K), 47-48-49 베이스(22n가 양 러그 사이, 와이퍼→10n→15K),
+# 50-51-52 미드(와이퍼→18K). 입력 쪽 러그(44·47·50)를 3번으로 두어 시계방향이 부스트.
+
+STAGE input input 입력
+R 10K 31 11 R1
+C 47n 15 30 C1
+R 1M 4 27 R2
+R 1M 10 28 R3
+
+STAGE gain gain 게인단 (B)
+IC TL082 1=2 2=12 3=16 4=25 5=26 6=17 7=13 8=3 U1
+R 10K 65 66 R4
+C 1uF 67 68 C2
+POT B10K GAIN 73 71 64
+C 470n 14 29 C3
+
+STAGE eq tone 3밴드 EQ (A)
+R 100K 6 19 R5
+R 100K 0 20 R6
+POT B100K TREBLE 46 45 44
+C 3.3n 43 32 C4
+R 10K 21 7 R7
+R 1K 54 53 R8
+POT B100K BASS 49 48 47
+C 22n 41 42 C5
+C 10n 38 37 C6
+R 15K 22 1 R9
+R 1.8K 23 8 R10
+R 10K 55 56 R11
+POT B100K MID 52 51 50
+C 22n 39 40 C7
+R 18K 34 33 R12
+R 10K 24 9 R13
+
+STAGE output output 출력
+C 1uF 59 60 C8
+POT A10K VOLUME 63 70 72
+R 4.7K 62 61 R14
+
+STAGE power power 전원
+D 1N400X a=18 k=5 D1
+C 100uF 57 58 C9
+
+# --- schematic placement (hand): EQ 세 줄(베이스·미드·트레블)이 입력 노드에서 out A로, 와이퍼 망은 오른쪽 −입력 버스로 ---
+AT V1 60 430
+AT VCC 60 190
+AT D1 150 160 h
+AT C9 210 190 v
+AT R1 170 400 h
+AT C1 270 400 h
+AT R2 320 340 v
+AT R3 320 460 v-
+AT U1B 420 420
+AT R4 390 500 v
+AT C2 390 560 v
+AT GAIN 420 490 r0
+AT C3 510 420 h
+AT R5 820 330 v
+AT R6 820 390 v
+AT U1A 900 420
+AT R8 610 520 h
+AT BASS 700 520 r180
+AT C5 700 480 h
+AT R10 790 520 h
+AT C6 760 580 h
+AT R9 820 580 h
+AT R11 610 680 h
+AT MID 700 680 r180
+AT C7 700 640 h-
+AT R13 790 680 h
+AT R12 820 740 h
+AT TREBLE 700 840 r180
+AT C4 760 900 h
+AT R7 820 900 h
+AT C8 1010 420 h
+AT VOLUME 1080 450 r270 m
+AT R14 1160 450 h
+AT RLOAD 1220 480 v
