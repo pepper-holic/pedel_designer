@@ -1,0 +1,150 @@
+id pp-cream-cake-overdrive
+goods 186788052
+name Cream Cake Overdrive
+motif G2D Creamtone
+type overdrive
+desc TL072 3개: 입력 비반전 x11(10K/1K) → DRIVE 비반전단(10K/(1K+DRIVE)) → 1K + 1N4148 대칭 클리퍼(Vref) → [솔로] 비반전 x2.5(10K/6.8K) → 4.7K/6.8n → SOLO 분압 → P 버퍼 → 10K/220n·1K+TONE/22n 두 갈래 반전 가산(100K∥47p) → VOLUME
+image img_01.jpg
+# Same layout family as Custard Cake (186788053): one clipper instead of two, the solo stage at x2.5, no output inverter
+# (IC3 A unused: pins 1-3 have no copper, NC 106 107 108).
+# Off-board solo switch: goods page wiring diagram (img_00; PDS 777 points to it): right footswitch 3PDT pole with P (150)
+# common, S (148) solo throw, B (149) blues throw. Fixed in solo mode (JUMP 148 150); blues mode is P to B instead.
+# The extractor joined S and B with SOLO's middle lug 8 and the 6.8n/4.7K node 17/18 at the top-left corner where the two
+# edge traces run side by side, as on Custard Cake: S runs the outer edge to lug 8, B the inner one to 17/18 (SPLIT 148 8).
+# IC2 A buffers P: - in A (91) is a lone pad next to out A (90); Custard Cake ties the same two pins on the board, so
+# JUMP 90 91 (follower). The 6.8n on the B node (17-37) returns to the 9V rail (pad 37 sits on the cyan 9V trace) - an AC
+# ground through the 100uF.
+# TL072 silk: top row V+ / out B / - in B / + in B, bottom row out A / - in A / + in A / GND (pins 8 7 6 5 / 1 2 3 4).
+# Pots: "1" marks on the right lug. DRIVE and TONE wipers tied to lug 1 (rheostats); SOLO's middle lug is S (divider from
+# the boosted signal on lug 3 to a 10K to Vref on lug 1); VOLUME lug 1 on ground, wiper to OUT.
+BOM 2.2M 1Mx2 100Kx2 47K 22Kx3 10Kx6 6.8K 4.7Kx2 1Kx6 220n 22nx2 6.8nx3 680px3 47p 100uFx2 2.2uFx4 1N400X 1N4148x2 TL072x3 B10Kx4
+io IN=129 OUT=115 V9=13 GND=2
+SPLIT 148 8
+JUMP 148 150
+JUMP 90 91
+NC 3 149 106 107 108 130 131 132 133 135 136 137 138 139 140 141 142 144 145 146 147
+
+STAGE in input 입력
+R 2.2M 127 128 R1
+R 1K 121 122 R2
+C 6.8n 125 126 C1
+R 1M 118 119 R3
+
+STAGE pre gain IC1A 입력 증폭 (x11)
+IC TL072 1=99 2=100 3=101 4=102 5=70 6=69 7=68 8=67 U1
+R 10K 66 98 R4
+C 680p 80 97 C2
+R 1K 117 116 R5
+C 2.2uF 124 143 C3
+
+STAGE drive gain IC1B DRIVE단
+C 22n 88 71 C4
+R 10K 50 51 R6
+R 10K 48 49 R7
+C 680p 35 36 C5
+R 1K 25 24 R8
+POT B10K DRIVE 6 5 4
+C 2.2uF 33 34 C6
+
+STAGE clip clipping 클리퍼 (블루스 탭)
+R 1K 103 72 R9
+D 1N4148 a=81 k=104 D1
+D 1N4148 a=105 k=82 D2
+
+STAGE solo gain IC2B 솔로 증폭 (x2.5)
+R 1K 54 55 R10
+IC TL072 1=90 2=91 3=92 4=93 5=76 6=75 7=74 8=73 U2
+R 10K 38 39 R11
+C 680p 26 27 C7
+R 6.8K 77 110 R12
+C 2.2uF 83 84 C8
+
+STAGE sel custom control SOLO / 블루스 선택 (P)
+R 4.7K 53 19 R13
+C 6.8n 1 0 C9
+POT B10K SOLO 9 8 7
+R 10K 20 57 R14
+R 4.7K 52 18 R15
+C 6.8n 17 37 C10
+R 1M 58 89 R16
+
+STAGE tone tone 두 갈래 톤 반전 가산 (IC2A 버퍼 → IC3B)
+R 10K 86 41 R17
+C 220n 28 56 C11
+R 47K 40 85 R18
+R 1K 79 42 R19
+POT B10K TONE 12 11 10
+C 22n 44 78 C12
+R 100K 43 87 R20
+IC TL072 4=109 5=62 6=61 7=60 8=59 U3
+R 100K 31 32 R21
+C 47p 21 47 C13
+R 22K 45 46 R22
+
+STAGE out output 출력 + VOLUME
+C 2.2uF 22 23 C14
+POT B10K VOLUME 16 15 14
+
+STAGE power power 전원·Vref
+D 1N400X a=94 k=63 D3
+C 100uF 64 65 C15
+R 22K 29 30 R23
+R 22K 95 96 R24
+C 100uF 120 123 C16
+
+# --- schematic placement (hand) ---
+AT VCC 60 160
+AT D3 120 190 v-
+AT C15 170 190 v
+AT R23 240 190 v
+AT R24 240 250 v
+AT C16 290 250 v
+AT V1 60 530
+AT R1 100 560 v
+AT R2 150 500 h
+AT C1 210 500 h
+AT R3 240 560 v
+AT U1A 300 520
+AT R4 300 440 h-
+AT C2 300 400 h-
+AT R5 260 610 v
+AT C3 260 680 v
+AT C4 390 520 h
+AT R6 420 580 v
+AT U1B 480 540
+AT R7 480 460 h-
+AT C5 480 420 h-
+AT R8 440 630 v
+AT DRIVE 440 700 r90
+AT C6 440 780 v
+AT R9 560 540 h
+AT D1 600 600 v
+AT D2 640 600 v-
+AT R15 620 450 v-
+AT C10 680 420 v
+AT R10 670 540 h
+AT U2B 750 560
+AT R11 750 480 h-
+AT C7 750 440 h-
+AT R12 710 640 v
+AT C8 710 710 v
+AT R13 830 560 h
+AT C9 870 620 v
+AT SOLO 930 590 r90
+AT R14 930 680 v
+AT R16 990 640 v
+AT U2A 1040 580
+AT R17 1120 540 h
+AT C11 1160 600 v
+AT R18 1220 540 h
+AT R19 1120 680 h
+AT TONE 1190 680 r0
+AT C12 1240 740 v
+AT R20 1280 680 h
+AT U3B 1350 560
+AT R21 1350 480 h-
+AT C13 1350 440 h-
+AT R22 1310 620 v
+AT C14 1430 560 h
+AT VOLUME 1500 590 r90
+AT RLOAD 1570 620 v
