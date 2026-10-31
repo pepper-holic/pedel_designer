@@ -1,0 +1,155 @@
+id pp-blues-brkr-box
+goods 186788484
+name BLUES BRKR BOX
+motif Snouse BlackBox v2 (Marshall Bluesbreaker 계열)
+type overdrive
+desc J201 부스터(27K/4.7K, 100n 입력)→2.2u→BOOST B250K·1n→10n/2.2M→U1B 비반전(GAIN C100K, 33K·27K·10n x2 다리, 240K+10n·10p 귀환)→100n/10K→U1A 반전(220K, 6.8K+1N4148 직렬쌍 역병렬 귀환, 27K Vref)→1K→TONE B25K(10n)→6.8K→PRESENCE A50K(10n)·100n→68K→J201 출력단(22K/12K+12K∥10u)→2.2u→A100K 볼륨
+image img_01.jpg
+# Ring extraction 2026-10-31: no merged nets (the 2026 [오병합] note no longer applies). J201s are SOT-23 bodies with cyan legs:
+# Q2 (top) D->10/26, G->13, S->11; Q3 (bottom) D->88 (2.2uF+), G->117 (1M, STD/CLS common 130), S->116 (4.7K).
+# U1 TL072 notch top: 72 79 84 93 = pins 1-4, 94 85 80 73 = pins 5-8.
+# DIP on-on toggles fixed to the full two-stage overdrive: STD/CLS common 130 -> 121 (100n input cap; the 1n branch 120-135-136 is
+# dropped with its part), OD/CB left common 131 -> 139 (BOOST wiper feeds the Bluesbreaker stage, not the raw input 122),
+# OD/CB right common 132 -> 142 (1N4148 series pairs in U1A feedback; 124 is an empty lug = CB), BRT/SMT common 133 -> 127
+# (empty lug = BRT, the 470p 128-146 branch is dropped). LED + 470R (0-4) is the status LED - left out.
+# Pot lug order by role (no "1" marks): GAIN lug1 = -in side (CW more gain), TONE lug1 = 10n side, VOLUME/BOOST lug1 = ground.
+BOM 2.2M 1Mx5 240K 220K 68K 47Kx2 33K 27Kx3 22K 12Kx2 10K 6.8Kx2 4.7K 1K 100Rx2 100nx4 10nx6 1n 220p 10p 100uFx2 10uF 2.2uFx2 1N400X 1N4148x4 TL072 J201x2 B250K C100K A100K A50K B25K
+io IN=98 OUT=62 V9=9 GND=111
+NC 0 1 2 3 4 122 124 127 120 135 136 128 133 145 146
+JUMP 130 121
+JUMP 131 139
+JUMP 132 142
+
+STAGE input input 입력 (100R, 220p, 100n)
+R 1M 115 97 R1
+R 100R 96 114 R2
+C 220p 86 87 C1
+C 100n 104 113 C2
+
+STAGE boost buffer J201 부스터 (BOOST)
+R 1M 117 138 R3
+Q J201 g=117 d=88 s=116 Q3
+R 27K 82 83 R4
+R 4.7K 116 137 R5
+C 2.2uF 88 89 C3
+C 1n 103 112 C4
+POT B250K BOOST 91 78 66
+
+STAGE bb1 gain U1B 비반전 (GAIN)
+C 10n 141 123 C5
+R 2.2M 140 118 R6
+R 1M 102 101 R7
+IC TL072 1=72 2=79 3=84 4=93 5=94 6=85 7=80 8=73 U1
+R 33K 23 22 R8
+C 10n 21 30 C6
+R 27K 25 24 R9
+C 10n 29 20 C7
+R 240K 31 32 R10
+C 10n 45 44 C8
+C 10p 81 95 C9
+POT C100K GAIN 54 53 52
+
+STAGE bb2 clipping U1A 반전 (1N4148 귀환)
+C 100n 43 42 C10
+R 10K 60 61 R11
+R 220K 67 68 R12
+R 27K 107 108 R13
+R 6.8K 110 109 R14
+D 1N4148 a=105 k=106 D1
+D 1N4148 a=143 k=125 D2
+D 1N4148 a=100 k=99 D3
+D 1N4148 a=126 k=144 D4
+
+STAGE tone tone TONE·PRESENCE
+R 1K 92 71 R15
+POT B25K TONE 51 50 49
+C 10n 58 57 C11
+R 6.8K 59 76 R16
+POT A50K PRESENCE 90 77 65
+C 10n 75 70 C12
+
+STAGE outbuf buffer J201 출력단
+C 100n 74 69 C13
+R 68K 39 14 R17
+R 1M 13 38 R18
+Q J201 g=13 d=10 s=11 Q2
+R 22K 35 10 R19
+R 12K 11 36 R20
+C 10uF 15 16 C14
+R 12K 12 37 R21
+
+STAGE out output VOLUME
+C 2.2uF 26 27 C15
+POT A100K VOLUME 48 47 46
+R 1M 55 56 R22
+
+STAGE pwr power 전원·Vref
+D 1N400X a=6 k=5 D5
+R 100R 8 7 R23
+C 100uF 63 64 C16
+C 100n 19 28 C17
+R 47K 17 40 R24
+R 47K 41 18 R25
+C 100uF 33 34 C18
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT R23 120 160 h
+AT D5 180 160 h
+AT C16 230 190 v
+AT C17 270 190 v
+AT R24 320 190 v
+AT R25 320 250 v
+AT C18 360 250 v
+AT R1 100 430 v
+AT R2 130 400 h
+AT C1 160 430 v
+AT C2 190 400 h
+AT R3 220 430 v
+AT Q3 250 400
+AT R4 270 310 v
+AT R5 270 460 v
+AT C3 330 370 h
+AT C4 360 400 v
+AT BOOST 400 400 r270 m
+AT U1A 760 400
+AT R12 760 470 h-
+AT R13 720 510 v-
+AT R14 760 540 h
+AT D1 850 540 h-
+AT D2 940 540 h-
+AT D3 850 580 h
+AT D4 940 580 h
+AT R15 850 400 h
+AT TONE 910 430 r270 m
+AT C11 910 490 v
+AT R16 970 430 h
+AT PRESENCE 1000 490 r90
+AT C12 1000 550 v
+AT C13 1060 430 h
+AT R17 1120 430 h
+AT Q2 1180 430
+AT R18 1150 490 v
+AT R19 1200 340 v
+AT R20 1200 490 v
+AT C14 1200 550 v
+AT R21 1240 490 v
+AT C15 1260 400 h
+AT VOLUME 1320 430 r270 m
+AT R22 1380 460 v
+AT RLOAD 1430 460 v
+AT C5 470 380 h
+AT R6 440 440 v
+AT R7 510 330 v-
+AT U1B 560 400
+AT C9 560 450 h-
+AT GAIN 560 510 r0
+AT C8 530 570 h-
+AT R10 590 570 h-
+AT R9 500 650 v
+AT R8 460 650 v
+AT C6 480 720 h
+AT C7 510 760 v
+AT C10 640 510 h
+AT R11 700 420 h
