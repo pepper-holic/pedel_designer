@@ -81,6 +81,15 @@ python -E -P scripts/extract_nets.py <board.jpg> <scratch>/<kit> 3
 **SMD 키트**: info.txt에 SMD가 있으면 `pilot_bundle`이 `--smd`로 다시 추출해, 동박이 닿는 검정 몸통의 다리마다 가상 패드(`"smd": true`,
 번호는 실제 패드 뒤)를 만든다. `Q J201 g= d= s=`에 그 번호를 쓴다. 다른 기판에서는 트랜지스터 외곽선·팟 박스를 잘못 잡아 켜지 않는다.
 
+SMD로 패킹돼도 기판에 TO-92 G/S/D 링이 있으면(Parsley Drive, Brown Sound II) 가상 패드가 팟·다이오드 몸통에 엉뚱하게 잡히니,
+`references/pcb-kits/<goods>/board0_nets.json`(가상 패드 없는 원본)을 작업 폴더에 덮어쓰고 링으로 읽는다.
+
+**직류 섬**: 가변저항이 두 캡 사이에만 매달린 톤 회로(OCTA CLASSIC)처럼 직류 경로가 없는 노드 묶음은 판독 오류가 아니다. 변환기
+(`kits/dcIslands.ts`)가 그 섬을 감싼 캡에 1GΩ 병렬 누설을 자동으로 넣으니 대응표에 없는 저항을 지어내지 않는다.
+
+**토글 러그 표기**: 실크 "P1=4"·"M2=5"는 DPDT 두 극의 같은 위치 러그를 묶었다는 뜻이다. 2·5가 공통이고 1·4는 한쪽 접점이라,
+P1=4 패드가 고립이어도 다른 넷과 잇지 않는다(추출기 힌트가 틀리기 쉽다). 고정할 위치를 정해 공통과 접점을 `JUMP`한다.
+
 **팟 라벨이 없는 기판**: 앵글 팟 큰 패드에 이름이 없으면 `fetch_photo.py <root> <goodsNo>`로 상품 사진(`photo.jpg`)을 받아 노브
 이름·순서를 읽는다. 앵글 팟은 기판의 팟 줄 순서가 케이스 노브 순서와 같다(RED CHARLES: 윗줄 BASS·MID·TREBLE, 아랫줄 VOLUME·DRIVE).
 값은 부품표의 팟 목록을 역할에 맞춰 배정하고(볼륨 A, 톤스택은 큰 값이 TREBLE) 주석에 근거를 적는다.

@@ -1,17 +1,17 @@
-# 키트 기판 진행 현황 (2026-10-31 LM386·보류 재검토·미착수 1차까지)
+# 키트 기판 진행 현황 (2026-10-31 미착수 4단계 묶음 1까지)
 
 수집: pedalparts.co.kr 키트 기판 렌더 279건(triage). A등급=60패드 이하·고립 2개 이하, B등급=그 외 시뮬 가능 계열, C등급=모델 없는 계열(딜레이·모듈레이션 등).
 
 | 상태 | 수 |
 |---|---|
-| 변환 완료 | 88 |
+| 변환 완료 | 93 |
 | 기록만 | 5 |
-| 보류 | 37 |
-| 미착수 | 90 |
+| 보류 | 38 |
+| 미착수 | 84 |
 | 중복 기판 | 19 |
 | C등급(범위 밖) | 40 |
 
-## 변환 완료 (88)
+## 변환 완료 (93)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -104,6 +104,11 @@
 | B | 186787646 | NEW Dirty Cat | fuzz | ProCo RAT (Dirty) |
 | B | 186788316 | EZK25:17 FUZZ | fuzz | 4단 클리퍼 op-amp 퍼즈 |
 | A | 186787693 | [1K] SHO | buffer-boost | Zvex Super Hard On |
+| B | 186787543 | West Breeze | eq | TL072 OD + 자이레이터 EQ |
+| B | 186787556 | Brown Sound II | distortion | AMZ Brown Sound in a Box |
+| B | 186788446 | OCB | fuzz | 클린 옥타브 블렌드 |
+| B | 186787488 | Parsley Drive | overdrive | Wampler Paisley Drive |
+| B | 186788509 | OCTA CLASSIC | fuzz | 빈티지 옥타브 퍼즈 (직류 섬 누설) |
 ## 기록만 (5)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
@@ -114,7 +119,7 @@
 | B | 186787637 | Gray Stone | distortion | CD4069 |
 | B | 186788033 | Green Soma | overdrive | 기타 |
 
-## 보류 (37)
+## 보류 (38)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
@@ -155,26 +160,21 @@
 | B | 186788577 | NEW RED CHARLES | distortion |  |
 | B | 186787546 | X-Touch | overdrive |  |
 | B | 186788551 | REAL CLEAN | buffer-boost |  |
+| B | 186788552 | ALMOST CLEAN | buffer-boost | RC/AC BST 공용 기판 |
 
-## 미착수 (90)
+## 미착수 (84)
 
 | 등급 | goodsNo | 이름 | 계열 | 비고 |
 |---|---|---|---|---|
 | B | 186786839 | NEW FAT 부스터 | buffer-boost | 66패드, 고립 9 |
 | B | 186787969 | Octavia | fuzz | 69패드, 고립 15 |
-| B | 186788446 | OCB | fuzz | 100패드, 고립 2 |
-| B | 186788552 | ALMOST CLEAN | buffer-boost | 111패드, 고립 7 |
-| B | 186787543 | West Breeze | eq | 112패드, 고립 2 |
 | B | 186788161 | SONIX 482i | unknown | 112패드, 고립 21 |
 | B | 186788570 | NEW PRINCE TONE | overdrive | 113패드, 고립 8 |
-| B | 186787488 | Parsley Drive | overdrive | 114패드, 고립 3 |
 | B | 186787634 | TONE HAMMA | overdrive | 114패드, 고립 10 |
 | B | 186788550 | TA7136 DS ONE | distortion | 114패드, 고립 8 |
-| B | 186787556 | Brown Sound II | distortion | 115패드, 고립 3 |
 | B | 186787649 | Kluster Fuzz | fuzz | 115패드, 고립 3 |
 | B | 186788011 | Heavy Fist | distortion | 115패드, 고립 9 |
 | B | 186788337 | SURGE V2 | overdrive | 115패드, 고립 13 |
-| B | 186788509 | OCTA CLASSIC | fuzz | 115패드, 고립 3 |
 | B | 186788115 | NEW 1981 LEVEL | buffer-boost | 116패드, 고립 11 |
 | B | 186788144 | KONISH NG-2 | fuzz | 117패드, 고립 16 |
 | B | 186788336 | SIR RIOT | distortion | 118패드, 고립 16 |
