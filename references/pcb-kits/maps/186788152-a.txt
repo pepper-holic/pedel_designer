@@ -1,0 +1,114 @@
+id pp-twin-bloid-a
+goods 186788152
+name TWIN BLOID CH1
+motif Zendrive 계열 덤블형 (일본 부티크 Bloid, 1채널)
+type overdrive
+desc BC550C 이미터 폴로어 입력 뒤 TL072 A단 비반전(DRIVE A1M+10K 귀환, 82p, 220n+1.8K Vref)→1K 뒤 B단(+in 10K Vref·220n 접지, ACCENT 가변저항+1K와 빨간 LED 귀환, TONE B25K가 -in과 +in 사이에서 와이퍼 100n+220R 접지)→2.2uF·1K→VOLUME B100K→220n→BC550C 이미터 폴로어 출력(Rock 고정)
+image img_01.jpg
+SHARED 186788152-b
+# Two THE BLOID circuits (CH1 top, CH2 bottom) on one board; this map is CH1. Shared and written in both maps: 1N400X, the
+# 100uF on 9V, Vref 10K/10K + 47uF. Each channel keeps its own six 10K, three 1K, two 100R (kit list 10K x14 = 6+6+2).
+# TL072 notch down: 1=65 2=57 3=43 4=30(GND) / 5=29 6=42 7=51 8=64(V+), matching the silk marks.
+# TONE: lug 89 on -in B (via 91), wiper 90 -> 100n -> 220R -> GND, lug 92 on +in B (trace runs up to pin 5); THE BLOID's map
+# has the third lug empty, this board wires it.
+# LED square pad is the anode (kit note): a=41 (-in B), k=56 (out B). DRIVE 96-97-98 with 96 tied to the wiper (rheostat 97-98,
+# clockwise raises the feedback resistance), ACCENT 93 (no copper)/94 wiper/95, VOLUME 86 at Vref. Pot names from the silk.
+# Jazz/Rock DIP (26 common, 35 ground plane, 8 empty) fixed at Rock: the 470n 7-37 is left out (kit list 470n x4 = 2 per channel).
+# CH1 status LED and its resistor (13, 25, 31, 59, 60) are not audio; 99/100 are vias on the 22uF net.
+BOM 1M 150K 100K 10Kx8 1.8K 1Kx3 220R 100Rx2 1000n 470n 220nx3 100n 100pF 82pF 100uF 47uF 22uF 2.2uF 1N400X LED-RED TL072 BC550Cx2 A1M B25Kx2 B100K
+io IN=46 OUT=27 V9=80 GND=70
+NC 7 37 8 26 35 13 25 31 59 60 99 100 91 93 200 201 202
+
+STAGE input buffer 입력 버퍼 (Q1)
+C 100p 24 23 C1
+R 1M 6 5 R1
+C 470n 45 44 C2
+R 100R 22 21 R2
+R 150K 18 19 R3
+Q BC550C b=20 c=34 e=2 Q1
+R 10K 3 4 R4
+
+STAGE stageA gain A단 (DRIVE)
+C 1000n 17 16 C3
+R 10K 48 49 R5
+IC TL072 1=65 2=57 3=43 4=30 5=29 6=42 7=51 8=64 U1
+C 82p 66 67 C4
+R 10K 68 69 R6
+POT A1M DRIVE 98 97 96
+C 220n 52 53 C5
+R 1.8K 33 36 R7
+
+STAGE stageB clipping B단 (ACCENT·TONE·LED)
+R 1K 12 11 R8
+R 10K 9 10 R9
+C 220n 15 50 C6
+POT B25K ACCENT 95 94 94
+R 1K 72 73 R10
+D LED-RED a=41 k=56 D1
+POT B25K TONE 89 90 92
+C 100n 88 87 C7
+R 220R 77 40 R11
+
+STAGE out output 볼륨·출력 버퍼 (Q2)
+C 2.2uF 71 63 C8
+R 1K 39 76 R12
+POT B100K VOLUME 86 85 84
+C 220n 75 74 C9
+R 100K 61 62 R13
+Q BC550C b=32 c=14 e=47 Q2
+R 10K 58 83 R14
+R 100R 54 55 R15
+C 22uF 38 28 C10
+R 10K 1 0 R16
+
+STAGE power power 전원·Vref (공용)
+D 1N400X a=79 k=78 D2
+C 100uF 81 82 C11
+R 10K 105 104 R17
+R 10K 102 101 R18
+C 47uF 103 108 C12
+
+# --- schematic placement: THE BLOID (186788151) hand layout, same refs ---
+AT V1 60 430
+AT VCC 60 190
+AT D2 130 160 h
+AT C11 190 190 v
+AT R17 250 190 v
+AT R18 250 250 v
+AT C12 300 250 v
+AT C1 110 430 v
+AT R1 150 430 v-
+AT C2 200 400 h-
+AT R2 260 400 h-
+AT R3 290 370 v-
+AT Q1 320 400
+AT R4 340 460 v
+AT C3 370 430 h
+AT R5 400 400 v-
+AT U1A 460 450
+AT C4 460 500 h-
+AT C5 400 500 h-
+AT R7 370 530 v
+AT R6 460 560 h
+AT DRIVE 550 560 r0
+AT R8 560 450 h
+AT R9 590 420 v
+AT C6 620 480 v
+AT U1B 690 470
+AT D1 690 530 h
+AT ACCENT 690 570 r0 m
+AT R10 750 570 h-
+AT TONE 630 620 r180
+AT C7 630 680 v-
+AT R11 630 740 v
+AT C8 780 470 h
+AT R12 840 470 h
+AT VOLUME 900 470 r180
+AT C9 930 500 h-
+AT R13 960 470 v-
+AT Q2 990 500
+AT R14 1010 560 v
+AT R15 1040 530 h-
+AT C10 1100 530 h
+AT R16 1130 560 v
+AT RLOAD 1180 560 v

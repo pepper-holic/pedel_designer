@@ -1,0 +1,117 @@
+id pp-breadcast
+goods 186788600
+name BREADCAST
+motif Hudson Electronics Broadcast
+type preamp
+desc 1M/330n→BC549C 공통 이미터(56K/56K 분압+220K 바이어스, 이미터 5.6K∥10uF→TRIM LOW 1K+68R, HIGH 모드는 100uF→TRIM HIGH 접지 추가)→직결 2N404 Ge PNP(이미터 4.7K∥330n, LOW CUT B25K+330uF)→컬렉터 100uF→5.6K+GAIN TRIM B25K 귀환을 Q1 이미터로; 컬렉터 100uF→15K/33K→1:1 TV-141P 트랜스포머→LEVEL HIGH A10K
+image img_01.jpg
+# Pots are off-board along the top edge; the product photo reads LOW CUT, GAIN TRIM, LEVEL LOW, LEVEL HIGH from the front, so
+# inside (board) left to right: 1-2-3 LEVEL HIGH (wiper -> HIGH pad), 4-5-6 LEVEL LOW (wiper on the transformer's driven side),
+# 8-9-10 GAIN TRIM (rheostat 9-10 in the Q2 collector -> Q1 emitter feedback, 8 empty), 11-12-13 LOW CUT (rheostat 12-13 from
+# the Q2 emitter to the 330uF bypass, 11 empty). Values from the kit list by role (estimate): A10K for LEVEL HIGH (after the
+# 600R transformer), A250K for LEVEL LOW, B25K for GAIN TRIM and LOW CUT. Rheostats run so clockwise raises gain / cuts more lows.
+# Trimmers have the wiper at the apex pad (55, 95), tied to one lug.
+# Toggle fixed at 9V: its common (7) to the protected 9V (0); the 24V branch - ICL7660 and the 4x 1N400X + 4x 10uF multiplier
+# (44-47/79-82, 98-101/109-112, IC 48-84) - is left out here and in the BOM line (kit list ICL7660, 1N400X x5, 10uF x5).
+# The left footswitch board (A type, wiring not published) is fixed in the HIGH position: OUT (124) takes HIGH (122), SW (123)
+# grounds TRIM HIGH (assumed: the HIGH channel adds that emitter bypass). The right board is the bypass: IN 128, OUT 129.
+# Q2 base has two joined pads (74, 75). LED resistors (85-118, 86-119) and LED pads are status only.
+# TV-141P: driven winding 38-78, the other 37-77 (centre taps 56/57 empty); 1:1 so the phase is not marked.
+BOM 1M 220K 56Kx2 33K 15K 5.6Kx4 4.7K 1Kx3 68R 10R 330nx2 1n 330pF 330uF 100uFx5 47uF 10uF 1N400X BC549C 2N404 TV-141P A250K A10K B25Kx2
+io IN=128 OUT=129 V9=33 GND=18
+JUMP 7 0
+JUMP 122 124
+JUMP 123 120
+NC 8 11 14 56 57 75 85 86 118 119 125 126 121 34
+NC 44 45 46 47 79 80 81 82 98 99 100 101 109 110 111 112 48 49 58 59 72 73 83 84
+
+STAGE input input 입력
+R 1M 92 53 R1
+C 330n 91 70 C1
+
+STAGE bias custom bias Q1 바이어스 전원 (1K/100uF, 56K/56K)
+R 1K 52 90 R2
+C 100uF 102 113 C2
+R 56K 103 104 R3
+R 56K 115 114 R4
+
+STAGE q1 gain Q1 BC549C (TRIM LOW·HIGH)
+R 220K 93 54 R5
+C 330p 71 94 C3
+Q BC549C c=69 b=76 e=88 Q1
+R 5.6K 89 51 R6
+R 5.6K 97 96 R7
+C 10uF 67 66 C4
+POT 1K TRIM_LOW 64 55 65
+R 68R 107 108 R8
+C 100uF 63 62 C5
+POT 1K TRIM_HIGH 105 95 106
+
+STAGE q2 gain Q2 2N404 (LOW CUT)
+Q 2N404 b=74 c=87 e=68 Q2
+R 4.7K 24 50 R9
+C 330n 23 43 C6
+POT B25K LOW_CUT 13 12 12
+C 330uF 27 28 C7
+R 5.6K 117 116 R10
+
+STAGE fb custom feedback GAIN TRIM (Q2 컬렉터→Q1 이미터)
+C 100uF 32 31 C8
+R 5.6K 16 17 R11
+POT B25K GAIN 10 9 9
+C 1n 25 26 C9
+
+STAGE output output 트랜스포머·레벨
+C 100uF 30 29 C10
+R 15K 42 41 R12
+R 33K 40 39 R13
+T TV-141P p1=38 p2=78 s1=37 s2=77 T1
+POT A250K LEVEL_LOW 6 5 4
+POT A10K LEVEL_HIGH 3 2 1
+
+STAGE power power 전원 (9V)
+D 1N400X a=20 k=19 D1
+C 47uF 61 60 C11
+R 10R 35 36 R14
+C 100uF 22 21 C12
+
+# --- schematic placement (hand) ---
+AT VCC 60 190
+AT D1 120 160 h
+AT C11 170 190 v
+AT R14 230 160 h
+AT C12 290 190 v
+AT R2 380 190 v
+AT C2 420 250 v
+AT R3 380 250 v
+AT R4 380 310 v
+AT V1 60 430
+AT R1 110 430 v
+AT C1 400 400 h
+AT C3 430 460 v
+AT R5 450 340 v-
+AT Q1 480 400
+AT R6 500 310 v
+AT R7 500 490 v
+AT C4 540 490 v
+AT TRIM_LOW 500 580 r270
+AT R8 500 670 v
+AT C5 590 530 h
+AT TRIM_HIGH 620 590 r90
+AT Q2 620 370 r0 m
+AT R9 640 280 v
+AT C6 690 280 v
+AT LOW_CUT 750 300 r270
+AT C7 750 210 v
+AT R10 640 460 v
+AT C8 780 470 v
+AT R11 780 560 v
+AT GAIN 780 650 r90
+AT C9 830 530 v
+AT C10 720 400 h
+AT R12 810 400 h
+AT R13 860 430 v
+AT T1 940 420
+AT LEVEL_LOW 940 320 r0 m
+AT LEVEL_HIGH 1040 400 r180
+AT RLOAD 1100 470 v

@@ -53,13 +53,13 @@ function resolveLayout(layout: Record<string, LayoutSpot>, elements: Element[]):
 }
 
 /** Chip internals (LM386 gain network, a CMOS inverter package's threshold divider) have no AT line of their own: cluster
- * them around the chip - the LM386's own spot, or an inverter package's A channel - so they don't land on the auto grid. */
+ * them around the chip - the LM386's own spot, or an inverter package's first placed channel - so they don't land on the auto grid. */
 function withChipInternals(layout: Record<string, LayoutSpot>, parts: KitPart[], elements: Element[]): Record<string, LayoutSpot> {
   const ids = new Set(elements.map((e) => e.id));
   const internalSpots = (p: KitPart): Record<string, LayoutSpot> => {
     const part = p.part ?? "";
     if (isLm386(part) && layout[p.ref]) return lm386Spots(p.ref, layout[p.ref]);
-    const anchor = layout[`${p.ref}A`] ?? layout[p.ref];
+    const anchor = [..."ABCDEF"].map((c) => layout[`${p.ref}${c}`]).find(Boolean) ?? layout[p.ref];
     if (inverterPinout(part) && anchor) return inverterSpots(p.ref, anchor);
     return {};
   };

@@ -1,0 +1,131 @@
+id pp-1981-level
+goods 186788115
+name NEW 1981 LEVEL
+motif 1981 Inventions LVL
+type buffer-boost
+desc 2N3904 부트스트랩 이미터 팔로워 입력 버퍼→220n·4.7K+C100K 가변저항→LM833 A 반전 증폭(220K∥100p, 3.3V 제너 둘 맞물림 귀환 클리퍼)→1K→A100K 레벨→LM833 B 비반전 고정 EQ(6.81K∥2.2n, 22K+47n·39K+22n 접지 다리)→10K/10K 반전 복원→10uF→475R 출력; Vref 22K/22K를 다른 칩 B가 버퍼
+image img_03.jpg
+# Upper LM833 (notch left): pins 1-4 along the bottom row 54-57, 5-8 back along the top row 38-35. Its B half (5=Vref
+# divider 22K/22K+100uF, 6=7) buffers Vref for both chips. Lower LM833 (notch down): 1=97 2=91 3=86 4=72, 5=71 6=85 7=90 8=96.
+# Zeners: 31-32 band at 32 (-in side), 45-46 band at 45 (output side) - anodes meet at 31-46, a back-to-back pair across 220K.
+# The bootstrap 10uF (12 +, 3 -) runs from the buffer's 100K/150K base-bias node to its emitter.
+# Pots have no silk names; the angle pot row is read by role: 61/62=63 is the C100K rheostat in the gain leg (62-63 tied,
+# 61 on -in), lug order set so clockwise lowers the resistance (gain up); 59/60/52 is the A100K level (52 ground, 60 wiper on
+# the 220n into the second chip, 59 from the 1K).
+# "Buff Out" pad 94 is a second, buffered dry output (emitter -> 10uF -> 100K -> 475R 48-49 -> 94); the app has one output,
+# so its 475R is left out here and in the BOM line (kit list 475R x2). The 10uF + 100K stay as the emitter load.
+# Pad 70 (100n 69-70) is a ground '+' pad with no drawn copper; 50 is a bare 9V via.
+BOM 2.2M 220K 150K 100Kx5 39K 22Kx3 10Kx4 6.81K 4.7K 1K 475R 10R 220nx3 100nx3 47n 22n 2.2n 100pFx2 100uFx2 10uFx3 1N400X 3V3x2 LM833x2 2N3904 C100K A100K
+io IN=40 OUT=111 V9=0 GND=115,70
+NC 50 48 49 94
+
+STAGE input buffer 입력 버퍼 (2N3904 부트스트랩)
+R 2.2M 21 22 R1
+R 10K 15 16 R2
+C 220n 23 24 C1
+Q 2N3904 c=7 b=8 e=9 Q1
+R 100K 10 11 R3
+R 100K 18 19 R4
+R 150K 29 30 R5
+C 10uF 12 3 C2
+R 10K 77 101 R6
+C 10uF 28 17 C3
+R 100K 42 43 R7
+
+STAGE vref custom bias Vref (22K/22K, 칩 B 버퍼)
+R 22K 25 26 R8
+R 22K 39 58 R9
+C 100uF 47 41 C4
+
+STAGE gain gain 증폭·제너 클리핑 (LM833 A)
+C 220n 78 93 C5
+R 4.7K 76 100 R10
+POT C100K GAIN 63 62 61
+IC LM833 1=54 2=55 3=56 4=57 5=38 6=37 7=36 8=35 U1
+R 220K 34 53 R11
+C 100p 33 51 C6
+D 3V3 a=31 k=32 D1
+D 3V3 a=46 k=45 D2
+
+STAGE level custom control LEVEL (1K·A100K)
+R 1K 67 68 R12
+POT A100K LEVEL 52 60 59
+
+STAGE eq custom filter 고정 EQ (LM833 B 비반전)
+C 220n 79 80 C7
+R 100K 64 65 R13
+IC LM833 1=97 2=91 3=86 4=72 5=71 6=85 7=90 8=96 U2
+R 6.81K 84 108 R14
+C 2.2n 83 95 C8
+R 22K 81 106 R15
+C 47n 105 89 C9
+R 39K 82 107 R16
+C 22n 104 88 C10
+
+STAGE output output 반전 복원·출력
+R 10K 109 110 R17
+R 10K 66 87 R18
+C 100p 73 92 C11
+C 10uF 102 103 C12
+R 100K 98 74 R19
+R 475R 75 99 R20
+
+STAGE power power 전원
+D 1N400X a=1 k=2 D3
+R 10R 5 6 R21
+C 100n 14 27 C13
+C 100uF 13 4 C14
+C 100n 20 44 C15
+C 100n 69 70 C16
+
+# --- schematic placement (hand) ---
+AT VCC 60 190
+AT D3 120 160 h
+AT C13 180 190 v
+AT R21 240 160 h
+AT C14 300 190 v
+AT C15 340 190 v
+AT C16 380 190 v
+AT R8 620 190 v
+AT R9 620 250 v
+AT C4 660 250 v
+AT U1B 740 240
+AT V1 60 430
+AT R1 100 430 v
+AT R2 160 400 h
+AT C1 240 400 h
+AT Q1 330 400
+AT R4 300 250 v
+AT R5 260 310 v
+AT R3 300 340 v-
+AT C2 400 340 v
+AT R6 350 490 v
+AT C3 420 490 v
+AT R7 420 580 v
+AT C5 480 430 h
+AT R10 570 430 h-
+AT GAIN 660 430 r0
+AT U1A 780 410
+AT R11 780 500 h
+AT C6 780 560 h
+AT D1 750 620 h-
+AT D2 810 620 h
+AT R12 870 410 h-
+AT LEVEL 960 410 r180
+AT C7 960 500 v
+AT R13 1010 560 v
+AT U2B 1080 550
+AT R14 1080 620 h
+AT C8 1080 680 h
+AT R15 1020 720 v
+AT C9 1020 810 v
+AT R16 960 720 v
+AT C10 960 810 v
+AT R17 1170 550 h
+AT U2A 1260 530
+AT R18 1260 620 h
+AT C11 1260 680 h
+AT C12 1350 530 h
+AT R19 1390 560 v
+AT R20 1450 530 h
+AT RLOAD 1520 560 v

@@ -237,8 +237,13 @@ type Transformer = { primaryInductance: number; secondaryInductance: number; cou
  * Audio transformers: full-winding inductances in henries (primary as the maker marks it) and the coupling coefficient.
  * Xicon 42TM022 is 1.5K CT : 600R CT, three pins a side. Electrokit's listing gives 570mH and 195mH, a 1.71 turns ratio
  * (sqrt(570/195)) that matches its quoted 1.725. Leakage is not published; k = 0.99 is usual for a small EI-core part.
+ * TV-141P (BREADCAST kit) is a small 600R:600R 1:1 line transformer with no published data: 1H per winding is an estimate
+ * typical of that size, with the same k.
  */
-const TRANSFORMERS: [string, Transformer][] = [["42TM022", { primaryInductance: 0.57, secondaryInductance: 0.195, coupling: 0.99 }]];
+const TRANSFORMERS: [string, Transformer][] = [
+  ["42TM022", { primaryInductance: 0.57, secondaryInductance: 0.195, coupling: 0.99 }],
+  ["TV-141P", { primaryInductance: 1, secondaryInductance: 1, coupling: 0.99 }],
+];
 
 export const transformerModel = (part: string): Transformer | undefined => lookup(TRANSFORMERS, part);
 
