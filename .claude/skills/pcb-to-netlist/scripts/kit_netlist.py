@@ -19,6 +19,8 @@ The map names each part and the pads (ids from the extract_nets overlay) its lea
     Q 2N5088 b=51 c=42 e=59 [Q1]        # BJT / JFET (g= d= s=)
     POT B100K BASS 27 26 25             # pot: value+taper, label, lug1, wiper, lug3
     IC TL072 1=40 2=41 3=42 4=0 5=.. 8=..   # 8-pin op-amp package, pin=pad
+    T 42TM022 p1=29 pct=30 p2=31 s1=58 s2=60 [T1]   # audio transformer: primary/secondary ends as the maker marks
+                                        # them, optional centre tap pct= or sct= (one side only); model in partModels.ts
     STAGE pre gain 프리앰프 (Q1·Q2)       # following parts belong to this functional stage
     JUMP 12 30                          # wire link on the board (merges the two nets)
     NC 61                               # pad deliberately unused (silences the check)
@@ -169,6 +171,13 @@ def main() -> None:
         elif head == "POT":
             value, label, l1, w, l3 = rest
             raw_parts.append({"ref": label, "kind": "POT", "value": value, "pads": [pad(l1), pad(w), pad(l3)]})
+        elif head == "T":
+            part, *pins = rest
+            kv = dict(t.split("=") for t in pins if "=" in t)
+            ref = next((t for t in pins if "=" not in t), None)
+            if not {"p1", "p2", "s1", "s2"} <= kv.keys() or not kv.keys() <= {"p1", "p2", "s1", "s2", "pct", "sct"} or {"pct", "sct"} <= kv.keys():
+                sys.exit(f"{map_path.name}:{line_no}: T needs p1= p2= s1= s2= and at most one of pct= sct=")
+            raw_parts.append({"ref": auto_ref("T", ref), "kind": "T", "part": part, "pads": {k: pad(v) for k, v in kv.items()}})
         elif head == "IC":
             part, *pins = rest
             kv = dict(t.split("=") for t in pins if "=" in t)
@@ -208,7 +217,7 @@ def main() -> None:
                 pad(t)
         else:
             sys.exit(f"{map_path.name}:{line_no}: unknown line '{raw}'")
-        if stages and raw_parts and head in ("R", "C", "L", "D", "Q", "POT", "IC") and raw_parts[-1]["ref"] not in stages[-1]["parts"]:
+        if stages and raw_parts and head in ("R", "C", "L", "D", "Q", "POT", "IC", "T") and raw_parts[-1]["ref"] not in stages[-1]["parts"]:
             stages[-1]["parts"].append(raw_parts[-1]["ref"])
 
     for k in ("IN", "OUT", "V9", "GND"):

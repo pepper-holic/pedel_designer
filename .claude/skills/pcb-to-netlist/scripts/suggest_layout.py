@@ -257,15 +257,15 @@ def main() -> None:
                 pos[free_node] = (px, py + 30)
             placed.add(ref)
 
-    # transistors / ICs not on the spine: base or input next to whatever it hangs on
+    # transistors / ICs / transformers not on the spine: base or input next to whatever it hangs on
     for part in parts:
-        if part["ref"] in placed or part["kind"] not in ("Q", "IC"):
+        if part["ref"] in placed or part["kind"] not in ("Q", "IC", "T"):
             continue
         n = part["nodes"]
         anchor = next((v for v in n.values() if v in pos and v not in ("0", "vcc")), None)
         ax, ay = pos.get(anchor, (x, SPINE_Y + 200))
         px, py = board.nudge(ax + 60, ay, part["kind"], False)
-        put(part["ref"] if part["kind"] == "Q" else f"{part['ref']}A", px, py, part["kind"], False)
+        put(f"{part['ref']}A" if part["kind"] == "IC" else part["ref"], px, py, part["kind"], False)
         placed.add(part["ref"])
 
     leftover_x = 140

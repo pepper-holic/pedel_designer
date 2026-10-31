@@ -8,18 +8,19 @@
  */
 import type { LayoutSpot } from "../types";
 
-export type KitPartKind = "R" | "C" | "L" | "D" | "Q" | "POT" | "IC";
+export type KitPartKind = "R" | "C" | "L" | "D" | "Q" | "POT" | "IC" | "T";
 
 export interface KitPart {
   ref: string;
   kind: KitPartKind;
   /** Printed value: "4.7K", "470R", "220n", "22uF", "500mH", pots with taper "B100K". */
   value?: string;
-  /** Part number for semiconductors: "2N5088", "1N4148", "TL072". */
+  /** Part number for semiconductors and transformers: "2N5088", "1N4148", "TL072", "42TM022". */
   part?: string;
   /**
    * Two-lead parts: [a, b]; diodes {a, k}; transistors {b, c, e} or JFETs {g, d, s};
-   * pots [lug1, wiper, lug3]; ICs {"1": net, "2": net, ...} by package pin.
+   * pots [lug1, wiper, lug3]; ICs {"1": net, "2": net, ...} by package pin; transformers {p1, p2, s1, s2} plus an
+   * optional centre tap pct or sct.
    */
   nodes: string[] | Record<string, string>;
 }

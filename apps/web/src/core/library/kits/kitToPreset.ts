@@ -3,7 +3,8 @@ import type { KnobSpec, LayoutSpot, PedalPreset, PresetCategory } from "../types
 import type { KitCircuit, KitMeta, KitPart, KitRail } from "./types";
 import { stageBlocks } from "./stageBlocks";
 import { parsePot, parseValue } from "./values";
-import { bjtModel, diodeModel, jfetModel, opAmpModel, OPAMP_PINOUT } from "./partModels";
+import { bjtModel, diodeModel, jfetModel, opAmpModel, transformerModel } from "./partModels";
+import { transformerElements } from "./transformer";
 import { SILICON_DIODE_1N4148 } from "../deviceModels";
 import { isLm386, lm386Elements, lm386Spots } from "./lm386";
 import { withIslandLeakage } from "./dcIslands";
@@ -33,6 +34,7 @@ const isChargePump = (part: string): boolean => CHARGE_PUMPS.some((p) => part.to
  * half goes one row under the A half. Refs that match no element are dropped. */
 function resolveLayout(layout: Record<string, LayoutSpot>, elements: Element[]): Record<string, LayoutSpot> {
   const ids = new Set(elements.map((e) => e.id));
+  const coupled = new Set(elements.flatMap((e) => (e.type === "coupledInductors" ? [e.id] : [])));
   const out: Record<string, LayoutSpot> = {};
   for (const [ref, spot] of Object.entries(layout)) {
     const id = ref === "VCC" ? "Vcc" : ref;
@@ -40,6 +42,8 @@ function resolveLayout(layout: Record<string, LayoutSpot>, elements: Element[]):
     // A three-lug pot is two elements (<ref>_1, <ref>_3) that the editor merges back into one part named <ref>.
     else if (ids.has(`${id}_1`) && ids.has(`${id}_3`)) out[id] = spot;
     else if (/A$/.test(id) && ids.has(id.slice(0, -1))) out[id.slice(0, -1)] = spot;
+    // A centre-tapped transformer is two coupled pairs (<ref>A, <ref>B); the B half follows the A half below.
+    else if (coupled.has(`${id}A`)) out[`${id}A`] = spot;
   }
   for (const id of ids) {
     if (/B$/.test(id) && !out[id] && out[`${id.slice(0, -1)}A`]) out[id] = { ...out[`${id.slice(0, -1)}A`], y: out[`${id.slice(0, -1)}A`].y + 120 };
@@ -130,7 +134,7 @@ function partElements(part: KitPart, rails: Rails, knobs: KnobSpec[]): Element[]
       const found = opAmpModel(part.part ?? "");
       if (!found) throw new UnsupportedKitError(`${part.ref}: no model for IC ${part.part}`);
       const p = pins(part);
-      const pinout = OPAMP_PINOUT[found.channels];
+      const { pinout } = found;
       const top = railVoltage(p[pinout.vPlus] ?? "", rails) ?? Math.max(rails.supply, 0);
       const bottom = railVoltage(p[pinout.vMinus] ?? "", rails) ?? Math.min(rails.supply, 0);
       const { railPositive: _rp, railNegative: _rn, ...dynamics } = found.model;
@@ -139,6 +143,11 @@ function partElements(part: KitPart, rails: Rails, knobs: KnobSpec[]): Element[]
           ? [{ id: found.channels > 1 ? `${part.ref}${"ABCD"[i]}` : part.ref, type: "opamp", nodes: [p[ch.inPlus], p[ch.inMinus], p[ch.out]], openLoopGain: 1e5, ...dynamics, railPositive: top - RAIL_HEADROOM, railNegative: bottom + RAIL_HEADROOM }]
           : [],
       );
+    }
+    case "T": {
+      const model = transformerModel(part.part ?? "");
+      if (!model) throw new UnsupportedKitError(`${part.ref}: no transformer model for ${part.part}`);
+      return transformerElements(part.ref, model, pins(part));
     }
   }
 }

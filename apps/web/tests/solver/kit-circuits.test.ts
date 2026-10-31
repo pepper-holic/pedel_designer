@@ -10,6 +10,8 @@ import { loadPedalPreset } from "../../src/editor/templateLoading";
 /** A GBW-limited op-amp driving a large capacitor straight off its output (Brown Charlie's Vref buffer into
  * 100uF) takes a few seconds of transient on its own, more under a full parallel run. */
 const SIGNAL_TIMEOUT_MS = 20_000;
+/** The realtime engine's warm-up from rest (realtimeEngine.ts WARMUP_SECONDS = 0.3) at 48kHz. */
+const WARMUP_SAMPLES = 14_400;
 
 describe("kit circuit values", () => {
   it("reads the notations printed on kit boards", () => {
@@ -68,11 +70,18 @@ describe("kit circuits", () => {
     });
 
     it("passes a guitar-level signal to the output without blowing up", () => {
-      const samples = new Float64Array(960).map((_, i) => 0.1 * Math.sin((2 * Math.PI * 440 * i) / 48000));
-      const r = runTransient(preset.build(preset.defaultParams), { inputSourceId: preset.inputSourceId, inputSamples: samples, sampleRate: 48000, tapNodes: [preset.outputNode] });
-      const out = r.traces.get(preset.outputNode)!;
+      // A transient starts from rest. Most boards pass signal within 20ms; one whose bias charges slowly (DS ONE: 47uF
+      // Vref behind 5K, cut-off buffers until it rises) gets the 0.3s warm-up the realtime engine gives every circuit.
+      const run = (warmup: number) => {
+        const samples = new Float64Array(warmup + 960).map((_, i) => 0.1 * Math.sin((2 * Math.PI * 440 * i) / 48000));
+        const r = runTransient(preset.build(preset.defaultParams), { inputSourceId: preset.inputSourceId, inputSamples: samples, sampleRate: 48000, tapNodes: [preset.outputNode] });
+        return r.traces.get(preset.outputNode)!.subarray(warmup);
+      };
+      const peak = (out: Float64Array) => Math.max(...out.subarray(480).map(Math.abs));
+      let out = run(0);
+      if (peak(out) <= 1e-4) out = run(WARMUP_SAMPLES);
       expect(out.every(Number.isFinite)).toBe(true);
-      expect(Math.max(...out.subarray(480).map(Math.abs))).toBeGreaterThan(1e-4);
+      expect(peak(out)).toBeGreaterThan(1e-4);
     }, SIGNAL_TIMEOUT_MS);
 
     it("keeps every hand-placed part where its layout puts it", () => {

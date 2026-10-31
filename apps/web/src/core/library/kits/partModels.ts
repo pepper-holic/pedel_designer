@@ -133,8 +133,16 @@ const DIODES: [string, Diode][] = [
 ];
 
 type OpAmp = typeof TL072_APPROX;
-/** [prefix, model, channels in the package: 1 or 2 for 8-pin, 4 for 14-pin quads] */
-const OPAMPS: [string, OpAmp, 1 | 2 | 4][] = [
+type OpAmpPinout = { channels: readonly { out: string; inMinus: string; inPlus: string }[]; vPlus: string; vMinus: string };
+
+/** Toshiba TA7136AP, the early Boss DS-1's preamp: one op-amp in a 7-pin SIP, pin 1 at the ringed end. Toshiba lists the
+ * supply between pins 7 and 4; the DS ONE board puts the signal (biased from Vref) on pin 2, the gain divider on pin 3 and
+ * the clipper feed on pin 6, so + and - in sit the other way round from an 8-pin single. Pin 1 takes the compensation cap
+ * to the output and pin 5 a bias resistor to V+ - neither is simulated. */
+const TA7136_PINOUT: OpAmpPinout = { channels: [{ out: "6", inMinus: "3", inPlus: "2" }], vPlus: "7", vMinus: "4" };
+
+/** [prefix, model, channels in the package: 1 or 2 for 8-pin, 4 for 14-pin quads, pinout when not the standard one] */
+const OPAMPS: [string, OpAmp, 1 | 2 | 4, OpAmpPinout?][] = [
   ["TL074", TL072_APPROX, 4],
   ["TL084", TL072_APPROX, 4],
   ["TL064", TL072_APPROX, 4],
@@ -178,6 +186,8 @@ const OPAMPS: [string, OpAmp, 1 | 2 | 4][] = [
   ["CA3130", CA3130_APPROX, 1],
   ["CA3240", CA3130_APPROX, 2],
   ["OP07", OP07_APPROX, 1],
+  // An externally compensated bipolar preamp (150p on pin 1 in the DS-1): about as slow as a 741.
+  ["TA7136", LM741_APPROX, 1, TA7136_PINOUT],
 ];
 
 const lookup = <T>(table: [string, T][], part: string): T | undefined => {
@@ -189,11 +199,21 @@ export const bjtModel = (part: string): Bjt | undefined => lookup(BJTS, part);
 export const jfetModel = (part: string): Jfet | undefined => lookup(JFETS, part);
 export const diodeModel = (part: string): Diode | undefined => lookup(DIODES, part);
 
-export function opAmpModel(part: string): { model: OpAmp; channels: 1 | 2 | 4 } | undefined {
+export function opAmpModel(part: string): { model: OpAmp; channels: 1 | 2 | 4; pinout: OpAmpPinout } | undefined {
   const key = part.toUpperCase().replace(/\s+/g, "");
   const hit = OPAMPS.find(([prefix]) => key.startsWith(prefix));
-  return hit ? { model: hit[1], channels: hit[2] } : undefined;
+  return hit ? { model: hit[1], channels: hit[2], pinout: hit[3] ?? OPAMP_PINOUT[hit[2]] } : undefined;
 }
+
+type Transformer = { primaryInductance: number; secondaryInductance: number; coupling: number };
+/**
+ * Audio transformers: full-winding inductances in henries (primary as the maker marks it) and the coupling coefficient.
+ * Xicon 42TM022 is 1.5K CT : 600R CT, three pins a side. Electrokit's listing gives 570mH and 195mH, a 1.71 turns ratio
+ * (sqrt(570/195)) that matches its quoted 1.725. Leakage is not published; k = 0.99 is usual for a small EI-core part.
+ */
+const TRANSFORMERS: [string, Transformer][] = [["42TM022", { primaryInductance: 0.57, secondaryInductance: 0.195, coupling: 0.99 }]];
+
+export const transformerModel = (part: string): Transformer | undefined => lookup(TRANSFORMERS, part);
 
 /** Standard op-amp pinouts (8-pin single/dual, 14-pin quad): which package pin is which input/output of each channel. */
 export const OPAMP_PINOUT = {

@@ -56,6 +56,11 @@ function partitionOf(netlist: Netlist): Partition {
 /** Iterations of plain Newton before steps are damped, and the fraction of each step then taken. */
 const DAMPING_AFTER = 20;
 const DAMPING = 0.5;
+/** Iteration budget for a transient step, and for a DC operating point (dt = 0). A DC solve runs once and starts cold,
+ * so it gets more room: three junctions in one direct-coupled loop (Octavia's Q1-Q2-Q3 with collector-to-emitter
+ * feedback) need ~90 damped iterations. Circuits that converge sooner return as soon as they do. */
+const TRANSIENT_MAX_ITERATIONS = 50;
+const DC_MAX_ITERATIONS = 200;
 
 export class NewtonWorkspace {
   readonly size: number;
@@ -105,7 +110,7 @@ export function solveNewton(
   dt: number,
   options: NewtonOptions = {},
 ): NewtonResult {
-  const maxIterations = options.maxIterations ?? 50;
+  const maxIterations = options.maxIterations ?? (dt > 0 ? TRANSIENT_MAX_ITERATIONS : DC_MAX_ITERATIONS);
   const tolerance = options.tolerance ?? DEFAULT_TOLERANCE;
 
   const ws = options.workspace && options.workspace.size === topology.size ? options.workspace : new NewtonWorkspace(topology.size);
