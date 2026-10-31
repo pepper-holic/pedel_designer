@@ -1,6 +1,58 @@
-# SEC RET PRE (186788334): Chase Tone Secret Preamp (Echoplex EP-3 preamp). A single SMD 2N5457
-# JFET stage run from an ICL7660 doubler (4x 1N400X, 100uF x2, 10uF x2, 22V zener), 50K bias
-# trimmer, A500K volume, on-off-on toggle. The app has no charge-pump model; recorded only.
-# Board: 1M x3, 240K, 110K x3, 3.6K, 100n, 22n x2, 10n, 22pF.
-# Update 2026-10-30: the charge-pump supply convention now exists (IC ICL7660 pin 5 -> -9V rail, RAIL <pad> <V>);
-# this board stays recorded only because of its hidden traces / SMD pads, see docs/kit-deferred.md.
+id pp-sec-ret-pre
+goods 186788334
+name SEC RET PRE
+motif Chase Tone Secret Preamp (Echoplex EP-3 preamp)
+type preamp
+desc 110K/22p 입력 → 22n·1M 게이트 → 2N5457 공통 소스(50K 트리머 드레인 부하, 22V 레일, 3.6K 소스 + EQ 토글 10n/22n 바이패스) → 100n → 240K·110K 출력망 + A500K 볼륨
+image img_01.jpg
+# SEC RET PRE (186788334): Chase Tone Secret Preamp (Echoplex EP-3 preamp). One SMD 2N5457 common-source stage on a
+# 22V rail from an ICL7660 pump. No seller resource for the toggle or volume wiring (pedalparts PDS board searched,
+# 2026-10-31): both are decided by circuit logic below.
+# JFET: the SMD body has no ring pads; its legs are the cyan traces under the S/G/D silk, so the Q line names a pad of each
+# leg's net: S = 3.6K/10n/22n node (pad 2), G = 22n/1M node (pad 25), D = 100n/50K trimmer node (pad 17).
+# Supply: 9V ring 7 -> 1N400X 14-34 -> n14 (100uF 54, ICL7660 pins 1 and 8). Pin 2 (50) pumps the 10uF 55-64 and 57-66
+# through four 1N400X (43-44, 37-38, 45-46, 39-40, 10uF 56-65 to ground) - a Dickson tripler clamped by the 22V zener
+# (59-60) and the 100uF 58. Pins 3 and 5 are on ground (no inverter rail). The pump is not simulated: RAIL 58 22, the
+# pump diodes/caps and the zener are left out here and on the BOM line (parts list: 1N400X 5, 10uF 3, 22V zener 1).
+# The page says the drain sits near 11V with the trimmer at noon.
+# EQ toggle (on-off-on, rings 0/8/20): the middle lug 8 is tied to the ground pad 9 (light-purple '+' pad), lug 0 takes
+# the 10n and lug 20 the 22n source caps, each with a 1M to ground (3-4, 9-10) against pops. Fixed with the source bypass
+# on: JUMP 0 8 = 10n across the 3.6K (the brightest of the three modes; centre = no bypass, 20 = 22n). The toggle shorts
+# the 1M 3-4 in this position, so it is left out (BOM 1Mx2 here, 1Mx3 on the parts list); lug 20 is the open position.
+# Volume A500K (angle pot 47/48/49): the middle lug 48 has no copper, so it is the wiper wired off the board. Lug 49 is
+# the 100n/240K output node, lug 47 runs to a 110K into OUT, and a second 110K joins 49 to OUT. The only reading that
+# makes a volume is wiper -> ground: CW (wiper toward 47) grounds the 47 side and leaves 49's 110K to OUT (about -6dB),
+# CCW shorts the output node (silence). Lug 1 = 49 so that clockwise is louder.
+# Silk reads 220pF for the input shunt cap; the parts list has 22pF (and no 220p), so 22pF is used.
+BOM 1Mx2 240K 110Kx3 3.6K 100n 22nx2 10n 22pF 100uFx2 1N400X ICL7660 2N5457 A500K B50K
+io IN=29 OUT=13 V9=7 GND=3,9,22,63,67
+RAIL 58 22
+JUMP 0 8
+NC 37 38 39 40 43 44 45 46 50 55 56 57 64 65 66 59 60 48 51 53 61 68 69 70 71 4 20
+
+STAGE in input 입력
+R 110K 30 31 R1
+C 22pF 22 23 C1
+C 22n 24 25 C2
+R 1M 33 32 R2
+
+STAGE jfet gain 2N5457 공통 소스 (EQ 토글 소스 바이패스)
+Q 2N5457 g=25 d=17 s=2 Q1
+POT B50K TRIM 26 21 27
+R 3.6K 11 12 R3
+C 10n 2 1 C3
+C 22n 16 15 C4
+R 1M 10 9 R5
+
+STAGE out output 출력 + VOLUME
+C 100n 17 28 C5
+R 240K 5 6 R6
+R 110K 36 19 R7
+POT A500K VOLUME 49 GND 47
+R 110K 35 18 R8
+
+STAGE power power 전원 (ICL7660 22V)
+D 1N400X a=14 k=34 D1
+C 100uF 54 63 C6
+IC ICL7660 1=41 3=52 8=42 U1
+C 100uF 58 67 C7

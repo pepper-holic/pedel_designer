@@ -1,0 +1,617 @@
+{
+ "id": "pp-gto-d",
+ "goodsNo": "186787678",
+ "kitName": "GTO-D",
+ "motif": "MXR GT-OD",
+ "type": "overdrive",
+ "description": "MPSA18 이미터 폴로어(2.2M/1.8M 바이어스) 뒤 18n로 비반전 B단: 귀환은 33K+GAIN B1M 가변저항, 120p, 1N4148 1:2 비대칭, −입력 다리 4.7K+47n. 10K·47n를 거쳐 A단이 TONE B20K(와이퍼 47n+470R 접지)를 −/+ 사이에 두고 10K∥10n 귀환, GTOD 토글(닫힘 고정)이 −입력 10K를 Vref에 붙여 GT-OD 모드. 3.3uF·4.7K·OUTPUT.",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "2.2M",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "1.8M",
+   "nodes": [
+    "n2",
+    "n3"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "vcc",
+    "n3"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "4.7uF",
+   "nodes": [
+    "n3",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "MPSA18",
+   "nodes": {
+    "b": "n2",
+    "c": "vcc",
+    "e": "n4"
+   }
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "22K",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "18n",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n5",
+    "n6"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "TL072",
+   "nodes": {
+    "1": "n7",
+    "2": "n8",
+    "3": "n9",
+    "4": "0",
+    "5": "n5",
+    "6": "n10",
+    "7": "n11",
+    "8": "vcc"
+   }
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "n12",
+    "n11"
+   ]
+  },
+  {
+   "ref": "GAIN",
+   "kind": "POT",
+   "value": "B1M",
+   "nodes": [
+    "n10",
+    "n12",
+    "n12"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "120pF",
+   "nodes": [
+    "n10",
+    "n11"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n10",
+    "k": "n11"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n11",
+    "k": "n13"
+   }
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N4148",
+   "nodes": {
+    "a": "n13",
+    "k": "n10"
+   }
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n10",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n14",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n11",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n9",
+    "n6"
+   ]
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B20K",
+   "nodes": [
+    "n9",
+    "n15",
+    "n8"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "47n",
+   "nodes": [
+    "n15",
+    "n16"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "470Ω",
+   "nodes": [
+    "n16",
+    "0"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n8",
+    "n7"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n8",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "n8",
+    "n6"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "3.3uF",
+   "nodes": [
+    "n7",
+    "n17"
+   ]
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "4.7K",
+   "nodes": [
+    "n17",
+    "n18"
+   ]
+  },
+  {
+   "ref": "OUTPUT",
+   "kind": "POT",
+   "value": "B10K",
+   "nodes": [
+    "0",
+    "out",
+    "n18"
+   ]
+  },
+  {
+   "ref": "D4",
+   "kind": "D",
+   "part": "1N4007",
+   "nodes": {
+    "a": "0",
+    "k": "vcc"
+   }
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "vcc",
+    "0"
+   ]
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "vcc",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "33K",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "10uF",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "input",
+   "category": "buffer",
+   "label": "입력 버퍼",
+   "parts": [
+    "R1",
+    "R2",
+    "C1",
+    "R3",
+    "R4",
+    "R5",
+    "C2",
+    "Q1",
+    "R6"
+   ]
+  },
+  {
+   "id": "drive",
+   "category": "gain",
+   "label": "B단 (GAIN, 클리핑)",
+   "parts": [
+    "C3",
+    "R7",
+    "U1",
+    "R8",
+    "GAIN",
+    "C4",
+    "D1",
+    "D2",
+    "D3",
+    "R9",
+    "C5"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "A단 (TONE)",
+   "parts": [
+    "R10",
+    "C6",
+    "TONE",
+    "C7",
+    "R11",
+    "R12",
+    "C8",
+    "R13"
+   ]
+  },
+  {
+   "id": "output",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "C9",
+    "R14",
+    "OUTPUT"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원",
+   "parts": [
+    "D4",
+    "C10",
+    "R15",
+    "R16",
+    "C11"
+   ]
+  }
+ ],
+ "layout": {
+  "V1": {
+   "x": 60,
+   "y": 430
+  },
+  "VCC": {
+   "x": 60,
+   "y": 190
+  },
+  "D4": {
+   "x": 150,
+   "y": 190,
+   "rotation": 270
+  },
+  "C10": {
+   "x": 210,
+   "y": 190,
+   "rotation": 90
+  },
+  "R15": {
+   "x": 270,
+   "y": 190,
+   "rotation": 90
+  },
+  "R16": {
+   "x": 270,
+   "y": 250,
+   "rotation": 90
+  },
+  "C11": {
+   "x": 330,
+   "y": 250,
+   "rotation": 90
+  },
+  "R5": {
+   "x": 400,
+   "y": 190,
+   "rotation": 90
+  },
+  "C2": {
+   "x": 460,
+   "y": 250,
+   "rotation": 90
+  },
+  "R4": {
+   "x": 400,
+   "y": 290,
+   "rotation": 90
+  },
+  "R1": {
+   "x": 110,
+   "y": 470,
+   "rotation": 90
+  },
+  "R2": {
+   "x": 170,
+   "y": 400,
+   "rotation": 0
+  },
+  "C1": {
+   "x": 260,
+   "y": 400,
+   "rotation": 0
+  },
+  "R3": {
+   "x": 350,
+   "y": 470,
+   "rotation": 90
+  },
+  "Q1": {
+   "x": 420,
+   "y": 400
+  },
+  "R6": {
+   "x": 420,
+   "y": 490,
+   "rotation": 90
+  },
+  "C3": {
+   "x": 490,
+   "y": 430,
+   "rotation": 0
+  },
+  "R7": {
+   "x": 530,
+   "y": 490,
+   "rotation": 90
+  },
+  "U1B": {
+   "x": 620,
+   "y": 450
+  },
+  "R9": {
+   "x": 550,
+   "y": 560,
+   "rotation": 90
+  },
+  "C5": {
+   "x": 550,
+   "y": 620,
+   "rotation": 90
+  },
+  "GAIN": {
+   "x": 630,
+   "y": 540,
+   "rotation": 0
+  },
+  "R8": {
+   "x": 710,
+   "y": 540,
+   "rotation": 0
+  },
+  "C4": {
+   "x": 650,
+   "y": 600,
+   "rotation": 0
+  },
+  "D1": {
+   "x": 650,
+   "y": 640,
+   "rotation": 0
+  },
+  "D3": {
+   "x": 620,
+   "y": 690,
+   "rotation": 180
+  },
+  "D2": {
+   "x": 680,
+   "y": 690,
+   "rotation": 180
+  },
+  "R10": {
+   "x": 720,
+   "y": 450,
+   "rotation": 0
+  },
+  "C6": {
+   "x": 760,
+   "y": 510,
+   "rotation": 90
+  },
+  "U1A": {
+   "x": 860,
+   "y": 470
+  },
+  "R12": {
+   "x": 860,
+   "y": 400,
+   "rotation": 180
+  },
+  "C8": {
+   "x": 860,
+   "y": 360,
+   "rotation": 180
+  },
+  "TONE": {
+   "x": 800,
+   "y": 560,
+   "rotation": 0,
+   "mirror": true
+  },
+  "C7": {
+   "x": 800,
+   "y": 630,
+   "rotation": 90
+  },
+  "R11": {
+   "x": 800,
+   "y": 690,
+   "rotation": 90
+  },
+  "R13": {
+   "x": 900,
+   "y": 560,
+   "rotation": 90
+  },
+  "C9": {
+   "x": 950,
+   "y": 470,
+   "rotation": 0
+  },
+  "R14": {
+   "x": 1030,
+   "y": 470,
+   "rotation": 0
+  },
+  "OUTPUT": {
+   "x": 1090,
+   "y": 500,
+   "rotation": 270,
+   "mirror": true
+  },
+  "RLOAD": {
+   "x": 1160,
+   "y": 530,
+   "rotation": 90
+  }
+ }
+}

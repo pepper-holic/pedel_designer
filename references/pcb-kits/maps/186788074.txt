@@ -1,0 +1,83 @@
+id pp-new-big-muffler
+goods 186788074
+name New Big Muffler (Stock)
+motif EHX Big Muff Pi
+type fuzz
+desc 2N5088 4석 빅머프(Stock 버전): Q1 입력 증폭(470K∥500p 귀환) → SUSTAIN → Q3·Q4 클리핑단(100n+1N914 역병렬 귀환, 8.2K 입력) → 39K/10n·3.9n/100K 톤 스택(TONE B100K) → Q2 회복단(390K/100K 분압, 10K 컬렉터, 2.2K 이미터) → 1uF → VOLUME
+image img_01.jpg
+# The board render has no value silk; values come from the seller's resource post (pedalparts PDS sno=778, "Big Muffler 9"
+# PDF, one page per version with its parts list and a layout of where each part sits). This is the "Stock Version" page:
+# its layout lines up pad for pad with the render (scratch overlay), and every part on its parts list is placed. The board
+# also carries footprints the other eight versions use (pads 1, 20, 41, 49, 75, 107) and big alternative pot rings for a
+# 1590BB layout (12, 14, 23, 30); those are NC here.
+# Q2 (top right, 11/15/18): the extractor joined base 15 to emitter 18 through the TO-92 outline's flat-side line, which
+# crosses the pads; SPLIT 18 37 keeps the emitter on its 2.2K and the base with 390K/100K/100n (9, 27, 46).
+# Pot "1" marks: SUSTAIN and VOLUME lug 1 on the left (38, 42 = ground), TONE lug 1 on the right (71, the 39K/10n side).
+# Status LED (86/87, LED_R 65-96, LED- 119) left out.
+BOM 1M 470Kx3 390K 100Kx5 39Kx2 15Kx3 10K 8.2Kx2 2.2K 1K 100Rx3 100nx3 10n 3.9n 500px3 1uFx5 1N914x4 2N5088x4 A100Kx2 B100K
+io IN=77 OUT=50 V9=32 GND=110
+SPLIT 18 37
+NC 1 12 14 20 23 30 41 49 75 107 65 96 86 87 119
+
+STAGE in input 입력
+R 1M 88 110 R1
+R 39K 73 48 R2
+C 1uF 22 21 C1
+
+STAGE q1 gain Q1 입력 증폭
+Q 2N5088 b=13 c=5 e=17 Q1
+R 470K 0 19 R3
+C 500p 4 16 C2
+R 100K 6 25 R4
+R 15K 7 26 R5
+R 100R 33 54 R6
+C 1uF 24 31 C3
+
+STAGE sus custom control SUSTAIN
+POT A100K SUSTAIN 38 39 40
+R 1K 47 72 R7
+
+STAGE q3 gain Q3 클리핑단 1
+C 1uF 51 52 C4
+R 8.2K 111 91 R8
+Q 2N5088 b=74 c=64 e=81 Q3
+R 470K 53 80 R9
+C 500p 63 79 C5
+C 100n 62 78 C6
+D 1N914 a=89 k=104 D1
+D 1N914 a=105 k=90 D2
+R 100K 93 113 R10
+R 100R 92 112 R11
+R 15K 34 55 R12
+
+STAGE q4 gain Q4 클리핑단 2
+C 1uF 97 103 C7
+R 8.2K 120 100 R13
+Q 2N5088 b=76 c=68 e=85 Q4
+R 470K 60 84 R14
+C 500p 67 83 C8
+C 100n 66 82 C9
+D 1N914 a=98 k=108 D3
+D 1N914 a=109 k=99 D4
+R 100K 101 121 R15
+R 100R 102 122 R16
+R 15K 36 59 R17
+
+STAGE tone tone TONE 스택
+R 39K 35 58 R18
+C 10n 95 106 C10
+C 3.9n 45 56 C11
+R 100K 94 114 R19
+POT B100K TONE 71 70 69
+
+STAGE q2 gain Q2 회복단
+C 100n 57 46 C12
+Q 2N5088 b=15 c=11 e=18 Q2
+R 390K 28 9 R20
+R 100K 27 8 R21
+R 10K 29 10 R22
+R 2.2K 37 61 R23
+
+STAGE out output 출력
+C 1uF 3 2 C13
+POT A100K VOLUME 42 43 44

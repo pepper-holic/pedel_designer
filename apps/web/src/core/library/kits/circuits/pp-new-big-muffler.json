@@ -1,0 +1,546 @@
+{
+ "id": "pp-new-big-muffler",
+ "goodsNo": "186788074",
+ "kitName": "New Big Muffler (Stock)",
+ "motif": "EHX Big Muff Pi",
+ "type": "fuzz",
+ "description": "2N5088 4석 빅머프(Stock 버전): Q1 입력 증폭(470K∥500p 귀환) → SUSTAIN → Q3·Q4 클리핑단(100n+1N914 역병렬 귀환, 8.2K 입력) → 39K/10n·3.9n/100K 톤 스택(TONE B100K) → Q2 회복단(390K/100K 분압, 10K 컬렉터, 2.2K 이미터) → 1uF → VOLUME",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "in",
+    "0"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "39K",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n2",
+    "n1"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N5088",
+   "nodes": {
+    "b": "n2",
+    "c": "n3",
+    "e": "n4"
+   }
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n3",
+    "n2"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "500p",
+   "nodes": [
+    "n3",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R4",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "15K",
+   "nodes": [
+    "n3",
+    "vcc"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n3",
+    "n5"
+   ]
+  },
+  {
+   "ref": "SUSTAIN",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "n6",
+    "n7",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "1K",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n8",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "8.2K",
+   "nodes": [
+    "n8",
+    "n9"
+   ]
+  },
+  {
+   "ref": "Q3",
+   "kind": "Q",
+   "part": "2N5088",
+   "nodes": {
+    "b": "n9",
+    "c": "n10",
+    "e": "n11"
+   }
+  },
+  {
+   "ref": "R9",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n10",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "500p",
+   "nodes": [
+    "n10",
+    "n9"
+   ]
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n10",
+    "n12"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n12",
+    "k": "n9"
+   }
+  },
+  {
+   "ref": "D2",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n9",
+    "k": "n12"
+   }
+  },
+  {
+   "ref": "R10",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n9",
+    "0"
+   ]
+  },
+  {
+   "ref": "R11",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n11",
+    "0"
+   ]
+  },
+  {
+   "ref": "R12",
+   "kind": "R",
+   "value": "15K",
+   "nodes": [
+    "vcc",
+    "n10"
+   ]
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n10",
+    "n13"
+   ]
+  },
+  {
+   "ref": "R13",
+   "kind": "R",
+   "value": "8.2K",
+   "nodes": [
+    "n13",
+    "n14"
+   ]
+  },
+  {
+   "ref": "Q4",
+   "kind": "Q",
+   "part": "2N5088",
+   "nodes": {
+    "b": "n14",
+    "c": "n15",
+    "e": "n16"
+   }
+  },
+  {
+   "ref": "R14",
+   "kind": "R",
+   "value": "470K",
+   "nodes": [
+    "n15",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C8",
+   "kind": "C",
+   "value": "500p",
+   "nodes": [
+    "n15",
+    "n14"
+   ]
+  },
+  {
+   "ref": "C9",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n15",
+    "n17"
+   ]
+  },
+  {
+   "ref": "D3",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n17",
+    "k": "n14"
+   }
+  },
+  {
+   "ref": "D4",
+   "kind": "D",
+   "part": "1N914",
+   "nodes": {
+    "a": "n14",
+    "k": "n17"
+   }
+  },
+  {
+   "ref": "R15",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n14",
+    "0"
+   ]
+  },
+  {
+   "ref": "R16",
+   "kind": "R",
+   "value": "100R",
+   "nodes": [
+    "n16",
+    "0"
+   ]
+  },
+  {
+   "ref": "R17",
+   "kind": "R",
+   "value": "15K",
+   "nodes": [
+    "vcc",
+    "n15"
+   ]
+  },
+  {
+   "ref": "R18",
+   "kind": "R",
+   "value": "39K",
+   "nodes": [
+    "n15",
+    "n18"
+   ]
+  },
+  {
+   "ref": "C10",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n18",
+    "0"
+   ]
+  },
+  {
+   "ref": "C11",
+   "kind": "C",
+   "value": "3.9n",
+   "nodes": [
+    "n15",
+    "n19"
+   ]
+  },
+  {
+   "ref": "R19",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n19",
+    "0"
+   ]
+  },
+  {
+   "ref": "TONE",
+   "kind": "POT",
+   "value": "B100K",
+   "nodes": [
+    "n18",
+    "n20",
+    "n19"
+   ]
+  },
+  {
+   "ref": "C12",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n20",
+    "n21"
+   ]
+  },
+  {
+   "ref": "Q2",
+   "kind": "Q",
+   "part": "2N5088",
+   "nodes": {
+    "b": "n21",
+    "c": "n22",
+    "e": "n23"
+   }
+  },
+  {
+   "ref": "R20",
+   "kind": "R",
+   "value": "390K",
+   "nodes": [
+    "vcc",
+    "n21"
+   ]
+  },
+  {
+   "ref": "R21",
+   "kind": "R",
+   "value": "100K",
+   "nodes": [
+    "n21",
+    "0"
+   ]
+  },
+  {
+   "ref": "R22",
+   "kind": "R",
+   "value": "10K",
+   "nodes": [
+    "vcc",
+    "n22"
+   ]
+  },
+  {
+   "ref": "R23",
+   "kind": "R",
+   "value": "2.2K",
+   "nodes": [
+    "n23",
+    "0"
+   ]
+  },
+  {
+   "ref": "C13",
+   "kind": "C",
+   "value": "1uF",
+   "nodes": [
+    "n22",
+    "n24"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A100K",
+   "nodes": [
+    "0",
+    "out",
+    "n24"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "in",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "R2",
+    "C1"
+   ]
+  },
+  {
+   "id": "q1",
+   "category": "gain",
+   "label": "Q1 입력 증폭",
+   "parts": [
+    "Q1",
+    "R3",
+    "C2",
+    "R4",
+    "R5",
+    "R6",
+    "C3"
+   ]
+  },
+  {
+   "id": "sus",
+   "category": "custom",
+   "label": "control SUSTAIN",
+   "parts": [
+    "SUSTAIN",
+    "R7"
+   ]
+  },
+  {
+   "id": "q3",
+   "category": "gain",
+   "label": "Q3 클리핑단 1",
+   "parts": [
+    "C4",
+    "R8",
+    "Q3",
+    "R9",
+    "C5",
+    "C6",
+    "D1",
+    "D2",
+    "R10",
+    "R11",
+    "R12"
+   ]
+  },
+  {
+   "id": "q4",
+   "category": "gain",
+   "label": "Q4 클리핑단 2",
+   "parts": [
+    "C7",
+    "R13",
+    "Q4",
+    "R14",
+    "C8",
+    "C9",
+    "D3",
+    "D4",
+    "R15",
+    "R16",
+    "R17"
+   ]
+  },
+  {
+   "id": "tone",
+   "category": "tone",
+   "label": "TONE 스택",
+   "parts": [
+    "R18",
+    "C10",
+    "C11",
+    "R19",
+    "TONE"
+   ]
+  },
+  {
+   "id": "q2",
+   "category": "gain",
+   "label": "Q2 회복단",
+   "parts": [
+    "C12",
+    "Q2",
+    "R20",
+    "R21",
+    "R22",
+    "R23"
+   ]
+  },
+  {
+   "id": "out",
+   "category": "output",
+   "label": "출력",
+   "parts": [
+    "C13",
+    "VOLUME"
+   ]
+  }
+ ]
+}

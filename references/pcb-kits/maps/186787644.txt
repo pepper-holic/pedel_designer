@@ -1,0 +1,111 @@
+id pp-new-turbo-cat
+goods 186787644
+name NEW Turbo Cat
+motif ProCo RAT
+type distortion
+desc LM308 비반전 게인(100K DISTORTION+100p 피드백, 47R/560R 다리) → 1K/4.7uF → 적색 LED 대칭 클리퍼 → 1.5K+FILTER+3.3n 저역 → 2N5952 소스 폴로어(2.2M 게이트 바이어스) → C13 10uF → 10K 풀다운·A100K 볼륨
+image img_01.jpg
+# Variant of NEW Cat (186787642, same "ALL RAT" board, same render and parts list). The variant parts come from the
+# seller's variant table on every ALL RAT page (img_03: C13, R4, R10, R15, R16, D1/D2 per CAT / CAT II / TURBO /
+# VINTAGE / DIRTY); the rest of the map is NEW Cat's, connection for connection. The parts pack ships LM308 for every
+# variant, so the op-amp stays LM308. R4 is the + in bias resistor, R10 the JFET gate resistor, R15 the 10K pulldown
+# on the C13 side of VOLUME (pads 18-34), R16 a 9V -> gate bias resistor (pads 15-31, Turbo only).
+# TURBO column: C13 10uF, R4 2.2M, R10 2.2M, R15 10K, R16 2.2M, D1/D2 red LEDs. The page says to bridge the selector
+# 2-3 for the Turbo: pad 56 ("2", the clipping node) to 72 ("3", the LED common), so the axial D1/D2 pads (57-59, 96, 97)
+# stay empty and the two round LED footprints (73/74 and 85/86) clip. They sit anti-parallel: D1 square pad 73 on the
+# LED common with 74 on ground; D2 square pad 86 is the ground side (an isolated dark ground pad in the extraction, joined
+# to GND in io) and 85 on the common. The page title says Turbo Cat while its text was copied from the Dirty Cat page.
+# The original Turbo RAT uses an OP07; this kit ships LM308.
+BOM 2.2M 100Kx2 10K 1.5K 1Kx2 560R 47Rx2 22nx2 10n 3.3n 1n 100p 100uF 4.7uFx2 2.2uF 1uF 1N400X LM308 2N5952 A100Kx3 2.2Mx3 10K 10uF LED-REDx2
+io IN=88 OUT=47 V9=11 GND=75,86
+JUMP 56 72
+JUMP 14 50
+JUMP 24 33
+JUMP 35 31
+JUMP 94 80
+NC 0 1 2 3 4 45 46 54 55 57 58 59 96 97 78
+
+STAGE input input 입력
+R 2.2M 90 67 R1
+C 22n 89 79 C1
+R 2.2M 91 68 R4
+R 1K 83 82 R2
+C 1n 76 87 C2
+
+STAGE gain gain LM308 게인단 (DISTORTION)
+IC LM308 2=61 3=65 4=77 6=66 7=62 U1
+POT A100K DISTORTION 38 37 36
+C 100p 60 44 C3
+R 560R 27 7 R3
+C 4.7uF 6 5 C4
+R 47R 28 8 R5
+C 2.2uF 23 22 C5
+
+STAGE clip clipping 클리퍼
+R 1K 63 64 R6
+C 4.7uF 51 50 C6
+D LED-RED a=73 k=74 D1
+D LED-RED a=86 k=85 D2
+
+STAGE tone tone FILTER
+POT A100K FILTER 14 13 12
+R 1.5K 9 29 R7
+C 3.3n 39 40 C7
+
+STAGE output output JFET 버퍼 + 볼륨
+C 22n 25 26 C8
+R 2.2M 32 16 R10
+Q 2N5952 g=35 d=21 s=24 Q1
+R 10K 33 17 R8
+C 10uF 19 20 C13
+POT A100K VOLUME 43 42 41
+R 10K 34 18 R15
+R 2.2M 15 31 R16
+
+STAGE power power 전원
+R 47R 10 30 R9
+C 100uF 53 52 C9
+C 10n 80 95 C10
+D 1N400X a=71 k=94 D3
+R 100K 93 70 R11
+R 100K 69 92 R12
+C 1uF 49 48 C11
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT C1 180 400 h
+AT R4 210 340 v-
+AT R2 270 400 h
+AT C2 300 460 v
+AT U1 360 420
+AT DISTORTION 360 500
+AT C3 360 550 h
+AT R3 270 520 v
+AT C4 270 600 v
+AT R5 210 520 v
+AT C5 210 600 v
+AT R6 450 420 h
+AT C6 540 420 h
+AT D1 600 480 v-
+AT D2 660 480 v
+AT FILTER 630 420
+AT R7 720 420 h
+AT C7 780 480 v
+AT C8 810 420 h
+AT R10 870 480 v
+AT Q1 900 420
+AT R8 920 520 v
+AT C13 980 450 h
+AT VOLUME 1040 480 r270
+AT RLOAD 1160 540 v
+AT R9 150 160 h
+AT C9 210 190 v
+AT C10 270 190 v
+AT D3 330 190 v-
+AT R11 390 190 v
+AT R12 390 280 v
+AT C11 450 280 v
+AT R15 1100 480 v
+AT R16 870 340 v-

@@ -1,0 +1,241 @@
+{
+ "id": "pp-sec-ret-pre",
+ "goodsNo": "186788334",
+ "kitName": "SEC RET PRE",
+ "motif": "Chase Tone Secret Preamp (Echoplex EP-3 preamp)",
+ "type": "preamp",
+ "description": "110K/22p 입력 → 22n·1M 게이트 → 2N5457 공통 소스(50K 트리머 드레인 부하, 22V 레일, 3.6K 소스 + EQ 토글 10n/22n 바이패스) → 100n → 240K·110K 출력망 + A500K 볼륨",
+ "supply": 9.0,
+ "parts": [
+  {
+   "ref": "R1",
+   "kind": "R",
+   "value": "110K",
+   "nodes": [
+    "in",
+    "n1"
+   ]
+  },
+  {
+   "ref": "C1",
+   "kind": "C",
+   "value": "22pF",
+   "nodes": [
+    "0",
+    "n1"
+   ]
+  },
+  {
+   "ref": "C2",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n1",
+    "n2"
+   ]
+  },
+  {
+   "ref": "R2",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n2",
+    "0"
+   ]
+  },
+  {
+   "ref": "Q1",
+   "kind": "Q",
+   "part": "2N5457",
+   "nodes": {
+    "g": "n2",
+    "d": "n3",
+    "s": "n4"
+   }
+  },
+  {
+   "ref": "TRIM",
+   "kind": "POT",
+   "value": "B50K",
+   "nodes": [
+    "n3",
+    "n3",
+    "v22"
+   ]
+  },
+  {
+   "ref": "R3",
+   "kind": "R",
+   "value": "3.6K",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C3",
+   "kind": "C",
+   "value": "10n",
+   "nodes": [
+    "n4",
+    "0"
+   ]
+  },
+  {
+   "ref": "C4",
+   "kind": "C",
+   "value": "22n",
+   "nodes": [
+    "n4",
+    "n5"
+   ]
+  },
+  {
+   "ref": "R5",
+   "kind": "R",
+   "value": "1M",
+   "nodes": [
+    "n5",
+    "0"
+   ]
+  },
+  {
+   "ref": "C5",
+   "kind": "C",
+   "value": "100n",
+   "nodes": [
+    "n3",
+    "n6"
+   ]
+  },
+  {
+   "ref": "R6",
+   "kind": "R",
+   "value": "240K",
+   "nodes": [
+    "n6",
+    "0"
+   ]
+  },
+  {
+   "ref": "R7",
+   "kind": "R",
+   "value": "110K",
+   "nodes": [
+    "n6",
+    "out"
+   ]
+  },
+  {
+   "ref": "VOLUME",
+   "kind": "POT",
+   "value": "A500K",
+   "nodes": [
+    "n6",
+    "0",
+    "n7"
+   ]
+  },
+  {
+   "ref": "R8",
+   "kind": "R",
+   "value": "110K",
+   "nodes": [
+    "n7",
+    "out"
+   ]
+  },
+  {
+   "ref": "D1",
+   "kind": "D",
+   "part": "1N400X",
+   "nodes": {
+    "a": "vcc",
+    "k": "n8"
+   }
+  },
+  {
+   "ref": "C6",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "n8",
+    "0"
+   ]
+  },
+  {
+   "ref": "U1",
+   "kind": "IC",
+   "part": "ICL7660",
+   "nodes": {
+    "1": "n8",
+    "3": "0",
+    "8": "n8"
+   }
+  },
+  {
+   "ref": "C7",
+   "kind": "C",
+   "value": "100uF",
+   "nodes": [
+    "v22",
+    "0"
+   ]
+  }
+ ],
+ "rails": [
+  {
+   "net": "v22",
+   "voltage": 22.0
+  }
+ ],
+ "stages": [
+  {
+   "id": "in",
+   "category": "input",
+   "label": "입력",
+   "parts": [
+    "R1",
+    "C1",
+    "C2",
+    "R2"
+   ]
+  },
+  {
+   "id": "jfet",
+   "category": "gain",
+   "label": "2N5457 공통 소스 (EQ 토글 소스 바이패스)",
+   "parts": [
+    "Q1",
+    "TRIM",
+    "R3",
+    "C3",
+    "C4",
+    "R5"
+   ]
+  },
+  {
+   "id": "out",
+   "category": "output",
+   "label": "출력 + VOLUME",
+   "parts": [
+    "C5",
+    "R6",
+    "R7",
+    "VOLUME",
+    "R8"
+   ]
+  },
+  {
+   "id": "power",
+   "category": "power",
+   "label": "전원 (ICL7660 22V)",
+   "parts": [
+    "D1",
+    "C6",
+    "U1",
+    "C7"
+   ]
+  }
+ ]
+}

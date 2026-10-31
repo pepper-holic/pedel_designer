@@ -1,0 +1,103 @@
+id pp-new-vintage-cat
+goods 186787645
+name NEW Vintage Cat
+motif ProCo RAT
+type distortion
+desc LM308 비반전 게인(100K DISTORTION+100p 피드백, 47R/560R 다리) → 1K/4.7uF → 1N4148 대칭 클리퍼 → 1.5K+FILTER+3.3n 저역 → 2N5952 소스 폴로어 → C13 1uF → A100K 볼륨
+image img_01.jpg
+# Variant of NEW Cat (186787642, same "ALL RAT" board, same render and parts list). The variant parts come from the
+# seller's variant table on every ALL RAT page (img_03: C13, R4, R10, R15, R16, D1/D2 per CAT / CAT II / TURBO /
+# VINTAGE / DIRTY); the rest of the map is NEW Cat's, connection for connection. The parts pack ships LM308 for every
+# variant, so the op-amp stays LM308. R4 is the + in bias resistor, R10 the JFET gate resistor, R15 the 10K pulldown
+# on the C13 side of VOLUME (pads 18-34), R16 a 9V -> gate bias resistor (pads 15-31, Turbo only).
+# VINTAGE column: C13 1uF, R4 1M, R10 1M, R15/R16 empty, D1/D2 1N4148, selector bridged 1-2 (56-57). Same values as CAT
+# except the clipping diodes (1N4148 for 1N914, the same model in the app).
+BOM 2.2M 100Kx2 10K 1.5K 1Kx2 560R 47Rx2 22nx2 10n 3.3n 1n 100p 100uF 4.7uFx2 2.2uF 1uF 1N400X LM308 2N5952 A100Kx3 1Mx2 1uF 1N4148x2
+io IN=88 OUT=47 V9=11 GND=75
+JUMP 56 57
+JUMP 14 50
+JUMP 24 33
+JUMP 35 31
+JUMP 94 80
+NC 0 1 2 3 4 45 46 54 55 85 15 18 34 72 73 78 86
+
+STAGE input input 입력
+R 2.2M 90 67 R1
+C 22n 89 79 C1
+R 1M 91 68 R4
+R 1K 83 82 R2
+C 1n 76 87 C2
+
+STAGE gain gain LM308 게인단 (DISTORTION)
+IC LM308 2=61 3=65 4=77 6=66 7=62 U1
+POT A100K DISTORTION 38 37 36
+C 100p 60 44 C3
+R 560R 27 7 R3
+C 4.7uF 6 5 C4
+R 47R 28 8 R5
+C 2.2uF 23 22 C5
+
+STAGE clip clipping 클리퍼
+R 1K 63 64 R6
+C 4.7uF 51 50 C6
+D 1N4148 a=96 k=58 D1
+D 1N4148 a=59 k=97 D2
+
+STAGE tone tone FILTER
+POT A100K FILTER 14 13 12
+R 1.5K 9 29 R7
+C 3.3n 39 40 C7
+
+STAGE output output JFET 버퍼 + 볼륨
+C 22n 25 26 C8
+R 1M 32 16 R10
+Q 2N5952 g=35 d=21 s=24 Q1
+R 10K 33 17 R8
+C 1uF 19 20 C13
+POT A100K VOLUME 43 42 41
+
+STAGE power power 전원
+R 47R 10 30 R9
+C 100uF 53 52 C9
+C 10n 80 95 C10
+D 1N400X a=71 k=94 D3
+R 100K 93 70 R11
+R 100K 69 92 R12
+C 1uF 49 48 C11
+
+# --- schematic placement (hand) ---
+AT V1 60 430
+AT VCC 60 190
+AT R1 120 470 v
+AT C1 180 400 h
+AT R4 210 340 v-
+AT R2 270 400 h
+AT C2 300 460 v
+AT U1 360 420
+AT DISTORTION 360 500
+AT C3 360 550 h
+AT R3 270 520 v
+AT C4 270 600 v
+AT R5 210 520 v
+AT C5 210 600 v
+AT R6 450 420 h
+AT C6 540 420 h
+AT D1 600 480 v-
+AT D2 660 480 v
+AT FILTER 630 420
+AT R7 720 420 h
+AT C7 780 480 v
+AT C8 810 420 h
+AT R10 870 480 v
+AT Q1 900 420
+AT R8 920 520 v
+AT C13 980 450 h
+AT VOLUME 1040 480 r270
+AT RLOAD 1100 540 v
+AT R9 150 160 h
+AT C9 210 190 v
+AT C10 270 190 v
+AT D3 330 190 v-
+AT R11 390 190 v
+AT R12 390 280 v
+AT C11 450 280 v
