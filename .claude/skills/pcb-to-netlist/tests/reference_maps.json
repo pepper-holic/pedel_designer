@@ -1,0 +1,74 @@
+[
+ {
+  "goods": "186788082",
+  "id": "pp-cdos",
+  "name": "CDOS",
+  "evidence": "Pedal Parts UK Vintage POW! Overdriver 회로도와 연결 전부 일치(값 5곳 차이, 베이스 팟 양단 100n 없음) - 맵 머리 주석"
+ },
+ {
+  "goods": "186787681",
+  "id": "pp-fluffy-fuzz",
+  "name": "Fluffy Fuzz",
+  "evidence": "PedalPCB Cream Pie 빌드 문서 3쪽 회로도와 연결 전부 일치 - 맵 머리 주석, kit-deferred.md 2026-10-31 절"
+ },
+ {
+  "goods": "186788132",
+  "id": "pp-fuzzy-face",
+  "name": "FUZZY FACE",
+  "evidence": "표준 NPN 실리콘 Fuzz Face와 연결 일치(330R은 원본 470R, 1M 입력 풀다운 추가) - 맵 주석, 넷은 tests/reference_nets.json의 fuzzy-face"
+ },
+ {
+  "goods": "186787642",
+  "id": "pp-new-cat",
+  "name": "NEW Cat",
+  "evidence": "ProCo RAT 회로도와 연결 일치: 22n·1M Vref·1K/1n 입력, LM308 100K∥100p 귀환, 560R+4.7uF·47R+2.2uF 다리, 1K·4.7uF·1N914, 1.5K+3.3n 필터, 2N5952 폴로어(2.2M 입력 풀다운만 다름) - 2026-10-31 lint 세션 대조"
+ },
+ {
+  "goods": "186787646",
+  "id": "pp-new-dirty-cat",
+  "name": "NEW Dirty Cat",
+  "evidence": "NEW Cat과 같은 RAT 연결, 클리퍼만 1N34A, 출력 캡 10uF - 2026-10-31 lint 세션 대조"
+ },
+ {
+  "goods": "186788110",
+  "id": "pp-new-valve-808",
+  "name": "NEW Valve 808",
+  "evidence": "Ibanez TS-808 회로도와 연결 일치(2SC1815 입·출력 버퍼, 51K+A500K∥51p·1N914 귀환, 4.7K+47n, 1K/0.22uF·10K Vref 톤단, W20K+220R/0.22uF, 1K 귀환, 1000n·1K·B100K·100n·510K, 100R·10uF·10K) - 2026-10-31 lint 세션에서 JUMP 1 16(op-amp 출력-출력 이미터 합침)을 지운 뒤"
+ },
+ {
+  "goods": "186788666",
+  "id": "pp-randy-plus",
+  "name": "RANDY PLUS",
+  "evidence": "MXR Distortion+ 회로도와 연결 일치: 10n·10K·1M Vref 입력, 741 비반전 1M 귀환, 47n+4.7K+GAIN 가변저항 다리, 1uF·10K·1N270 역병렬·1n, 1M/1M/1uF Vref(GAIN C500K·VOLUME A50K·10p 귀환 캡이 원본과 다름) - 2026-10-31 lint 세션 대조"
+ },
+ {
+  "goods": "186787695",
+  "id": "pp-lpb1-1k",
+  "name": "LPB1 [1K]",
+  "evidence": "EHX LPB-1 회로도와 연결 일치: 100n 입력, 베이스 분압(1M/100K, 원본 430K/43K와 같은 비), 10K 컬렉터, 390R 이미터, 100n 출력, A100K 볼륨 - 2026-10-31 lint 세션 대조"
+ },
+ {
+  "goods": "186788519",
+  "id": "pp-ranger-ge",
+  "name": "RANGER GE",
+  "evidence": "Dallas Rangemaster(게르마늄 PNP, -9V) 연결 일치: 4.7n 입력, 470K/68K 베이스 분압, 이미터 47uF 바이패스, 10n 출력. 이미터 3.9K 대신 5K 트리머+1K, 컬렉터 부하가 A10K 볼륨 팟(와이퍼 출력) - 2026-10-31 lint 세션 대조"
+ },
+ {
+  "goods": "186788664",
+  "id": "pp-lonestar-ranger",
+  "name": "LONESTAR RANGER",
+  "evidence": "Rangemaster의 NPN 판(Texas Ranger) 연결 일치: 4.7n 입력, 470K/68K 분압, 4.7K∥33uF 이미터, 컬렉터 부하 B10K BOOST 팟 와이퍼→10n 출력 - 2026-10-31 lint 세션 대조"
+ },
+ {
+  "goods": "186788663",
+  "id": "pp-lonestar-fuzz",
+  "name": "LONESTAR FUZZ",
+  "evidence": "표준 Fuzz Face 연결 일치: 2.2uF 입력, 33K Q1 부하, Q1→Q2 직결, 100K 귀환, FUZZ B2K+22uF, 8.2K·1.2K 분기점 출력 10n→A500K - 2026-10-31 lint 세션 대조"
+ },
+ {
+  "goods": "186788521",
+  "id": "pp-sola-face-ge",
+  "name": "SOLA GE FACE",
+  "evidence": "게르마늄 PNP Fuzz Face(-9V) 연결 일치: 1uF 입력, 33K, 직결, 100K 귀환, FUZZ B1K+22uF, Q2 컬렉터 부하 8.2K 자리를 1K+10K 트리머+B5K BIAS2 팟으로, 470R 분기점 출력 10n→A250K - 2026-10-31 lint 세션 대조"
+ }
+]

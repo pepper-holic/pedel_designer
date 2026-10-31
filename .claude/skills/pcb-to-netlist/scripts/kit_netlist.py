@@ -31,8 +31,8 @@ The map names each part and the pads (ids from the extract_nets overlay) its lea
     RAIL 40 18                          # the net of pad 40 is an ideal 18V rail (voltage-doubler output); nets vm9/v18/vm18
 
 STAGE lines group the parts after them into the schematic's functional blocks, in signal order:
-"STAGE <id> <category> <label>", category one of input buffer gain clipping fuzz tone output power
-custom (use custom for feedback/bias networks and controls that are their own stage). The app lays
+"STAGE <id> <category> <label>", category one of input buffer gain clipping tone output power custom; a
+custom label starts with bias/control/feedback/filter/mix/octave/osc (stage_vocab.py, SKILL.md section 2). The app lays
 blocks out left to right in this order, so a kit reads input -> preamp -> controls -> clipper ->
 output instead of as a grid. Every part should sit in a stage once any STAGE is used.
 
