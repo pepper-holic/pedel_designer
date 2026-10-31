@@ -1,0 +1,118 @@
+id pp-kott-a
+goods 186788598
+name KOTT A
+motif Analogman King of Tone (왼쪽 채널)
+type overdrive
+desc 22n/1M→4580 B 비반전(-in 다리 27K+10n·33K+10n+10n 접지, 귀환 100K+DRIVE B100K∥100p)→DRIVE 다른 끝 10K→100n→4580 A 반전(220K, Soft: BA282 2+2 맞물림+6.8K 귀환)→1K→TONE B25K(10n→Vref)→6.8K→PRESENCE 트림(10n)→VOLUME A100K→1000n∥1uF
+image img_01.jpg
+SHARED 186788598-b
+# Two identical King of Tone channels side by side; this map is the left one (B side reuses the same layout, shifted). The
+# 1N400X and the 100n on the protected 9V are shared and written in both maps; each channel has its own 47R, Vref 47K/47K and
+# two 100uF.
+# 4580D notch down: 1=162 2=147 3=137 4=125, 5=124 6=136 7=146 8=161. B half (+ from the 22n/1M input) is the gain stage, A half
+# (+ at Vref) the inverting stage.
+# The extractor ran B's output trace (146) under the 100p body into the -in net: SPLIT keeps out B = DRIVE wiper 1, pin 7 and
+# the 100p's lower pad 160; -in B is 136, 135, 44 (100K), 70 (toggle), 181/189 (27K/33K legs).
+# Toggles (3-pad DIP on-on rows, each using two pads): Soft 71-85 puts the BA282 strings from out A through 6.8K to -in A;
+# Hard 72-86 puts the 1N914 pair from the 1K/TONE node to Vref; the third 52-70 puts 1K across the 100K drive resistor (lower
+# gain). Fixed here: Soft on, Hard off, 1K off - the 1N914 pair and the 1K (24-25) are left out of the netlist and BOM line.
+# Pots read by role: DRIVE 0-1-2 (wiper 1 = out B, lug 2 -> 100K feedback so clockwise raises gain, lug 0 -> 10K forward),
+# VOLUME 7-8-9 (lug 9 at Vref), TONE 150-151-152 (152 -> 10n to Vref, 150 from the 1K). PRESENCE trim wiper is the apex pad 149.
+BOM 1Mx3 220K 100K 47Kx2 33K 27K 10Kx2 6.8Kx2 1K 47R 1000n 100nx2 22n 10nx4 100pF 100uFx2 1uF 1N400X BA282x4 JRC4580D A100K B100K B25K
+io IN=207 OUT=208 V9=11 GND=205
+SPLIT 1 146 160
+JUMP 71 85
+NC 52 70 84 24 25 54 57 72 86 48 49 73 74 191 192 193 194 206
+
+STAGE input input 입력
+C 22n 116 117 C1
+R 1M 134 180 R1
+R 1M 55 91 R2
+
+STAGE drive gain 드라이브단 (4580 B)
+IC JRC4580D 1=162 2=147 3=137 4=125 5=124 6=136 7=146 8=161 U1
+C 100p 135 160 C2
+R 100K 44 45 R3
+POT B100K DRIVE 2 1 0
+R 27K 181 182 R4
+C 10n 176 177 C3
+R 33K 189 190 R5
+C 10n 187 188 C4
+
+STAGE soft clipping Soft 클리핑단 (4580 A 반전, BA282 귀환)
+R 10K 53 90 R6
+C 100n 106 107 C5
+R 220K 126 163 R7
+D BA282 a=4 k=3 D1
+D BA282 a=6 k=5 D2
+D BA282 a=28 k=29 D3
+D BA282 a=30 k=31 D4
+R 6.8K 56 92 R8
+
+STAGE tone tone 톤 (TONE·PRESENCE)
+R 1K 164 165 R9
+POT B25K TONE 152 151 150
+C 10n 108 132 C6
+R 6.8K 113 112 R10
+POT 10K PRESENCE 138 149 139
+C 10n 127 148 C7
+
+STAGE output output 출력 (VOLUME)
+POT A100K VOLUME 9 8 7
+C 1000n 36 37 C8
+C 1uF 80 81 C9
+R 1M 94 93 R11
+
+STAGE vref custom bias Vref·전원 (47R, 47K/47K)
+R 47R 60 97 R12
+C 100uF 166 167 C10
+R 47K 59 96 R13
+R 47K 95 58 R14
+C 100uF 118 119 C11
+
+STAGE power power 전원 (공용)
+D 1N400X a=38 k=39 D5
+C 100n 40 41 C12
+
+
+# --- schematic placement (hand) ---
+AT VCC 60 190
+AT D5 120 160 h
+AT C12 170 190 v
+AT R12 230 160 h
+AT C10 290 190 v
+AT R13 350 190 v-
+AT R14 350 250 v
+AT C11 390 250 v
+AT V1 60 480
+AT R1 100 480 v
+AT C1 160 450 h
+AT R2 210 420 v
+AT U1B 280 470
+AT R4 240 550 v
+AT C3 240 640 v
+AT R5 200 550 v
+AT C4 200 640 v
+AT C2 280 390 h
+AT R3 240 340 h
+AT DRIVE 300 340 r0 m
+AT R6 390 340 h
+AT C5 470 340 h
+AT U1A 560 320
+AT R7 560 260 h
+AT R9 650 320 h
+AT TONE 740 320 r180 m
+AT C6 780 360 v-
+AT R10 800 290 h
+AT PRESENCE 860 350 r270
+AT C7 860 440 v
+AT VOLUME 920 290 r180
+AT C8 980 350 h
+AT C9 980 400 h
+AT R11 1040 380 v
+AT RLOAD 1090 380 v
+AT R8 560 410 h-
+AT D2 650 410 h
+AT D1 710 410 h
+AT D4 650 460 h-
+AT D3 710 460 h-

@@ -1,0 +1,120 @@
+id pp-pluto-b
+goods 186788553
+name 브라우니 PLUTO Blue
+motif Browne Amplification Protein (Blue 채널, 블루스브레이커형)
+type overdrive
+desc 2.2M/47n→TL072 A 비반전(-in 다리 4.7K+10n·3.3K+10n+10n Vref, 귀환 GAIN B100K∥56p)→GAIN 다른 끝 220n→10K→TL072 B 반전(220K, 1N4148 2+2 맞물림+6.8K 귀환)→1K→TONE B25K(10n→Vref)→6.8K→100K∥10n Vref→1000n→10K→TL071 비반전 복원(6.8K/2.4K+10uF, 1M/1M 바이어스)→4.7uF→VOLUME A5K
+image img_01.jpg
+SHARED 186788553-a
+# The Blue channel (right half); shared 1N400X, 100n and 100uF on 9V written in both maps; Blue's own Vref is 47K/47K + 47uF.
+# TL072 notch right: top row 96=1 95=2 94=3 93=4(GND), bottom row 138=5 139=6 140=7 141=8(V+). TL071 notch down, single pinout
+# (2=44 -, 3=37 +, 4=26, 6=36 out, 7=43 V+); its silk is the dual template, pins 1/5/8 (57, 25, 56) have no copper.
+# Clipping diodes: two 2-diode strings from out B (98, 99) through 121/143 and 122/144 to the 6.8K node (172, 173), drawn
+# anti-parallel (bands too small to read; the pair is symmetric either way).
+# Pots by role (no names on the board): GAIN B100K 14-35-55 (wiper 35 = out A, lug 14 on -in so clockwise raises gain, lug 55
+# -> 220n forward), TONE B25K 232-205-174 (232 from the 1K, 174 -> 10n to Vref), VOLUME A5K 118-117-116 (118 GND, wiper to P-O).
+BOM 2.2M 1Mx3 220K 100K 47Kx2 10Kx2 6.8Kx3 4.7K 3.3K 2.4K 1K 1000n 220n 100n 47n 10nx4 56pF 100uF 47uF 10uF 4.7uF 1N400X 1N4148x4 TL072 TL071 B100K B25K A5K
+io IN=248 OUT=249 V9=68 GND=246
+NC 25 56 57 247 67 276
+
+STAGE input input 입력
+R 2.2M 230 231 R1
+C 47n 239 238 C1
+R 1M 90 135 R2
+
+STAGE gain gain 게인단 (TL072 A)
+IC TL072 1=96 2=95 3=94 4=93 5=138 6=139 7=140 8=141 U1
+C 56pF 13 34 C2
+POT B100K GAIN 14 35 55
+R 4.7K 91 136 R3
+C 10n 186 160 C3
+R 3.3K 92 137 R4
+C 10n 161 187 C4
+
+STAGE soft clipping 클리핑단 (TL072 B 반전, 1N4148 귀환)
+C 220n 42 71 C5
+R 10K 97 142 R5
+R 220K 162 163 R6
+R 6.8K 170 171 R7
+D 1N4148 a=98 k=121 D1
+D 1N4148 a=143 k=172 D2
+D 1N4148 a=173 k=144 D3
+D 1N4148 a=122 k=99 D4
+
+STAGE tone tone 톤 (TONE B25K)
+R 1K 100 145 R8
+POT B25K TONE 174 205 232
+C 10n 218 217 C6
+R 6.8K 204 203 R9
+R 100K 189 188 R10
+C 10n 220 219 C7
+
+STAGE rec gain 복원단 (TL071)
+C 1000n 190 164 C8
+R 10K 191 147 R11
+IC TL071 2=44 3=37 4=26 6=36 7=43 U2
+R 1M 101 146 R12
+R 1M 72 73 R13
+R 2.4K 83 82 R14
+C 10uF 45 58 C9
+R 6.8K 15 16 R15
+
+STAGE output output 출력 (VOLUME)
+C 4.7uF 75 76 C10
+POT A5K VOLUME 118 117 116
+
+STAGE vref custom bias Vref (47K/47K)
+R 47K 201 202 R16
+R 47K 215 214 R17
+C 47uF 216 229 C11
+
+STAGE power power 전원 (공용)
+D 1N400X a=89 k=134 D5
+C 100uF 159 169 C12
+C 100n 131 111 C13
+
+# --- schematic placement (hand) ---
+AT VCC 60 190
+AT D5 120 160 h
+AT C13 170 190 v
+AT C12 210 190 v
+AT R16 300 190 v
+AT R17 300 250 v-
+AT C11 340 250 v
+AT V1 60 480
+AT R1 100 480 v
+AT C1 160 450 h
+AT R2 210 420 v
+AT U1A 280 470
+AT C2 280 390 h
+AT GAIN 300 340 r0 m
+AT R3 240 550 v
+AT C3 240 640 v
+AT R4 200 550 v
+AT C4 200 640 v
+AT C5 390 340 h
+AT R5 470 340 h
+AT U1B 560 320
+AT R6 560 260 h
+AT R7 560 410 h-
+AT D1 650 410 h
+AT D2 710 410 h
+AT D3 650 460 h-
+AT D4 710 460 h-
+AT R8 650 320 h
+AT TONE 740 320 r180 m
+AT C6 780 360 v-
+AT R9 800 290 h
+AT R10 860 320 v
+AT C7 900 320 v
+AT C8 950 290 h
+AT R11 1030 290 h
+AT U2 1120 310
+AT R12 1070 230 v
+AT R13 1070 340 v
+AT R14 1180 430 v
+AT C9 1120 400 h
+AT R15 1120 370 h-
+AT C10 1210 310 h
+AT VOLUME 1300 310 r180
+AT RLOAD 1360 380 v

@@ -1,0 +1,109 @@
+id pp-kott-b
+goods 186788598
+name KOTT B
+motif Analogman King of Tone (오른쪽 채널)
+type overdrive
+desc 22n/1M→4580 B 비반전(-in 다리 27K+10n·33K+10n+10n 접지, 귀환 100K+DRIVE B100K∥100p)→DRIVE 다른 끝 10K→100n→4580 A 반전(220K)→1K→Hard: 1N914 역병렬 Vref 클리퍼→TONE B25K(10n→Vref)→6.8K→PRESENCE 트림(10n)→VOLUME A100K→1000n∥1uF
+image img_01.jpg
+SHARED 186788598-a
+# The right channel: the left channel's layout shifted, same parts (see 186788598-a for the reading notes). Shared 1N400X and
+# 100n written in both maps.
+# 4580D notch down: 1=172 2=154 3=143 4=129, 5=128 6=142 7=153 8=171. SPLIT keeps out B = DRIVE wiper 14, pin 7 and the 100p's
+# lower pad 170 apart from -in B (142, 141, 46, 75, 184, 199).
+# Toggles fixed the other way from channel A so the two maps show both clipping modes: Hard on (77-89: 1N914 pair from the
+# 1K/TONE node to Vref), Soft off (BA282 x4 and their 6.8K into -in A left out), 1K drive toggle off (1K 26-27 left out).
+# Pots as channel A: DRIVE 13-14-15 (lug 15 -> 100K), VOLUME 20-21-22 (22 at Vref), TONE 157-158-159, PRESENCE apex 156.
+BOM 1Mx3 220K 100K 47Kx2 33K 27K 10Kx2 6.8K 1K 47R 1000n 100nx2 22n 10nx4 100pF 100uFx2 1uF 1N400X 1N914x2 JRC4580D A100K B100K B25K
+io IN=211 OUT=212 V9=11 GND=209
+SPLIT 14 153 170
+JUMP 77 89
+NC 64 75 87 26 27 66 69 76 88 16 17 18 19 32 33 34 35 68 103 195 196 197 198 210
+
+STAGE input input 입력
+C 22n 122 123 C1
+R 1M 140 183 R1
+R 1M 67 102 R2
+
+STAGE drive gain 드라이브단 (4580 B)
+IC JRC4580D 1=172 2=154 3=143 4=129 5=128 6=142 7=153 8=171 U1
+C 100p 141 170 C2
+R 100K 46 47 R3
+POT B100K DRIVE 15 14 13
+R 27K 184 185 R4
+C 10n 178 179 C3
+R 33K 199 200 R5
+C 10n 201 202 C4
+
+STAGE inv gain 반전단 (4580 A)
+R 10K 65 101 R6
+C 100n 109 110 C5
+R 220K 130 173 R7
+
+STAGE hard clipping Hard 클리핑 (1N914 → Vref)
+R 1K 174 175 R9
+D 1N914 a=51 k=50 D1
+D 1N914 a=78 k=79 D2
+
+STAGE tone tone 톤 (TONE·PRESENCE)
+POT B25K TONE 159 158 157
+C 10n 111 133 C6
+R 6.8K 115 114 R10
+POT 10K PRESENCE 144 156 145
+C 10n 131 155 C7
+
+STAGE output output 출력 (VOLUME)
+POT A100K VOLUME 22 21 20
+C 1000n 42 43 C8
+C 1uF 82 83 C9
+R 1M 105 104 R11
+
+STAGE vref custom bias Vref·전원 (47R, 47K/47K)
+R 47R 61 98 R12
+C 100uF 169 168 C10
+R 47K 62 99 R13
+R 47K 100 63 R14
+C 100uF 121 120 C11
+
+STAGE power power 전원 (공용)
+D 1N400X a=38 k=39 D5
+C 100n 40 41 C12
+
+
+# --- schematic placement (hand) ---
+AT VCC 60 190
+AT D5 120 160 h
+AT C12 170 190 v
+AT R12 230 160 h
+AT C10 290 190 v
+AT R13 350 190 v-
+AT R14 350 250 v
+AT C11 390 250 v
+AT V1 60 480
+AT R1 100 480 v
+AT C1 160 450 h
+AT R2 210 420 v
+AT U1B 280 470
+AT R4 240 550 v
+AT C3 240 640 v
+AT R5 200 550 v
+AT C4 200 640 v
+AT C2 280 390 h
+AT R3 240 340 h
+AT DRIVE 300 340 r0 m
+AT R6 390 340 h
+AT C5 470 340 h
+AT U1A 560 320
+AT R7 560 260 h
+AT R9 650 320 h
+AT TONE 740 320 r180 m
+AT C6 780 360 v-
+AT R10 800 290 h
+AT PRESENCE 860 350 r270
+AT C7 860 440 v
+AT VOLUME 920 290 r180
+AT C8 980 350 h
+AT C9 980 400 h
+AT R11 1040 380 v
+AT RLOAD 1090 380 v
+AT D1 690 380 v
+AT D2 720 380 v-

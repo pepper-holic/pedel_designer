@@ -1,0 +1,187 @@
+id pp-duality-bass-fuzz
+goods 186788025
+name Duality Bass Fuzz
+motif Darkglass Duality
+type fuzz
+desc 10K/100n→TL072 버퍼→1000n→비반전 프리앰프(330K/15K∥1n)→두 퍼즈 갈래: ①22n→CD4049 인버터 3단(330K, 470K∥680p+47n, 10K∥220p)→1000n 버퍼 ②10n/470K→귀환 없는 TL072 비교기→1N914 직렬 정류(470K 갈래)+1n→버퍼; DUALITY B100K로 섞어→버퍼→330K/33K·2.2n→Sallen-Key 저역통과 두 단→FILTER(2.2K/1K, 680p) 반전 가산단→LEVEL A100K→BLEND(원음)→버퍼→1000n/1K 출력
+image img_01.jpg
+# ICs (pin 1 from the notch): TL072-1 notch down (1=43 .. 4=20, 5=19 .. 8=42) is the input buffer (A) and the BLEND buffer (B);
+# TL072-2 notch right (1=17 .. 4=14 top row right to left, 5=36 .. 8=39 bottom row) is the CMOS-path output buffer (A) and the
+# preamp (B); TL072-4 notch left; TL072-5 notch up; TL072-6 notch right. CD4049UBE notch right: 1=66 .. 8=59 along the top,
+# 9=83 .. 16=90 along the bottom. Inverters 9->10, 11->12, 14->15 are used; inputs 3/5/7 are tied to 9V with outputs 2/4/6 open
+# (they stamp nothing), 13/16 are NC.
+# TL072-4A has no feedback: an open-loop comparator on the 470K/15K input. Its output feeds the 1N914 pair (105->106 direct,
+# 96<-97 through 470K) into 1n and the B follower.
+# The two Sallen-Key cells: 10K/33K with 1n to the TL072-5B output and 1n to ground at its + input; the second (10K, 33K into
+# TL072-6A +) has its ground 1n on the first node, as drawn.
+# The rail is n18 (9V after the 1N400X); Vref is 10K/10K + 100uF. Pads 67-70 are vias on the 9V net. Pots read with lug 1 at the
+# silk "1" (right end): LEVEL lug 1 at Vref (AC ground) confirms it. BLEND lug 3 is the dry buffer, lug 1 the LEVEL wiper.
+BOM 1Mx5 470Kx3 330Kx3 220Kx2 100K 33Kx3 15Kx2 10Kx8 2.2K 1Kx2 1000nx3 100nx3 47n 22n 10n 2.2n 1nx7 220pF 680pFx2 220uF 100uF 1N400X 1N914x2 CD4049UBE TL072x5 A100K B100Kx3
+io IN=30 OUT=93 V9=176 GND=14
+NC 61 63 65 87 90 67 68 69 70
+
+STAGE input buffer 입력 버퍼 (TL072-1 A)
+R 10K 44 73 R1
+R 1M 45 74 R2
+C 100n 72 52 C1
+R 1M 6 7 R3
+IC TL072 1=43 2=29 3=27 4=20 5=19 6=26 7=28 8=42 U1
+
+STAGE pre gain 프리앰프 (TL072-2 B)
+C 1000n 9 8 C2
+R 1M 13 34 R4
+IC TL072 1=17 2=16 3=15 4=14 5=36 6=37 7=38 8=39 U2
+R 15K 50 23 R5
+C 100n 21 35 C3
+R 330K 18 40 R6
+C 1n 24 41 C4
+
+STAGE cmos gain CMOS 퍼즈 (CD4049 3단)
+C 22n 25 32 C5
+IC CD4049UBE 1=66 8=59 3=64 5=62 7=60 9=83 10=84 11=85 12=86 14=88 15=89 U3
+R 330K 101 102 R7
+R 10K 122 121 R8
+C 47n 120 119 C6
+R 470K 109 110 R9
+C 680p 99 100 C7
+R 10K 125 98 R10
+R 10K 82 58 R11
+C 220p 75 57 C8
+C 1000n 31 22 C9
+R 1M 12 33 R12
+
+STAGE comp gain 비교기 퍼즈 (TL072-4)
+C 10n 49 48 C10
+R 470K 47 46 R13
+R 15K 116 115 R14
+IC TL072 1=78 2=79 3=80 4=81 5=56 6=55 7=54 8=53 U4
+D 1N914 a=105 k=106 D1
+R 470K 94 95 R15
+D 1N914 a=97 k=96 D2
+C 1n 107 108 C11
+
+STAGE duality custom mix DUALITY (두 퍼즈 섞기)
+POT B100K DUALITY 2 1 0
+
+STAGE lpf custom filter 저역통과 (Sallen-Key 두 단)
+IC TL072 1=148 2=154 3=159 4=172 5=173 6=160 7=155 8=149 U5
+R 330K 152 151 R16
+C 1n 146 147 C12
+R 33K 130 131 R17
+C 2.2n 153 132 C13
+R 10K 133 134 R18
+R 33K 135 161 R19
+C 1n 118 117 C14
+C 1n 136 156 C15
+R 10K 126 127 R20
+C 1n 111 112 C16
+C 1n 103 104 C17
+R 33K 123 124 R21
+
+STAGE filter tone FILTER (TL072-6 반전 가산)
+IC TL072 1=142 2=141 3=140 4=139 5=165 6=166 7=167 8=168 U6
+R 220K 138 164 R22
+R 2.2K 137 163 R23
+POT B100K FILTER 179 178 177
+C 680p 162 150 C18
+R 220K 174 175 R24
+R 1K 171 170 R25
+
+STAGE level custom control LEVEL
+POT A100K LEVEL 182 181 180
+
+STAGE blend custom mix BLEND (원음 섞기)
+POT B100K BLEND 5 4 3
+R 1M 10 11 R26
+
+STAGE output output 출력
+C 1000n 51 71 C19
+R 100K 76 77 R27
+R 1K 91 92 R28
+
+STAGE vref custom bias Vref (10K/10K)
+R 10K 184 183 R29
+R 10K 157 158 R30
+C 100uF 144 145 C20
+
+STAGE power power 전원
+D 1N400X a=169 k=143 D3
+C 220uF 114 113 C21
+C 100n 129 128 C22
+
+# --- schematic placement (hand): CMOS row above, comparator row below, DUALITY -> filters -> blend to the right ---
+AT VCC 60 190
+AT D3 120 160 h
+AT C21 180 190 v
+AT C22 220 190 v
+AT R29 280 190 v
+AT R30 280 250 v
+AT C20 320 250 v
+AT V1 60 430
+AT R1 150 400 h
+AT R2 100 430 v
+AT C1 240 400 h
+AT R3 290 340 v
+AT U1A 330 420
+AT C2 420 420 h
+AT R4 470 450 v
+AT U2B 530 440
+AT R6 530 520 h
+AT C4 530 570 h
+AT R5 500 630 v
+AT C3 500 720 v
+AT C5 620 300 h
+AT U3F 720 280
+AT R7 720 350 h
+AT R8 810 280 h
+AT C6 850 310 v
+AT U3E 900 260
+AT R9 900 330 h
+AT C7 900 380 h
+AT R10 990 220 h
+AT U3D 1080 200
+AT R11 1080 280 h
+AT C8 1080 330 h
+AT C9 1170 200 h
+AT R12 1210 230 v
+AT U2A 1290 220
+AT C10 620 820 h
+AT R13 710 820 h
+AT R14 760 850 v
+AT U4A 820 800
+AT D1 910 800 h
+AT R15 880 870 h
+AT D2 940 870 h-
+AT C11 1000 830 v
+AT U4B 1060 820
+AT DUALITY 1400 540 r90
+AT U5A 1500 560
+AT R16 1590 560 h
+AT C12 1640 590 v
+AT C13 1620 500 h
+AT R17 1680 560 h
+AT R18 1770 560 h
+AT R19 1860 560 h
+AT C14 1910 590 v
+AT C15 1900 500 h
+AT U5B 1970 580
+AT R20 2060 580 h
+AT C16 2110 610 v
+AT C17 2170 520 h
+AT R21 2150 580 h
+AT U6A 2240 600
+AT R22 2330 600 h
+AT U6B 2420 580
+AT R24 2420 660 h
+AT C18 2360 690 v-
+AT R23 2300 690 v
+AT FILTER 2360 750 r0 m
+AT R25 2450 720 v
+AT LEVEL 2540 580 r180
+AT BLEND 2540 700 r0 m
+AT R26 2540 790 v-
+AT U1B 2640 750
+AT C19 2730 750 h
+AT R27 2780 780 v
+AT R28 2830 750 h
+AT RLOAD 2900 780 v
